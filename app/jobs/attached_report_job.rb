@@ -13,7 +13,7 @@ class AttachedReportJob < ApplicationJob
     Current.organization = Organization.find organization_id
 
     scope        = build_scope_for model, query_methods
-    report       = scope.send method_name, options
+    report       = scope.send method_name, **options
     zip_file     = zip_report_with_filename report, filename
     extension    = File.extname filename
     new_filename = filename.sub(

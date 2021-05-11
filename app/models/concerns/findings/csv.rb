@@ -20,6 +20,7 @@ module Findings::Csv
       (taggings.map(&:tag).to_sentence if self.class.show_follow_up_timestamps?),
       title,
       description,
+      state_text,
       full_state_text,
       try(:risk_text) || '',
       respond_to?(:risk_text) ? priority_text : '',
@@ -48,7 +49,7 @@ module Findings::Csv
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text if Finding.show_commitment_support?)
+      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -84,6 +85,10 @@ module Findings::Csv
 
     def origination_date_text
       origination_date ? I18n.l(origination_date, format: :minimal) : '-'
+    end
+
+    def first_follow_up_date_text
+      first_follow_up_date ? I18n.l(first_follow_up_date, format: :minimal) : '-'
     end
 
     def follow_up_date_text
@@ -154,8 +159,10 @@ module Findings::Csv
     end
 
     def last_commitment_date_text
-      commitment_date = finding_answers.map(&:commitment_date).compact.sort.last
-      date            = if follow_up_date && commitment_date
+      commitment_date = finding_answers.reverse.detect(&:commitment_date)&.commitment_date
+      date            = if Finding.show_commitment_support?
+                          commitment_date
+                        elsif follow_up_date && commitment_date
                           follow_up_date <= commitment_date ? commitment_date : nil
                         elsif follow_up_date.blank?
                           commitment_date
@@ -216,15 +223,17 @@ module Findings::Csv
         cs = fa.commitment_support
 
         if cs
-          date = I18n.l fa.created_at, format: :minimal
-          endorsements = fa.endorsements.map do |e|
+          date         = I18n.l fa.created_at, format: :minimal
+          endorsements = fa.endorsements.sort_by(&:updated_at).reverse.map do |e|
             status = I18n.t "findings.endorsements.status.#{e.status}"
+            e_date = I18n.l e.updated_at, format: :minimal
+            e_text = [e_date, status, e.reason].reject(&:blank?).join ' - '
 
-            "#{e.user.full_name}: #{[status, e.reason].reject(&:blank?).join ' - '}"
+            "#{e.user.full_name}: #{e_text}"
           end.to_sentence
 
           if endorsements.present?
-            "[#{date}] #{fa.user.full_name}: #{cs.reason} (#{endorsements})"
+            "[#{date}] (#{endorsements}) #{fa.user.full_name}: #{cs.reason}"
           else
             "[#{date}] #{fa.user.full_name}: #{cs.reason}"
           end
@@ -304,6 +313,7 @@ module Findings::Csv
           Weakness.human_attribute_name('title'),
           Weakness.human_attribute_name('description'),
           Weakness.human_attribute_name('state'),
+          I18n.t('finding.state_full'),
           Weakness.human_attribute_name('risk'),
           Weakness.human_attribute_name('priority'),
           FindingUserAssignment.human_attribute_name('process_owner'),

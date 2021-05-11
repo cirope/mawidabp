@@ -5,7 +5,7 @@ class PlansController < ApplicationController
   respond_to :html, :js
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_business_unit_type, only: [:show, :new, :edit]
+  before_action :set_business_unit_type, only: [:show, :new, :edit, :update]
   before_action :set_plan, only: [:show, :edit, :update, :destroy, :export_to_pdf]
   before_action :set_plan_clone, only: [:new, :create]
   before_action :set_title, except: [:destroy]
@@ -23,6 +23,7 @@ class PlansController < ApplicationController
       format.html
       format.js
       format.pdf  { redirect_to plan_pdf_path }
+      format.csv  { plan_csv_path }
     end
   end
 
@@ -109,6 +110,10 @@ class PlansController < ApplicationController
         business_unit_type: @business_unit_type
 
       @plan.relative_pdf_path
+    end
+
+    def plan_csv_path
+      render csv: @plan.to_csv(business_unit_type: @business_unit_type), filename: @plan.csv_filename
     end
 
     def load_privileges

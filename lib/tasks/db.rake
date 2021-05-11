@@ -24,6 +24,9 @@ namespace :db do
       fix_final_latest_findings           # 2020-03-13
       fix_email_organization              # 2020-04-24
       add_follow_up_audited_privilege     # 2020-05-08
+      add_file_model_review               # 2020-07-20
+      remove_auditor_junior_role          # 2020-11-04
+      add_commitment_data_on_findings     # 2020-12-01
     end
   end
 end
@@ -78,6 +81,30 @@ private
                            description: I18n.t('settings.skip_function_and_manager_from_ldap_sync')
       end
     end
+
+    if add_hide_obsolete_best_practices? # 2020-10-19
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'hide_obsolete_best_practices',
+                           value:       DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value],
+                           description: I18n.t('settings.hide_obsolete_best_practices')
+      end
+    end
+
+    if set_hours_of_work_per_day? # 2021-04-30
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'hours_of_work_per_day',
+                           value:       DEFAULT_SETTINGS[:hours_of_work_per_day][:value],
+                           description: I18n.t('settings.hours_of_work_per_day')
+      end
+    end
+  end
+
+  def set_hours_of_work_per_day?
+    Setting.where(name: 'hours_of_work_per_day').empty?
+  end
+
+  def add_hide_obsolete_best_practices?
+    Setting.where(name: 'hide_obsolete_best_practices').empty?
   end
 
   def add_skip_function_and_manager_from_ldap_sync?
@@ -520,7 +547,7 @@ private
   def fix_email_organization
     if fix_email_organization?
       EMail.where(organization_id: nil).find_each do |e_mail|
-        match        = e_mail.subject.match /\[(\w+\W*\w*)\]/
+        match        = e_mail.subject.match /\A\[(\w+\W*\w*)\]/
         organization = if match && match[1]
                         Organization.where(
                           "LOWER(#{Organization.qcn 'prefix'}) = ?",
@@ -551,4 +578,42 @@ private
   def follow_up_audited_privilege?
     Privilege.where(module: 'follow_up_reports_audited').empty? &&
       Privilege.where(module: 'follow_up_reports_audit').empty?
+  end
+
+  def add_file_model_review
+    if migrate_file_model_review?
+      Review.where.not(file_model_id: nil).find_each do |r|
+        FileModelReview.create! review_id: r.id, file_model_id: r.file_model_id
+
+        r.update_column :file_model_id, nil
+      end
+    end
+  end
+
+  def migrate_file_model_review?
+    FileModelReview.count == 0
+  end
+
+  def remove_auditor_junior_role
+    if remove_auditor_junior_role?
+      Role.where(role_type: 4).update_all role_type: 3
+    end
+  end
+
+  def remove_auditor_junior_role?
+    Role.where(role_type: 4).any?
+  end
+
+  def add_commitment_data_on_findings
+    if add_commitment_data_on_findings?
+      Finding.where.not(reschedule_count: 0).where(commitments: nil).find_each do |finding|
+        commitments = finding.calculate_commitments
+
+        finding.update_column :commitments, commitments if commitments.any?
+      end
+    end
+  end
+
+  def add_commitment_data_on_findings?
+    Endorsement.any? && Finding.where.not(reschedule_count: 0).where(commitments: nil).all?
   end

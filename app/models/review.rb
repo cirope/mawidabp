@@ -6,12 +6,13 @@ class Review < ApplicationRecord
   include Reviews::AutomaticIdentification
   include Reviews::Approval
   include Reviews::BestPracticeComments
+  include Reviews::BusinessUnitTypes
   include Reviews::Clone
   include Reviews::ConclusionReview
   include Reviews::ControlObjectiveItems
   include Reviews::Counts
   include Reviews::DestroyValidation
-  include Reviews::FileModel
+  include Reviews::FileModelReviews
   include Reviews::FindingAssignments
   include Reviews::FindingCode
   include Reviews::Findings

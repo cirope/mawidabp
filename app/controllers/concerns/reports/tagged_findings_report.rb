@@ -47,6 +47,10 @@ module Reports::TaggedFindingsReport
                     )
 
                     findings_with_less_than_n_tags scope, report_params
+
+                    scope.
+                      includes(review: :plan_item).
+                      merge Review.allowed_by_business_units
                   else
                     Finding.none
                   end
@@ -93,7 +97,7 @@ module Reports::TaggedFindingsReport
       if controller_name == 'execution_reports'
         Finding.list_without_final_review
       else
-        Finding.list_with_final_review
+        Finding.list_for_report
       end
     end
 

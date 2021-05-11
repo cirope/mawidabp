@@ -14,13 +14,25 @@ module Weaknesses::Scopes
     scope :with_highest_risk, -> {
       where "#{quoted_table_name}.#{qcn 'highest_risk'} = #{quoted_table_name}.#{qcn 'risk'}"
     }
-
     scope :all_for_report, -> {
       where(
         state: Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).values,
         final: true
       ).order(risk: :desc, state: :asc)
     }
+    scope :latest, -> { where latest_id: nil }
+
+    def process_owner_parents
+      process_owners.map(&:parent).compact
+    end
+
+    def process_owner_intermediates
+      process_owners.map(&:parent_intermediates).flatten
+    end
+
+    def process_owner_roots
+      process_owners.map(&:parent_root).compact
+    end
   end
 
   module ClassMethods
@@ -33,24 +45,27 @@ module Weaknesses::Scopes
     end
 
     def by_priority_on_risk conditions
-      result = nil
+      clauses    = []
+      parameters = {}
 
-      risks.each do |risk, value|
-        priority  = conditions[risk]
+      risks.each_with_index do |values, i|
+        risk      = values.last
+        priority  = conditions[values.first]
         condition = if priority
-                      { risk: value, priority: priority }
-                    else
-                      { risk: value }
-                    end
+                      clauses << [
+                        "#{quoted_table_name}.#{qcn 'risk'} = :risk_#{i}",
+                        "#{quoted_table_name}.#{qcn 'priority'} = :priority_#{i}"
+                      ].join(' AND ')
 
-        if result
-          result = result.or where(condition)
-        else
-          result = where condition
-        end
+                      parameters[:"risk_#{i}"]     = risk
+                      parameters[:"priority_#{i}"] = priority
+                    else
+                      clauses << "#{quoted_table_name}.#{qcn 'risk'} = :risk_#{i}"
+                      parameters[:"risk_#{i}"] = risk
+                    end
       end
 
-      result
+      where clauses.map { |c| "(#{c})" }.join(' OR '), parameters
     end
 
     def by_impact impact

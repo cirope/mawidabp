@@ -37,6 +37,14 @@ module ReviewsHelper
     review.plan_item.try(:business_unit).try(:name)
   end
 
+  def review_business_unit_types
+    if @review&.business_unit_type
+      BusinessUnitType.list.where.not(id: @review.business_unit_type.id).order :name
+    else
+      BusinessUnitType.list.order :name
+    end
+  end
+
   def user_assignment_type_field(form, inline = true, disabled = false)
     input_options = { disabled: disabled, data: { review_role: true } }
     options = user_assignment_type_options_for form.object.user
@@ -76,15 +84,22 @@ module ReviewsHelper
     link_for_download = link_to(
       t('label.download'),
       :action => :survey_pdf, :id => review, :_ts => Time.now.to_i
-    ).html_safe
-    link_for_download_attachment = link_to(
-      t('review.survey.download_attachment'), review.file_model.file.url
-    ).html_safe if review.file_model.try(:file?)
+    )
 
     out = "<b>#{Review.human_attribute_name(:survey)}</b>"
 
     out << " | #{link_for_download}" unless review.survey.blank?
-    out << " | #{link_for_download_attachment}" if review.file_model.try(:file?)
+    out << "<ul>"
+
+    review.file_models.each do |fm|
+      link_for_download_attachment = link_to(
+        fm.file_file_name, fm.file.url
+      )
+
+      out << "<li>#{link_for_download_attachment}</li>"
+    end
+
+    out << "</ul>"
 
     raw(out + simple_format(review.survey, class: 'mb-1'))
   end
@@ -209,5 +224,9 @@ module ReviewsHelper
         reset_name_for: control_objective_item.id
       }
     )
+  end
+
+  def count_control_objective_items_by_finished_status review, finished: false
+    review.control_objective_items.select { |coi| coi.finished == finished }.count
   end
 end

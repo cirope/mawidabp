@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   post   'sessions', to: 'sessions#create',  as: 'sessions'
   delete 'logout',   to: 'sessions#destroy', as: 'logout'
 
+  # SAML
+  get 'saml/auth', to: 'saml_sessions#new', as: :new_saml_session
+  post 'saml/callback', to: 'saml_sessions#create', as: :saml_session
+  get 'saml/metadata', to: 'saml_sessions#metadata', as: :saml_metadata
+
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :benefits
@@ -47,6 +52,7 @@ Rails.application.routes.draw do
     resources :questionnaires, only: [:index]
     resources :answers, only: [:index]
     resources :business_units, only: [:index]
+    resources :reviews, only: [:index]
     resources :users, only: [:index]
   end
 
@@ -82,6 +88,7 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_state_execution',
+    'weaknesses_current_situation',
     'weaknesses_report',
     'detailed_management_report',
     'planned_cost_summary',
@@ -92,6 +99,8 @@ Rails.application.routes.draw do
 
   [
     'create_weaknesses_by_state_execution',
+    'create_weaknesses_current_situation',
+    'create_weaknesses_current_situation_permalink',
     'create_detailed_management_report',
     'create_planned_cost_summary',
     'create_weaknesses_report'
@@ -120,6 +129,7 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_user',
+    'process_control_stats'
   ].each do |action|
     get "follow_up_audited/#{action}",
       as: "#{action}_follow_up_audited",
@@ -128,6 +138,7 @@ Rails.application.routes.draw do
 
   [
     'create_weaknesses_by_user',
+    'create_process_control_stats'
   ].each do |action|
     post "follow_up_audited/#{action}",
       as: "#{action}_follow_up_audited",
@@ -161,7 +172,9 @@ Rails.application.routes.draw do
     'fixed_weaknesses_report',
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
-    'auto_complete_for_process_control'
+    'auto_complete_for_process_control',
+    'weaknesses_by_control_objective_process',
+    'weaknesses_heatmap'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -194,7 +207,9 @@ Rails.application.routes.draw do
     'create_weaknesses_current_situation_permalink',
     'create_weaknesses_repeated',
     'create_weaknesses_by_control_objective',
-    'create_fixed_weaknesses_report'
+    'create_fixed_weaknesses_report',
+    'create_weaknesses_by_control_objective_process',
+    'create_weaknesses_heatmap'
   ].each do |action|
     post "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -228,6 +243,7 @@ Rails.application.routes.draw do
     weaknesses_evolution
     weaknesses_list
     weaknesses_brief
+    weaknesses_reschedules
     tagged_findings_report
   ].each do |action|
     get "follow_up_audit/#{action}",
@@ -326,6 +342,7 @@ Rails.application.routes.draw do
       patch :recode_weaknesses_by_repetition_and_risk
       patch :recode_weaknesses_by_risk_and_repetition
       patch :recode_weaknesses_by_control_objective_order
+      patch :recode_work_papers
       patch :reorder
       patch :reset_control_objective_name
     end
@@ -339,6 +356,7 @@ Rails.application.routes.draw do
       get :auto_complete_for_best_practice
       get :auto_complete_for_process_control
       get :auto_complete_for_control_objective
+      get :auto_complete_for_past_implemented_audited_findings
       get :auto_complete_for_tagging
       get :next_identification_number
     end
@@ -383,7 +401,10 @@ Rails.application.routes.draw do
 
   resources :plans do
     resources :plan_items, only: [:show, :new, :edit, :update] do
-      get :auto_complete_for_control_objective, on: :collection
+      collection do
+        get :auto_complete_for_best_practice
+        get :auto_complete_for_control_objective
+      end
     end
 
     member do

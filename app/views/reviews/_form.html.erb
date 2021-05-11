@@ -16,9 +16,12 @@
           } %>
         <% end %>
         <% if @review.new_record? %>
-          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true, input_html: {
-            data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
-          } %>
+          <%= f.input :period_id, collection: Period.list_all_with_plans.map { |p| [p.inspect, p.id] },
+            prompt: true,
+            input_html: {
+              data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
+            }
+          %>
         <% else %>
           <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
             input_html: { value: @review.period.inspect, readonly: true } %>
@@ -42,25 +45,25 @@
           <%= f.input :description, label: Review.human_attribute_name(:description),
             input_html: { readonly: readonly, rows: 5 } %>
         <% end %>
+
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
           input_html: { readonly: readonly, rows: HIDE_REVIEW_DESCRIPTION ? 8 : 5 } %>
-        <% f.object.build_file_model unless f.object.file_model %>
+
+        <p class="mb-1 text-right">
+          <%= link_to_unless @review.new_record?, t('review.survey.download'),
+            :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
+        </p>
+
         <div class="row">
           <div class="col-md-6">
             <p class="mb-1"><%= Review.human_attribute_name 'file_model_id' %></p>
+
             <div class="clearfix">
-              <%= f.simple_fields_for :file_model do |fm_f| %>
-                <div class="file-container float-left">
-                  <%= link_to_upload(fm_f.object) %>
-                  <% if fm_f.object.file_cache %>
-                    <%= fm_f.input :file_cache, as: :hidden %>
-                    <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
-                  <% else %>
-                    <%= fm_f.input :file, label: false %>
-                  <% end %>
-                </div>
+              <%= f.simple_fields_for :file_model_reviews do |fm_r| %>
+                <%= render 'file_model_review', f: fm_r, frozen: frozen %>
               <% end %>
-              <%= link_to_download f.object %>
+
+              <%= link_to_add_fields t('review.add_file_model'), f, :file_model_reviews, 'file_model_review' unless frozen %>
             </div>
           </div>
           <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? current_organization.prefix %>
@@ -76,15 +79,37 @@
             </div>
           <% end %>
         </div>
-        <p class="mb-1">
-          <%= link_to_unless @review.new_record?, t('review.survey.download'),
-            :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
-        </p>
-        <div id="estimated_amount">
+
+        <div id="estimated_amount" class="mt-3">
           <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
         </div>
       </div>
     </div>
+
+    <% if USE_SCOPE_CYCLE %>
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <%= f.input :manual_score, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
+        </div>
+        <% if @review.new_record? || @review.plan_item&.cycle? %>
+          <div class="col-md-6" data-manual-score-alt>
+            <%= f.input :manual_score_alt, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
+          </div>
+        <% end %>
+      </div>
+
+      <h5 class="h6 mt-3">
+        <%= BusinessUnitTypeReview.human_attribute_name 'business_unit_type_id' %>
+      </h5>
+
+      <div>
+        <%= f.simple_fields_for :business_unit_type_reviews do |but_r| %>
+          <%= render 'business_unit_type_review', f: but_r %>
+        <% end %>
+
+        <%= link_to_add_fields t('.add_business_unit_type'), f, :business_unit_type_reviews %>
+      </div>
+    <% end %>
 
     <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
       <div class="row">
@@ -139,6 +164,8 @@
     <% unless readonly %>
       <hr>
 
+      <div data-review-user-assignments-container></div>
+
       <%= link_to_add_fields(
         t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
       ) %>
@@ -167,39 +194,22 @@
     </div>
   <% end %>
 
+  <h4 class="mt-3">
+    <%= t('review.control_objective_items_label') %>
+    <% if @review.persisted? && !readonly %>
+      <span class="float-right small">
+        <%= link_to_excluded_control_objectives %>
+      </span>
+    <% end %>
+  </h4>
+
+  <hr />
+
+  <div data-control-objective-items-container>
+  </div>
+
   <% if @review.control_objective_items.any? %>
-    <h4 class="mt-3">
-      <%= t('review.control_objective_items_label') %>
-      <% if @review.persisted? && !readonly %>
-        <span class="float-right small">
-          <%= link_to_excluded_control_objectives %>
-        </span>
-      <% end %>
-    </h4>
-
-    <hr />
-
-    <div id="control_objective_items">
-      <% @review.grouped_control_objective_items.each do |pc, cois| %>
-        <div id="process_control_<%= pc.id %>" class="process_control">
-          <h5>
-            <%= pc.name %> |
-            <% unless readonly %>
-              <%= link_to_suggested_process_control_findings(pc) %> |
-              <%= link_to_move :class => 'process_control_move' %>
-            <% end %>
-          </h5>
-          <%= f.simple_fields_for :control_objective_items, cois.sort do |coi_f| %>
-            <%= render 'control_objective_item', f: coi_f, readonly: readonly, frozen: frozen %>
-          <% end %>
-
-          <div data-messages></div>
-        </div>
-        <script type="text/javascript">
-          Helper.makeSortable('#process_control_<%= pc.id %>', 'fieldset.control_objective_item', 'a.move');
-        </script>
-      <% end %>
-    </div>
+    <%= render 'control_objective_items', f: f, readonly: readonly, frozen: frozen %>
   <% end %>
 
   <% unless readonly %>
@@ -217,6 +227,11 @@
       <li class="nav-item">
         <a class="nav-link" href="#best-practice" data-toggle="tab">
           <%= BestPractice.model_name.human %>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#control-objective-tag" data-toggle="tab">
+          <%= t('review.control_objective_tag') %>
         </a>
       </li>
     </ul>
@@ -245,6 +260,11 @@
           ) %>
         </div>
       </div>
+      <div class="tab-pane" id="control-objective-tag">
+        <div id="control_objective_tags">
+          <%= link_to_add_fields t('review.add_control_objective_tag'), f, :control_objective_items, 'control_objective_tag' %>
+        </div>
+      </div>
     </div>
   <% end %>
 
@@ -267,9 +287,19 @@
     <h5 class="h6 mt-3"><%= FindingReviewAssignment.human_attribute_name 'finding' %></h5>
 
     <div id="finding_review_assignments"></div>
-
+    <div id="finding_review_dynamic_assignments"></div>
     <p class="mb-1">
-      <%= link_to_add_fields t('review.add_finding_assignment'), f, :finding_review_assignments %>
+      <%= link_to_add_fields(
+        t('review.add_finding_assignment'), f,
+        :finding_review_assignments, nil,
+        { insert_into: '#finding_review_dynamic_assignments' }
+      ) %>
+      <%= link_to_add_fields(
+        t('review.add_past_findings'), f,
+        :finding_review_assignments,
+        'implemented_audited_finding',
+        { insert_into: '#finding_review_dynamic_assignments' }
+      ) %>
       <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
         suggested_findings_review_path(id: @review.plan_item_id) : '#',
         :remote => true, :id => :link_to_suggested_findings,
@@ -334,6 +364,9 @@ jQuery(function() {
       $('#link_to_past_implemented_audited_findings').attr('href', '#');
       $('#link_to_past_implemented_audited_findings').addClass('link_without_action');
       $('#control_objectives').find('fieldset.control_objective[data-dynamic]').remove();
+      $('[data-review-user-assignments-container]').html('')
+      $('[data-control-objective-items-container]').html('')
+      $('[data-manual-score-alt]').removeClass('d-none')
     }
   });
 

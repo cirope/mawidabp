@@ -22,7 +22,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un reporte
   test 'create' do
-    assert_difference 'Review.count' do
+    assert_difference %w(Review.count BusinessUnitTypeReview.count) do
       @review = Review.list.create(
         :identification => 'New Identification',
         :description => 'New Description',
@@ -30,26 +30,31 @@ class ReviewTest < ActiveSupport::TestCase
         :plan_item_id => plan_items(:past_plan_item_3).id,
         :scope => 'committee',
         :risk_exposure => 'high',
-        :manual_score => 800,
+        :manual_score => 80,
         :include_sox => 'no',
         :review_user_assignments_attributes => {
-            :new_1 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-              :user => users(:first_time)
-            },
-            :new_2 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
-              :user => users(:supervisor)
-            },
-            :new_3 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:manager],
-              :user => users(:supervisor_second)
-            },
-            :new_4 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:audited],
-              :user => users(:audited)
-            }
+          :new_1 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:auditor],
+            :user => users(:first_time)
+          },
+          :new_2 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
+            :user => users(:supervisor)
+          },
+          :new_3 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:manager],
+            :user => users(:supervisor_second)
+          },
+          :new_4 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:audited],
+            :user => users(:audited)
           }
+        },
+        :business_unit_type_reviews_attributes => [
+          {
+            :business_unit_type_id => business_unit_types(:cycle).id
+          }
+        ]
       )
     end
 
@@ -149,14 +154,18 @@ class ReviewTest < ActiveSupport::TestCase
     skip unless SHOW_REVIEW_EXTRA_ATTRIBUTES
 
     @review.manual_score = -1
+    @review.manual_score_alt = -1
 
     assert @review.invalid?
     assert_error @review, :manual_score, :greater_than_or_equal_to, count: 0
+    assert_error @review, :manual_score_alt, :greater_than_or_equal_to, count: 0
 
     @review.manual_score = 1001
+    @review.manual_score_alt = 101
 
     assert @review.invalid?
-    assert_error @review, :manual_score, :less_than_or_equal_to, count: 1000
+    assert_error @review, :manual_score, :less_than_or_equal_to, count: (USE_SCOPE_CYCLE ? 100 : 1000)
+    assert_error @review, :manual_score_alt, :less_than_or_equal_to, count: 100
   end
 
   test 'validates valid attributes' do
@@ -259,6 +268,14 @@ class ReviewTest < ActiveSupport::TestCase
 
     new_average = (total / cois_count.to_f).round
     assert_not_equal average, new_average
+
+    manual_score = 50
+
+    assert_not_equal manual_score, @review.score_array.last
+
+    @review.manual_score = manual_score
+
+    assert_equal manual_score, @review.score_array.last
   end
 
   test 'review score by weaknesses' do
@@ -306,10 +323,39 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal 100, review.score
   end
 
+  test 'review score by splitted weaknesses' do
+    skip if !USE_SCOPE_CYCLE || score_type != :weaknesses
+
+    scope = REVIEW_SCOPES.detect { |_, v| v[:type] == :cycle }
+
+    @review.plan_item.update! scope: scope.first
+
+    # With two low risk on design
+    assert_equal :improve, @review.score_array.first
+    assert_equal 50, @review.score
+    assert_equal 75, @review.score_alt
+    assert_equal 'splitted_effectiveness', @review.score_type
+
+    coi = @review.weaknesses.first.control_objective_item
+
+    coi.update! design_score:       1,
+                sustantive_score:   1,
+                control_attributes: {
+                  id:               coi.control.id,
+                  sustantive_tests: 'Some'
+                }
+
+    # With one low risk on design and one on sustantive
+    assert_equal :unsatisfactory, @review.reload.score_array.first
+    assert_equal 5, @review.score
+    assert_equal 53, @review.score_alt
+    assert_equal 'splitted_effectiveness', @review.score_type
+  end
+
   test 'must be approved function' do
     @review = reviews(:review_approved_with_conclusion)
 
-    @review.file_model = FileModel.take!
+    @review.file_models << FileModel.take!
     @review.save!
 
     assert @review.must_be_approved?
@@ -463,7 +509,9 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.approval_errors.blank?
 
     if SHOW_REVIEW_EXTRA_ATTRIBUTES
-      @review.file_model = nil
+      @review.file_models.destroy_all
+
+      @review.manual_score = 800
 
       refute @review.must_be_approved?
       assert @review.can_be_approved_by_force
@@ -609,6 +657,16 @@ class ReviewTest < ActiveSupport::TestCase
         ]
       end
     end
+  end
+
+  test 'control objective tag ids' do
+    assert @review.control_objective_items.present?
+
+      assert_difference '@review.control_objective_items.size' do
+        @review.control_objective_tag_ids = [
+          tags(:risk_evaluation).id
+        ]
+      end
   end
 
   test 'procedure control subitem ids' do
@@ -948,6 +1006,45 @@ class ReviewTest < ActiveSupport::TestCase
     pcs = @review.grouped_control_objective_items.map &:first
 
     assert_equal pcs, sorted_pcs
+  end
+
+  test 'recode work papers' do
+    Current.user = users :supervisor
+    cois         = control_objective_items :management_dependency_item_editable
+
+    add_wp = cois.work_papers.create!(
+               code: 'PTOC 300',
+               name: 'New recode',
+               description: 'New workpaper description',
+               file_model_attributes: {
+                 file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+               }
+    )
+
+    work_papers           = @review.work_papers.map &:code
+    recode_work_papers    = @review.recode_work_papers.map
+    codes                 = {}
+    work_papers_new_codes = recode_work_papers.map &:code
+
+    assert_not_equal work_papers, work_papers_new_codes
+
+    recode_work_papers.sort.each do |wp|
+      prefix, code_number = wp.code.split
+      codes[prefix]     ||= 1
+      test_code           = "#{prefix} #{'%.3d' % codes[prefix]}"
+      new_code            = test_code.sub(/\s/, '_')
+
+      assert_equal wp.code, test_code
+
+      if wp.file_model
+        code_file = wp.file_model.file_file_name.split('-')
+
+        assert wp.file_model.file_file_name.start_with? new_code
+        assert wp.file_model.file_file_name.exclude? add_wp.code
+      end
+
+      codes[prefix] += 1
+    end
   end
 
   test 'pdf conversion' do

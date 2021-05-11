@@ -19,8 +19,9 @@ class ConclusionFinalReviewsController < ApplicationController
       params[:page]
     ).references(
       :periods, :reviews, :business_units
+    ).merge(
+      PlanItem.allowed_by_business_units
     )
-
     respond_to do |format|
       format.html
     end
@@ -389,7 +390,7 @@ class ConclusionFinalReviewsController < ApplicationController
         :observations, :main_weaknesses_text, :corrective_actions,
         :affects_compliance, :collapse_control_objectives,
         :reference, :scope, :previous_identification, :previous_date,
-        :main_recommendations, :lock_version,
+        :main_recommendations, :additional_comments, :lock_version,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [

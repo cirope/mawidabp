@@ -52,5 +52,61 @@ es:
         text: "Las tareas desarrolladas tuvieron por objeto evaluar y verificar el cumplimiento de las disposiciones del BCRA, los riesgos inherentes y los controles asociados al ciclo “%{business_unit}”.\r\n\r\nEl marco de referencia aplicado fue definido teniendo en cuenta las normas del BCRA en materia de control interno vigente, como así también las normas internas emitidas por las autoridades de la Entidad."
       findings:
         empty: "Sin observaciones."
+        answer: "Comentarios de la entidad"
+        user_ids: "Responsable del comentario"
+        origination_date: "Origen"
+        estimated_follow_up_date: "Fecha estimada de solución"
+        new_description: "Nuevo comentario de la entidad"
+        new_estimated_follow_up_date: "Nueva fecha estimada de solución"
+
       follow_up:
         empty: "Sin observaciones de seguimiento en informes anteriores."
+      weakness:
+        risk: "Importancia"
+        effect: "Riesgo"
+        audit_recommendations: "Recomendación"
+    pat:
+      cover:
+        from: "Banco Patagonia S.A.\nGerencia de Auditoría Interna\n%{business_unit_types}"
+        to: "A: Comité de Auditoría"
+        scope:
+          cycle: "%{prefix} Tareas y Alcance."
+          sustantive: "%{prefix} Alcance de las Tareas."
+        details: "Se detalla el programa de trabajo"
+        conclusion: "%{prefix} Conclusión."
+        objective: "%{prefix} Objetivo."
+        additional_comments: "Comentarios adicionales."
+        owners:
+          cycle: "Las observaciones que surgen de nuestro trabajo, y que se detallan en el Anexo I adjunto, fueron comentadas con %{owners}."
+          sustantive: "En el Anexo I se describen las observaciones surgidas de la revisión efectuada, así como las implicancias de las mismas. Dichas observaciones han sido comentadas con %{owners}"
+        auditors: "Auditores intervinientes:"
+        supervisors: "Supervisado por:"
+        organization: "Banco Patagonia S.A."
+        description:
+          cycle: "Ciclo %{description}"
+          sustantive: "Pruebas sustantivas sobre %{description}"
+        brief:
+          title: "Ref: %{description}\nInforme de Auditoría N° %{review}"
+          notice:
+            one: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} página."
+            other: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} páginas."
+          details_title: "A continuación se detallan las principales debilidades observadas, así como su situación al momento de emitir el respectivo informe:"
+          weaknesses_title: "Observaciones del presente período:"
+      weaknesses:
+        title: "Anexo I"
+        previous_title: "%{prefix} Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."
+        current_title:
+          cycle: "%{prefix} Observaciones surgidas durante la revisión correspondiente al año %{year}."
+          sustantive: "%{prefix} Observaciones del ciclo surgidas durante la revisión correspondiente al Plan %{year}."
+        follow_up: "%{prefix} Seguimiento de aspectos observados en otras inspecciones."
+        current_situation: "Situación Actual:"
+        risk: "<b>Nivel de riesgo</b>: %{risk}"
+        follow_up_date: "Fecha estimada de regularización:"
+        effect: "Efecto:"
+        answer: "Comentario del Sector:"
+        audit_recommendations: "Recomendación:"
+      workflow:
+        title: "Anexo II"
+        subtitle: "Programa de Trabajo"
+      footer:
+        text: "Auditoría"

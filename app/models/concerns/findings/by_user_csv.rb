@@ -22,12 +22,16 @@ module Findings::ByUserCsv
         BusinessUnit.model_name.human,
         Weakness.human_attribute_name('review_code'),
         Weakness.human_attribute_name('title'),
-        Weakness.human_attribute_name('description'),
-        Weakness.human_attribute_name('state'),
-        Weakness.human_attribute_name('risk'),
         I18n.t('finding.auditors', count: 0),
         I18n.t('finding.responsibles', count: 1),
         I18n.t('finding.audited', count: 0),
+        I18n.t('finding.auditor_users', count: 0),
+        I18n.t('finding.responsible_users', count: 1),
+        I18n.t('finding.audited_users', count: 0),
+        Weakness.human_attribute_name('description'),
+        Weakness.human_attribute_name('state'),
+        Weakness.human_attribute_name('risk'),
+        Weakness.human_attribute_name('priority'),
         Weakness.human_attribute_name('origination_date'),
         Weakness.human_attribute_name('follow_up_date'),
         Weakness.human_attribute_name('solution_date'),
@@ -36,27 +40,36 @@ module Findings::ByUserCsv
         Weakness.human_attribute_name('audit_comments'),
         Weakness.human_attribute_name('audit_recommendations'),
         Weakness.human_attribute_name('answer'),
-        (I18n.t('finding.finding_answers') if Weakness.show_follow_up_timestamps?)
+        (I18n.t('finding.finding_answers') if Weakness.show_follow_up_timestamps?),
+        Weakness.human_attribute_name('compliance_observations')
       ].compact
     end
 
     def weaknesses_by_user_csv_data_rows
       all.map do |weakness|
+        auditors       = weakness.users.select &:auditor?
+        process_owners = weakness.process_owners
+        auditeds       = weakness.users.select do |u|
+          u.can_act_as_audited? && weakness.process_owners.exclude?(u)
+        end
+
         [
           weakness.review.identification,
           weakness.review.plan_item.project,
-          I18n.l(weakness.review.conclusion_final_review.issue_date),
+          weakness.review.conclusion_final_review ? I18n.l(weakness.review.conclusion_final_review.issue_date) : '-',
           weakness.business_unit,
           weakness.review_code,
           weakness.title,
+          auditors.map(&:full_name).join('; '),
+          process_owners.map(&:full_name).join('; '),
+          auditeds.map(&:full_name).join('; '),
+          auditors.map(&:user).join('; '),
+          process_owners.map(&:user).join('; '),
+          auditeds.map(&:user).join('; '),
           weakness.description,
           weakness.state_text,
           weakness.risk_text,
-          weakness.users.select(&:auditor?).map(&:full_name).to_sentence,
-          weakness.process_owners.map(&:full_name).to_sentence,
-          weakness.users.select { |u|
-            u.can_act_as_audited? && weakness.process_owners.exclude?(u)
-          }.map(&:full_name).to_sentence,
+          weakness.priority_text,
           (weakness.origination_date ? I18n.l(weakness.origination_date) : '-'),
           (weakness.follow_up_date ? I18n.l(weakness.follow_up_date) : '-'),
           (weakness.solution_date ? I18n.l(weakness.solution_date) : '-'),
@@ -69,7 +82,8 @@ module Findings::ByUserCsv
             date = I18n.l fa.created_at, format: :minimal
 
             "[#{date}] #{fa.user.full_name}: #{fa.answer}"
-          }.join("\n") if Weakness.show_follow_up_timestamps?)
+          }.join("\n") if Weakness.show_follow_up_timestamps?),
+          weakness.compliance_observations
         ].compact
       end
     end

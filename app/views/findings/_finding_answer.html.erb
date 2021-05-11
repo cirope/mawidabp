@@ -78,8 +78,13 @@
                   )
                 }
               } %>
+
+            <% if Finding.show_commitment_support? && show_commitment_date?(finding_answer) %>
+              <%= f.input :skip_commitment_support, as: :boolean, input_html: { data: { skip_commitment_support: true } } %>
+            <% end %>
           </div>
         <% end %>
+        <div class="alert alert-warning" data-commitment-date-message hidden></div>
         <%= finding_answer_notification_check(f) %>
         <%= f.input :user_id, as: :hidden %>
       <% end %>

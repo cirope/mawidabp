@@ -7,7 +7,7 @@ module PlansHelper
       label: false,
       prompt: true,
       input_html: {
-        id: "#{id}_resource_id", autofocus: true
+        id: "#{id}_resource_id", autofocus: form.object.new_record?
       }
   end
 
@@ -56,7 +56,7 @@ module PlansHelper
   def plan_business_unit_type_list
     grouped_plan_items = @plan.grouped_plan_items
 
-    (BusinessUnitType.list + [nil]).map do |but|
+    BusinessUnitType.allowed_business_unit_types.map do |but|
       [but, Array(grouped_plan_items[but])]
     end
   end
@@ -115,6 +115,11 @@ module PlansHelper
         t('plans.download_detailed_plan'),
         [@plan, include_details: 1, _ts: Time.now.to_i, format: :pdf],
         class: 'dropdown-item'
+      ),
+      link_to(
+        t('plans.download_business_unit_type_plan_csv'),
+        [@plan, include_details: 1, _ts: Time.now.to_i, format: :csv],
+        class: 'dropdown-item'
       )
     ]
 
@@ -144,6 +149,11 @@ module PlansHelper
         link_to(
           t('plans.download_detailed_business_unit_type_plan', business_unit_type: @business_unit_type.name),
           [@plan, include_details: 1, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :pdf],
+          class: 'dropdown-item'
+        ),
+        link_to(
+          t('plans.download_detailed_business_unit_type_plan_csv', business_unit_type: @business_unit_type.name),
+          [@plan, include_details: 1, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :csv],
           class: 'dropdown-item'
         )
       ]

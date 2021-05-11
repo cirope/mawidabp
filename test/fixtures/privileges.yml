@@ -18,14 +18,14 @@ supervisor_<%= privilege %>:
   role: supervisor_role
 <% end %>
 
-<% ALLOWED_MODULES_BY_TYPE[:auditor_senior].each do |privilege| %>
+<% ALLOWED_MODULES_BY_TYPE[:auditor].each do |privilege| %>
 auditor_<%= privilege %>:
   module: <%= privilege %>
   read: true
   modify: true
   erase: false
   approval: false
-  role: auditor_senior_role
+  role: auditor_role
 <% end %>
 
 <% ALLOWED_MODULES_BY_TYPE[:audited].each do |privilege| %>
@@ -58,7 +58,7 @@ admin_second_<%= privilege %>:
   role: admin_second_role
 <% end %>
 
-<% ALLOWED_MODULES_BY_TYPE[:auditor_senior].each do |privilege| %>
+<% ALLOWED_MODULES_BY_TYPE[:auditor].each do |privilege| %>
 auditor_second_<%= privilege %>:
   module: <%= privilege %>
   read: true
@@ -88,7 +88,7 @@ admin_second_alphabet_<%= privilege %>:
   role: admin_second_alphabet_role
 <% end %>
 
-<% ALLOWED_MODULES_BY_TYPE[:auditor_senior].each do |privilege| %>
+<% ALLOWED_MODULES_BY_TYPE[:auditor].each do |privilege| %>
 auditor_second_alphabet_<%= privilege %>:
   module: <%= privilege %>
   read: true

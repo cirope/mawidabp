@@ -2,20 +2,18 @@ module Reviews::Score
   extend ActiveSupport::Concern
 
   def score_text
-    score = score_array
+    _score_text score_array
+  end
 
-    if SHOW_REVIEW_EXTRA_ATTRIBUTES
-      (manual_score || '-').to_s
-    else score
-      [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ')
-    end
+  def score_alt_text
+    scored_by_splitted_effectiveness? ? _score_text(score_array alt: true) : '-'
   end
 
   def sorted_scores type: :effectiveness
     date = conclusion_final_review&.issue_date || created_at
 
     case type
-    when :effectiveness, :manual
+    when :effectiveness, :manual, :splitted_effectiveness
       self.class.scores(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
@@ -26,12 +24,18 @@ module Reviews::Score
     end
   end
 
-  def score_array date: (conclusion_final_review&.issue_date || Time.zone.today)
+  def score_array date: (conclusion_final_review&.issue_date || Time.zone.today), alt: false
     type   = guess_score_type
     scores = sorted_scores type: type
     count  = scores.size + 1
 
     calculate_score_for type, date
+
+    score = if alt
+              (manual_score_alt || score_alt).to_i
+            else
+              (manual_score || self.score).to_i
+            end
 
     score_description = scores.detect do |s|
       count -= 1
@@ -69,14 +73,66 @@ module Reviews::Score
     self.score = total <= 50 ? (100 - total * 2).round : 0
   end
 
+  def score_by_splitted_effectiveness date
+    design_relevance_sum     = 0
+    design_total             = 0
+    sustantive_relevance_sum = 0
+    sustantive_total         = 0
+
+    control_objective_items_for_score.each do |coi|
+      unless coi.exclude_from_score
+        if coi.design_score.present?
+          design_relevance_sum += coi.relevance.to_f
+          design_total         += coi.effectiveness(exclude_non_design_scores: true) * coi.relevance.to_f
+        end
+
+        if coi.sustantive_score.present? || coi.compliance_score.present?
+          sustantive_relevance_sum += coi.relevance.to_f
+          sustantive_total         += coi.effectiveness(exclude_design_score: true) * coi.relevance.to_f
+        end
+      end
+    end
+
+    self.score = if design_relevance_sum > 0
+                   (design_total / design_relevance_sum.to_f).round
+                 else
+                   100.0
+                 end
+
+    self.score_alt = if sustantive_relevance_sum > 0
+                       (sustantive_total / sustantive_relevance_sum.to_f).round
+                     else
+                       100.0
+                     end
+  end
+
   def scored_by_weaknesses?
     score_type == 'weaknesses'
   end
 
+  def scored_by_splitted_effectiveness?
+    score_type == 'splitted_effectiveness'
+  end
+
   private
 
+    def _score_text score
+      if SHOW_REVIEW_EXTRA_ATTRIBUTES
+        (manual_score || '-').to_s
+      elsif score
+        [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ')
+      end
+    end
+
     def guess_score_type
-      if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization&.prefix
+      by_weaknesses = ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization&.prefix
+      splitted_effectiveness = by_weaknesses &&
+                              USE_SCOPE_CYCLE &&
+                              REVIEW_SCOPES[plan_item&.scope]&.fetch(:type, nil) == :cycle
+
+      if splitted_effectiveness
+        :splitted_effectiveness
+      elsif by_weaknesses
         score_type&.to_sym == :none ? :none : :weaknesses
       elsif SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
@@ -91,6 +147,8 @@ module Reviews::Score
         effectiveness
       when :weaknesses
         score_by_weaknesses date
+      when :splitted_effectiveness
+        score_by_splitted_effectiveness date
       when :manual, :none
         self.score = 100
       end
@@ -114,7 +172,7 @@ module Reviews::Score
         weakness_weights[:normal_high]
       when risks[:medium]
         weakness_weights[:normal_medium]
-      when risks[:low]
+      when risks[:low], risks[:none]
         weakness_weights[:normal_low]
       end
     end
@@ -127,7 +185,7 @@ module Reviews::Score
         weakness_weights[:repeated_high]
       when risks[:medium]
         weakness_weights[:repeated_medium]
-      when risks[:low]
+      when risks[:low], risks[:none]
         weakness_weights[:repeated_low]
       end
     end
@@ -140,7 +198,7 @@ module Reviews::Score
         weakness_weights[:old_high]
       when risks[:medium]
         weakness_weights[:old_medium]
-      when risks[:low]
+      when risks[:low], risks[:none]
         weakness_weights[:old_low]
       end
     end

@@ -11,7 +11,8 @@ class ReviewsController < ApplicationController
     :recode_weaknesses_by_repetition_and_risk,
     :recode_weaknesses_by_risk_and_repetition,
     :recode_weaknesses_by_control_objective_order, :reorder,
-    :excluded_control_objectives, :reset_control_objective_name
+    :excluded_control_objectives, :reset_control_objective_name,
+    :recode_work_papers
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -58,8 +59,13 @@ class ReviewsController < ApplicationController
     @review = Review.new
 
     @review.clone_from @review_clone if @review_clone
-    @review.period_id = params[:period] ?
-      params[:period].to_i : Period.list.first.try(:id)
+    @review.period_id = if params[:period]
+                          params[:period].to_i
+                        elsif Period.currents.list_all_with_plans.any?
+                          Period.currents.list_all_with_plans.first.id
+                        else
+                          Period.list_all_with_plans.first.try(:id)
+                        end
 
     respond_to do |format|
       format.html # new.html.erb
@@ -172,6 +178,13 @@ class ReviewsController < ApplicationController
   # * GET /reviews/plan_item_data/1
   def plan_item_data
     @plan_item = PlanItem.find_by id: params[:id]
+    @review = Review.new plan_item: @plan_item,
+                         best_practice_ids: @plan_item.best_practices.ids,
+                         control_objective_ids: @plan_item.control_objectives.ids
+
+    @plan_item.human_resource_utilizations.each do |ru|
+      @review.review_user_assignments.new user_id: ru.resource_id
+    end
   end
 
   # Crea el documento de relevamiento del informe
@@ -269,6 +282,64 @@ class ReviewsController < ApplicationController
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ].map { |o| Arel.sql o }
     ).references(:reviews, :periods, :conclusion_reviews, :business_units)
+  end
+
+  def auto_complete_for_past_implemented_audited_findings
+    @tokens    = params[:q][0..100].split(
+      SPLIT_AND_TERMS_REGEXP
+    ).uniq.map(&:strip)
+
+    @tokens.reject! { |t| t.blank? }
+    conditions =
+      [
+        [
+          "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :boolean_false",
+          "#{Finding.quoted_table_name}.#{Finding.qcn('state')} IN(:states)",
+          "#{Finding.quoted_table_name}.#{Finding.qcn('solution_date')} >= :limit_date",
+          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL"
+        ].join(' AND ')
+      ].compact
+
+      parameters = {
+        boolean_false: false,
+        limit_date: 3.years.ago.to_date,
+        states: [Finding::STATUS[:implemented_audited], Finding::STATUS[:expired]]
+      }
+
+      @tokens.each_with_index do |t, i|
+        conditions << [
+          "LOWER(#{Finding.quoted_table_name}.#{Finding.qcn('review_code')}) LIKE :finding_data_#{i}",
+          "LOWER(#{Finding.quoted_table_name}.#{Finding.qcn('title')}) LIKE :finding_data_#{i}",
+          "LOWER(#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('control_objective_text')}) LIKE :finding_data_#{i}",
+          "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')}) LIKE :finding_data_#{i}"
+        ].join(' OR ')
+        parameters["finding_data_#{i}".to_sym] = "%#{t.mb_chars.downcase}%"
+      end
+
+      @findings = Finding.where(
+        [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
+      ).includes(
+        control_objective_item: {
+          review: [
+            { plan_item: [:plan, :business_unit] },
+            :period,
+            :conclusion_final_review
+          ]
+        }
+      ).merge(
+        PlanItem.allowed_by_business_units
+      ).order(
+        [
+          "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
+          "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
+        ].map { |o| Arel.sql o }
+      ).references(
+        :reviews, :periods, :conclusion_reviews, :business_units
+      ).limit(5)
+
+      respond_to do |format|
+        format.json { render json: @findings }
+      end
   end
 
   # * GET /reviews/auto_complete_for_finding
@@ -386,6 +457,14 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def recode_work_papers
+    if @review.recode_work_papers
+      redirect_to edit_review_url(@review), notice: t('review.work_papers_recoded')
+    else
+      redirect_to edit_review_url(@review), alert: t('review.work_papers_recode_failed')
+    end
+  end
+
   # * GET /reviews/next_identification_number
   def next_identification_number
     @next_number = Review.list.next_identification_number params[:suffix]
@@ -410,9 +489,8 @@ class ReviewsController < ApplicationController
     def review_params
       params.require(:review).permit(
         :identification, :description, :survey, :period_id, :plan_item_id,
-        :scope, :risk_exposure, :manual_score, :include_sox, :lock_version,
-        :score_type,
-        file_model_attributes: [:id, :file, :file_cache, :_destroy],
+        :scope, :risk_exposure, :manual_score, :manual_score_alt, :include_sox,
+        :score_type, :lock_version,
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version
         ],
@@ -428,9 +506,17 @@ class ReviewsController < ApplicationController
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]
         ],
+        file_model_reviews_attributes: [
+          :id, :_destroy,
+          file_model_attributes: [:id, :file, :file_cache, :_destroy]
+        ],
+        business_unit_type_reviews_attributes: [
+          :id, :business_unit_type_id, :_destroy
+        ],
         control_objective_ids: [],
         process_control_ids: [],
-        best_practice_ids: []
+        best_practice_ids: [],
+        control_objective_tag_ids: []
       )
     end
 
@@ -473,6 +559,7 @@ class ReviewsController < ApplicationController
         auto_complete_for_process_control: :read,
         auto_complete_for_best_practice: :read,
         auto_complete_for_tagging: :read,
+        auto_complete_for_past_implemented_audited_findings: :read,
         estimated_amount: :read,
         next_identification_number: :read,
         excluded_control_objectives: :read,

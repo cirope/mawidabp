@@ -40,8 +40,8 @@
         <%= f.input :description, label: finding_description_label, input_html: { readonly: true, rows: 5 } %>
 
         <% if SHOW_FINDING_CURRENT_SITUATION %>
-          <%= f.input :current_situation, input_html: { rows: 3 } %>
-          <%= f.input :current_situation_verified %>
+          <%= f.input :current_situation, input_html: { rows: USE_SCOPE_CYCLE ? 4 : 3 } %>
+          <%= f.input :current_situation_verified unless USE_SCOPE_CYCLE %>
         <% end %>
 
         <% if @finding.kind_of?(Weakness) %>
@@ -55,9 +55,12 @@
         <% if @finding.kind_of?(Weakness) %>
           <%= f.input :risk, collection: risks, prompt: true, input_html: {
             autofocus: true,
-            data: SHOW_CONDENSED_PRIORITIES ? { toggle_priority: Finding.risks[:medium], toggle_compliance: Finding::risks[:low] } : {}
+            data: weakness_risk_data_options
           } %>
-          <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES, disabled: disabled_priority(@finding, false) %>
+          <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
+            disabled: disabled_priority(@finding, false),
+            readonly: !!USE_SCOPE_CYCLE
+          %>
         <% end %>
         <%= f.label :state, raw(Finding.human_attribute_name(:state) + ' ' +
           (show_history_changes ? finding_show_status_change_history(:finding_status_change_history) : '')) %>
@@ -98,8 +101,19 @@
           <%= f.input :compliance, collection: weakness_compliance_options,
                                    prompt: true,
                                    disabled: (@finding.risk == Finding.risks[:low]),
-                                   input_html: { data: { tag_modifier: true } } %>
+                                   input_html: {
+                                     data: {
+                                       tag_modifier: true,
+                                       mark_impact_as: false,
+                                       mark_impact_on: 'yes'
+                                     }
+                                   } %>
           <%= f.input :compliance, as: :hidden, input_html: { id: 'finding_hidden_compliance' } %>
+          <div data-compliance-observations <%= 'hidden' unless @finding.compliance == 'yes' %>>
+            <%= f.input :compliance_observations, input_html: {
+              data: { compliance_observations_text: true }
+            } %>
+          </div>
         </div>
       </div>
       <div class="row">

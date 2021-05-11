@@ -53,6 +53,7 @@ module Findings::CurrentSituationCsv
           I18n.t('follow_up_committee_report.weaknesses_current_situation.origination_year'),
           ConclusionFinalReview.human_attribute_name('conclusion'),
           Weakness.human_attribute_name('risk'),
+          Weakness.human_attribute_name('priority'),
           Weakness.human_attribute_name('title'),
           Weakness.human_attribute_name('description'),
           Weakness.human_attribute_name('current_situation'),
@@ -63,7 +64,8 @@ module Findings::CurrentSituationCsv
           Finding.human_attribute_name('id'),
           I18n.t('finding.audited', count: 0),
           I18n.t('finding.auditors', count: 0),
-          Tag.model_name.human(count: 0)
+          Tag.model_name.human(count: 0),
+          Weakness.human_attribute_name('compliance_observations')
         ].concat benefits.pluck('name')
       end
 
@@ -77,8 +79,9 @@ module Findings::CurrentSituationCsv
             weakness.review.identification,
             weakness.business_unit_type.to_s,
             (I18n.l weakness.origination_date, format: '%Y' if weakness.origination_date),
-            weakness.review.conclusion_final_review.conclusion,
+            weakness.review.conclusion_final_review&.conclusion,
             current_weakness.risk_text,
+            current_weakness.priority_text,
             current_weakness.title,
             current_weakness.description,
             (current_weakness.show_current_situation? ? current_weakness.current_situation : ''),
@@ -89,7 +92,8 @@ module Findings::CurrentSituationCsv
             weakness.id,
             weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
             weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; '),
-            weakness.taggings.map(&:tag).join('; ')
+            weakness.taggings.map(&:tag).join('; '),
+            weakness.compliance_observations
           ].concat(benefits.map do |b|
             achievement = weakness.achievements.detect do |a|
               a.benefit_id == b.id

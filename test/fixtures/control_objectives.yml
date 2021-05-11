@@ -5,6 +5,7 @@ management_dependency:
   order: 1
   process_control: security_management
   obsolete: false
+  score_type: <%= ControlObjective.default_score_type %>
   support: 'text.txt'
 
 impact_analysis:
@@ -14,6 +15,7 @@ impact_analysis:
   order: 2
   process_control: security_management
   obsolete: false
+  score_type: <%= ControlObjective.default_score_type %>
 
 security_policy_3_1:
   name: "3.1) Security policy"
@@ -22,6 +24,7 @@ security_policy_3_1:
   order: 1
   process_control: security_policy
   obsolete: false
+  score_type: <%= ControlObjective.default_score_type %>
 
 organization_security_4_1:
   name: "4.1) Organization security"
@@ -30,6 +33,7 @@ organization_security_4_1:
   order: 2
   process_control: security_policy
   obsolete: false
+  score_type: <%= ControlObjective.default_score_type %>
 
 organization_security_4_2:
   name: "4.2) Organization security access"
@@ -38,6 +42,7 @@ organization_security_4_2:
   order: 3
   process_control: security_policy
   obsolete: false
+  score_type: <%= ControlObjective.default_score_type %>
 
 organization_security_4_3:
   name: "4.3) Organization security access"
@@ -46,6 +51,7 @@ organization_security_4_3:
   order: 4
   process_control: security_policy
   obsolete: false
+  score_type: <%= ControlObjective.default_score_type %>
 
 organization_security_4_4:
   name: "4.4) Organization security access"
@@ -54,3 +60,4 @@ organization_security_4_4:
   order: 5
   process_control: security_policy
   obsolete: false
+  score_type: <%= ControlObjective.default_score_type %>

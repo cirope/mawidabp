@@ -86,7 +86,7 @@ class RoleTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    @role.name = roles(:auditor_senior_role).name
+    @role.name = roles(:auditor_role).name
 
     assert @role.invalid?
     assert_error @role, :name, :taken
@@ -106,7 +106,7 @@ class RoleTest < ActiveSupport::TestCase
 
   test 'inject auth privileges and has auth privileges function' do
     @role = Role.new
-    bare_role_privileges = roles(:auditor_senior_role).privileges_hash
+    bare_role_privileges = roles(:auditor_role).privileges_hash
 
     assert !@role.has_auth_privileges?
     assert bare_role_privileges.size > 0
@@ -116,7 +116,7 @@ class RoleTest < ActiveSupport::TestCase
   end
 
   test 'auth privileges for function' do
-    bare_role_privileges = roles(:auditor_senior_role).privileges_hash
+    bare_role_privileges = roles(:auditor_role).privileges_hash
 
     assert bare_role_privileges.size > 0
     @role.inject_auth_privileges(bare_role_privileges)

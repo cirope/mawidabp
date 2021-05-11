@@ -5,6 +5,7 @@ being_implemented_weakness:
   title: Title 1w
   review_code: O001
   description: Description 1w
+  brief: Brief 1w
   answer: Answer 1w
   current_situation:
   current_situation_verified: false
@@ -33,6 +34,7 @@ unconfirmed_for_notification_weakness:
   title: Title 2w iso
   review_code: O002
   description: Description 2w iso
+  brief: Brief 2w iso
   answer: Answer 2w
   current_situation:
   current_situation_verified: false
@@ -62,12 +64,12 @@ unanswered_for_level_<%= level %>_notification:
   title: Title <%= level %>w
   review_code: <%= "O00#{level}" %>
   description: Description <%= level %>w
+  brief: Brief <%= level %>w
   answer: Answer <%= level %>w
   current_situation:
   current_situation_verified: false
   audit_comments: Audit comments <%= level %>w
   state: <%= Finding::STATUS[:unanswered] %>
-  origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
   effect: Effect <%= level %>w
@@ -92,12 +94,12 @@ incomplete_weakness:
   title: Title incomplete_w
   review_code: O005
   description: Description incomplete_w
+  brief: Brief incomplete_w
   answer: Answer incomplete_w
   current_situation:
   current_situation_verified: false
   audit_comments: Audit comments incomplete_w
   state: <%= Finding::STATUS[:incomplete] %>
-  origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
   effect: Effect incomplete_w
@@ -120,6 +122,7 @@ other_unconfirmed_for_notification_weakness:
   title: Title 3w iso
   review_code: O003
   description: Description 3w iso
+  brief: Brief 3w iso
   answer: Answer 3w
   current_situation:
   current_situation_verified: false
@@ -147,6 +150,7 @@ notify_oportunity:
   title: Title 1o
   review_code: OM001
   description: Description 1o
+  brief: Brief 1o
   answer: Answer 1o
   current_situation:
   current_situation_verified: false
@@ -164,6 +168,7 @@ being_implemented_oportunity:
   title: Title 1o
   review_code: OM001
   description: Description 1o
+  brief: Brief 1o
   answer: Answer 1o
   current_situation:
   current_situation_verified: false
@@ -183,6 +188,7 @@ being_implemented_weakness_on_draft:
   title: Title 3w bcra
   review_code: O003
   description: Description 3w bcra
+  brief: Brief 3w bcra
   answer: Answer 3w
   current_situation:
   current_situation_verified: false
@@ -209,6 +215,7 @@ unanswered_weakness:
   title: Title 2w bcra
   review_code: O002
   description: Description 2w bcra
+  brief: Brief 2w bcra
   answer: Answer 2w
   current_situation:
   current_situation_verified: false
@@ -235,6 +242,7 @@ unconfirmed_weakness:
   title: Title 1w bi
   review_code: O001
   description: Description 1w bi
+  brief: Brief 1w bi
   answer: Answer 1w
   current_situation:
   current_situation_verified: false
@@ -261,6 +269,7 @@ unconfirmed_oportunity:
   title: Title 3o
   review_code: OM003
   description: Description 3o
+  brief: Brief 3o
   answer: Answer 3o
   current_situation:
   current_situation_verified: false
@@ -280,6 +289,7 @@ confirmed_oportunity_on_draft:
   title: Title o
   review_code: OM001
   description: Description o
+  brief: Brief o
   answer: Answer o
   current_situation:
   current_situation_verified: false
@@ -298,6 +308,7 @@ confirmed_oportunity:
   title: Title 2o
   review_code: OM002
   description: Description 2o
+  brief: Brief 2o
   answer: Answer 2o
   current_situation:
   current_situation_verified: false
@@ -317,6 +328,7 @@ being_implemented_weakness_on_final:
   title: Title 1wx
   review_code: O001
   description: Description 1wx
+  brief: Brief 1wx
   answer: Answer 1w
   current_situation:
   current_situation_verified: false
@@ -343,6 +355,7 @@ being_implemented_weakness_on_approved_draft:
   title: Title 1w
   review_code: O001
   description: Description 1w
+  brief: Brief 1w
   answer: Answer 1w
   current_situation:
   current_situation_verified: false

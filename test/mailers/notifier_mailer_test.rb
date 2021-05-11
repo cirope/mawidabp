@@ -11,6 +11,11 @@ class NotifierMailerTest < ActionMailer::TestCase
     set_organization
   end
 
+  teardown do
+    Current.organization = nil
+    Current.user         = nil
+  end
+
   test 'pending poll email' do
     poll = Poll.find(polls(:poll_one).id)
 
@@ -76,6 +81,36 @@ class NotifierMailerTest < ActionMailer::TestCase
       I18n.t('notifier.notify_new_finding.title')
     )
     assert_match Regexp.new(I18n.t('notifier.notify_new_finding.title')),
+      response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
+  test 'notify new finding to related users' do
+    user = users :administrator
+    related = users :bare
+
+    user.related_user_relations.create! related_user_id: related.id, notify: true
+
+    response = NotifierMailer.notify_new_finding(user, user.findings.first).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.notify_new_finding.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.notify_new_finding.title')),
+      response.body.decoded
+    assert_equal [user.email, related.email].sort, response.to.sort
+  end
+
+  test 'notify new oportunity' do
+    user     = users :supervisor
+    response = NotifierMailer.notify_new_oportunity([user], user.oportunities.first).deliver_now
+
+    refute ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.notify_new_oportunity.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.notify_new_oportunity.title')),
       response.body.decoded
     assert_equal user.email, response.to.first
   end
@@ -245,6 +280,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     ]
 
     Current.organization = organization
+    Current.user         = user
 
     conclusion_review.to_pdf organization
     conclusion_review.review.score_sheet organization, draft: false

@@ -11,6 +11,16 @@ module UsersHelper
    form.input :language, collection: options, prompt: true, input_html: { disabled: disabled }
   end
 
+  def user_row_class user
+    if user.hidden
+      'strike'
+    elsif user.enable
+      'enabled_item'
+    else
+      'disabled_item'
+    end
+  end
+
   def user_info user
     if user.organizations.blank?
       show_info t('user.without_organization'), class: :red
@@ -63,5 +73,9 @@ module UsersHelper
     result  = (setting ? setting.value : DEFAULT_SETTINGS[:hide_import_from_ldap][:value]) != '0'
 
     !result || can_perform?(:edit, :approval)
+  end
+
+  def user_business_unit_types
+    BusinessUnitType.list.order :name
   end
 end

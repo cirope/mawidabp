@@ -16,6 +16,7 @@ module FindingAnswers::Validations
     def commitment_date_should_be_present?
       user&.can_act_as_audited? &&
         requires_commitment_date? &&
+        !skip_commitment_support &&
         Current.organization &&
         !Current.organization.corporate?
     end

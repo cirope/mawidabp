@@ -87,11 +87,13 @@ module AuditedReports::WeaknessesByUser
       weaknesses = Weakness.
         with_status_for_report.
         finals(final).
-        list_with_final_review.
+        list_for_report.
         where(state: [Finding::STATUS[:being_implemented], Finding::STATUS[:unanswered]]).
-        joins(:users).
-        references(:user).
-        where(User.table_name => { id: users.map(&:id) }).
+        references(:finding_user_assignments).
+        joins(:finding_user_assignments).
+        where(FindingUserAssignment.table_name => {
+          user_id: users.map(&:id), process_owner: true
+        }).
         includes(
           :business_unit,
           :business_unit_type,
@@ -211,9 +213,11 @@ module AuditedReports::WeaknessesByUser
         @filters << "<b>#{User.model_name.human count: 1}</b> = \"#{user.full_name}\""
 
         weaknesses.
-          joins(:users).
-          references(:user).
-          where(User.table_name => { id: user.self_and_descendants.map(&:id) })
+          references(:finding_user_assignments).
+          joins(:finding_user_assignments).
+          where FindingUserAssignment.table_name => {
+            user_id: user.self_and_descendants.map(&:id), process_owner: true
+          }
       else
         weaknesses
       end

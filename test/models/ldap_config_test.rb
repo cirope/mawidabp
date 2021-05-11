@@ -175,6 +175,7 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     user.update! manager_id: users(:corporate).id
 
+    refute user.organizational_unit.present?
     assert user.organization_roles.map(&:role_id).exclude?(role.id)
     assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)
 
@@ -184,6 +185,7 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)
     assert user.organization_roles.map(&:role_id).include?(corp_role.id)
+    assert user.organizational_unit.present?
     assert_equal user.id, User.find_by(user: 'new_user').manager_id
     assert_nil user.manager_id
   end
@@ -231,7 +233,13 @@ class LdapConfigTest < ActiveSupport::TestCase
   test 'massive import' do
     user         = users(:supervisor)
     organization = organizations(:google)
-    emails_count = NOTIFY_NEW_ADMIN ? 2 : 1
+    emails_count = if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+                     0
+                   elsif NOTIFY_NEW_ADMIN
+                     2
+                   else
+                     1
+                   end
 
     organization.ldap_config.update! user: 'admin', password: 'admin123'
 

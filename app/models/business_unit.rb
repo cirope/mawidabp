@@ -2,6 +2,7 @@ class BusinessUnit < ApplicationRecord
   include Auditable
   include BusinessUnits::Scopes
   include ParameterSelector
+  include Taggable
   include Trimmer
 
   trimmed_fields :name

@@ -206,13 +206,14 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'create review' do
-    expected_coi_count = ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION ? 5 : 3
+    expected_coi_count = ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION ? 6 : 3
 
     login
     assert_difference ['Review.count', 'FindingReviewAssignment.count', 'Tagging.count'] do
-      # Se crean 2 con 'best_practice_ids', 2 con 'process_control_ids' y uno con 'control_objective_ids'
+      # Se crean 2 con 'best_practice_ids', 2 con 'process_control_ids',
+      # 1 con 'control_objective_ids' y 1 con 'objective control tag'
       assert_difference 'ControlObjectiveItem.count', expected_coi_count do
-        assert_difference 'FileModel.count' do
+        assert_difference 'FileModelReview.count' do
           assert_difference 'ReviewUserAssignment.count', 4 do
             post :create, params: {
               review: {
@@ -223,14 +224,19 @@ class ReviewsControllerTest < ActionController::TestCase
                 plan_item_id: plan_items(:past_plan_item_3).id,
                 scope: 'committee',
                 risk_exposure: 'high',
-                manual_score: 800,
+                manual_score: 80,
                 include_sox: 'no',
                 best_practice_ids: [best_practices(:bcra_A4609).id],
                 process_control_ids: [process_controls(:security_management).id],
                 control_objective_ids: [control_objectives(:security_policy_3_1).id],
-                file_model_attributes: {
-                  file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
-                },
+                control_objective_tag_ids: [tags(:risk_evaluation).id],
+                file_model_reviews_attributes: [
+                  {
+                    file_model_attributes: {
+                      file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+                    },
+                  }
+                ],
                 finding_review_assignments_attributes: [
                   {
                     finding_id: findings(:unanswered_weakness).id.to_s
@@ -287,7 +293,7 @@ class ReviewsControllerTest < ActionController::TestCase
           plan_item_id: plan_items(:current_plan_item_2).id,
           scope: 'committee',
           risk_exposure: 'high',
-          manual_score: 800,
+          manual_score: 80,
           include_sox: 'no',
           review_user_assignments_attributes: [
             {
@@ -723,6 +729,34 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 0, findings.size # Sin resultados
   end
 
+  test 'auto complete for past implemented audited finding ' do
+    finding = findings :being_implemented_weakness_on_final
+
+    login
+
+    finding.update_columns state:         Finding::STATUS[:implemented_audited],
+                           solution_date: 1.year.ago.to_date.to_s(:db)
+
+    get :auto_complete_for_past_implemented_audited_findings, xhr: true, params: { q: 'O001' }, as: :json
+    assert_response :success
+
+    findings = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, findings.size
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
+  end
+
+  test 'auto complete for past implemented audited finding relation for unknown' do
+    login
+
+    get :auto_complete_for_past_implemented_audited_findings, xhr: true, params: { q: 'x_none' }, as: :json
+    assert_response :success
+
+    findings = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, findings.size # Sin resultados
+  end
+
   test 'auto complete for tagging' do
     login
 
@@ -763,6 +797,54 @@ class ReviewsControllerTest < ActionController::TestCase
       q: 'impor',
       completion_state: 'incomplete',
       kind: 'finding'
+    }, as: :json
+
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode @response.body
+
+    assert_equal 0, response_tags.size
+  end
+
+  test 'auto complete for control objective tag' do
+    login
+
+    get :auto_complete_for_tagging, xhr: true, params: {
+      q: 'risk evaluation',
+      kind: 'control_objective'
+    }, as: :json
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, response_tags.size
+    assert response_tags.all? { |t| t['label'].match /risk evaluation/i }
+  end
+
+  test 'auto complete for unknown control objective tag' do
+    login
+
+    get :auto_complete_for_tagging, xhr: true, params: {
+      q: 'x_none',
+      kind: 'control_objetive'
+    }, as: :json
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, response_tags.size # Sin resultados
+  end
+
+  test 'auto complete for obsolete control objective tag' do
+    login
+
+    tag = tags :risk_evaluation
+
+    tag.update! obsolete: true
+
+    get :auto_complete_for_tagging, params: {
+      q: 'impor',
+      kind: 'control_objective'
     }, as: :json
 
     assert_response :success

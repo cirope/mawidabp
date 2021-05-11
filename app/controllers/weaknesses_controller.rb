@@ -56,7 +56,9 @@ class WeaknessesController < ApplicationController
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn('review_code')} ASC"
       ].map { |o| Arel.sql o }
-    ).references(:periods, :conclusion_reviews)
+    ).
+    references(:periods, :conclusion_reviews).
+    merge Review.allowed_by_business_units
 
     respond_to do |format|
       format.html { @weaknesses = @weaknesses.page params[:page] }
@@ -163,11 +165,11 @@ class WeaknessesController < ApplicationController
   private
     def weakness_params
       params.require(:weakness).permit(
-        :control_objective_item_id, :review_code, :title, :description, :answer,
-        :audit_comments, :state, :origination_date, :solution_date,
+        :control_objective_item_id, :review_code, :title, :description, :brief,
+        :answer, :audit_comments, :state, :origination_date, :solution_date,
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
         :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
-        :weakness_template_id, :lock_version,
+        :weakness_template_id, :lock_version, :compliance_observations,
         operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [], tag_ids: [],
         achievements_attributes: [

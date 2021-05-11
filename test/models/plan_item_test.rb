@@ -2,9 +2,14 @@ require 'test_helper'
 
 class PlanItemTest < ActiveSupport::TestCase
   setup do
-    @plan_item = plan_items :current_plan_item_1
+    @plan_item   = plan_items :current_plan_item_1
+    Current.user = users :supervisor
 
     set_organization
+  end
+
+  teardown do
+    Current.user = nil
   end
 
   test 'create' do

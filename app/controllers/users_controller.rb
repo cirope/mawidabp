@@ -56,7 +56,7 @@ class UsersController < ApplicationController
 
     @user.send_notification_if_necesary if @user.errors.empty?
 
-    respond_with @user, location: users_url
+    respond_with @user, location: users_url unless performed?
   end
 
   # * DELETE /users/1
@@ -69,7 +69,13 @@ class UsersController < ApplicationController
   private
 
     def users
-      User.list.search(**search_params).not_hidden.order(
+      scope = if params[:show_hidden].present?
+                User.all
+              else
+                User.not_hidden
+              end
+
+      scope.list.search(**search_params).order(
         Arel.sql "#{User.quoted_table_name}.#{User.qcn('user')} ASC"
       ).page params[:page]
     end

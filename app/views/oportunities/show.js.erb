@@ -1,6 +1,7 @@
 <% if @oportunity %>
   $('[name$="[title]"]').val("<%== j @oportunity.title %>").trigger('change')
   $('[name$="[description]"]').val("<%== j @oportunity.description %>").trigger('change')
+  $('[name$="[state]"]').val("<%== j @oportunity.state %>").trigger('change')
   $('[name$="[answer]"]').val("<%== j @oportunity.answer %>").trigger('change')
   $('[name$="[audit_comments]"]').val("<%== j @oportunity.audit_comments %>").trigger('change')
 

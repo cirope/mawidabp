@@ -9,7 +9,7 @@ module Reports::FileResponder
     if send_report_by_email? collection
       perform_report_and_redirect_back args
     else
-      render request.format.symbol => collection.send(method_name, options), filename: filename
+      render request.format.symbol => collection.send(method_name, **options), filename: filename
     end
   end
 
@@ -25,7 +25,7 @@ module Reports::FileResponder
 
                      request.referrer
                    else
-                     collection.send method_name, options.merge(filename_only: true)
+                     collection.send method_name, **options.merge(filename_only: true)
                    end
 
     respond_to do |format|

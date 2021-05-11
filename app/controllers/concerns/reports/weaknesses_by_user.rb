@@ -9,7 +9,8 @@ module Reports::WeaknessesByUser
     init_weaknesses_by_user_vars
 
     respond_to do |format|
-      format.html
+      format.html { render_paginated_weaknesses }
+      format.js   { render_paginated_weaknesses }
       format.csv  { render_weaknesses_by_user_report_csv }
     end
   end
@@ -78,7 +79,7 @@ module Reports::WeaknessesByUser
       weaknesses = Weakness.
         with_status_for_report.
         finals(final).
-        list_with_final_review.
+        list_for_report.
         by_issue_date('BETWEEN', @from_date, @to_date).
         includes(
           :business_unit,
@@ -118,7 +119,7 @@ module Reports::WeaknessesByUser
         ],
         [
           ConclusionFinalReview.human_attribute_name('issue_date'),
-          l(weakness.review.conclusion_final_review.issue_date)
+          weakness.review.conclusion_final_review ? l(weakness.review.conclusion_final_review.issue_date) : '-'
         ],
         [
           BusinessUnit.model_name.human,
@@ -143,6 +144,10 @@ module Reports::WeaknessesByUser
         [
           Weakness.human_attribute_name('risk'),
           weakness.risk_text
+        ],
+        [
+          Weakness.human_attribute_name('priority'),
+          weakness.priority_text
         ],
         [
           t('finding.auditors', count: 0),
@@ -200,9 +205,11 @@ module Reports::WeaknessesByUser
         @filters << "<b>#{User.model_name.human count: 1}</b> = \"#{user.full_name}\""
 
         weaknesses.
-          joins(:users).
-          references(:user).
-          where(User.table_name => { id: user.self_and_descendants.map(&:id) })
+          references(:finding_user_assignments).
+          joins(:finding_user_assignments).
+          where FindingUserAssignment.table_name => {
+            user_id: user.self_and_descendants.map(&:id), process_owner: true
+          }
       else
         weaknesses
       end
@@ -268,5 +275,9 @@ module Reports::WeaknessesByUser
       else
         weaknesses
       end
+    end
+
+    def render_paginated_weaknesses
+      @weaknesses = @weaknesses.page params[:page]
     end
 end

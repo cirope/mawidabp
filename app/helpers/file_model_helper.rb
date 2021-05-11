@@ -3,12 +3,12 @@ module FileModelHelper
     model.build_file_model unless model.file_model
   end
 
-  def link_to_download model
+  def link_to_download model, extra_classes: nil
     file_model = model.file_model
 
     if file_model && file_model.file? && file_model.file.cached?.blank?
       options = {
-        class: 'btn btn-outline-secondary',
+        class: "btn btn-outline-secondary #{extra_classes}",
         title: file_model.identifier.titleize,
         data:  { ignore_unsaved_data: true }
       }

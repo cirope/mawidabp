@@ -51,6 +51,9 @@
         <%= finding_repeated_of_label f, readonly: readonly %>
         <%= finding_repeated_of_if_field f, readonly: readonly %>
         <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: 5 } %>
+        <% if USE_SCOPE_CYCLE %>
+          <%= f.input :brief, input_html: { readonly: readonly, rows: 1 } %>
+        <% end %>
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
       </div>
       <div class="col-md-6">
@@ -102,8 +105,20 @@
   </div>
 
   <div id="finding_user_assignments">
-    <%= f.simple_fields_for :finding_user_assignments do |fua_f| %>
-      <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
+    <% others, audit_team = @oportunity.finding_user_assignments.partition { |fua| fua.user.can_act_as_audited? } %>
+
+    <% if audit_team.present? %>
+      <h5 class="text-muted"><%= t 'finding.user_assignment.audit_team' %></h5>
+      <%= f.simple_fields_for :finding_user_assignments, audit_team do |fua_f| %>
+        <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
+      <% end %>
+    <% end %>
+
+    <% if others.present? %>
+      <h5 class="text-muted"><%= t 'finding.user_assignment.others' %></h5>
+      <%= f.simple_fields_for :finding_user_assignments, others do |fua_f| %>
+        <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
+      <% end %>
     <% end %>
 
     <%= link_to_add_fields(t('finding.add_user'), f,

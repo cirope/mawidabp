@@ -14,6 +14,7 @@ class WeaknessTest < ActiveSupport::TestCase
         title: 'Title',
         review_code: 'O020',
         description: 'New description',
+        brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
         state: Finding::STATUS[:notify],
@@ -60,6 +61,7 @@ class WeaknessTest < ActiveSupport::TestCase
         title: 'Title',
         review_code: 'O020',
         description: 'New description',
+        brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
         state: Finding::STATUS[:notify],
@@ -346,7 +348,7 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'must be approved on required attributes' do
-    error_messages = if HIDE_WEAKNESS_EFFECT
+    error_messages = if HIDE_WEAKNESS_EFFECT || USE_SCOPE_CYCLE
                        [I18n.t('weakness.errors.without_audit_comments')]
                      else
                        [
@@ -479,6 +481,17 @@ class WeaknessTest < ActiveSupport::TestCase
 
     assert weakness.all_follow_up_dates.blank?
     refute weakness.rescheduled?
+  end
+
+  test 'compliance observations attribute not be empty when option is yes' do
+    skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+
+    weakness = findings :being_implemented_weakness_on_approved_draft
+
+    weakness.compliance = 'yes'
+
+    assert weakness.invalid?
+    assert_error weakness, :compliance_observations, :blank
   end
 
   private

@@ -7,7 +7,9 @@ class Finding < ApplicationRecord
   include Findings::AttributeTypes
   include Findings::Brief
   include Findings::BusinessUnits
+  include Findings::ByControlObjectiveProcessCsv
   include Findings::ByUserCsv
+  include Findings::WeaknessesHeatmapCsv
   include Findings::Code
   include Findings::Comments
   include Findings::Confirmation
@@ -15,6 +17,7 @@ class Finding < ApplicationRecord
   include Findings::Cost
   include Findings::CreateValidation
   include Findings::Csv
+  include Findings::Commitments
   include Findings::CommitmentSupport
   include Findings::Current
   include Findings::CurrentSituationCsv

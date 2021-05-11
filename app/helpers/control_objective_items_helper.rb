@@ -51,4 +51,12 @@ module ControlObjectiveItemsHelper
   def auditor_comment_options
     CONCLUSION_OPTIONS.map { |option| [option, option] }
   end
+
+  def previous_effectiveness(control_objective_item)
+    effectiveness = control_objective_item.previous_effectiveness
+
+    if effectiveness
+      t('control_objective_item.previous_effectiveness', effectiveness: effectiveness)
+    end
+  end
 end

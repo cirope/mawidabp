@@ -25,6 +25,14 @@ module Reports::CostAnalysis
 
       set_total_costs(period)
     end
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.csv do
+        render csv: cost_analysis_report_csv, filename: @title.downcase
+      end
+    end
   end
 
   def init_cost_analysis_vars
@@ -217,5 +225,71 @@ module Reports::CostAnalysis
         end
       end
     end
+  end
+
+  def cost_analysis_report_csv
+    options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+    csv_str = CSV.generate(**options) do |csv|
+      csv << cost_analysis_headers
+
+      cost_analysis_data.each do |data|
+        csv << data.map { |value| value.to_s.gsub /<[^>]*>/, '' }
+      end
+    end
+
+    "\uFEFF#{csv_str}"
+  end
+
+  def cost_analysis_headers
+    [
+      t('conclusion_report.cost_analysis.general_column_business_unit'),
+      t('conclusion_report.cost_analysis.general_column_review'),
+      t('conclusion_report.cost_analysis.general_column_estimated_amount'),
+      t('conclusion_report.cost_analysis.general_column_real_amount'),
+      t('conclusion_report.cost_analysis.general_column_deviation'),
+      t('conclusion_report.cost_analysis.period.title')
+    ]
+  end
+
+  def cost_analysis_data
+    data = []
+
+    @periods.each do |period|
+      @total_cost_data[period].each do |total_data|
+        data << total_data.push(period.inspect)
+      end
+
+      unless @detailed_data[period].blank?
+        data << detail_cost_analysis_headers
+
+        detail_cost_analysis_data(period).each do |detail|
+          data << detail
+        end
+      end
+    end
+
+    data
+  end
+
+  def detail_cost_analysis_headers
+    [
+      t("conclusion_report.cost_analysis.detailed_column_resource"),
+      t("conclusion_report.cost_analysis.detailed_column_estimated_amount"),
+      t("conclusion_report.cost_analysis.detailed_column_real_amount"),
+      t("conclusion_report.cost_analysis.detailed_column_deviation")
+    ]
+  end
+
+  def detail_cost_analysis_data period
+    rows = []
+
+    @detailed_data[period].each do |detailed_data|
+      detailed_data[:data].each do |data|
+        rows.push(data)
+      end
+    end
+
+    rows
   end
 end

@@ -154,11 +154,11 @@ module Prawn
         end
       end
 
-      def add_review_header(organization, identification, project)
+      def add_review_header(organization, identification, project, hide_logo: false)
         self.repeat :all do
           font_size = PDF_HEADER_FONT_SIZE
 
-          self.add_organization_image organization, font_size
+          self.add_organization_image organization, font_size unless hide_logo
 
            y_pointer = self.y
 
@@ -260,16 +260,24 @@ module Prawn
         self.y = y_pointer
       end
 
-      def add_page_footer(font_size = 10)
-        self.repeat :all, :dynamic =>  true do
+      def add_page_footer(font_size = 10, skip_first_page = false, left_text = nil)
+        pages = skip_first_page ? -> (page) { page > 1 } : :all
+
+        self.repeat pages, :dynamic =>  true do
           self.canvas do
             right_margin = self.page.margins[:right]
+            left_margin = self.page.margins[:left]
             string = I18n.t('pdf.page_pattern', :page => self.page_number,
               :total => self.page_count)
             x = self.bounds.right - self.width_of(string) - right_margin
 
             self.draw_text string, :at => [x, (font_size.pt * 2)],
               :size => font_size
+
+            if left_text.present?
+              self.draw_text left_text, :at => [left_margin, (font_size.pt * 2)],
+                :size => font_size
+            end
           end
         end
       end

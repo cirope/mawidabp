@@ -91,6 +91,9 @@ es:
       title: 'Detalle objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
+    score_type:
+      option: 'Opciones'
+      percentage: 'Porcentaje'
 
   documents:
     edit:
@@ -152,6 +155,8 @@ es:
       confirmed: 'Confirmada'
       unconfirmed: 'No confirmada'
       unanswered: 'Sin respuesta'
+      awaiting: 'A regularizar'
+      failure: 'Falla'
       being_implemented: 'Pendiente'
       being_implemented_current: 'Vigente'
       being_implemented_current_rescheduled: 'Reprogramada vigente'
@@ -298,7 +303,11 @@ es:
       title: 'Detalles del período'
 
   plan_items:
-    show:
+    best_practice:
+      best_practice_projects:
+        save: 'Asociar buena práctica'
+        done: 'Guardar'
+    control_objective:
       control_objective_projects:
         save: 'Asociar objetivo de control'
         done: 'Guardar'
@@ -348,6 +357,9 @@ es:
       title: 'Plan de auditoría'
       pdf_name: 'plan_periodo_%{period}.pdf'
       resource_utilization: 'Recursos utilizados'
+    csv:
+      title: 'Plan de auditoría'
+      csv_name: 'plan_periodo_%{period}.csv'
     calendar:
       show:
         title: 'Cronograma'
@@ -371,11 +383,14 @@ es:
         progress: 'Avance total'
         compliance: 'Cumplimiento'
     business_unit_type_plan_items:
-      associate_control_objectives: 'Asociar objetivos de control'
+      associate_control_objective: 'Asociar objetivo de control'
+      associate_best_practice: 'Asociar buena práctica'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
     download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
     download_detailed_business_unit_type_plan: 'Descargar plan %{business_unit_type} detallado'
+    download_detailed_business_unit_type_plan_csv: 'Descargar plan %{business_unit_type} en CSV'
+    download_business_unit_type_plan_csv: 'Descargar plan en CSV'
     without_business_unit_type: 'Sin unidad de negocio'
 
   profiles:
@@ -397,6 +412,9 @@ es:
     business_units:
       index:
         title: 'Resumen por unidad organizativa'
+    reviews:
+      index:
+        title: 'Resumen por informe'
     index:
       title: 'Listado de encuestas'
     edit:
@@ -476,6 +494,7 @@ es:
       user: 'Usuario'
       password: 'Contraseña'
       remember_me: 'Recordarme'
+      try_again: 'Ingresar nuevamente'
       forgot_password: '¿Olvidaste tu contraseña?'
     create:
       invalid: 'Tu correo y/o contraseña no están bien =('
@@ -511,6 +530,8 @@ es:
     require_manager_on_findings: 'Requerir gerente de auditoría en hallazgos'
     hide_import_from_ldap: 'Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación'
     skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
+    hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
+    hours_of_work_per_day: 'Horas de trabajo por día'
 
   tags:
     edit:
@@ -545,10 +566,22 @@ es:
       in_progress: 'En proceso'
       finished: 'Finalizada'
 
+  reviews:
+    index:
+      control_objective_items_open:
+        title: 'Objetivos de control abiertos'
+        label: 'OCA'
+      control_objective_items_finished:
+        title: 'Objetivos de control finalizados'
+        label: 'OCF'
+    form:
+      add_business_unit_type: 'Agregar unidad organizativa'
+
   users:
     index:
       title: 'Listado de usuarios'
       import_from_ldap: 'Importar desde LDAP'
+      show_hidden: 'Mostrar ocultos'
     show:
       title: 'Detalles de usuario'
       profiles: 'Perfiles'
@@ -562,11 +595,14 @@ es:
       unlink_manager: 'Desvincular'
       children: 'Personal a cargo'
       add_child: 'Agregar persona a cargo'
+      add_business_unit_type: 'Agregar unidades organizativas'
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
     create:
       correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
-
+    profiles:
+      edit:
+        title: 'Mis datos'
     imports:
       new:
         title: 'Importar usuarios desde LDAP'
@@ -647,6 +683,9 @@ es:
           complete:
             one: '**Una** observación solucionada'
             other: '**%{count}** observaciones solucionadas'
+          repeated:
+            one: '**Una** observación reiterada'
+            other: '**%{count}** observaciones reiteradas'
 
   risk_assessments:
     edit:

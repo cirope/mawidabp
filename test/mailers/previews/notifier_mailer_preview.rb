@@ -71,7 +71,7 @@ class NotifierMailerPreview < ActionMailer::Preview
     users      = User.joins(:findings).merge(Finding.where(conditions)).limit(1)
     finding    = users.take.findings.where(conditions).take
 
-    NotifierMailer.expired_finding_to_manager_notification finding, users, 1
+    NotifierMailer.expired_finding_to_manager_notification finding, users, 0
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/reassigned_findings_notification

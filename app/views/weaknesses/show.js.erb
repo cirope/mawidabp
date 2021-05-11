@@ -1,10 +1,12 @@
 <% if @weakness %>
   $('[name$="[title]"]').val("<%== j @weakness.title %>").trigger('change')
   $('[name$="[description]"]').val("<%== j @weakness.description %>").trigger('change')
+  $('[name$="[brief]"]').val("<%== j @weakness.brief %>").trigger('change')
   $('[name$="[effect]"]').val("<%== j @weakness.effect %>").trigger('change')
   $('[name$="[audit_recommendations]"]').val("<%== j @weakness.audit_recommendations %>").trigger('change')
   $('[name$="[risk]"]').val(<%= @weakness.risk %>).trigger('change')
   $('[name$="[priority]"]').val(<%= @weakness.priority %>).trigger('change')
+  $('[name$="[state]"]').val(<%= @weakness.state %>).trigger('change')
   $('[name$="[answer]"]').val("<%== j @weakness.answer %>").trigger('change')
   $('[name$="[audit_comments]"]').val("<%== j @weakness.audit_comments %>").trigger('change')
   $('[name$="[compliance]"]').val("<%= @weakness.compliance %>").trigger('change')

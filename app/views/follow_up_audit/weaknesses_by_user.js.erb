@@ -1,0 +1,11 @@
+$('.endless-pagination').append(
+  '<%= j render(partial: 'weakness_by_user', collection: @weaknesses, as: :weakness) %>'
+)
+
+$('[data-pagination-loading]').attr('hidden', true)
+
+<% if @weaknesses.next_page %>
+  $('.pagination').replaceWith('<%= j paginate(@weaknesses) %>')
+<% else %>
+  $('.pagination').remove()
+<% end %>

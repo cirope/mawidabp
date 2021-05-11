@@ -215,6 +215,12 @@ es:
       best_practice_comment:
         auditor_comment: 'Conclusiones del auditor'
         best_practice: 'Buena práctica'
+      business_unit_type_users:
+        business_unit_type_id: "Unidad organizativa"
+        user_id: "Usuario"
+      business_unit_type_reviews:
+        business_unit_type_id: "Unidad organizativa"
+        review_id: "Informe"
       business_unit_score:
         business_unit_id: 'Unidad de negocio'
         design_score: 'Calificación pruebas de diseño'
@@ -242,6 +248,7 @@ es:
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
         support: 'Soporte'
+        score_type: 'Tipo de calificación'
         control_objective_id: 'Objetivo de control'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
@@ -266,6 +273,7 @@ es:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
         description: 'Observación / Oportunidad'
+        brief: 'Resumen'
         type: 'Tipo'
         repeated_of_id: 'Reiterada de'
         review_code: 'Código'
@@ -329,6 +337,7 @@ es:
         commitment_date: 'Fecha de compromiso'
         user_id: 'Comentario (usuario)'
         notify_users: 'Comentario (enviar notificación)'
+        skip_commitment_support: 'Tildar si la observación está solucionada'
       finding/finding_answers/commitment_support:
         one: 'Sustento compromiso'
         reason: 'Motivo reprogramación'
@@ -409,6 +418,7 @@ es:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
         description: 'Oportunidad de mejora'
+        brief: 'Resumen'
         review_code: 'Código'
         answer: 'Respuesta/Acciones correctivas'
         user_ids: 'Usuario'
@@ -425,6 +435,7 @@ es:
         corporate: 'Corporativa'
         image_model: 'Imagen'
         co_brand_image_model: 'Imagen secundaria'
+        saml_provider: 'Proveedor SAML'
       organization/image_model:
         image_file_name: 'Isologotipo (nombre de archivo)'
         image_content_type: 'Isologotipo (tipo de archivo)'
@@ -530,7 +541,7 @@ es:
       poll:
         comments: 'Comentarios'
         send_date: 'Fecha envío'
-        answer_date: 'Fecha contestación'
+        answer_date: 'Fecha respuesta'
         answered: 'Contestada'
         questionnaire: 'Cuestionario'
         user: 'Usuario'
@@ -620,6 +631,7 @@ es:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
         description: 'Observación'
+        brief: 'Resumen'
         review_code: 'Código'
         audit_recommendations: 'Recomendaciones de auditoría'
         answer: 'Respuesta/Acciones correctivas'
@@ -634,6 +646,7 @@ es:
         state: 'Estado'
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
+        compliance_observations: 'Norma que impacta'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
@@ -676,6 +689,7 @@ es:
               required: 'no puede estar en blanco'
             process_owner:
               invalid: 'solo puede ser asignado a usuarios de tipo auditado'
+              taken: 'solo puede haber uno'
         ldap_config:
           attributes:
             user:

@@ -23,6 +23,8 @@ class ConclusionDraftReviewsController < ApplicationController
       **search_params
     ).references(
       :reviews, :business_units
+    ).merge(
+      PlanItem.allowed_by_business_units
     ).order_by.page params[:page]
 
     respond_to do |format|
@@ -282,7 +284,7 @@ class ConclusionDraftReviewsController < ApplicationController
         :observations, :main_weaknesses_text, :corrective_actions,
         :affects_compliance, :collapse_control_objectives, :force_approval,
         :reference, :scope, :previous_identification, :previous_date,
-        :main_recommendations, :lock_version,
+        :main_recommendations, :additional_comments, :lock_version,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [

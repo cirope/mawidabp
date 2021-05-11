@@ -57,10 +57,10 @@ class FindingsController < ApplicationController
     def auditor_finding_params
       params.require(:finding).permit(
         :id, :control_objective_item_id, :review_code, :title, :description,
-        :answer, :current_situation, :current_situation_verified,
+        :brief, :answer, :current_situation, :current_situation_verified,
         :audit_comments, :state, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
-        :compliance, :nested_user, :skip_work_paper, :lock_version,
+        :compliance, :compliance_observations, :nested_user, :skip_work_paper, :lock_version,
         impact: [],
         operational_risk: [],
         internal_control_components: [],
@@ -101,7 +101,7 @@ class FindingsController < ApplicationController
       params.require(:finding).permit(
         :id, :lock_version,
         finding_answers_attributes: [
-          :answer, :user_id, :commitment_date, :notify_users,
+          :answer, :user_id, :commitment_date, :notify_users, :skip_commitment_support,
           file_model_attributes: [:file, :file_cache],
           commitment_support_attributes: [:id, :reason, :plan, :controls]
         ],

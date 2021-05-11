@@ -17,7 +17,8 @@ module Users::Params
       [
         :manager_id, :function, :lock_version,
         child_ids: [],
-        related_user_relations_attributes: [:id, :related_user_id, :_destroy]
+        related_user_relations_attributes: [:id, :related_user_id, :notify, :_destroy],
+        business_unit_type_users_attributes: [:id, :business_unit_type_id, :_destroy]
       ]
     end
 
@@ -29,7 +30,8 @@ module Users::Params
         :lock_version,
         child_ids: [],
         organization_roles_attributes: [:id, :organization_id, :role_id, :_destroy],
-        related_user_relations_attributes: [:id, :related_user_id, :_destroy]
+        related_user_relations_attributes: [:id, :related_user_id, :notify, :_destroy],
+        business_unit_type_users_attributes: [:id, :business_unit_type_id, :_destroy]
       ]
     end
 end
