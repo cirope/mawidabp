@@ -31,7 +31,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   # Prueba la creación de un informe final
   test 'create' do
     Current.user   = users :supervisor
-    review         = Review.find reviews(:review_approved_with_conclusion).id
+    review         = reviews :review_approved_with_conclusion
     findings_count = (review.weaknesses + review.oportunities).size
 
     assert findings_count > 0
