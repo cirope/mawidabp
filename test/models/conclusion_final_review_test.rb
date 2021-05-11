@@ -88,7 +88,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
       new_conclusion_final_review review
 
-      assert_equal last_weakness.review_code.next, Finding.where(final: true).last.review_code
+      assert_equal last_weakness.review_code.next, Finding.finals(true).last.review_code
     end
   end
 
