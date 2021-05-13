@@ -1,5 +1,5 @@
 class TimeSummaryController < ApplicationController
-  respond_to :html
+  respond_to :html, :csv
 
   before_action :auth, :check_privileges, :set_title
 
@@ -7,8 +7,16 @@ class TimeSummaryController < ApplicationController
     @start_date         = start_date
     @end_date           = end_date
     @work_hours_per_day = work_hours_per_day
-
+    set_descendants
+    set_user
     set_items
+
+    respond_to do |format|
+      format.html 
+      format.csv {
+        render csv: time_summary_csv, filename: "prueba.csv"
+      }
+    end
   end
 
   def new
@@ -87,7 +95,7 @@ class TimeSummaryController < ApplicationController
         ].join ' AND '
       end.map { |c| "(#{c})" }.join ' OR '
 
-      @auth_user.
+      @user.
         resource_utilizations.
         joins(:workflow_item).
         references(:workflow_items).
@@ -120,4 +128,56 @@ class TimeSummaryController < ApplicationController
 
       value > 0 ? value : 8
     end
+    
+    def set_user
+      if params[:user_id]
+        @user = User.list.find(params[:user_id])
+      else
+        @user =  @auth_user
+      end
+    end
+
+    def set_descendants
+      @self_and_descendants = @auth_user.descendants + [@auth_user]
+    end
+    
+    def time_summary_csv
+    options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+    csv_str = CSV.generate(**options) do |csv|
+      csv << time_summary_header_csv 
+
+      time_summary_data_csv.each do |data|
+        csv << data
+      end
+    end
+
+    "\uFEFF#{csv_str}"
+   end
+
+   def time_summary_header_csv
+     [
+       t('time_summary.date'),
+       t('time_summary.task'),
+       t('time_summary.quantity_hours_per_day')
+     ]
+   end
+
+   def time_summary_data_csv
+     row = []
+
+     (@start_date..@end_date).each do |date|
+       if date.workday?
+         if @items[date].present?
+           @items[date].each do |item, hours|
+            row << [date, item[:task], hours]
+           end
+         else
+            row << [date, '', 0]
+         end
+       end
+     end
+
+     row
+   end
 end

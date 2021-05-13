@@ -10,8 +10,9 @@
   <%= link_to raw("&laquo; #{t 'label.previous'}"), time_summary_prev_week_path, class: 'btn btn-secondary' %>
   <%= link_to t('.current_week'), time_summary_index_path, class: 'btn btn-secondary' %>
   <%= link_to raw("&raquo; #{t 'label.next'}"), time_summary_next_week_path, class: 'btn btn-secondary' %>
+  <%= label_tag :user_id_select, User.model_name.human, class: 'col-form-label' %>
+  <%= show_related_users %>
 </div>
-
 <hr>
 
 <% (@start_date..@end_date).each do |date| %>
@@ -36,8 +37,22 @@
       </ul>
     <% else %>
       <p class="mb-3">
-        <%= t '.empty' %>
+      <%= t '.empty' %>
       </p>
     <% end %>
   <% end %>
 <% end %>
+
+<div>
+  <%= render 'downloads' %>
+</div>
+
+<script type="text/javascript">
+  $('#user_id_select').change(function() {
+    if($(this).val()) {
+        var url = '<%= time_summary_index_path %>';
+
+      BrowserManipulation.changeLocation(url, jQuery.parseJSON($(this).val()));
+    }
+  });
+</script>
