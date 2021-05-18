@@ -107,6 +107,7 @@ module LdapConfigs::LdapImport
         name:                casted_attribute(entry, name_attribute),
         last_name:           casted_attribute(entry, last_name_attribute),
         email:               casted_attribute(entry, email_attribute),
+        office:              casted_attribute(entry, office_attribute),
         organizational_unit: organizational_unit(entry),
         hidden:              false,
         enable:              true
