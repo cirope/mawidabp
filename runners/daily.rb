@@ -1,4 +1,4 @@
-Rails.logger.info 'Starting daily runner'
+Rails.logger.info "Starting daily runner (version #{APP_REVISION[0,8]})"
 
 if Organization.any?
   User.notify_auditors_about_close_date
@@ -17,4 +17,4 @@ if Organization.any?
   LdapConfig.sync_users
 end
 
-Rails.logger.info 'Daily runner finished'
+Rails.logger.info "Daily runner finished (version #{APP_REVISION[0,8]})"

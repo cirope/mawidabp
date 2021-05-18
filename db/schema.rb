@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_21_221955) do
+ActiveRecord::Schema.define(version: 2020_02_11_214928) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -576,7 +576,6 @@ ActiveRecord::Schema.define(version: 2020_01_21_221955) do
     t.integer "repeated_of_id", precision: 38
     t.integer "organization_id", precision: 38
     t.string "title"
-    t.integer "progress", precision: 38
     t.text "current_situation"
     t.string "current_situation_verified", limit: 1, default: "f", null: false
     t.string "compliance"
@@ -589,6 +588,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_221955) do
     t.integer "reschedule_count", precision: 38, default: 0, null: false
     t.date "implemented_at"
     t.date "closed_at"
+    t.integer "latest_id", precision: 38
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "i_fin_con_obj_ite_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -598,6 +598,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_221955) do
     t.index ["follow_up_date"], name: "i_findings_follow_up_date"
     t.index ["implemented_at"], name: "i_findings_implemented_at"
     t.index ["last_notification_date"], name: "i_fin_las_not_dat"
+    t.index ["latest_id"], name: "index_findings_on_latest_id"
     t.index ["organization_id"], name: "i_findings_organization_id"
     t.index ["parent_id"], name: "index_findings_on_parent_id"
     t.index ["repeated_of_id"], name: "i_findings_repeated_of_id"
@@ -2901,9 +2902,11 @@ ActiveRecord::Schema.define(version: 2020_01_21_221955) do
     t.integer "group_id", precision: 38, null: false
     t.string "icon", default: "tag", null: false
     t.integer "parent_id", precision: 38
+    t.string "obsolete", limit: 1, default: "f", null: false
     t.index ["group_id"], name: "index_tags_on_group_id"
     t.index ["kind"], name: "index_tags_on_kind"
     t.index ["name"], name: "index_tags_on_name"
+    t.index ["obsolete"], name: "index_tags_on_obsolete"
     t.index ["organization_id"], name: "index_tags_on_organization_id"
     t.index ["parent_id"], name: "index_tags_on_parent_id"
     t.index ["shared"], name: "index_tags_on_shared"
@@ -3076,6 +3079,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_221955) do
   add_foreign_key "finding_user_assignments", "findings", on_delete: :cascade
   add_foreign_key "finding_user_assignments", "users", on_delete: :cascade
   add_foreign_key "findings", "control_objective_items", on_delete: :cascade
+  add_foreign_key "findings", "findings", column: "latest_id", on_delete: :cascade
   add_foreign_key "findings", "findings", column: "repeated_of_id", on_delete: :cascade
   add_foreign_key "findings", "weakness_templates", on_delete: :cascade
   add_foreign_key "ldap_configs", "organizations", on_delete: :cascade

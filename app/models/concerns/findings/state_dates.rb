@@ -31,7 +31,7 @@ module Findings::StateDates
   private
 
     def put_state_dates
-      if being_implemented? || awaiting?
+      if being_implemented?
         self.implemented_at = nil
       elsif implemented?
         self.implemented_at = Time.zone.today

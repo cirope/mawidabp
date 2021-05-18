@@ -5,7 +5,6 @@ class Weakness < Finding
   include Weaknesses::GraphHelpers
   include Weaknesses::Image
   include Weaknesses::Priority
-  include Weaknesses::Progress
   include Weaknesses::Risk
   include Weaknesses::Scopes
   include Weaknesses::Score

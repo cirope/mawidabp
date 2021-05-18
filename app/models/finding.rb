@@ -7,6 +7,7 @@ class Finding < ApplicationRecord
   include Findings::Answers
   include Findings::BusinessUnits
   include Findings::Brief
+  include Findings::ByUserCsv
   include Findings::Code
   include Findings::Comments
   include Findings::Confirmation
@@ -14,6 +15,8 @@ class Finding < ApplicationRecord
   include Findings::Cost
   include Findings::CreateValidation
   include Findings::Csv
+  include Findings::Current
+  include Findings::CurrentSituationCsv
   include Findings::CustomAttributes
   include Findings::Defaults
   include Findings::DestroyValidation

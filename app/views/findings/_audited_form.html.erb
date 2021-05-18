@@ -1,4 +1,4 @@
-<%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completed], @finding),
+<%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completion_state], @finding),
   html: { method: :patch, id: "edit_finding_#{@finding.id}"} do |f| %>
   <%= render 'shared/error_explanation', f: f %>
 
@@ -29,26 +29,21 @@
           }, readonly: true %>
           <%= f.input :control_objective_item_id, as: :hidden %>
         <% end %>
-        <%= f.input :description, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 12 : 5 } %>
+        <%= f.input :description, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 9 : 5 } %>
         <% if @finding.kind_of?(Weakness) %>
           <% unless HIDE_WEAKNESS_EFFECT %>
             <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
           <% end %>
-          <%= f.input :audit_recommendations, input_html: { readonly: true, rows: 2 } %>
+          <%= f.input :audit_recommendations, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 5 : 2 } %>
         <% end %>
       </div>
       <div class="col-md-6">
         <% if @finding.kind_of?(Weakness) %>
           <%= f.input :risk, collection: risks, prompt: true, disabled: true %>
-          <% unless HIDE_WEAKNESS_PRIORITY %>
-            <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
-          <% end %>
+          <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
         <% end %>
         <%= f.label :state, Finding.human_attribute_name(:state) %>
         <%= finding_status_field(f, disabled: true) %>
-        <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_PROGRESS %>
-          <%= f.input :progress, collection: weakness_progresses(@finding), prompt: true, disabled: true %>
-        <% end %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>

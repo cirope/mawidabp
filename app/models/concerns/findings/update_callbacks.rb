@@ -2,7 +2,8 @@ module Findings::UpdateCallbacks
   extend ActiveSupport::Concern
 
   included do
-    before_save :can_be_modified?, :users_notification
+    before_save :can_be_modified?
+    after_save :users_notification
     after_update :notify_changes_to_users
   end
 

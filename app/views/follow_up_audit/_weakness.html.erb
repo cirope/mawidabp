@@ -44,7 +44,7 @@
 
     <p class="mb-1">
       <strong><%= Weakness.human_attribute_name 'state' %>:</strong>
-      <%= weakness.state_text %>
+      <%= weakness.full_state_text %>
     </p>
 
     <p class="mb-1">
@@ -52,12 +52,10 @@
       <%= weakness.risk_text %>
     </p>
 
-    <% unless HIDE_WEAKNESS_PRIORITY %>
-      <p class="mb-1">
-        <strong><%= Weakness.human_attribute_name 'priority' %>:</strong>
-        <%= weakness.priority_text %>
-      </p>
-    <% end %>
+    <p class="mb-1">
+      <strong><%= Weakness.human_attribute_name 'priority' %>:</strong>
+      <%= weakness.priority_text %>
+    </p>
 
     <% unless HIDE_WEAKNESS_EFFECT %>
       <div>

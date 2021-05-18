@@ -4,14 +4,11 @@ module Findings::SortColumns
   module ClassMethods
     def columns_for_sort
       columns = {
-        risk_asc:            risk_asc_options,
-        risk_desc:           risk_desc_options,
+        risk_asc:      risk_asc_options,
+        risk_desc:     risk_desc_options,
+        priority_asc:  priority_asc_options,
+        priority_desc: priority_desc_options,
       }.with_indifferent_access
-
-      columns.merge!(
-        priority_asc:        priority_asc_options,
-        priority_desc:       priority_desc_options,
-      ) unless HIDE_WEAKNESS_PRIORITY
 
       columns[:readings_desc] = readings_desc_options if self == Finding
 
@@ -36,11 +33,7 @@ module Findings::SortColumns
       end
 
       def risk_options order: 'ASC'
-        name = if HIDE_WEAKNESS_PRIORITY
-                 "#{human_attribute_name :risk}#{order_label order}"
-               else
-                 "#{human_attribute_name :risk} - #{human_attribute_name :priority}#{order_label order}"
-               end
+        name = "#{human_attribute_name :risk} - #{human_attribute_name :priority}#{order_label order}"
 
         {
           name:  name,
