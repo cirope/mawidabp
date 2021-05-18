@@ -23,12 +23,11 @@
             <%= l_f.input :port %>
             <%= l_f.input :alternative_hostname %>
             <%= l_f.input :alternative_port %>
+            <%= l_f.input :tls %>
+            <%= l_f.input :ca_path %>
             <%= l_f.input :basedn %>
             <%= l_f.input :filter %>
             <%= l_f.input :login_mask %>
-            <%= l_f.input :tls %>
-            <%= l_f.input :test_user %>
-            <%= l_f.input :user %>
           </div>
           <div class="col-md-6">
             <%= l_f.input :username_attribute %>
@@ -36,9 +35,20 @@
             <%= l_f.input :last_name_attribute %>
             <%= l_f.input :email_attribute %>
             <%= l_f.input :function_attribute %>
+            <%= l_f.input :office_attribute %>
             <%= l_f.input :roles_attribute %>
             <%= l_f.input :manager_attribute %>
-            <%= l_f.input :ca_path %>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+          <div class="col-md-6">
+            <%= l_f.input :test_user %>
+            <%= l_f.input :user %>
+          </div>
+          <div class="col-md-6">
             <%= l_f.input :test_password %>
             <%= l_f.input :password %>
           </div>

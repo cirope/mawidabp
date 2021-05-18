@@ -1367,6 +1367,7 @@ es:
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
+        notify: 'Incluir en notificaciones'
       resource_utilization:
         resource_id: "Recurso"
       review:

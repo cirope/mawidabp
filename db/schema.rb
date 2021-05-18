@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_06_151454) do
+ActiveRecord::Schema.define(version: 2021_05_18_191736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -569,6 +569,7 @@ ActiveRecord::Schema.define(version: 2021_05_06_151454) do
     t.integer "alternative_port"
     t.string "tls"
     t.string "ca_path"
+    t.string "office_attribute"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
   end
 
@@ -855,6 +856,7 @@ ActiveRecord::Schema.define(version: 2021_05_06_151454) do
     t.integer "related_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "notify", default: false, null: false
     t.index ["user_id", "related_user_id"], name: "index_related_user_relations_on_user_id_and_related_user_id"
   end
 
@@ -1093,6 +1095,7 @@ ActiveRecord::Schema.define(version: 2021_05_06_151454) do
     t.datetime "hash_changed"
     t.boolean "hidden", default: false
     t.string "organizational_unit"
+    t.string "office"
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"

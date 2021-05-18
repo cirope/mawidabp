@@ -56,7 +56,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should show message must change the password' do
     @user.update_column :password_changed, get_test_parameter(:password_expire_time).to_i.next.days.ago
 
-    assert_valid_authentication redirect_url: [:edit, 'users_password', id: @user],
+    assert_valid_authentication redirect_url: [:edit, :users_password, id: @user],
       message: 'message.must_change_the_password'
   end
 
@@ -149,7 +149,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'first login' do
     @user.update_column :last_access, nil
 
-    assert_valid_authentication redirect_url: [:edit, 'users_password', id: @user],
+    assert_valid_authentication redirect_url: [:edit, :users_password, id: @user],
       message: 'message.must_change_the_password'
 
     login_record = LoginRecord.find_by user: @user, organization: @organization
