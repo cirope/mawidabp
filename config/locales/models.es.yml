@@ -409,7 +409,7 @@ es:
         program: 'Programa de trabajo'
         scope: 'Comentarios UPLA'
         suggestions: 'Sugerencias e inquietudes'
-        comments: 'Comentarios UPLA'
+        comments: 'Comentarios adicionales'
         review: 'Informe'
         review_id: 'Informe'
       opening_interview_user:
