@@ -1,5 +1,6 @@
 <h2 class="h1">
   <%= @title %>
+  <%= @user %>
 </h2>
 
 <h3 class="h4">
@@ -36,23 +37,14 @@
         <% end %>
       </ul>
     <% else %>
-      <p class="mb-3">
-      <%= t '.empty' %>
-      </p>
+      <p class="mb-3"><%= t '.empty' %></p>
     <% end %>
   <% end %>
 <% end %>
+
+<hr>
 
 <div>
   <%= render 'downloads' %>
 </div>
 
-<script type="text/javascript">
-  $('#user_id_select').change(function() {
-    if($(this).val()) {
-        var url = '<%= time_summary_index_path %>';
-
-      BrowserManipulation.changeLocation(url, jQuery.parseJSON($(this).val()));
-    }
-  });
-</script>

@@ -1,18 +1,19 @@
 module TimeSummaryHelper
   def time_summary_prev_week_path
     time_summary_index_path start_date: @start_date.weeks_ago(1),
-                            end_date:   @end_date.weeks_ago(1)
+                            end_date:   @end_date.weeks_ago(1),
+                            user_id:    @user.id
   end
 
   def time_summary_next_week_path
     time_summary_index_path start_date: @start_date.weeks_since(1),
-                            end_date:   @end_date.weeks_since(1)
+                            end_date:   @end_date.weeks_since(1),
+                            user_id:    @user.id
   end
 
   def time_summary_current_path period
     time_summary_index_path start_date: @start_date.send("beginning_of_#{period}"),
-      end_date:   @end_date.send("end_of_#{period}"),
-      format: :csv
+      end_date: @end_date.send("end_of_#{period}"), format: :csv
   end
 
   def time_summary_completed? date
@@ -22,11 +23,21 @@ module TimeSummaryHelper
   end
 
   def show_related_users
-    users = time_summary_current_user_related_user_options
+    users        = time_summary_current_user_related_user_options
 
     select nil, :user_id, sort_options_array(users),
       { prompt: true },
-      { name: :user_id, id: :user_id_select, class: 'form-control' }
+      { name: :user_id, id: :user_id_select, class: 'form-control',
+        data: {
+          time_summary_url: time_summary_generic_url_for
+        }
+      }
+  end
+
+  def time_summary_generic_url_for
+    url_for controller: controller_path,
+      action:     :index,
+      user_id:    '[USER_ID]'
   end
 
   def time_summary_current_user_related_user_options

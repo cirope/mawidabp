@@ -60,6 +60,7 @@
 //= require show
 //= require tags
 //= require tasks
+//= require time_summary
 //= require touch
 //= require users
 //= require weakness_templates

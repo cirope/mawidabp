@@ -1,20 +1,20 @@
 class TimeSummaryController < ApplicationController
   respond_to :html, :csv
 
-  before_action :auth, :check_privileges, :set_title
+  before_action :auth, :check_privileges, :set_title, :set_descendants,
+                :set_user
 
   def index
     @start_date         = start_date
     @end_date           = end_date
     @work_hours_per_day = work_hours_per_day
-    set_descendants
-    set_user
+
     set_items
 
     respond_to do |format|
       format.html 
       format.csv {
-        render csv: time_summary_csv, filename: "prueba.csv"
+        render csv: time_summary_csv, filename: filename
       }
     end
   end
@@ -142,42 +142,46 @@ class TimeSummaryController < ApplicationController
     end
     
     def time_summary_csv
-    options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-    csv_str = CSV.generate(**options) do |csv|
-      csv << time_summary_header_csv 
+      csv_str = CSV.generate(**options) do |csv|
+        csv << time_summary_header_csv 
 
-      time_summary_data_csv.each do |data|
-        csv << data
+        time_summary_data_csv.each do |data|
+          csv << data
+        end
       end
+
+      "\uFEFF#{csv_str}"
     end
 
-    "\uFEFF#{csv_str}"
-   end
+    def time_summary_header_csv
+      [
+        t('time_summary.date'),
+        t('time_summary.task'),
+        t('time_summary.quantity_hours_per_day')
+      ]
+    end
 
-   def time_summary_header_csv
-     [
-       t('time_summary.date'),
-       t('time_summary.task'),
-       t('time_summary.quantity_hours_per_day')
-     ]
-   end
+    def time_summary_data_csv
+      row = []
 
-   def time_summary_data_csv
-     row = []
-
-     (@start_date..@end_date).each do |date|
-       if date.workday?
-         if @items[date].present?
-           @items[date].each do |item, hours|
-            row << [date, item[:task], hours]
-           end
-         else
+      (@start_date..@end_date).each do |date|
+        if date.workday?
+          if @items[date].present?
+            @items[date].each do |item, hours|
+              row << [date, item[:task], hours]
+            end
+          else
             row << [date, '', 0]
-         end
-       end
-     end
+          end
+        end
+      end
 
-     row
-   end
+      row
+    end
+
+    def filename
+      "#{@user.name}_#{@user.last_name}"
+    end
 end
