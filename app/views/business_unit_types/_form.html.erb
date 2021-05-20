@@ -50,6 +50,14 @@
       <% end %>
     </div>
 
+    <% if Current.conclusion_pdf_format == 'gal' %>
+      <div class="row">
+        <div class="col-md-3">
+          <%= f.input :independent_identification %>
+        </div>
+      </div>
+    <% end %>
+
     <hr />
 
     <h5 class="h6"><%= BusinessUnit.model_name.human %></h5>

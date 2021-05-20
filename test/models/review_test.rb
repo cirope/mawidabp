@@ -961,12 +961,20 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'next identification number' do
-    assert_equal '001', Review.next_identification_number(2017)
+    assert_equal '001', Review.next_identification_number('XX', 2017)
 
-    Review.order(:id).last.update_column :identification, 'XX-22/2017'
+    review = Review.order(:id).last
+
+    review.update_column :identification, 'XX-22/2017'
 
     # Should ignore the prefix
-    assert_equal '023', Review.next_identification_number(2017)
+    assert_equal '023', Review.next_identification_number('XX', 2017)
+
+    review.business_unit_type.update! independent_identification: true
+
+    # Should NOT ignore the prefix
+    assert_equal '001', Review.next_identification_number('XX', 2017)
+    assert_equal '023', Review.next_identification_number('XX', 2017, use_prefix: true)
   end
 
   test 'build best practice comments' do

@@ -96,7 +96,12 @@ module Reviews::Validations
     end
 
     def validate_identification_number_uniqueness
-      suffix = identification.to_s.split('-').last
+      suffix  = identification.to_s.split('-').last
+      pattern = unless business_unit_type&.independent_identification
+                  "%#{suffix}"
+                end
+
+
       conditions = [
         "#{Review.quoted_table_name}.#{Review.qcn 'organization_id'} = :organization_id",
         "#{Review.quoted_table_name}.#{Review.qcn 'identification'} LIKE :identification"
@@ -106,7 +111,7 @@ module Reviews::Validations
         is_taken = Review.unscoped.where(
           conditions,
           organization_id: organization_id,
-          identification: "%#{suffix}"
+          identification: pattern
         ).any?
 
         errors.add :identification, :taken if is_taken
