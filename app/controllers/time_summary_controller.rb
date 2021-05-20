@@ -12,7 +12,7 @@ class TimeSummaryController < ApplicationController
     set_items
 
     respond_to do |format|
-      format.html 
+      format.html
       format.csv {
         render csv: time_summary_csv, filename: filename
       }
@@ -84,21 +84,24 @@ class TimeSummaryController < ApplicationController
     end
 
     def resource_utilizations
-      parameters = [@start_date, @end_date].each_with_index.inject({}) do |acc, di|
-        acc.merge :"start_#{di.last}" => di.first, :"end_#{di.last}" => di.first
-      end.merge( start: @start_date, end: @end_date )
+      initial_parameters = { start: @start_date, end: @end_date }
+      conditions         = []
 
-      conditions = 2.times.map do |i|
-        [
+      parameters = [@start_date, @end_date].each_with_index.inject(initial_parameters) do |acc, di|
+        acc.merge :"start_#{di.last}" => di.first, :"end_#{di.last}" => di.first
+      end
+
+      conditions << [
+        "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} >= :start",
+        "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} <= :end"
+      ].join(' AND ')
+
+      2.times.map do |i|
+        conditions << [
           "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} <= :start_#{i}",
           "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} >= :end_#{i}"
-        ].join ' AND '
-      end << (
-        [
-          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} >= :start",
-          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} <= :end"
-        ].join ' AND '
-      )
+        ].join(' AND ')
+      end
 
       conditions = conditions.map { |c| "(#{c})" }.join ' OR '
 
@@ -135,24 +138,28 @@ class TimeSummaryController < ApplicationController
 
       value > 0 ? value : 8
     end
-    
+
     def set_user
-      if params[:user_id]
+      if params[:user_id] && user_included?
         @user = User.list.find(params[:user_id])
       else
         @user = @auth_user
       end
     end
 
-    def set_descendants
-      @self_and_descendants = @auth_user.descendants + [@auth_user]
+    def user_included?
+      @auth_user.self_and_descendants.map(&:id).include? params[:user_id].to_i
     end
-    
+
+    def set_descendants
+      @self_and_descendants = @auth_user.self_and_descendants
+    end
+
     def time_summary_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
       csv_str = CSV.generate(**options) do |csv|
-        csv << time_summary_header_csv 
+        csv << time_summary_header_csv
 
         time_summary_data_csv.each do |data|
           csv << data
@@ -164,9 +171,9 @@ class TimeSummaryController < ApplicationController
 
     def time_summary_header_csv
       [
-        t('time_summary.date'),
-        t('time_summary.task'),
-        t('time_summary.quantity_hours_per_day')
+        t('time_summary.downloads.csv.date'),
+        t('time_summary.downloads.csv.task'),
+        t('time_summary.downloads.csv.quantity_hours_per_day')
       ]
     end
 

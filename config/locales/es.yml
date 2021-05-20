@@ -44,9 +44,6 @@
     downloads: "Descargas"
     update: "Actualizar"
     without_data: "Sin datos"
-    current_week_downloads: "Descarga semana actual"
-    current_month_downloads: "Descarga mes actual"
-    current_year_downloads: "Descarga año actual"
 
   lang:
     es: 'Español'
@@ -1415,11 +1412,6 @@
     type_committee: "Comité"
     type_manager: "Gerente de auditoría"
     type_executive_manager: "Gerente"
-
-  time_summary:
-    date: "Fecha"
-    quantity_hours_per_day: "Cantidad horas por día"
-    task: "Tarea"
 
   user:
     will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha hallazgos pendientes, deberá reasignarlas primero"

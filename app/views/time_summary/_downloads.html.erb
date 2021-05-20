@@ -1,25 +1,19 @@
-<% links = [
-  link_to(
-    t('label.current_week_downloads'), time_summary_current_path(:week),
-    class: 'dropdown-item'
-  ),
-  link_to(
-    t('label.current_month_downloads'), time_summary_current_path(:month),
-    class: 'dropdown-item'
-  ),
-  link_to(
-    t('label.current_year_downloads'), time_summary_current_path(:year),
-    class: 'dropdown-item'
-  )
-]
-%>
 <div class="dropup d-inline">
   <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
     <%= t 'label.downloads' %>
   <% end %>
   <div class="dropdown-menu dropdown-menu-right">
-    <% links.each do |link| %>
-      <%= link %>
-    <% end %>
+    <%= link_to(
+      t('time_summary.downloads.download_current_week'), time_summary_current_path(:week),
+      class: 'dropdown-item'
+    ) %>
+    <%= link_to(
+      t('time_summary.downloads.download_current_month'), time_summary_current_path(:month),
+      class: 'dropdown-item'
+    ) %>
+    <%= link_to(
+      t('time_summary.downloads.download_current_year'), time_summary_current_path(:year),
+      class: 'dropdown-item'
+    ) %>
   </div>
 </div>
