@@ -86,14 +86,21 @@ class TimeSummaryController < ApplicationController
     def resource_utilizations
       parameters = [@start_date, @end_date].each_with_index.inject({}) do |acc, di|
         acc.merge :"start_#{di.last}" => di.first, :"end_#{di.last}" => di.first
-      end
+      end.merge( start: @start_date, end: @end_date )
 
       conditions = 2.times.map do |i|
         [
           "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} <= :start_#{i}",
           "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} >= :end_#{i}"
         ].join ' AND '
-      end.map { |c| "(#{c})" }.join ' OR '
+      end << (
+        [
+          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} >= :start",
+          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} <= :end"
+        ].join ' AND '
+      )
+
+      conditions = conditions.map { |c| "(#{c})" }.join ' OR '
 
       @user.
         resource_utilizations.
@@ -133,7 +140,7 @@ class TimeSummaryController < ApplicationController
       if params[:user_id]
         @user = User.list.find(params[:user_id])
       else
-        @user =  @auth_user
+        @user = @auth_user
       end
     end
 

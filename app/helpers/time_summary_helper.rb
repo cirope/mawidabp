@@ -13,7 +13,9 @@ module TimeSummaryHelper
 
   def time_summary_current_path period
     time_summary_index_path start_date: @start_date.send("beginning_of_#{period}"),
-      end_date: @end_date.send("end_of_#{period}"), format: :csv
+                            end_date:   @end_date.send("end_of_#{period}"),
+                            user_id:    @user.id,
+                            format:     :csv
   end
 
   def time_summary_completed? date
@@ -23,7 +25,7 @@ module TimeSummaryHelper
   end
 
   def show_related_users
-    users        = time_summary_current_user_related_user_options
+    users = time_summary_current_user_related_user_options
 
     select nil, :user_id, sort_options_array(users),
       { prompt: true },
@@ -37,7 +39,9 @@ module TimeSummaryHelper
   def time_summary_generic_url_for
     url_for controller: controller_path,
       action:     :index,
-      user_id:    '[USER_ID]'
+      user_id:    '[USER_ID]',
+      start_date: @start_date,
+      end_date:   @end_date
   end
 
   def time_summary_current_user_related_user_options
