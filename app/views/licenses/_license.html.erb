@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-md-6">
+    <p class="mb-1">
+      <strong><%= License.human_attribute_name 'status' %></strong>:
+      <%= license_status @license.status %>
+    </p>
+
+    <p class="mb-1">
+      <strong><%= Group.human_attribute_name 'admin_email' %></strong>:
+      <%= @license.group.admin_email %>
+    </p>
+
+    <p class="mb-1">
+      <strong><%= License.human_attribute_name 'auditors_limit' %></strong>:
+      <%= @license.auditors_limit %>
+      <small>(<%= link_to t('label.update'), new_license_authorizations_path %>)</small>
+    </p>
+
+    <p class="mb-1">
+      <strong><%= t 'licenses.price_per_month' %></strong>:
+      <%= number_to_currency @license.price_per_month, unit: 'US$' %>
+    </p>
+
+    <p class="mb-1">
+      <% if @license.trial? %>
+        <strong><%= t 'licenses.trial_valid_until' %></strong>:
+        <%= l @license.trial_valid_until, format: :minimal %>
+        (<%= distance_of_time_in_words_to_now @license.trial_valid_until %>)
+      <% else %>
+        <strong><%= License.human_attribute_name 'paid_until' %></strong>:
+        <%= l @license.paid_until, format: :minimal if @license.paid_until %>
+      <% end %>
+    </p>
+  </div>
+  <div class="col-md-6">
+    <% if @license.plan_change_url %>
+      <p class="mb-1">
+        <strong><%= t '.authorize_new_plan.title' %></strong>:
+        <p><%= t '.authorize_new_plan.body' %></p>
+        <%= link_to t('.approve'), @license.plan_change_url, target: '_blank' %>
+      </p>
+    <% end %>
+  </div>
+</div>
+
+<hr>
+
+<% if @license.subscription_id.blank? %>
+  <%= render 'paypal_button' %>
+<% elsif @license.blocked? %>
+  <%= link_to t('.check'), license_check_path, method: :post, remote: true %>
+<% end %>

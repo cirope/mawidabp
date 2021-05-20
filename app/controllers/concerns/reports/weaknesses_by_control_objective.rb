@@ -94,7 +94,7 @@ module Reports::WeaknessesByControlObjective
     def weaknesses_by_control_objective_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = CSV.generate(options) do |csv|
+      csv_str = CSV.generate(**options) do |csv|
         csv << weaknesses_by_control_objective_csv_headers
 
         weaknesses_by_control_objective_csv_data_rows.each { |row| csv << row }
@@ -130,7 +130,7 @@ module Reports::WeaknessesByControlObjective
           weakness.control_objective_item.auditor_comment
         ]
       ].concat(
-        if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix)
+        if weakness.control_objective_item.show_counts?(current_organization.prefix)
           [
             [
               ControlObjectiveItem.human_attribute_name('issues_count'),
@@ -283,17 +283,10 @@ module Reports::WeaknessesByControlObjective
         BusinessUnitType.model_name.human,
         t('follow_up_committee_report.weaknesses_by_control_objective.origination_year'),
         Weakness.human_attribute_name('control_objective_item_id'),
-        ControlObjectiveItem.human_attribute_name('auditor_comment')
-      ].concat(
-        if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix)
-          [
-            ControlObjectiveItem.human_attribute_name('issues_count'),
-            ControlObjectiveItem.human_attribute_name('alerts_count')
-          ]
-        else
-          []
-        end
-      )
+        ControlObjectiveItem.human_attribute_name('auditor_comment'),
+        ControlObjectiveItem.human_attribute_name('issues_count'),
+        ControlObjectiveItem.human_attribute_name('alerts_count')
+      ]
     end
 
     def weaknesses_by_control_objective_csv_data_rows
@@ -305,17 +298,10 @@ module Reports::WeaknessesByControlObjective
           weakness.business_unit_type.to_s,
           (l weakness.origination_date, format: '%Y' if weakness.origination_date),
           weakness.control_objective_item.control_objective_text.to_s,
-          weakness.control_objective_item.auditor_comment.to_s
-        ].concat(
-          if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix)
-            [
-              weakness.control_objective_item.issues_count.to_s,
-              weakness.control_objective_item.alerts_count.to_s
-            ]
-          else
-            []
-          end
-        )
+          weakness.control_objective_item.auditor_comment.to_s,
+          weakness.control_objective_item.issues_count.to_s,
+          weakness.control_objective_item.alerts_count.to_s
+        ]
       end
     end
 end

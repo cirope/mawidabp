@@ -185,8 +185,8 @@ module ConclusionFinalReviewsHelper
     end
   end
 
-  def send_review_options
-    default = if Current.conclusion_pdf_format == 'gal' && show_brief_download?
+  def send_review_options conclusion_review
+    default = if Current.conclusion_pdf_format == 'gal' && show_brief_download?(conclusion_review)
                 'brief'
               else
                 'normal'
@@ -200,7 +200,7 @@ module ConclusionFinalReviewsHelper
                 ['normal']
               end
 
-    options.delete 'brief' unless show_brief_download?
+    options.delete 'brief' unless show_brief_download?(conclusion_review)
 
     select_options = options.map do |type|
       [t("conclusion_final_review.send_type.#{type}"), type]
@@ -216,9 +216,9 @@ module ConclusionFinalReviewsHelper
       ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
   end
 
-  def show_brief_download?
+  def show_brief_download? conclusion_review
     !show_review_best_practice_comments? &&
-      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.exclude?(current_organization.prefix)
+      !conclusion_review.review.show_counts?(current_organization.prefix)
   end
 
   def show_conclusion_review_issue_date conclusion_final_review

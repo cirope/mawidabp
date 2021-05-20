@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_22_213849) do
+ActiveRecord::Schema.define(version: 2020_02_11_214928) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -153,6 +153,7 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.string "require_tag", limit: 1, default: "f", null: false
     t.text "sectors"
     t.text "recipients"
+    t.string "require_counts", limit: 1, default: "f", null: false
     t.index ["external"], name: "i_business_unit_types_external"
     t.index ["name"], name: "i_business_unit_types_name"
     t.index ["organization_id"], name: "i_bus_uni_typ_org_id"
@@ -575,7 +576,6 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.integer "repeated_of_id", precision: 38
     t.integer "organization_id", precision: 38
     t.string "title"
-    t.integer "progress", precision: 38
     t.text "current_situation"
     t.string "current_situation_verified", limit: 1, default: "f", null: false
     t.string "compliance"
@@ -586,13 +586,19 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.date "first_follow_up_date"
     t.date "last_notification_date"
     t.integer "reschedule_count", precision: 38, default: 0, null: false
+    t.date "implemented_at"
+    t.date "closed_at"
+    t.integer "latest_id", precision: 38
+    t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "i_fin_con_obj_ite_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
     t.index ["first_follow_up_date"], name: "i_fin_fir_fol_up_dat"
     t.index ["first_notification_date"], name: "i_fin_fir_not_dat"
     t.index ["follow_up_date"], name: "i_findings_follow_up_date"
+    t.index ["implemented_at"], name: "i_findings_implemented_at"
     t.index ["last_notification_date"], name: "i_fin_las_not_dat"
+    t.index ["latest_id"], name: "index_findings_on_latest_id"
     t.index ["organization_id"], name: "i_findings_organization_id"
     t.index ["parent_id"], name: "index_findings_on_parent_id"
     t.index ["repeated_of_id"], name: "i_findings_repeated_of_id"
@@ -655,6 +661,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.string "filter"
     t.string "user"
     t.string "encrypted_password"
+    t.string "alternative_hostname"
+    t.integer "alternative_port", precision: 38
     t.index ["organization_id"], name: "i_ldap_configs_organization_id"
   end
 
@@ -663,11 +671,11 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.string "status", default: "trial", null: false
     t.integer "auditors_limit", precision: 38, null: false
     t.string "subscription_id"
-    t.datetime "subscribed_until", precision: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "paid_until", precision: 6
     t.index ["group_id"], name: "index_licenses_on_group_id"
-    t.index ["subscribed_until"], name: "i_licenses_subscribed_until"
+    t.index ["paid_until"], name: "index_licenses_on_paid_until"
     t.index ["subscription_id"], name: "i_licenses_subscription_id"
   end
 
@@ -2894,9 +2902,11 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.integer "group_id", precision: 38, null: false
     t.string "icon", default: "tag", null: false
     t.integer "parent_id", precision: 38
+    t.string "obsolete", limit: 1, default: "f", null: false
     t.index ["group_id"], name: "index_tags_on_group_id"
     t.index ["kind"], name: "index_tags_on_kind"
     t.index ["name"], name: "index_tags_on_name"
+    t.index ["obsolete"], name: "index_tags_on_obsolete"
     t.index ["organization_id"], name: "index_tags_on_organization_id"
     t.index ["parent_id"], name: "index_tags_on_parent_id"
     t.index ["shared"], name: "index_tags_on_shared"
@@ -2973,6 +2983,17 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "i_wea_tem_org_id"
+  end
+
+  create_table "webhooks", force: :cascade do |t|
+    t.string "gateway", null: false
+    t.string "status", null: false
+    t.string "kind", null: false
+    t.string "reference_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gateway"], name: "index_webhooks_on_gateway"
+    t.index ["status"], name: "index_webhooks_on_status"
   end
 
   create_table "work_papers", force: :cascade do |t|
@@ -3058,6 +3079,7 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
   add_foreign_key "finding_user_assignments", "findings", on_delete: :cascade
   add_foreign_key "finding_user_assignments", "users", on_delete: :cascade
   add_foreign_key "findings", "control_objective_items", on_delete: :cascade
+  add_foreign_key "findings", "findings", column: "latest_id", on_delete: :cascade
   add_foreign_key "findings", "findings", column: "repeated_of_id", on_delete: :cascade
   add_foreign_key "findings", "weakness_templates", on_delete: :cascade
   add_foreign_key "ldap_configs", "organizations", on_delete: :cascade

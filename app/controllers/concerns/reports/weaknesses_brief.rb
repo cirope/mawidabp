@@ -47,8 +47,7 @@ module Reports::WeaknessesBrief
       final = params[:final] == 'true'
 
       pending_weaknesses = Weakness.
-        awaiting.
-        or(Weakness.being_implemented).
+        being_implemented.
         or(Weakness.implemented).
         finals(final).
         list_with_final_review.
@@ -90,7 +89,7 @@ module Reports::WeaknessesBrief
     def weaknesses_brief_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = CSV.generate(options) do |csv|
+      csv_str = CSV.generate(**options) do |csv|
         csv << weaknesses_brief_csv_headers
 
         weaknesses_brief_csv_data_rows.each { |row| csv << row }
@@ -129,7 +128,7 @@ module Reports::WeaknessesBrief
           weakness.audit_comments,
           weaknesses_brief_audit_users(weakness).join("\n"),
           (weakness.origination_date ? l(weakness.origination_date) : '-'),
-          (weakness.pending? || weakness.awaiting? ? weakness.reschedule_count : '-'),
+          (weakness.pending? ? weakness.reschedule_count : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           distance_in_days_to_cut_date(weakness)
         ]
@@ -150,12 +149,6 @@ module Reports::WeaknessesBrief
 
         distance.abs.to_i > 365 ? distance.abs.to_i : nil
       end
-    end
-
-    def extract_cut_date parameters
-      cut_date = Timeliness.parse parameters[:cut_date], :date if parameters
-
-      cut_date&.to_date || Time.zone.today
     end
 
     def add_weaknesses_brief pdf
@@ -232,7 +225,7 @@ module Reports::WeaknessesBrief
           truncate(weakness.audit_comments, length: 1000),
           weaknesses_brief_audit_users(weakness).join("\n"),
           (weakness.origination_date ? l(weakness.origination_date) : '-'),
-          (weakness.pending? || weakness.awaiting? ? weakness.reschedule_count : '-'),
+          (weakness.pending? ? weakness.reschedule_count : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           distance_in_days_to_cut_date(weakness)
         ]

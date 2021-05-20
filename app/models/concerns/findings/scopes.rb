@@ -72,12 +72,12 @@ module Findings::Scopes
     def by_user_id user_id, include_finding_answers: false
       if include_finding_answers
         conditions = [
-          "#{User.quoted_table_name}.#{User.qcn 'id'} = :user_id",
-          "#{FindingAnswer.quoted_table_name}.#{FindingAnswer.qcn 'user_id'} = :user_id"
+          "#{User.quoted_table_name}.#{User.qcn 'id'} IN (:user_id)",
+          "#{FindingAnswer.quoted_table_name}.#{FindingAnswer.qcn 'user_id'} IN (:user_id)"
         ]
 
         includes(:users, :finding_answers).
-          where(conditions.map { |c| "(#{c})" }.join(' OR '), user_id: user_id).
+          where(conditions.map { |c| "(#{c})" }.join(' OR '), user_id: Array(user_id)).
           references(:users, :finding_answers)
       else
         includes(:users).where(users: { id: user_id }).references(:users)

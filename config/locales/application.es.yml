@@ -181,7 +181,7 @@ es:
     control_objective_stats_by_review_title: 'Observaciones por objetivo de control sin calificación'
     benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
-    synthesis_report_title: "Informe de síntesis al directorio"
+    synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
     review_score_details_report_title: "Calificaciones de informes detallado"
@@ -276,7 +276,7 @@ es:
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
         digitalized: "Digitalización"
     synthesis_report:
-      pdf_name: "informe_de_sintesis_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -286,8 +286,7 @@ es:
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      without_oportunities: "Sin oportunidades de mejora"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
@@ -613,7 +612,7 @@ es:
     process_control_stats_title: 'Observaciones por proceso de negocio'
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
-    synthesis_report_title: "Informe de síntesis al directorio"
+    synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
@@ -721,7 +720,7 @@ es:
         digitalized: "Digitalización"
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
     synthesis_report:
-      pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "resumen_ejecutivo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -739,7 +738,7 @@ es:
         one: "Una observación / oportunidad de mejora reiterada"
         other: "%{count} observaciones / oportunidades de mejora reiteradas"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
     review_stats_report:
       pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       title: "ESTADÍSTICAS DE INFORMES"
@@ -831,11 +830,11 @@ es:
       the_following_findings_are_still_unconfirmed: "Las siguientes observaciones / oportunidades han sido notificadas pero no han recibido una confirmación"
     reassigned_findings:
       new_responsibles:
-        one: "Responsable actual: %{responsible}"
-        other: "Responsables actuales: %{responsible}"
+        one: "Usuario actual: %{responsible}"
+        other: "Usuarios actuales: %{responsible}"
       old_responsibles:
-        one: "Responsable anterior: %{responsible}"
-        other: "Responsables anteriores: %{responsible}"
+        one: "Usuario anterior: %{responsible}"
+        other: "Usuarios anteriores: %{responsible}"
       the_following_findings_are_now_reassigned:
         one: "La siguiente observación / oportunidad de mejora ha sido reasignada"
         other: "Las siguientes observaciones / oportunidades de mejora han sido reasignadas"
@@ -849,12 +848,12 @@ es:
       clarification: "Si usted **no pidió** el restablecimiento **no haga nada**, su usuario y contraseña siguen vigentes"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
-      the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
-      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
+      the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los usuarios de la siguiente observación / oportunidad de mejora"
+      managers_clarification: "Los usuarios pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
     expired_finding_to_manager:
       title: "Hallazgo vencido"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación de la siguiente observación / oportunidad de mejora"
-      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
+      managers_clarification: "Los usuarios pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_findings:
@@ -1176,6 +1175,7 @@ es:
         sectors: "Sectores/departamentos involucrados"
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
+        require_counts: "Requerir cantidades en objetivos de control"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"

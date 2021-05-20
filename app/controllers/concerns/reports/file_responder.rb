@@ -54,6 +54,8 @@ module Reports::FileResponder
       values = report_where_clauses values
       values = report_order_clauses values
 
+      values.delete :reordering
+
       values.to_json
     end
 

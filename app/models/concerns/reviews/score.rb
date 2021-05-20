@@ -97,8 +97,6 @@ module Reviews::Score
     end
 
     def score_for weakness, date
-      raise 'Not compatible configuration' if SHOW_EXTENDED_RISKS
-
       if weakness.take_as_old_for_score? date: date
         old_score_for weakness
       elsif weakness.take_as_repeated_for_score? date: date

@@ -5,7 +5,8 @@ module Reviews::ControlObjectiveItems
     attr_reader   :control_objective_ids, :process_control_ids, :best_practice_ids
     attr_accessor :control_objective_data, :process_control_data, :best_practice_data
 
-    has_many :control_objective_items, dependent: :destroy, after_add: :assign_review
+    has_many :control_objective_items, dependent: :destroy,
+      after_add: :assign_review, inverse_of: :review
     has_many :process_controls, -> { distinct }, through: :control_objective_items
     has_many :best_practices, -> { distinct }, through: :process_controls
 

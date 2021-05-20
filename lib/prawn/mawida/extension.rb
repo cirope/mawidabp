@@ -80,7 +80,7 @@ module Prawn
         if term.present? && description.present?
           options = { invalid: :replace, undef: :replace, replace: '?' }
           formated_term = underline ? "<u><b>#{term}</b></u>" : "<b>#{term}</b>"
-          encoded_text = "#{formated_term}: #{description}".encode 'windows-1252', 'UTF-8', options
+          encoded_text = "#{formated_term}: #{description}".encode 'windows-1252', 'UTF-8', **options
 
           self.text encoded_text, :size => font_size, :align => align,
             :inline_format => true, :indent_paragraphs => left.pt
@@ -316,12 +316,15 @@ module Prawn
 
       def put_hr
         self.line_width = 0.5
+        stroke_color = self.stroke_color
 
         move_down 10
+        self.stroke_color 'cccccc'
         stroke_horizontal_rule
         move_down 10
 
         self.line_width = 1
+        self.stroke_color = stroke_color
       end
 
       private

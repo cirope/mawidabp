@@ -14,17 +14,19 @@ class ReviewsControllerTest < ActionController::TestCase
     }
     public_actions = []
     private_actions = [
-      [:get, :index],
+      [:get, :index, {}],
       [:get, :show, id_param],
-      [:get, :new],
+      [:get, :new, {}],
       [:get, :edit, id_param],
-      [:post, :create],
+      [:post, :create, {}],
       [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
     private_actions.each do |action|
-      send *action
+      options = action.pop
+
+      send *action, **options
       assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
@@ -660,10 +662,10 @@ class ReviewsControllerTest < ActionController::TestCase
     }, as: :json
     assert_response :success
 
-    tags = ActiveSupport::JSON.decode(@response.body)
+    response_tags = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 1, tags.size
-    assert tags.all? { |t| t['label'].match /high priority/i }
+    assert_equal 1, response_tags.size
+    assert response_tags.all? { |t| t['label'].match /high priority/i }
 
     get :auto_complete_for_tagging, xhr: true, params: {
       q: 'x_none',
@@ -671,9 +673,25 @@ class ReviewsControllerTest < ActionController::TestCase
     }, as: :json
     assert_response :success
 
-    tags = ActiveSupport::JSON.decode(@response.body)
+    response_tags = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, tags.size # Sin resultados
+    assert_equal 0, response_tags.size # Sin resultados
+
+    tag = tags :important
+
+    tag.update! obsolete: true
+
+    get :auto_complete_for_tagging, params: {
+      q: 'impor',
+      completion_state: 'incomplete',
+      kind: 'finding'
+    }, as: :json
+
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode @response.body
+
+    assert_equal 0, response_tags.size
   end
 
   test 'excluded control objectives' do

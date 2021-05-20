@@ -36,7 +36,7 @@ class FindingsController < ApplicationController
     update_resource @finding, finding_params
 
     location = if @finding.pending? || @finding.invalid?
-                 edit_finding_url params[:completed], @finding
+                 edit_finding_url params[:completion_state], @finding
                else
                  finding_url 'complete', @finding
                end
@@ -58,7 +58,7 @@ class FindingsController < ApplicationController
       params.require(:finding).permit(
         :id, :control_objective_item_id, :review_code, :title, :description,
         :answer, :current_situation, :current_situation_verified,
-        :audit_comments, :state, :progress, :origination_date, :solution_date,
+        :audit_comments, :state, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
         :compliance, :nested_user, :skip_work_paper, :lock_version,
         impact: [],
@@ -121,7 +121,14 @@ class FindingsController < ApplicationController
     end
 
     def pdf
-      title_partial = params[:completed] == 'incomplete' ? 'pending' : 'complete'
+      title_partial = case params[:completion_state]
+                      when'incomplete'
+                        'pending'
+                      when 'rescheduled'
+                        'rescheduled'
+                      else
+                        'complete'
+                      end
 
       FindingPdf.create(
         title: t("menu.follow_up.#{title_partial}_findings"),
