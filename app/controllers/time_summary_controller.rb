@@ -142,19 +142,19 @@ class TimeSummaryController < ApplicationController
     end
 
     def set_user
-      if params[:user_id] && user_included.present?
-        @user = user_included
+      if params[:user_id]
+        @user = scoped_users.take!
       else
         @user = @auth_user
       end
     end
 
-    def user_included
+    def scoped_users
       User.list.where(
-        id: @auth_user.self_and_descendants.map(&:id)
+        id: @auth_user.self_and_descendants
       ).where(
         "#{User.table_name}.#{User.qcn 'id'} = ?", params[:user_id].to_i
-      ).first
+      )
     end
 
     def set_descendants
