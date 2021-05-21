@@ -78,7 +78,7 @@ class TimeSummaryController < ApplicationController
     end
 
     def set_time_consumption
-      @auth_user.time_consumptions.between(@start_date, @end_date).each do |tc|
+      @user.time_consumptions.between(@start_date, @end_date).each do |tc|
         @items[tc.date] ||= []
         @items[tc.date]  << [tc.activity, tc.amount]
       end
@@ -143,19 +143,13 @@ class TimeSummaryController < ApplicationController
     end
 
     def set_user
-      if params[:user_id]
-        @user = scoped_users.take!
+      if params[:user_id].present?
+        @user = User.list.where(
+          id: @auth_user.self_and_descendants
+        ).find params[:user_id]
       else
         @user = @auth_user
       end
-    end
-
-    def scoped_users
-      User.list.where(
-        id: @auth_user.self_and_descendants
-      ).where(
-        "#{User.table_name}.#{User.qcn 'id'} = ?", params[:user_id]
-      )
     end
 
     def set_descendants
@@ -191,7 +185,11 @@ class TimeSummaryController < ApplicationController
         if date.workday?
           if @items[date].present?
             @items[date].each do |item, hours|
-              row << [date, item[:task], hours]
+              row << [
+                date,
+                item.to_s,
+                helpers.number_with_precision(hours, precision: 1)
+              ]
             end
           else
             row << [date, '', 0]

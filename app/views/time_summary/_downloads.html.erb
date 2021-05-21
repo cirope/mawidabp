@@ -2,7 +2,7 @@
   <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
     <%= t 'label.downloads' %>
   <% end %>
-  <div class="dropdown-menu dropdown-menu-right">
+  <div class="dropdown-menu">
     <%= link_to(
       t('time_summary.downloads.current_week'), time_summary_current_path(:week),
       class: 'dropdown-item'

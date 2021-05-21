@@ -28,13 +28,15 @@ module TimeSummaryHelper
     @work_hours_per_day - total
   end
 
-  def show_related_users
+  def time_summary_user_select
     users = time_summary_user_options
 
     select nil, :user_id, sort_options_array(users),
-      { prompt: true },
-      { name: :user_id, id: :user_id_select, class: 'form-control',
-        data: {
+      { prompt: false },
+      {
+        name:  :user_id,
+        class: 'form-control',
+        data:  {
           time_summary_url: time_summary_helper_path
         }
       }
@@ -48,7 +50,7 @@ module TimeSummaryHelper
 
   def time_summary_user_options
     @self_and_descendants.map do |user|
-      [user.full_name_with_function, user.id]
+      [user.full_name_with_function, user.id, selected: user == @user]
     end
   end
 end
