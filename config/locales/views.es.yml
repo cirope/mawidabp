@@ -600,6 +600,14 @@ es:
       add: 'Agregar actividad'
     new:
       title: 'Nueva actividad'
+    downloads:
+      current_week: "Descarga semana actual"
+      current_month: "Descarga mes actual"
+      current_year: "Descarga año actual"
+      csv:
+        date: "Fecha"
+        quantity_hours_per_day: "Cantidad horas por día"
+        task: "Tarea"
 
   users:
     index:

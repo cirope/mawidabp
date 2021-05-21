@@ -17,7 +17,7 @@
           <td><%= activity_group.name %></td>
           <td class="text-right"><%= link_to_show activity_group %></td>
           <td class="text-right"><%= link_to_edit [:edit, activity_group] %></td>
-          <td class="text-right"><%= link_to_destroy activity_group %></td>
+          <td class="text-right"><%= link_to_destroy activity_group if activity_group.can_be_destroyed? %></td>
         </tr>
       <% end %>
     </tbody>

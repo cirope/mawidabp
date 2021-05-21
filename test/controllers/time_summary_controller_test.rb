@@ -35,4 +35,44 @@ class TimeSummaryControllerTest < ActionController::TestCase
       end_date:   date.at_end_of_week
     )
   end
+
+  test 'time summary report as CSV' do
+    ['weeks', 'month', 'year'].map do |period|
+      get :index, params: {
+        start_date: 1.send(period).ago,
+        end_date: 1.send(period).since
+      }, as: :csv
+
+      assert_response :success
+      assert_match Mime[:csv].to_s, @response.content_type
+    end
+  end
+
+  test 'time summary filter by default user' do
+    user = users :administrator
+
+    get :index, params: {
+      start_date: 1.weeks.ago,
+      end_date: 1.weeks.since
+    }
+
+    assert_response :success
+    assert_select 'body h2',
+      "#{I18n.t('time_summary.index.title')} | #{user.full_name}"
+  end
+
+  test 'time summary filter by user descendants' do
+    user            = users :administrator
+    user_descendant = user.self_and_descendants.first
+
+    get :index, params: {
+      start_date: 1.weeks.ago,
+      end_date: 1.weeks.since,
+      user_id: user_descendant.id
+    }
+
+    assert_response :success
+    assert_select 'body h2',
+      "#{I18n.t('time_summary.index.title')} | #{user_descendant.full_name}"
+  end
 end

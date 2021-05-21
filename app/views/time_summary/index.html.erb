@@ -1,15 +1,22 @@
 <h2 class="h1">
-  <%= @title %>
+  <%= @title %> | <%= @user.full_name %>
 </h2>
 
 <h3 class="h4">
   <%= t '.period', start: l(@start_date, format: :minimal), end: l(@end_date, format: :minimal) %>
 </h3>
 
-<div class="btn-group" role="group">
-  <%= link_to raw("&laquo; #{t 'label.previous'}"), time_summary_prev_week_path, class: 'btn btn-secondary' %>
-  <%= link_to t('.current_week'), time_summary_index_path, class: 'btn btn-secondary' %>
-  <%= link_to raw("&raquo; #{t 'label.next'}"), time_summary_next_week_path, class: 'btn btn-secondary' %>
+<div class="row">
+  <div class="col-md-6">
+    <div class="btn-group" role="group">
+      <%= link_to raw("&laquo; #{t 'label.previous'}"), time_summary_prev_week_path, class: 'btn btn-secondary' %>
+      <%= link_to t('.current_week'), time_summary_index_path, class: 'btn btn-secondary' %>
+      <%= link_to raw("#{t 'label.next'} &raquo;"), time_summary_next_week_path, class: 'btn btn-secondary' %>
+    </div>
+  </div>
+  <div class="col-md-6 mt-3 mt-md-0">
+    <%= time_summary_user_select if @self_and_descendants.size > 1 %>
+  </div>
 </div>
 
 <hr>
@@ -20,7 +27,7 @@
       <%= l date, format: :minimal %>
 
       <% unless time_summary_completed? date %>
-        <%= link_to new_time_summary_path(date: date), title: t('.add'), class: 'ml-1 h6' do %>
+        <%= link_to new_time_summary_path(date: date, limit: time_summary_remaining_hours(date)), title: t('.add'), class: 'ml-1 h6' do %>
           <i class="fas fa-plus-circle"></i>
         <% end %>
       <% end %>
@@ -41,3 +48,9 @@
     <% end %>
   <% end %>
 <% end %>
+
+<hr>
+
+<div>
+  <%= render 'downloads' %>
+</div>

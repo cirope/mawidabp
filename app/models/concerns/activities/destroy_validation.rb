@@ -5,9 +5,8 @@ module Activities::DestroyValidation
     before_destroy :check_if_can_be_destroyed
   end
 
-  # TODO: complete after implemented with custom logic
   def can_be_destroyed?
-    true
+    time_consumptions.empty?
   end
 
   private

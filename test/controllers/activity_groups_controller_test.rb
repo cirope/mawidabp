@@ -71,6 +71,12 @@ class ActivityGroupsControllerTest < ActionController::TestCase
   end
 
   test 'should destroy activity group' do
+    @activity_group.activities.each do |activity|
+      activity.time_consumptions.destroy_all
+
+      activity.destroy!
+    end
+
     assert_difference 'ActivityGroup.count', -1 do
       delete :destroy, params: { id: @activity_group }
     end
