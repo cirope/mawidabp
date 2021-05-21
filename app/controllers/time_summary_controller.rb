@@ -12,7 +12,8 @@ class TimeSummaryController < ApplicationController
   end
 
   def new
-    @time_consumption = TimeConsumption.new date: params[:date]
+    @time_consumption = TimeConsumption.new date:  params[:date],
+                                            limit: params[:limit]
   end
 
   def create
@@ -31,7 +32,7 @@ class TimeSummaryController < ApplicationController
   private
 
     def time_consumption_params
-      params.require(:time_consumption).permit :amount, :date, :activity_id
+      params.require(:time_consumption).permit :amount, :date, :limit, :activity_id
     end
 
     def start_date

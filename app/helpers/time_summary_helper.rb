@@ -10,8 +10,12 @@ module TimeSummaryHelper
   end
 
   def time_summary_completed? date
+    time_summary_remaining_hours(date) <= 0
+  end
+
+  def time_summary_remaining_hours date
     total = Array(@items[date]).sum { |_item, hours| hours }
 
-    total >= @work_hours_per_day
+    @work_hours_per_day - total
   end
 end

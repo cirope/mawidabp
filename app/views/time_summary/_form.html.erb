@@ -7,13 +7,14 @@
       <%= l @time_consumption.date %>
     </p>
 
-    <%= f.input :activity_id, collection: ActivityGroup.order(:name),
-                              as: :grouped_select,
-                              group_method: :activities,
-                              prompt: true,
-                              input_html: { autofocus: true } %>
+    <%= f.association :activity, collection: ActivityGroup.order(:name),
+                                 as: :grouped_select,
+                                 group_method: :activities,
+                                 prompt: true,
+                                 input_html: { autofocus: true } %>
     <%= f.input :amount %>
     <%= f.input :date, as: :hidden %>
+    <%= f.input :limit, as: :hidden %>
   </div>
 
   <div class="form-actions">
