@@ -62,7 +62,7 @@ class TimeSummaryControllerTest < ActionController::TestCase
   end
 
   test 'time summary filter by user descendants' do
-    user            = users(:administrator)
+    user            = users :administrator
     user_descendant = user.self_and_descendants.first
 
     get :index, params: {
