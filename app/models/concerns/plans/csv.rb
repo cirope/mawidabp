@@ -57,7 +57,7 @@ module Plans::Csv
             plan_item.status_text(long: false),
             business_unit_type&.name || '',
             plan_item.business_unit&.name || '',
-            plan_item.project,
+            plan_item.project.to_s,
             (plan_item.scope.to_s if SHOW_REVIEW_EXTRA_ATTRIBUTES),
             (plan_item.risk_exposure.to_s if SHOW_REVIEW_EXTRA_ATTRIBUTES),
             plan_item.tags.map(&:to_s).join(';'),

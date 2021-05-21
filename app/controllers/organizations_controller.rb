@@ -69,9 +69,10 @@ class OrganizationsController < ApplicationController
         ldap_config_attributes: [
           :id, :hostname, :port, :basedn, :filter, :login_mask,
           :username_attribute, :name_attribute, :last_name_attribute,
-          :email_attribute, :function_attribute, :roles_attribute,
-          :manager_attribute, :tls, :ca_path, :test_user, :test_password,
-          :user, :password, :alternative_hostname, :alternative_port
+          :email_attribute, :function_attribute, :office_attribute,
+          :roles_attribute, :manager_attribute, :tls, :ca_path, :test_user,
+          :test_password, :user, :password, :alternative_hostname,
+          :alternative_port
         ]
       )
     end

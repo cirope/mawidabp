@@ -7,9 +7,15 @@ module LdapConfigs::LdapImport
     users_by_dn  = {}
     managers     = {}
     users        = []
+    search_options = {
+      base:                     basedn,
+      filter:                   ldap_filter,
+      ignore_server_caps:       true,
+      paged_searches_supported: true
+    }
 
     User.transaction do
-      connection.search(base: basedn, filter: ldap_filter) do |entry|
+      connection.search(search_options) do |entry|
         if (process_args = process_entry? entry)
           users << (result = process_entry entry, **process_args)
           user   = result[:user]
@@ -101,6 +107,7 @@ module LdapConfigs::LdapImport
         name:                casted_attribute(entry, name_attribute),
         last_name:           casted_attribute(entry, last_name_attribute),
         email:               casted_attribute(entry, email_attribute),
+        office:              casted_attribute(entry, office_attribute),
         organizational_unit: organizational_unit(entry),
         hidden:              false,
         enable:              true

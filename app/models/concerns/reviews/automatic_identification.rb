@@ -12,13 +12,18 @@ module Reviews::AutomaticIdentification
   end
 
   module ClassMethods
-    def next_identification_number suffix
-      regex = /(\d+)\/#{suffix}\Z/i
-      last_identification =
-        where("#{quoted_table_name}.#{qcn 'identification'} LIKE ?", "%/#{suffix}").
-        reorder(:id).
-        last&.
-        identification
+    def next_identification_number prefix, suffix, use_prefix: false
+      pattern        = use_prefix ? "#{prefix}-%/#{suffix}" : "%/#{suffix}"
+      regex          = /(\d+)\/#{suffix}\Z/i
+      relation_scope = where(
+        "#{quoted_table_name}.#{qcn 'identification'} LIKE ?", pattern
+      ).joins(
+        :business_unit_type
+      ).where(
+        business_unit_types: { independent_identification: use_prefix }
+      )
+
+      last_identification = relation_scope.reorder(:id).last&.identification
 
       last_number = String(last_identification).match(regex)&.captures&.first
 
