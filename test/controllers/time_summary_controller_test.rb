@@ -47,4 +47,19 @@ class TimeSummaryControllerTest < ActionController::TestCase
       assert_match Mime[:csv].to_s, @response.content_type
     end
   end
+
+  test 'time summary filter by user' do
+    user            = User.find session[:user_id]
+    user_descendant = User.find user.self_and_descendants.first.id
+
+    get :index, params: {
+      start_date: 1.weeks.ago,
+      end_date: 1.weeks.since,
+      user_id: user_descendant.id
+    }
+
+    assert_response :success
+    assert_select 'body h2',
+      "#{I18n.t('time_summary.index.title')} | #{user_descendant.full_name}"
+  end
 end
