@@ -91,10 +91,12 @@ class TimeSummaryController < ApplicationController
         acc.merge :"start_#{di.last}" => di.first, :"end_#{di.last}" => di.first
       end
 
-      conditions = Array([
-        "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} >= :start",
-        "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} <= :end"
-      ].join(' AND '))
+      conditions = [
+        [
+          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} >= :start",
+          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} <= :end"
+        ].join(' AND ')
+      ]
 
       2.times do |i|
         conditions << [
@@ -140,15 +142,19 @@ class TimeSummaryController < ApplicationController
     end
 
     def set_user
-      if params[:user_id] && user_included?
-        @user = User.list.find(params[:user_id])
+      if params[:user_id] && user_included.present?
+        @user = user_included
       else
         @user = @auth_user
       end
     end
 
-    def user_included?
-      @auth_user.self_and_descendants.map(&:id).include? params[:user_id].to_i
+    def user_included
+      User.list.where(
+        id: @auth_user.self_and_descendants.map(&:id)
+      ).where(
+        "#{User.table_name}.#{User.qcn 'id'} = ?", params[:user_id].to_i
+      ).first
     end
 
     def set_descendants
@@ -196,6 +202,6 @@ class TimeSummaryController < ApplicationController
     end
 
     def filename
-      %W(#{@user.name} #{@user.last_name}).join '_'
+      [@user.name, @user.last_name].join '_'
     end
 end
