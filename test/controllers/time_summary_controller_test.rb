@@ -48,9 +48,22 @@ class TimeSummaryControllerTest < ActionController::TestCase
     end
   end
 
-  test 'time summary filter by user' do
-    user            = User.find session[:user_id]
-    user_descendant = User.find user.self_and_descendants.first.id
+  test 'time summary filter by default user' do
+    user = users(:administrator)
+
+    get :index, params: {
+      start_date: 1.weeks.ago,
+      end_date: 1.weeks.since
+    }
+
+    assert_response :success
+    assert_select 'body h2',
+      "#{I18n.t('time_summary.index.title')} | #{user.full_name}"
+  end
+
+  test 'time summary filter by user descendants' do
+    user            = users(:administrator)
+    user_descendant = user.self_and_descendants.first
 
     get :index, params: {
       start_date: 1.weeks.ago,

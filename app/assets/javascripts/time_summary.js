@@ -3,8 +3,7 @@ jQuery(function ($) {
     var $userSelect = $(this)
     var userId      = $userSelect.val()
     var urlTemplate = decodeURI($userSelect.data('timeSummaryUrl'))
-    var url         = urlTemplate.replace('[USER_ID]', userId)
 
-    window.location = url
+    window.location = urlTemplate.replace('[USER_ID]', userId)
   })
 })

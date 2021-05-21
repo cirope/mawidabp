@@ -153,7 +153,7 @@ class TimeSummaryController < ApplicationController
       User.list.where(
         id: @auth_user.self_and_descendants
       ).where(
-        "#{User.table_name}.#{User.qcn 'id'} = ?", params[:user_id].to_i
+        "#{User.table_name}.#{User.qcn 'id'} = ?", params[:user_id]
       )
     end
 
