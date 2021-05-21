@@ -1,7 +1,8 @@
 class TimeSummaryController < ApplicationController
-  respond_to :html
+  respond_to :html, :csv
 
-  before_action :auth, :check_privileges, :set_title
+  before_action :auth, :check_privileges, :set_title, :set_descendants,
+                :set_user
 
   def index
     @start_date         = start_date
@@ -9,6 +10,13 @@ class TimeSummaryController < ApplicationController
     @work_hours_per_day = work_hours_per_day
 
     set_items
+
+    respond_to do |format|
+      format.html
+      format.csv {
+        render csv: time_summary_csv, filename: filename
+      }
+    end
   end
 
   def new
@@ -77,18 +85,30 @@ class TimeSummaryController < ApplicationController
     end
 
     def resource_utilizations
-      parameters = [@start_date, @end_date].each_with_index.inject({}) do |acc, di|
+      initial_parameters = { start: @start_date, end: @end_date }
+      dates              = [@start_date, @end_date]
+
+      parameters = dates.each_with_index.inject(initial_parameters) do |acc, di|
         acc.merge :"start_#{di.last}" => di.first, :"end_#{di.last}" => di.first
       end
 
-      conditions = 2.times.map do |i|
+      conditions = [
         [
+          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} >= :start",
+          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} <= :end"
+        ].join(' AND ')
+      ]
+
+      2.times do |i|
+        conditions << [
           "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} <= :start_#{i}",
           "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} >= :end_#{i}"
-        ].join ' AND '
-      end.map { |c| "(#{c})" }.join ' OR '
+        ].join(' AND ')
+      end
 
-      @auth_user.
+      conditions = conditions.map { |c| "(#{c})" }.join ' OR '
+
+      @user.
         resource_utilizations.
         joins(:workflow_item).
         references(:workflow_items).
@@ -120,5 +140,69 @@ class TimeSummaryController < ApplicationController
       value   = setting&.value.to_f
 
       value > 0 ? value : 8
+    end
+
+    def set_user
+      if params[:user_id]
+        @user = scoped_users.take!
+      else
+        @user = @auth_user
+      end
+    end
+
+    def scoped_users
+      User.list.where(
+        id: @auth_user.self_and_descendants
+      ).where(
+        "#{User.table_name}.#{User.qcn 'id'} = ?", params[:user_id]
+      )
+    end
+
+    def set_descendants
+      @self_and_descendants = @auth_user.self_and_descendants
+    end
+
+    def time_summary_csv
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      csv_str = CSV.generate(**options) do |csv|
+        csv << time_summary_header_csv
+
+        time_summary_data_csv.each do |data|
+          csv << data
+        end
+      end
+
+      "\uFEFF#{csv_str}"
+    end
+
+    def time_summary_header_csv
+      [
+        t('time_summary.downloads.csv.date'),
+        t('time_summary.downloads.csv.task'),
+        t('time_summary.downloads.csv.quantity_hours_per_day')
+      ]
+    end
+
+    def time_summary_data_csv
+      row = []
+
+      (@start_date..@end_date).each do |date|
+        if date.workday?
+          if @items[date].present?
+            @items[date].each do |item, hours|
+              row << [date, item[:task], hours]
+            end
+          else
+            row << [date, '', 0]
+          end
+        end
+      end
+
+      row
+    end
+
+    def filename
+      [@user.name, @user.last_name].join '_'
     end
 end

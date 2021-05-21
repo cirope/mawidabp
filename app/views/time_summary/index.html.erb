@@ -1,15 +1,20 @@
 <h2 class="h1">
-  <%= @title %>
+  <%= @title %> | <%= @user.full_name %>
 </h2>
 
 <h3 class="h4">
   <%= t '.period', start: l(@start_date, format: :minimal), end: l(@end_date, format: :minimal) %>
 </h3>
 
-<div class="btn-group" role="group">
-  <%= link_to raw("&laquo; #{t 'label.previous'}"), time_summary_prev_week_path, class: 'btn btn-secondary' %>
-  <%= link_to t('.current_week'), time_summary_index_path, class: 'btn btn-secondary' %>
-  <%= link_to raw("&raquo; #{t 'label.next'}"), time_summary_next_week_path, class: 'btn btn-secondary' %>
+<div class="row">
+  <div class="col-md-4 btn-group" role="group">
+    <%= link_to raw("&laquo; #{t 'label.previous'}"), time_summary_prev_week_path, class: 'btn btn-secondary' %>
+    <%= link_to t('.current_week'), time_summary_index_path, class: 'btn btn-secondary' %>
+    <%= link_to raw("#{t 'label.next'} &raquo;"), time_summary_next_week_path, class: 'btn btn-secondary' %>
+  </div>
+  <div class="col-md-6">
+    <%= show_related_users %>
+  </div>
 </div>
 
 <hr>
@@ -41,3 +46,9 @@
     <% end %>
   <% end %>
 <% end %>
+
+<hr>
+
+<div>
+  <%= render 'downloads' %>
+</div>

@@ -1,0 +1,19 @@
+<div class="dropup d-inline">
+  <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
+    <%= t 'label.downloads' %>
+  <% end %>
+  <div class="dropdown-menu dropdown-menu-right">
+    <%= link_to(
+      t('time_summary.downloads.current_week'), time_summary_current_path(:week),
+      class: 'dropdown-item'
+    ) %>
+    <%= link_to(
+      t('time_summary.downloads.current_month'), time_summary_current_path(:month),
+      class: 'dropdown-item'
+    ) %>
+    <%= link_to(
+      t('time_summary.downloads.current_year'), time_summary_current_path(:year),
+      class: 'dropdown-item'
+    ) %>
+  </div>
+</div>
