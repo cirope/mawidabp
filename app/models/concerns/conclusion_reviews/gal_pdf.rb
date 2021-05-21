@@ -18,7 +18,9 @@ module ConclusionReviews::GalPdf
   private
 
     def put_gal_header_on pdf, organization
-      pdf.add_review_header organization, nil, nil
+      hide_logo = review.business_unit_type.hide_review_logo
+
+      pdf.add_review_header organization, nil, nil, hide_logo: hide_logo
       pdf.add_page_footer
     end
 

@@ -71,6 +71,8 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :external => '0',
           :require_tag => '0',
           :require_counts => '0',
+          :hide_review_logo => '0',
+          :independent_identification => '0',
           :business_units_attributes => [
             {
               :name => 'New business unit'
@@ -108,6 +110,8 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :external => '0',
           :require_tag => '0',
           :require_counts => '0',
+          :hide_review_logo => '0',
+          :independent_identification => '0',
           :business_units_attributes => [
             {
               :id => business_units(:business_unit_one).id,

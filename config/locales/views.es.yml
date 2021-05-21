@@ -605,6 +605,7 @@ es:
     index:
       title: 'Listado de usuarios'
       import_from_ldap: 'Importar desde LDAP'
+      show_hidden: 'Mostrar ocultos'
     show:
       title: 'Detalles de usuario'
       profiles: 'Perfiles'

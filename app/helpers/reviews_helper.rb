@@ -45,6 +45,18 @@ module ReviewsHelper
     end
   end
 
+  def review_business_unit_type_prefixes
+    BusinessUnitType.list.map do |but|
+      [
+        but.review_prefix,
+        but.review_prefix,
+        {
+          data: { use_prefix: but.independent_identification }
+        }
+      ]
+    end
+  end
+
   def user_assignment_type_field(form, inline = true, disabled = false)
     input_options = { disabled: disabled, data: { review_role: true } }
     options = user_assignment_type_options_for form.object.user

@@ -8,6 +8,8 @@ cycle:
   sectors: 'Area 51'
   require_tag: false
   require_counts: false
+  hide_review_logo: false
+  independent_identification: false
   organization: cirope
 
 consolidated_substantive:
@@ -20,6 +22,8 @@ consolidated_substantive:
   sectors: 'Area 51'
   require_tag: false
   require_counts: false
+  hide_review_logo: false
+  independent_identification: false
   organization: cirope
 
 bcra:
@@ -32,6 +36,8 @@ bcra:
   sectors: 'Area 51'
   require_tag: false
   require_counts: false
+  hide_review_logo: false
+  independent_identification: false
   organization: cirope
 
 bcra_google:
@@ -44,4 +50,6 @@ bcra_google:
   sectors: 'Area 51'
   require_tag: false
   require_counts: false
+  hide_review_logo: false
+  independent_identification: false
   organization: google
