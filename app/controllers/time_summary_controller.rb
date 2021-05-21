@@ -85,18 +85,18 @@ class TimeSummaryController < ApplicationController
 
     def resource_utilizations
       initial_parameters = { start: @start_date, end: @end_date }
-      conditions         = []
+      dates              = [@start_date, @end_date]
 
-      parameters = [@start_date, @end_date].each_with_index.inject(initial_parameters) do |acc, di|
+      parameters = dates.each_with_index.inject(initial_parameters) do |acc, di|
         acc.merge :"start_#{di.last}" => di.first, :"end_#{di.last}" => di.first
       end
 
-      conditions << [
+      conditions = Array([
         "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} >= :start",
         "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} <= :end"
-      ].join(' AND ')
+      ].join(' AND '))
 
-      2.times.map do |i|
+      2.times do |i|
         conditions << [
           "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} <= :start_#{i}",
           "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} >= :end_#{i}"
@@ -196,6 +196,6 @@ class TimeSummaryController < ApplicationController
     end
 
     def filename
-      "#{@user.name}_#{@user.last_name}"
+      %W(#{@user.name} #{@user.last_name}).join '_'
     end
 end

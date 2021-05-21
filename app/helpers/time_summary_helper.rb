@@ -43,10 +43,8 @@ module TimeSummaryHelper
   end
 
   def time_summary_user_options
-    related = @self_and_descendants
-
-    related.map do |user|
-       [user.full_name_with_function, user.id]
+    @self_and_descendants.map do |user|
+      [user.full_name_with_function, user.id]
     end
   end
 end
