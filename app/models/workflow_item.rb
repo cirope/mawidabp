@@ -79,7 +79,7 @@ class WorkflowItem < ApplicationRecord
   end
 
   def to_s
-    [workflow.review.identification, task].join ' - '
+    [workflow.review.long_identification, task].join ' - '
   end
 
   def start
