@@ -49,7 +49,7 @@ class TimeSummaryControllerTest < ActionController::TestCase
   end
 
   test 'time summary filter by default user' do
-    user = users(:administrator)
+    user = users :administrator
 
     get :index, params: {
       start_date: 1.weeks.ago,
