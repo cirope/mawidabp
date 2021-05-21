@@ -546,7 +546,7 @@
       without_design_tests: "sin pruebas de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
       without_sustantive_tests: "sin pruebas sustantivas"
-      without_auditor_comment: "sin conclusiones del auditor"
+      without_auditor_comment: "sin conclusiones UPLA"
     review:
       edit: 'Editar informe'
       show: 'Ver informe'
