@@ -62,12 +62,13 @@ class TimeSummaryController < ApplicationController
     def set_items
       @items = {}
 
-      set_resource_utilization
+      load_resource_utilizations
       set_time_consumption
+      set_resource_utilization
     end
 
     def set_resource_utilization
-      resource_utilizations.each do |ru|
+      @_resource_utilizations.find_each do |ru|
         split_resource(ru).each do |date, rh|
           if date.between?(@start_date, @end_date)
             @items[date] ||= []
@@ -78,13 +79,20 @@ class TimeSummaryController < ApplicationController
     end
 
     def set_time_consumption
-      @user.time_consumptions.between(@start_date, @end_date).each do |tc|
+      start_col    = "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'}"
+      end_col      = "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'}"
+      r_start_date = @_resource_utilizations.reorder(start_col).first&.workflow_item&.start
+      r_end_date   = @_resource_utilizations.reorder(end_col).last&.workflow_item&.end
+      start_date   = r_start_date&.<(@start_date) ? r_start_date : @start_date
+      end_date     = r_end_date&.>(@end_date) ? r_end_date : @end_date
+
+      @user.time_consumptions.between(start_date, end_date).each do |tc|
         @items[tc.date] ||= []
         @items[tc.date]  << [tc.activity, tc.amount]
       end
     end
 
-    def resource_utilizations
+    def load_resource_utilizations
       initial_parameters = { start: @start_date, end: @end_date }
       dates              = [@start_date, @end_date]
 
@@ -108,9 +116,9 @@ class TimeSummaryController < ApplicationController
 
       conditions = conditions.map { |c| "(#{c})" }.join ' OR '
 
-      @user.
+      @_resource_utilizations = @user.
         resource_utilizations.
-        joins(:workflow_item).
+        includes(:workflow_item).
         references(:workflow_items).
         where(conditions, parameters)
     end
@@ -121,9 +129,12 @@ class TimeSummaryController < ApplicationController
       units         = resource_utilization.units
 
       (wi.start..wi.end).each do |date|
+        used      = Array(@items[date]).sum { |_item, hours| hours }
+        remaining = @work_hours_per_day - used
+
         if date.workday? && units > 0
-          if units >= @work_hours_per_day
-            hours_per_day[date] = [wi, @work_hours_per_day]
+          if units >= remaining
+            hours_per_day[date] = [wi, remaining]
           else
             hours_per_day[date] = [wi, units]
           end
