@@ -77,7 +77,7 @@ APP_AUDITOR_MENU_ITEMS = [
             order: 3,
             controllers: :business_unit_kinds,
             url: { controller: '/business_unit_kinds' }
-          ) unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS )
+          ) unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS)
         ].compact
       ),
       MenuItem.new(

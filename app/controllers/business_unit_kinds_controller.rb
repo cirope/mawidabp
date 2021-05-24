@@ -40,6 +40,7 @@ class BusinessUnitKindsController < ApplicationController
   # DELETE /business_unit_kinds/1
   def destroy
     @business_unit_kind.destroy
+
     respond_with @business_unit_kind
   end
 
