@@ -3,19 +3,20 @@ require 'test_helper'
 class BusinessUnitKindsControllerTest < ActionController::TestCase
 
   setup do
-    @business_unit_kind = business_unit_kinds(:sucursal)
+    @business_unit_kind = business_unit_kinds :sucursal
 
     login
   end
 
   test 'should get index' do
     get :index
+
     assert_response :success
-    assert_not_nil assigns(:business_unit_kinds)
   end
 
   test 'should get new' do
     get :new
+
     assert_response :success
   end
 
@@ -28,7 +29,7 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to business_unit_kind_url(assigns(:business_unit_kind))
+    assert_redirected_to business_unit_kind_url(BusinessUnitKind.last)
   end
 
   test 'should show business_unit_kind' do
@@ -48,7 +49,7 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
       id: @business_unit_kind, business_unit_kind: { name: 'Regional' }
     }
 
-    assert_redirected_to business_unit_kind_url(assigns(:business_unit_kind))
+    assert_redirected_to business_unit_kind_url(@business_unit_kind)
   end
 
   test 'should destroy business_unit_kind' do

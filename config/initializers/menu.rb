@@ -77,7 +77,7 @@ APP_AUDITOR_MENU_ITEMS = [
             order: 3,
             controllers: :business_unit_kinds,
             url: { controller: '/business_unit_kinds' }
-          ) if SHOW_BUSINESS_UNIT_KINDS)
+          ) if Current.conclusion_pdf_format == 'upl')
         ].compact
       ),
       MenuItem.new(

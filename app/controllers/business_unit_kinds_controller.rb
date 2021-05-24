@@ -7,7 +7,7 @@ class BusinessUnitKindsController < ApplicationController
 
   # GET /business_unit_kinds
   def index
-    @business_unit_kinds = BusinessUnitKind.page(params[:page])
+    @business_unit_kinds = BusinessUnitKind.list.page(params[:page])
   end
 
   # GET /business_unit_kinds/1
@@ -25,7 +25,7 @@ class BusinessUnitKindsController < ApplicationController
 
   # POST /business_unit_kinds
   def create
-    @business_unit_kind = BusinessUnitKind.new(business_unit_kind_params)
+    @business_unit_kind = BusinessUnitKind.list.new(business_unit_kind_params)
 
     @business_unit_kind.save
     respond_with @business_unit_kind

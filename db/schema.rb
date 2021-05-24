@@ -107,9 +107,11 @@ ActiveRecord::Schema.define(version: 2021_05_23_004130) do
   end
 
   create_table "business_unit_kinds", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.bigint "organization_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_business_unit_kinds_on_organization_id"
   end
 
   create_table "business_unit_scores", id: :serial, force: :cascade do |t|
@@ -1207,6 +1209,7 @@ ActiveRecord::Schema.define(version: 2021_05_23_004130) do
   add_foreign_key "best_practices", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_findings", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_findings", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_unit_kinds", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "control_objective_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_reviews", "business_unit_types", on_update: :restrict, on_delete: :restrict
