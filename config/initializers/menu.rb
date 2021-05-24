@@ -71,8 +71,14 @@ APP_AUDITOR_MENU_ITEMS = [
             order: 2,
             controllers: :business_unit_types,
             url: { controller: '/business_unit_types' }
-          )
-        ]
+          ),
+          (MenuItem.new(
+            :business_unit_kind,
+            order: 3,
+            controllers: :business_unit_kinds,
+            url: { controller: '/business_unit_kinds' }
+          ) if SHOW_BUSINESS_UNIT_KINDS)
+        ].compact
       ),
       MenuItem.new(
         :security,

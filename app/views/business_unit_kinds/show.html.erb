@@ -1,0 +1,9 @@
+<h2><%= @business_unit_kind %></h2>
+
+<p>
+  <strong><%= BusinessUnitKind.human_attribute_name 'name' %></strong>:
+  <%= @business_unit_kind.name %>
+</p>
+
+<%= link_to_edit [:edit, @business_unit_kind] %> |
+<%= link_to_index business_unit_kinds_path %>
