@@ -218,6 +218,8 @@ es:
       best_practice_comment:
         auditor_comment: 'Conclusiones del auditor'
         best_practice: 'Buena práctica'
+      business_unit:
+        business_unit_kind_id: 'Tipo de unidad de negocio'
       business_unit_kind:
         name: 'Nombre'
       business_unit_type_users:
