@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   get '/healthy', to: 'health#show', as: 'healthy'
   post '/touch', to: 'touch#create', as: 'touch'
 
