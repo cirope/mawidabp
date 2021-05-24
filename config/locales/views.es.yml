@@ -64,7 +64,7 @@ es:
 
   business_unit_kinds:
     index:
-      empty_html: 'No hay tipo de unidades de negocio, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
+      empty_html: 'No hay tipo de unidades de negocios, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
   closing_interviews:
     edit:
       title: 'Editar entrevista de cierre'
