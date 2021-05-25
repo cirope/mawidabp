@@ -3,7 +3,7 @@ require 'test_helper'
 class BusinessUnitKindsControllerTest < ActionController::TestCase
 
   setup do
-    @business_unit_kind = business_unit_kinds :sucursal
+    @business_unit_kind = business_unit_kinds :central
 
     login
   end
@@ -24,7 +24,7 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
     assert_difference 'BusinessUnitKind.count' do
       post :create, params: {
         business_unit_kind: {
-          name: 'Central'
+          name: 'Regional'
         }
       }
     end

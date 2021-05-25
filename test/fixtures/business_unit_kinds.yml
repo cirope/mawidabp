@@ -1,3 +1,7 @@
 sucursal:
   name: Sucursal
   organization: cirope
+
+central:
+  name: Central
+  organization: cirope
