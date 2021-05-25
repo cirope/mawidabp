@@ -34,6 +34,7 @@ class BusinessUnitKindsController < ApplicationController
   # PATCH/PUT /business_unit_kinds/1
   def update
     update_resource @business_unit_kind, business_unit_kind_params
+
     respond_with @business_unit_kind
   end
 
