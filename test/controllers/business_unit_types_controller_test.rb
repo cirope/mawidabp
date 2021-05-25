@@ -76,7 +76,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :business_units_attributes => [
             {
               :name => 'New business unit',
-              :business_unit_kind_id => business_unit_kinds(:sucursal).id
+              :business_unit_kind_id => business_unit_kinds(:branch).id
             }
           ]
         }
