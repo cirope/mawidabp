@@ -170,7 +170,8 @@ ActiveRecord::Schema.define(version: 2021_05_24_183659) do
     t.integer "business_unit_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "business_unit_kind_id"
+    t.bigint "business_unit_kind_id"
+    t.index ["business_unit_kind_id"], name: "index_business_units_on_business_unit_kind_id"
     t.index ["business_unit_type_id"], name: "index_business_units_on_business_unit_type_id"
     t.index ["name"], name: "index_business_units_on_name"
   end

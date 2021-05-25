@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BusinessUnitKindTest < ActiveSupport::TestCase
   setup do
-    @business_unit_kind = business_unit_kinds :sucursal
+    @business_unit_kind = business_unit_kinds :branch
   end
 
   test 'blank attributes' do

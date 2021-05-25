@@ -1,7 +1,7 @@
-sucursal:
+branch:
   name: Sucursal
   organization: cirope
 
-central:
+branch_two:
   name: Central
   organization: cirope

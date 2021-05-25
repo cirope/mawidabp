@@ -23,7 +23,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
       @business_unit = BusinessUnit.new(
         :name => 'New name',
         :business_unit_type => business_unit_types(:cycle),
-        :business_unit_kind => business_unit_kinds(:sucursal)
+        :business_unit_kind => business_unit_kinds(:branch)
       )
 
       assert @business_unit.save, @business_unit.errors.full_messages.join('; ')
