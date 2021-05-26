@@ -12,7 +12,6 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
     skip unless (!HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
            HIDE_FINDING_CRITERIA_MISMATCH)
 
-
     get :index
 
     assert_response :success
