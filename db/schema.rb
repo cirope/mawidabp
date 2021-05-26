@@ -1219,6 +1219,7 @@ ActiveRecord::Schema.define(version: 2021_05_24_183659) do
   add_foreign_key "business_unit_type_users", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_users", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_units", "business_unit_kinds", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_units", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interview_users", "closing_interviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interview_users", "users", on_update: :restrict, on_delete: :restrict

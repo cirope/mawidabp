@@ -20,7 +20,9 @@ class BusinessUnit < ApplicationRecord
   validates :name, :uniqueness =>
     {:case_sensitive => false, :scope => :business_unit_type_id}
 
-  validates :business_unit_kind_id, :presence => !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+  validates :business_unit_kind_id,
+    :presence => !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
+      HIDE_FINDING_CRITERIA_MISMATCH
 
   # Relaciones
   belongs_to :business_unit_type, :optional => true

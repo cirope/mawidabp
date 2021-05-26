@@ -48,7 +48,7 @@ class BusinessUnitKindsController < ApplicationController
   private
 
     def set_business_unit_kind
-      @business_unit_kind = BusinessUnitKind.list.find(params[:id])
+      @business_unit_kind = BusinessUnitKind.list.find params[:id]
     end
 
     def business_unit_kind_params

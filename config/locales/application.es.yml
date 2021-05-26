@@ -1184,6 +1184,7 @@ es:
     attributes:
       business_unit:
         name: "Nombre"
+        business_unit_kind_id: 'Tipo de unidad de negocio'
       business_unit_type:
         name: "Nombre"
         business_unit_label: "Etiqueta de la unidad de negocio en el informe"
