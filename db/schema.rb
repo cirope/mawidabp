@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_20_005824) do
+ActiveRecord::Schema.define(version: 2021_05_24_183659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -106,6 +106,14 @@ ActiveRecord::Schema.define(version: 2021_05_20_005824) do
     t.index ["finding_id"], name: "index_business_unit_findings_on_finding_id"
   end
 
+  create_table "business_unit_kinds", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_business_unit_kinds_on_organization_id"
+  end
+
   create_table "business_unit_scores", id: :serial, force: :cascade do |t|
     t.integer "design_score"
     t.integer "compliance_score"
@@ -162,6 +170,8 @@ ActiveRecord::Schema.define(version: 2021_05_20_005824) do
     t.integer "business_unit_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "business_unit_kind_id"
+    t.index ["business_unit_kind_id"], name: "index_business_units_on_business_unit_kind_id"
     t.index ["business_unit_type_id"], name: "index_business_units_on_business_unit_type_id"
     t.index ["name"], name: "index_business_units_on_name"
   end
@@ -1201,6 +1211,7 @@ ActiveRecord::Schema.define(version: 2021_05_20_005824) do
   add_foreign_key "best_practices", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_findings", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_findings", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_unit_kinds", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "control_objective_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_reviews", "business_unit_types", on_update: :restrict, on_delete: :restrict
@@ -1208,6 +1219,7 @@ ActiveRecord::Schema.define(version: 2021_05_20_005824) do
   add_foreign_key "business_unit_type_users", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_users", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_units", "business_unit_kinds", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_units", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interview_users", "closing_interviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interview_users", "users", on_update: :restrict, on_delete: :restrict

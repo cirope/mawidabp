@@ -49,6 +49,9 @@ es:
       business_unit:
         one: 'Unidad de negocio'
         other: 'Unidades de negocio'
+      business_unit_kind:
+        one: 'Tipo de unidad de negocio'
+        other: 'Tipos de unidad de negocio'
       business_unit_score:
         one: 'Calificación unidad de negocio'
         other: 'Calificaciones de unidades de negocio'
@@ -215,6 +218,8 @@ es:
       best_practice_comment:
         auditor_comment: 'Conclusiones del auditor'
         best_practice: 'Buena práctica'
+      business_unit_kind:
+        name: 'Nombre'
       business_unit_type_users:
         business_unit_type_id: "Unidad organizativa"
         user_id: "Usuario"
