@@ -6,7 +6,7 @@
         input_html: { id: "#{id}", autofocus: true } %>
     </div>
 
-    <% if allow_business_unit_kind %>
+    <% if show_business_unit_kind? %>
       <div class="col-md-3">
         <%= f.association :business_unit_kind, label: false %>
       </div>
