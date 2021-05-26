@@ -6,7 +6,7 @@
         input_html: { id: "#{id}", autofocus: true } %>
     </div>
 
-    <% if !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS && HIDE_FINDING_CRITERIA_MISMATCH %>
+    <% if allow_business_unit_kind %>
       <div class="col-md-3">
         <%= f.association :business_unit_kind, label: false %>
       </div>

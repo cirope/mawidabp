@@ -9,8 +9,7 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
   end
 
   test 'should get index' do
-    skip unless (!HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-           HIDE_FINDING_CRITERIA_MISMATCH)
+    skip unless allow_business_unit_kinds
 
     get :index
 
@@ -18,8 +17,7 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
   end
 
   test 'should get new' do
-    skip unless (!HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-           HIDE_FINDING_CRITERIA_MISMATCH)
+    skip unless allow_business_unit_kinds
 
     get :new
 
@@ -27,8 +25,7 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
   end
 
   test 'should create business_unit_kind' do
-    skip unless (!HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-           HIDE_FINDING_CRITERIA_MISMATCH)
+    skip unless allow_business_unit_kinds
 
     assert_difference 'BusinessUnitKind.count' do
       post :create, params: {
@@ -42,8 +39,7 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
   end
 
   test 'should show business_unit_kind' do
-    skip unless (!HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-           HIDE_FINDING_CRITERIA_MISMATCH)
+    skip unless allow_business_unit_kinds
 
     get :show, params: { id: @business_unit_kind }
 
@@ -51,8 +47,7 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
   end
 
   test 'should get edit' do
-    skip unless (!HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-           HIDE_FINDING_CRITERIA_MISMATCH)
+    skip unless allow_business_unit_kinds
 
     get :edit, params: { id: @business_unit_kind }
 
@@ -60,8 +55,7 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
   end
 
   test 'should update business_unit_kind' do
-    skip unless (!HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-           HIDE_FINDING_CRITERIA_MISMATCH)
+    skip unless allow_business_unit_kinds
 
     patch :update, params: {
       id: @business_unit_kind, business_unit_kind: { name: 'Regional' }
@@ -71,8 +65,7 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
   end
 
   test 'should destroy business_unit_kind' do
-    skip unless (!HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-           HIDE_FINDING_CRITERIA_MISMATCH)
+    skip unless allow_business_unit_kinds
 
     assert_difference 'BusinessUnitKind.count', -1 do
       delete :destroy, params: { id: @business_unit_kind }
@@ -80,4 +73,12 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
 
     assert_redirected_to business_unit_kinds_url
   end
+
+
+  private
+
+    def allow_business_unit_kinds
+      !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
+        HIDE_FINDING_CRITERIA_MISMATCH
+    end
 end
