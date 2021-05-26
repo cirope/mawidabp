@@ -691,6 +691,7 @@
   follow_up_audited:
     index_title: "Reportes generales"
     weaknesses_by_user_title: "Observaciones por usuario"
+    status_user: "Estado de usuario"
     process_control_stats_title: "Observaciones por proceso de negocio"
     business_unit_type_title: "Unidad organizativa"
     business_unit_title: "Unidad de negocio"
