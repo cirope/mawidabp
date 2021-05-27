@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.3.6'
+gem 'rails', '~> 6.0.3.7'
 
 gem 'rake', '13.0.1'
 gem 'pg'
@@ -24,7 +24,7 @@ gem 'prawn-table'
 gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
-gem 'bootstrap'
+gem 'bootstrap', '< 5'
 gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
@@ -34,6 +34,7 @@ gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
+gem 'execjs', '< 2.8'
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 

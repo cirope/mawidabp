@@ -224,7 +224,7 @@ class ReviewsControllerTest < ActionController::TestCase
                 plan_item_id: plan_items(:past_plan_item_3).id,
                 scope: 'committee',
                 risk_exposure: 'high',
-                manual_score: 800,
+                manual_score: 80,
                 include_sox: 'no',
                 best_practice_ids: [best_practices(:bcra_A4609).id],
                 process_control_ids: [process_controls(:security_management).id],
@@ -293,7 +293,7 @@ class ReviewsControllerTest < ActionController::TestCase
           plan_item_id: plan_items(:current_plan_item_2).id,
           scope: 'committee',
           risk_exposure: 'high',
-          manual_score: 800,
+          manual_score: 80,
           include_sox: 'no',
           review_user_assignments_attributes: [
             {

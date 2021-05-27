@@ -25,10 +25,19 @@
   <%= @finding.issue_date ? l(@finding.issue_date, :format => :long) :
     t('finding.without_conclusion_final_review') %>
 </p>
+
 <div>
   <strong><%= Finding.human_attribute_name :description %></strong>
   <%= simple_format @finding.description, class: 'mb-1' %>
 </div>
+
+<% if USE_SCOPE_CYCLE %>
+  <div>
+    <strong><%= Finding.human_attribute_name :brief %></strong>
+    <%= simple_format @finding.brief, class: 'mb-1' %>
+  </div>
+<% end %>
+
 <% if @finding.kind_of? Weakness %>
   <div>
     <strong><%= Weakness.human_attribute_name :audit_recommendations %></strong>:
@@ -81,10 +90,12 @@
     <%= simple_format @finding.current_situation, class: 'mb-1' %>
   </div>
 
-  <div>
-    <strong><%= Finding.human_attribute_name :current_situation_verified %></strong>:
-    <%= t "label.#{@finding.current_situation_verified ? 'yes' : 'no'}" %>
-  </div>
+  <% unless USE_SCOPE_CYCLE %>
+    <div>
+      <strong><%= Finding.human_attribute_name :current_situation_verified %></strong>:
+      <%= t "label.#{@finding.current_situation_verified ? 'yes' : 'no'}" %>
+    </div>
+  <% end %>
 <% end %>
 
 <div>

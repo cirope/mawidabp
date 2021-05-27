@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_09_150136) do
+ActiveRecord::Schema.define(version: 2021_05_20_005824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.index ["group_id"], name: "index_best_practices_on_group_id"
     t.index ["obsolete"], name: "index_best_practices_on_obsolete"
     t.index ["organization_id"], name: "index_best_practices_on_organization_id"
+    t.index ["shared"], name: "index_best_practices_on_shared"
   end
 
   create_table "business_unit_findings", id: :serial, force: :cascade do |t|
@@ -115,6 +116,15 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.datetime "updated_at", null: false
     t.index ["business_unit_id"], name: "index_business_unit_scores_on_business_unit_id"
     t.index ["control_objective_item_id"], name: "index_business_unit_scores_on_control_objective_item_id"
+  end
+
+  create_table "business_unit_type_reviews", force: :cascade do |t|
+    t.bigint "business_unit_type_id", null: false
+    t.bigint "review_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["business_unit_type_id"], name: "index_business_unit_type_reviews_on_business_unit_type_id"
+    t.index ["review_id"], name: "index_business_unit_type_reviews_on_review_id"
   end
 
   create_table "business_unit_type_users", force: :cascade do |t|
@@ -140,6 +150,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.text "sectors"
     t.text "recipients"
     t.boolean "require_counts", default: false, null: false
+    t.boolean "hide_review_logo", default: false, null: false
+    t.boolean "independent_identification", default: false, null: false
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
@@ -184,8 +196,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
 
   create_table "comments", id: :serial, force: :cascade do |t|
     t.text "comment"
-    t.integer "commentable_id"
     t.string "commentable_type"
+    t.integer "commentable_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -232,6 +244,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.string "previous_identification"
     t.date "previous_date"
     t.text "main_recommendations"
+    t.text "effectiveness_notes"
+    t.text "additional_comments"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
@@ -305,8 +319,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.text "compliance_tests"
     t.text "sustantive_tests"
     t.integer "order"
-    t.integer "controllable_id"
     t.string "controllable_type"
+    t.integer "controllable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["controllable_type", "controllable_id"], name: "index_controls_on_controllable_type_and_controllable_id"
@@ -316,8 +330,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.text "description"
     t.string "cost_type"
     t.decimal "cost", precision: 15, scale: 2
-    t.integer "item_id"
     t.string "item_type"
+    t.integer "item_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -431,8 +445,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
 
   create_table "finding_user_assignments", id: :serial, force: :cascade do |t|
     t.boolean "process_owner", default: false
-    t.integer "finding_id"
     t.string "finding_type"
+    t.integer "finding_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -477,13 +491,14 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.bigint "weakness_template_id"
     t.date "last_notification_date"
     t.integer "reschedule_count", default: 0, null: false
+    t.integer "parent_ids", default: [], array: true
     t.date "implemented_at"
     t.date "closed_at"
-    t.integer "parent_ids", default: [], array: true
     t.bigint "latest_id"
     t.date "first_follow_up_date"
     t.text "compliance_observations"
     t.jsonb "commitments"
+    t.text "brief"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -528,8 +543,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.integer "lock_version", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "imageable_id", null: false
     t.string "imageable_type", null: false
+    t.integer "imageable_id", null: false
     t.index ["imageable_type", "imageable_id"], name: "index_image_models_on_imageable_type_and_imageable_id"
   end
 
@@ -555,6 +570,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.integer "alternative_port"
     t.string "tls"
     t.string "ca_path"
+    t.string "office_attribute"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
   end
 
@@ -603,8 +619,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
 
   create_table "notification_relations", id: :serial, force: :cascade do |t|
     t.integer "notification_id"
-    t.integer "model_id"
     t.string "model_type"
+    t.integer "model_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["model_type", "model_id"], name: "index_notification_relations_on_model_type_and_model_id"
@@ -758,8 +774,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.integer "lock_version", default: 0
     t.integer "user_id", null: false
     t.integer "questionnaire_id"
-    t.integer "pollable_id"
     t.string "pollable_type"
+    t.integer "pollable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "organization_id"
@@ -841,6 +857,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.integer "related_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "notify", default: false, null: false
     t.index ["user_id", "related_user_id"], name: "index_related_user_relations_on_user_id_and_related_user_id"
   end
 
@@ -857,10 +874,10 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
 
   create_table "resource_utilizations", id: :serial, force: :cascade do |t|
     t.decimal "units", precision: 15, scale: 2
-    t.integer "resource_consumer_id"
     t.string "resource_consumer_type"
-    t.integer "resource_id"
+    t.integer "resource_consumer_id"
     t.string "resource_type"
+    t.integer "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["resource_consumer_id", "resource_consumer_type"], name: "resource_utilizations_consumer_consumer_type_idx"
@@ -909,6 +926,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.string "include_sox"
     t.integer "finished_work_papers", default: 0, null: false
     t.string "score_type", default: "effectiveness", null: false
+    t.integer "score_alt", default: 100, null: false
+    t.decimal "manual_score_alt", precision: 6, scale: 2
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "index_reviews_on_identification"
     t.index ["organization_id"], name: "index_reviews_on_organization_id"
@@ -970,6 +989,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.index ["period_id"], name: "index_risk_assessments_on_period_id"
     t.index ["plan_id"], name: "index_risk_assessments_on_plan_id"
     t.index ["risk_assessment_template_id"], name: "index_risk_assessments_on_risk_assessment_template_id"
+    t.index ["shared"], name: "index_risk_assessments_on_shared"
   end
 
   create_table "risk_weights", force: :cascade do |t|
@@ -1009,8 +1029,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
 
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id", null: false
-    t.integer "taggable_id", null: false
     t.string "taggable_type", null: false
+    t.integer "taggable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
@@ -1076,6 +1096,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.datetime "hash_changed"
     t.boolean "hidden", default: false
     t.string "organizational_unit"
+    t.string "office"
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"
@@ -1085,8 +1106,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|
-    t.integer "item_id"
     t.string "item_type"
+    t.integer "item_id"
     t.string "event", null: false
     t.integer "whodunnit"
     t.datetime "created_at"
@@ -1132,8 +1153,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.string "code"
     t.integer "number_of_pages"
     t.text "description"
-    t.integer "owner_id"
     t.string "owner_type"
+    t.integer "owner_id"
     t.integer "file_model_id"
     t.integer "organization_id"
     t.integer "lock_version", default: 0
@@ -1182,6 +1203,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
   add_foreign_key "business_unit_findings", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "control_objective_items", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_unit_type_reviews", "business_unit_types", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_unit_type_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_users", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_users", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict

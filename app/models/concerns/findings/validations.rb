@@ -13,6 +13,7 @@ module Findings::Validations
       pdf_encoding: true
     validates :follow_up_date, :solution_date, :origination_date,
       :first_notification_date, timeliness: { type: :date }, allow_blank: true
+    validates :brief, presence: true, if: :require_brief?
     validate :validate_answer
     validate :validate_state
     validate :validate_review_code
@@ -34,6 +35,7 @@ module Findings::Validations
 
     (to_pending || to_implemented) && !has_new_comment
   end
+
   private
 
     def audit_comments_should_be_present?
@@ -42,6 +44,10 @@ module Findings::Validations
 
     def check_dates?
       !incomplete? && !revoked? && !repeated?
+    end
+
+    def require_brief?
+      USE_SCOPE_CYCLE
     end
 
     def validate_follow_up_date

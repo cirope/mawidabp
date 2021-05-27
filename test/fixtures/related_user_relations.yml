@@ -1,7 +1,9 @@
 bare_first_time_relation:
   user: bare
   related_user: first_time
+  notify: false
 
 general_manager_coordinator_manager_relation:
   user: general_manager
   related_user: coordinator_manager
+  notify: false

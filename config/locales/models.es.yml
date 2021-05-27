@@ -218,6 +218,9 @@ es:
       business_unit_type_users:
         business_unit_type_id: "Unidad organizativa"
         user_id: "Usuario"
+      business_unit_type_reviews:
+        business_unit_type_id: "Unidad organizativa"
+        review_id: "Informe"
       business_unit_score:
         business_unit_id: 'Ciclo'
         design_score: 'Calificación pruebas de diseño'
@@ -270,6 +273,7 @@ es:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
         description: 'Observación / Oportunidad'
+        brief: 'Resumen'
         type: 'Tipo'
         repeated_of_id: 'Reiterada de'
         review_code: 'Código'
@@ -374,6 +378,7 @@ es:
         last_name_attribute: 'Atributo con el apellido'
         email_attribute: 'Atributo con el correo electrónico'
         function_attribute: 'Atributo con el cargo'
+        office_attribute: 'Atributo con el departamento'
         roles_attribute: 'Atributo con los perfiles'
         manager_attribute: 'Atributo con el superior'
         tls: 'Versión TLS'
@@ -414,6 +419,7 @@ es:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
         description: 'Oportunidad de mejora'
+        brief: 'Resumen'
         review_code: 'Código'
         answer: 'Respuesta/Acciones correctivas'
         user_ids: 'Usuario'
@@ -464,6 +470,7 @@ es:
         enable: 'Habilitado'
         failed_attempts: 'Intentos fallidos'
         function: 'Cargo'
+        office: 'Departamento'
         hidden: 'Oculto'
         language: 'Lenguaje'
         last_access: 'Último acceso'
@@ -626,6 +633,7 @@ es:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
         description: 'Observación'
+        brief: 'Resumen'
         review_code: 'Código'
         audit_recommendations: 'Recomendaciones de auditoría'
         answer: 'Respuesta/Acciones correctivas'

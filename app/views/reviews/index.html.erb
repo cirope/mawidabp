@@ -16,6 +16,16 @@
       <% else %>
         <%= make_not_available_column Tag.model_name.human(count: 0), { :class => 'd-none d-sm-table-cell' } %>
       <% end %>
+      <%= make_not_available_column t('.control_objective_items_open.label'),
+        { :class => 'd-none d-xl-table-cell',
+          :title => t('.control_objective_items_open.title')
+        }
+      %>
+      <%= make_not_available_column t('.control_objective_items_finished.label'),
+        { :class => 'd-none d-xl-table-cell',
+          :title => t('.control_objective_items_finished.title')
+        }
+      %>
       <th colspan="4" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -31,6 +41,8 @@
         <td class="d-none d-sm-table-cell"><%= super_truncate review.plan_item.project, 25 %></td>
         <td class="d-none d-sm-table-cell"><%= audit_team_for review %></td>
         <td class="d-none d-sm-table-cell"><%= tags review.tags %></td>
+        <td class="d-none d-xl-table-cell"><%= count_control_objective_items_by_finished_status(review, finished: false) %></td>
+        <td class="d-none d-xl-table-cell"><%= count_control_objective_items_by_finished_status(review, finished: true) %></td>
         <td class="text-right"><%= link_to_clone new_review_path(:clone_from => review.id) %></td>
         <td class="text-right"><%= link_to_show review %></td>
         <td class="text-right"><%= link_to_edit edit_review_path(review) %></td>
