@@ -1,0 +1,17 @@
+<h1><%= t '.title' %></h1>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="card-header"></div>
+      <div class="card-body">
+        <%= simple_form_for :import_from_file, url: users_import_from_file_index_path do |f| %>
+
+          <div class="form-actions">
+            <%= f.submit t('.import'), class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
