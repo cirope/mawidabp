@@ -3,108 +3,125 @@ module Users::Import
 
   module ClassMethods
     def import_from_file
-      users = {}
-      roles = []
+      users   = {}
+      options = {'col_sep': ';'}
+      rows    = []
 
-      File.foreach(extra_users_info_file_role) do |line|
-        row  = line.split(';')
+      CSV.foreach(extra_users_info_file_role, options) do |row|
         key  = /\d+/.match(row[1])
         role = row[0].strip
 
-        if role != 'UserReplicLdap' && key.present?
-          users[key[0]] = {
-            id: row[1].strip,
-            role: role
-          }
-
-          roles.push(role).uniq
-        end
-      end
-
-        import_extra_users_info_role users, roles
-    end
-
-    private
-
-    def import_extra_users_info_role users, roles
-      fields        = [11, 30, 30, 6, 50, 30, 70, 1, 10, 8, 8]
-      field_pattern = "A#{fields.join 'A'}"
-      data          = []
-
-      roles = get_roles roles
-
-      File.foreach(extra_users_info_file) do |line|
-        row = line.unpack field_pattern
-
-        if row[4].present?
-          user_people = row[0][0..4]
-
-          if users.key?(user_people) && roles.include?(users[user_people][:role])
-            user = users[user_people]
-
-            data.push(trivial_data(row, user))
+        if role_allowed?(role) && key.present?
+          if users.key? key[0]
+            users[key[0]].push(role)
+          else
+            users[key[0]] = [role]
           end
         end
       end
 
-      create_user data if data.present?
-    end
-
-
-    def create_user data
       User.transaction do
-        u = User.first_or_create!(data)
+        rows = import_extra_users_info_role(users)
+      end
+
+      rows
+    end
+
+    private
+
+      def role_allowed? role
+        excluded_roles.exclude?(role) && find_role(role).present?
+      end
+
+      def excluded_roles
+        ['UserReplicLdap']
+      end
+
+      def import_extra_users_info_role users
+        fields         = [11, 30, 30, 6, 50, 30, 70, 1, 10, 8, 8]
+        field_pattern  = "A#{fields.join 'A'}"
+        users_imported = []
+
+        File.foreach(extra_users_info_file) do |line|
+          row   = line.unpack field_pattern
+          email = row[4]
+
+          if email.present?
+            people_user_id = row[0][0..4]
+
+            if users.key?(people_user_id)
+              roles = users[people_user_id]
+              data  = trivial_data(row, people_user_id)
+              user  = find_user data
+
+              if user.nil?
+                users_imported  << create_user(data, roles) if data.present?
+              else
+                users_imported << user
+              end
+            end
+          end
+        end
+
+        users_imported
+      end
+
+
+      def find_user data
+        User.group_list.by_email(data[:email])             ||
+          User.without_organization.by_email(data[:email]) ||
+          User.list.by_user(data[:user])
+      end
+
+      def create_user data, roles
+        data[:organization_roles_attributes] = roles.map do |r|
+          { organization_id: r.organization_id, role_id: r.id }
+        end.compact
+
+        u = User.first_create(data)
+      end
+
+      def find_role role
+        Role.list.find_by(name: role)
+      end
+
+      def trivial_data row, user
+        {
+          name: row[2],
+          last_name: row[1],
+          user: user,
+          email: row[4],
+          hidden: false,
+          enable: true
+        }
+      end
+
+      def import_extra_users_info?
+        extra_users_info_file && extra_users_info_format == 'peoplesoft_txt'
+      end
+
+      def extra_users_info_file
+        path = extra_users_info_attr 'path'
+
+        path if path && File.exist?(path)
+      end
+
+      def extra_users_info_format
+        extra_users_info_attr 'format'
+      end
+
+      def extra_users_info_attr(attr)
+        if ENV['EXTRA_USERS_INFO'].present?
+          file_info = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {}
+
+          file_info[attr]
+        end
+      end
+
+      def extra_users_info_file_role
+        path = extra_users_info_attr 'role_path'
+
+        path if path && File.exist?(path)
       end
     end
-
-    def get_roles roles
-      Role.list.where(name: roles).pluck(:name)
-    end
-
-    def trivial_data row, user
-      {
-        name: row[2],
-        last_name: row[1],
-        user: user[:id],
-        email: row[4],
-        hidden:              false,
-        enable:              true,
-        organization_roles_attributes: [
-          {
-            organization_id: Current.organization.id,
-            role_id: Role.find_by(name: user[:role]).id
-          }
-        ]
-      }
-    end
-
-    def import_extra_users_info?
-      extra_users_info_file && extra_users_info_format == 'peoplesoft_txt'
-    end
-
-    def extra_users_info_file
-      #path = extra_users_info_attr 'path'
-      path = 'scripts/MW-PERSONAL_test.TXT'
-
-      path if path && File.exist?(path)
-    end
-
-    def extra_users_info_format
-      extra_users_info_attr 'format'
-    end
-
-    def extra_users_info_attr(attr)
-      if ENV['EXTRA_USERS_INFO'].present?
-        file_info = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {}
-
-        file_info[attr]
-      end
-    end
-
-    def extra_users_info_file_role
-      path = 'scripts/mw_l_.csv'
-
-      path if path && File.exist?(path)
-    end
-  end
 end

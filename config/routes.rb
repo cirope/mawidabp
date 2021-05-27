@@ -475,7 +475,6 @@ Rails.application.routes.draw do
     resources :roles, only: [:index]
     resources :status, only: [:index, :show, :create, :destroy]
     resources :imports, only: [:new, :create]
-    resources :import_from_file, only: [:new, :create]
   end
 
   resources :users
