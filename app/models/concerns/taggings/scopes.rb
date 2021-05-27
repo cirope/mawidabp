@@ -3,7 +3,7 @@ module Taggings::Scopes
 
   included do
     scope :for_document, -> {
-      joins(:tag).where tags: { kind: 'document' }
+      joins(:tag).where tags: { kind: 'document', obsolete: false }
     }
     scope :with_documents, -> {
       for_document.joins(:document).merge Document.list

@@ -62,6 +62,9 @@ es:
     control_objectives:
       new: 'Agregar objetivo'
 
+  business_unit_kinds:
+    index:
+      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
   closing_interviews:
     edit:
       title: 'Editar entrevista de cierre'
@@ -531,6 +534,7 @@ es:
     hide_import_from_ldap: 'Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación'
     skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
+    hours_of_work_per_day: 'Horas de trabajo por día'
 
   tags:
     edit:
@@ -565,10 +569,22 @@ es:
       in_progress: 'En proceso'
       finished: 'Finalizada'
 
+  reviews:
+    index:
+      control_objective_items_open:
+        title: 'Objetivos de control abiertos'
+        label: 'OCA'
+      control_objective_items_finished:
+        title: 'Objetivos de control finalizados'
+        label: 'OCF'
+    form:
+      add_business_unit_type: 'Agregar unidad organizativa'
+
   users:
     index:
       title: 'Listado de usuarios'
       import_from_ldap: 'Importar desde LDAP'
+      show_hidden: 'Mostrar ocultos'
     show:
       title: 'Detalles de usuario'
       profiles: 'Perfiles'
@@ -590,11 +606,6 @@ es:
     profiles:
       edit:
         title: 'Mis datos'
-
-  reviews:
-    form:
-      add_business_unit_type: 'Agregar unidad organizativa'
-
     imports:
       new:
         title: 'Importar usuarios desde LDAP'

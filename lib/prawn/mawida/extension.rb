@@ -154,11 +154,11 @@ module Prawn
         end
       end
 
-      def add_review_header(organization, identification, project)
+      def add_review_header(organization, identification, project, hide_logo: false)
         self.repeat :all do
           font_size = PDF_HEADER_FONT_SIZE
 
-          self.add_organization_image organization, font_size
+          self.add_organization_image organization, font_size unless hide_logo
 
            y_pointer = self.y
 

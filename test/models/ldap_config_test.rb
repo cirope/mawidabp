@@ -42,6 +42,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     @ldap_config.last_name_attribute = '?'
     @ldap_config.email_attribute = '?'
     @ldap_config.function_attribute = '?'
+    @ldap_config.office_attribute = '?'
     @ldap_config.roles_attribute = '?'
     @ldap_config.manager_attribute = '?'
 
@@ -53,6 +54,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_error @ldap_config, :last_name_attribute, :invalid
     assert_error @ldap_config, :email_attribute, :invalid
     assert_error @ldap_config, :function_attribute, :invalid
+    assert_error @ldap_config, :office_attribute, :invalid
     assert_error @ldap_config, :roles_attribute, :invalid
     assert_error @ldap_config, :manager_attribute, :invalid
   end

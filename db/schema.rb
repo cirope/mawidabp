@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_23_194445) do
+ActiveRecord::Schema.define(version: 2021_05_24_183659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -26,6 +26,22 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
     t.datetime "updated_at", null: false
     t.index ["benefit_id"], name: "index_achievements_on_benefit_id"
     t.index ["finding_id"], name: "index_achievements_on_finding_id"
+  end
+
+  create_table "activities", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "activity_group_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["activity_group_id"], name: "index_activities_on_activity_group_id"
+  end
+
+  create_table "activity_groups", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_activity_groups_on_organization_id"
   end
 
   create_table "answer_options", id: :serial, force: :cascade do |t|
@@ -106,6 +122,14 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
     t.index ["finding_id"], name: "index_business_unit_findings_on_finding_id"
   end
 
+  create_table "business_unit_kinds", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_business_unit_kinds_on_organization_id"
+  end
+
   create_table "business_unit_scores", id: :serial, force: :cascade do |t|
     t.integer "design_score"
     t.integer "compliance_score"
@@ -150,6 +174,8 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
     t.text "sectors"
     t.text "recipients"
     t.boolean "require_counts", default: false, null: false
+    t.boolean "hide_review_logo", default: false, null: false
+    t.boolean "independent_identification", default: false, null: false
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
@@ -160,6 +186,8 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
     t.integer "business_unit_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "business_unit_kind_id"
+    t.index ["business_unit_kind_id"], name: "index_business_units_on_business_unit_kind_id"
     t.index ["business_unit_type_id"], name: "index_business_units_on_business_unit_type_id"
     t.index ["name"], name: "index_business_units_on_name"
   end
@@ -242,8 +270,8 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
     t.string "previous_identification"
     t.date "previous_date"
     t.text "main_recommendations"
-    t.text "effectiveness_notes"
     t.text "additional_comments"
+    t.text "effectiveness_notes"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
@@ -568,6 +596,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
     t.integer "alternative_port"
     t.string "tls"
     t.string "ca_path"
+    t.string "office_attribute"
     t.string "organizational_unit_attribute"
     t.string "organizational_unit"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
@@ -856,6 +885,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
     t.integer "related_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "notify", default: false, null: false
     t.index ["user_id", "related_user_id"], name: "index_related_user_relations_on_user_id_and_related_user_id"
   end
 
@@ -1070,6 +1100,17 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
     t.index ["finding_id"], name: "index_tasks_on_finding_id"
   end
 
+  create_table "time_consumptions", force: :cascade do |t|
+    t.date "date", null: false
+    t.decimal "amount", precision: 3, scale: 1, null: false
+    t.bigint "activity_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["activity_id"], name: "index_time_consumptions_on_activity_id"
+    t.index ["user_id"], name: "index_time_consumptions_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name", limit: 100
     t.string "last_name", limit: 100
@@ -1094,6 +1135,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
     t.datetime "hash_changed"
     t.boolean "hidden", default: false
     t.string "organizational_unit"
+    t.string "office"
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"
@@ -1189,6 +1231,8 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
 
   add_foreign_key "achievements", "benefits", on_update: :restrict, on_delete: :restrict
   add_foreign_key "achievements", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "activities", "activity_groups", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "activity_groups", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "benefits", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "best_practices", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "reviews", on_update: :restrict, on_delete: :restrict
@@ -1198,6 +1242,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
   add_foreign_key "best_practices", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_findings", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_findings", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_unit_kinds", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "control_objective_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_reviews", "business_unit_types", on_update: :restrict, on_delete: :restrict
@@ -1205,6 +1250,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
   add_foreign_key "business_unit_type_users", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_users", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_units", "business_unit_kinds", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_units", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interview_users", "closing_interviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interview_users", "users", on_update: :restrict, on_delete: :restrict
@@ -1301,6 +1347,8 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tasks", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "time_consumptions", "activities", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "time_consumptions", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict
