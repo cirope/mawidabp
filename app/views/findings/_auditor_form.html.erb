@@ -40,7 +40,7 @@
         <%= f.input :description, label: finding_description_label, input_html: { readonly: true, rows: 5 } %>
 
         <% if SHOW_FINDING_CURRENT_SITUATION %>
-          <%= f.input :current_situation, input_html: { rows: USE_SCOPE_CYCLE ? 4 : 3 } %>
+          <%= f.input :current_situation, input_html: { rows: 3 } %>
           <%= f.input :current_situation_verified unless USE_SCOPE_CYCLE %>
         <% end %>
 
@@ -53,10 +53,40 @@
       </div>
       <div class="col-md-6">
         <% if @finding.kind_of?(Weakness) %>
-          <%= f.input :risk, collection: risks, prompt: true, input_html: {
-            autofocus: true,
-            data: weakness_risk_data_options
-          } %>
+          <% if USE_SCOPE_CYCLE %>
+            <div class="row">
+              <div class="col">
+                <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true, input_html: {
+                  autofocus: true,
+                  data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+                } %>
+              </div>
+              <div class="col">
+                <%= f.input :probability, collection: weakness_probabilities, prompt: true, input_html: {
+                  data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+                } %>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-9">
+                <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
+                  data: weakness_risk_data_options
+                } %>
+              </div>
+              <div class="col-3 text-right">
+                <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
+                  data: { toggle_risk_disabled_attr: true }
+                } %>
+              </div>
+            </div>
+          <% else %>
+            <%= f.input :risk, collection: risks, prompt: true, input_html: {
+              autofocus: true,
+              data: weakness_risk_data_options
+            } %>
+          <% end %>
+
           <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
             disabled: disabled_priority(@finding, false),
             readonly: !!USE_SCOPE_CYCLE
@@ -83,7 +113,7 @@
         <% end %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
-        <%= f.input :answer, input_html: { rows: SHOW_FINDING_CURRENT_SITUATION ? 9 : 5 } %>
+        <%= f.input :answer, input_html: { rows: finding_answer_rows } %>
         <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
         <% if @finding.follow_up_date && show_follow_up_timestamps? %>
           <%= show_weakness_previous_follow_up_dates(@finding) %>

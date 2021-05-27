@@ -67,7 +67,7 @@
           <%= f.input :brief, input_html: { readonly: readonly, rows: 1 } %>
         <% end %>
         <% unless HIDE_WEAKNESS_EFFECT %>
-          <%= f.input :effect, input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 4 : 5 } %>
+          <%= f.input :effect, input_html: { readonly: readonly, rows: 5 } %>
         <% end %>
         <%= f.input :audit_recommendations, input_html: { readonly: readonly, rows: HIDE_WEAKNESS_EFFECT ? 7 : 5 } %>
       </div>
@@ -75,9 +75,37 @@
         <%= f.input :origination_date, as: :date_picker, input_html: {
           readonly: (readonly || @weakness.repeated_of)
         } %>
-        <%= f.input :risk, collection: risks, prompt: true, disabled: readonly, input_html: {
-          data: weakness_risk_data_options
-        } %>
+        <% if USE_SCOPE_CYCLE %>
+          <div class="row">
+            <div class="col">
+              <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true, input_html: {
+                data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+              } %>
+            </div>
+            <div class="col">
+              <%= f.input :probability, collection: weakness_probabilities, prompt: true, input_html: {
+                data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+              } %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-9">
+              <%= f.input :risk, collection: risks, prompt: true, disabled: @weakness.automatic_risk? || readonly, input_html: {
+                data: weakness_risk_data_options
+              } %>
+            </div>
+            <div class="col-3 text-right">
+              <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
+                data: { toggle_risk_disabled_attr: true }
+              } %>
+            </div>
+          </div>
+        <% else %>
+          <%= f.input :risk, collection: risks, prompt: true, disabled: readonly, input_html: {
+            data: weakness_risk_data_options
+          } %>
+        <% end %>
       <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
         disabled: disabled_priority(@weakness, readonly),
         readonly: !!USE_SCOPE_CYCLE
@@ -102,7 +130,7 @@
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
         <% end %>
-        <%= f.input :answer, input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 10 : 5 } %>
+        <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>

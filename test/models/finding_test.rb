@@ -1476,6 +1476,26 @@ class FindingTest < ActiveSupport::TestCase
     assert_nil without_message
   end
 
+  test 'automatic risk' do
+    @finding.risk        = Finding.risks[:low]
+    @finding.probability = Finding.probabilities[:almost_certain]
+    @finding.impact_risk = Finding.impact_risks[:critical]
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:low], @finding.risk
+
+    @finding.manual_risk = false
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:high], @finding.risk
+
+    @finding.probability = Finding.probabilities[:possible]
+    @finding.impact_risk = Finding.impact_risks[:moderate]
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:medium], @finding.risk
+  end
+
   private
 
     def review_codes_on_findings_by_user method

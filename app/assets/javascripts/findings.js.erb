@@ -137,6 +137,39 @@ jQuery(function ($) {
     }
   })
 
+  $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
+    $('[name$="[risk]"]').attr('disabled', ! $(this).is(':checked'))
+    $('[data-risk-modifier]').change()
+  })
+
+  $(document).on('change', '[data-risk-modifier]', function () {
+    var automatic = !$('[name$="[manual_risk]"]').is(':checked')
+    var values    = $('[data-risk-modifier]').map(function () {
+      return +$(this).val()
+    }).get()
+
+    if (automatic) {
+      var risk = undefined
+
+      if (values.every(function (v) { return v })) {
+        var result     = values.reduce(function (acc, v) { return acc * v }, 1)
+        var thresholds = $(this).data('riskModifier')
+
+        $.each(thresholds, function (risk_value, threshold) {
+          if (! risk && result <= threshold) {
+            risk = risk_value
+          }
+        })
+      }
+
+      if (risk) {
+        $('[name$="[risk]"]').val(risk).change()
+      } else {
+        $('[name$="[risk]"]').val(risk)
+      }
+    }
+  })
+
   $(document).on('keyup', '[data-endorsement-reason]', function () {
     var $reason       = $(this)
     var reason        = $reason.val() || ''

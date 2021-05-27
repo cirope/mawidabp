@@ -308,6 +308,9 @@ es:
         reschedule_count: 'Cantidad de reprogramaciones'
         implemented_at: 'Fecha de cambio a "Implementada"'
         closed_at: 'Fecha del último cambio de estado'
+        probability: 'Probabilidad'
+        impact_risk: 'Impacto'
+        manual_risk: 'Manual'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -662,6 +665,9 @@ es:
         work_papers: 'Papeles de trabajo'
         implemented_at: 'Fecha de cambio a "Implementada"'
         closed_at: 'Fecha del último cambio de estado'
+        probability: 'Probabilidad'
+        impact_risk: 'Impacto'
+        manual_risk: 'Manual'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:

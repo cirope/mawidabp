@@ -5,6 +5,7 @@ class Finding < ApplicationRecord
   include Findings::Achievements
   include Findings::Answers
   include Findings::AttributeTypes
+  include Findings::AutoRisk
   include Findings::Brief
   include Findings::BusinessUnits
   include Findings::ByControlObjectiveProcessCsv
