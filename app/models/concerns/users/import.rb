@@ -7,7 +7,7 @@ module Users::Import
       options = {'col_sep': ';'}
       rows    = []
 
-      CSV.foreach(extra_users_info_file_role, options) do |row|
+      CSV.foreach(extra_users_info_attr('role_path'), options) do |row|
         key  = /\d+/.match(row[1])
         role = row[0].strip
 
@@ -78,7 +78,7 @@ module Users::Import
           { organization_id: r.organization_id, role_id: r.id }
         end.compact
 
-        u = User.first_create(data)
+        User.first_create(data)
       end
 
       def find_role role
@@ -116,12 +116,6 @@ module Users::Import
 
           file_info[attr]
         end
-      end
-
-      def extra_users_info_file_role
-        path = extra_users_info_attr 'role_path'
-
-        path if path && File.exist?(path)
       end
     end
 end
