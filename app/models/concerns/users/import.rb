@@ -4,10 +4,10 @@ module Users::Import
   module ClassMethods
     def import organization, username, password
       prefixes = get_prefixes_of_organizations
-      @prefix  = organization.prefix
+      prefix  = organization.prefix
 
-      if prefixes.include? @prefix
-        import = import_from_file
+      if prefixes.include? prefix
+        import = import_from_file prefix
       else
         ldap_config = organization.ldap_config
         import      = ldap_config.import username, password
@@ -16,12 +16,12 @@ module Users::Import
       import
     end
 
-    def import_from_file
+    def import_from_file prefix
       users   = {}
       options = { col_sep: ';' }
       rows    = []
 
-      CSV.foreach(extra_users_info_attr('role_path'), options) do |row|
+      CSV.foreach(extra_users_info_attr(prefix, 'role_path'), options) do |row|
         key  = /\d+/.match(row[1])
         role = row[0].strip
 
@@ -35,7 +35,7 @@ module Users::Import
       end
 
       User.transaction do
-        rows = import_extra_users_info_role(users)
+        rows = import_extra_users_info_role(users, prefix)
       end
 
       rows
@@ -51,41 +51,54 @@ module Users::Import
         ['UserReplicLdap']
       end
 
-      def import_extra_users_info_role users
-        fields         = [11, 30, 30, 6, 50, 30, 70, 1, 10, 8, 8]
-        field_pattern  = "A#{fields.join 'A'}"
-        users_imported = []
-        users_managers = []
+      def import_extra_users_info_role entry, prefix
+        fields        = [11, 30, 30, 6, 50, 30, 70, 1, 10, 8, 8]
+        field_pattern = "A#{fields.join 'A'}"
+        users         = []
+        managers      = {}
+        users_by_file = {}
 
-        File.foreach(extra_users_info_file) do |line|
+        File.foreach(extra_users_info_file(prefix)) do |line|
           row      = line.unpack field_pattern
-          email    = row[4]
-          managers = row[6]
+          manager  = find_manager row[6]
 
-          if email.present?
-            people_user_id = row[0][0..4]
+          if (process_args = process_entry? entry, row)
+            users << (result = process_entry entry, **process_args)
+            user   = result[:user]
 
-            if users.key?(people_user_id)
-              roles = find_role(users[people_user_id])
-              data  = trivial_data(row, people_user_id)
-              user  = find_user data
-
-              users_imported << process_entry(data, user, roles)
-
-              manager = find_manager managers
-
-              users_managers.push({
-                "#{people_user_id}": manager.first
-              }) if manager
-
+            if user.persisted?
+              users_by_file[user.user]  = user.user
+              managers[user] = manager[0] if manager
             end
           end
         end
 
-        users_imported
+        assign_managers managers, users_by_file
+
+        users
       end
 
-      def process_entry data, user, roles
+      def process_entry? entry, row
+        email    = row[4]
+
+        if email.present?
+          people_user_id = row[0][0..4]
+
+          if entry.key?(people_user_id)
+            roles = find_role(entry[people_user_id])
+            data  = trivial_data(row, people_user_id)
+            user  = find_user data
+
+            if user&.roles.blank? && roles.blank?
+              false
+            else
+              { user: user, roles: roles, data: data }
+            end
+          end
+        end
+      end
+
+      def process_entry entry, user:, roles:, data:
         state = if user
                   update_user user: user, data: data, roles: roles
 
@@ -104,9 +117,9 @@ module Users::Import
         { user: user, state: state }
       end
 
-      def find_manager user_manager
+      def find_manager managers
         hierarchy  = managers.split(/\W/).reject &:blank?
-        manager_id = /\d+/.match(hierarchy.first) if hierarchy.present?
+         /\d+/.match(hierarchy.first) if hierarchy.present?
       end
 
       def update_hierarchy users_managers
@@ -162,25 +175,38 @@ module Users::Import
         }
       end
 
-      def import_extra_users_info?
-        extra_users_info_file && extra_users_info_format == 'peoplesoft_txt'
+      def assign_managers managers, users_by_file
+        byebug
+        managers.each do |user, manager|
+          manager_id = if users_by_file[manager] == user.user
+                         nil
+                       else
+                         User.find_by(user: manager)&.id
+                       end
+byebug
+          user.reload.update manager_id: manager_id if manager_id
+        end
       end
 
-      def extra_users_info_file
-        path = extra_users_info_attr 'path'
+      def import_extra_users_info?
+        extra_users_info_file(previx) && extra_users_info_format(prefix) == 'peoplesoft_txt'
+      end
+
+      def extra_users_info_file prefix
+        path = extra_users_info_attr prefix, 'path'
 
         path if path && File.exist?(path)
       end
 
-      def extra_users_info_format
-        extra_users_info_attr 'format'
+      def extra_users_info_format prefix
+        extra_users_info_attr prefix, 'format'
       end
 
-      def extra_users_info_attr(attr)
+      def extra_users_info_attr(prefix, attr)
         if ENV['EXTRA_USERS_INFO'].present?
           file_info = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {}
 
-          file_info[@prefix][attr]
+          file_info[prefix][attr]
         end
       end
 
