@@ -4,7 +4,7 @@ module Users::Import
   module ClassMethods
     def import organization, username, password
       prefixes = get_prefixes_of_organizations
-      prefix  = organization.prefix
+      prefix   = organization.prefix
 
       if prefixes.include? prefix
         import = import_from_file prefix
@@ -12,8 +12,6 @@ module Users::Import
         ldap_config = organization.ldap_config
         import      = ldap_config.import username, password
       end
-
-      import
     end
 
     def import_from_file prefix
@@ -59,15 +57,15 @@ module Users::Import
         users_by_file = {}
 
         File.foreach(extra_users_info_file(prefix)) do |line|
-          row      = line.unpack field_pattern
-          manager  = find_manager row[6]
+          row     = line.unpack field_pattern
+          manager = find_manager row[6]
 
           if (process_args = process_entry? entry, row)
             users << (result = process_entry entry, **process_args)
             user   = result[:user]
 
             if user.persisted?
-              users_by_file[user.user]  = user.user
+              users_by_file[user.user] = user.user
               managers[user] = manager[0] if manager
             end
           end
@@ -79,7 +77,7 @@ module Users::Import
       end
 
       def process_entry? entry, row
-        email    = row[4]
+        email = row[4]
 
         if email.present?
           people_user_id = row[0][0..4]
@@ -120,12 +118,6 @@ module Users::Import
       def find_manager managers
         hierarchy  = managers.split(/\W/).reject &:blank?
          /\d+/.match(hierarchy.first) if hierarchy.present?
-      end
-
-      def update_hierarchy users_managers
-        users_managers.map do |k, v|
-          User.list.find_by(user: k).update(manager_id: User.find_by(user: v).id)
-        end
       end
 
       def find_user data
@@ -176,20 +168,15 @@ module Users::Import
       end
 
       def assign_managers managers, users_by_file
-        byebug
         managers.each do |user, manager|
           manager_id = if users_by_file[manager] == user.user
                          nil
                        else
                          User.find_by(user: manager)&.id
                        end
-byebug
+
           user.reload.update manager_id: manager_id if manager_id
         end
-      end
-
-      def import_extra_users_info?
-        extra_users_info_file(previx) && extra_users_info_format(prefix) == 'peoplesoft_txt'
       end
 
       def extra_users_info_file prefix
@@ -215,11 +202,8 @@ byebug
 
         if ENV['EXTRA_USERS_INFO'].present?
           prefixes = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {}
-
           prefixes = prefixes.keys
         end
-
-        prefixes
       end
     end
 end
