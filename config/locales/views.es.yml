@@ -584,7 +584,6 @@ es:
     index:
       title: 'Listado de usuarios'
       import_from_ldap: 'Importar desde LDAP'
-      import_from_file: 'Importar desde Archivo'
       show_hidden: 'Mostrar ocultos'
     show:
       title: 'Detalles de usuario'
@@ -623,10 +622,6 @@ es:
         unchanged: 'Sin cambios'
         errored: 'Con errores'
         deprecated_users: 'Usuarios ausentes en el servidor LDAP'
-    import_from_file:
-      new:
-        title: 'Importar usuarios desde archivo'
-        import: 'Importar'
     passwords:
       edit:
         title: 'Cambiar contraseña'
