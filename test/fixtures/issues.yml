@@ -1,0 +1,8 @@
+suspicious_transaction:
+  customer: some customer id
+  entry: some entry id
+  operation: some operation id
+  amount: 1000.95
+  comments: some comments
+  close_date:
+  finding: unconfirmed_weakness

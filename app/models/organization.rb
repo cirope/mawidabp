@@ -20,6 +20,7 @@ class Organization < ApplicationRecord
 
   has_many :benefits, dependent: :destroy
   has_many :best_practices, dependent: :destroy
+  has_many :business_unit_kinds, dependent: :destroy
   has_many :business_unit_types, -> { order(name: :asc) }, dependent: :destroy
   has_many :documents, dependent: :destroy
   has_many :error_records, dependent: :destroy

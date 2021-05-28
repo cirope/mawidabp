@@ -129,6 +129,7 @@ class WeaknessesControllerTest < ActionController::TestCase
       'FindingRelation.count',
       'Achievement.count',
       'BusinessUnitFinding.count',
+      'Issue.count',
       'Task.count',
       'Comment.count'
     ]
@@ -160,6 +161,9 @@ class WeaknessesControllerTest < ActionController::TestCase
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
+            impact_risk: Finding.impact_risks[:small],
+            probability: Finding.probabilities[:rare],
+            manual_risk: '1',
             image_model_attributes: {
               image: Rack::Test::UploadedFile.new(
                 "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
@@ -211,6 +215,16 @@ class WeaknessesControllerTest < ActionController::TestCase
                 related_finding_id: findings(:unanswered_weakness).id
               }
             ],
+            issues_attributes: [
+              {
+                customer: '01',
+                entry: '01',
+                operation: '01',
+                amount: '10.0',
+                comments: 'Some issue',
+                close_date: ''
+              }
+            ],
             tasks_attributes: [
               {
                 code: '01',
@@ -245,6 +259,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     counts_array = [
       'WorkPaper.count',
       'FindingRelation.count',
+      'Issue.count',
       'Task.count'
     ]
 
@@ -273,6 +288,9 @@ class WeaknessesControllerTest < ActionController::TestCase
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
+            impact_risk: Finding.impact_risks[:small],
+            probability: Finding.probabilities[:rare],
+            manual_risk: '1',
             finding_user_assignments_attributes: [
               {
                 id: finding_user_assignments(:unanswered_weakness_bare).id,
@@ -316,6 +334,16 @@ class WeaknessesControllerTest < ActionController::TestCase
               {
                 description: 'Duplicated',
                 related_finding_id: findings(:unanswered_weakness).id
+              }
+            ],
+            issues_attributes: [
+              {
+                customer: '01',
+                entry: '01',
+                operation: '01',
+                amount: '10.0',
+                comments: 'Some issue',
+                close_date: ''
               }
             ],
             tasks_attributes: [
