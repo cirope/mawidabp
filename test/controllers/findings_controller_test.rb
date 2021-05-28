@@ -304,7 +304,8 @@ class FindingsControllerTest < ActionController::TestCase
   test 'edit implemented audited finding' do
     finding = findings :being_implemented_weakness
 
-    finding.update_column :state, Finding::STATUS[:implemented_audited]
+    finding.update_columns state:         Finding::STATUS[:implemented_audited],
+                           solution_date: Time.zone.today
 
     assert_raise ActiveRecord::RecordNotFound do
       get :edit, params: {

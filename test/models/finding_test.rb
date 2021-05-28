@@ -1502,6 +1502,35 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal Finding.risks[:medium], @finding.risk
   end
 
+  test 'automatic issue based state' do
+    skip unless USE_SCOPE_CYCLE
+
+    @finding.issues.build customer: 'Some customer'
+
+    assert @finding.valid?
+    assert @finding.awaiting?
+
+    Current.user = users :supervisor
+
+    @finding.issues.all? { |issue| issue.close_date = Time.zone.today }
+
+    @finding.follow_up_date  = Time.zone.today
+    @finding.skip_work_paper = true
+
+    assert @finding.valid?
+    assert @finding.implemented_audited?
+    assert_equal @finding.issues.map(&:close_date).last, @finding.solution_date
+
+    @finding.issues.create! customer: 'Another customer'
+
+    @finding.solution_date = nil
+
+    assert @finding.valid?, @finding.errors.full_messages
+    assert @finding.being_implemented?
+  ensure
+    Current.user = nil
+  end
+
   private
 
     def review_codes_on_findings_by_user method

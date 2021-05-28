@@ -113,7 +113,7 @@
         <%= f.label :state, raw(Weakness.human_attribute_name(:state) + ' ' +
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : '')) %>
-        <%= finding_status_field(f, disabled: readonly) %>
+        <%= finding_status_field(f, disabled: readonly || @weakness.issues.any?) %>
 
         <% if show_skip_work_paper_for @weakness %>
           <%= f.input :skip_work_paper, as: :boolean %>
@@ -392,6 +392,33 @@
 
   <div id="tasks" data-follow-up-date-changed-warning="<%= t 'finding.follow_up_date_changed_warning' %>">
     <%= render 'tasks', f: f, readonly: readonly %>
+  </div>
+
+  <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
+
+  <div class="row">
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'customer' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'entry' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'operation' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'amount' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'comments' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'close_date' %></h5>
+    </div>
+  </div>
+
+  <div id="issues">
+    <%= render 'issues', f: f, readonly: readonly %>
   </div>
 
   <h5 class="mt-3"><%= WorkPaper.model_name.human(count: 0) %></h5>

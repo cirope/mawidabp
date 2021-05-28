@@ -85,6 +85,9 @@ es:
       image_model:
         one: 'Imagen'
         other: 'Imágenes'
+      issue:
+        one: 'Caso'
+        other: 'Casos'
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
@@ -373,6 +376,13 @@ es:
         uploaded_data: 'Imagen'
         content_type: 'Imagen (tipo)'
         size: 'Imagen (tamaño)'
+      issue:
+        customer: 'Cliente'
+        entry: 'Rubro'
+        transaction: 'Operación'
+        amount: 'Monto'
+        comments: 'Comentarios'
+        close_date: 'Fecha de regularización'
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'

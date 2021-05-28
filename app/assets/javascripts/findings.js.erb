@@ -63,6 +63,15 @@ jQuery(function ($) {
   $(document).on('dynamic-item:added', '[data-association="tasks"]', disableFollowUpDate)
   $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".task"]', disableFollowUpDate)
 
+  var disableState = function () {
+    var hasVisibleIssues = !!$('.issue:visible').length
+
+    $('[name$="[state]"]').attr('readonly', hasVisibleIssues)
+  }
+
+  $(document).on('dynamic-item:added', '[data-association="issues"]', disableState)
+  $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".issue"]', disableState)
+
   var changeFollowUpDate = function () {
     var lang     = $('html').prop('lang')
     var format   = $.datepicker.regional[lang].dateFormat

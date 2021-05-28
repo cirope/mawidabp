@@ -87,7 +87,7 @@ module Findings::State
         ] |
         (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING && !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [STATUS[:assumed_risk]] : []) |
         (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]]) |
-        (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
+        (SHOW_WEAKNESS_PROGRESS ? [STATUS[:awaiting]] : [])
       end
 
       def repeated_status

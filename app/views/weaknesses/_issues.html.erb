@@ -1,0 +1,5 @@
+<%= f.simple_fields_for :issues do |i_f| %>
+  <%= render 'issue', f: i_f, readonly: readonly %>
+<% end %>
+
+<%= link_to_add_fields t('finding.add_issue'), f, :issues unless readonly %>

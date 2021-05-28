@@ -129,6 +129,7 @@ class WeaknessesControllerTest < ActionController::TestCase
       'FindingRelation.count',
       'Achievement.count',
       'BusinessUnitFinding.count',
+      'Issue.count',
       'Task.count',
       'Comment.count'
     ]
@@ -214,6 +215,16 @@ class WeaknessesControllerTest < ActionController::TestCase
                 related_finding_id: findings(:unanswered_weakness).id
               }
             ],
+            issues_attributes: [
+              {
+                customer: '01',
+                entry: '01',
+                operation: '01',
+                amount: '10.0',
+                comments: 'Some issue',
+                close_date: ''
+              }
+            ],
             tasks_attributes: [
               {
                 code: '01',
@@ -248,6 +259,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     counts_array = [
       'WorkPaper.count',
       'FindingRelation.count',
+      'Issue.count',
       'Task.count'
     ]
 
@@ -322,6 +334,16 @@ class WeaknessesControllerTest < ActionController::TestCase
               {
                 description: 'Duplicated',
                 related_finding_id: findings(:unanswered_weakness).id
+              }
+            ],
+            issues_attributes: [
+              {
+                customer: '01',
+                entry: '01',
+                operation: '01',
+                amount: '10.0',
+                comments: 'Some issue',
+                close_date: ''
               }
             ],
             tasks_attributes: [
