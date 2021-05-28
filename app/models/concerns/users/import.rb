@@ -3,40 +3,36 @@ module Users::Import
 
   module ClassMethods
     def import organization, username, password
-      prefixes = get_prefixes_of_organizations
+      prefixes = extra_users_info_prefixes
       prefix   = organization.prefix
 
       if prefixes.include? prefix
-        import = import_from_file prefix
+        import_from_file prefix
       else
         ldap_config = organization.ldap_config
-        import      = ldap_config.import username, password
+
+        ldap_config.import username, password
       end
     end
 
     def import_from_file prefix
       users   = {}
       options = { col_sep: ';' }
-      rows    = []
 
       CSV.foreach(extra_users_info_attr(prefix, 'role_path'), options) do |row|
-        key  = /\d+/.match(row[1])
+        username  = row[1][/\d+/]
         role = row[0].strip
 
-        if role_allowed?(role) && key.present?
-          if users.key? key[0]
-            users[key[0]].push(role)
-          else
-            users[key[0]] = [role]
-          end
+        if role_allowed?(role) && username.present?
+          users[username] ||= []
+
+          users[username] << role
         end
       end
 
       User.transaction do
-        rows = import_extra_users_info_role(users, prefix)
+        import_extra_users_info_role(users, prefix)
       end
-
-      rows
     end
 
     private
@@ -80,11 +76,11 @@ module Users::Import
         email = row[4]
 
         if email.present?
-          people_user_id = row[0][0..4]
+          username = row[0][0..4]
 
-          if entry.key?(people_user_id)
-            roles = find_role(entry[people_user_id])
-            data  = trivial_data(row, people_user_id)
+          if entry.key?(username)
+            roles = find_role(entry[username])
+            data  = trivial_data(row, username)
             user  = find_user data
 
             if user&.roles.blank? && roles.blank?
@@ -116,8 +112,9 @@ module Users::Import
       end
 
       def find_manager managers
-        hierarchy  = managers.split(/\W/).reject &:blank?
-         /\d+/.match(hierarchy.first) if hierarchy.present?
+        hierarchy = managers.split(/\W/).reject &:blank?
+
+        hierarchy.first[/\d+/] if hierarchy.present?
       end
 
       def find_user data
@@ -197,12 +194,13 @@ module Users::Import
         end
       end
 
-      def get_prefixes_of_organizations
-        prefixes = []
+      def extra_users_info_prefixes
+        organizations_prefixes = []
 
         if ENV['EXTRA_USERS_INFO'].present?
-          prefixes = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {}
-          prefixes = prefixes.keys
+          prefixes_info = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {}
+
+          organizations_prefixes = prefixes_info.keys
         end
       end
     end

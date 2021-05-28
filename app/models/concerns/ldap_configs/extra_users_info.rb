@@ -13,12 +13,13 @@ module LdapConfigs::ExtraUsersInfo
         row        = line.unpack field_pattern
         hierarchy  = row[6].split(/\W/).reject &:blank?
         manager    = User.list.by_user hierarchy.first
-        conditions = [
-          "LOWER(#{User.quoted_table_name}.#{User.qcn 'name'}) = ?",
-          "LOWER(#{User.quoted_table_name}.#{User.qcn 'last_name'}) = ?"
-        ].join ' AND '
+        username   = row[0][0..4]
 
-        user = User.list.where(conditions, row[2].downcase, row[1].downcase).take
+        conditions = [
+          "LOWER(#{User.quoted_table_name}.#{User.qcn 'user'}) = ?",
+        ]
+
+        user = User.list.where(conditions, username).take
 
         if user
           user.email      = row[4].downcase
