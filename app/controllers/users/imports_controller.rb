@@ -5,15 +5,8 @@ class Users::ImportsController < ApplicationController
   end
 
   def create
-    prefix     = Current.organization.prefix
-    extra_info = extra_users_info_prefix
+    @imports = User.import current_organization, import_params[:username], import_params[:password]
 
-    if extra_info.include? prefix
-      @imports = User.import_from_file
-    else
-      ldap_config = current_organization.ldap_config
-      @imports = ldap_config.import import_params[:username], import_params[:password]
-    end
     imported_user_ids = @imports.map { |i| i[:user].id }.compact
     conditions = []
     parameters = {}
@@ -46,17 +39,5 @@ class Users::ImportsController < ApplicationController
 
       @action_privileges.update new:    required_privilege,
                                 create: required_privilege
-    end
-
-    def extra_users_info_prefix
-      prefixes = []
-
-      if ENV['EXTRA_USERS_INFO'].present?
-        prefixes = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {}
-
-        prefixes = prefixes['prefixes'].split(',')
-      end
-
-      prefixes
     end
 end
