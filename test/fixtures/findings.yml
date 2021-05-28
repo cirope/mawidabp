@@ -25,8 +25,8 @@ being_implemented_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
-  impact_risk:
-  probability:
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
   manual_risk: true
   notification_level: 0
   organization: cirope
@@ -56,8 +56,8 @@ unconfirmed_for_notification_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
-  impact_risk:
-  probability:
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
   manual_risk: true
   notification_level: 0
   organization: cirope
@@ -89,8 +89,8 @@ unanswered_for_level_<%= level %>_notification:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
-  impact_risk:
-  probability:
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
   manual_risk: true
   notification_level: <%= level - 1 %>
   organization: cirope
@@ -122,8 +122,8 @@ incomplete_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
-  impact_risk:
-  probability:
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
   manual_risk: true
   notification_level: 0
   organization: cirope
@@ -153,8 +153,8 @@ other_unconfirmed_for_notification_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
-  impact_risk:
-  probability:
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
   manual_risk: true
   notification_level: 0
   organization: cirope
@@ -221,8 +221,8 @@ being_implemented_weakness_on_draft:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
-  impact_risk:
-  probability:
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
   manual_risk: true
   notification_level: 0
   organization: cirope
@@ -251,8 +251,8 @@ unanswered_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
-  impact_risk:
-  probability:
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
   manual_risk: true
   notification_level: 0
   organization: cirope
@@ -281,8 +281,8 @@ unconfirmed_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
-  impact_risk:
-  probability:
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
   manual_risk: true
   notification_level: 0
   organization: cirope
@@ -370,8 +370,8 @@ being_implemented_weakness_on_final:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
-  impact_risk:
-  probability:
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
   manual_risk: true
   notification_level: 0
   organization: cirope
@@ -400,8 +400,8 @@ being_implemented_weakness_on_approved_draft:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
-  impact_risk:
-  probability:
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
   manual_risk: true
   notification_level: 0
   organization: cirope

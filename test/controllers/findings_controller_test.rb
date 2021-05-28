@@ -357,6 +357,9 @@ class FindingsControllerTest < ActionController::TestCase
               operational_risk: ['internal fraud'],
               impact: ['econimic', 'regulatory'],
               internal_control_components: ['risk_evaluation', 'monitoring'],
+              impact_risk: Finding.impact_risks[:small],
+              probability: Finding.probabilities[:rare],
+              manual_risk: '1',
               business_unit_ids: [business_units(:business_unit_three).id],
               finding_user_assignments_attributes: [
                 {
@@ -486,6 +489,9 @@ class FindingsControllerTest < ActionController::TestCase
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
+            impact_risk: Finding.impact_risks[:small],
+            probability: Finding.probabilities[:rare],
+            manual_risk: '1',
             finding_user_assignments_attributes: [
               {
                 user_id: users(:audited).id,
@@ -571,6 +577,9 @@ class FindingsControllerTest < ActionController::TestCase
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
           users_for_notification: [users(:bare).id],
+          impact_risk: Finding.impact_risks[:small],
+          probability: Finding.probabilities[:rare],
+          manual_risk: '1',
           finding_user_assignments_attributes: [
             {
               id: finding_user_assignments(:unconfirmed_weakness_bare).id,
@@ -629,6 +638,9 @@ class FindingsControllerTest < ActionController::TestCase
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
+          impact_risk: Finding.impact_risks[:small],
+          probability: Finding.probabilities[:rare],
+          manual_risk: '1',
           tag_ids: [
             tags(:important).id,
             tags(:pending).id,

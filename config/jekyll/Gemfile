@@ -7,7 +7,8 @@ gem 'coffee-script'
 gem 'uglifier'
 gem 'kramdown'
 gem 'bootstrap-sass'
-gem 'autoprefixer-rails'
+gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
+gem 'execjs', '< 2.8'
 
 group :jekyll_plugins do
   gem 'jekyll-assets'
