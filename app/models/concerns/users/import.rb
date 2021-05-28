@@ -20,8 +20,8 @@ module Users::Import
       options = { col_sep: ';' }
 
       CSV.foreach(extra_users_info_attr(prefix, 'role_path'), options) do |row|
-        username  = row[1][/\d+/]
-        role = row[0].strip
+        username = row[1][/\d+/]
+        role     = row[0].strip
 
         if role_allowed?(role) && username.present?
           users[username] ||= []
@@ -38,11 +38,7 @@ module Users::Import
     private
 
       def role_allowed? role
-        excluded_roles.exclude?(role) && find_role(role).present?
-      end
-
-      def excluded_roles
-        ['UserReplicLdap']
+        find_role(role).present?
       end
 
       def import_extra_users_info_role entry, prefix
@@ -187,21 +183,13 @@ module Users::Import
       end
 
       def extra_users_info_attr(prefix, attr)
-        if ENV['EXTRA_USERS_INFO'].present?
-          file_info = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {}
-
-          file_info[prefix][attr]
+        if EXTRA_USERS_INFO.present?
+          EXTRA_USERS_INFO[prefix][attr]
         end
       end
 
       def extra_users_info_prefixes
-        organizations_prefixes = []
-
-        if ENV['EXTRA_USERS_INFO'].present?
-          prefixes_info = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {}
-
-          organizations_prefixes = prefixes_info.keys
-        end
+        EXTRA_USERS_INFO.keys
       end
     end
 end

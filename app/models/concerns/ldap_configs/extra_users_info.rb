@@ -15,11 +15,7 @@ module LdapConfigs::ExtraUsersInfo
         manager    = User.list.by_user hierarchy.first
         username   = row[0][0..4]
 
-        conditions = [
-          "LOWER(#{User.quoted_table_name}.#{User.qcn 'user'}) = ?",
-        ]
-
-        user = User.list.where(conditions, username).take
+        user = User.list.by_user(username).take
 
         if user
           user.email      = row[4].downcase
