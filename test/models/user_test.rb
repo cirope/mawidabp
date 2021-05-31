@@ -713,6 +713,8 @@ class UserTest < ActiveSupport::TestCase
   test 'import' do
     organization = organizations :google
 
+    skip unless EXTRA_USERS_INFO.has_key? organization.prefix
+
     assert_difference 'User.count', 2 do
       User.import organization, 'admin', 'admin123'
     end
