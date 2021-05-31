@@ -711,7 +711,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'import' do
-    organization = organizations :google
+    Current.organization = organizations(:google)
+    organization         = Current.organization
 
     skip unless EXTRA_USERS_INFO.has_key? organization.prefix
 
