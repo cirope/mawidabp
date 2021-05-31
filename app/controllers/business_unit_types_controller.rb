@@ -113,7 +113,10 @@ class BusinessUnitTypesController < ApplicationController
         :name, :business_unit_label, :project_label, :review_prefix, :sectors,
         :recipients, :external, :require_tag, :require_counts,
         :hide_review_logo, :independent_identification, :lock_version,
-        business_units_attributes: [:id, :name, :business_unit_kind_id, :_destroy]
+        business_units_attributes: [
+          :id, :name, :business_unit_kind_id, :_destroy,
+          taggings_attributes: [:id, :tag_id, :_destroy]
+        ]
       )
     end
 
