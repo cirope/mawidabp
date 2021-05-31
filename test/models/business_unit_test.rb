@@ -25,7 +25,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
         :business_unit_type => business_unit_types(:cycle),
         :taggings_attributes => [
           :tag_id => tags(:business_unit).id
-        ]
+        ],
         :business_unit_kind => business_unit_kinds(:branch)
       )
 

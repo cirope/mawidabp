@@ -78,7 +78,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
               :name => 'New business unit',
               :taggings_attributes => [
                 :tag_id => tags(:business_unit).id
-              ]
+              ],
               :business_unit_kind_id => business_unit_kinds(:branch).id
             }
           ]
