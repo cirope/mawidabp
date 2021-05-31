@@ -69,6 +69,9 @@ Rails.application.routes.draw do
     get :auto_complete_for_tagging, on: :collection
   end
 
+  resources :business_unit_types
+  resources :business_unit_kinds
+
   resources :groups
 
   resources :permalinks, only: [:show]

@@ -17,7 +17,7 @@
   </thead>
   <tbody>
     <% @users.each do |user| %>
-      <tr class="<%= user.enable? ? 'enabled_item' : 'disabled_item' %>">
+      <tr class="<%= user_row_class user %>">
         <td><%= user_info user %></td>
         <td><%= show_user_with_email_as_abbr(user) %></td>
         <td><%= user.full_name %></td>
@@ -37,12 +37,12 @@
 
 <div>
   <%= paginate @users %>
-
   <% if current_organization.ldap_config && show_import_from_ldap? %>
     <%= link_to t('.import_from_ldap'), new_users_import_path %> |
   <% elsif current_organization.ldap_config.blank? %>
     <%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %> |
   <% end %>
 
-  <%= link_to t('label.download'), users_path(params.permit(search: [:query, columns: []]).merge(_ts: Time.now.to_i, format: :pdf)) %>
+  <%= link_to t('label.download'), users_path(params.permit(search: [:query, columns: []]).merge(_ts: Time.now.to_i, format: :pdf)) %> |
+  <%= link_to t('.show_hidden'), users_path(params.permit(search: [:query, columns: []]).merge(show_hidden: true)) %>
 </div>

@@ -42,6 +42,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     @ldap_config.last_name_attribute = '?'
     @ldap_config.email_attribute = '?'
     @ldap_config.function_attribute = '?'
+    @ldap_config.office_attribute = '?'
     @ldap_config.roles_attribute = '?'
     @ldap_config.manager_attribute = '?'
 
@@ -53,6 +54,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_error @ldap_config, :last_name_attribute, :invalid
     assert_error @ldap_config, :email_attribute, :invalid
     assert_error @ldap_config, :function_attribute, :invalid
+    assert_error @ldap_config, :office_attribute, :invalid
     assert_error @ldap_config, :roles_attribute, :invalid
     assert_error @ldap_config, :manager_attribute, :invalid
   end
@@ -182,6 +184,8 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_difference 'User.count' do
       @ldap_config.import 'admin', 'admin123'
     end
+
+    user.reload.update! organizational_unit: 'dn'
 
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)
     assert user.organization_roles.map(&:role_id).include?(corp_role.id)

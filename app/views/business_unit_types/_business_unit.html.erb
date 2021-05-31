@@ -10,6 +10,11 @@
         <%= render 'tagging', f: t_f, kind: 'business_unit' %>
       <% end %>
     </div>
+    <% if show_business_unit_kind? %>
+      <div class="col-md-3">
+        <%= f.association :business_unit_kind, label: false %>
+      </div>
+    <% end %>
     <div class="col-md-1">
       <div class="mt-2 text-right">
         <%= link_to_remove_nested_item(f) %>

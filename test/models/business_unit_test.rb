@@ -26,6 +26,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
         :taggings_attributes => [
           :tag_id => tags(:business_unit).id
         ]
+        :business_unit_kind => business_unit_kinds(:branch)
       )
 
       assert @business_unit.save, @business_unit.errors.full_messages.join('; ')
