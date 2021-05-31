@@ -709,4 +709,17 @@ class UserTest < ActiveSupport::TestCase
       user.save!
     end
   end
+
+  test 'import_from_file' do
+    organization = organizations :cirope
+
+    assert_difference 'User.count', 2 do
+      User.import_from_file organization.prefix
+    end
+
+    one_user_file = User.find_by email: 'juan127@cirope.com'
+    two_user_file = User.find_by email: 'pedro127@cirope.com'
+
+    assert_equal one_user_file.manager_id, two_user_file.id
+  end
 end

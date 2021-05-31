@@ -31,7 +31,7 @@ module Users::Import
       end
 
       User.transaction do
-        import_extra_users_info_role(users, prefix)
+        import_extra_users_info_role users, prefix
       end
     end
 
@@ -58,7 +58,7 @@ module Users::Import
 
             if user.persisted?
               users_by_file[user.user] = user.user
-              managers[user] = manager[0] if manager
+              managers[user] = manager if manager
             end
           end
         end
@@ -146,7 +146,7 @@ module Users::Import
       end
 
       def find_role role
-        Role.list_with_corporate.where(name: role)
+        Role.list_with_corporate.where name: role
       end
 
       def trivial_data row, user
@@ -183,7 +183,7 @@ module Users::Import
       end
 
       def extra_users_info_attr(prefix, attr)
-        if EXTRA_USERS_INFO.present?
+        if EXTRA_USERS_INFO.has_key? prefix
           EXTRA_USERS_INFO[prefix][attr]
         end
       end
