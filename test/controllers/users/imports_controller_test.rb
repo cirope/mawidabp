@@ -29,6 +29,8 @@ class Users::ImportsControllerTest < ActionController::TestCase
   test 'should create import with alternative ldap' do
     ldap_config = Current.organization.ldap_config
 
+    skip if EXTRA_USERS_INFO.has_key? Current.organization.prefix
+
     ldap_config.update_columns(
       hostname:             '0.0.0.1',
       alternative_hostname: 'localhost',
@@ -47,7 +49,7 @@ class Users::ImportsControllerTest < ActionController::TestCase
   test 'should not create import' do
     organization = Current.organization
 
-    skip EXTRA_USERS_INFO.has_key? organization.prefix
+    skip if EXTRA_USERS_INFO.has_key? organization.prefix
 
     assert_no_difference 'User.count' do
       post :create, params: {
