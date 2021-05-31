@@ -48,7 +48,7 @@ module LdapConfigs::LdapImport
   private
 
     def process_entry? entry
-      if import_extra_users_info? || entry[email_attribute].present?
+      if entry[email_attribute].present?
         role_names = role_data entry
         roles      = clean_roles Role.list_with_corporate.where(name: role_names)
         data       = trivial_data entry
