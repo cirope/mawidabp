@@ -181,20 +181,8 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert user.organization_roles.map(&:role_id).exclude?(role.id)
     assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)
 
-    file_info = JSON.parse ENV['EXTRA_USERS_INFO'] if ENV['EXTRA_USERS_INFO'].present?
-
     assert_difference 'User.count' do
-      if file_info.empty?
-        @ldap_config.import 'admin', 'admin123'
-      else
-        user_auditor = users :auditor
-
-        assert_not_equal user_auditor.email, 'test@example.com'
-
-        @ldap_config.import 'admin', 'admin123'
-
-        assert_equal user_auditor.reload.email, 'test@example.com'
-      end
+      @ldap_config.import 'admin', 'admin123'
     end
 
     user.reload.update! organizational_unit: 'dn'

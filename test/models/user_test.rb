@@ -710,8 +710,8 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test 'import_from_file' do
-    organization = organizations :cirope
+  test 'import' do
+    organization = organizations :google
 
     assert_difference 'User.count', 2 do
       User.import organization, 'admin', 'admin123'
