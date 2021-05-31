@@ -714,7 +714,7 @@ class UserTest < ActiveSupport::TestCase
     organization = organizations :cirope
 
     assert_difference 'User.count', 2 do
-      User.import_from_file organization.prefix
+      User.import organization, 'admin', 'admin123'
     end
 
     one_user_file = User.find_by email: 'juan127@cirope.com'
