@@ -27,7 +27,6 @@ $yellow:  #f0ad4e !default;
 $green:   #5cb85c !default;
 $teal:    #20c997 !default;
 $cyan:    #5bc0de !default;
-$card-body-custom: #E98527 !default;
 
 $primary:       $blue !default;
 $secondary:     $gray-200 !default;
@@ -120,8 +119,8 @@ $pagination-disabled-border-color:  $pagination-border-color !default;
 
 // Cards
 
-$card-cap-bg:                       #F49C3F !default;
-$card-bg:                           $gray-200 !default;
+$card-cap-bg:                       $table-hover-bg !default;
+$card-bg:                           #E6E8E6 !default;
 $card-inner-border-radius:          0px !default;
 
 // Popovers
