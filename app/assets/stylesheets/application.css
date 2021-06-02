@@ -13,6 +13,7 @@
  *= require main
  *= require graph
  *= require closing_interviews
+ *= require custom_geplas
  *= require documents
  *= require findings/answers
  *= require findings/commitments
