@@ -10,7 +10,7 @@
   <% @organization.build_ldap_config unless @organization.ldap_config %>
   <%= f.simple_fields_for :ldap_config do |l_f| %>
     <% collapse_in = l_f.object.persisted? || l_f.object.errors.present? %>
-    <div id="ldap_config" class="card-body collapse<%= ' show' if collapse_in %>">
+    <div id="ldap_config" class="card-body bg-light collapse<%= ' show' if collapse_in %>">
       <% if l_f.object.errors[:base].present? %>
         <div class="alert alert-danger">
           <%= l_f.object.errors[:base].to_sentence %>
