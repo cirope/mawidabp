@@ -114,7 +114,7 @@ module Findings::State
       def exclude_from_reports_status
         [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked] |
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [:implemented, :assumed_risk] : []) |
-          (SHOW_WEAKNESS_PROGRESS ? [] : [:awaiting, :failure])
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
       end
 
       def pending_for_review_status
