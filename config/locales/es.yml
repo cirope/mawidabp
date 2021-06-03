@@ -89,6 +89,10 @@
     show_details: "Ver detalles"
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
+  business_unit_kind:
+    errors:
+      business_unit_kind_related: "El tipo de unidad de negocio no puede ser eliminado, se encuentra relacionada con al menos una unidad de negocio"
+
   business_unit_type:
     index_title: "Listado de sectores"
     show_title: "Detalle sector"
@@ -607,6 +611,7 @@
     download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
     add_task: "Agregar tarea"
+    add_issue: "Agregar caso"
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"

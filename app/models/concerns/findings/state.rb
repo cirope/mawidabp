@@ -87,7 +87,7 @@ module Findings::State
         ] |
         (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING && !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [STATUS[:assumed_risk]] : []) |
         (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]]) |
-        (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
+        (SHOW_WEAKNESS_PROGRESS ? [STATUS[:awaiting]] : [])
       end
 
       def repeated_status
@@ -114,7 +114,7 @@ module Findings::State
       def exclude_from_reports_status
         [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked] |
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [:implemented, :assumed_risk] : []) |
-          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
+          (SHOW_WEAKNESS_PROGRESS ? [] : [:awaiting, :failure])
       end
 
       def pending_for_review_status
