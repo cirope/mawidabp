@@ -56,10 +56,10 @@ es:
     probable: 'Probable'
     almost_certain: 'Casi Certeza'
   score_types:
-    satisfactory: 'Satisfactorio'
-    improve: 'Necesita mejorar'
-    regular: 'Regular'
-    unsatisfactory: 'No satisfactorio'
+    satisfactory: 'Bueno'
+    improve: 'Satisfactorio'
+    regular: 'Con falencias'
+    unsatisfactory: 'Deficiente'
     # When score by weaknesses is used
     adequate: 'Bueno'
     require_some_improvements: 'Satisfactorio'
