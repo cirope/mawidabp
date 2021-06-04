@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_24_183659) do
+ActiveRecord::Schema.define(version: 2021_05_28_143012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -509,6 +509,9 @@ ActiveRecord::Schema.define(version: 2021_05_24_183659) do
     t.text "compliance_observations"
     t.jsonb "commitments"
     t.text "brief"
+    t.integer "probability"
+    t.integer "impact_risk"
+    t.boolean "manual_risk", default: true, null: false
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -556,6 +559,19 @@ ActiveRecord::Schema.define(version: 2021_05_24_183659) do
     t.string "imageable_type", null: false
     t.integer "imageable_id", null: false
     t.index ["imageable_type", "imageable_id"], name: "index_image_models_on_imageable_type_and_imageable_id"
+  end
+
+  create_table "issues", force: :cascade do |t|
+    t.string "customer"
+    t.string "entry"
+    t.string "operation"
+    t.decimal "amount", precision: 15, scale: 2
+    t.text "comments"
+    t.date "close_date"
+    t.bigint "finding_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["finding_id"], name: "index_issues_on_finding_id"
   end
 
   create_table "ldap_configs", id: :serial, force: :cascade do |t|
@@ -1260,6 +1276,7 @@ ActiveRecord::Schema.define(version: 2021_05_24_183659) do
   add_foreign_key "findings", "findings", column: "latest_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "findings", "findings", column: "repeated_of_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "findings", "weakness_templates", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "issues", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "ldap_configs", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "licenses", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "organizations", on_update: :restrict, on_delete: :restrict

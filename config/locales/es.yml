@@ -624,6 +624,7 @@
     download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
     add_task: "Agregar tarea"
+    add_issue: "Agregar caso"
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"

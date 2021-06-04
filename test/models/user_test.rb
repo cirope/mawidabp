@@ -724,5 +724,6 @@ class UserTest < ActiveSupport::TestCase
     two_user_file = User.find_by email: 'pedro127@cirope.com'
 
     assert_equal one_user_file.manager_id, two_user_file.id
+    assert_equal one_user_file.roles.count, 2
   end
 end
