@@ -63,6 +63,15 @@ jQuery(function ($) {
   $(document).on('dynamic-item:added', '[data-association="tasks"]', disableFollowUpDate)
   $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".task"]', disableFollowUpDate)
 
+  var disableState = function () {
+    var hasVisibleIssues = !!$('.issue:visible').length
+
+    $('[name$="[state]"]').attr('readonly', hasVisibleIssues)
+  }
+
+  $(document).on('dynamic-item:added', '[data-association="issues"]', disableState)
+  $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".issue"]', disableState)
+
   var changeFollowUpDate = function () {
     var lang     = $('html').prop('lang')
     var format   = $.datepicker.regional[lang].dateFormat
@@ -134,6 +143,39 @@ jQuery(function ($) {
       $.getScript(url).always(function () {
         $commitmentDate.prop('disabled', false)
       })
+    }
+  })
+
+  $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
+    $('[name$="[risk]"]').attr('disabled', ! $(this).is(':checked'))
+    $('[data-risk-modifier]').change()
+  })
+
+  $(document).on('change', '[data-risk-modifier]', function () {
+    var automatic = !$('[name$="[manual_risk]"]').is(':checked')
+    var values    = $('[data-risk-modifier]').map(function () {
+      return +$(this).val()
+    }).get()
+
+    if (automatic) {
+      var risk = undefined
+
+      if (values.every(function (v) { return v })) {
+        var result     = values.reduce(function (acc, v) { return acc * v }, 1)
+        var thresholds = $(this).data('riskModifier')
+
+        $.each(thresholds, function (risk_value, threshold) {
+          if (! risk && result <= threshold) {
+            risk = risk_value
+          }
+        })
+      }
+
+      if (risk) {
+        $('[name$="[risk]"]').val(risk).change()
+      } else {
+        $('[name$="[risk]"]').val(risk)
+      }
     }
   })
 

@@ -85,6 +85,9 @@ es:
       image_model:
         one: 'Imagen'
         other: 'Imágenes'
+      issue:
+        one: 'Caso'
+        other: 'Casos'
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
@@ -308,6 +311,9 @@ es:
         reschedule_count: 'Cantidad de reprogramaciones'
         implemented_at: 'Fecha de cambio a "Implementada"'
         closed_at: 'Fecha del último cambio de estado'
+        probability: 'Probabilidad'
+        impact_risk: 'Impacto'
+        manual_risk: 'Manual'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -370,6 +376,13 @@ es:
         uploaded_data: 'Imagen'
         content_type: 'Imagen (tipo)'
         size: 'Imagen (tamaño)'
+      issue:
+        customer: 'Cliente'
+        entry: 'Rubro'
+        transaction: 'Operación'
+        amount: 'Monto'
+        comments: 'Comentarios'
+        close_date: 'Fecha de regularización'
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'
@@ -664,6 +677,9 @@ es:
         work_papers: 'Papeles de trabajo'
         implemented_at: 'Fecha de cambio a "Implementada"'
         closed_at: 'Fecha del último cambio de estado'
+        probability: 'Probabilidad'
+        impact_risk: 'Impacto'
+        manual_risk: 'Manual'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:

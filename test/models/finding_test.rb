@@ -32,6 +32,9 @@ class FindingTest < ActiveSupport::TestCase
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
+          impact_risk: Finding.impact_risks[:small],
+          probability: Finding.probabilities[:rare],
+          manual_risk: true,
           finding_user_assignments_attributes: {
             new_1: {
               user_id: users(:audited).id, process_owner: true
@@ -77,6 +80,9 @@ class FindingTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
+        impact_risk: Finding.impact_risks[:small],
+        probability: Finding.probabilities[:rare],
+        manual_risk: true,
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -1474,6 +1480,55 @@ class FindingTest < ActiveSupport::TestCase
     without_message  = @finding.commitment_date_message_for commitment_date
 
     assert_nil without_message
+  end
+
+  test 'automatic risk' do
+    @finding.risk        = Finding.risks[:low]
+    @finding.probability = Finding.probabilities[:almost_certain]
+    @finding.impact_risk = Finding.impact_risks[:critical]
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:low], @finding.risk
+
+    @finding.manual_risk = false
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:high], @finding.risk
+
+    @finding.probability = Finding.probabilities[:possible]
+    @finding.impact_risk = Finding.impact_risks[:moderate]
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:medium], @finding.risk
+  end
+
+  test 'automatic issue based state' do
+    skip unless USE_SCOPE_CYCLE
+
+    @finding.issues.build customer: 'Some customer'
+
+    assert @finding.valid?
+    assert @finding.awaiting?
+
+    Current.user = users :supervisor
+
+    @finding.issues.all? { |issue| issue.close_date = Time.zone.today }
+
+    @finding.follow_up_date  = Time.zone.today
+    @finding.skip_work_paper = true
+
+    assert @finding.valid?
+    assert @finding.implemented_audited?
+    assert_equal @finding.issues.map(&:close_date).last, @finding.solution_date
+
+    @finding.issues.create! customer: 'Another customer'
+
+    @finding.solution_date = nil
+
+    assert @finding.valid?, @finding.errors.full_messages
+    assert @finding.being_implemented?
+  ensure
+    Current.user = nil
   end
 
   private
