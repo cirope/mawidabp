@@ -24,9 +24,11 @@ module Users::Import
         role     = row[0].strip
 
         if role_allowed?(role) && username.present?
-          users[username] ||= []
+          users[username] ||= {}
 
-          users[username] << role
+          role = users[username].has_key?(:role) ? users[username][:role].push(role) : [role]
+
+          users[username].merge!(role: role, user: row[1])
         end
       end
 
@@ -75,8 +77,8 @@ module Users::Import
           username = row[0][0..4]
 
           if entry.key?(username)
-            roles = find_role(entry[username])
-            data  = trivial_data(row, username)
+            roles = find_role(entry[username][:role])
+            data  = trivial_data(row, entry[username][:user])
             user  = find_user data
 
             if user&.roles.blank? && roles.blank?
@@ -110,7 +112,7 @@ module Users::Import
       def find_manager managers
         hierarchy = managers.split(/\W/).reject &:blank?
 
-        hierarchy.first[/\d+/] if hierarchy.present?
+        hierarchy.first if hierarchy.present?
       end
 
       def find_user data
