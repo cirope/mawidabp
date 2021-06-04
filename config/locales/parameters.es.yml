@@ -58,12 +58,12 @@ es:
   score_types:
     satisfactory: 'Bueno'
     improve: 'Satisfactorio'
-    regular: 'Con falencias'
-    unsatisfactory: 'Deficiente'
+    regular: 'Con Necesidad de Mejora'
+    unsatisfactory: 'Con Falencias'
     # When score by weaknesses is used
     adequate: 'Bueno'
     require_some_improvements: 'Satisfactorio'
-    require_improvements: 'Con falencias'
-    require_lots_of_improvements: 'Deficiente'
-    inadequate: 'Deficiente'
+    require_improvements: 'Con Necesidad de Mejora'
+    require_lots_of_improvements: 'Con Falencias'
+    inadequate: 'Con Falencias'
     none: 'No aplica'
