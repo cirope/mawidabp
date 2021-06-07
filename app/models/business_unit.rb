@@ -20,9 +20,11 @@ class BusinessUnit < ApplicationRecord
   validates :name, :uniqueness =>
     {:case_sensitive => false, :scope => :business_unit_type_id}
   validates_presence_of :taggings
+  validates :business_unit_kind_id, :presence => true, if: :require_business_unit_kind?
 
   # Relaciones
   belongs_to :business_unit_type, :optional => true
+  belongs_to :business_unit_kind, :optional => true
   has_many :plan_items, :dependent => :destroy
   has_many :business_unit_findings, :dependent => :destroy
   has_many :business_unit_scores, :dependent => :destroy
@@ -63,5 +65,10 @@ class BusinessUnit < ApplicationRecord
 
     def check_if_can_be_destroyed
       throw :abort unless can_be_destroyed?
+    end
+
+    def require_business_unit_kind?
+      !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
+        HIDE_FINDING_CRITERIA_MISMATCH
     end
 end

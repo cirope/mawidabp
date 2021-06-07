@@ -49,6 +49,9 @@ es:
       business_unit:
         one: 'Unidad de negocio'
         other: 'Unidades de negocio'
+      business_unit_kind:
+        one: 'Tipo de unidad de negocio'
+        other: 'Tipos de unidad de negocio'
       business_unit_score:
         one: 'Calificación unidad de negocio'
         other: 'Calificaciones de unidades de negocio'
@@ -82,6 +85,9 @@ es:
       image_model:
         one: 'Imagen'
         other: 'Imágenes'
+      issue:
+        one: 'Caso'
+        other: 'Casos'
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
@@ -215,6 +221,8 @@ es:
       best_practice_comment:
         auditor_comment: 'Conclusiones del auditor'
         best_practice: 'Buena práctica'
+      business_unit_kind:
+        name: 'Nombre'
       business_unit_type_users:
         business_unit_type_id: "Unidad organizativa"
         user_id: "Usuario"
@@ -303,6 +311,9 @@ es:
         reschedule_count: 'Cantidad de reprogramaciones'
         implemented_at: 'Fecha de cambio a "Implementada"'
         closed_at: 'Fecha del último cambio de estado'
+        probability: 'Probabilidad'
+        impact_risk: 'Impacto'
+        manual_risk: 'Manual'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -365,6 +376,13 @@ es:
         uploaded_data: 'Imagen'
         content_type: 'Imagen (tipo)'
         size: 'Imagen (tamaño)'
+      issue:
+        customer: 'Cliente'
+        entry: 'Rubro'
+        transaction: 'Operación'
+        amount: 'Monto'
+        comments: 'Comentarios'
+        close_date: 'Fecha de regularización'
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'
@@ -378,6 +396,7 @@ es:
         last_name_attribute: 'Atributo con el apellido'
         email_attribute: 'Atributo con el correo electrónico'
         function_attribute: 'Atributo con el cargo'
+        office_attribute: 'Atributo con el departamento'
         roles_attribute: 'Atributo con los perfiles'
         manager_attribute: 'Atributo con el superior'
         tls: 'Versión TLS'
@@ -469,6 +488,7 @@ es:
         enable: 'Habilitado'
         failed_attempts: 'Intentos fallidos'
         function: 'Cargo'
+        office: 'Departamento'
         hidden: 'Oculto'
         language: 'Lenguaje'
         last_access: 'Último acceso'
@@ -655,6 +675,9 @@ es:
         work_papers: 'Papeles de trabajo'
         implemented_at: 'Fecha de cambio a "Implementada"'
         closed_at: 'Fecha del último cambio de estado'
+        probability: 'Probabilidad'
+        impact_risk: 'Impacto'
+        manual_risk: 'Manual'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:

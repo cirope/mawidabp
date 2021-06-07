@@ -11,6 +11,16 @@ module UsersHelper
    form.input :language, collection: options, prompt: true, input_html: { disabled: disabled }
   end
 
+  def user_row_class user
+    if user.hidden
+      'strike'
+    elsif user.enable
+      'enabled_item'
+    else
+      'disabled_item'
+    end
+  end
+
   def user_info user
     if user.organizations.blank?
       show_info t('user.without_organization'), class: :red
