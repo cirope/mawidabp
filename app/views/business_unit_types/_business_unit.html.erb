@@ -1,15 +1,22 @@
 <% id = f.object.object_id %>
 <fieldset>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
       <%= f.input :name, label: false, placeholder: BusinessUnit.human_attribute_name('name'),
         input_html: { id: "#{id}", autofocus: true } %>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-3">
       <%= f.simple_fields_for :taggings, business_unit_taggings(f.object) do |t_f| %>
         <%= render 'tagging', f: t_f, kind: 'business_unit' %>
       <% end %>
     </div>
+
+    <% if show_business_unit_kind? %>
+      <div class="col-md-3">
+        <%= f.association :business_unit_kind, label: false %>
+      </div>
+    <% end %>
+
     <div class="col-md-1">
       <div class="mt-2 text-right">
         <%= link_to_remove_nested_item(f) %>

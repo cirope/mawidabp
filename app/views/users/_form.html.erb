@@ -14,6 +14,7 @@
       </div>
       <div class="col-md-6">
         <%= f.input :notes, input_html: { rows: 4, readonly: limited_edition } %>
+        <%= f.input :office, input_html: { maxlength: 255 } %>
         <%= user_language_field f, disabled: limited_edition %>
         <%= f.input :enable, input_html: { disabled: limited_edition } %>
         <%= f.input :hidden, input_html: { disabled: limited_edition } %>

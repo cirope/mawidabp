@@ -1184,6 +1184,7 @@ es:
     attributes:
       business_unit:
         name: "Nombre"
+        business_unit_kind_id: 'Tipo de unidad de negocio'
       business_unit_type:
         name: "Nombre"
         business_unit_label: "Etiqueta de la unidad de negocio en el informe"
@@ -1194,6 +1195,8 @@ es:
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
         require_counts: "Requerir cantidades en objetivos de control"
+        hide_review_logo: "Ocultar logo en informes"
+        independent_identification: "Numeración independiente"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
@@ -1366,6 +1369,7 @@ es:
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
+        notify: 'Incluir en notificaciones'
       resource_utilization:
         resource_id: "Recurso"
       review:

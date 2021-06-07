@@ -48,7 +48,8 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def duplicate_review_findings
-    findings = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
+    findings  = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
+    last_code = latest_final_weakness_review_code if USE_GLOBAL_WEAKNESS_REVIEW_CODE
 
     begin
       findings.all? do |finding|
@@ -84,6 +85,12 @@ class ConclusionFinalReview < ConclusionReview
           )
         end
 
+        finding.issues.each do |i|
+          final_finding.issues.build(
+            i.attributes.dup.merge('id' => nil, 'finding_id' => nil)
+          )
+        end
+
         finding.tasks.each do |t|
           final_finding.tasks.build(
             t.attributes.dup.merge('id' => nil, 'finding_id' => nil)
@@ -102,6 +109,11 @@ class ConclusionFinalReview < ConclusionReview
           ).check_code_prefix = false
         end
 
+        if USE_GLOBAL_WEAKNESS_REVIEW_CODE && finding.kind_of?(Weakness)
+          last_code                 = last_code.next
+          final_finding.review_code = finding.review_code = last_code
+        end
+
         final_finding.save!
         finding.save!
       end
@@ -118,6 +130,18 @@ class ConclusionFinalReview < ConclusionReview
       Rails.logger.error ex.inspect
       raise ActiveRecord::Rollback
     end
+  end
+
+  def last_final_weakness
+    Weakness.list.finals(true).reorder(review_code: :desc).first
+  end
+
+  def latest_final_weakness_review_code
+    prefix         = I18n.t 'code_prefixes.weaknesses'
+    last_used_code = last_final_weakness&.review_code || '0'
+    number_code    = last_used_code.match(/\d+\Z/).to_a.first.to_i
+
+    "#{prefix}#{'%.7d' % number_code}".strip
   end
 
   def assign_audit_date_to_control_objective_items

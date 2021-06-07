@@ -29,6 +29,9 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
+        impact_risk: Finding.impact_risks[:small],
+        probability: Finding.probabilities[:rare],
+        manual_risk: true,
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -76,6 +79,9 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
+        impact_risk: Finding.impact_risks[:small],
+        probability: Finding.probabilities[:rare],
+        manual_risk: true,
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -123,6 +129,8 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.impact = []
     @weakness.internal_control_components = []
     @weakness.tag_ids = []
+    @weakness.impact_risk = nil
+    @weakness.probability = nil
 
     if WEAKNESS_TAG_VALIDATION_START
       @weakness.created_at = WEAKNESS_TAG_VALIDATION_START
@@ -147,6 +155,11 @@ class WeaknessTest < ActiveSupport::TestCase
 
     if WEAKNESS_TAG_VALIDATION_START
       assert_error @weakness, :tag_ids, :blank
+    end
+
+    if USE_SCOPE_CYCLE
+      assert_error @weakness, :impact_risk, :blank
+      assert_error @weakness, :probability, :blank
     end
   end
 
