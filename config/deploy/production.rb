@@ -1,4 +1,4 @@
-set :branch,    'c-patagonia'
+set :branch,    'c-patagonia-test'
 set :stage,     :production
 set :rails_env, 'production'
 
