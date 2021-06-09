@@ -1204,7 +1204,6 @@ es:
         taggings: "Etiquetas"
       business_unit_type_user:
         business_unit_type_id: "Unidad de negocio"
-
       comment:
         comment: "Comentario"
         user_id: "Usuario"
