@@ -1204,6 +1204,7 @@ es:
         taggings: "Etiquetas"
       business_unit_type_user:
         business_unit_type_id: "Unidad de negocio"
+
       comment:
         comment: "Comentario"
         user_id: "Usuario"
@@ -1367,6 +1368,9 @@ es:
         modify: "Modificación"
         erase: "Baja"
         approval: "Aprobación"
+      process_controls/control_objectives/control:
+        effects: "Efectos"
+        compliance_tests: "Pruebas de cumplimientos"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
