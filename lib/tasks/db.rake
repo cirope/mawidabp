@@ -4,7 +4,6 @@ namespace :db do
     ActiveRecord::Base.transaction do
       update_organization_settings        # 2017-03-15
       add_new_answer_options              # 2017-06-29
-      add_best_practice_privilege         # 2018-01-31
       add_task_codes                      # 2018-07-24
       mark_tasks_as_finished              # 2019-01-04
       update_finding_first_follow_up_date # 2019-01-07
@@ -140,22 +139,6 @@ private
 
   def add_new_answer_options?
     AnswerOption.where(option: 'not_apply').empty?
-  end
-
-  def add_best_practice_privilege
-    if add_best_practice_privilege?
-      Privilege.where(module: 'administration_best_practices').find_each do |p|
-        attrs = p.attributes.
-          except('id', 'module', 'created_at', 'updated_at').
-          merge(module: 'administration_best_practices_best_practices')
-
-        Privilege.create! attrs
-      end
-    end
-  end
-
-  def add_best_practice_privilege?
-    Privilege.where(module: 'administration_best_practices_best_practices').empty?
   end
 
   def add_task_codes
