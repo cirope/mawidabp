@@ -166,7 +166,7 @@ es:
       being_implemented_stale: 'Vencida'
       being_implemented_stale_rescheduled: 'Reprogramada vencida'
       implemented: 'Implementada'
-      implemented_audited: 'Implementada / Auditada'
+      implemented_audited: 'Implementada / Validada'
       assumed_risk: 'Riesgo asumido'
       notify: 'Notificar'
       incomplete: 'Incompleta'

@@ -1,11 +1,11 @@
 <% id = f.object.object_id %>
 <fieldset>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
       <%= f.input :name, label: false, placeholder: BusinessUnit.human_attribute_name('name'),
         input_html: { id: "#{id}", autofocus: true } %>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-3">
       <%= f.simple_fields_for :taggings, business_unit_taggings(f.object) do |t_f| %>
         <%= render 'tagging', f: t_f, kind: 'business_unit' %>
       <% end %>

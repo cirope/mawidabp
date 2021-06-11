@@ -2,8 +2,8 @@
   <div class="col-md-6">
     <% if current_organization&.saml_provider.blank? %>
       <%= form_tag sessions_path, novalidate: 'novalidate', data: { no_observe_changes: true } do %>
-        <div class="card bg-dark text-light mb-3<%= ' pb-3' if current_organization&.ldap_config&.present? %>">
-          <div class="card-header text-center bg-dark border-dark pt-5 pb-4">
+        <div class="card bg-light text-light mb-3<%= ' pb-3' if current_organization&.ldap_config&.present? %>">
+          <div class="card-header text-center bg-light border-dark pt-5 pb-4">
             <%= image_tag 'logo.svg', alt: t('app_name'), height: 40 %>
           </div>
           <div class="card-body py-0 px-5">
@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <div class="card-footer text-center bg-dark border-dark pb-4">
+          <div class="card-footer text-center bg-light border-dark pb-4">
             <div class="form-actions">
               <%= submit_tag t('.log_in'), class: 'btn btn-lg btn-primary' %>
             </div>
