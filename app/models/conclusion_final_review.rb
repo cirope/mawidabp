@@ -85,6 +85,12 @@ class ConclusionFinalReview < ConclusionReview
           )
         end
 
+        finding.issues.each do |i|
+          final_finding.issues.build(
+            i.attributes.dup.merge('id' => nil, 'finding_id' => nil)
+          )
+        end
+
         finding.tasks.each do |t|
           final_finding.tasks.build(
             t.attributes.dup.merge('id' => nil, 'finding_id' => nil)

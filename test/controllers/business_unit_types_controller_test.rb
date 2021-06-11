@@ -75,7 +75,8 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :independent_identification => '0',
           :business_units_attributes => [
             {
-              :name => 'New business unit'
+              :name => 'New business unit',
+              :business_unit_kind_id => business_unit_kinds(:branch).id
             }
           ]
         }
