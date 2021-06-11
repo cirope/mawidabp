@@ -63,9 +63,9 @@ module LdapConfigs::Ldap
         username
       else
         user = if Current.organization
-                 Current.organization.users.find_by user: username
+                 Current.organization.users.by_user username
                else
-                 User.find_by user: username
+                 User.by_user username
                end
 
         ou = user&.organizational_unit.presence || organizational_unit
