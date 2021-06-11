@@ -68,7 +68,7 @@ module LdapConfigs::Ldap
                  User.find_by user: username
                end
 
-        ou = user&.organizational_unit || organizational_unit
+        ou = user&.organizational_unit.presence || organizational_unit
 
         login_mask % { user: username, basedn: basedn, ou: ou }
       end

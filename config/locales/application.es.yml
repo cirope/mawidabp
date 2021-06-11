@@ -1202,6 +1202,7 @@ es:
         other: "Unidades de negocio"
         name: "Unidad de negocio"
         taggings: "Etiquetas"
+        business_unit_kind_id: "Tipo de unidad de negocio"
       business_unit_type_user:
         business_unit_type_id: "Unidad de negocio"
       comment:

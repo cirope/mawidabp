@@ -20,15 +20,17 @@ module Users::Import
       options = { col_sep: ';' }
 
       CSV.foreach(extra_users_info_attr(prefix, 'role_path'), options) do |row|
-        username = row[1][/\d+/]
-        role     = row[0].strip
+        user_ldap = row[1]&.sub(/.*?uid=(.*?),.*/i, '\1')&.to_s
+        username  = user_ldap[/\d+/]
+        role      = row[0].strip
+        ou        = row[1]&.gsub /\A(cn|uid)=[\w\s]+,/i, ''
 
         if role_allowed?(role) && username.present?
           users[username] ||= {}
 
           role = users[username].has_key?(:role) ? users[username][:role].push(role) : [role]
 
-          users[username].merge!(role: role, user: row[1])
+          users[username].merge!(role: role, user: user_ldap, ou: ou)
         end
       end
 
@@ -78,7 +80,7 @@ module Users::Import
 
           if entry.key?(username)
             roles = find_role(entry[username][:role])
-            data  = trivial_data(row, entry[username][:user])
+            data  = trivial_data(row, entry[username])
             user  = find_user data
 
             if user&.roles.blank? && roles.blank?
@@ -155,10 +157,11 @@ module Users::Import
         {
           name: row[2],
           last_name: row[1],
-          user: user,
+          user: user[:user],
           email: row[4],
           hidden: false,
-          enable: true
+          enable: true,
+          organizational_unit: user[:ou]
         }
       end
 
