@@ -1,5 +1,5 @@
 es:
-  app_name: "Mawidabp"
+  app_name: "GEPLAS"
   app_copyright: "Copyright © 2008-%{year} Cirope S.A. Todos los derechos reservados."
 
   label:
@@ -875,12 +875,12 @@ es:
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
       create_user: "Crear usuario"
-      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'Mawidabp'"
+      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'GEPLAS'"
     welcome_email:
       title: "%{name}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
       change_password: "Establecer contraseña"
-      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp'."
+      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'GEPLAS'."
       organizations_sites:
         one: "Luego puede ingresar en la siguiente dirección:"
         other: "Luego puede ingresar en cualquiera de las siguientes direcciones (dependiendo de la organización que seleccione):"

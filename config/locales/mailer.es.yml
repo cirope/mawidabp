@@ -18,7 +18,7 @@ es:
     footer:
       email_label: "Correo"
       warning: "Por favor, **no contestar** el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
-      title: "Correo enviado por el sistema 'Mawidabp', cualquier inquietud comunicarse al área de soporte."
+      title: "Correo enviado por el sistema 'GEPLAS', cualquier inquietud comunicarse al área de soporte."
       recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 10 o superior*"
 
   report_mailer:
