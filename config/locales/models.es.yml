@@ -699,6 +699,7 @@ es:
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
+        reference: 'Referencia'
         title: 'Título'
         description: 'Observación'
         risk: 'Riesgo'

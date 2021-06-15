@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_28_143012) do
+ActiveRecord::Schema.define(version: 2021_06_15_163105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1187,7 +1187,9 @@ ActiveRecord::Schema.define(version: 2021_05_28_143012) do
     t.bigint "organization_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reference"
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
+    t.index ["reference"], name: "index_weakness_templates_on_reference"
   end
 
   create_table "webhooks", force: :cascade do |t|

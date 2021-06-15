@@ -36,7 +36,7 @@ module Weaknesses::Validations
 
                /\A#{revoked_prefix}?#{prefix}\d+\Z/
              end
-  
+
       errors.add :review_code, :invalid unless review_code =~ regex
     end
 

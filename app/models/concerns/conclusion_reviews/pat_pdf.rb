@@ -441,7 +441,7 @@ module ConclusionReviews::PatPdf
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
       weaknesses.not_revoked.any? ||
-        (review.plan_item.sustantive? && review.previous&.final_weaknesses&.any?)
+        (review.plan_item.sustantive? && review.previous&.weaknesses&.any?)
     end
 
     def put_pat_workflow_on pdf
