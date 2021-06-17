@@ -13,6 +13,10 @@
             { action: :weaknesses_by_user, controller_name: 'follow_up', final: false },
             class: 'list-group-item list-group-item-action'
           %>
+          <%= link_to t('follow_up_audited.status_user'),
+            users_status_path(@auth_user, graph: true),
+            class: 'list-group-item list-group-item-action'
+          %>
         </div>
       </div>
       <div class="col-md-6">

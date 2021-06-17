@@ -401,14 +401,15 @@ module Reports::WeaknessesCurrentSituation
     end
 
     def filter_weaknesses_current_situation_by_weakness_tags weaknesses
-      tags = params[:weaknesses_current_situation][:weakness_tags].to_s.split(
+      negate = params[:weaknesses_current_situation][:negate_weakness_tags] == '1'
+      tags   = params[:weaknesses_current_situation][:weakness_tags].to_s.split(
         SPLIT_OR_TERMS_REGEXP
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
         @filters << "<b>#{t "#{@controller}_committee_report.weaknesses_current_situation.weakness_tags"}</b> = \"#{tags.to_sentence}\""
 
-        weaknesses.by_wilcard_tags tags
+        weaknesses.by_wilcard_tags tags, negate: negate
       else
         weaknesses
       end

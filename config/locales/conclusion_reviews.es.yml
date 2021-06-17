@@ -82,9 +82,6 @@ es:
         auditors: "Auditores intervinientes:"
         supervisors: "Supervisado por:"
         organization: "Banco Patagonia S.A."
-        description:
-          cycle: "Ciclo %{description}"
-          sustantive: "Pruebas sustantivas sobre %{description}"
         brief:
           title: "Ref: %{description}\nInforme de Auditoría N° %{review}"
           notice:

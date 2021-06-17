@@ -283,6 +283,16 @@ module FindingsHelper
     end
   end
 
+  def finding_answer_rows
+    if SHOW_FINDING_CURRENT_SITUATION && USE_SCOPE_CYCLE
+      7
+    elsif SHOW_FINDING_CURRENT_SITUATION
+      9
+    else
+      5
+    end
+  end
+
   private
 
     def finding_state_options_for finding

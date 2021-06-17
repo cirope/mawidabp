@@ -258,6 +258,7 @@ class ReviewsController < ApplicationController
     plan_item = PlanItem.find(params[:id])
     @findings = Finding.where(
       [
+        "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} = :organization_id",
         "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :boolean_false",
         "#{Finding.quoted_table_name}.#{Finding.qcn('state')} IN(:states)",
         "#{Finding.quoted_table_name}.#{Finding.qcn('origination_date')} >= :limit_date",
@@ -265,6 +266,7 @@ class ReviewsController < ApplicationController
         "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('id')} = :business_unit_id"
       ].join(' AND '),
       boolean_false: false,
+      organization_id: Current.organization&.id,
       limit_date: 3.years.ago.to_date,
       states: [Finding::STATUS[:implemented_audited], Finding::STATUS[:expired]],
       business_unit_id: plan_item.business_unit_id
@@ -293,6 +295,7 @@ class ReviewsController < ApplicationController
     conditions =
       [
         [
+          "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} = :organization_id",
           "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :boolean_false",
           "#{Finding.quoted_table_name}.#{Finding.qcn('state')} IN(:states)",
           "#{Finding.quoted_table_name}.#{Finding.qcn('solution_date')} >= :limit_date",
@@ -302,6 +305,7 @@ class ReviewsController < ApplicationController
 
       parameters = {
         boolean_false: false,
+        organization_id: Current.organization&.id,
         limit_date: 3.years.ago.to_date,
         states: [Finding::STATUS[:implemented_audited], Finding::STATUS[:expired]]
       }
