@@ -1202,6 +1202,7 @@ es:
         one: "Ciclo"
         other: "Ciclos"
         name: "Ciclo"
+        business_unit_kind_id: "Tipo de ciclo"
       business_unit_type_user:
         business_unit_type_id: "Ciclo"
       comment:
