@@ -34,13 +34,22 @@ module ConclusionReviews::UplPdf
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title review.plan_item.business_unit_type.name, *title_options
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.add_title review.plan_item.business_unit&.tags.map(&:name).join, *title_options
+      pdf.add_title ([upl_business_unit_tags, upl_business_unit_kind].join ' - '),
+                      *title_options
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title I18n.l(issue_date, format: :long), *title_options
       pdf.move_down PDF_FONT_SIZE
 
       put_upl_recipients_on    pdf
       put_upl_review_owners_on pdf
+    end
+
+    def upl_business_unit_tags
+       review.plan_item.business_unit&.tags.map(&:name).join
+    end
+
+    def upl_business_unit_kind
+       review.plan_item.business_unit&.business_unit_kind.name
     end
 
     def put_upl_header_on pdf
