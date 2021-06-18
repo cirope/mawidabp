@@ -2,7 +2,18 @@ module Reviews::Previous
   extend ActiveSupport::Concern
 
   def previous
-    previous_by_business_unit || previous_by_shared_business_unit
+    direct_prev   = previous_by_business_unit
+    indirect_prev = previous_by_shared_business_unit
+
+    if direct_prev.blank? && indirect_prev
+      indirect_prev
+    elsif indirect_prev.blank? && direct_prev
+      direct_prev
+    elsif direct_prev.issue_date <= indirect_prev.issue_date
+      direct_prev
+    else
+      indirect_prev
+    end
   end
 
   private
