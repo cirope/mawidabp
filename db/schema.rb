@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_15_163105) do
+ActiveRecord::Schema.define(version: 2021_06_18_140824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -176,9 +176,11 @@ ActiveRecord::Schema.define(version: 2021_06_15_163105) do
     t.boolean "require_counts", default: false, null: false
     t.boolean "hide_review_logo", default: false, null: false
     t.boolean "independent_identification", default: false, null: false
+    t.boolean "shared_business_units", default: false, null: false
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
+    t.index ["shared_business_units"], name: "index_business_unit_types_on_shared_business_units"
   end
 
   create_table "business_units", id: :serial, force: :cascade do |t|

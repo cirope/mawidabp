@@ -1198,6 +1198,7 @@ es:
         require_counts: "Requerir cantidades en objetivos de control"
         hide_review_logo: "Ocultar logo en informes"
         independent_identification: "Numeración independiente"
+        shared_business_units: "Unidades de negocio compartidas"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
