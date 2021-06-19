@@ -45,7 +45,7 @@ module ConclusionReviews::UplPdf
     end
 
     def upl_business_unit_tags
-       review.plan_item.business_unit&.tags.join
+       review.plan_item.business_unit&.tags.to_sentence
     end
 
     def upl_business_unit_kind
