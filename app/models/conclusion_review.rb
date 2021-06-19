@@ -9,7 +9,6 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::CoverPdf
   include ConclusionReviews::CroPdf
   include ConclusionReviews::DefaultPdf
-  include ConclusionReviews::UplPdf
   include ConclusionReviews::DestroyValidation
   include ConclusionReviews::Email
   include ConclusionReviews::FindingsFollowUpPdf
@@ -21,6 +20,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::Scopes
   include ConclusionReviews::Search
   include ConclusionReviews::SortColumns
+  include ConclusionReviews::UplPdf
   include ConclusionReviews::Validations
   include ConclusionReviews::WorkflowPdf
 
