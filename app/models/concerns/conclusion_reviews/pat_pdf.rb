@@ -92,14 +92,9 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_extra_cover_info_on pdf
-      method   = review.plan_item.cycle? ? :upcase : :to_s
-      i18n_key = if review.plan_item.cycle?
-                   'conclusion_review.pat.cover.description.cycle'
-                 else
-                   'conclusion_review.pat.cover.description.sustantive'
-                 end
+      method = review.plan_item.cycle? ? :upcase : :to_s
 
-      pdf.text "\n<i>#{I18n.t(i18n_key, description: review.description).send method}</i>",
+      pdf.text "\n<i>#{review.description.send method}</i>",
         align: :center, inline_format: true
       pdf.put_hr
 
@@ -441,7 +436,7 @@ module ConclusionReviews::PatPdf
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
       weaknesses.not_revoked.any? ||
-        (review.plan_item.sustantive? && review.previous&.final_weaknesses&.any?)
+        (review.plan_item.sustantive? && review.previous&.weaknesses&.any?)
     end
 
     def put_pat_workflow_on pdf

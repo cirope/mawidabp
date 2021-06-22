@@ -408,6 +408,7 @@ es:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
@@ -1202,6 +1203,7 @@ es:
         other: "Unidades de negocio"
         name: "Unidad de negocio"
         taggings: "Etiquetas"
+        business_unit_kind_id: "Tipo de unidad de negocio"
       business_unit_type_user:
         business_unit_type_id: "Unidad de negocio"
       comment:
