@@ -23,7 +23,7 @@ class ActiveSupport::TestCase
   def set_organization organization = organizations(:cirope)
     Current.group        = organization.group
     Current.organization = organization
-    prefix               = organization&.prefix
+    prefix               = organization.prefix
 
     if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
       Current.conclusion_pdf_format = SHOW_CONCLUSION_ALTERNATIVE_PDF[prefix]
