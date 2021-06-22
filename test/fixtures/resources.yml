@@ -2,3 +2,8 @@ laptop_resource:
   name: Generic Laptop
   description: This is a generic laptop
   resource_class: hardware_resources
+
+car_resource:
+  name: Generic Car
+  description: This is a generic car
+  resource_class: vehicle_resource

@@ -11,7 +11,7 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
       @resource_utilization = ResourceUtilization.create(
         units: '21.5',
         resource_consumer: plan_items(:current_plan_item_1),
-        resource: resources(:laptop_resource)
+        resource: resources(:car_resource)
       )
     end
   end
