@@ -133,7 +133,7 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def last_final_weakness
-    Weakness.list.finals(true).reorder(review_code: :desc).first
+    Weakness.list.finals(true).not_revoked.reorder(review_code: :desc).first
   end
 
   def latest_final_weakness_review_code
