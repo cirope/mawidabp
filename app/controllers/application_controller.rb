@@ -63,6 +63,9 @@ class ApplicationController < ActionController::Base
       if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
         Current.conclusion_pdf_format =
           SHOW_CONCLUSION_ALTERNATIVE_PDF[current_organization&.prefix&.downcase]
+        if Current.conclusion_pdf_format
+          Current.global_weakness_code = true
+        end
       end
 
       Current.conclusion_pdf_format ||= 'default'

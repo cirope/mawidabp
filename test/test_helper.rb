@@ -27,6 +27,9 @@ class ActiveSupport::TestCase
     if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
       Current.conclusion_pdf_format =
         SHOW_CONCLUSION_ALTERNATIVE_PDF[organization&.prefix]
+      if Current.conclusion_pdf_format
+        Current.global_weakness_code = true
+      end
     end
 
     Current.conclusion_pdf_format ||= 'default'
