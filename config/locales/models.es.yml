@@ -238,7 +238,7 @@ es:
       commitment_support:
         reason: 'Motivo reprogramación'
         plan: 'Nuevo plan de acción'
-        controls: 'Controles mitigantes'
+        controls: 'Porcentaje de avance de la observación'
       control_objective:
         name: 'Objetivo de control'
         relevance: 'Importancia'
@@ -338,7 +338,7 @@ es:
         one: 'Sustento compromiso'
         reason: 'Motivo reprogramación'
         plan: 'Nuevo plan de acción'
-        controls: 'Controles mitigantes'
+        controls: 'Porcentaje de avance de la observación'
       finding/finding_answers/file_model:
         one: 'Anexo (archivo)'
         file: 'Anexo (archivo)'
