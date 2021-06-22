@@ -23,13 +23,14 @@ class ActiveSupport::TestCase
   def set_organization organization = organizations(:cirope)
     Current.group        = organization.group
     Current.organization = organization
+    prefix               = organization&.prefix
 
     if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
-      Current.conclusion_pdf_format =
-        SHOW_CONCLUSION_ALTERNATIVE_PDF[organization&.prefix]
-      if Current.conclusion_pdf_format
-        Current.global_weakness_code = true
-      end
+      Current.conclusion_pdf_format = SHOW_CONCLUSION_ALTERNATIVE_PDF[prefix]
+    end
+
+    if USE_GLOBAL_WEAKNESS_REVIEW_CODE.include? prefix
+      Current.global_weakness_code = true
     end
 
     Current.conclusion_pdf_format ||= 'default'
