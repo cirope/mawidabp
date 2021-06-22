@@ -1,7 +1,3 @@
 hardware_resources:
   name: Hardware resources
   organization: cirope
-
-vehicle_resources:
-  name: Vehicle resources
-  organization: cirope

@@ -3,7 +3,7 @@ laptop_resource:
   description: This is a generic laptop
   resource_class: hardware_resources
 
-car_resource:
-  name: Generic Car
-  description: This is a generic car
-  resource_class: vehicle_resource
+mouse_resource:
+  name: Generic mouse
+  description: This is a generic mouse
+  resource_class: hardware_resource
