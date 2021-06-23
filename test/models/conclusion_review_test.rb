@@ -333,7 +333,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
   test 'upl pdf conversion' do
     assert_nothing_raised do
-      @conclusion_review.upl_pdf(organizations(:cirope))
+      @conclusion_review.upl_pdf organizations(:cirope)
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)

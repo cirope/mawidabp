@@ -47,6 +47,10 @@
         <div class="col-md-3">
           <%= f.input :hide_review_logo %>
         </div>
+      <% elsif Current.conclusion_pdf_format == 'pat' %>
+        <div class="col-md-3">
+          <%= f.input :shared_business_units %>
+        </div>
       <% end %>
     </div>
 

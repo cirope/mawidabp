@@ -38,7 +38,10 @@
 
   <ul>
     <% @weakness_template.control_objectives.each do |control_objective| %>
-      <li><%= control_objective %></li>
+      <li>
+        <%= control_objective %> | <%= control_objective.process_control %>
+        (<%= link_to control_objective.best_practice, control_objective.best_practice %>)
+      </li>
     <% end %>
   </ul>
 <% end %>

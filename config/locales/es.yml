@@ -928,6 +928,7 @@
       origination_year: "Año de origen"
       control_objective_tags: "Etiquetas objetivos de control"
       weakness_tags: "Etiquetas de observación"
+      negate_weakness_tags: "Excluir"
       review_tags: "Etiquetas de informe"
       cut_date: "Fecha de cómputo"
     weaknesses_by_control_objective:

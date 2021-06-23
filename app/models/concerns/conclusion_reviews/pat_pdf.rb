@@ -92,10 +92,11 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_extra_cover_info_on pdf
+      title  = review.scope.presence || review.description
       method = review.plan_item.cycle? ? :upcase : :to_s
 
-      pdf.text "\n<i>#{review.description.send method}</i>",
-        align: :center, inline_format: true
+      pdf.text "\n<i>#{title.send method}</i>", align: :center,
+        inline_format: true
       pdf.put_hr
 
       if review.plan_item.cycle?
