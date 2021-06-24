@@ -29,7 +29,7 @@ module Weaknesses::Validations
     end
 
     def review_code_has_valid_prefix
-     regex = if USE_GLOBAL_WEAKNESS_REVIEW_CODE && (parent || children.any?)
+      regex = if Current.global_weakness_code && (parent || children.any?)
                /\A#{prefix}\d+\Z/
              else
                revoked_prefix = I18n.t 'code_prefixes.revoked'

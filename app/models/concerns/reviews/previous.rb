@@ -9,7 +9,7 @@ module Reviews::Previous
       indirect_prev
     elsif indirect_prev.blank? && direct_prev
       direct_prev
-    elsif direct_prev.issue_date <= indirect_prev.issue_date
+    elsif direct_prev && direct_prev.issue_date <= indirect_prev.issue_date
       direct_prev
     else
       indirect_prev
