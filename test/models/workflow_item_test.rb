@@ -8,8 +8,13 @@ class WorkflowItemTest < ActiveSupport::TestCase
   setup do
     @workflow_item = WorkflowItem.find(
       workflow_items(:with_conclusion_workflow_item_1).id)
+
+    Current.organization = organizations :cirope
   end
 
+  teardown do
+    Current.organization = nil
+  end
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of WorkflowItem, @workflow_item
