@@ -35,15 +35,22 @@
 
     <% if @items[date].present? %>
       <ul>
-        <% @items[date].each do |item, hours| %>
+        <% @items[date].each do |item, hours, id| %>
           <li>
             <%= item %>: <%= number_with_precision hours, precision: 1 %>
+            <% if item.model_name == Activity.name %>
+              <%= link_to edit_time_summary_path(id,  date: date,
+                limit: time_summary_remaining_hours(date)),
+                title: t('.add'), class: 'ml-1 h6' do %>
+                  <i class="fas fa-edit"></i>
+              <% end %>
+          <% end %>
           </li>
         <% end %>
       </ul>
     <% else %>
       <p class="mb-3">
-        <%= t '.empty' %>
+      <%= t '.empty' %>
       </p>
     <% end %>
   <% end %>

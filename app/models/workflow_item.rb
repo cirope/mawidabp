@@ -62,6 +62,7 @@ class WorkflowItem < ApplicationRecord
       end
     end
   end
+  validate :check_maximum_hours_for_task_of_human_resources
 
   # Relaciones
   belongs_to :workflow
@@ -180,5 +181,33 @@ class WorkflowItem < ApplicationRecord
 
     def check_if_can_be_destroyed
       throw :abort unless can_be_destroyed?
+    end
+
+    def work_hours_per_day
+      setting = current_organization.settings.find_by name: 'hours_of_work_per_day'
+      value   = setting&.value.to_f
+
+      value > 0 ? value : 8
+    end
+
+    def check_maximum_hours_for_task_of_human_resources
+      start_date                        = self.start
+      end_date                          = self.end
+      days                              = start_date == end_date ? 1 : (end_date - start_date).to_i
+      hours_for_days                    = work_hours_per_day
+      maximum_hours_for_human_resources = days * hours_for_days
+
+
+      self.human_resource_utilizations.map do |hr|
+        if hr.units > (maximum_hours_for_human_resources)
+          msg = I18n.t('workflow.maximum_exceeded_by_human_resource',
+                       user: hr.resource.full_name, item: self.task)
+          self.errors.add :base, msg
+
+          throw :abort
+        else
+          true
+        end
+      end
     end
 end

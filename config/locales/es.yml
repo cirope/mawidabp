@@ -1500,6 +1500,7 @@
     hide_resource_utilization: "Ocultar recursos"
     download_global_workflow: "Descargar programa de trabajo global"
     download_detailed_workflow: "Descargar programa de trabajo detallado"
+    maximum_exceeded_by_human_resource: "%{user} ha excedido el máximo de hora para la tarea: %{item}"
     period:
       title: "Periodo (%{name})"
       range: "%{from_date} al %{to_date}"

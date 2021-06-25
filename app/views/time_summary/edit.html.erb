@@ -1,0 +1,8 @@
+<%= render 'form' %>
+
+<br />
+
+<%= link_to_index time_summary_index_path(
+  start_date: @time_consumption.date.at_beginning_of_week,
+  end_date:   @time_consumption.date.at_end_of_week
+) %>

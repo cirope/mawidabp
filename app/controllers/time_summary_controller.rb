@@ -3,6 +3,7 @@ class TimeSummaryController < ApplicationController
 
   before_action :auth, :check_privileges, :set_title, :set_descendants,
                 :set_user
+  before_action :set_time, only: [:edit, :update]
 
   def index
     @start_date         = start_date
@@ -37,7 +38,23 @@ class TimeSummaryController < ApplicationController
     )
   end
 
+  def edit
+  end
+
+  def update
+    update_resource @time_consumption, time_consumption_params
+
+    respond_with @time_consumption, location: time_summary_index_url(
+      start_date: @time_consumption.date.at_beginning_of_week,
+      end_date:   @time_consumption.date.at_end_of_week
+    )
+  end
+
   private
+
+    def set_time
+      @time_consumption = TimeConsumption.find params[:id]
+    end
 
     def time_consumption_params
       params.require(:time_consumption).permit :amount, :date, :limit, :activity_id
@@ -88,7 +105,7 @@ class TimeSummaryController < ApplicationController
 
       @user.time_consumptions.between(start_date, end_date).each do |tc|
         @items[tc.date] ||= []
-        @items[tc.date]  << [tc.activity, tc.amount]
+        @items[tc.date]  << [tc.activity, tc.amount, tc.id]
       end
     end
 
