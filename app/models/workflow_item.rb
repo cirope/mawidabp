@@ -184,7 +184,7 @@ class WorkflowItem < ApplicationRecord
     end
 
     def work_hours_per_day
-      setting = current_organization.settings.find_by name: 'hours_of_work_per_day'
+      setting = Current.organization.settings.find_by name: 'hours_of_work_per_day'
       value   = setting&.value.to_f
 
       value > 0 ? value : 8

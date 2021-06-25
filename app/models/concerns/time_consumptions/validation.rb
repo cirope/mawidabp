@@ -2,6 +2,8 @@ module TimeConsumptions::Validation
   extend ActiveSupport::Concern
 
   included do
+    before_validation :check_limit
+
     validates :date, presence: true, timeliness: { type: :date }
     validates :amount, presence: true, numericality: {
       greater_than: 0, less_than_or_equal_to: :amount_limit
@@ -9,6 +11,10 @@ module TimeConsumptions::Validation
   end
 
   private
+
+    def check_limit
+        self.limit = limit.to_i + amount_was.to_i
+    end
 
     def amount_limit
       limit || 24

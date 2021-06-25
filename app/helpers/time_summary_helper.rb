@@ -57,4 +57,9 @@ module TimeSummaryHelper
   def time_summary_url time_summary
     time_summary.new_record? ? time_summary_index_path : time_summary_path(time_summary)
   end
+
+  def time_summary_enabled_edit item, date
+    item.model_name == Activity.model_name &&
+      date >= Time.zone.today.weeks_ago(1)
+  end
 end

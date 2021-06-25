@@ -53,7 +53,8 @@ class TimeSummaryController < ApplicationController
   private
 
     def set_time
-      @time_consumption = TimeConsumption.find params[:id]
+      @time_consumption       = TimeConsumption.find params[:id]
+      @time_consumption.limit = params[:limit]
     end
 
     def time_consumption_params
