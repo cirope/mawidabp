@@ -3,7 +3,7 @@ class TimeSummaryController < ApplicationController
 
   before_action :auth, :check_privileges, :set_title, :set_descendants,
                 :set_user
-  before_action :set_time, only: [:edit, :update]
+  before_action :set_time_consumption, only: [:edit, :update]
 
   def index
     @start_date         = start_date
@@ -52,7 +52,7 @@ class TimeSummaryController < ApplicationController
 
   private
 
-    def set_time
+    def set_time_consumption
       @time_consumption       = TimeConsumption.find params[:id]
       @time_consumption.limit = params[:limit]
     end
@@ -81,7 +81,7 @@ class TimeSummaryController < ApplicationController
       @items = {}
 
       load_resource_utilizations
-      set_time_consumption
+      set_time_consumptions
       set_resource_utilization
     end
 
@@ -96,7 +96,7 @@ class TimeSummaryController < ApplicationController
       end
     end
 
-    def set_time_consumption
+    def set_time_consumptions
       start_col    = "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'}"
       end_col      = "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'}"
       r_start_date = @_resource_utilizations.reorder(start_col).first&.workflow_item&.start

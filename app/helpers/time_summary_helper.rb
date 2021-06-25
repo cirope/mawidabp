@@ -59,7 +59,6 @@ module TimeSummaryHelper
   end
 
   def time_summary_enabled_edit item, date
-    item.model_name == Activity.model_name &&
-      date >= Time.zone.today.weeks_ago(1)
+    item.kind_of?(Activity) && date >= 1.week.ago
   end
 end

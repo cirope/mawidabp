@@ -193,21 +193,25 @@ class WorkflowItem < ApplicationRecord
     def check_maximum_hours_for_task_of_human_resources
       start_date                        = self.start
       end_date                          = self.end
-      days                              = start_date == end_date ? 1 : (end_date - start_date).to_i
+      days                              = work_days(start_date, end_date).count
       hours_for_days                    = work_hours_per_day
       maximum_hours_for_human_resources = days * hours_for_days
-
 
       self.human_resource_utilizations.map do |hr|
         if hr.units > (maximum_hours_for_human_resources)
           msg = I18n.t('workflow.maximum_exceeded_by_human_resource',
                        user: hr.resource.full_name, item: self.task)
           self.errors.add :base, msg
+          hr.errors.add :units, :too_long, message: maximum_hours_for_human_resources
 
           throw :abort
         else
           true
         end
       end
+    end
+
+    def work_days start_date, end_date
+      (start_date.to_date..end_date.to_date).select {|d| d.workday?}
     end
 end
