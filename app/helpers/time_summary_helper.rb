@@ -53,4 +53,12 @@ module TimeSummaryHelper
       [user.full_name_with_function, user.id, selected: user == @user]
     end
   end
+
+  def time_summary_url time_summary
+    time_summary.new_record? ? time_summary_index_path : time_summary_path(time_summary)
+  end
+
+  def time_summary_enabled_edit item, date
+    item.kind_of?(Activity) && date >= 1.week.ago
+  end
 end
