@@ -84,7 +84,8 @@ class WeaknessesController < ApplicationController
   def new
     @title = t 'weakness.new_title'
     @weakness = Weakness.new(
-      control_objective_item_id: params[:control_objective_item]
+      control_objective_item_id: params[:control_objective_item],
+      manual_risk: !USE_SCOPE_CYCLE
     )
 
     @weakness.import_users
@@ -168,8 +169,9 @@ class WeaknessesController < ApplicationController
         :control_objective_item_id, :review_code, :title, :description, :brief,
         :answer, :audit_comments, :state, :origination_date, :solution_date,
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
-        :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
-        :weakness_template_id, :lock_version, :compliance_observations,
+        :follow_up_date, :users_for_notification, :compliance, :impact_risk,
+        :probability, :skip_work_paper, :weakness_template_id,
+        :compliance_observations, :manual_risk, :lock_version,
         operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [], tag_ids: [],
         achievements_attributes: [
@@ -188,6 +190,10 @@ class WeaknessesController < ApplicationController
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
+        ],
+        issues_attributes: [
+          :id, :customer, :entry, :operation, :amount, :comments, :close_date,
+          :_destroy
         ],
         tasks_attributes: [
           :id, :code, :description, :status, :due_on, :_destroy

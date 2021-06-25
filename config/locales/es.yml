@@ -89,6 +89,10 @@
     show_details: "Ver detalles"
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
+  business_unit_kind:
+    errors:
+      business_unit_kind_related: "El tipo de unidad de negocio no puede ser eliminado, se encuentra relacionada con al menos una unidad de negocio"
+
   business_unit_type:
     index_title: "Listado de unidades organizativas"
     show_title: "Detalle unidad organizativa"
@@ -452,6 +456,7 @@
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
@@ -607,6 +612,7 @@
     download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
     add_task: "Agregar tarea"
+    add_issue: "Agregar caso"
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
@@ -691,6 +697,7 @@
   follow_up_audited:
     index_title: "Reportes generales"
     weaknesses_by_user_title: "Observaciones por usuario"
+    status_user: "Estado de usuario"
     process_control_stats_title: "Observaciones por proceso de negocio"
     business_unit_type_title: "Unidad organizativa"
     business_unit_title: "Unidad de negocio"
@@ -899,6 +906,7 @@
       origination_year: "Año de origen"
       control_objective_tags: "Etiquetas objetivos de control"
       weakness_tags: "Etiquetas de observación"
+      negate_weakness_tags: "Excluir"
       review_tags: "Etiquetas de informe"
       cut_date: "Fecha de cómputo"
     weaknesses_by_control_objective:

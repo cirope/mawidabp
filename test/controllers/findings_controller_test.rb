@@ -304,7 +304,8 @@ class FindingsControllerTest < ActionController::TestCase
   test 'edit implemented audited finding' do
     finding = findings :being_implemented_weakness
 
-    finding.update_column :state, Finding::STATUS[:implemented_audited]
+    finding.update_columns state:         Finding::STATUS[:implemented_audited],
+                           solution_date: Time.zone.today
 
     assert_raise ActiveRecord::RecordNotFound do
       get :edit, params: {
@@ -357,6 +358,9 @@ class FindingsControllerTest < ActionController::TestCase
               operational_risk: ['internal fraud'],
               impact: ['econimic', 'regulatory'],
               internal_control_components: ['risk_evaluation', 'monitoring'],
+              impact_risk: Finding.impact_risks[:small],
+              probability: Finding.probabilities[:rare],
+              manual_risk: '1',
               business_unit_ids: [business_units(:business_unit_three).id],
               finding_user_assignments_attributes: [
                 {
@@ -486,6 +490,9 @@ class FindingsControllerTest < ActionController::TestCase
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
+            impact_risk: Finding.impact_risks[:small],
+            probability: Finding.probabilities[:rare],
+            manual_risk: '1',
             finding_user_assignments_attributes: [
               {
                 user_id: users(:audited).id,
@@ -571,6 +578,9 @@ class FindingsControllerTest < ActionController::TestCase
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
           users_for_notification: [users(:bare).id],
+          impact_risk: Finding.impact_risks[:small],
+          probability: Finding.probabilities[:rare],
+          manual_risk: '1',
           finding_user_assignments_attributes: [
             {
               id: finding_user_assignments(:unconfirmed_weakness_bare).id,
@@ -629,6 +639,9 @@ class FindingsControllerTest < ActionController::TestCase
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
+          impact_risk: Finding.impact_risks[:small],
+          probability: Finding.probabilities[:rare],
+          manual_risk: '1',
           tag_ids: [
             tags(:important).id,
             tags(:pending).id,

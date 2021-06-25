@@ -5,6 +5,7 @@ class Finding < ApplicationRecord
   include Findings::Achievements
   include Findings::Answers
   include Findings::AttributeTypes
+  include Findings::AutoRisk
   include Findings::Brief
   include Findings::BusinessUnits
   include Findings::ByControlObjectiveProcessCsv
@@ -31,6 +32,7 @@ class Finding < ApplicationRecord
   include Findings::FollowUp
   include Findings::FollowUpPdf
   include Findings::ImportantDates
+  include Findings::Issues
   include Findings::Json
   include Findings::NotificationLevel
   include Findings::Notifications

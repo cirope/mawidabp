@@ -67,6 +67,7 @@ Rails.application.routes.draw do
   resources :e_mails, only: [:index, :show]
 
   resources :business_unit_types
+  resources :business_unit_kinds
 
   resources :groups
 
