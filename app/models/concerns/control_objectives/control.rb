@@ -14,8 +14,8 @@ module ControlObjectives::Control
   private
 
     def enable_control_validations
-        control.validates_presence_of_effects          = true
-        control.validates_presence_of_compliance_tests = true
+      control&.validates_presence_of_effects          = true
+      control&.validates_presence_of_compliance_tests = true
     end
 
     def enable_control_validations?
