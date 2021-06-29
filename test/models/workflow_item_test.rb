@@ -8,13 +8,8 @@ class WorkflowItemTest < ActiveSupport::TestCase
   setup do
     @workflow_item = WorkflowItem.find(
       workflow_items(:with_conclusion_workflow_item_1).id)
-
-    Current.organization = organizations :cirope
   end
 
-  teardown do
-    Current.organization = nil
-  end
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of WorkflowItem, @workflow_item
@@ -118,6 +113,8 @@ class WorkflowItemTest < ActiveSupport::TestCase
     workflow_item_3 = WorkflowItem.find(
       workflow_items(:current_workflow_item_3).id)
 
+    Current.organization = organizations :cirope
+
     assert workflow_item_3.valid?
 
     workflow_item_3.resource_utilizations <<
@@ -126,6 +123,8 @@ class WorkflowItemTest < ActiveSupport::TestCase
 
     assert workflow_item_3.invalid?
     assert_error workflow_item_3, :start, :resource_overload
+
+    Current.organization = nil
   end
 
   test 'can be modified' do

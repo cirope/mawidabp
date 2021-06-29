@@ -13,10 +13,12 @@ module TimeConsumptions::Validation
   private
 
     def set_limit
-      self.limit = limit.to_i + amount_was.to_i
+      if (amount.to_f > limit.to_f) && (amount.to_f < amount_was.to_f)
+        self.limit = limit.to_f + amount_was.to_f
+      end
     end
 
     def amount_limit
-      limit || 24
+      limit || 24.0
     end
 end
