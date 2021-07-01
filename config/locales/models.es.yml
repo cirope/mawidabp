@@ -499,7 +499,7 @@ es:
       time_consumption:
         date: 'Fecha'
         activity: 'Actividad'
-        resource_on_id: 'Recurso'
+        resource_id: 'Recurso'
         amount: 'Tiempo en horas'
       user:
         email: 'Correo'

@@ -23,7 +23,7 @@ class TimeSummaryController < ApplicationController
   def new
     @time_consumption = TimeConsumption.new date:  params[:date],
                                             limit: params[:limit],
-                                            resource_on_type: params[:resource_on_type]
+                                            resource_type: params[:resource_type]
   end
 
   def create
@@ -58,7 +58,7 @@ class TimeSummaryController < ApplicationController
     end
 
     def time_consumption_params
-      params.require(:time_consumption).permit :amount, :date, :limit, :resource_on_id, :resource_on_type
+      params.require(:time_consumption).permit :amount, :date, :limit, :resource_id, :resource_type
     end
 
     def start_date
@@ -78,8 +78,8 @@ class TimeSummaryController < ApplicationController
     end
 
     def set_items
-      @items        = {}
-      @amount_hours = 0
+      @items       = {}
+      @total_amount = total_amount_for_period
 
       set_time_consumptions
     end
@@ -87,9 +87,13 @@ class TimeSummaryController < ApplicationController
     def set_time_consumptions
       @user.time_consumptions.between(start_date, end_date).each do |tc|
         @items[tc.date] ||= []
-        @items[tc.date]  << [tc.resource_on.to_s, tc.amount, tc.id]
-        @amount_hours    += tc.amount
+        @items[tc.date]  << [tc.resource.to_s, tc.amount, tc.id]
       end
+    end
+
+    def total_amount_for_period
+      TimeConsumption.where(user: @self_and_descendants).
+        where(date: @start_date..@end_date).sum(:amount)
     end
 
     def work_hours_per_day
@@ -129,38 +133,27 @@ class TimeSummaryController < ApplicationController
 
     def time_summary_header_csv
       [
+        t('time_summary.downloads.csv.user'),
         t('time_summary.downloads.csv.date'),
         t('time_summary.downloads.csv.task'),
-        t('time_summary.downloads.csv.quantity_hours_per_day'),
-        t('time_summary.downloads.csv.user')
+        t('time_summary.downloads.csv.quantity_hours_per_day')
+
       ]
     end
 
     def time_summary_data_csv
       row  = []
-      data = {}
 
-      @results = TimeConsumption.where(user: @self_and_descendants).
-        where(date: @start_date..@end_date).each do |tc|
-          data[tc.date] ||= []
-          data[tc.date]  << [tc.resource_on.to_s, tc.amount, tc.user.full_name]
-      end
-
-      (@start_date..@end_date).each do |date|
-        if date.workday?
-          if data[date].present?
-            data[date].each do |item, hours, user|
-              row << [
-                date,
-                item.to_s,
-                helpers.number_with_precision(hours, precision: 1),
-                user
-              ]
-            end
-          else
-            row << [date, '', 0]
+      @self_and_descendants.each do |u|
+        TimeConsumption.where(user: u).
+          where(date: @start_date..@end_date).each do |tc|
+            row << [
+              tc.user.full_name,
+              tc.date,
+              tc.resource.to_s,
+              helpers.number_with_precision(tc.amount, precision: 1)
+            ]
           end
-        end
       end
 
       row

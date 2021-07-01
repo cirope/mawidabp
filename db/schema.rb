@@ -1117,12 +1117,12 @@ ActiveRecord::Schema.define(version: 2021_06_30_173900) do
   create_table "time_consumptions", force: :cascade do |t|
     t.date "date", null: false
     t.decimal "amount", precision: 3, scale: 1, null: false
-    t.bigint "resource_on_id", null: false
+    t.bigint "resource_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "resource_on_type", default: "activity"
-    t.index ["resource_on_id"], name: "index_time_consumptions_on_resource_on_id"
+    t.string "resource_type", default: "Activity"
+    t.index ["resource_id"], name: "index_time_consumptions_on_resource_id"
     t.index ["user_id"], name: "index_time_consumptions_on_user_id"
   end
 

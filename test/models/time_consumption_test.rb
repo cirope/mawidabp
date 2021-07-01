@@ -23,19 +23,15 @@ class TimeConsumptionTest < ActiveSupport::TestCase
     @time_consumption.amount = 25
 
     assert @time_consumption.invalid?
-    assert_error @time_consumption, :amount, :less_than_or_equal_to, count: 24.0
+    assert_error @time_consumption, :amount, :less_than_or_equal_to, count: 24.4
   end
 
   test 'custom amount limit' do
-    @time_consumption.limit  = 7
-    @time_consumption.amount = 6
-
-    assert @time_consumption.save
-
-    @time_consumption.amount =  @time_consumption.limit + 1
+    @time_consumption.limit  = 7.0
+    @time_consumption.amount =  20
 
     assert @time_consumption.invalid?
-    assert_error @time_consumption, :amount, :less_than_or_equal_to, count: 7.0
+    assert_error @time_consumption, :amount, :less_than_or_equal_to, count: 19.2
   end
 
   test 'validates formated attributes' do
