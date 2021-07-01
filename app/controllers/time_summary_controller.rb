@@ -22,14 +22,14 @@ class TimeSummaryController < ApplicationController
 
   def new
     @time_consumption = TimeConsumption.new date:  params[:date],
-                                            limit: params[:limit]
+                                            limit: params[:limit],
+                                            resource_on_type: params[:resource_on_type]
   end
 
   def create
     @time_consumption = TimeConsumption.new time_consumption_params.merge(
       user: @auth_user
     )
-
     @time_consumption.save
 
     respond_with @time_consumption, location: time_summary_index_url(
@@ -58,7 +58,7 @@ class TimeSummaryController < ApplicationController
     end
 
     def time_consumption_params
-      params.require(:time_consumption).permit :amount, :date, :limit, :activity_id
+      params.require(:time_consumption).permit :amount, :date, :limit, :resource_on_id, :resource_on_type
     end
 
     def start_date
@@ -78,90 +78,18 @@ class TimeSummaryController < ApplicationController
     end
 
     def set_items
-      @items = {}
+      @items        = {}
+      @amount_hours = 0
 
-      load_resource_utilizations
       set_time_consumptions
-      set_resource_utilization
-    end
-
-    def set_resource_utilization
-      @_resource_utilizations.find_each do |ru|
-        split_resource(ru).each do |date, rh|
-          if date.between?(@start_date, @end_date)
-            @items[date] ||= []
-            @items[date]  << [rh.first, rh.last]
-          end
-        end
-      end
     end
 
     def set_time_consumptions
-      start_col    = "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'}"
-      end_col      = "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'}"
-      r_start_date = @_resource_utilizations.reorder(start_col).first&.workflow_item&.start
-      r_end_date   = @_resource_utilizations.reorder(end_col).last&.workflow_item&.end
-      start_date   = r_start_date&.<(@start_date) ? r_start_date : @start_date
-      end_date     = r_end_date&.>(@end_date) ? r_end_date : @end_date
-
       @user.time_consumptions.between(start_date, end_date).each do |tc|
         @items[tc.date] ||= []
-        @items[tc.date]  << [tc.activity, tc.amount, tc.id]
+        @items[tc.date]  << [tc.resource_on.to_s, tc.amount, tc.id]
+        @amount_hours    += tc.amount
       end
-    end
-
-    def load_resource_utilizations
-      initial_parameters = { start: @start_date, end: @end_date }
-      dates              = [@start_date, @end_date]
-
-      parameters = dates.each_with_index.inject(initial_parameters) do |acc, di|
-        acc.merge :"start_#{di.last}" => di.first, :"end_#{di.last}" => di.first
-      end
-
-      conditions = [
-        [
-          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} >= :start",
-          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} <= :end"
-        ].join(' AND ')
-      ]
-
-      2.times do |i|
-        conditions << [
-          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'start'} <= :start_#{i}",
-          "#{WorkflowItem.table_name}.#{WorkflowItem.qcn 'end'} >= :end_#{i}"
-        ].join(' AND ')
-      end
-
-      conditions = conditions.map { |c| "(#{c})" }.join ' OR '
-
-      @_resource_utilizations = @user.
-        resource_utilizations.
-        includes(:workflow_item).
-        references(:workflow_items).
-        where(conditions, parameters)
-    end
-
-    def split_resource resource_utilization
-      hours_per_day = {}
-      wi            = resource_utilization.resource_consumer
-      units         = resource_utilization.units
-
-      (wi.start..wi.end).each do |date|
-        used      = Array(@items[date]).sum { |_item, hours| hours }
-        remaining = @work_hours_per_day - used
-
-        if date.workday? && units > 0
-          if units >= remaining
-            hours_per_day[date] = [wi, remaining]
-          else
-            hours_per_day[date] = [wi, units]
-          end
-
-          units -= hours_per_day[date].last
-        end
-      end
-
-      hours_per_day
     end
 
     def work_hours_per_day
@@ -203,21 +131,30 @@ class TimeSummaryController < ApplicationController
       [
         t('time_summary.downloads.csv.date'),
         t('time_summary.downloads.csv.task'),
-        t('time_summary.downloads.csv.quantity_hours_per_day')
+        t('time_summary.downloads.csv.quantity_hours_per_day'),
+        t('time_summary.downloads.csv.user')
       ]
     end
 
     def time_summary_data_csv
-      row = []
+      row  = []
+      data = {}
+
+      @results = TimeConsumption.where(user: @self_and_descendants).
+        where(date: @start_date..@end_date).each do |tc|
+          data[tc.date] ||= []
+          data[tc.date]  << [tc.resource_on.to_s, tc.amount, tc.user.full_name]
+      end
 
       (@start_date..@end_date).each do |date|
         if date.workday?
-          if @items[date].present?
-            @items[date].each do |item, hours|
+          if data[date].present?
+            data[date].each do |item, hours, user|
               row << [
                 date,
                 item.to_s,
-                helpers.number_with_precision(hours, precision: 1)
+                helpers.number_with_precision(hours, precision: 1),
+                user
               ]
             end
           else

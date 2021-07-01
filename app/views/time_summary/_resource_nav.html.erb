@@ -1,0 +1,18 @@
+<ul class="nav nav-tabs d-none d-md-flex">
+  <li class="nav-item"><%= link_to t('time_summary.form.activity'),
+    new_time_summary_path(
+      date: params[:date],
+      limit: params[:limit],
+      resource_on_type: 'Activity'),
+      class: (@time_consumption.resource_on_type == 'Activity' ? 'nav-link active' : 'nav-link')
+    %>
+  </li>
+  <li class="nav-item"><%= link_to t('time_summary.form.review'),
+    new_time_summary_path(
+      date: params[:date],
+      limit: params[:limit],
+      resource_on_type: 'Review'),
+      class: (@time_consumption.resource_on_type == 'Review' ? 'nav-link active' : 'nav-link')
+    %>
+  </li>
+</ul>

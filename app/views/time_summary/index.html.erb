@@ -27,7 +27,7 @@
       <%= l date, format: :minimal %>
 
       <% unless time_summary_completed? date %>
-        <%= link_to new_time_summary_path(date: date, limit: time_summary_remaining_hours(date)), title: t('.add'), class: 'ml-1 h6' do %>
+        <%= link_to new_time_summary_path(date: date, limit: time_summary_remaining_hours(date), resource_on_type: 'Activity'), title: t('.add'), class: 'ml-1 h6' do %>
           <i class="fas fa-plus-circle"></i>
         <% end %>
       <% end %>
@@ -54,7 +54,13 @@
     <% end %>
   <% end %>
 <% end %>
-
+<div>
+  <h4><%= t('.amount_hours',
+            start_date: l(@start_date, format: :minimal),
+            end_date: l(@end_date, format: :minimal),
+            amount: @amount_hours)
+      %></h4>
+</div>
 <hr>
 
 <div>

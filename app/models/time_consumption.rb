@@ -5,5 +5,9 @@ class TimeConsumption < ApplicationRecord
   include TimeConsumptions::Validation
 
   belongs_to :user
-  belongs_to :activity, inverse_of: :time_consumptions
+  belongs_to :resource_on, polymorphic: true
+
+  def to_s
+    name
+  end
 end

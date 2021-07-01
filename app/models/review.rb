@@ -48,6 +48,7 @@ class Review < ApplicationRecord
   belongs_to :organization
   has_one :workflow, dependent: :destroy
   has_many :business_unit_scores, through: :control_objective_items
+  has_many :time_consumptions, as: :resource_on
 
   def long_identification
     "#{identification} - #{plan_item.project}"

@@ -601,8 +601,12 @@ es:
       current_week: 'Semana actual'
       empty: 'Sin registros'
       add: 'Agregar actividad'
+      amount_hours: 'Total de horas acumuladas desde %{start_date} hasta %{end_date}: %{amount}'
     new:
       title: 'Nueva actividad'
+    form:
+      activity: 'Actividad'
+      review: 'Informe'
     downloads:
       current_week: "Descarga semana actual"
       current_month: "Descarga mes actual"
@@ -611,6 +615,7 @@ es:
         date: "Fecha"
         quantity_hours_per_day: "Cantidad horas por día"
         task: "Tarea"
+        user: "Usuario"
 
   users:
     index:
