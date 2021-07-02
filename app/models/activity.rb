@@ -4,7 +4,7 @@ class Activity < ApplicationRecord
   include Activities::Validation
 
   belongs_to :activity_group, inverse_of: :activities
-  has_many :time_consumptions, as: :resource, dependent: :restrict_with_error, inverse_of: :activity
+  has_many :time_consumptions, as: :resource, dependent: :restrict_with_error, inverse_of: :resource
 
   def to_s
     name

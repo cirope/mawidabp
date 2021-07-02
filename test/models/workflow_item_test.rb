@@ -124,6 +124,7 @@ class WorkflowItemTest < ActiveSupport::TestCase
     assert workflow_item_3.invalid?
     assert_error workflow_item_3, :start, :resource_overload
 
+  ensure
     Current.organization = nil
   end
 
