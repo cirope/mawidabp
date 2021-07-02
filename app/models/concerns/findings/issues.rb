@@ -16,11 +16,11 @@ module Findings::Issues
     private
       def amount_impact
         {
-         '2084408'    => 'Insignificante',
-         '20844081'   => 'Bajo',
-         '208440815'  => 'Moderado',
-         '2084408150' => 'Alto',
-         '9999999999' => 'Crítico'
+         'insignificant' => 2084408,
+         'under' => 20844081,
+         'moderate' => 208440815,
+         'high' =>  2084408150,
+         'critical' => '9999999999'
         }
       end
     end

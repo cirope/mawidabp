@@ -419,18 +419,10 @@ module FindingsHelper
     end
 
     def amount_impact finding
-      amount      = finding_issue_amount_sum finding
-      amount_prev = 0
-      result      = ''
+      amount = finding_issue_amount_sum finding
 
-      Finding::AMOUNT_IMPACT.each do |a, val|
-        if amount.to_f > amount_prev.to_f && amount.to_f <= a.to_f
-          amount_prev = a
-
-          result = val
-        end
+      Finding::AMOUNT_IMPACT.detect do |name, import|
+        name if amount.to_f < import.to_f
       end
-
-      result
     end
 end
