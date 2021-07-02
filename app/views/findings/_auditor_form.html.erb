@@ -379,6 +379,12 @@
       <%= render 'issue', f: fr_f %>
     <% end %>
 
+    <div class="col-md-12 text-right">
+      <h5 class="col-md-8">
+        <%= number_to_currency finding_issue_amount_sum(@finding), unit: 'US$ ' %> -  <%= amount_impact(@finding) %>
+      </h5>
+    </div>
+
     <%= link_to_add_fields(t('finding.add_issue'), f, :issues) %>
   </div>
 

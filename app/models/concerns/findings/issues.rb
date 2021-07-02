@@ -2,12 +2,28 @@ module Findings::Issues
   extend ActiveSupport::Concern
 
   included do
+    AMOUNT_IMPACT = amount_impact
+
     before_validation :set_issue_based_status
 
     has_many :issues, -> { order id: :asc }, dependent: :destroy, inverse_of: :finding
 
     accepts_nested_attributes_for :issues, allow_destroy: true, reject_if: :all_blank
   end
+
+  module ClassMethods
+
+    private
+      def amount_impact
+        {
+         '2084408'    => 'Insignificante',
+         '20844081'   => 'Bajo',
+         '208440815'  => 'Moderado',
+         '2084408150' => 'Alto',
+         '9999999999' => 'Crítico'
+        }
+      end
+    end
 
   private
 
