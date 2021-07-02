@@ -42,7 +42,11 @@
           <li>
             <%= item %>: <%= number_with_precision hours, precision: 1 %>
             <% if time_summary_enabled_edit item, date %>
-              <%= link_to edit_time_summary_path(id, date: date, limit: time_summary_remaining_hours(date)), title: t('.add'),
+              <%= link_to edit_time_summary_path(id,
+                                                 date: date,
+                                                 limit: time_summary_remaining_hours(date) + hours
+                                                ),
+                title: t('.add'),
                 class: 'ml-1 h6' do %>
                   <i class="fas fa-pen"></i>
               <% end %>

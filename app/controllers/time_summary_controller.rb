@@ -4,7 +4,6 @@ class TimeSummaryController < ApplicationController
   before_action :auth, :check_privileges, :set_title, :set_descendants,
                 :set_user
   before_action :set_time_consumption, only: [:edit, :update]
-  before_action :set_limit, only: [:update]
 
   def index
     @start_date         = start_date
@@ -52,12 +51,6 @@ class TimeSummaryController < ApplicationController
   end
 
   private
-
-    def set_limit
-      previous_limit = params[:time_consumption][:limit].to_f
-
-      params[:time_consumption][:limit] = previous_limit + @time_consumption.amount.to_f
-    end
 
     def set_time_consumption
       @time_consumption       = TimeConsumption.find params[:id]
