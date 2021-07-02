@@ -4,7 +4,7 @@
       new_time_summary_path(
         date: params[:date],
         limit: params[:limit],
-        resource_on_type: 'Activity'),
+        resource_type: 'Activity'),
         class: (@time_consumption.resource_type == 'Activity' ? 'nav-link active' : 'nav-link') %>
   </li>
   <li class="nav-item">
@@ -12,7 +12,7 @@
       new_time_summary_path(
         date: params[:date],
         limit: params[:limit],
-        resource_on_type: 'Review'),
+        resource_type: 'Review'),
         class: (@time_consumption.resource_type == 'Review' ? 'nav-link active' : 'nav-link') %>
   </li>
 </ul>

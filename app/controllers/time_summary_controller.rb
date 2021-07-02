@@ -78,7 +78,7 @@ class TimeSummaryController < ApplicationController
     end
 
     def set_items
-      @items       = {}
+      @items        = {}
       @total_amount = total_amount_for_period
 
       set_time_consumptions
@@ -137,7 +137,6 @@ class TimeSummaryController < ApplicationController
         t('time_summary.downloads.csv.date'),
         t('time_summary.downloads.csv.task'),
         t('time_summary.downloads.csv.quantity_hours_per_day')
-
       ]
     end
 

@@ -602,6 +602,7 @@ es:
       empty: 'Sin registros'
       add: 'Agregar actividad'
       total_amount: 'Total de horas acumuladas desde %{start_date} hasta %{end_date}: %{amount}'
+
     new:
       title: 'Nueva actividad'
     form:

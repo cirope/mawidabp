@@ -15,7 +15,6 @@ module TimeConsumptions::Validation
 
     def set_limit
       if persisted?
-
         self.limit = limit.to_f + amount_was.to_f
       end
     end
