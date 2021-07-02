@@ -421,8 +421,6 @@ module FindingsHelper
     def amount_impact finding
       amount = finding_issue_amount_sum finding
 
-      Finding::AMOUNT_IMPACT.detect do |name, import|
-        name if amount.to_f < import.to_f
-      end
+      Finding::AMOUNT_IMPACT.detect { |name, import| amount.to_f < import.to_f }
     end
 end
