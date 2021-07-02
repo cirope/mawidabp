@@ -59,6 +59,11 @@ module TimeSummaryHelper
   end
 
   def time_summary_enabled_edit item, date
-    item.kind_of?(Activity) && date >= 1.week.ago
+    date >= 1.week.ago
+  end
+
+  def time_summary_reviews
+    Review.list_without_final_review_or_not_closed.
+      map { |r| [r.identification, r.id] }
   end
 end

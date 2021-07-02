@@ -1,23 +1,33 @@
 <%= simple_form_for @time_consumption, url: time_summary_url(@time_consumption) do |f| %>
   <%= f.error_notification %>
+  <%= render 'resource_nav' %>
 
   <div class="form-inputs">
-    <p class="mb-2">
-      <strong><%= TimeConsumption.human_attribute_name 'date' %></strong>:
-      <%= l @time_consumption.date %>
-    </p>
+    <div>
+      <p class="mb-2">
+        <strong><%= TimeConsumption.human_attribute_name 'date' %></strong>:
+        <%= l @time_consumption.date %>
+      </p>
 
-    <%= f.association :activity, collection: ActivityGroup.order(:name),
-                                 as: :grouped_select,
-                                 group_method: :activities,
-                                 prompt: true,
-                                 input_html: { autofocus: true } %>
-    <%= f.input :amount %>
-    <%= f.input :date, as: :hidden %>
-    <%= f.input :limit, as: :hidden %>
-  </div>
+      <% if @time_consumption.resource_type == 'Activity' %>
+        <%= f.input :resource_id, collection: ActivityGroup.order(:name),
+          as: :grouped_select,
+          group_method: :activities,
+          prompt: true,
+          input_html: { autofocus: true } %>
+      <% else %>
+        <%= f.input :resource_id, collection: time_summary_reviews,
+          prompt: true,
+          input_html: { autofocus: true } %>
+      <% end %>
+      <%= f.input :amount %>
+      <%= f.input :date, as: :hidden %>
+      <%= f.input :limit, as: :hidden %>
+      <%= f.input :resource_type, as: :hidden %>
+    </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, class: 'btn-primary' %>
+    <div class="form-actions">
+      <%= f.button :submit, class: 'btn-primary' %>
+    </div>
   </div>
 <% end %>

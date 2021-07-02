@@ -4,6 +4,12 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
   setup do
     @resource_utilization =
       resource_utilizations(:auditor_for_20_units_plan_item_1)
+
+    Current.organization = organizations :cirope
+  end
+
+  teardown do
+    Current.organization = nil
   end
 
   test 'create' do
