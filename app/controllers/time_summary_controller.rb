@@ -56,7 +56,7 @@ class TimeSummaryController < ApplicationController
     def set_limit
       previous_limit = params[:time_consumption][:limit].to_f
 
-      previous_limit += @time_consumption.amount.to_f
+      params[:time_consumption][:limit] = previous_limit + @time_consumption.amount.to_f
     end
 
     def set_time_consumption
