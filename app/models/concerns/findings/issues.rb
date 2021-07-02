@@ -20,7 +20,7 @@ module Findings::Issues
          'under' => 20844081,
          'moderate' => 208440815,
          'high' =>  2084408150,
-         'critical' => '9999999999'
+         'critical' => 9999999999
         }
       end
     end

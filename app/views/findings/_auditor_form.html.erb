@@ -381,7 +381,7 @@
 
     <div class="col-md-12 text-right">
       <h5 class="col-md-8">
-        <%= number_to_currency finding_issue_amount_sum(@finding), unit: 'US$ ' %> - <%= t("finding.issues.#{amount_impact(@finding).first}") %>
+        <%= number_to_currency finding_issues_amount(@finding), unit: 'US$ ' %> - <%= t("finding.issues.#{amount_impact(@finding).first}") %>
       </h5>
     </div>
 

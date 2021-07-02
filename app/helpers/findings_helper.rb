@@ -414,13 +414,13 @@ module FindingsHelper
       "#{ConclusionReview.human_attribute_name 'summary'}: #{summary}"
     end
 
-    def finding_issue_amount_sum finding
-      finding.issues.sum(:amount)
+    def finding_issues_amount finding
+      finding.issues.sum(&:amount)
     end
 
     def amount_impact finding
-      amount = finding_issue_amount_sum finding
+      amount = finding_issues_amount finding
 
-      Finding::AMOUNT_IMPACT.detect { |name, import| amount.to_f < import.to_f }
+      Finding::AMOUNT_IMPACT.detect { |name, import| amount <= import }
     end
 end
