@@ -25,7 +25,8 @@ class TimeSummaryControllerTest < ActionController::TestCase
         time_consumption: {
           date: date.to_s(:db),
           amount: '1',
-          activity_id: activities(:special_activity).id
+          resource_id: reviews(:current_review).id,
+          resource_type: 'Review'
         }
       }
     end
