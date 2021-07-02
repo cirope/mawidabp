@@ -4,6 +4,7 @@ class TimeSummaryController < ApplicationController
   before_action :auth, :check_privileges, :set_title, :set_descendants,
                 :set_user
   before_action :set_time_consumption, only: [:edit, :update]
+  before_action :set_limit, only: [:update]
 
   def index
     @start_date         = start_date
@@ -52,6 +53,12 @@ class TimeSummaryController < ApplicationController
 
   private
 
+    def set_limit
+      previous_limit = params[:time_consumption][:limit].to_f
+
+      previous_limit += @time_consumption.amount.to_f
+    end
+
     def set_time_consumption
       @time_consumption       = TimeConsumption.find params[:id]
       @time_consumption.limit = params[:limit]
@@ -92,8 +99,10 @@ class TimeSummaryController < ApplicationController
     end
 
     def total_amount_for_period
-      TimeConsumption.where(user: @self_and_descendants).
-        where(date: @start_date..@end_date).sum(:amount)
+      TimeConsumption.
+        where(user: @self_and_descendants).
+        where(date: @start_date..@end_date).
+        sum(:amount)
     end
 
     def work_hours_per_day
@@ -143,11 +152,12 @@ class TimeSummaryController < ApplicationController
     def time_summary_data_csv
       row  = []
 
-      @self_and_descendants.each do |u|
-        TimeConsumption.where(user: u).
+      @self_and_descendants.each do |user|
+        TimeConsumption.
+          where(user: user).
           where(date: @start_date..@end_date).each do |tc|
             row << [
-              tc.user.full_name,
+              user.full_name,
               tc.date,
               tc.resource.to_s,
               helpers.number_with_precision(tc.amount, precision: 1)
