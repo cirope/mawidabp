@@ -95,7 +95,7 @@ class TimeSummaryController < ApplicationController
       TimeConsumption.
         where(user: @self_and_descendants).
         where(date: @start_date..@end_date).
-        sum(:amount)
+        sum :amount
     end
 
     def work_hours_per_day

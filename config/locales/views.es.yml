@@ -601,7 +601,9 @@ es:
       current_week: 'Semana actual'
       empty: 'Sin registros'
       add: 'Agregar actividad'
-      total_amount: 'Total de horas acumuladas desde %{start_date} hasta %{end_date}: %{amount}'
+      total_amount:
+        one: 'Total de horas acumulada desde %{start_date} hasta %{end_date}: %{amount}'
+        other: 'Total de horas acumuladas de %{count} usuarios, desde %{start_date} hasta %{end_date}: %{amount}'
 
     new:
       title: 'Nueva actividad'
