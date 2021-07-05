@@ -602,8 +602,8 @@ es:
       empty: 'Sin registros'
       add: 'Agregar actividad'
       total_amount:
-        one: 'Total de horas acumulada desde %{start_date} hasta %{end_date}: %{amount}'
-        other: 'Total de horas acumuladas de %{count} personas, desde %{start_date} hasta %{end_date}: %{amount}'
+        one: 'Total de horas acumulada: %{amount}'
+        other: 'Total de horas acumuladas de %{count} personas: %{amount}'
 
     new:
       title: 'Nueva actividad'
