@@ -143,19 +143,40 @@ class TimeSummaryController < ApplicationController
     end
 
     def time_summary_data_csv
-      row  = []
+      row   = []
+      users = {}
 
       @self_and_descendants.each do |user|
+        time_consumptions = {}
+
         TimeConsumption.
           where(user: user).
-          where(date: @start_date..@end_date).each do |tc|
-            row << [
+          where(date: @start_date..@end_date).map do |tc|
+            time_consumptions[tc.date] = [
               user.full_name,
               tc.date,
               tc.resource.to_s,
               helpers.number_with_precision(tc.amount, precision: 1)
             ]
           end
+
+        users[user.user] = time_consumptions
+      end
+
+      @self_and_descendants.each do |user|
+        if users[user.user]
+          (@start_date..@end_date).each do |date|
+            if date.workday?
+              if users[user.user][date].present?
+                row << users[user.user][date]
+              else
+                row << [user.full_name,date,'','']
+              end
+            end
+          end
+        end
+
+        row << ['']
       end
 
       row
