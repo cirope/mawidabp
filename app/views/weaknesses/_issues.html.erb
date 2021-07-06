@@ -2,4 +2,11 @@
   <%= render 'issue', f: i_f, readonly: readonly %>
 <% end %>
 
+<div class="col-md-12 text-right">
+  <h5 class="col-md-8">
+    <%= number_to_currency finding_issues_amount(@weakness), unit: 'US$ ' %> -
+    <%= finding_impact_risks_type(@weakness) %>
+  </h5>
+</div>
+
 <%= link_to_add_fields t('finding.add_issue'), f, :issues unless readonly %>

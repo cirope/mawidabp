@@ -14,16 +14,16 @@ module Findings::Issues
   module ClassMethods
 
     private
-      def amount_impact
-        {
-         'insignificant' => 2084408,
-         'under' => 20844081,
-         'moderate' => 208440815,
-         'high' =>  2084408150,
-         'critical' => 9999999999
-        }
-      end
+    def amount_impact
+      {
+        1 => 2084408,
+        2 => 20844081,
+        3 => 208440815,
+        4 => 2084408150,
+        5 => 9999999999
+      }
     end
+  end
 
   private
 
