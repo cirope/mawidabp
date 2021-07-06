@@ -2,8 +2,6 @@ module Findings::Issues
   extend ActiveSupport::Concern
 
   included do
-    AMOUNT_IMPACT = amount_impact
-
     before_validation :set_issue_based_status
 
     has_many :issues, -> { order id: :asc }, dependent: :destroy, inverse_of: :finding
@@ -11,25 +9,31 @@ module Findings::Issues
     accepts_nested_attributes_for :issues, allow_destroy: true, reject_if: :all_blank
   end
 
-  module ClassMethods
-
-    private
-      def amount_impact
-        {
-          1 => 2084408,
-          2 => 20844081,
-          3 => 208440815,
-          4 => 2084408150,
-          5 => 9999999999
-        }
-      end
+  def issues_amount
+    issues.sum &:amount
   end
 
-  def impact_risk_text impact
-    impact ? I18n.t("impact_risk_types.#{Finding::IMPACT_RISKS.invert[impact]}") : '-'
+  def get_amount_by_impact
+    amount = issues_amount
+
+    amount_by_impact.detect { |name, import| amount <= import }
+  end
+
+  def impact_risk_text
+    I18n.t("impact_risk_types.#{Finding::IMPACT_RISKS.invert[get_amount_by_impact.first]}")
   end
 
   private
+
+    def amount_by_impact
+      {
+        1 => 2084408,
+        2 => 20844081,
+        3 => 208440815,
+        4 => 2084408150,
+        5 => 9999999999
+      }
+    end
 
     def set_issue_based_status
       valid_issues = issues.reject &:marked_for_destruction?

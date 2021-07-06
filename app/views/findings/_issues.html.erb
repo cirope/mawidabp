@@ -5,10 +5,10 @@
     <thead>
       <tr>
         <th><%= Issue.human_attribute_name 'customer' %></th>
-        <th><%= Issue.human_attribute_name 'entry' %></th>
-        <th><%= Issue.human_attribute_name 'operation' %></th>
+        <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'entry' %></th>
+        <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'operation' %></th>
         <th><%= Issue.human_attribute_name 'amount' %></th>
-        <th><%= Issue.human_attribute_name 'comments'  %></th>
+        <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'comments'  %></th>
         <th><%= Issue.human_attribute_name 'close_date' %></th>
       </tr>
     </thead>
@@ -17,11 +17,11 @@
       <% @finding.issues.each do |issue| %>
         <tr>
           <td><%= issue.customer %></td>
-          <td><%= issue.entry %></td>
-          <td><%= issue.operation %></td>
+          <td class="d-none d-md-table-cell"><%= issue.entry %></td>
+          <td class="d-none d-md-table-cell"><%= issue.operation %></td>
           <td><%= issue.amount %></td>
-          <td><%= issue.comments %></td>
-          <td><%= issue.close_date %></td>
+          <td class="d-none d-md-table-cell"><%= issue.comments %></td>
+          <td><%= l(issue.close_date, format: :minimal) if issue.close_date %></td>
         </tr>
       <% end %>
       <tr>

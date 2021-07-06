@@ -415,16 +415,10 @@ module FindingsHelper
     end
 
     def finding_issues_amount finding
-      finding.issues.sum &:amount
-    end
-
-    def amount_impact finding
-      amount = finding_issues_amount finding
-
-      Finding::AMOUNT_IMPACT.detect { |name, import| amount <= import }
+      finding.issues_amount
     end
 
     def finding_impact_risks_type finding
-      finding.impact_risk_text(amount_impact(finding).first)
+      finding.impact_risk_text
     end
 end
