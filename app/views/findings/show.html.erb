@@ -238,35 +238,7 @@
   </table>
 <% end %>
 
-<% if @finding.issues.any? %>
-  <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
-
-  <table class="table table-sm table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= Issue.human_attribute_name 'customer' %></th>
-        <th><%= Issue.human_attribute_name 'entry' %></th>
-        <th><%= Issue.human_attribute_name 'operation' %></th>
-        <th><%= Issue.human_attribute_name 'amount' %></th>
-        <th><%= Issue.human_attribute_name 'comments'  %></th>
-        <th><%= Issue.human_attribute_name 'close_date' %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @finding.issues.each do |issue| %>
-        <tr>
-          <td><%= issue.customer %></td>
-          <td><%= issue.entry %></td>
-          <td><%= issue.operation %></td>
-          <td><%= issue.amount %></td>
-          <td><%= issue.comments %></td>
-          <td><%= issue.close_date %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+<%= render "issues" %>
 
 <h5 class="my-3">
   <%= t('finding.finding_answers') %>
