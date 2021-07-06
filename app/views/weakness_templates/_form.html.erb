@@ -13,9 +13,7 @@
       </div>
     </div>
     <%= f.input :description, input_html: { rows: 6 } %>
-    <% if USE_SCOPE_CYCLE %>
-      <%= f.input :notes, input_html: { rows: 6 } %>
-    <% end %>
+    <%= f.input :notes, input_html: { rows: 6 } %>
     <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-4">

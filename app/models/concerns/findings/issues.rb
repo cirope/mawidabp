@@ -14,15 +14,19 @@ module Findings::Issues
   module ClassMethods
 
     private
-    def amount_impact
-      {
-        1 => 2084408,
-        2 => 20844081,
-        3 => 208440815,
-        4 => 2084408150,
-        5 => 9999999999
-      }
-    end
+      def amount_impact
+        {
+          1 => 2084408,
+          2 => 20844081,
+          3 => 208440815,
+          4 => 2084408150,
+          5 => 9999999999
+        }
+      end
+  end
+
+  def impact_risk_text impact
+    impact ? I18n.t("impact_risk_types.#{Finding::IMPACT_RISKS.invert[impact]}") : '-'
   end
 
   private

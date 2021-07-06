@@ -415,7 +415,7 @@ module FindingsHelper
     end
 
     def finding_issues_amount finding
-      finding.issues.sum(&:amount)
+      finding.issues.sum &:amount
     end
 
     def amount_impact finding
@@ -425,6 +425,6 @@ module FindingsHelper
     end
 
     def finding_impact_risks_type finding
-      t("impact_risk_types.#{Finding::IMPACT_RISKS.key(amount_impact(finding).first)}")
+      finding.impact_risk_text(amount_impact(finding).first)
     end
 end
