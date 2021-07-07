@@ -68,22 +68,16 @@ module TimeSummaryHelper
   end
 
   def time_summary_activities
-    items = []
-
     ActivityGroup.list.map do |ag|
-      child = []
-
-      ag.activities.map do |a|
-        child << ([a.name, a.id, { 'data-require_detail': a.require_detail }])
+      children = ag.activities.map do |a|
+        [a.name, a.id, { data: { require_detail: a.require_detail }}]
       end
 
-      items << ([ag.name, child])
+      [ag.name, children]
     end
-
-    items
   end
 
-  def show_require_detail?
+  def time_summary_require_detail_class
     'd-none' unless @time_consumption.resource.try(:require_detail)
   end
 end

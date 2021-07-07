@@ -10,12 +10,12 @@ jQuery(function ($) {
   $(document).on('change', '[data-time-summary-require]', function () {
     var $element       = $(this)
     var $option        = $element.find('option:selected')
-    var requireDetail  = $option.data('require_detail')
+    var requireDetail  = $option.data('requireDetail')
 
     if (!requireDetail) {
-      $('[data-show-detail]').addClass('d-none')
+      $('[data-time-summary-detail]').addClass('d-none')
     } else {
-      $('[data-show-detail]').removeClass('d-none')
+      $('[data-time-summary-detail]').removeClass('d-none')
     }
   })
 })
