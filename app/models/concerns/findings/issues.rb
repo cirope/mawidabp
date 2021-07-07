@@ -23,6 +23,18 @@ module Findings::Issues
     I18n.t("impact_risk_types.#{Finding::IMPACT_RISKS.invert[get_amount_by_impact.first]}")
   end
 
+  def probability_risk
+    quantity ||= 0
+
+    # if review.previous && weakness_previous
+    #   quantity++
+    # end
+  end
+
+  def weaknesses_previous
+    review.previous.weaknesses.map(&:weakness_template_id).include? weakness_template_id
+  end
+
   private
 
     def amount_by_impact
