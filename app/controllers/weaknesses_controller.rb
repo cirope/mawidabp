@@ -171,7 +171,8 @@ class WeaknessesController < ApplicationController
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
         :follow_up_date, :users_for_notification, :compliance, :impact_risk,
         :probability, :skip_work_paper, :weakness_template_id,
-        :compliance_observations, :manual_risk, :lock_version,
+        :compliance_observations, :manual_risk, :suggested_impact,
+        :suggested_probability, :lock_version,
         operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [], tag_ids: [],
         achievements_attributes: [

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_06_030703) do
+ActiveRecord::Schema.define(version: 2021_07_06_124408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -514,6 +514,8 @@ ActiveRecord::Schema.define(version: 2021_07_06_030703) do
     t.integer "probability"
     t.integer "impact_risk"
     t.boolean "manual_risk", default: true, null: false
+    t.boolean "suggested_impact", default: false
+    t.boolean "suggested_probability", default: false
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"

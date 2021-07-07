@@ -83,8 +83,18 @@
               } %>
             </div>
             <div class="col">
+              <%= f.input :suggested_impact, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
+                data: { toggle_suggested_impact_disabled_attr: true }
+              } %>
+            </div>
+            <div class="col">
               <%= f.input :probability, collection: weakness_probabilities, prompt: true, input_html: {
                 data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+              } %>
+            </div>
+            <div class="col">
+              <%= f.input :suggested_probability, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
+                data: { toggle_suggested_probability_disabled_attr: true }
               } %>
             </div>
           </div>

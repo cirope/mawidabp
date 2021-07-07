@@ -314,6 +314,8 @@ es:
         probability: 'Probabilidad'
         impact_risk: 'Impacto'
         manual_risk: 'Manual'
+        suggested_impact: 'Impacto sugerido'
+        suggested_probability: 'Probabilidad sugerida'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'

@@ -421,4 +421,8 @@ module FindingsHelper
     def finding_impact_risks_type finding
       finding.impact_risk_text
     end
+
+    def finding_probability_risk finding
+      finding.probability_risk
+    end
 end

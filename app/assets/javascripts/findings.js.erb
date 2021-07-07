@@ -179,6 +179,10 @@ jQuery(function ($) {
     }
   })
 
+  $(document).on('change', '[data-toggle-suggested-impact-disabled-attr]', function () {
+    $('[name$="[impact_risk]"]').attr('disabled', $(this).is(':checked'))
+  })
+
   $(document).on('keyup', '[data-endorsement-reason]', function () {
     var $reason       = $(this)
     var reason        = $reason.val() || ''
