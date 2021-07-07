@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2021_07_07_130228) do
     t.bigint "activity_group_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "require_detail", default: false
     t.index ["activity_group_id"], name: "index_activities_on_activity_group_id"
   end
 

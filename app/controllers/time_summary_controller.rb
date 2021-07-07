@@ -151,7 +151,7 @@ class TimeSummaryController < ApplicationController
 
         TimeConsumption.
           where(user: user).
-          where(date: @start_date..@end_date).map do |tc|
+          where(date: @start_date..@end_date).each do |tc|
             time_consumptions[tc.date] = [
               user.full_name,
               tc.date,
@@ -164,19 +164,17 @@ class TimeSummaryController < ApplicationController
       end
 
       @self_and_descendants.each do |user|
-        if users[user.user]
-          (@start_date..@end_date).each do |date|
-            if date.workday?
-              if users[user.user][date].present?
-                row << users[user.user][date]
-              else
-                row << [user.full_name,date,'','']
-              end
+        (@start_date..@end_date).each do |date|
+          if date.workday?
+            if users[user.user][date].present?
+              row << users[user.user][date]
+            else
+              row << [user.full_name, date, '', '']
             end
           end
         end
 
-        row << ['']
+        row << ['', '', '', '']
       end
 
       row
