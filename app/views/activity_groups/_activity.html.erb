@@ -5,6 +5,9 @@
       <%= f.input :name, label: false, placeholder: Activity.human_attribute_name('name'),
         input_html: { autofocus: true } %>
     </div>
+    <div class="col-md-5">
+      <%= f.input :require_detail %>
+    </div>
     <div class="col-md-1">
       <div class="mt-2 text-right">
         <%= link_to_remove_nested_item(f) if f.object.can_be_destroyed? %>

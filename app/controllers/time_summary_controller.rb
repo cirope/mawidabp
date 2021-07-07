@@ -58,7 +58,7 @@ class TimeSummaryController < ApplicationController
     end
 
     def time_consumption_params
-      params.require(:time_consumption).permit :amount, :date, :limit, :resource_id, :resource_type
+      params.require(:time_consumption).permit :amount, :date, :limit, :resource_id, :resource_type, :detail
     end
 
     def start_date

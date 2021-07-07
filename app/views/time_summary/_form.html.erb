@@ -10,17 +10,22 @@
       </p>
 
       <% if @time_consumption.resource_type == 'Activity' %>
-        <%= f.input :resource_id, collection: ActivityGroup.order(:name),
-          as: :grouped_select,
-          group_method: :activities,
+        <%= f.input :resource_id, collection: time_summary_activities,
           prompt: true,
-          input_html: { autofocus: true } %>
+          input_html: { autofocus: true,
+                        data: { require: true }
+        } %>
       <% else %>
         <%= f.input :resource_id, collection: time_summary_reviews,
           prompt: true,
           input_html: { autofocus: true } %>
       <% end %>
       <%= f.input :amount %>
+
+      <div id="require_detail" <%= show_require_detail %>>
+        <%= f.input :detail %>
+      </div>
+
       <%= f.input :date, as: :hidden %>
       <%= f.input :limit, as: :hidden %>
       <%= f.input :resource_type, as: :hidden %>

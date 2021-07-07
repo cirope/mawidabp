@@ -66,4 +66,27 @@ module TimeSummaryHelper
     Review.list_without_final_review_or_not_closed.
       map { |r| [r.identification, r.id] }
   end
+
+  def time_summary_activities
+    Activity.order(:name).map do |a|
+      [a.name, a.id, { 'data-require_detail': a.require_detail }]
+    end
+  end
+
+  def show_require_detail
+    if @time_consumption.new_record?
+
+      'hidden'
+    else
+      unless @time_consumption.resource_type == 'Activity' &&
+          status_require_detail
+
+        'hidden'
+      end
+    end
+  end
+
+  def status_require_detail
+      @time_consumption&.resource.require_detail
+  end
 end
