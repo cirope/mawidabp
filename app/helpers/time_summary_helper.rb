@@ -69,12 +69,14 @@ module TimeSummaryHelper
 
   def time_summary_activities
     items = []
+
     ActivityGroup.list.map do |ag|
       child = []
 
       ag.activities.map do |a|
         child << ([a.name, a.id, { 'data-require_detail': a.require_detail }])
       end
+
       items << ([ag.name, child])
     end
 
