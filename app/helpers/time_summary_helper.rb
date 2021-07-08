@@ -78,6 +78,6 @@ module TimeSummaryHelper
   end
 
   def time_summary_require_detail_class
-    'd-none' unless @time_consumption.resource.try(:require_detail)
+    'd-none' unless @time_consumption.require_detail?
   end
 end
