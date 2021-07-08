@@ -68,7 +68,7 @@ module TimeSummaryHelper
   end
 
   def time_summary_activities
-    ActivityGroup.list.map do |ag|
+    ActivityGroup.list.order(:name).map do |ag|
       children = ag.activities.map do |a|
         [a.name, a.id, { data: { require_detail: a.require_detail }}]
       end
