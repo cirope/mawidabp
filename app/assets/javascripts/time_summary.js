@@ -12,10 +12,10 @@ jQuery(function ($) {
     var $option        = $element.find('option:selected')
     var requireDetail  = $option.data('requireDetail')
 
-    if (!requireDetail) {
-      $('[data-time-summary-detail]').addClass('d-none')
-    } else {
+    if (requireDetail) {
       $('[data-time-summary-detail]').removeClass('d-none')
+    } else {
+      $('[data-time-summary-detail]').addClass('d-none')
     }
   })
 })

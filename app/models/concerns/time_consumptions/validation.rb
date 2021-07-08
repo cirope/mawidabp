@@ -10,13 +10,13 @@ module TimeConsumptions::Validation
     validates :detail, presence: true, if: :require_detail?
   end
 
+  def require_detail?
+    resource.try(:require_detail)
+  end
+
   private
 
     def amount_limit
       limit || 24.0
-    end
-
-    def require_detail?
-      resource.try(:require_detail)
     end
 end
