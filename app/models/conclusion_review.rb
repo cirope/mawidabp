@@ -21,6 +21,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::Scopes
   include ConclusionReviews::Search
   include ConclusionReviews::SortColumns
+  include ConclusionReviews::UplPdf
   include ConclusionReviews::Validations
   include ConclusionReviews::WorkflowPdf
 

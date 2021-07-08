@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_28_143012) do
+ActiveRecord::Schema.define(version: 2021_06_18_140824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -160,9 +160,11 @@ ActiveRecord::Schema.define(version: 2021_05_28_143012) do
     t.boolean "require_counts", default: false, null: false
     t.boolean "hide_review_logo", default: false, null: false
     t.boolean "independent_identification", default: false, null: false
+    t.boolean "shared_business_units", default: false, null: false
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
+    t.index ["shared_business_units"], name: "index_business_unit_types_on_shared_business_units"
   end
 
   create_table "business_units", id: :serial, force: :cascade do |t|
@@ -1162,7 +1164,9 @@ ActiveRecord::Schema.define(version: 2021_05_28_143012) do
     t.bigint "organization_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reference"
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
+    t.index ["reference"], name: "index_weakness_templates_on_reference"
   end
 
   create_table "webhooks", force: :cascade do |t|

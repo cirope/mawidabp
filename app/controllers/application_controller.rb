@@ -60,9 +60,14 @@ class ApplicationController < ActionController::Base
     end
 
     def set_conclusion_pdf_format
+      prefix = current_organization&.prefix&.downcase
+
       if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
-        Current.conclusion_pdf_format =
-          SHOW_CONCLUSION_ALTERNATIVE_PDF[current_organization&.prefix&.downcase]
+        Current.conclusion_pdf_format = SHOW_CONCLUSION_ALTERNATIVE_PDF[prefix]
+      end
+
+      if USE_GLOBAL_WEAKNESS_REVIEW_CODE.include? prefix
+        Current.global_weakness_code = true
       end
 
       Current.conclusion_pdf_format ||= 'default'

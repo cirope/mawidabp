@@ -4,8 +4,9 @@ module Reviews::Validations
   included do
     validates :identification, :period_id, :plan_item_id, :organization_id, presence: true
     validates :description, presence: true, unless: -> { HIDE_REVIEW_DESCRIPTION }
+    validates :scope, presence: true, if: -> { USE_SCOPE_CYCLE }
+    validates :identification, :scope, length: { maximum: 255 }
     validates :identification,
-      length:      { maximum: 255 },
       format:      { with: /\A\w([.\w\sáéíóúÁÉÍÓÚñÑ-]|\/)*\z/ },
       allow_nil:   true,
       allow_blank: true

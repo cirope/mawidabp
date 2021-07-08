@@ -1,5 +1,5 @@
 es:
-  app_name: "Mawidabp"
+  app_name: "GEPLAS"
   app_copyright: "Copyright © 2008-%{year} Cirope S.A. Todos los derechos reservados."
 
   label:
@@ -408,6 +408,7 @@ es:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
@@ -875,12 +876,12 @@ es:
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
       create_user: "Crear usuario"
-      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'Mawidabp'"
+      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'GEPLAS'"
     welcome_email:
       title: "%{name}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
       change_password: "Establecer contraseña"
-      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp'."
+      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'GEPLAS'."
       organizations_sites:
         one: "Luego puede ingresar en la siguiente dirección:"
         other: "Luego puede ingresar en cualquiera de las siguientes direcciones (dependiendo de la organización que seleccione):"
@@ -1197,6 +1198,7 @@ es:
         require_counts: "Requerir cantidades en objetivos de control"
         hide_review_logo: "Ocultar logo en informes"
         independent_identification: "Numeración independiente"
+        shared_business_units: "Unidades de negocio compartidas"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
@@ -1368,6 +1370,9 @@ es:
         modify: "Modificación"
         erase: "Baja"
         approval: "Aprobación"
+      process_controls/control_objectives/control:
+        effects: "Efectos"
+        compliance_tests: "Pruebas de cumplimientos"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'

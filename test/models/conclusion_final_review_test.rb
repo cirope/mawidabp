@@ -81,7 +81,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert review.control_objective_items.all? { |coi| coi.audit_date.present? }
     end
 
-    if USE_GLOBAL_WEAKNESS_REVIEW_CODE
+    if Current.global_weakness_code
       last_weakness  = Weakness.finals(true).reorder(review_code: :desc).first
 
       assert_equal last_weakness.review_code, Finding.finals(true).last.review_code

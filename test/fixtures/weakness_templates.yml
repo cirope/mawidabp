@@ -1,4 +1,5 @@
 security:
+  reference: '123'
   title: Security weakness
   description: Some nasty security bug
   risk: <%= Finding.risks_values.last %>
