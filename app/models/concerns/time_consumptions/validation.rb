@@ -7,6 +7,11 @@ module TimeConsumptions::Validation
       greater_than: 0, less_than_or_equal_to: :amount_limit
     }
     validates :resource_id, uniqueness: { scope: [:user, :resource_type, :date] }
+    validates :detail, presence: true, if: :require_detail?
+  end
+
+  def require_detail?
+    resource.try :require_detail
   end
 
   private

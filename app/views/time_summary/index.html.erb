@@ -64,8 +64,7 @@
 <% end %>
 <div>
   <h4>
-    <%= t('.total_amount', start_date: l(@start_date, format: :minimal), end_date: l(@end_date, format: :minimal),
-      amount: @total_amount, count: @self_and_descendants.size) %>
+    <%= t '.total_amount', amount: @total_amount, count: @self_and_descendants.size %>
   </h4>
 </div>
 <hr>

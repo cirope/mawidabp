@@ -204,6 +204,7 @@ es:
         comment: 'Comentario'
       activity:
         name: 'Nombre'
+        require_detail: 'Require detalle'
       activity_group:
         name: 'Nombre'
       answer:
@@ -501,6 +502,7 @@ es:
         activity: 'Actividad'
         resource_id: 'Recurso'
         amount: 'Tiempo en horas'
+        detail: 'Detalle'
       user:
         email: 'Correo'
         enable: 'Habilitado'

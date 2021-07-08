@@ -54,6 +54,6 @@ class ActivityGroupsController < ApplicationController
 
     def activity_group_params
       params.require(:activity_group).permit :name,
-        activities_attributes: [:id, :name, :_destroy]
+        activities_attributes: [:id, :name, :require_detail, :_destroy]
     end
 end
