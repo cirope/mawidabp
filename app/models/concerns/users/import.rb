@@ -2,7 +2,7 @@ module Users::Import
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def import organization, username, password
+    def import organization, username = nil, password = nil
       prefixes = extra_users_info_prefixes
       prefix   = organization.prefix
 
