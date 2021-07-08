@@ -32,8 +32,6 @@ module LdapConfigs::LdapImport
       assign_managers managers, users_by_dn unless skip_function_and_manager?
 
       users = check_state_for_late_changes(users)
-
-      import_extra_users_info
     end
 
     users
@@ -107,8 +105,8 @@ module LdapConfigs::LdapImport
         name:                casted_attribute(entry, name_attribute),
         last_name:           casted_attribute(entry, last_name_attribute),
         email:               casted_attribute(entry, email_attribute),
+        organizational_unit: casted_organizational_unit(entry),
         office:              casted_attribute(entry, office_attribute),
-        organizational_unit: organizational_unit(entry),
         hidden:              false,
         enable:              true
       }.merge(
@@ -124,8 +122,8 @@ module LdapConfigs::LdapImport
       attr_name && entry[attr_name].first&.force_encoding('UTF-8')&.to_s
     end
 
-    def organizational_unit entry
-      casted_ou = casted_attribute(entry, 'dn')
+    def casted_organizational_unit entry
+      casted_ou = casted_attribute(entry, organizational_unit_attribute)
 
       casted_ou&.gsub /\Acn=[\w\s]+,/i, ''
     end
@@ -148,11 +146,13 @@ module LdapConfigs::LdapImport
           { organization_id: r.organization_id, role_id: r.id }
         end
       end
+
       removed_roles = user.organization_roles.map do |o_r|
         if roles.map(&:id).exclude? o_r.role_id
           { id: o_r.id, _destroy: '1' } if o_r.organization_id == Current.organization&.id
         end
       end
+
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
 
       user.update data

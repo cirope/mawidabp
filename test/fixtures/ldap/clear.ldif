@@ -7,6 +7,9 @@ changetype: delete
 dn: cn=general_manager,ou=people,dc=test,dc=com
 changetype: delete
 
+dn: cn=manager,ou=people,dc=test,dc=com
+changetype: delete
+
 dn: cn=admin,ou=people,dc=test,dc=com
 changetype: delete
 

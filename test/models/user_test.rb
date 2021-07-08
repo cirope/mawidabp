@@ -709,4 +709,21 @@ class UserTest < ActiveSupport::TestCase
       user.save!
     end
   end
+
+  test 'import' do
+    Current.organization = organizations(:google)
+    organization         = Current.organization
+
+    skip unless EXTRA_USERS_INFO.has_key? organization.prefix
+
+    assert_difference 'User.count', 2 do
+      User.import organization, 'admin', 'admin123'
+    end
+
+    one_user_file = User.find_by email: 'juan127@cirope.com'
+    two_user_file = User.find_by email: 'pedro127@cirope.com'
+
+    assert_equal one_user_file.manager_id, two_user_file.id
+    assert_equal one_user_file.roles.count, 2
+  end
 end

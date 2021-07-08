@@ -1,0 +1,6 @@
+Administrator Google;uid=UserReplicLdap,ou=usuarios,ou=CC,dc=dbna,dc=net
+Administrator Google;uid=F01237,ou=usuarios,ou=CC,dc=dbna,dc=net
+Administrator Second;uid=F01237,ou=usuarios,ou=CC,dc=dbna,dc=net
+Administrator Google;uid=F11227,ou=usuarios,ou=CC,dc=dbna,dc=net
+Administrator Google;uid=UserReplicLdap,ou=usuarios,ou=CC,dc=dbna,dc=net
+Administrator Google;uid=UserReplicLdap,ou=usuarios,ou=CC,dc=dbna,dc=net

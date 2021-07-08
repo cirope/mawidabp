@@ -13,6 +13,8 @@ google_ldap:
   roles_attribute: description
   manager_attribute: manager
   organization: google
+  organizational_unit_attribute:
+  organizational_unit:
 
 alphabet_ldap:
   hostname: localhost
@@ -29,3 +31,5 @@ alphabet_ldap:
   roles_attribute: description
   manager_attribute: manager
   organization: alphabet
+  organizational_unit_attribute:
+  organizational_unit:
