@@ -599,6 +599,8 @@ ActiveRecord::Schema.define(version: 2021_06_18_140824) do
     t.string "tls"
     t.string "ca_path"
     t.string "office_attribute"
+    t.string "organizational_unit_attribute"
+    t.string "organizational_unit"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
   end
 
