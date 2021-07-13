@@ -81,22 +81,10 @@ class NotifierMailer < ActionMailer::Base
     mail to: users_to_notify_for(users).map(&:email),
          subject: prefix.upcase + t(
            'notifier.notify_new_finding_answer.title',
-           review: finding_answer.finding.review.to_s,
-           id_finding: finding_answer.finding.id
+           review:     finding_answer.finding.review.to_s,
+           finding_id: finding_answer.finding.id
          )
   end
-
-  # def prueba
-  #   Mail.defaults do
-  #     retriever_method :pop3, address:    'pop.gmail.com',
-  #                             port:       995,
-  #                             user_name:  ENV['SMTP_USER_NAME'],
-  #                             password:   ENV['SMTP_PASSWORD'],
-  #                             enable_ssl: true
-  #   end
-
-  #   Mail.all
-  # end
 
   def stale_notification(user)
     @notifications = user.notifications.not_confirmed

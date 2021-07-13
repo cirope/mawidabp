@@ -1,4 +1,4 @@
-<p style="font-size: .8em"><%= t 'notifier.notify_new_finding_answer.reply_delimiter' %></p>
+<p style="font-size: .8em"><%= t 'common_mailer.header_repĺy.reply_delimiter' %></p>
 
 <% finding = @finding_answer.finding %>
 <% organization = finding.review.organization %>
@@ -57,5 +57,5 @@
     <%= link_to t('notifier.notify_new_finding_answer.finding_link'),
       finding_url %>
   </p>
-  <%= render :partial => 'common_mailer/footer_for_mail_with_reply' %>
+  <%= render :partial => 'common_mailer/reply_footer' %>
 </div>
