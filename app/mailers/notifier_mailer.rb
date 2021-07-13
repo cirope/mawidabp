@@ -81,7 +81,8 @@ class NotifierMailer < ActionMailer::Base
     mail to: users_to_notify_for(users).map(&:email),
          subject: prefix.upcase + t(
            'notifier.notify_new_finding_answer.title',
-           review: finding_answer.finding.review.to_s
+           review: finding_answer.finding.review.to_s,
+           id_finding: finding_answer.finding.id
          )
   end
 
