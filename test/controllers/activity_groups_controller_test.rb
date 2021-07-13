@@ -26,9 +26,11 @@ class ActivityGroupsControllerTest < ActionController::TestCase
       post :create, params: {
         activity_group: {
           name: 'New activity group',
+          organization_id: organizations(:google).id,
           activities_attributes: {
             '0' => {
-              name: 'New activity'
+              name: 'New activity',
+              require_detail: true
             }
           }
         }
@@ -60,7 +62,8 @@ class ActivityGroupsControllerTest < ActionController::TestCase
           activities_attributes: {
             activity.id => {
               id:   activity.id,
-              name: activity.name
+              name: activity.name,
+              require_detail: true
             }
           }
         }

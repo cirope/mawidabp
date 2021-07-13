@@ -3,3 +3,5 @@ special_activity_time:
   amount: 12.2
   user: administrator
   resource: special_activity
+  resource_type: 'Activity'
+  detail: ''
