@@ -11,7 +11,7 @@ module TimeConsumptions::Validation
   end
 
   def require_detail?
-    resource.try(:require_detail)
+    resource.try :require_detail
   end
 
   private
