@@ -86,6 +86,18 @@ class NotifierMailer < ActionMailer::Base
          )
   end
 
+  # def prueba
+  #   Mail.defaults do
+  #     retriever_method :pop3, address:    'pop.gmail.com',
+  #                             port:       995,
+  #                             user_name:  ENV['SMTP_USER_NAME'],
+  #                             password:   ENV['SMTP_PASSWORD'],
+  #                             enable_ssl: true
+  #   end
+
+  #   Mail.all
+  # end
+
   def stale_notification(user)
     @notifications = user.notifications.not_confirmed
     organizations = @notifications.map do |n|

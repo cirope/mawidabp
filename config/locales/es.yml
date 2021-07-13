@@ -1143,6 +1143,7 @@
       title: "Nuevo comentario en el informe %{review} [#%{id_finding}]"
       finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver hallazgo"
+      reply_delimiter: '-- RESPONDER ARRIBA DE ESTA LÍNEA Y POR FAVOR NO MODIFIQUE EL ASUNTO --'
     notify_new_findings:
       title: "Notificación de hallazgos"
       created_title:
