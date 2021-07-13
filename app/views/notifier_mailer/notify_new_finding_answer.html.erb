@@ -1,3 +1,5 @@
+<p style="font-size: .8em"><%= t 'common_mailer.header_repĺy.reply_delimiter' %></p>
+
 <% finding = @finding_answer.finding %>
 <% organization = finding.review.organization %>
 <% finding_url = finding_url(finding.pending? ? 'incomplete' : 'complete',
@@ -55,5 +57,5 @@
     <%= link_to t('notifier.notify_new_finding_answer.finding_link'),
       finding_url %>
   </p>
-  <%= render :partial => 'common_mailer/footer' %>
+  <%= render :partial => 'common_mailer/reply_footer' %>
 </div>
