@@ -54,7 +54,7 @@ class TimeSummaryController < ApplicationController
     review = Review.find(params[:id]) unless params[:id].blank?
 
     amounts = {
-      'workflow': review.workflow.try(:human_units).to_f,
+      'workflow':         review.workflow.try(:human_units).to_f,
       'time_consumption': review.time_consumptions.sum(&:amount).to_f
     }
 
