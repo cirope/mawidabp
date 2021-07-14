@@ -154,7 +154,7 @@ class PlansControllerTest < ActionController::TestCase
                   resource_utilizations_attributes: {
                     '1' => {
                       id: resource_utilizations(:auditor_for_20_units_past_plan_item_1).id,
-                      resource_id: resources(:laptop_resource).id,
+                      resource_id: resources(:mouse_resource).id,
                       resource_type: 'Resource',
                       units: '12.21'
                     }

@@ -10,7 +10,7 @@
       <%= icon 'fas', 'user' %>
     </a>
 
-    <div class="dropdown-menu">
+    <div class="dropdown-menu dropdown-menu-right">
       <% if current_organization && (current_organization.ldap_config.blank? && current_organization.saml_provider.blank?) %>
         <%= link_to t('users.profiles.edit.title'), edit_users_profile_path(user), class: 'dropdown-item' %>
       <% else %>

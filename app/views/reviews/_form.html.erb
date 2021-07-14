@@ -41,9 +41,13 @@
           value: review_business_unit_type_text(@review), readonly: true } %>
       </div>
       <div class="col-md-6">
+        <% if USE_SCOPE_CYCLE %>
+          <%= f.input :scope %>
+        <% end %>
+
         <% unless HIDE_REVIEW_DESCRIPTION %>
           <%= f.input :description, label: Review.human_attribute_name(:description),
-            input_html: { readonly: readonly, rows: 5 } %>
+            input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 4 : 5 } %>
         <% end %>
 
         <%= f.input :survey, label: Review.human_attribute_name(:survey),

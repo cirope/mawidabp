@@ -113,10 +113,12 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
-    @review.identification = 'abcdd' * 52
+    @review.identification = 'abcde' * 52
+    @review.scope = 'abcde' * 52
 
     assert @review.invalid?
     assert_error @review, :identification, :too_long, count: 255
+    assert_error @review, :scope, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -166,6 +168,15 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
     assert_error @review, :manual_score, :less_than_or_equal_to, count: (USE_SCOPE_CYCLE ? 100 : 1000)
     assert_error @review, :manual_score_alt, :less_than_or_equal_to, count: 100
+  end
+
+  test 'validates conditional presence' do
+    skip unless USE_SCOPE_CYCLE
+
+    @review.scope = nil
+
+    assert @review.invalid?
+    assert_error @review, :scope, :blank
   end
 
   test 'validates valid attributes' do
@@ -961,12 +972,20 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'next identification number' do
-    assert_equal '001', Review.next_identification_number(2017)
+    assert_equal '001', Review.next_identification_number('XX', 2017)
 
-    Review.order(:id).last.update_column :identification, 'XX-22/2017'
+    review = Review.order(:id).last
+
+    review.update_column :identification, 'XX-22/2017'
 
     # Should ignore the prefix
-    assert_equal '023', Review.next_identification_number(2017)
+    assert_equal '023', Review.next_identification_number('XX', 2017)
+
+    review.business_unit_type.update! independent_identification: true
+
+    # Should NOT ignore the prefix
+    assert_equal '001', Review.next_identification_number('XX', 2017)
+    assert_equal '023', Review.next_identification_number('XX', 2017, use_prefix: true)
   end
 
   test 'build best practice comments' do

@@ -43,6 +43,7 @@ es:
         last_name_attribute: 'Por ejemplo: sn'
         email_attribute: 'Por ejemplo: mail'
         function_attribute: 'Por ejemplo: title'
+        office_attribute: 'Por ejemplo: postofficebox'
         roles_attribute: 'Por ejemplo: memberof'
         manager_attribute: 'Por ejemplo: manager'
         tls: 'Valores posibles: TLSv1_1 o TLSv1_2'

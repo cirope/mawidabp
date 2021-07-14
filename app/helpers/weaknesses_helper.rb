@@ -99,4 +99,16 @@ module WeaknessesHelper
       {}
     end
   end
+
+  def weakness_impact_risks
+    Finding.impact_risks.map do |key, value|
+      [t("impact_risk_types.#{key}"), value]
+    end
+  end
+
+  def weakness_probabilities
+    Finding.probabilities.map do |key, value|
+      [t("probability_types.#{key}"), value]
+    end
+  end
 end

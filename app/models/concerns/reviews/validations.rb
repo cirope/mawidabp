@@ -4,8 +4,9 @@ module Reviews::Validations
   included do
     validates :identification, :period_id, :plan_item_id, :organization_id, presence: true
     validates :description, presence: true, unless: -> { HIDE_REVIEW_DESCRIPTION }
+    validates :scope, presence: true, if: -> { USE_SCOPE_CYCLE }
+    validates :identification, :scope, length: { maximum: 255 }
     validates :identification,
-      length:      { maximum: 255 },
       format:      { with: /\A\w([.\w\sáéíóúÁÉÍÓÚñÑ-]|\/)*\z/ },
       allow_nil:   true,
       allow_blank: true
@@ -96,7 +97,12 @@ module Reviews::Validations
     end
 
     def validate_identification_number_uniqueness
-      suffix = identification.to_s.split('-').last
+      suffix  = identification.to_s.split('-').last
+      pattern = unless business_unit_type&.independent_identification
+                  "%#{suffix}"
+                end
+
+
       conditions = [
         "#{Review.quoted_table_name}.#{Review.qcn 'organization_id'} = :organization_id",
         "#{Review.quoted_table_name}.#{Review.qcn 'identification'} LIKE :identification"
@@ -106,7 +112,7 @@ module Reviews::Validations
         is_taken = Review.unscoped.where(
           conditions,
           organization_id: organization_id,
-          identification: "%#{suffix}"
+          identification: pattern
         ).any?
 
         errors.add :identification, :taken if is_taken
