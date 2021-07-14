@@ -60,7 +60,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     acts_as_tree (2.9.1)
       activerecord (>= 3.0.0)
-    addressable (2.7.0)
+    addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
@@ -156,7 +156,7 @@ GEM
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
     net-ssh (6.1.0)
-    newrelic_rpm (7.1.0)
+    newrelic_rpm (7.2.0)
     nio4r (2.5.7)
     nokogiri (1.11.7)
       mini_portile2 (~> 2.5.0)
@@ -165,7 +165,7 @@ GEM
       activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.20.1)
-    parser (3.0.1.1)
+    parser (3.0.2.0)
       ast (~> 2.4.1)
     pdf-core (0.9.0)
     pg (1.2.3)
@@ -178,6 +178,8 @@ GEM
     public_suffix (4.0.6)
     racc (1.5.2)
     rack (2.2.3)
+    rack-protection (2.1.0)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.0.3.7)
@@ -212,13 +214,13 @@ GEM
       thor (>= 0.20.3, < 2.0)
     rainbow (3.0.0)
     raindrops (0.19.2)
-    rake (13.0.3)
+    rake (13.0.6)
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rbtree (0.4.4)
     redcarpet (3.5.1)
-    redis (4.3.1)
+    redis (4.1.4)
     regexp_parser (2.1.1)
     request_store (1.5.0)
       rack (>= 1.4)
@@ -235,7 +237,7 @@ GEM
       rubocop-ast (>= 1.2.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.7.0)
+    rubocop-ast (1.8.0)
       parser (>= 3.0.1.1)
     rubocop-github (0.16.2)
       rubocop (<= 1.13.0)
@@ -255,7 +257,7 @@ GEM
       rexml
     ruby-vips (2.1.2)
       ffi (~> 1.12)
-    rubyzip (2.3.0)
+    rubyzip (2.3.2)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -265,10 +267,11 @@ GEM
       sprockets-rails
       tilt
     set (1.0.1)
-    sidekiq (6.2.1)
-      connection_pool (>= 2.2.2)
+    sidekiq (5.2.9)
+      connection_pool (~> 2.2, >= 2.2.2)
       rack (~> 2.0)
-      redis (>= 4.2.0)
+      rack-protection (>= 1.5.0)
+      redis (>= 3.3.5, < 4.2)
     simple_form (5.1.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
@@ -368,7 +371,7 @@ DEPENDENCIES
   rubyzip
   sassc
   sassc-rails
-  sidekiq
+  sidekiq (< 6.0)
   simple_form
   timecop
   uglifier

@@ -23,25 +23,40 @@ module LdapConfigs::LdapService
 
   module ClassMethods
     def sync_users
-      with_user.preload(:organization).each do |ldap|
-        organization = ldap.organization
+      if  EXTRA_USERS_INFO.any?
+        organizations  = Organization.where(prefix: EXTRA_USERS_INFO.keys)
 
-        Current.organization = organization # Role and users scope
-        Current.group = organization.group
+        organizations.each do |organization|
+          Current.organization = organization # Role and users scope
+          Current.group = organization.group
 
-        ::Rails.logger.info(
-          "[#{organization.prefix.upcase}] Importing users for #{ldap.basedn}"
-        )
+          ::Rails.logger.info(
+            "[#{organization.prefix.upcase}] Importing users for files"
+          )
 
-        imports = ldap.sync
-        filtered_imports = imports.map do |i|
-          unless i[:state] == :unchanged
-            { user: { name: i[:user].to_s, errors: i[:errors] }, state: i[:state] }
+          User.import(organization)
+        end
+      else
+        with_user.preload(:organization).each do |ldap|
+          organization = ldap.organization
+
+          Current.organization = organization # Role and users scope
+          Current.group = organization.group
+
+          ::Rails.logger.info(
+            "[#{organization.prefix.upcase}] Importing users for #{ldap.basedn}"
+          )
+
+          imports = ldap.sync
+          filtered_imports = imports.map do |i|
+            unless i[:state] == :unchanged
+              { user: { name: i[:user].to_s, errors: i[:errors] }, state: i[:state] }
+            end
+          end.compact
+
+          if filtered_imports.any? && !SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+            LdapMailer.import_notifier(filtered_imports.to_json, organization.id).deliver_later
           end
-        end.compact
-
-        if filtered_imports.any? && !SHOW_WEAKNESS_EXTRA_ATTRIBUTES
-          LdapMailer.import_notifier(filtered_imports.to_json, organization.id).deliver_later
         end
       end
 

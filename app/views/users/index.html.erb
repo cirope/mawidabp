@@ -37,7 +37,6 @@
 
 <div>
   <%= paginate @users %>
-
   <% if current_organization.ldap_config && show_import_from_ldap? %>
     <%= link_to t('.import_from_ldap'), new_users_import_path %> |
   <% elsif current_organization.ldap_config.blank? %>

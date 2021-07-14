@@ -185,6 +185,8 @@ class LdapConfigTest < ActiveSupport::TestCase
       @ldap_config.import 'admin', 'admin123'
     end
 
+    user.reload.update! organizational_unit: 'dn'
+
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)
     assert user.organization_roles.map(&:role_id).include?(corp_role.id)
     assert user.organizational_unit.present?
