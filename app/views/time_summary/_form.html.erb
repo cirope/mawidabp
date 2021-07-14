@@ -22,8 +22,21 @@
       <% else %>
         <%= f.input :resource_id, collection: time_summary_reviews,
           prompt: true,
-          input_html: { autofocus: true } %>
+          input_html: {
+            autofocus: true,
+            data: { time_summary_review: true }
+          } %>
+
+        <div class="d-none" data-time-summary-amounts>
+          <div>
+            <b><%= t('.workflow_amount') %><span data-time-summary-workflow-amount></span></b>
+          </div>
+          <div>
+            <b><%= t('.time_consumption_amount') %><span data-time-summary-time-consumption-amount></span></b>
+          </div>
+        </div>
       <% end %>
+
       <%= f.input :amount %>
 
       <div class="<%= time_summary_require_detail_class %>" data-time-summary-detail>

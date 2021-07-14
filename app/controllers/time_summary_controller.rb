@@ -50,6 +50,17 @@ class TimeSummaryController < ApplicationController
     )
   end
 
+  def estimated_amount
+    review = Review.find(params[:id]) unless params[:id].blank?
+
+    amounts = {
+      'workflow': review.workflow.try(:human_units).to_f,
+      'time_consumption': review.time_consumptions.sum(&:amount).to_f
+    }
+
+    render json: amounts
+  end
+
   private
 
     def set_time_consumption

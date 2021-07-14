@@ -18,4 +18,18 @@ jQuery(function ($) {
       $('[data-time-summary-detail]').addClass('d-none')
     }
   })
+
+  $(document).on('change', '[data-time-summary-review]', function () {
+    var amountUrl = '/time_summary/estimated_amount/'
+
+    if ($(this).val()){
+      $.get(amountUrl, { id: $(this).val() }, function (data) {
+        $('[data-time-summary-amounts]').removeClass('d-none')
+        $('[data-time-summary-workflow-amount]').text(data['workflow'])
+        $('[data-time-summary-time-consumption-amount]').text(data['time_consumption'])
+      })
+    }else{
+      $('[data-time-summary-amounts]').addClass('d-none')
+    }
+  })
 })
