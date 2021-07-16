@@ -314,6 +314,10 @@ es:
         probability: 'Probabilidad'
         impact_risk: 'Impacto'
         manual_risk: 'Manual'
+        suggested_impact: 'Impacto sugerido'
+        suggested_probability: 'Probabilidad sugerida'
+        amount_impact: 'Monto impacto'
+        amount_probability: 'Monto probabilidad'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -687,6 +691,7 @@ es:
         risk: 'Riesgo'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
+        notes: 'Notas'
         internal_control_components: 'Componentes de CI'
         allow_duplication: 'Permitir título duplicado'
 
