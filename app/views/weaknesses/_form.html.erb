@@ -78,9 +78,12 @@
         <% if USE_SCOPE_CYCLE %>
           <div class="row">
             <div class="col">
-              <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true, input_html: {
+              <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true, disabled: @weakness.suggested_impact,
+                input_html: {
                 data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
               } %>
+
+              <%= f.input :impact_risk, disabled: !@weakness.suggested_impact %>
             </div>
             <div class="col">
               <%= f.input :suggested_impact, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
@@ -405,7 +408,17 @@
   </div>
 
   <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
-
+    <div class="col-md-4">
+      <%= f.input :amount_impact,
+        input_html: {
+          class: "col-md-6",
+          data: { amount_impact: true }
+        } %>
+      <span data-percentage-issue></span>
+    </div>
+    <div class="col-md-4">
+      <%= f.input :amount_probability, input_html: { class: "col-md-6" }%>
+    </div>
   <div class="row">
     <div class="col-md-2">
       <h5 class="h6"><%= Issue.human_attribute_name 'customer' %></h5>

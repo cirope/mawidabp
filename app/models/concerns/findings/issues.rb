@@ -23,6 +23,10 @@ module Findings::Issues
     I18n.t("impact_risk_types.#{Finding::IMPACT_RISKS.invert[get_amount_by_impact.first]}")
   end
 
+  def impact_risk_value
+    get_amount_by_impact.first
+  end
+
   def probability_risk
     quantity ||= 0
 
@@ -35,17 +39,17 @@ module Findings::Issues
     review.previous.weaknesses.map(&:weakness_template_id).include? weakness_template_id
   end
 
-  private
+  def amount_by_impact
+    {
+      1 => 2084408,
+      2 => 20844081,
+      3 => 208440815,
+      4 => 2084408150,
+      5 => 9999999999
+    }
+  end
 
-    def amount_by_impact
-      {
-        1 => 2084408,
-        2 => 20844081,
-        3 => 208440815,
-        4 => 2084408150,
-        5 => 9999999999
-      }
-    end
+  private
 
     def set_issue_based_status
       valid_issues = issues.reject &:marked_for_destruction?

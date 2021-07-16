@@ -422,7 +422,21 @@ module FindingsHelper
       finding.impact_risk_text
     end
 
+    def finding_impact_risks_value finding
+      finding.impact_risk_value
+    end
+
     def finding_probability_risk finding
       finding.probability_risk
+    end
+
+    def finding_impact_risks_types finding
+      types = {}
+
+      finding.amount_by_impact.each do |id, name|
+        types["#{name}"] = [I18n.t("impact_risk_types.#{Finding::IMPACT_RISKS.invert[id]}"), id].join '|'
+      end
+
+      types.to_json
     end
 end

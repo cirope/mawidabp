@@ -180,7 +180,61 @@ jQuery(function ($) {
   })
 
   $(document).on('change', '[data-toggle-suggested-impact-disabled-attr]', function () {
-    $('[name$="[impact_risk]"]').attr('disabled', $(this).is(':checked'))
+    if ($(this).is(':checked')){
+      $('select[name$="[impact_risk]"]').attr('disabled', true)
+      $('input[name$="[impact_risk]"]').attr('disabled', false)
+
+      var impactValue = $('[data-impact-risks-value]').text()
+
+      $('[name$="[impact_risk]"]').val($.trim(impactValue)).trigger('change')
+    }else{
+      $('select[name$="[impact_risk]"]').attr('disabled', false)
+      $('input[name$="[impact_risk]"]').attr('disabled', true)
+    }
+  })
+
+  $(document).on('change', '[data-finding-issue-amount]', function() {
+    var textImpact
+    var valueImpact
+    var totalAmount = 0
+    var types       = $('[data-impact-risks-types]').data('impactRisksTypes')
+
+    $('[data-finding-issue-amount]').each(function (i, e) {
+      totalAmount += parseFloat($(e).val())
+    })
+
+    $.each(types, function(amount, name) {
+      if (totalAmount < amount) {
+        result      = name.split('|')
+        textImpact  = result[0]
+        valueImpact = result[1]
+        return false
+      }
+    })
+
+    var amountImpactAssign     = $('[data-amount-impact]').val()
+    var amountPorcentageIssues = ((totalAmount * 100 ) / parseFloat(amountImpactAssign))
+
+    $('[data-percentage-issue]').text(amountPorcentageIssues)
+    $('[data-impact-risks-type-text]').text(textImpact)
+    $('[data-impact-risks-value]').text(valueImpact)
+
+    if ($('[data-toggle-suggested-impact-disabled-attr]').is(':checked')) {
+      $('[name$="[impact_risk]"]').val(valueImpact).trigger('change')
+    }
+  })
+
+  $(document).on('change', '[name$="[amount_impact]"]', function () {
+    totalAmount            = 0
+    var amountImpactAssign = $(this).val()
+
+    $('[data-finding-issue-amount]').each(function (i, e) {
+      totalAmount += parseFloat($(e).val())
+    })
+
+    var amountPorcentageIssues = ((totalAmount * 100 ) / parseFloat(amountImpactAssign))
+
+    $('[data-percentage-issue]').text(amountPorcentageIssues)
   })
 
   $(document).on('keyup', '[data-endorsement-reason]', function () {

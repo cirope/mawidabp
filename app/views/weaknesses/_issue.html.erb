@@ -17,7 +17,7 @@
         <%= f.input :operation, label: false, input_html: { readonly: readonly } %>
       </div>
       <div class="col-md-2">
-        <%= f.input :amount, label: false, input_html: { readonly: readonly } %>
+        <%= f.input :amount, label: false, input_html: { readonly: readonly, data: { finding_issue_amount: true} } %>
       </div>
       <div class="col-md-2 d-none d-md-block d-xl-block">
         <%= f.input :comments, label: false, input_html: { readonly: readonly, rows: 1 } %>
