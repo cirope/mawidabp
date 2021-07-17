@@ -24,7 +24,10 @@
           prompt: true,
           input_html: {
             autofocus: true,
-            data: { time_summary_review: true }
+            data: {
+              time_summary_review: true,
+              time_summary_review_url: estimated_amount_time_summary_index_path()
+            }
           } %>
 
         <div class="d-none" data-time-summary-amounts>

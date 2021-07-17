@@ -26,7 +26,6 @@ class ActivityGroupsControllerTest < ActionController::TestCase
       post :create, params: {
         activity_group: {
           name: 'New activity group',
-          organization_id: organizations(:google).id,
           activities_attributes: {
             '0' => {
               name: 'New activity',
