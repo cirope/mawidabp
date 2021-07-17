@@ -610,6 +610,8 @@ es:
     form:
       activity: 'Actividad'
       review: 'Informe'
+      workflow_amount: 'Cantidad de horas programadas'
+      time_consumption_amount: 'Cantidad de horas asignadas'
     downloads:
       current_week: "Descarga semana actual"
       current_month: "Descarga mes actual"

@@ -21,9 +21,11 @@ class TimeConsumptionTest < ActiveSupport::TestCase
     assert_error @time_consumption, :amount, :greater_than, count: 0
 
     @time_consumption.amount = 25
+    @time_consumption.resource.require_detail = true
 
     assert @time_consumption.invalid?
     assert_error @time_consumption, :amount, :less_than_or_equal_to, count: 24.0
+    assert_error @time_consumption, :detail, :blank
   end
 
   test 'custom amount limit' do
