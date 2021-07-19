@@ -20,7 +20,7 @@ module Findings::Issues
   end
 
   def impact_risk_text
-    I18n.t("impact_risk_types.#{Finding::IMPACT_RISKS.invert[get_amount_by_impact.first]}")
+    I18n.t "impact_risk_types.#{Finding::IMPACT_RISKS.invert[get_amount_by_impact.first]}"
   end
 
   def impact_risk_value

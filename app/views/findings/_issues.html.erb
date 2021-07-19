@@ -7,9 +7,9 @@
         <th><%= Issue.human_attribute_name 'customer' %></th>
         <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'entry' %></th>
         <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'operation' %></th>
-        <th><%= Issue.human_attribute_name 'amount' %></th>
         <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'comments'  %></th>
         <th><%= Issue.human_attribute_name 'close_date' %></th>
+        <th><%= Issue.human_attribute_name 'amount' %></th>
       </tr>
     </thead>
 
@@ -19,18 +19,18 @@
           <td><%= issue.customer %></td>
           <td class="d-none d-md-table-cell"><%= issue.entry %></td>
           <td class="d-none d-md-table-cell"><%= issue.operation %></td>
-          <td><%= issue.amount %></td>
           <td class="d-none d-md-table-cell"><%= issue.comments %></td>
           <td><%= l(issue.close_date, format: :minimal) if issue.close_date %></td>
+          <td><%= issue.amount %></td>
         </tr>
       <% end %>
       <tr>
         <td></td>
         <td></td>
         <td></td>
-        <td><%= number_to_currency finding_issues_amount(@finding) %></td>
         <td></td>
         <td></td>
+        <td><%= number_to_currency @finding.issues_amount %></td>
       </tr>
     </tbody>
   </table>

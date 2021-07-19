@@ -4,23 +4,25 @@
 <div id="weakness_issues"></div>
 
 <div class="col-md-12 text-right">
-  <h5 class="col-md-8">
-    <div data-sum-amount-impact-risks>
-      <%= number_to_currency finding_issues_amount(@weakness) %>
+  <div class="row">
+    <div class="col-md-10"></div>
+    <div class="col-md-2 text-right">
+      <div class="row">
+        <div class="col-10" data-sum-amount-impact-risks>
+          <h5> <%= number_to_currency @weakness.issues_amount %></h5>
+        </div>
+        <div class="col-2"></div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <div data-impact-risks-type-text>
-      <%= finding_impact_risks_type(@weakness) %>
-    </div>
+<div class="d-none" data-impact-risks-value data-impact-risks-types="<%= finding_impact_risks_types(@weakness) %>">
+  <%= @weakness.impact_risk_value %>
+</div>
 
-    <div class="d-none" data-impact-risks-value data-impact-risks-types="<%= finding_impact_risks_types(@weakness) %>">
-      <%= finding_impact_risks_value(@weakness) %>
-    </div>
-
-    <div class="d-none" data-amount-probability-value>
-      <%= finding_probability_risk(@weakness) %>
-    </div>
-  </h5>
+<div class="d-none" data-amount-probability-value>
+  <%= @weakness.probability_risk %>
 </div>
 
 <%= link_to_add_fields(
