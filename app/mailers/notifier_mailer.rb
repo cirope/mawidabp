@@ -86,6 +86,13 @@ class NotifierMailer < ActionMailer::Base
          )
   end
 
+  def notify_not_added_answer(email_to, answer)
+    @answer = answer
+
+    mail to: email_to,
+         subject: t('notifier.notify_not_added_answer.title')
+  end
+
   def stale_notification(user)
     @notifications = user.notifications.not_confirmed
     organizations = @notifications.map do |n|

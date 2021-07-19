@@ -1143,6 +1143,10 @@
       title: "Nuevo comentario en el informe %{review} [#%{finding_id}]"
       finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver hallazgo"
+    notify_not_added_answer:
+      title: "No se ha podido agregar el comentario que usted esta enviando"
+      warning: "No se ha podido agregar el comentario que usted esta enviando ya que no estamos recibiendo el mismo asunto en la respuesta, 
+                por favor veriquelo."
     notify_new_findings:
       title: "Notificación de hallazgos"
       created_title:

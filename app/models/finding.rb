@@ -28,6 +28,7 @@ class Finding < ApplicationRecord
   include Findings::Display
   include Findings::Expiration
   include Findings::FinalReview
+  include Findings::FindingAnswersGenerator
   include Findings::FirstFollowUp
   include Findings::FollowUp
   include Findings::FollowUpPdf

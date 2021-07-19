@@ -13,7 +13,7 @@ es:
 
   common_mailer:
     header_repĺy:
-      reply_delimiter: '-- RESPONDER ARRIBA DE ESTA LÍNEA Y POR FAVOR NO MODIFIQUE EL ASUNTO --'
+      reply_delimiter: '-- PARA AGREGAR UN COMENTARIO RESPONDA ESTE EMAIL SIN MODIFICAR EL ASUNTO --'
     alt_footer:
       warning: "Por favor, **no contestar** el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
       title_html: "Si usted desea acceder a sus observaciones, haga clic en el siguiente enlace e ingrese legajo y contraseña de Windows: %{url}"
