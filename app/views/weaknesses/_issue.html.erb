@@ -10,13 +10,13 @@ readonly = readonly
       <div class="col-md-2">
         <%= f.input :customer, label: false, input_html: { autofocus: issue.new_record?, readonly: readonly } %>
       </div>
-      <div class="col-md-2 d-none d-md-block d-xl-block">
+      <div class="col-md-2 d-none d-md-block">
         <%= f.input :entry, label: false, input_html: { readonly: readonly } %>
       </div>
-      <div class="col-md-2 d-none d-md-block d-xl-block">
+      <div class="col-md-2 d-none d-md-block">
         <%= f.input :operation, label: false, input_html: { readonly: readonly } %>
       </div>
-      <div class="col-md-2 d-none d-md-block d-xl-block">
+      <div class="col-md-2 d-none d-md-block">
         <%= f.input :comments, label: false, input_html: { readonly: readonly, rows: 1 } %>
       </div>
       <div class="col-md-2">
