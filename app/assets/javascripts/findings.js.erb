@@ -202,9 +202,10 @@ jQuery(function ($) {
       total += +$(e).val()
     })
 
-    $.each(types, function(amount, id) {
-      if (total <= amount) {
-        impactValue = id
+    $.each(types, function(i, data) {
+      if (total >= data[0]) {
+        impactValue = data[1]
+        console.log(impactValue)
         return false
       }
     })

@@ -417,10 +417,10 @@ module FindingsHelper
     def finding_impact_risks_types finding
       types = {}
 
-      finding.amount_by_impact.each do |id, name|
+      finding.amount_by_impact.reverse_each do |id, name|
         types.merge!("#{name}" => "#{id}")
       end
 
-      types.to_json
+      types.to_a.to_json
     end
 end

@@ -16,7 +16,7 @@ module Findings::Issues
   def get_amount_by_impact
     amount = issues_amount
 
-    amount_by_impact.detect { |name, import| amount <= import }
+    Hash[amount_by_impact.to_a.reverse].to_hash.detect { |id, import| amount >= import }
   end
 
   def impact_risk_text
@@ -24,7 +24,7 @@ module Findings::Issues
   end
 
   def impact_risk_value
-    get_amount_by_impact.first
+    get_amount_by_impact&.first
   end
 
   def probability_risk
@@ -41,11 +41,11 @@ module Findings::Issues
 
   def amount_by_impact
     {
-      1 => 2084408,
-      2 => 20844081,
-      3 => 208440815,
-      4 => 2084408150,
-      5 => 9999999999
+      1 => 0,
+      2 => 2084408,
+      3 => 20844081,
+      4 => 208440815,
+      5 => 2084408150
     }
   end
 
