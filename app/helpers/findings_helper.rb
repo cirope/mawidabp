@@ -418,7 +418,7 @@ module FindingsHelper
       types = {}
 
       finding.amount_by_impact.reverse_each do |id, name|
-        types.merge!("#{name}" => "#{id}")
+        types.merge!(name.to_s => id.to_s)
       end
 
       types.to_a.to_json

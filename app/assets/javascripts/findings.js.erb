@@ -181,10 +181,10 @@ jQuery(function ($) {
 
   $(document).on('change', '[data-toggle-suggested-impact-disabled-attr]', function () {
     if ($(this).is(':checked')) {
+      var impactValue = $('[data-impact-risks-value]').data('impactRisksValue')
+
       $('select[name$="[impact_risk]"]').attr('disabled', true)
       $('input[name$="[impact_risk]"]').attr('disabled', false)
-
-      var impactValue = $('[data-impact-risks-value]').data('impactRisksValue')
 
       $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
     } else {
@@ -203,36 +203,40 @@ jQuery(function ($) {
     })
 
     $.each(types, function(i, data) {
-      if (total >= data[0]) {
-        impactValue = data[1]
+      var impactRiskId     = data[1]
+      var impactRiskAmount = data[0]
+
+      if (total >= impactRiskAmount) {
+        impactValue = impactRiskId
         return false
       }
     })
 
     var currentImpactValue = +$('[data-amount-impact]').val()
-    var issuePercentage    = total / currentImpactValue * 100
     var currency           = $('[data-current-currency]').val()
+    var issuePercentage    = total / currentImpactValue * 100
 
     $('[data-percentage-issue]').text(issuePercentage)
     $('[data-sum-amount-impact-risks]').text(currency + total.toFixed(2))
     $('[data-impact-risks-value]').data('impactRisksValue', impactValue)
 
-    if ($('[data-toggle-suggested-impact-disabled-attr]').is(':checked')) {
-      if ($('[name$="[impact_risk]"]').val() !== impactValue) {
-        $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
-      }
+    var isImpactChecked   = $('[data-toggle-suggested-impact-disabled-attr]').is(':checked')
+    var impactRiskChanged = $('[name$="[impact_risk]"]').val() !== impactValue
+
+    if (isImpactChecked && impactRiskChanged) {
+      $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
     }
   })
 
   $(document).on('change', '[name$="[impact_amount]"]', function () {
     var total              = 0
-    var amountImpactAssign = +$(this).val()
+    var impactAmount = +$(this).val()
 
     $('[data-finding-issue-amount]').each(function (i, e) {
       total += +$(e).val()
     })
 
-    var amountPorcentageIssues = (total * 100) / amountImpactAssign
+    var amountPorcentageIssues = total / impactAmount * 100
 
     $('[data-percentage-issue]').text(amountPorcentageIssues)
   })
