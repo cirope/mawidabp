@@ -81,16 +81,16 @@ class NotifierMailer < ActionMailer::Base
     mail to: users_to_notify_for(users).map(&:email),
          subject: prefix.upcase + t(
            'notifier.notify_new_finding_answer.title',
-           review:     finding_answer.finding.review.to_s,
+           review:     finding_answer.finding.review,
            finding_id: finding_answer.finding.id
          )
   end
 
-  def notify_not_added_answer(email_to, answer)
+  def notify_action_not_found(email_to, answer)
     @answer = answer
 
     mail to: email_to,
-         subject: t('notifier.notify_not_added_answer.title')
+         subject: t('notifier.notify_action_not_found.title')
   end
 
   def stale_notification(user)

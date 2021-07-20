@@ -28,7 +28,6 @@ class Finding < ApplicationRecord
   include Findings::Display
   include Findings::Expiration
   include Findings::FinalReview
-  include Findings::FindingAnswersGenerator
   include Findings::FirstFollowUp
   include Findings::FollowUp
   include Findings::FollowUpPdf
@@ -39,6 +38,7 @@ class Finding < ApplicationRecord
   include Findings::Notifications
   include Findings::Overrides
   include Findings::Pdf
+  include Findings::ProcessEmail
   include (POSTGRESQL_ADAPTER ? Findings::Reiterations : Findings::ReiterationsAlt)
   include Findings::Relations
   include Findings::RepeatedCsv
