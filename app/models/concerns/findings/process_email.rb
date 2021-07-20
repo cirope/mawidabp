@@ -5,7 +5,7 @@ module Findings::ProcessEmail
     def receive_finding_answers
       if email_method?
         config
-
+        byebug
         Mail.all.each do |mail|
           begin
             receive_mail mail
@@ -19,10 +19,12 @@ module Findings::ProcessEmail
     private
 
       def receive_mail mail
-        finding_id = extract_finding_id mail
+        finding_id = extract_finding_id(mail)
+        user       = find_user mail if finding_id
+        finding    = set_finding(finding_id, user) if user
 
-        if finding_id && exists?(finding_id)
-          find(finding_id).finding_answers.create generate_finding_answer_from_mail(mail)
+        if finding
+          finding.finding_answers.create generate_finding_answer_from_mail(mail, user)
         else
           NotifierMailer.notify_action_not_found(mail.from, extract_answer(mail)).deliver_later
         end
@@ -43,10 +45,6 @@ module Findings::ProcessEmail
         ENV['EMAIL_METHOD']
       end
 
-      def email_method
-        ENV['EMAIL_METHOD'].to_sym
-      end
-
       def log exception, mail
         logger = Logger.new 'log/mailman.log'
 
@@ -62,10 +60,41 @@ module Findings::ProcessEmail
         mail.subject.present? ? mail.subject : '(no subject)'
       end
 
-      def generate_finding_answer_from_mail mail
+      def set_finding finding_id, user
+        if exists? finding_id
+          finding              = find finding_id
+          Current.organization = finding.organization
+          Current.group        = Current.organization.group
+
+          left_joins = scope_user_findings?(user) ? [:users] : []
+
+          left_joins(left_joins).where(get_conditions(finding_id, user)).take
+        end
+      end
+
+      def scope_user_findings? user
+        !Current.organization.corporate &&
+          user.can_act_as_audited? &&
+          !user.committee?
+      end
+
+      def get_conditions finding_id, user
+        conditions = { id: finding_id, final: false }
+
+        if scope_user_findings? user
+          user_ids = user.self_and_descendants.map(&:id) +
+                     user.related_users_and_descendants.map(&:id)
+
+          conditions[User.table_name] = { id: user_ids }
+        end
+
+        conditions
+      end
+
+      def generate_finding_answer_from_mail mail, user
         {
           answer: extract_answer(mail),
-          user: find_user(mail),
+          user: user,
           imported: true
         }
       end

@@ -1531,7 +1531,20 @@ class FindingTest < ActiveSupport::TestCase
     Current.user = nil
   end
 
+  test 'notify action not found because subject not have finding_id' do
+    Finding.receive_finding_answers
+  end
+
   private
+
+    def send_email from, subject
+      Mail.deliver do
+        to 'soporte@mawidabp.com'
+        from from
+        subject subject
+        body 'Some body'
+      end
+    end
 
     def review_codes_on_findings_by_user method
       review_codes_by_user = {}
@@ -1632,4 +1645,6 @@ class FindingTest < ActiveSupport::TestCase
         finding_ids:                     finding_ids
       }
     end
+
+
 end

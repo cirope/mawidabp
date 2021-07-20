@@ -138,11 +138,24 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert response.subject.include?(
       I18n.t(
         'notifier.notify_new_finding_answer.title',
-        :review => finding_answer.finding.review.to_s
+        review: finding_answer.finding.review,
+        finding_id: finding_answer.finding.id
       )
     )
     assert_match Regexp.new(I18n.t('notifier.notify_new_finding_answer.finding_link')),
       response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
+  test 'notify action not found' do
+    user    = User.find(users(:administrator).id)
+    comment = 'comment'
+
+    response = NotifierMailer.notify_action_not_found(user.email, comment).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include? I18n.t('notifier.notify_action_not_found.title')
+    assert_match Regexp.new(comment), response.body.decoded
     assert_equal user.email, response.to.first
   end
 
