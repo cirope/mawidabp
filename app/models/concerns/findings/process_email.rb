@@ -5,7 +5,7 @@ module Findings::ProcessEmail
     def receive_finding_answers
       if email_method?
         config
-        byebug
+
         Mail.all.each do |mail|
           begin
             receive_mail mail

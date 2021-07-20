@@ -1,7 +1,6 @@
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'sidekiq/testing'
-require 'mail'
 
 Sidekiq::Testing.inline!
 
@@ -19,10 +18,6 @@ class ActiveSupport::TestCase
 
     try :clear_enqueued_jobs
     try :clear_performed_jobs
-  end
-
-  Mail.defaults do
-    delivery_method :test
   end
 
   def set_organization organization = organizations(:cirope)
