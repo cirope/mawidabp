@@ -16,7 +16,7 @@ module Findings::Issues
   def get_amount_by_impact
     amount = issues_amount
 
-    amount_by_impact.reverse_each.to_h.detect { |id, import| amount >= import }
+    amount_by_impact.reverse_each.to_h.detect { |id, value| amount >= value }
   end
 
   def impact_risk_text
