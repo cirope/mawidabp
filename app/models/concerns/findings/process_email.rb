@@ -2,55 +2,19 @@ module Findings::ProcessEmail
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def receive_finding_answers
-      if email_method?
-        config
+    def receive_mail mail
+      finding_id = extract_finding_id(mail)
+      user       = find_user mail if finding_id
+      finding    = set_finding(finding_id, user) if user
 
-        Mail.all.each do |mail|
-          begin
-            receive_mail mail
-          rescue Exception => exception
-            log exception, mail
-          end
-        end
+      if finding
+        finding.finding_answers.create generate_finding_answer_from_mail(mail, user)
+      else
+        NotifierMailer.notify_action_not_found(mail.from, extract_answer(mail)).deliver_later
       end
     end
 
     private
-
-      def receive_mail mail
-        finding_id = extract_finding_id(mail)
-        user       = find_user mail if finding_id
-        finding    = set_finding(finding_id, user) if user
-
-        if finding
-          finding.finding_answers.create generate_finding_answer_from_mail(mail, user)
-        else
-          NotifierMailer.notify_action_not_found(mail.from, extract_answer(mail)).deliver_later
-        end
-      end
-
-      def config
-        Mail.defaults do
-          email_method = -> { ENV['EMAIL_METHOD'].to_sym }
-          retriever_method email_method.call,  address:    ENV['EMAIL_SERVER'],
-                                               port:       ENV['EMAIL_PORT'],
-                                               user_name:  ENV['EMAIL_USER_NAME'],
-                                               password:   ENV['EMAIL_PASSWORD'],
-                                               enable_ssl: ENV['EMAIL_SSL'] != 'false'
-        end
-      end
-
-      def email_method?
-        ENV['EMAIL_METHOD']
-      end
-
-      def log exception, mail
-        logger = Logger.new 'log/mailman.log'
-
-        logger.error "Exception occurred while receiving message:\n#{mail}"
-        logger.error [exception, *exception.backtrace].join("\n")
-      end
 
       def extract_finding_id mail
         extract_subject(mail).slice(/\[#(\d+)\]/, 1)
