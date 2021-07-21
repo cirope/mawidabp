@@ -1,3 +1,5 @@
-$('[data-time-summary-amounts]').removeClass('d-none')
-$('[data-time-summary-workflow-amount]').text('<%= @amounts[:workflow] %>')
-$('[data-time-summary-time-consumption-amount]').text('<%= @amounts[:time_consumption] %>')
++function () {
+  $('[data-time-summary-amounts]').removeClass('d-none')
+  $('[data-time-summary-workflow-amount]').text('<%= @amounts[:workflow] %>')
+  $('[data-time-summary-time-consumption-amount]').text('<%= @amounts[:time_consumption] %>')
+}()
