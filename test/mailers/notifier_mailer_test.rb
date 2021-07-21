@@ -129,7 +129,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'notify new finding answer' do
-    user = User.find(users(:administrator).id)
+    user           = User.find(users(:administrator).id)
     finding_answer = FindingAnswer.find(finding_answers(:auditor_answer).id)
 
     response = NotifierMailer.notify_new_finding_answer(user, finding_answer).deliver_now
