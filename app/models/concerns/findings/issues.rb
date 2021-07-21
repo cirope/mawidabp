@@ -34,7 +34,7 @@ module Findings::Issues
       4.times do
         review = review&.previous
 
-        if review && (weaknesses_previous? review)
+        if review && (previous_weakness_by_templat? review)
           quantity += 1
         end
       end
@@ -43,7 +43,7 @@ module Findings::Issues
     end
   end
 
-  def weaknesses_previous? review
+  def previous_weakness_by_template? review
     review.weaknesses.map(&:weakness_template_id).include? weakness_template_id
   end
 

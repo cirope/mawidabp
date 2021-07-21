@@ -514,8 +514,8 @@ ActiveRecord::Schema.define(version: 2021_07_14_191248) do
     t.integer "probability"
     t.integer "impact_risk"
     t.boolean "manual_risk", default: true, null: false
-    t.boolean "use_suggested_impact", default: false
-    t.boolean "use_suggested_probability", default: false
+    t.boolean "use_suggested_impact", default: false, null: false
+    t.boolean "use_suggested_probability", default: false, null: false
     t.decimal "impact_amount", precision: 17, scale: 2
     t.decimal "probability_amount", precision: 17, scale: 2
     t.index ["closed_at"], name: "index_findings_on_closed_at"

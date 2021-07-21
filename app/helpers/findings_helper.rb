@@ -418,13 +418,9 @@ module FindingsHelper
       types = {}
 
       finding.amount_by_impact.reverse_each do |id, name|
-        types.merge!(name.to_s => id.to_s)
+        types.merge!(name => id.to_s)
       end
 
       types.to_a.to_json
-    end
-
-    def finding_probability_previous_amount finding
-      finding.probability_risk_previous
     end
 end

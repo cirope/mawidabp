@@ -14,9 +14,7 @@
   </div>
 </div>
 
-<div class="d-none" data-impact-risks-value data-impact-risks-types="<%= finding_impact_risks_types(@weakness) %>">
-  <%= @weakness.impact_risk_value %>
-</div>
+<div class="d-none" data-impact-risks-value=<%= @weakness.impact_risk_value %> data-impact-risks-types="<%= finding_impact_risks_types(@weakness) %>"></div>
 
 <%= link_to_add_fields(
   t('finding.add_issue'), f,

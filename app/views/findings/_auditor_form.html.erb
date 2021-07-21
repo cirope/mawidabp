@@ -70,10 +70,11 @@
                 } %>
               </div>
               <div class="col">
-                <%= f.input :probability, collection: weakness_probabilities, prompt: true, input_html: {
+                <%= f.input :probability, collection: weakness_probabilities, prompt: true, disabled: @finding.use_suggested_probability,
+                  input_html: {
                   data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
                 } %>
-                <%= f.input :probability, as: :hidden, disabled: !@weakness.use_suggested_probability %>
+                <%= f.input :probability, as: :hidden, disabled: !@finding.use_suggested_probability %>
               </div>
               <div class="col">
                 <%= f.input :use_suggested_probability, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
@@ -380,7 +381,7 @@
         input_html: {
           class: "col-md-6",
           data: {
-            probability_previous_amount: finding_probability_previous_amount(@finding)
+            probability_previous_amount: @finding.probability_risk_previous
           }
         } %>
     </div>
@@ -413,7 +414,7 @@
 
     <div id="finding_issues"></div>
     <div class="row justify-content-end">
-      <div class="col-2 text-right" data-sum-amount-impact-risks>
+      <div class="col-2 text-right" data-sum-amount-impact-risks data-current-currency="<%= t 'number.currency.format.unit' %>">
         <div class="row">
           <div class="col-10 text-right">
             <%= number_to_currency @finding.issues_amount %>
@@ -421,13 +422,7 @@
         </div>
       </div>
     </div>
-    <div class="d-none" data-impact-risks-value data-impact-risks-types="<%= finding_impact_risks_types(@finding) %>">
-      <%= @finding.impact_risk_value %>
-    </div>
-
-    <div class="d-none" data-amount-probability-value>
-      <%= @finding.probability_risk %>
-    </div>
+    <div class="d-none" data-impact-risks-value=<%= @finding.impact_risk_value %> data-impact-risks-types="<%= finding_impact_risks_types(@finding) %>"></div>
 
     <%= link_to_add_fields(
       t('finding.add_issue'), f,

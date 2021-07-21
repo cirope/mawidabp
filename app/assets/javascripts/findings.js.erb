@@ -193,7 +193,7 @@ jQuery(function ($) {
     }
   })
 
-  $(document).on('keyup', '[data-finding-issue-amount]', function() {
+  $(document).on('keyup', '[data-finding-issue-amount]', function () {
     var impactValue
     var total = 0
     var types = $('[data-impact-risks-types]').data('impactRisksTypes')
@@ -202,7 +202,7 @@ jQuery(function ($) {
       total += +$(e).val()
     })
 
-    $.each(types, function(i, data) {
+    $.each(types, function (i, data) {
       var impactRiskId     = data[1]
       var impactRiskAmount = data[0]
 
