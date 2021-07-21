@@ -229,7 +229,7 @@ jQuery(function ($) {
   })
 
   $(document).on('change', '[name$="[impact_amount]"]', function () {
-    var total              = 0
+    var total        = 0
     var impactAmount = +$(this).val()
 
     $('[data-finding-issue-amount]').each(function (i, e) {

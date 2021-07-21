@@ -73,6 +73,7 @@
                 <%= f.input :probability, collection: weakness_probabilities, prompt: true, input_html: {
                   data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
                 } %>
+                <%= f.input :probability, as: :hidden, disabled: !@weakness.use_suggested_probability %>
               </div>
               <div class="col">
                 <%= f.input :use_suggested_probability, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
@@ -365,18 +366,25 @@
   </div>
 
   <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
-  <div class="col-md-4">
-    <%= f.input :impact_amount,
-      input_html: {
-        class: "col-md-6",
-        data: { amount_impact: true }
-      } %>
-    <span data-percentage-issue></span>
-  </div>
-  <div class="col-md-4">
-    <%= f.input :probability_amount, input_html: { class: "col-md-6" }%>
-  </div>
-
+  <% if USE_SCOPE_CYCLE %>
+    <div class="col-md-4">
+      <%= f.input :impact_amount,
+        input_html: {
+          class: "col-md-6",
+          data: { amount_impact: true }
+        } %>
+      <span data-percentage-issue></span>
+    </div>
+    <div class="col-md-4">
+      <%= f.input :probability_amount,
+        input_html: {
+          class: "col-md-6",
+          data: {
+            probability_previous_amount: finding_probability_previous_amount(@finding)
+          }
+        } %>
+    </div>
+  <% end %>
   <div class="row">
     <div class="col-md-2">
       <h5 class="h6"><%= Issue.human_attribute_name 'customer' %></h5>

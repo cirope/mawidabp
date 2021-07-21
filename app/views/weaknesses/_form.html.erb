@@ -95,8 +95,9 @@
                 input_html: {
                   data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
                 } %>
+              <%= f.input :probability, as: :hidden, disabled: !@weakness.use_suggested_probability %>
             </div>
-            <%= f.input :probability, as: :hidden, disabled: !@weakness.use_suggested_probability %>
+
             <div class="col">
               <%= f.input :use_suggested_probability, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
                 data: { toggle_suggested_probability_disabled_attr: true }
