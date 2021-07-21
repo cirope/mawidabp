@@ -51,7 +51,7 @@ class TimeSummaryController < ApplicationController
   end
 
   def show
-    review = Review.find(params[:id]) unless params[:id].blank?
+    review = Review.find params[:id]
 
     @amounts = {
       'workflow':         review.workflow.try(:human_units).to_f,

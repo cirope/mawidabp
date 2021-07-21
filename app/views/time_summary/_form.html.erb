@@ -26,16 +26,16 @@
             autofocus: true,
             data: {
               time_summary_review: true,
-              time_summary_review_url: time_summary_generic_url_for
+              time_summary_review_url: time_summary_path('[ID]')
             }
           } %>
 
         <div class="d-none" data-time-summary-amounts>
           <div>
-            <b><%= t('.workflow_amount') %> <span data-time-summary-workflow-amount></span></b>
+            <%= t('.workflow_amount') %> <span data-time-summary-workflow-amount></span>
           </div>
           <div>
-            <b><%= t('.time_consumption_amount') %> <span data-time-summary-time-consumption-amount></span></b>
+            <%= t('.time_consumption_amount') %> <span data-time-summary-time-consumption-amount></span>
           </div>
         </div>
       <% end %>
