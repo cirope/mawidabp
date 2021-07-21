@@ -80,4 +80,10 @@ module TimeSummaryHelper
   def time_summary_require_detail_class
     'd-none' unless @time_consumption.require_detail?
   end
+
+  def time_summary_generic_url_for
+    url_for controller: 'time_summary',
+            action:     :show,
+            id:         '[ID]'
+  end
 end

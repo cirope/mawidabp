@@ -20,14 +20,13 @@ jQuery(function ($) {
   })
 
   $(document).on('change', '[data-time-summary-review]', function () {
-    var amountUrl = $(this).data('timeSummaryReviewUrl')
+    var $reviewSelect = $(this)
+    var reviewId      = $reviewSelect.val()
+    var urlTemplate   = decodeURI($reviewSelect.data('timeSummaryReviewUrl'))
+    var url           = urlTemplate.replace('[ID]', reviewId)
 
     if ($(this).val()){
-      $.get(amountUrl, { id: $(this).val() }, function (data) {
-        $('[data-time-summary-amounts]').removeClass('d-none')
-        $('[data-time-summary-workflow-amount]').text(data['workflow'])
-        $('[data-time-summary-time-consumption-amount]').text(data['time_consumption'])
-      })
+      $.getScript(url)
     } else {
       $('[data-time-summary-amounts]').addClass('d-none')
     }

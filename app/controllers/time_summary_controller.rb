@@ -1,5 +1,5 @@
 class TimeSummaryController < ApplicationController
-  respond_to :html, :csv
+  respond_to :html, :csv, :js
 
   before_action :auth, :check_privileges, :set_title, :set_descendants,
                 :set_user
@@ -50,15 +50,16 @@ class TimeSummaryController < ApplicationController
     )
   end
 
-  def estimated_amount
+  def show
     review = Review.find(params[:id]) unless params[:id].blank?
 
-    amounts = {
+    @amounts = {
       'workflow':         review.workflow.try(:human_units).to_f,
       'time_consumption': review.time_consumptions.sum(&:amount).to_f
     }
 
-    render json: amounts
+    respond_to :js
+
   end
 
   private
