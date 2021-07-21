@@ -91,10 +91,12 @@
               } %>
             </div>
             <div class="col">
-              <%= f.input :probability, collection: weakness_probabilities, prompt: true, input_html: {
-                data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
-              } %>
+              <%= f.input :probability, collection: weakness_probabilities, prompt: true, disabled: @weakness.use_suggested_probability,
+                input_html: {
+                  data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+                } %>
             </div>
+            <%= f.input :probability, as: :hidden, disabled: !@weakness.use_suggested_probability %>
             <div class="col">
               <%= f.input :use_suggested_probability, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
                 data: { toggle_suggested_probability_disabled_attr: true }
@@ -417,7 +419,13 @@
       <span data-percentage-issue></span>
     </div>
     <div class="col-md-4">
-      <%= f.input :probability_amount, input_html: { class: "col-md-6" }%>
+      <%= f.input :probability_amount,
+        input_html: {
+          class: "col-md-6",
+          data: {
+            probability_previous_amount: finding_probability_previous_amount(@weakness)
+          }
+        } %>
     </div>
   <div class="row">
     <div class="col-md-2">

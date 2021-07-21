@@ -241,6 +241,20 @@ jQuery(function ($) {
     $('[data-percentage-issue]').text(amountPorcentageIssues)
   })
 
+  $(document).on('change', '[data-toggle-suggested-probability-disabled-attr]', function () {
+    if ($(this).is(':checked')) {
+      var probabilityValue = $('[data-probability-previous-amount]').data('probabilityPreviousAmount')
+
+      $('select[name$="[probability]"]').attr('disabled', true)
+      $('input[name$="[probability]"]').attr('disabled', false)
+
+      $('[name$="[probability]"]').val(probabilityValue).trigger('change')
+    } else {
+      $('select[name$="[probability]"]').attr('disabled', false)
+      $('input[name$="[probability]"]').attr('disabled', true)
+    }
+  })
+
   $(document).on('keyup', '[data-endorsement-reason]', function () {
     var $reason       = $(this)
     var reason        = $reason.val() || ''

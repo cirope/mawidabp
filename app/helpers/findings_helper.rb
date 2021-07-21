@@ -423,4 +423,8 @@ module FindingsHelper
 
       types.to_a.to_json
     end
+
+    def finding_probability_previous_amount finding
+      finding.probability_risk_previous
+    end
 end

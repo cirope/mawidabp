@@ -18,10 +18,6 @@
   <%= @weakness.impact_risk_value %>
 </div>
 
-<div class="d-none" data-amount-probability-value>
-  <%= @weakness.probability_risk %>
-</div>
-
 <%= link_to_add_fields(
   t('finding.add_issue'), f,
   (:issues unless readonly), nil,
