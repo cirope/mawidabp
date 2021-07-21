@@ -59,7 +59,6 @@ class TimeSummaryController < ApplicationController
     }
 
     respond_to :js
-
   end
 
   private
