@@ -29,13 +29,13 @@ module Findings::Issues
 
   def probability_risk_previous
     if weakness_template_id
-      quantity = 1
-      @review  = review
+      quantity       = 1
+      current_review = review
 
       4.times do
-        @review = @review&.previous
+        current_review = current_review&.previous
 
-        if review && previous_weakness_by_template?(@review)
+        if review && previous_weakness_by_template?(current_review)
           quantity += 1
         end
       end
