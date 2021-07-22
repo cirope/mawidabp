@@ -8,7 +8,7 @@ module Findings::ProcessEmail
       finding    = set_finding(finding_id, user) if user
 
       if finding
-        finding.finding_answers.create generate_finding_answer_from_mail(mail, user)
+        finding.finding_answers.create! generate_finding_answer_from_mail(mail, user)
       else
         NotifierMailer.notify_action_not_found(mail.from, extract_answer(mail)).deliver_later
       end
@@ -31,8 +31,7 @@ module Findings::ProcessEmail
       end
 
       def scope_user_findings? user
-        user.can_act_as_audited? &&
-          !user.committee?
+        user.can_act_as_audited? && !user.committee?
       end
 
       def get_conditions finding_id, user

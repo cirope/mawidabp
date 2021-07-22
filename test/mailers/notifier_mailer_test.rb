@@ -134,7 +134,7 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     response = NotifierMailer.notify_new_finding_answer(user, finding_answer).deliver_now
 
-    assert !ActionMailer::Base.deliveries.empty?
+    refute ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
       I18n.t(
         'notifier.notify_new_finding_answer.title',
@@ -153,7 +153,7 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     response = NotifierMailer.notify_action_not_found(user.email, comment).deliver_now
 
-    assert !ActionMailer::Base.deliveries.empty?
+    refute ActionMailer::Base.deliveries.empty?
     assert response.subject.include? I18n.t('notifier.notify_action_not_found.title')
     assert_match Regexp.new(comment), response.body.decoded
     assert_equal user.email, response.to.first
