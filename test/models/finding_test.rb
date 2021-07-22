@@ -1741,5 +1741,4 @@ class FindingTest < ActiveSupport::TestCase
       }
     end
 
-
 end

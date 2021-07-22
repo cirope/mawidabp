@@ -1134,7 +1134,7 @@
 
   notifier:
     notify_new_finding:
-      title: "Tiene un nuevo hallazgo"
+      title: "Tiene un nuevo hallazgo [#%{finding_id}]"
       created_title: "Nuevo hallazgo"
     notify_new_oportunity:
       title: "Tiene una nueva oportunidad de mejora"
