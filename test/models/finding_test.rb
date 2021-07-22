@@ -1544,9 +1544,15 @@ class FindingTest < ActiveSupport::TestCase
   test 'get_amount_by_impact' do
     skip unless USE_SCOPE_CYCLE
 
-    @finding.issues.create!(customer: 'Some customer', amount: 30844081)
+    amount =  30844081
 
-    assert_equal @finding.impact_risk_value, 3
+    @finding.issues.create!(customer: 'Some customer', amount: amount)
+
+    amount_by_impact = @finding.amount_by_impact
+
+    result = amount_by_impact.reverse_each.to_h.detect { |id, value| amount >= value }
+
+    assert_equal @finding.impact_risk_value, result.first
   end
 
   test 'probability_risk_previuos' do
@@ -1559,7 +1565,15 @@ class FindingTest < ActiveSupport::TestCase
 
     @finding.weakness_template = weakness_templates :security
 
+    assert @finding.valid?
+
     assert_equal @finding.probability_risk_previous, 1
+
+    weakness_previous = @finding.review.previous.weaknesses.first
+
+    weakness_previous.update_column :weakness_template_id, weakness_templates(:security).id
+
+    assert_equal @finding.probability_risk_previous, 2
   end
 
   private

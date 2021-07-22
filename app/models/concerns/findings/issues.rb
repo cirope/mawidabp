@@ -30,11 +30,12 @@ module Findings::Issues
   def probability_risk_previous
     if weakness_template_id
       quantity = 1
+      @review  = review
 
       4.times do
-        review = review&.previous
+        @review = @review&.previous
 
-        if review && previous_weakness_by_template?(review)
+        if review && previous_weakness_by_template?(@review)
           quantity += 1
         end
       end
@@ -44,7 +45,7 @@ module Findings::Issues
   end
 
   def previous_weakness_by_template? review
-    review.weaknesses.map(&:weakness_template_id).include? weakness_template_id
+    review&.weaknesses&.map(&:weakness_template_id)&.include? weakness_template_id
   end
 
   def amount_by_impact
