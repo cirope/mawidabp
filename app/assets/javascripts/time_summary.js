@@ -25,7 +25,7 @@ jQuery(function ($) {
     var urlTemplate   = decodeURI($reviewSelect.data('timeSummaryReviewUrl'))
     var url           = urlTemplate.replace('[ID]', reviewId)
 
-    if ($(this).val()){
+    if (reviewId) {
       $.getScript(url)
     } else {
       $('[data-time-summary-amounts]').addClass('d-none')
