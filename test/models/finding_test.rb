@@ -1532,18 +1532,13 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'issues_amount' do
-    skip unless USE_SCOPE_CYCLE
-
     @finding.issues.create!(customer: 'Some customer', amount: 10)
-
     @finding.issues.create!(customer: 'Some customer dup', amount: 23)
 
     assert_equal @finding.issues_amount, 33
   end
 
   test 'get_amount_by_impact' do
-    skip unless USE_SCOPE_CYCLE
-
     amount =  30844081
 
     @finding.issues.create!(customer: 'Some customer', amount: amount)
@@ -1556,8 +1551,6 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'probability_risk_previuos' do
-    skip unless USE_SCOPE_CYCLE
-
     Current.organization = organizations :cirope
     Current.user         = users :auditor
 

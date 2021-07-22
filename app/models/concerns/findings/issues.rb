@@ -45,7 +45,7 @@ module Findings::Issues
   end
 
   def previous_weakness_by_template? review
-    review&.weaknesses&.map(&:weakness_template_id)&.include? weakness_template_id
+    Array(review&.weaknesses).map(&:weakness_template_id).include? weakness_template_id
   end
 
   def amount_by_impact
