@@ -544,7 +544,7 @@ class UserTest < ActiveSupport::TestCase
       review_codes_by_user[user] = user.findings.for_notification.pluck 'review_code'
     end
 
-    assert_enqueued_emails 6 do
+    assert_enqueued_emails 12 do
       User.notify_new_findings
     end
 
