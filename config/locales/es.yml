@@ -1147,11 +1147,6 @@
       title: "No se procesó su correo"
       warning: "No se tomó acción con el correo recibido."
       reply_receive: "Respuesta recibida"
-    notify_new_findings:
-      title: "Notificación de hallazgos"
-      created_title:
-        one: "Nuevo hallazgo"
-        other: "Nuevos hallazgos"
     change_password: "Cambiar contraseña"
     changes_notification:
       title: "Notificación de cambios"
