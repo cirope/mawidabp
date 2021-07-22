@@ -54,8 +54,8 @@ class TimeSummaryController < ApplicationController
     review = Review.list.find params[:id]
 
     @amounts = {
-      'workflow':         review.workflow.try(:human_units).to_f,
-      'time_consumption': review.time_consumptions.sum(&:amount).to_f
+      workflow:         review&.workflow.try(:human_units).to_f,
+      time_consumption: review.time_consumptions.sum(&:amount).to_f
     }
 
     respond_to :js
