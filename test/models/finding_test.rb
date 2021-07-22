@@ -1531,6 +1531,37 @@ class FindingTest < ActiveSupport::TestCase
     Current.user = nil
   end
 
+  test 'issues_amount' do
+    skip unless USE_SCOPE_CYCLE
+
+    @finding.issues.create!(customer: 'Some customer', amount: 10)
+
+    @finding.issues.create!(customer: 'Some customer dup', amount: 23)
+
+    assert_equal @finding.issues_amount, 33
+  end
+
+  test 'get_amount_by_impact' do
+    skip unless USE_SCOPE_CYCLE
+
+    @finding.issues.create!(customer: 'Some customer', amount: 30844081)
+
+    assert_equal @finding.impact_risk_value, 3
+  end
+
+  test 'probability_risk_previuos' do
+    skip unless USE_SCOPE_CYCLE
+
+    Current.organization = organizations :cirope
+    Current.user         = users :auditor
+
+    assert_nil @finding.probability_risk_previous
+
+    @finding.weakness_template = weakness_templates :security
+
+    assert_equal @finding.probability_risk_previous, 1
+  end
+
   private
 
     def review_codes_on_findings_by_user method

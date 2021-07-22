@@ -34,7 +34,7 @@ module Findings::Issues
       4.times do
         review = review&.previous
 
-        if review && (previous_weakness_by_templat? review)
+        if review && previous_weakness_by_template?(review)
           quantity += 1
         end
       end
