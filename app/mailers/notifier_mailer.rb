@@ -51,8 +51,8 @@ class NotifierMailer < ActionMailer::Base
 
     mail to: users_to_notify_for(user).map(&:email),
          subject: prefix.upcase + t(
-            'notifier.notify_new_finding.title',
-            finding_id: finding.id
+           'notifier.notify_new_finding.title',
+           finding_id: finding.id
         )
   end
 

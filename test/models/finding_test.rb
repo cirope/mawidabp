@@ -1740,5 +1740,4 @@ class FindingTest < ActiveSupport::TestCase
         finding_ids:                     finding_ids
       }
     end
-
 end
