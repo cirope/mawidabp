@@ -221,7 +221,7 @@ jQuery(function ($) {
     $('[data-impact-risks-value]').data('impactRisksValue', impactValue)
 
     var isImpactChecked   = $('[data-toggle-suggested-impact-disabled-attr]').is(':checked')
-    var impactRiskChanged = $('[name$="[impact_risk]"]').val() !== impactValue
+    var impactRiskChanged = $('[name$="[impact_risk]"]').val() !== String(impactValue)
 
     if (isImpactChecked && impactRiskChanged) {
       $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
