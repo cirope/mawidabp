@@ -24,12 +24,12 @@ module Emails::Fetch
 
       def config
         Mail.defaults do
-          email_method = -> { ENV['EMAIL_METHOD'].to_sym }
-          retriever_method email_method.call,  address:    ENV['EMAIL_SERVER'],
-                                               port:       ENV['EMAIL_PORT'],
-                                               user_name:  ENV['EMAIL_USER_NAME'],
-                                               password:   ENV['EMAIL_PASSWORD'],
-                                               enable_ssl: ENV['EMAIL_SSL'] != 'false'
+          email_method = ENV['EMAIL_METHOD'].to_sym
+          retriever_method email_method, address:    ENV['EMAIL_SERVER'],
+                                         port:       ENV['EMAIL_PORT'],
+                                         user_name:  ENV['EMAIL_USER_NAME'],
+                                         password:   ENV['EMAIL_PASSWORD'],
+                                         enable_ssl: ENV['EMAIL_SSL'] != 'false'
         end
       end
 

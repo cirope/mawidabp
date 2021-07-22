@@ -3,8 +3,8 @@ module Findings::ProcessEmail
 
   module ClassMethods
     def receive_mail mail
-      finding_id = extract_finding_id(mail)
-      user       = find_user mail if finding_id
+      finding_id = extract_finding_id mail
+      user       = find_user(mail, finding_id) if finding_id
       finding    = set_finding(finding_id, user) if user
 
       if finding
@@ -17,7 +17,7 @@ module Findings::ProcessEmail
     private
 
       def extract_finding_id mail
-        extract_subject(mail).slice(/\[#(\d+)\]/, 1)
+        extract_subject(mail).slice /\[#(\d+)\]/, 1
       end
 
       def extract_subject mail
@@ -25,20 +25,13 @@ module Findings::ProcessEmail
       end
 
       def set_finding finding_id, user
-        if exists? finding_id
-          finding              = find finding_id
-          Current.organization = finding.organization
-          Current.group        = Current.organization.group
+        left_joins = scope_user_findings?(user) ? [:users] : []
 
-          left_joins = scope_user_findings?(user) ? [:users] : []
-
-          left_joins(left_joins).where(get_conditions(finding_id, user)).take
-        end
+        left_joins(left_joins).where(get_conditions(finding_id, user)).take
       end
 
       def scope_user_findings? user
-        !Current.organization.corporate &&
-          user.can_act_as_audited? &&
+        user.can_act_as_audited? &&
           !user.committee?
       end
 
@@ -73,8 +66,14 @@ module Findings::ProcessEmail
         clean_answer.present? ? clean_answer.first : '-'
       end
 
-      def find_user mail
-        User.find_by email: mail.from.first
+      def find_user mail, finding_id
+        if exists?(finding_id)
+          finding              = find finding_id
+          Current.organization = finding.organization
+          Current.group        = Current.organization.group
+
+          User.list.find_by email: mail.from.first
+        end
       end
   end
 end

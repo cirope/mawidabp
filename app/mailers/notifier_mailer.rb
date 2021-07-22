@@ -86,10 +86,10 @@ class NotifierMailer < ActionMailer::Base
          )
   end
 
-  def notify_action_not_found(email_to, answer)
+  def notify_action_not_found(email, answer)
     @answer = answer
 
-    mail to: email_to,
+    mail to: email,
          subject: t('notifier.notify_action_not_found.title')
   end
 

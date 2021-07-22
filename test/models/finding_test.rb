@@ -1531,7 +1531,7 @@ class FindingTest < ActiveSupport::TestCase
     Current.user = nil
   end
 
-  test 'notify action not found because subject not have finding_id' do
+  test 'notify action not found when subject have no finding_id' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
 
@@ -1546,7 +1546,7 @@ class FindingTest < ActiveSupport::TestCase
     ENV['REGEX_REPLY_EMAIL'] = old_regex
   end
 
-  test 'notify action not found because the email does not belong to any user' do
+  test 'notify action not found when email does not belong to any user' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
 
@@ -1562,7 +1562,7 @@ class FindingTest < ActiveSupport::TestCase
     ENV['REGEX_REPLY_EMAIL'] = old_regex
   end
 
-  test 'notify action not found because the auditee is not related' do
+  test 'notify action not found when auditee is not related' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
 
@@ -1578,7 +1578,7 @@ class FindingTest < ActiveSupport::TestCase
     ENV['REGEX_REPLY_EMAIL'] = old_regex
   end
 
-  test 'add finding_answer to finding because the auditee is related' do
+  test 'add finding answer when auditee is related' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
 
@@ -1597,7 +1597,7 @@ class FindingTest < ActiveSupport::TestCase
     ENV['REGEX_REPLY_EMAIL'] = old_regex
   end
 
-  test 'add finding_answer to finding as supervisor' do
+  test 'add finding answer to finding as supervisor' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
 
@@ -1627,7 +1627,7 @@ class FindingTest < ActiveSupport::TestCase
 
       mail.html_part = Mail::Part.new do
         content_type 'text/html; charset=UTF-8'
-        body         body
+        body          body
       end
 
       mail

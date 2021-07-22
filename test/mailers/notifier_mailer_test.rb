@@ -129,7 +129,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'notify new finding answer' do
-    user           = User.find(users(:administrator).id)
+    user           = users(:administrator)
     finding_answer = FindingAnswer.find(finding_answers(:auditor_answer).id)
 
     response = NotifierMailer.notify_new_finding_answer(user, finding_answer).deliver_now
@@ -148,7 +148,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'notify action not found' do
-    user    = User.find(users(:administrator).id)
+    user    = users(:administrator)
     comment = 'comment'
 
     response = NotifierMailer.notify_action_not_found(user.email, comment).deliver_now
