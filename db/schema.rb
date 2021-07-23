@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_30_173900) do
+ActiveRecord::Schema.define(version: 2021_07_07_130228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_173900) do
     t.bigint "activity_group_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "require_detail", default: false
     t.index ["activity_group_id"], name: "index_activities_on_activity_group_id"
   end
 
@@ -1124,6 +1125,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_173900) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "resource_type", default: "Activity"
+    t.text "detail"
     t.index ["resource_id"], name: "index_time_consumptions_on_resource_id"
     t.index ["user_id"], name: "index_time_consumptions_on_user_id"
   end
