@@ -1,3 +1,4 @@
 special_activity:
   name: Special activity
   activity_group: special_activities
+  require_detail: false

@@ -7,7 +7,7 @@ class ActivityGroupsController < ApplicationController
 
   # GET /activity_groups
   def index
-    @activity_groups = ActivityGroup.list.order(:name).page params[:page]
+    @activity_groups = ActivityGroup.group_list.order(:name).page params[:page]
   end
 
   # GET /activity_groups/1

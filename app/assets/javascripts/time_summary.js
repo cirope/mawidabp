@@ -18,4 +18,17 @@ jQuery(function ($) {
       $('[data-time-summary-detail]').addClass('d-none')
     }
   })
+
+  $(document).on('change', '[data-time-summary-review]', function () {
+    var $reviewSelect = $(this)
+    var reviewId      = $reviewSelect.val()
+    var urlTemplate   = decodeURI($reviewSelect.data('timeSummaryReviewUrl'))
+    var url           = urlTemplate.replace('[ID]', reviewId)
+
+    if (reviewId) {
+      $.getScript(url)
+    } else {
+      $('[data-time-summary-amounts]').addClass('d-none')
+    }
+  })
 })
