@@ -41,19 +41,6 @@ class NotifierMailer < ActionMailer::Base
          )
   end
 
-  def notify_new_findings(user)
-    findings = user.findings.recently_notified
-
-    @user = user
-    @grouped_findings = findings.group_by(&:organization)
-    @notification = Notification.create(user: user, findings: findings)
-    prefixes = @grouped_findings.keys.map { |o| "[#{o.prefix}]" }.join(' ')
-    prefixes << ' ' unless prefixes.blank?
-
-    mail to: users_to_notify_for(user).map(&:email),
-         subject: prefixes.upcase + t('notifier.notify_new_findings.title')
-  end
-
   def notify_new_finding(user, finding)
     @user, @finding = user, finding
     prefix = "[#{finding.organization.prefix}] "
@@ -63,7 +50,10 @@ class NotifierMailer < ActionMailer::Base
     end
 
     mail to: users_to_notify_for(user).map(&:email),
-         subject: prefix.upcase + t('notifier.notify_new_finding.title')
+         subject: prefix.upcase + t(
+           'notifier.notify_new_finding.title',
+           finding_id: finding.id
+        )
   end
 
   def findings_brief(user, findings)
@@ -81,8 +71,16 @@ class NotifierMailer < ActionMailer::Base
     mail to: users_to_notify_for(users).map(&:email),
          subject: prefix.upcase + t(
            'notifier.notify_new_finding_answer.title',
-           review: finding_answer.finding.review.to_s
+           review:     finding_answer.finding.review,
+           finding_id: finding_answer.finding.id
          )
+  end
+
+  def notify_action_not_found(email, answer)
+    @answer = answer
+
+    mail to: email,
+         subject: t('notifier.notify_action_not_found.title')
   end
 
   def stale_notification(user)

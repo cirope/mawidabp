@@ -432,6 +432,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_191248) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "skip_commitment_support", default: false, null: false
+    t.boolean "imported", default: false, null: false
     t.index ["file_model_id"], name: "index_finding_answers_on_file_model_id"
     t.index ["finding_id"], name: "index_finding_answers_on_finding_id"
     t.index ["user_id"], name: "index_finding_answers_on_user_id"

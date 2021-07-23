@@ -28,7 +28,11 @@ module Users::Notifications
           raise ActiveRecord::Rollback unless findings.all? &:mark_as_unconfirmed
         end
 
-        users.each { |user| NotifierMailer.notify_new_findings(user).deliver_later }
+        users.each do |user|
+          user.findings.recently_notified.each do |finding|
+            NotifierMailer.notify_new_finding(user, finding).deliver_later
+          end
+        end
       end
     end
   end

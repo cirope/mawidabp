@@ -820,11 +820,6 @@ es:
       title: "Nuevo comentario en el informe %{review}"
       finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver observación / oportunidad de mejora"
-    notify_new_findings:
-      title: "Notificación de observaciones / oportunidades de mejora"
-      created_title:
-        one: "Nueva observación / oportunidad de mejora"
-        other: "Nuevas observaciones / oportunidades de mejora"
     change_password: "Cambiar contraseña"
     changes_notification:
       title: "Notificación de cambios"
