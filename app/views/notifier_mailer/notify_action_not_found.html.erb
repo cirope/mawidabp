@@ -1,0 +1,14 @@
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <h3 style="font-weight: normal;">
+    <%= markdown_without_paragraph(
+      t('notifier.notify_action_not_found.warning')
+    ) %>
+  </h3>
+
+  <p>
+    <b><%= t('notifier.notify_action_not_found.reply_receive') %></b>:
+    <span style="font-style: italic;"><%= @answer %></span>
+  </p>
+
+  <%= render :partial => 'common_mailer/reply_footer' %>
+</div>

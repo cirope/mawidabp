@@ -820,11 +820,6 @@ es:
       title: "Nuevo comentario en el informe %{review}"
       finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver observación / oportunidad de mejora"
-    notify_new_findings:
-      title: "Notificación de observaciones / oportunidades de mejora"
-      created_title:
-        one: "Nueva observación / oportunidad de mejora"
-        other: "Nuevas observaciones / oportunidades de mejora"
     change_password: "Cambiar contraseña"
     changes_notification:
       title: "Notificación de cambios"
@@ -1198,6 +1193,7 @@ es:
         require_counts: "Requerir cantidades en objetivos de control"
         hide_review_logo: "Ocultar logo en informes"
         independent_identification: "Numeración independiente"
+        shared_business_units: "Unidades de negocio compartidas"
       business_unit_type/business_units:
         one: "Ciclo"
         other: "Ciclos"
@@ -1368,6 +1364,9 @@ es:
         modify: "Modificación"
         erase: "Baja"
         approval: "Aprobación"
+      process_controls/control_objectives/control:
+        effects: "Efectos"
+        compliance_tests: "Pruebas de cumplimientos"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
