@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_07_130228) do
+ActiveRecord::Schema.define(version: 2021_07_14_191248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -449,6 +449,7 @@ ActiveRecord::Schema.define(version: 2021_07_07_130228) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "skip_commitment_support", default: false, null: false
+    t.boolean "imported", default: false, null: false
     t.index ["file_model_id"], name: "index_finding_answers_on_file_model_id"
     t.index ["finding_id"], name: "index_finding_answers_on_finding_id"
     t.index ["user_id"], name: "index_finding_answers_on_user_id"
@@ -531,6 +532,10 @@ ActiveRecord::Schema.define(version: 2021_07_07_130228) do
     t.integer "probability"
     t.integer "impact_risk"
     t.boolean "manual_risk", default: true, null: false
+    t.boolean "use_suggested_impact", default: false, null: false
+    t.boolean "use_suggested_probability", default: false, null: false
+    t.decimal "impact_amount", precision: 17, scale: 2
+    t.decimal "probability_amount", precision: 17, scale: 2
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -1193,6 +1198,7 @@ ActiveRecord::Schema.define(version: 2021_07_07_130228) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "reference"
+    t.text "notes"
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
     t.index ["reference"], name: "index_weakness_templates_on_reference"
   end

@@ -9,6 +9,55 @@ module Findings::Issues
     accepts_nested_attributes_for :issues, allow_destroy: true, reject_if: :all_blank
   end
 
+  def issues_amount
+    issues.sum &:amount
+  end
+
+  def get_amount_by_impact
+    amount = issues_amount
+
+    amount_by_impact.reverse_each.to_h.detect { |id, value| amount >= value }
+  end
+
+  def impact_risk_text
+    I18n.t "impact_risk_types.#{Finding::IMPACT_RISKS.invert[get_amount_by_impact.first]}"
+  end
+
+  def impact_risk_value
+    get_amount_by_impact&.first
+  end
+
+  def probability_risk_previous
+    if weakness_template_id
+      quantity       = 1
+      current_review = review
+
+      4.times do
+        current_review = current_review&.previous
+
+        if review && previous_weakness_by_template?(current_review)
+          quantity += 1
+        end
+      end
+
+      quantity
+    end
+  end
+
+  def previous_weakness_by_template? review
+    Array(review&.weaknesses).map(&:weakness_template_id).include? weakness_template_id
+  end
+
+  def amount_by_impact
+    {
+      1 => 0,
+      2 => 2084408,
+      3 => 20844081,
+      4 => 208440815,
+      5 => 2084408150
+    }
+  end
+
   private
 
     def set_issue_based_status

@@ -5,6 +5,8 @@ $('[id^=weakness_internal_control_components]').prop('checked', false).trigger('
 <% if @weakness_template %>
   $('[name$="[title]"]').val('<%= j @weakness_template.title %>')
   $('[name$="[description]"]').val('<%= j @weakness_template.description %>')
+  $('[data-notes]').text('<%= j @weakness_template.notes %>')
+  $('[name$="[brief]"]').val('<%= j @weakness_template.description %>')
   $('[name$="[risk]"]').val('<%= @weakness_template.risk %>')
 
   <% Array(@weakness_template.impact).each do |value| %>

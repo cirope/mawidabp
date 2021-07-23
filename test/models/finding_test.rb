@@ -1531,7 +1531,156 @@ class FindingTest < ActiveSupport::TestCase
     Current.user = nil
   end
 
+  test 'issues amount' do
+    @finding.issues.create!(customer: 'Some customer', amount: 10)
+    @finding.issues.create!(customer: 'Some customer dup', amount: 23)
+
+    assert_equal @finding.issues_amount, 33
+  end
+
+  test 'get amount by impact' do
+    amount = 30844081
+
+    @finding.issues.create!(customer: 'Some customer', amount: amount)
+
+    amount_by_impact = @finding.amount_by_impact
+
+    result = amount_by_impact.reverse_each.to_h.detect { |id, value| amount >= value }
+
+    assert_equal result.first,  @finding.impact_risk_value
+  end
+
+  test 'probability risk previuos' do
+    Current.organization = organizations :cirope
+    Current.user         = users :auditor
+
+    assert_nil @finding.probability_risk_previous
+
+    @finding.weakness_template = weakness_templates :security
+
+    assert @finding.valid?
+
+    assert_equal @finding.probability_risk_previous, 1
+
+    weakness_previous = @finding.review.previous.weaknesses.first
+
+    weakness_previous.update_column :weakness_template_id, weakness_templates(:security).id
+
+    assert_equal @finding.probability_risk_previous, 2
+  ensure
+    Current.organization = nil
+    Current.user         = nil
+  end
+
+  test 'notify action not found when subject have no finding_id' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email(supervisor.email, 'subject without id', body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[supervisor.email], "Reply "]
+
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'notify action not found when email does not belong to any user' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+
+    finding = findings :confirmed_oportunity
+
+    body = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email('nouser@nouser.com', "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [['nouser@nouser.com'], "Reply "]
+
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'notify action not found when auditee is not related' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited_second
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email(audited.email, "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[audited.email], "Reply "]
+
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'add finding answer when auditee is related' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email(audited.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, audited
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'add finding answer to finding as supervisor' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+
+    finding    = findings :confirmed_oportunity
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email(supervisor.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, supervisor
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
   private
+
+    def new_email from, subject, body
+      mail = create_mail from, subject
+
+      mail.text_part = Mail::Part.new do
+        body body
+      end
+
+      mail.html_part = Mail::Part.new do
+        content_type 'text/html; charset=UTF-8'
+        body          body
+      end
+
+      mail
+    end
+
+    def create_mail from, subject
+      Mail.new do
+        from    from
+        to      'support@postman.com'
+        subject subject
+      end
+    end
 
     def review_codes_on_findings_by_user method
       review_codes_by_user = {}
