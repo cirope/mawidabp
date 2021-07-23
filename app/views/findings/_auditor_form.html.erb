@@ -59,9 +59,9 @@
                 <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
                   disabled: @finding.use_suggested_impact,
                   input_html: {
-                  autofocus: true,
-                  data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
-                } %>
+                    autofocus: true,
+                    data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+                  } %>
                 <%= f.input :impact_risk, as: :hidden, disabled: !@finding.use_suggested_impact %>
               </div>
               <div class="col">
