@@ -28,7 +28,8 @@ class ActivityGroupsControllerTest < ActionController::TestCase
           name: 'New activity group',
           activities_attributes: {
             '0' => {
-              name: 'New activity'
+              name:           'New activity',
+              require_detail: true
             }
           }
         }
@@ -59,8 +60,9 @@ class ActivityGroupsControllerTest < ActionController::TestCase
           name: 'Updated name',
           activities_attributes: {
             activity.id => {
-              id:   activity.id,
-              name: activity.name
+              id:             activity.id,
+              name:           activity.name,
+              require_detail: true
             }
           }
         }
