@@ -158,13 +158,16 @@ class NotifierMailerTest < ActionMailer::TestCase
       !finding.finding_answers.detect { |fa| fa.user.can_act_as_audited? }
     end
     user = finding.first.users.first
-    response = NotifierMailer.unanswered_findings_notification(user, finding).deliver_now
+    response = NotifierMailer.unanswered_finding_notification(user, finding.first).deliver_now
 
-    assert !ActionMailer::Base.deliveries.empty?
+    refute ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.unanswered_findings.title')
+      I18n.t(
+        'notifier.unanswered_finding.subject',
+        finding_id: finding.first.id
+      )
     )
-    assert_match Regexp.new(I18n.t('notifier.unanswered_findings.title')),
+    assert_match Regexp.new(I18n.t('notifier.unanswered_finding.title')),
       response.body.decoded
     assert_equal user.email, response.to.first
   end
@@ -174,14 +177,17 @@ class NotifierMailerTest < ActionMailer::TestCase
     users = finding.users_for_scaffold_notification(1)
     response = NotifierMailer.unanswered_finding_to_manager_notification(finding, users, 1).deliver_now
 
-    assert !ActionMailer::Base.deliveries.empty?
+    refute ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.unanswered_finding_to_manager.title')
+      I18n.t(
+        'notifier.unanswered_finding_to_manager.title',
+        finding_id: finding.id
+      )
     )
     assert_match Regexp.new(
       I18n.t('notifier.unanswered_finding_to_manager.the_following_finding_is_stale_and_unanswered')
     ), response.body.decoded
-    assert !users.empty?
+    refute users.empty?
     assert users.map(&:email).all? { |email| response.to.include?(email) }
   end
 
@@ -190,14 +196,17 @@ class NotifierMailerTest < ActionMailer::TestCase
     users = finding.users_for_scaffold_notification(1)
     response = NotifierMailer.expired_finding_to_manager_notification(finding, users, 1).deliver_now
 
-    assert !ActionMailer::Base.deliveries.empty?
+    refute ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.expired_finding_to_manager.title')
+      I18n.t(
+        'notifier.expired_finding_to_manager.title',
+        finding_id: finding.id
+      )
     )
     assert_match Regexp.new(
       I18n.t('notifier.expired_finding_to_manager.the_following_finding_is_expired')
     ), response.body.decoded
-    assert !users.empty?
+    refute users.empty?
     assert users.map(&:email).all? { |email| response.to.include?(email) }
   end
 

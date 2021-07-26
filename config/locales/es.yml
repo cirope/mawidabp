@@ -1222,18 +1222,25 @@
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
+      subject: "Notificación por inactividad [#%{finding_id}]"
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los usuarios del siguiente hallazgo"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios del hallazgo o si se altera el organigrama"
     expired_finding_to_manager:
+      subject: "Hallazgo vencido [#%{finding_id}]"
       title: "Hallazgo vencido"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
-    unanswered_findings:
-      title: "Notificación de cambios"
-      the_following_findings_are_now_unanswered:
-        one: "El siguiente hallazgo ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
-        other: "Los siguientes hallazgos han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+    # unanswered_findings:
+    #   title: "Notificación de cambios"
+    #   the_following_findings_are_now_unanswered:
+    #     one: "El siguiente hallazgo ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+    #     other: "Los siguientes hallazgos han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+    #   if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
+    unanswered_finding:
+      subject: "Notificación de cambio a hallazgo [#%{finding_id}]"
+      title: "Notificación de cambio"
+      the_following_finding_are_now_unanswered: "El siguiente hallazgo ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
