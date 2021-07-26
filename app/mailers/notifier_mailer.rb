@@ -94,23 +94,7 @@ class NotifierMailer < ActionMailer::Base
     mail to: users_to_notify_for(user).map(&:email),
          subject: prefixes.upcase + t('notifier.notification.pending')
   end
-
-  # def unanswered_findings_notification(user, findings)
-  #   filtered_findings = findings.select {|f| f.users.any? {|u| u.id == user.id}}
-
-  #   unless filtered_findings.empty?
-  #     byebug
-  #     @grouped_findings = filtered_findings.group_by(&:organization)
-  #     prefixes = @grouped_findings.keys.map {|o| "[#{o.prefix}]" }.join(' ')
-  #     prefixes << ' ' unless prefixes.blank?
-
-  #     mail to: users_to_notify_for(user).map(&:email),
-  #          subject: prefixes.upcase + t('notifier.unanswered_findings.title')
-  #   else
-  #     raise 'Findings and user mismatch'
-  #   end
-  # end
-
+  
   def unanswered_finding_notification(user, finding)
     prefix   = "[#{finding.organization.prefix}] "
     @finding = finding
