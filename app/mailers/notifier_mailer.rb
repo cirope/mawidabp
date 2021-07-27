@@ -94,7 +94,7 @@ class NotifierMailer < ActionMailer::Base
     mail to: users_to_notify_for(user).map(&:email),
          subject: prefixes.upcase + t('notifier.notification.pending')
   end
-  
+
   def unanswered_finding_notification(user, finding)
     prefix   = "[#{finding.organization.prefix}] "
     @finding = finding

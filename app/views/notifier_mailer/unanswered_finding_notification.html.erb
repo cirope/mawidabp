@@ -3,7 +3,7 @@
   <h3 style="font-weight: normal;">
     <%= markdown_without_paragraph(
       t('notifier.unanswered_finding.the_following_finding_are_now_unanswered')
-      ) %>
+    ) %>
   </h3>
 
   <% organization = @finding.organization %>
@@ -11,7 +11,7 @@
   <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
   
   <% levels = [] %>
-  <% next_level = 1  %>
+  <% next_level = 1 %>
 
   <% until @finding.manager_users_for_level(next_level).empty? %>
     <% levels << next_level  %>
