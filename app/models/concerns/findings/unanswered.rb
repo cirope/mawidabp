@@ -58,10 +58,15 @@ module Findings::Unanswered
         end
 
         users.each do |user|
-          findings_for_user = findings.select { |f| f.users.include? user }
+          # findings_for_user = findings.select { |f| f.users.include? user }
 
-          findings_for_user.each do |finding|
-            NotifierMailer.unanswered_finding_notification(user, finding).deliver_later 
+          # findings_for_user.each do |finding|
+          #   NotifierMailer.unanswered_finding_notification(user, finding).deliver_later 
+          # end
+          findings.each do |finding|
+            if finding.users.include? user
+              NotifierMailer.unanswered_finding_notification(user, finding).deliver_later
+            end
           end
         end
       end
