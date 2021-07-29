@@ -247,7 +247,7 @@ module ConclusionReviews::PatPdf
         pdf.text I18n.t('conclusion_review.pat.cover.brief.weaknesses_title'), align: :justify
 
         filtered.each do |weakness|
-          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.risk_text})", align: :justify
+          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
         end
       end
     end
