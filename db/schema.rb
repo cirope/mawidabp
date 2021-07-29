@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_134353) do
+ActiveRecord::Schema.define(version: 2021_07_29_175353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -104,6 +104,15 @@ ActiveRecord::Schema.define(version: 2021_07_14_134353) do
     t.datetime "updated_at", null: false
     t.index ["business_unit_id"], name: "index_business_unit_findings_on_business_unit_id"
     t.index ["finding_id"], name: "index_business_unit_findings_on_finding_id"
+  end
+
+  create_table "business_unit_in_plan_items", force: :cascade do |t|
+    t.bigint "plan_item_id"
+    t.bigint "business_unit_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["business_unit_id"], name: "index_business_unit_in_plan_items_on_business_unit_id"
+    t.index ["plan_item_id"], name: "index_business_unit_in_plan_items_on_plan_item_id"
   end
 
   create_table "business_unit_kinds", force: :cascade do |t|

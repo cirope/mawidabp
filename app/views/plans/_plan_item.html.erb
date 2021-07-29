@@ -114,6 +114,13 @@
           association: 'taggings'
         }
       ) %>
+      <%= link_to_add_fields(
+        t('.add_auxiliar_business_unit'),
+        f, :taggings, 'plan_items/tagging', {
+          insert_into: "#tags_#{id}",
+          association: 'taggings'
+        }
+      ) %>
     </p>
   </div>
 </fieldset>
