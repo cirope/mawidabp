@@ -28,6 +28,9 @@ class BusinessUnit < ApplicationRecord
   has_many :business_unit_findings, :dependent => :destroy
   has_many :business_unit_scores, :dependent => :destroy
 
+  has_many :auxiliar_business_unit
+  has_many :plan_items_auxiliar, through: :auxiliar_business_unit
+
   def to_s
     name
   end
