@@ -64,7 +64,7 @@ module ConclusionReviews::PatPdf
     def put_pat_extra_brief_info_on pdf, organization
       title = I18n.t(
         'conclusion_review.pat.cover.brief.title',
-        description: review.description,
+        description: review.scope.presence || review.description,
         review: review.identification
       )
       notice = I18n.t(
