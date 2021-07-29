@@ -148,23 +148,24 @@ module ConclusionReviews::BicPdf
     end
 
     def put_bic_weaknesses_by_risk_and_repetition_on pdf
-      number      = 0
-      header_text = I18n.t 'conclusion_review.bic.weaknesses.title'
-      weaknesses  = if kind_of? ConclusionFinalReview
-                      review.final_weaknesses
-                    else
-                      review.weaknesses
-                    end
+      number     = 0
+      weaknesses = if kind_of? ConclusionFinalReview
+                     review.final_weaknesses
+                   else
+                     review.weaknesses
+                   end
 
       present  = weaknesses.not_revoked.where repeated_of_id: nil
       repeated = weaknesses.not_revoked.where.not repeated_of_id: nil
 
-      pdf.start_new_page
+      if present.any?
+        pdf.start_new_page
 
-      put_bic_page_header_on pdf, header_text
+        put_bic_page_header_on pdf, I18n.t('conclusion_review.bic.weaknesses.title')
 
-      present.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
-        put_bic_weakness_on pdf, weakness, number += 1
+        present.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
+          put_bic_weakness_on pdf, weakness, number += 1
+        end
       end
 
       if repeated.any?

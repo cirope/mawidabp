@@ -64,7 +64,7 @@ module ConclusionReviews::PatPdf
     def put_pat_extra_brief_info_on pdf, organization
       title = I18n.t(
         'conclusion_review.pat.cover.brief.title',
-        description: review.description,
+        description: review.scope.presence || review.description,
         review: review.identification
       )
       notice = I18n.t(
@@ -247,7 +247,7 @@ module ConclusionReviews::PatPdf
         pdf.text I18n.t('conclusion_review.pat.cover.brief.weaknesses_title'), align: :justify
 
         filtered.each do |weakness|
-          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.risk_text})", align: :justify
+          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
         end
       end
     end
@@ -380,6 +380,31 @@ module ConclusionReviews::PatPdf
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
         pdf.text I18n.l(weakness.follow_up_date, format: :minimal)
+      end
+
+      put_pat_issues_on pdf, weakness if weakness.issues.any?
+    end
+
+    def put_pat_issues_on pdf, weakness
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text Issue.model_name.human(count: 0), style: :bold
+
+      weakness.issues.each do |issue|
+        description = [
+          issue.customer,
+          issue.entry,
+          issue.operation
+        ].reject(&:blank?).join ' | '
+
+        data = [
+          issue.amount,
+          (I18n.l(issue.close_date) if issue.close_date)
+        ].compact.join ' - '
+
+        space      = Prawn::Text::NBSP
+        issue_line = "\n#{space * 4}• #{space * 2} #{description} (#{data})"
+
+        pdf.text issue_line, align: :justify
       end
     end
 
