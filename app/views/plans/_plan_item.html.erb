@@ -116,9 +116,9 @@
       ) %>
       <%= link_to_add_fields(
         t('.add_auxiliar_business_unit'),
-        f, :taggings, 'plan_items/tagging', {
-          insert_into: "#tags_#{id}",
-          association: 'taggings'
+        f, :auxiliar_business_unit_in_plan_items, 'plan_items/auxiliar_business_unit', {
+          insert_into: "#auxiliar_business_units_#{id}",
+          association: 'auxiliar_business_unit_in_plan_items'
         }
       ) %>
     </p>

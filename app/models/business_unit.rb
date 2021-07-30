@@ -28,8 +28,8 @@ class BusinessUnit < ApplicationRecord
   has_many :business_unit_findings, :dependent => :destroy
   has_many :business_unit_scores, :dependent => :destroy
 
-  has_many :business_unit_in_plan_items
-  has_many :plan_items_auxiliar, through: :business_unit_in_plan_items
+  has_many :auxiliar_business_unit_in_plan_items
+  has_many :auxiliar_plan_items, through: :auxiliar_business_unit_in_plan_items, source: :plan_item
 
   def to_s
     name
