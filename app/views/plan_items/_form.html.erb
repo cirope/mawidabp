@@ -32,10 +32,10 @@
       </div>
 
       <div id="auxiliar_business_units_<%= index %>">
-        <% plan_item.auxiliar_business_unit_in_plan_items.each do |auxiliar_business_unit_in_plan_item| %>
-          <% auxiliar_business_unit_in_plan_item_child_index = plan_item.auxiliar_business_unit_in_plan_items.index auxiliar_business_unit_in_plan_item %>
-          <%= pi_f.simple_fields_for :auxiliar_business_unit_in_plan_items, auxiliar_business_unit_in_plan_item, child_index: auxiliar_business_unit_in_plan_item_child_index do |aux_bu_inpi_f| %>
-            <%= render 'plan_items/auxiliar_business_unit', f: aux_bu_inpi_f %>
+        <% plan_item.auxiliar_business_units.each do |auxiliar_business_unit| %>
+          <% auxiliar_business_unit_child_index = plan_item.auxiliar_business_units.index auxiliar_business_unit %>
+          <%= pi_f.simple_fields_for :auxiliar_business_units, auxiliar_business_unit, child_index: auxiliar_business_unit_child_index do |aux_bu_f| %>
+            <%= render 'plan_items/auxiliar_business_unit', f: aux_bu_f %>
           <% end %>
         <% end %>
       </div>

@@ -81,7 +81,7 @@ class PlansController < ApplicationController
           taggings_attributes: [
             :id, :tag_id, :_destroy
           ],
-          auxiliar_business_unit_in_plan_items_attributes: [
+          auxiliar_business_units_attributes: [
             :id, :business_unit_id, :_destroy
           ]
         ]

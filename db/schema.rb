@@ -52,13 +52,13 @@ ActiveRecord::Schema.define(version: 2021_07_29_175353) do
     t.index ["type", "id"], name: "index_answers_on_type_and_id"
   end
 
-  create_table "auxiliar_business_unit_in_plan_items", force: :cascade do |t|
-    t.bigint "plan_item_id"
-    t.bigint "business_unit_id"
+  create_table "auxiliar_business_units", force: :cascade do |t|
+    t.bigint "plan_item_id", null: false
+    t.bigint "business_unit_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["business_unit_id"], name: "index_auxiliar_business_unit_in_plan_items_on_business_unit_id"
-    t.index ["plan_item_id"], name: "index_auxiliar_business_unit_in_plan_items_on_plan_item_id"
+    t.index ["business_unit_id"], name: "index_auxiliar_business_units_on_business_unit_id"
+    t.index ["plan_item_id"], name: "index_auxiliar_business_units_on_plan_item_id"
   end
 
   create_table "benefits", id: :serial, force: :cascade do |t|
@@ -1232,6 +1232,8 @@ ActiveRecord::Schema.define(version: 2021_07_29_175353) do
 
   add_foreign_key "achievements", "benefits", on_update: :restrict, on_delete: :restrict
   add_foreign_key "achievements", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "auxiliar_business_units", "business_units", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "auxiliar_business_units", "plan_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "benefits", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "best_practices", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "reviews", on_update: :restrict, on_delete: :restrict

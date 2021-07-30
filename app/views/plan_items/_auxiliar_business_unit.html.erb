@@ -1,14 +1,14 @@
 <%
   id = f.object.object_id
-  auxiliar_business_unit_in_plan_item = f.object
+  auxiliar_business_unit = f.object
 %>
 <fieldset class="auxiliar_business_units">
   <div class="row" data-nested>
     <div class="col-md-11">
-      <% if auxiliar_business_unit_in_plan_item.business_unit.blank? %>
+      <% if auxiliar_business_unit.business_unit.blank? %>
         <%= f.input :business_unit_id, as: :string, label: false, input_html: {
-          value: auxiliar_business_unit_in_plan_item.business_unit.to_s,
-          id: "plan_item_auxiliar_business_unit_in_plan_item_#{id}",
+          value: auxiliar_business_unit.business_unit.to_s,
+          id: "plan_item_auxiliar_business_unit_#{id}",
           title: t('label.search'), autocomplete: :off, autofocus: true,
           data: {
             autocomplete_params: { kind: 'plan_item' },
@@ -17,7 +17,7 @@
           }
         } %>
       <% else %>
-        <%= f.input "plan_item_auxiliar_business_unit_in_plan_item_#{id}", label: false, input_html: { value: auxiliar_business_unit_in_plan_item.business_unit.to_s, readonly: true } %>
+        <%= f.input "plan_item_auxiliar_business_unit_#{id}", label: false, input_html: { value: auxiliar_business_unit.business_unit.to_s, readonly: true } %>
       <% end %>
       <%= f.input :business_unit_id, as: :hidden, input_html: { id: "hidden_business_unit_#{id}" } %>
     </div>
