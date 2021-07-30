@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_29_175353) do
+ActiveRecord::Schema.define(version: 2021_07_30_192201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -295,6 +295,7 @@ ActiveRecord::Schema.define(version: 2021_07_29_175353) do
     t.integer "organization_id"
     t.integer "issues_count"
     t.integer "alerts_count"
+    t.integer "scored_business_unit_id"
     t.index ["control_objective_id"], name: "index_control_objective_items_on_control_objective_id"
     t.index ["organization_id"], name: "index_control_objective_items_on_organization_id"
     t.index ["review_id"], name: "index_control_objective_items_on_review_id"
@@ -1260,6 +1261,7 @@ ActiveRecord::Schema.define(version: 2021_07_29_175353) do
   add_foreign_key "comments", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "commitment_supports", "finding_answers", on_update: :restrict, on_delete: :restrict
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objective_items", "business_units", column: "scored_business_unit_id"
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_projects", "control_objectives", on_update: :restrict, on_delete: :restrict
