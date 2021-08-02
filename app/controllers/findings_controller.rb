@@ -47,11 +47,15 @@ class FindingsController < ApplicationController
   private
 
     def finding_params
-      if @auth_user.can_act_as_audited?
-        audited_finding_params
-      else
-        auditor_finding_params
-      end
+      casted_params = if @auth_user.can_act_as_audited?
+                        audited_finding_params
+                      else
+                        auditor_finding_params
+                      end
+
+      casted_params.merge(
+        can_close_findings: USE_SCOPE_CYCLE && can_perform?(:approval)
+      )
     end
 
     def auditor_finding_params
