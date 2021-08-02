@@ -20,7 +20,7 @@
           value: @control_objective_item.review.period.inspect, readonly: true
         } %>
         <% if @control_objective_item.review.plan_item.auxiliar_business_units.any? %>
-          <%= f.input :scored_business_unit_id, collection: @control_objective_item.review.plan_item.auxiliar_business_units.collect {|aux_bu| [ aux_bu.business_unit.name, aux_bu.business_unit.id ] },
+          <%= f.input :scored_business_unit_id, collection: @control_objective_item.review.plan_item.auxiliar_business_units.collect { |aux_bu| [ aux_bu.business_unit.name, aux_bu.business_unit.id ] },
             include_blank: t('control_objective_item.not_scored_business_unit'), input_html: { disabled: readonly } %>
         <% end %>
         <%= f.input :relevance, collection: relevances,

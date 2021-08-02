@@ -119,7 +119,7 @@
         f, :auxiliar_business_units, 'plan_items/auxiliar_business_unit', {
           insert_into: "#auxiliar_business_units_#{id}",
           association: 'auxiliar_business_units'
-        }
+        }, { exempt_business_unit_id: f.object.business_unit_id }
       ) %>
     </p>
   </div>

@@ -1625,7 +1625,7 @@
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
         work_papers: "Papeles de trabajo"
-        scored_business_unit_id: 'Unidad de negocio evaluada'
+        scored_business_unit_id: "Unidad de negocio evaluada"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"
