@@ -164,6 +164,7 @@ class WeaknessesController < ApplicationController
   end
 
   private
+
     def weakness_params
       casted_params = params.require(:weakness).permit(
         :control_objective_item_id, :review_code, :title, :description, :brief,
