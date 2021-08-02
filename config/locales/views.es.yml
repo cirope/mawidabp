@@ -183,7 +183,7 @@ es:
       implemented_audited: 'Implementada / Auditada'
       assumed_risk: 'Riesgo asumido'
       notify: 'Notificar'
-      incomplete: 'Incompleta'
+      incomplete: 'A definir'
       repeated: 'Reiterada'
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
