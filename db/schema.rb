@@ -295,10 +295,11 @@ ActiveRecord::Schema.define(version: 2021_07_30_192201) do
     t.integer "organization_id"
     t.integer "issues_count"
     t.integer "alerts_count"
-    t.integer "scored_business_unit_id"
+    t.bigint "scored_business_unit_id"
     t.index ["control_objective_id"], name: "index_control_objective_items_on_control_objective_id"
     t.index ["organization_id"], name: "index_control_objective_items_on_organization_id"
     t.index ["review_id"], name: "index_control_objective_items_on_review_id"
+    t.index ["scored_business_unit_id"], name: "index_control_objective_items_on_scored_business_unit_id"
   end
 
   create_table "control_objective_projects", force: :cascade do |t|
@@ -1261,7 +1262,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_192201) do
   add_foreign_key "comments", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "commitment_supports", "finding_answers", on_update: :restrict, on_delete: :restrict
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "control_objective_items", "business_units", column: "scored_business_unit_id"
+  add_foreign_key "control_objective_items", "business_units", column: "scored_business_unit_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_projects", "control_objectives", on_update: :restrict, on_delete: :restrict
