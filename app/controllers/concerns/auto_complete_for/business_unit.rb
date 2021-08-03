@@ -33,8 +33,8 @@ module AutoCompleteFor::BusinessUnit
     ).merge(PlanItem.allowed_by_business_units
     ).references(:business_unit_type).limit(10)
 
-    if (params.has_key? :exempt_business_unit_id) && params[:exempt_business_unit_id].present?
-      @business_units = @business_units.where('business_units.id != ?', params[:exempt_business_unit_id])
+    if params[:excluded_id].present?
+      @business_units = @business_units.where.not(id: params[:excluded_id])
     end
 
     respond_to do |format|

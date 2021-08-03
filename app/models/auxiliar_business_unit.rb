@@ -4,15 +4,16 @@ class AuxiliarBusinessUnit < ApplicationRecord
   belongs_to :plan_item
   belongs_to :business_unit
 
+  has_one :review, through: :plan_item
+  has_many :control_objective_items, through: :review
+
   after_destroy :remove_all_scored_business_unit
 
   private
 
     def remove_all_scored_business_unit
-      ControlObjectiveItem.joins(:review)
-                          .where('scored_business_unit_id = ? AND plan_item_id = ?', business_unit_id, plan_item_id)
-                          .each do |co_item|
-                            co_item.update(scored_business_unit_id: nil)
-                          end
+      control_objective_items.each do |co_i|
+        co_i.update(scored_business_unit_id: nil)
+      end
     end
 end
