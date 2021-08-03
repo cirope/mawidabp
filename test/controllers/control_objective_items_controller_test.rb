@@ -81,109 +81,6 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'update control_objective_item' do
-    assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
-      assert_difference 'WorkPaper.count', 2 do
-        login
-        patch :update, :params => {
-          :id => control_objective_items(:management_dependency_item_editable).id,
-          :control_objective_item => {
-            :control_objective_text => 'Updated text',
-            :relevance => ControlObjectiveItem.relevances_values.last,
-            :control_attributes => {
-              :id => controls(:management_dependency_item_editable_control_1).id,
-              :control => 'Updated control',
-              :effects => 'Updated effects',
-              :design_tests => 'Updated design tests',
-              :compliance_tests => 'Updated compliance tests',
-              :sustantive_tests => 'Updated sustantive tests'
-            },
-            :design_score => ControlObjectiveItem.qualifications_values.last,
-            :compliance_score => ControlObjectiveItem.qualifications_values.last,
-            :audit_date => 10.days.from_now.to_date,
-            :auditor_comment => 'Updated comment',
-            :control_objective_id =>
-              control_objectives(:organization_security_4_1).id,
-            :review_id => reviews(:review_with_conclusion).id,
-            :work_papers_attributes => [
-              {
-                :name => 'New workpaper name',
-                :code => 'PTOC 20',
-                :number_of_pages => '10',
-                :description => 'New workpaper description',
-                :organization_id => organizations(:cirope).id,
-                :file_model_attributes =>
-                  { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
-              },
-              {
-                :name => 'New workpaper2 name',
-                :code => 'PTOC 21',
-                :number_of_pages => '10',
-                :description => 'New workpaper2 description',
-                :organization_id => organizations(:cirope).id,
-                :file_model_attributes =>
-                  { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
-              }
-            ]
-          }
-        }
-      end
-    end
-
-    assert_redirected_to edit_control_objective_item_url(
-      control_objective_items(:management_dependency_item_editable))
-    assert_not_nil assigns(:control_objective_item)
-    assert_equal 'Updated text',
-      assigns(:control_objective_item).control_objective_text
-  end
-
-  test 'update control_objective_item with business unit scores' do
-    assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
-      # One explicit and two via business unit type
-      assert_difference 'BusinessUnitScore.count', 3 do
-        login
-
-        patch :update, :params => {
-          :id => control_objective_items(:organization_security_4_4_item).id,
-          :control_objective_item => {
-            :control_objective_text => 'Updated text',
-            :relevance => ControlObjectiveItem.relevances_values.last,
-            :control_attributes => {
-              :id => controls(:organization_security_4_4_item_control_1).id,
-              :control => 'Updated control',
-              :effects => 'Updated effects',
-              :design_tests => 'Updated design tests',
-              :compliance_tests => 'Updated compliance tests',
-              :sustantive_tests => 'Updated sustantive tests'
-            },
-            :design_score => ControlObjectiveItem.qualifications_values.last,
-            :compliance_score => ControlObjectiveItem.qualifications_values.last,
-            :sustantive_score => ControlObjectiveItem.qualifications_values.last,
-            :audit_date => 10.days.from_now.to_date,
-            :auditor_comment => 'Updated comment',
-            :control_objective_id => control_objectives(:organization_security_4_4).id,
-            :review_id => reviews(:review_without_conclusion).id,
-            :business_unit_scores_attributes => [
-              {
-                :business_unit_id => business_units(:business_unit_two).id,
-                :design_score => ControlObjectiveItem.qualifications_values.last.to_s,
-                :compliance_score => ControlObjectiveItem.qualifications_values.last.to_s,
-                :sustantive_score => ControlObjectiveItem.qualifications_values.last.to_s
-              }
-            ],
-            :business_unit_type_ids => [business_unit_types(:consolidated_substantive).id.to_s]
-          }
-        }
-      end
-    end
-
-    assert_redirected_to edit_control_objective_item_url(
-      control_objective_items( :organization_security_4_4_item))
-    assert_not_nil assigns(:control_objective_item)
-    assert_equal 'Updated text',
-      assigns(:control_objective_item).control_objective_text
-  end
-
-  test 'update control_objective_item with scored_business_unit' do
     business_unit_one = business_units(:business_unit_one)
 
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
@@ -243,7 +140,54 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
     control_objective_item = ControlObjectiveItem.find control_objective_items(:management_dependency_item_editable).id
     assert_equal control_objective_item.scored_business_unit_id,
-      business_unit_one.id
+                 business_unit_one.id
+  end
+
+  test 'update control_objective_item with business unit scores' do
+    assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
+      # One explicit and two via business unit type
+      assert_difference 'BusinessUnitScore.count', 3 do
+        login
+
+        patch :update, :params => {
+          :id => control_objective_items(:organization_security_4_4_item).id,
+          :control_objective_item => {
+            :control_objective_text => 'Updated text',
+            :relevance => ControlObjectiveItem.relevances_values.last,
+            :control_attributes => {
+              :id => controls(:organization_security_4_4_item_control_1).id,
+              :control => 'Updated control',
+              :effects => 'Updated effects',
+              :design_tests => 'Updated design tests',
+              :compliance_tests => 'Updated compliance tests',
+              :sustantive_tests => 'Updated sustantive tests'
+            },
+            :design_score => ControlObjectiveItem.qualifications_values.last,
+            :compliance_score => ControlObjectiveItem.qualifications_values.last,
+            :sustantive_score => ControlObjectiveItem.qualifications_values.last,
+            :audit_date => 10.days.from_now.to_date,
+            :auditor_comment => 'Updated comment',
+            :control_objective_id => control_objectives(:organization_security_4_4).id,
+            :review_id => reviews(:review_without_conclusion).id,
+            :business_unit_scores_attributes => [
+              {
+                :business_unit_id => business_units(:business_unit_two).id,
+                :design_score => ControlObjectiveItem.qualifications_values.last.to_s,
+                :compliance_score => ControlObjectiveItem.qualifications_values.last.to_s,
+                :sustantive_score => ControlObjectiveItem.qualifications_values.last.to_s
+              }
+            ],
+            :business_unit_type_ids => [business_unit_types(:consolidated_substantive).id.to_s]
+          }
+        }
+      end
+    end
+
+    assert_redirected_to edit_control_objective_item_url(
+      control_objective_items( :organization_security_4_4_item))
+    assert_not_nil assigns(:control_objective_item)
+    assert_equal 'Updated text',
+      assigns(:control_objective_item).control_objective_text
   end
 
   test 'destroy control_objective_item' do
