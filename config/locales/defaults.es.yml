@@ -35,6 +35,7 @@ es:
       long: ! '%e de %B de %Y'
       short: ! '%e de %b de %Y'
       minimal: ! '%d/%m/%y'
+      specific: ! '%B de %Y'
     month_names:
     -
     - Enero
