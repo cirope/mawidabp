@@ -12,8 +12,6 @@ class AuxiliarBusinessUnit < ApplicationRecord
   private
 
     def remove_all_scored_business_unit
-      control_objective_items.each do |co_i|
-        co_i.update(scored_business_unit_id: nil)
-      end
+      control_objective_items.update_all scored_business_unit_id: nil
     end
 end
