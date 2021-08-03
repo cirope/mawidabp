@@ -23,7 +23,6 @@ class AuxiliarBusinessUnitTest < ActiveSupport::TestCase
     control_objective_item.reload
 
     assert control_objective_item.scored_business_unit.blank?
-
   ensure
     Current.organization = nil
   end
