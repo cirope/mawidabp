@@ -4,7 +4,7 @@ require 'test_helper'
 
 class AuxiliarBusinessUnitTest < ActiveSupport::TestCase
   test 'remove all scored businessUnit after destroy' do
-    plan_item_one     = plan_items :current_plan_item_1
+    plan_item_one     = plan_items :current_plan_item_2
     business_unit_two = business_units :business_unit_two
 
     auxiliar_business_unit               = AuxiliarBusinessUnit.new
@@ -13,7 +13,7 @@ class AuxiliarBusinessUnitTest < ActiveSupport::TestCase
 
     auxiliar_business_unit.save!
 
-    control_objective_item = control_objective_items :management_dependency_item
+    control_objective_item = control_objective_items :management_dependency_item_editable
     control_objective_item.update_attribute 'scored_business_unit_id', business_unit_two.id
 
     assert control_objective_item.scored_business_unit.present?
