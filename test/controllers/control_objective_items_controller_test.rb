@@ -81,13 +81,14 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'update control_objective_item' do
-    business_unit_one = business_units(:business_unit_one)
+    business_unit_one      = business_units(:business_unit_one)
+    control_objective_item = control_objective_items(:management_dependency_item_editable)
 
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
       assert_difference 'WorkPaper.count', 2 do
         login
         patch :update, :params => {
-          :id => control_objective_items(:management_dependency_item_editable).id,
+          :id => control_objective_item.id,
           :control_objective_item => {
             :control_objective_text => 'Updated text',
             :scored_business_unit_id => business_unit_one.id,
@@ -133,13 +134,12 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to edit_control_objective_item_url(
-      control_objective_items(:management_dependency_item_editable))
+      control_objective_item)
     assert_not_nil assigns(:control_objective_item)
     assert_equal 'Updated text',
       assigns(:control_objective_item).control_objective_text
 
-    control_objective_item = ControlObjectiveItem.find control_objective_items(:management_dependency_item_editable).id
-    assert_equal control_objective_item.scored_business_unit_id,
+    assert_equal control_objective_item.reload.scored_business_unit_id,
                  business_unit_one.id
   end
 
