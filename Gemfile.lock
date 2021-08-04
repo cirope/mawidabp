@@ -148,6 +148,7 @@ GEM
     method_source (1.0.0)
     mini_magick (4.11.0)
     mini_mime (1.1.0)
+    mini_portile2 (2.6.1)
     minitest (5.14.4)
     nakayoshi_fork (0.0.4)
     net-ldap (0.17.0)

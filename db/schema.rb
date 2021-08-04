@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_134353) do
+ActiveRecord::Schema.define(version: 2021_07_30_192201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_134353) do
     t.bigint "activity_group_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "require_detail", default: false, null: false
     t.index ["activity_group_id"], name: "index_activities_on_activity_group_id"
   end
 
@@ -66,6 +67,15 @@ ActiveRecord::Schema.define(version: 2021_07_14_134353) do
     t.index ["poll_id"], name: "index_answers_on_poll_id"
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["type", "id"], name: "index_answers_on_type_and_id"
+  end
+
+  create_table "auxiliar_business_units", force: :cascade do |t|
+    t.bigint "plan_item_id", null: false
+    t.bigint "business_unit_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["business_unit_id"], name: "index_auxiliar_business_units_on_business_unit_id"
+    t.index ["plan_item_id"], name: "index_auxiliar_business_units_on_plan_item_id"
   end
 
   create_table "benefits", id: :serial, force: :cascade do |t|
@@ -302,9 +312,11 @@ ActiveRecord::Schema.define(version: 2021_07_14_134353) do
     t.integer "organization_id"
     t.integer "issues_count"
     t.integer "alerts_count"
+    t.bigint "scored_business_unit_id"
     t.index ["control_objective_id"], name: "index_control_objective_items_on_control_objective_id"
     t.index ["organization_id"], name: "index_control_objective_items_on_organization_id"
     t.index ["review_id"], name: "index_control_objective_items_on_review_id"
+    t.index ["scored_business_unit_id"], name: "index_control_objective_items_on_scored_business_unit_id"
   end
 
   create_table "control_objective_projects", force: :cascade do |t|
@@ -1125,6 +1137,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_134353) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "resource_type", default: "Activity"
+    t.text "detail"
     t.index ["resource_id"], name: "index_time_consumptions_on_resource_id"
     t.index ["user_id"], name: "index_time_consumptions_on_user_id"
   end
@@ -1253,6 +1266,8 @@ ActiveRecord::Schema.define(version: 2021_07_14_134353) do
   add_foreign_key "achievements", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "activities", "activity_groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "activity_groups", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "auxiliar_business_units", "business_units", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "auxiliar_business_units", "plan_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "benefits", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "best_practices", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "reviews", on_update: :restrict, on_delete: :restrict
@@ -1279,6 +1294,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_134353) do
   add_foreign_key "comments", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "commitment_supports", "finding_answers", on_update: :restrict, on_delete: :restrict
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objective_items", "business_units", column: "scored_business_unit_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_projects", "control_objectives", on_update: :restrict, on_delete: :restrict
