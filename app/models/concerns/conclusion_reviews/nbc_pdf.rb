@@ -240,11 +240,6 @@ module ConclusionReviews::NbcPdf
 
         pdf.text weakness.audit_comments
 
-        pdf.text nbc_weakness_responsible weakness
-
-        width_column1 = pdf.bounds.width - PDF_FONT_SIZE * 10
-        width_column2 = pdf.bounds.width - width_column1
-
         pdf.move_down PDF_FONT_SIZE
 
         data = [
@@ -254,8 +249,8 @@ module ConclusionReviews::NbcPdf
         ]
 
         data.insert 0, [
-          I18n.t('conclusion_review.detailed_review.full_name'),
-          I18n.t('conclusion_review.detailed_review.area')
+          I18n.t('conclusion_review.detailed_review.responsible_name'),
+          I18n.t('conclusion_review.detailed_review.follow_up_date')
         ]
 
         width_column1 = pdf.bounds.width - PDF_FONT_SIZE * 30

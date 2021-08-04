@@ -497,6 +497,8 @@
       review_procedures: "Asimismo, los procedimientos de revisión efectuados fueron los siguientes:\n• Entrevistas con el administrador del sistema, operadores y responsables del mantenimiento del mismo;\n• Elaboración del borrador preliminar de la auditoría y discusión con los responsables;\n• Redacción del correspondiente informe de debilidades detectadas y conclusión sobre el nivel de adecuación de los controles existentes;\n• Presentación del informe al Comité de Auditoría."
       full_name: "Nombre y Apellido"
       area: "Area"
+      responsible_name: "Nombre del Responsable de Regularización"
+      follow_up_date: "Fecha Estimada de Regularización"
     weaknesses_detected:
       name: "Debilidades detectadas"
       title: '<b>Título</b>'
