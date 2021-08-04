@@ -59,7 +59,7 @@ module ConclusionReviews::NbcPdf
       width_column1 = pdf.bounds.width - PDF_FONT_SIZE * 35
       width_column2 = pdf.bounds.width - width_column1
 
-      pdf.table(column_data, column_widths: [width_column1, width_column2]) do
+      pdf.table(column_data, cell_style: { inline_format: true }, column_widths: [width_column1, width_column2]) do
         row(0).style(
           borders: [:top, :left, :right]
         )
@@ -95,7 +95,7 @@ module ConclusionReviews::NbcPdf
 
       w_c = pdf.bounds.width / 4
 
-      pdf.table(column_data, :column_widths => [w_c,w_c,w_c,w_c,]) do
+      pdf.table(column_data, cell_style: { inline_format: true },  :column_widths => [w_c,w_c,w_c,w_c,]) do
         row(0).style(
           :borders =>[:top, :left, :right]
         )
@@ -197,7 +197,7 @@ module ConclusionReviews::NbcPdf
         I18n.t('conclusion_review.detailed_review.area')
       ]
 
-      pdf.table(data, :column_widths => [width_column1, width_column2]) do
+      pdf.table(data, cell_style: { inline_format: true }, :column_widths => [width_column1, width_column2]) do
         row(0).style(
           background_color: 'cccccc',
         )
@@ -256,7 +256,7 @@ module ConclusionReviews::NbcPdf
         width_column1 = pdf.bounds.width - PDF_FONT_SIZE * 30
         width_column2 = pdf.bounds.width - width_column1
 
-        pdf.table(data, :column_widths => [width_column1, width_column2]) do
+        pdf.table(data, cell_style: { inline_format: true }, :column_widths => [width_column1, width_column2]) do
           row(0).style(
             background_color: 'cccccc',
           )
