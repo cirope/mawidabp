@@ -62,11 +62,11 @@ module Prawn
         klass.extend(ClassExtension)
       end
 
-      def add_title(text, font_size = 18, align = :left, underline = false, valign = :top)
+      def add_title(text, font_size = 18, align = :left, underline = false)
         title_text = underline ? "<u><b>#{text}</b></u>" :  "<b>#{text}</b>"
 
         self.text "#{title_text}\n", :size => font_size, :align => align,
-          :inline_format => true, valign: valign
+          :inline_format => true
       end
 
       def add_subtitle(text, margin_top = 0, margin_down = 0, font_size = 12)

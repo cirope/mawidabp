@@ -19,10 +19,6 @@ module Findings::State
     FINAL_STATUS.include? state
   end
 
-  def implemented_status
-    STATUS[:repeated]
-  end
-
   module ClassMethods
     def with_pending_status
       where state: visible_pending_status
