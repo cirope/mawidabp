@@ -89,10 +89,11 @@ module Findings::State
                             !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK &&
                             !USE_SCOPE_CYCLE
         [
-          STATUS[:being_implemented], STATUS[:notify], STATUS[:unconfirmed],
-          STATUS[:confirmed], STATUS[:unanswered], STATUS[:incomplete]
+          STATUS[:being_implemented], STATUS[:unconfirmed], STATUS[:confirmed],
+          STATUS[:unanswered], STATUS[:incomplete]
         ] |
         (show_assumed_risk ? [STATUS[:assumed_risk]] : []) |
+        (USE_SCOPE_CYCLE ? [] : STATUS[:notify]) |
         (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]]) |
         (SHOW_WEAKNESS_PROGRESS ? [STATUS[:awaiting]] : [])
       end
@@ -121,7 +122,8 @@ module Findings::State
       def exclude_from_reports_status
         show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
 
-        [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked] |
+        [:unconfirmed, :confirmed, :incomplete, :repeated, :revoked] |
+          (USE_SCOPE_CYCLE ? [] : [:notify]) |
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [:implemented] : []) |
           (SHOW_WEAKNESS_PROGRESS ? [] : [:awaiting, :failure]) |
           (show_assumed_risk ? [:assumed_risk] : [])
@@ -219,8 +221,9 @@ module Findings::State
       def notify_transitions final
         show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
 
-        [:notify, :incomplete, :confirmed, :being_implemented, :implemented_audited, :expired] |
+        [:incomplete, :confirmed, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
+          (USE_SCOPE_CYCLE ? [] : [:notify]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
@@ -230,8 +233,9 @@ module Findings::State
       def incomplete_transitions final
         show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
 
-        [:incomplete, :notify, :being_implemented, :implemented_audited, :expired] |
+        [:incomplete, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
+          (USE_SCOPE_CYCLE ? [] : [:notify]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (SHOW_WEAKNESS_PROGRESS ? [:failure] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
