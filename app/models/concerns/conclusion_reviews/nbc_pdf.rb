@@ -29,7 +29,7 @@ module ConclusionReviews::NbcPdf
       text_title  = [
         I18n.t('conclusion_review.nbc.cover.title'),
         review.plan_item.business_unit.name
-      ].join("\n")
+      ].join "\n"
 
       pdf.bounding_box(coordinates, width: width, height: 150) do
         pdf.text text_title, size: (PDF_FONT_SIZE * 2).round, align: :center, valign: :center, inline_format: true
@@ -39,19 +39,16 @@ module ConclusionReviews::NbcPdf
 
       pdf.move_down PDF_FONT_SIZE * 10
 
-      review_owners = review.review_user_assignments.where owner: true
-
-      responsibles = review_owners&.map do |rua|
-        rua.user.full_name
-      end
-
+      responsibles = review.review_user_assignments.where(owner: true)&.map do |rua|
+                      rua.user.full_name
+                     end
       column_data = [
         [I18n.t('conclusion_review.nbc.cover.to'), I18n.t('conclusion_review.nbc.cover.to_label')],
         [I18n.t('conclusion_review.nbc.cover.from'), I18n.t('conclusion_review.nbc.cover.from_label')],
         [I18n.t('conclusion_review.nbc.cover.cc'), responsibles.join("\n") ]
       ]
 
-      width_column1 = pdf.bounds.width - PDF_FONT_SIZE * 35
+      width_column1 = PDF_FONT_SIZE * 7
       width_column2 = pdf.bounds.width - width_column1
 
       pdf.table(column_data, cell_style: { inline_format: true }, column_widths: [width_column1, width_column2]) do
@@ -82,11 +79,11 @@ module ConclusionReviews::NbcPdf
         ],
         [
           I18n.t('conclusion_review.nbc.cover.audit_date'),
-          I18n.l(issue_date, format: '%B %Y'),'',''
+          I18n.l(issue_date, format: '%B %Y'),
+          '',
+          ''
         ]
       ]
-
-      pdf.font_size(((PDF_FONT_SIZE * 0.75).round).pt)
 
       w_c = pdf.bounds.width / 4
 
@@ -115,7 +112,7 @@ module ConclusionReviews::NbcPdf
       pdf.add_subtitle I18n.t('conclusion_review.nbc.weaknesses.main_observations')
 
       review.weaknesses.each do |weakness|
-        pdf.text "• #{weakness.description}" if weakness.state == Weakness::STATUS[:being_implemented]
+        pdf.text "• #{weakness.description}" if weakness.being_implemented?
       end
     end
 
@@ -161,7 +158,7 @@ module ConclusionReviews::NbcPdf
       pdf.move_down PDF_FONT_SIZE
 
       review.grouped_control_objective_items.each do |process_control, cois|
-        process_control_text = "<i>#{process_control.name}</i></b>"
+        process_control_text = "<i>#{process_control.name}</i>"
 
         pdf.text process_control_text, align: :justify, inline_format: true
       end
@@ -174,11 +171,9 @@ module ConclusionReviews::NbcPdf
 
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages')
 
-      users = review.review_user_assignments.select(&:include_signature)
-
-      data = users.map do |rua|
-        [rua.user.full_name, rua.user.full_name]
-      end
+      data = review.review_user_assignments.select(&:include_signature).map do |rua|
+               [rua.user.full_name, rua.user.full_name]
+             end
 
       width_column1 = PDF_FONT_SIZE * 10
       width_column2 = pdf.bounds.width - width_column1

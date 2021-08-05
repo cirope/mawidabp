@@ -110,37 +110,37 @@ es:
     nbc:
       cover:
         title: "<b>Informe de Auditoría Interna</b>"
-        to: '<b>A</b>'
-        from: '<b>DE</b>'
-        cc: '<b>CC</b>'
-        to_label: 'Miembros del Comité de Auditoría del Nuevo Banco del Chaco S.A.'
-        from_label: 'Gerencia Auditoría Interna – Nuevo Banco del Chaco S.A'
-        number_review: '<b>Numero de Informe</b>'
-        prepared_by: '<b>Preparado por</b>'
-        internal_audit: 'Auditoría Interna - NBCH'
-        audit_date: '<b>Fecha de Auditoría</b>'
+        to: "<b>A</b>"
+        from: "<b>DE</b>"
+        cc: "<b>CC</b>"
+        to_label: "Miembros del Comité de Auditoría del Nuevo Banco del Chaco S.A."
+        from_label: "Gerencia Auditoría Interna – Nuevo Banco del Chaco S.A"
+        number_review: "<b>Numero de Informe</b>"
+        prepared_by: "<b>Preparado por</b>"
+        internal_audit: "Auditoría Interna - NBCH"
+        audit_date: "<b>Fecha de Auditoría</b>"
       weaknesses:
-        title: '<b>Resumen Ejecutivo</b>'
+        title: "<b>Resumen Ejecutivo</b>"
         subtitle: "Objetivo"
-        main_observations: 'Principales observaciones'
-        audit_conclusion: 'Conclusión General de la Auditoría'
-        highest_responsible: '<b>%{responsible}</b>'
-        signature_label: '<b>Gerencia de Auditoría Interna</b>'
-        organization: '<b>Nuevo Banco del Chaco S.A.</b>'
-        detailed_review: 'INFORME DETALLADO'
-        introduction_and_scope: 'INTRODUCCION Y ALCANCE DEL TRABAJO'
+        main_observations: "Principales observaciones"
+        audit_conclusion: "Conclusión General de la Auditoría"
+        highest_responsible: "<b>%{responsible}</b>"
+        signature_label: "<b>Gerencia de Auditoría Interna</b>"
+        organization: "<b>Nuevo Banco del Chaco S.A.</b>"
+        detailed_review: "INFORME DETALLADO"
+        introduction_and_scope: "INTRODUCCION Y ALCANCE DEL TRABAJO"
         introduction: "Como parte de los procedimientos de revisión de control interno planificados en el marco del plan de Auditoria Interna del Nuevo Banco del Chaco S.A. para el ejercicio que finalizará el %{date}, hemos realizado una revisión del control interno y análisis del ciclo de %{project}"
-        scope: 'El alcance de nuestro trabajo incluyó el análisis de los siguientes aspectos:'
+        scope: "El alcance de nuestro trabajo incluyó el análisis de los siguientes aspectos"
         review_procedures: "Asimismo, los procedimientos de revisión efectuados fueron los siguientes:\n• Entrevistas con el administrador del sistema, operadores y responsables del mantenimiento del mismo;\n• Elaboración del borrador preliminar de la auditoría y discusión con los responsables;\n• Redacción del correspondiente informe de debilidades detectadas y conclusión sobre el nivel de adecuación de los controles existentes;\n• Presentación del informe al Comité de Auditoría."
         full_name: "<b>Nombre y Apellido</b>"
         area: "<b>Area</b>"
         responsible_name: "<b>Nombre del Responsable de Regularización</b>"
         follow_up_date: "<b>Fecha Estimada de Regularización</b>"
-        messages: 'Nuestro trabajo se realizó en los meses de noviembre y diciembre de 2020, y para llevarlo a cabo se mantuvieron reuniones con el siguiente personal de Entidad:'
+        messages: "Nuestro trabajo se realizó en los meses de noviembre y diciembre de 2020, y para llevarlo a cabo se mantuvieron reuniones con el siguiente personal de Entidad:"
       weaknesses_detected:
         name: "Debilidades detectadas"
-        title: '<b>Título</b>'
-        description: '<b>Descripción</b>.'
-        effect: '<b>Riesgo Asociado</b>'
-        audit_recommendations: '<b>Sugerencia de Mejora</b>'
-        audit_comments: '<b>Comentarios del Responsable</b>'
+        title: "<b>Título</b>"
+        description: "<b>Descripción</b>"
+        effect: "<b>Riesgo Asociado</b>"
+        audit_recommendations: "<b>Sugerencia de Mejora</b>"
+        audit_comments: "<b>Comentarios del Responsable</b>"
