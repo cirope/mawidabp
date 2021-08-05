@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-module ConclusionDraftReviews::Annexes
+module ConclusionReviews::Annexes
   extend ActiveSupport::Concern
 
   included do
-    has_many :annexes, foreign_key: 'conclusion_review_id'
+    has_many :annexes, dependent: :destroy
 
     accepts_nested_attributes_for :annexes, allow_destroy: true
   end
