@@ -1,4 +1,5 @@
 class ConclusionDraftReview < ConclusionReview
+  include ConclusionDraftReviews::Annexes
   include ConclusionDraftReviews::AppliedProcedures
   include ConclusionDraftReviews::Approval
 

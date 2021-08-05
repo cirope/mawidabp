@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_30_192201) do
+ActiveRecord::Schema.define(version: 2021_08_05_131818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(version: 2021_07_30_192201) do
     t.datetime "updated_at", null: false
     t.index ["benefit_id"], name: "index_achievements_on_benefit_id"
     t.index ["finding_id"], name: "index_achievements_on_finding_id"
+  end
+
+  create_table "annexes", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description"
+    t.bigint "conclusion_review_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["conclusion_review_id"], name: "index_annexes_on_conclusion_review_id"
   end
 
   create_table "answer_options", id: :serial, force: :cascade do |t|
@@ -1234,6 +1243,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_192201) do
 
   add_foreign_key "achievements", "benefits", on_update: :restrict, on_delete: :restrict
   add_foreign_key "achievements", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "annexes", "conclusion_reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "auxiliar_business_units", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "auxiliar_business_units", "plan_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "benefits", "organizations", on_update: :restrict, on_delete: :restrict
