@@ -239,7 +239,7 @@ module Findings::State
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (SHOW_WEAKNESS_PROGRESS ? [:failure] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
-          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk]) |
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
           (show_assumed_risk ? [:assumed_risk] : [])
       end
 
