@@ -20,8 +20,6 @@ module ConclusionReviews::NbcPdf
     def put_nbc_cover_on pdf, organization
       pdf.add_review_header organization, nil, nil
 
-      title_options = [(PDF_FONT_SIZE * 1.5).round, :center, false, :center]
-
       pdf.move_down PDF_FONT_SIZE
 
       width       = pdf.bounds.width
@@ -87,29 +85,31 @@ module ConclusionReviews::NbcPdf
 
       w_c = pdf.bounds.width / 4
 
-      pdf.table(column_data, cell_style: { inline_format: true },  :column_widths => [w_c, w_c, w_c, w_c]) do
-        row(0).style(
-          borders: [:top, :left, :right]
-        )
-        row(1).style(
-          borders: [:bottom, :left, :right]
-        )
-      end
+      pdf.table(column_data, cell_style: { size: (PDF_FONT_SIZE * 0.75).round, inline_format: true },
+                :column_widths => [w_c, w_c, w_c, w_c]) do
+                  row(0).style(
+                    borders: [:top, :left, :right]
+                  )
+                  row(1).style(
+                    borders: [:bottom, :left, :right]
+                  )
+                end
     end
 
     def put_nbc_brief_on pdf
       title_options = [(PDF_FONT_SIZE * 1.5).round, :center, false]
 
       pdf.add_title I18n.t('conclusion_review.nbc.weaknesses.title'), *title_options
-      pdf.add_subtitle I18n.t('conclusion_review.nbc.weaknesses.subtitle')
+      pdf.text I18n.t('conclusion_review.nbc.weaknesses.subtitle'), inline_format: true
 
+      pdf.move_down PDF_FONT_SIZE
       pdf.text review.description, align: :justify, inline_format: true
 
       pdf.start_new_page
     end
 
     def put_nbc_weaknesses_on pdf
-      pdf.add_subtitle I18n.t('conclusion_review.nbc.weaknesses.main_observations')
+      pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
 
       review.weaknesses.each do |weakness|
         pdf.text "• #{weakness.description}" if weakness.being_implemented?
@@ -118,7 +118,7 @@ module ConclusionReviews::NbcPdf
 
     def put_nbc_conclusion_on pdf
       pdf.move_down PDF_FONT_SIZE
-      pdf.add_subtitle I18n.t('conclusion_review.nbc.weaknesses.audit_conclusion')
+      pdf.text I18n.t('conclusion_review.nbc.weaknesses.audit_conclusion'), inline_format: true
 
       if conclusion.present?
         pdf.move_down PDF_FONT_SIZE
@@ -143,7 +143,7 @@ module ConclusionReviews::NbcPdf
 
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.add_subtitle I18n.t('conclusion_review.nbc.weaknesses.introduction_and_scope')
+      pdf.text I18n.t('conclusion_review.nbc.weaknesses.introduction_and_scope'), inline_format: true
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -153,7 +153,7 @@ module ConclusionReviews::NbcPdf
 
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.add_subtitle I18n.t('conclusion_review.nbc.weaknesses.scope')
+      pdf.text I18n.t('conclusion_review.nbc.weaknesses.scope')
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -188,6 +188,7 @@ module ConclusionReviews::NbcPdf
       pdf.table(data, cell_style: { inline_format: true }, :column_widths => [width_column1, width_column2]) do
         row(0).style(
           background_color: 'cccccc',
+          align: :center
         )
       end
 
@@ -195,12 +196,12 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_detected_on pdf
-      pdf.add_subtitle I18n.t('conclusion_review.nbc.weaknesses_detected.name')
+      pdf.text I18n.t('conclusion_review.nbc.weaknesses_detected.name')
 
       review.weaknesses.each do |weakness|
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.nbc.weaknesses_detected.title'), inline_format: true
-        pdf.text weakness.review_code
+        pdf.text weakness.title
 
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.nbc.weaknesses_detected.description'), inline_format: true
@@ -236,12 +237,13 @@ module ConclusionReviews::NbcPdf
         I18n.t('conclusion_review.nbc.weaknesses.follow_up_date')
       ]
 
-      width_column1 = pdf.bounds.width - PDF_FONT_SIZE * 30
+      width_column1 = PDF_FONT_SIZE * 30
       width_column2 = pdf.bounds.width - width_column1
 
       pdf.table(data, cell_style: { inline_format: true }, :column_widths => [width_column1, width_column2]) do
         row(0).style(
           background_color: 'cccccc',
+          align: :center
         )
       end
     end
