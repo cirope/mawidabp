@@ -194,7 +194,7 @@ class TimeSummaryController < ApplicationController
         (@start_date..@end_date).each do |date|
           if date.workday?
             if users[user.user][date].present?
-              users[user.user][date].each { |tc| row << tc }
+              row += users[user.user][date]
             else
               row << [user.full_name, date, '', '', '', '']
             end
