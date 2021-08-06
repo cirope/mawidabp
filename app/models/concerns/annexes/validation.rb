@@ -9,9 +9,8 @@ module Annexes::Validation
 
   def description_or_image_presence
     if description.blank? && image_models.empty?
-      message = I18n.t('conclusion_draft_review.errors.not_present_description_and_images')
-      errors.add(:description, message)
-      errors.add(:image_models, message)
+      errors.add :description, :blank
+      errors.add :image_models, :blank
     end
   end
 end

@@ -10,6 +10,6 @@ module Annexes::ImageModels
   end
 
   def organization_id
-    conclusion_review.review.organization_id
+    conclusion_review.organization_id
   end
 end

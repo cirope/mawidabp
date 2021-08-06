@@ -133,7 +133,6 @@
     add_image: "Agregar imagen"
     errors:
       without_corrective_actions: "no tiene acciones correctivas"
-      not_present_description_and_images: "Debe tener al menos una descripcion o una imagen"
 
   conclusion_report:
     index_title: "Reportes de conclusión"
