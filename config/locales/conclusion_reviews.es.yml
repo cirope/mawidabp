@@ -72,7 +72,6 @@ es:
         scope:
           cycle: "%{prefix} Tareas y Alcance."
           sustantive: "%{prefix} Alcance de las Tareas."
-        details: "Se detalla el programa de trabajo"
         conclusion: "%{prefix} Conclusión."
         objective: "%{prefix} Objetivo."
         additional_comments: "Comentarios adicionales."

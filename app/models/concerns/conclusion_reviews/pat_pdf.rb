@@ -111,9 +111,6 @@ module ConclusionReviews::PatPdf
         inline_format: true
       pdf.text applied_procedures, align: :justify
 
-      pdf.text "\n#{I18n.t('conclusion_review.pat.cover.details').upcase}\n\n\n",
-        align: :center, inline_format: true
-
       if additional_comments.present?
         pdf.text "\n<u>#{I18n.t 'conclusion_review.pat.cover.additional_comments'}</u>\n\n",
           inline_format: true
@@ -355,6 +352,8 @@ module ConclusionReviews::PatPdf
           fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
       end
 
+      put_pat_issues_on pdf, weakness if weakness.issues.any?
+
       if weakness.effect.present?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.effect'), style: :bold
@@ -381,8 +380,6 @@ module ConclusionReviews::PatPdf
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
         pdf.text I18n.l(weakness.follow_up_date, format: :minimal)
       end
-
-      put_pat_issues_on pdf, weakness if weakness.issues.any?
     end
 
     def put_pat_issues_on pdf, weakness
@@ -390,16 +387,27 @@ module ConclusionReviews::PatPdf
       pdf.text Issue.model_name.human(count: 0), style: :bold
 
       weakness.issues.each do |issue|
+        amount_text = if issue.amount
+                   [
+                     Issue.human_attribute_name('amount'),
+                     [issue.currency, issue.amount].compact.join
+                   ].join ': '
+                 end
+
+        date_text = if issue.close_date
+                 [
+                   Issue.human_attribute_name('close_date'),
+                   I18n.l(issue.close_date)
+                 ].join ': '
+               end
+
         description = [
           issue.customer,
           issue.entry,
           issue.operation
         ].reject(&:blank?).join ' | '
 
-        data = [
-          issue.amount,
-          (I18n.l(issue.close_date) if issue.close_date)
-        ].compact.join ' - '
+        data = [amount_text, date_text].compact.join ' - '
 
         space      = Prawn::Text::NBSP
         issue_line = "\n#{space * 4}• #{space * 2} #{description} (#{data})"
