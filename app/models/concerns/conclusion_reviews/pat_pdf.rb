@@ -111,9 +111,6 @@ module ConclusionReviews::PatPdf
         inline_format: true
       pdf.text applied_procedures, align: :justify
 
-      pdf.text "\n#{I18n.t('conclusion_review.pat.cover.details').upcase}\n\n\n",
-        align: :center, inline_format: true
-
       if additional_comments.present?
         pdf.text "\n<u>#{I18n.t 'conclusion_review.pat.cover.additional_comments'}</u>\n\n",
           inline_format: true
@@ -355,6 +352,8 @@ module ConclusionReviews::PatPdf
           fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
       end
 
+      put_pat_issues_on pdf, weakness if weakness.issues.any?
+
       if weakness.effect.present?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.effect'), style: :bold
@@ -381,8 +380,6 @@ module ConclusionReviews::PatPdf
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
         pdf.text I18n.l(weakness.follow_up_date, format: :minimal)
       end
-
-      put_pat_issues_on pdf, weakness if weakness.issues.any?
     end
 
     def put_pat_issues_on pdf, weakness
