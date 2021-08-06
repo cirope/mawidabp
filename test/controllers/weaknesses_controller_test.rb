@@ -219,6 +219,7 @@ class WeaknessesControllerTest < ActionController::TestCase
                 customer: '01',
                 entry: '01',
                 operation: '01',
+                currency: 'ARS',
                 amount: '10.0',
                 comments: 'Some issue',
                 close_date: I18n.l(Time.zone.tomorrow)
@@ -227,6 +228,7 @@ class WeaknessesControllerTest < ActionController::TestCase
                 customer: '02',
                 entry: '02',
                 operation: '02',
+                currency: 'ARS',
                 amount: '20.0',
                 comments: 'Some other issue',
                 close_date: ''
@@ -344,6 +346,7 @@ class WeaknessesControllerTest < ActionController::TestCase
                   customer: '01',
                   entry: '01',
                   operation: '01',
+                  currency: 'ARS',
                   amount: '10.0',
                   comments: 'Some issue',
                   close_date: I18n.l(Time.zone.tomorrow)
@@ -352,6 +355,7 @@ class WeaknessesControllerTest < ActionController::TestCase
                   customer: '02',
                   entry: '02',
                   operation: '02',
+                  currency: 'ARS',
                   amount: '20.0',
                   comments: 'Some other issue',
                   close_date: ''

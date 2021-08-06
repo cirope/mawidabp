@@ -387,16 +387,27 @@ module ConclusionReviews::PatPdf
       pdf.text Issue.model_name.human(count: 0), style: :bold
 
       weakness.issues.each do |issue|
+        amount_text = if issue.amount
+                   [
+                     Issue.human_attribute_name('amount'),
+                     [issue.currency, issue.amount].compact.join
+                   ].join ': '
+                 end
+
+        date_text = if issue.close_date
+                 [
+                   Issue.human_attribute_name('close_date'),
+                   I18n.l(issue.close_date)
+                 ].join ': '
+               end
+
         description = [
           issue.customer,
           issue.entry,
           issue.operation
         ].reject(&:blank?).join ' | '
 
-        data = [
-          issue.amount,
-          (I18n.l(issue.close_date) if issue.close_date)
-        ].compact.join ' - '
+        data = [amount_text, date_text].compact.join ' - '
 
         space      = Prawn::Text::NBSP
         issue_line = "\n#{space * 4}• #{space * 2} #{description} (#{data})"
