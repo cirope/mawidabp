@@ -22,6 +22,9 @@ es:
       achievement:
         one: 'Beneficio / perjuicio estimado'
         other: 'Beneficios / perjuicios estimados'
+      annex:
+        one: 'Anexo'
+        other: 'Anexos'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -193,6 +196,10 @@ es:
         benefit: 'Nombre'
         amount: 'Monto'
         comment: 'Comentario'
+      annex:
+        title: 'Título'
+        description: 'Descripción'
+        image_models: 'Imágenes'
       answer:
         answer: 'Respuesta'
         comments: 'Comentarios respuesta'

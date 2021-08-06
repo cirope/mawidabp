@@ -8,4 +8,8 @@ module Annexes::ImageModels
 
     accepts_nested_attributes_for :image_models, allow_destroy: true, reject_if: :all_blank
   end
+
+  def organization_id
+    conclusion_review.review.organization_id
+  end
 end
