@@ -59,11 +59,25 @@ module TimeSummaryHelper
   end
 
   def time_summary_enabled_edit item, date
-    date >= 1.week.ago
+    date >= 3.weeks.ago
   end
 
   def time_summary_reviews
     Review.list_without_final_review_or_not_closed.
       map { |r| [r.identification, r.id] }
+  end
+
+  def time_summary_activities
+    ActivityGroup.list.order(:name).map do |ag|
+      children = ag.activities.order(:name).map do |a|
+        [a.name, a.id, { data: { require_detail: a.require_detail }}]
+      end
+
+      [ag.name, children]
+    end
+  end
+
+  def time_summary_require_detail_class
+    'd-none' unless @time_consumption.require_detail?
   end
 end

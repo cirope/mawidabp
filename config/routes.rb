@@ -77,7 +77,7 @@ Rails.application.routes.draw do
     resources :documents, only: [:index]
   end
 
-  resources :time_summary, except: [:show, :destroy]
+  resources :time_summary
 
   scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
     resources :tags
