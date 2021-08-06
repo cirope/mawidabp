@@ -68,7 +68,6 @@ class TimeSummaryController < ApplicationController
       start_date: @time_consumption.date.at_beginning_of_week,
       end_date:   @time_consumption.date.at_end_of_week
     )
-
   end
 
   private
@@ -185,7 +184,6 @@ class TimeSummaryController < ApplicationController
             ]
 
             time_consumptions[tc.date] ||= []
-
             time_consumptions[tc.date] << data
           end
 
