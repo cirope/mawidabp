@@ -91,7 +91,7 @@
 
   business_unit_kind:
     errors:
-      business_unit_kind_related: "El tipo de unidad de negocio no puede ser eliminado, se encuentra relacionada con al menos una unidad de negocio"
+      business_unit_kind_related: "El tipo de proceso crítico no puede ser eliminado, se encuentra relacionado con al menos un proceso crítico"
 
   business_unit_type:
     index_title: "Listado de unidades organizativas"
@@ -101,12 +101,12 @@
     correctly_created: "Unidad organizativa agregada correctamente."
     correctly_updated: "Unidad organizativa actualizada correctamente."
     stale_object_error: "La unidad organizativa no fue actualizada, intente nuevamente."
-    add_business_unit: "Agregar unidad de negocio"
+    add_business_unit: "Agregar proceso crítico"
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
     errors:
       can_not_be_destroyed: "La unidad organizativa no puede ser eliminada"
-      business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
+      business_unit_related: "El proceso crítico no puede ser eliminado, se encuentra relacionado con al menos un plan de trabajo"
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"
@@ -139,7 +139,7 @@
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y proceso crítico"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Informe mensual"
@@ -153,7 +153,7 @@
       detailed_column_estimated_amount: "Costo estimado (planificado)"
       detailed_column_real_amount: "Costo real (ejecutado)"
       detailed_column_deviation: "Desviación"
-      general_column_business_unit: "Unidad de negocio"
+      general_column_business_unit: "Proceso crítico"
       general_column_review: "Informe"
       general_column_estimated_amount: "Costo estimado (planificado)"
       general_column_real_amount: "Costo real (ejecutado)"
@@ -186,7 +186,7 @@
     review_scores_report_title: "Calificaciones de informes"
     review_score_details_report_title: "Calificaciones de informes detallado"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y proceso crítico"
     weaknesses_by_month_title: "Observaciones por riesgo"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
@@ -350,7 +350,7 @@
       title: "CALIFICACIONES DE INFORMES"
       subtitle: "INFORMES DEFINITIVOS"
       review_score: "Calificación informes"
-      business_unit_score: "Calificación unidades de negocio"
+      business_unit_score: "Calificación procesos críticos"
       total_score: "Calificación total"
       empty: "Sin calificaciones para el filtro aplicado"
     review_score_details_report:
@@ -377,7 +377,7 @@
     weaknesses_by_risk_and_business_unit:
       pdf_name: "observaciones_informes_definitivos_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
+      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO Y PROCESOS CRÍTICOS"
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
@@ -530,12 +530,12 @@
     add_oportunity: "Agregar nueva oportunidad de mejora"
     add_weakness: "Agregar nueva observación"
     add_work_paper: "Agregar papel de trabajo"
-    add_business_unit_score: "Agregar calificación de unidad de negocio"
-    add_business_unit_type: "Agregar unidades de negocio por tipo"
+    add_business_unit_score: "Agregar calificación de proceso crítico"
+    add_business_unit_type: "Agregar procesos críticos por tipo"
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     not_rated: "No evaluado"
-    not_scored_business_unit: "Misma unidad de negocio del proyecto"
+    not_scored_business_unit: "Mismo proceso crítico del proyecto"
     not_apply_text: 'No aplica calificación'
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
     not_applicable: "No aplica"
@@ -711,7 +711,7 @@
     status_user: "Estado de usuario"
     process_control_stats_title: "Observaciones por proceso de negocio"
     business_unit_type_title: "Unidad organizativa"
-    business_unit_title: "Unidad de negocio"
+    business_unit_title: "Proceso crítico"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -747,7 +747,7 @@
     cost_analysis_title: "Análisis de costos"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y proceso crítico"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Informe mensual"
@@ -764,7 +764,7 @@
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     weaknesses_heatmap_title: "Mapa de calor observaciones"
     cost_analysis:
-      column_business_unit: "Unidad de negocio"
+      column_business_unit: "Proceso crítico"
       column_project: "Proyecto"
       column_review: "Informe"
       column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)"
@@ -802,7 +802,7 @@
     synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y proceso crítico"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
@@ -1088,7 +1088,7 @@
     weaknesses_by_risk_and_business_unit:
       pdf_name: "observaciones_seguimiento_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
+      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO Y PROCESOS CRÍTICOS"
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
@@ -1532,7 +1532,7 @@
 
   activerecord:
     models:
-      business_unit: "Unidad de negocio"
+      business_unit: "Proceso crítico"
       business_unit_type: "Unidad organizativa"
       business_unit_type_user: "Unidad organizativa"
       business_unit_type_review: "Unidad organizativa"
@@ -1580,7 +1580,7 @@
         close_date: "Fecha de cierre"
         applied_procedures: "Procedimientos aplicados"
         conclusion: "Conclusión"
-        business_unit: "Unidad de negocio"
+        business_unit: "Proceso crítico"
         project: "Proyecto"
         approved: "Aprobado"
         summary: "Acta"
@@ -1626,7 +1626,7 @@
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
         work_papers: "Papeles de trabajo"
-        scored_business_unit_id: "Unidad de negocio evaluada"
+        scored_business_unit_id: "Proceso crítico evaluado"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"
@@ -1647,10 +1647,10 @@
         file_content_type: "Papel de trabajo (tipo de archivo)"
         file_file_size: "Papel de trabajo (tamaño de archivo)"
       control_objective_item/business_unit_scores:
-        business_unit_id: 'Calificación de unidad de negocio (unidad de negocio)'
-        design_score: 'Calificación de unidad de negocio (pruebas de diseño)'
-        compliance_score: 'Calificación de unidad de negocio (pruebas de cumplimiento)'
-        sustantive_score: 'Calificación de unidad de negocio (pruebas sustantivas)'
+        business_unit_id: 'Calificación de proceso crítico (proceso crítico)'
+        design_score: 'Calificación de proceso crítico (pruebas de diseño)'
+        compliance_score: 'Calificación de proceso crítico (pruebas de cumplimiento)'
+        sustantive_score: 'Calificación de proceso crítico (pruebas sustantivas)'
       cost:
         cost: "Tiempo dedicado"
         description: "Descripción de las actividades realizadas"
@@ -1820,7 +1820,7 @@
             review_user_assignments:
               invalid: "debe tener al menos %{required_roles}"
             plan_item:
-              invalid: "debe tener una unidad de negocio asignada en la planificación"
+              invalid: "debe tener un proceso crítico asignado en la planificación"
               required: "debe seleccionar uno"
         review_user_assignment:
           attributes:
@@ -1847,7 +1847,7 @@
 
   actioncontroller:
     best_practices: "Buenas prácticas"
-    business_unit_types: "Unidades de negocio"
+    business_unit_types: "Procesos críticos"
     follow_up_audit: "Reportes de seguimiento"
     conclusion_reports: "Reportes de conclusión"
     conclusion_draft_reviews: "Informe borrador"

@@ -53,14 +53,14 @@ es:
         one: 'Comentario del auditor (buena práctica)'
         other: 'Comentarios del auditor (buena práctica)'
       business_unit:
-        one: 'Unidad de negocio'
-        other: 'Unidades de negocio'
+        one: 'Proceso crítico'
+        other: 'Procesos críticos'
       business_unit_kind:
-        one: 'Tipo de unidad de negocio'
-        other: 'Tipos de unidad de negocio'
+        one: 'Tipo de proceso crítico'
+        other: 'Tipos de proceso crítico'
       business_unit_score:
-        one: 'Calificación unidad de negocio'
-        other: 'Calificaciones de unidades de negocio'
+        one: 'Calificación proceso crítico'
+        other: 'Calificaciones de procesos críticos'
       closing_interview:
         one: 'Entrevista de cierre'
         other: 'Entrevistas de cierre'
@@ -243,7 +243,7 @@ es:
         business_unit_type_id: "Unidad organizativa"
         review_id: "Informe"
       business_unit_score:
-        business_unit_id: 'Unidad de negocio'
+        business_unit_id: 'Proceso crítico'
         design_score: 'Calificación pruebas de diseño'
         compliance_score: 'Calificación pruebas de cumplimiento'
         sustantive_score: 'Calificación pruebas sustantivas'
@@ -548,7 +548,7 @@ es:
         order_number: 'Proyecto (orden)'
         scope: 'Proyecto (Tipo proyecto)'
         risk_exposure: 'Proyecto (exposición al riesgo)'
-        business_unit_id: 'Proyecto (unidad de negocio)'
+        business_unit_id: 'Proyecto (proceso crítico)'
         status: 'Proyecto (estado)'
       plan/plan_items/resource_utilizations:
         one: 'Recurso'
@@ -564,7 +564,7 @@ es:
         order_number: 'Orden'
         scope: 'Tipo proyecto'
         risk_exposure: 'Exposición al riesgo'
-        business_unit_id: 'Unidad de negocio'
+        business_unit_id: 'Proceso crítico'
         resources: 'Recursos'
         resource_ids: 'Recursos'
         status: 'Estado'
@@ -641,7 +641,7 @@ es:
       risk_assessment/risk_assessment_items:
         name: 'Nombre (ítem)'
         risk: 'Riesgo (ítem)'
-        business_unit: 'Unidad de negocio'
+        business_unit: 'Proceso crítico'
         risk_weights: 'Valores de la evaluación'
       risk_assessment/risk_assessment_items/risk_weights:
         value: 'Valor (ítem)'
@@ -649,7 +649,7 @@ es:
       risk_assessment_item:
         name: 'Nombre'
         risk: 'Riesgo'
-        business_unit: 'Unidad de negocio'
+        business_unit: 'Proceso crítico'
         process_control: 'Proceso'
       risk_assessment_template:
         name: 'Nombre'

@@ -6,7 +6,7 @@ es:
       organization:
         management: 'Gestión'
         business_units: 'Unidades organizativas'
-        business_unit_kind: 'Tipos de unidad de negocio'
+        business_unit_kind: 'Tipos de proceso crítico'
       security_title: 'Seguridad'
       security:
         reports: 'Reportes de seguridad'
