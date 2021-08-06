@@ -59,11 +59,7 @@ module TimeSummaryHelper
   end
 
   def time_summary_enabled_edit item, date
-    date >= 3.week.ago
-  end
-
-  def time_summary_enabled_destroy item, date
-    date >= 3.week.ago
+    date >= 3.weeks.ago
   end
 
   def time_summary_reviews

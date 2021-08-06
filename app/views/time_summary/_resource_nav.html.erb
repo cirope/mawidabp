@@ -6,7 +6,7 @@
           date: params[:date],
           limit: params[:limit],
           resource_type: 'Activity'),
-          class: (@time_consumption.resource_type == 'Activity' ? 'nav-link active' : 'nav-link'), readonly: true %>
+        class: (@time_consumption.resource_type == 'Activity' ? 'nav-link active' : 'nav-link'), readonly: true %>
     </li>
     <li class="nav-item">
       <%= link_to t('time_summary.form.review'),
@@ -14,7 +14,7 @@
           date: params[:date],
           limit: params[:limit],
           resource_type: 'Review'),
-          class: (@time_consumption.resource_type == 'Review' ? 'nav-link active' : 'nav-link'), readonly: true %>
+        class: (@time_consumption.resource_type == 'Review' ? 'nav-link active' : 'nav-link'), readonly: true %>
     </li>
   </ul>
 <% end %>

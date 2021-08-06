@@ -52,7 +52,7 @@
                   <i class="fas fa-pen"></i>
                 <% end %>
             <% end %>
-            <% if time_summary_enabled_destroy item, date %>
+            <% if time_summary_enabled_edit item, date %>
               <%= link_to time_summary_path(id),
                 data: {
                   method: :delete,

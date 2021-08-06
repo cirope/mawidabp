@@ -179,7 +179,7 @@ class TimeSummaryController < ApplicationController
               tc.date,
               tc.resource.to_s,
               helpers.number_with_precision(tc.amount, precision: 1),
-              (tc.resource.plan_item.business_unit.business_unit_type.name if tc.resource_type == 'Review'),
+              (tc.resource.plan_item.business_unit.business_unit_type.name if tc.review?),
               tc.detail
             ]
 
@@ -194,7 +194,7 @@ class TimeSummaryController < ApplicationController
         (@start_date..@end_date).each do |date|
           if date.workday?
             if users[user.user][date].present?
-              users[user.user][date].map { |tc| row << tc }
+              users[user.user][date].each { |tc| row << tc }
             else
               row << [user.full_name, date, '', '', '', '']
             end
