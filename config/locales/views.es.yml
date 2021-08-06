@@ -601,6 +601,8 @@ es:
       current_week: 'Semana actual'
       empty: 'Sin registros'
       add: 'Agregar actividad'
+      edit: 'Editar actividad'
+      destroy: 'Eliminar actividad'
       total_amount:
         one: 'Total de horas acumuladas: %{amount}'
         other: 'Total de horas acumuladas por %{count} personas: %{amount}'
@@ -621,6 +623,8 @@ es:
         quantity_hours_per_day: "Cantidad horas por día"
         task: "Tarea"
         user: "Usuario"
+        business_unit_types: "Unidades organizativas"
+        detail: "Detalle"
 
   users:
     index:

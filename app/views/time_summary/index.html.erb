@@ -47,9 +47,20 @@
                   date: date,
                   limit: time_summary_remaining_hours(date) + hours
                 ),
-                title: t('.add'),
+                title: t('.edit'),
                 class: 'ml-1 h6' do %>
                   <i class="fas fa-pen"></i>
+              <% end %>
+            <% end %>
+            <% if time_summary_enabled_destroy item, date %>
+              <%= link_to time_summary_path(id),
+                data: {
+                  method: :delete,
+                  confirm: t('messages.confirmation')
+                },
+                title: t('.destroy'),
+                class: 'ml-1 h6' do %>
+                <i class="fas fa-trash"></i>
               <% end %>
             <% end %>
           </li>
