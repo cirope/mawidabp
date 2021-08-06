@@ -3,7 +3,7 @@ class TimeSummaryController < ApplicationController
 
   before_action :auth, :check_privileges, :set_title, :set_descendants,
                 :set_user
-  before_action :set_time_consumption, only: [:edit, :update]
+  before_action :set_time_consumption, only: [:edit, :update, :destroy]
 
   def index
     @start_date         = start_date
@@ -54,11 +54,20 @@ class TimeSummaryController < ApplicationController
     review = Review.list.find params[:id]
 
     @amounts = {
-      workflow:         review.workflow.try(:human_units).to_f,
+      workflow:         review.plan_item.human_units.to_f,
       time_consumption: review.time_consumptions.sum(&:amount).to_f
     }
 
     respond_to :js
+  end
+
+  def destroy
+    @time_consumption.destroy
+
+    respond_with @time_consumption, location: time_summary_index_url(
+      start_date: @time_consumption.date.at_beginning_of_week,
+      end_date:   @time_consumption.date.at_end_of_week
+    )
   end
 
   private
@@ -149,7 +158,9 @@ class TimeSummaryController < ApplicationController
         t('time_summary.downloads.csv.user'),
         t('time_summary.downloads.csv.date'),
         t('time_summary.downloads.csv.task'),
-        t('time_summary.downloads.csv.quantity_hours_per_day')
+        t('time_summary.downloads.csv.quantity_hours_per_day'),
+        t('time_summary.downloads.csv.business_unit_types'),
+        t('time_summary.downloads.csv.detail'),
       ]
     end
 
@@ -163,12 +174,17 @@ class TimeSummaryController < ApplicationController
         TimeConsumption.
           where(user: user).
           where(date: @start_date..@end_date).each do |tc|
-            time_consumptions[tc.date] = [
+            data = [
               user.full_name,
               tc.date,
               tc.resource.to_s,
-              helpers.number_with_precision(tc.amount, precision: 1)
+              helpers.number_with_precision(tc.amount, precision: 1),
+              (tc.resource.plan_item.business_unit.business_unit_type.name if tc.review?),
+              tc.detail
             ]
+
+            time_consumptions[tc.date] ||= []
+            time_consumptions[tc.date] << data
           end
 
         users[user.user] = time_consumptions
@@ -178,14 +194,14 @@ class TimeSummaryController < ApplicationController
         (@start_date..@end_date).each do |date|
           if date.workday?
             if users[user.user][date].present?
-              row << users[user.user][date]
+              row += users[user.user][date]
             else
-              row << [user.full_name, date, '', '']
+              row << [user.full_name, date, '', '', '', '']
             end
           end
         end
 
-        row << ['', '', '', '']
+        row << ['', '', '', '', '', '']
       end
 
       row
