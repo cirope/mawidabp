@@ -561,6 +561,7 @@ es:
     skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
     hours_of_work_per_day: 'Horas de trabajo por día'
+    conclusion_review_receiver: 'Receptor/es del informe'
 
   tags:
     edit:
