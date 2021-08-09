@@ -45,7 +45,7 @@ module ConclusionReviews::PatPdf
 
     def put_pat_cover_header_on pdf, brief: false
       but_names = [review.business_unit_type.name] + review.business_unit_types.map(&:name)
-      to_text   = I18n.t 'conclusion_review.pat.cover.to'
+      to_text   = I18n.t 'conclusion_review.pat.cover.to', receiver: pat_receiver
       from_text = I18n.t 'conclusion_review.pat.cover.from', business_unit_types: but_names.to_sentence
 
       unless brief
@@ -488,5 +488,13 @@ module ConclusionReviews::PatPdf
           pdf.text "#{i.next}. #{wi.task}\n\n", align: :justify
         end
       end
+    end
+
+    def pat_receiver
+      setting = Current.organization.settings.find_by(
+        name: 'conclusion_review_receiver'
+      )
+
+      setting&.value || DEFAULT_SETTINGS[:conclusion_review_receiver][:value]
     end
 end

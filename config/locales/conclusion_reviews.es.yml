@@ -68,7 +68,7 @@ es:
     pat:
       cover:
         from: "Banco Patagonia S.A.\nGerencia de Auditoría Interna\n%{business_unit_types}"
-        to: "A: Comité de Auditoría"
+        to: "A: %{receiver}"
         scope:
           cycle: "%{prefix} Tareas y Alcance."
           sustantive: "%{prefix} Alcance de las Tareas."
