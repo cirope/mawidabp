@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Annexes::Validation
   extend ActiveSupport::Concern
 
   included do
     validates :title, presence: true, length: { maximum: 255 }
 
-    validate  :description_or_image_presence
+    validate :description_or_image_presence
   end
 
   def description_or_image_presence

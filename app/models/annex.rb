@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Annex < ApplicationRecord
   include Annexes::ImageModels
   include Annexes::Validation
