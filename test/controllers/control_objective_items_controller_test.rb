@@ -81,7 +81,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'update control_objective_item' do
-    business_unit_one      = business_units(:business_unit_one)
+    business_unit_type_one = business_unit_types(:cycle)
     control_objective_item = control_objective_items(:management_dependency_item_editable)
 
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
@@ -91,7 +91,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
           :id => control_objective_item.id,
           :control_objective_item => {
             :control_objective_text => 'Updated text',
-            :scored_business_unit_id => business_unit_one.id,
+            :scored_business_unit_type_id => business_unit_type_one.id,
             :relevance => ControlObjectiveItem.relevances_values.last,
             :control_attributes => {
               :id => controls(:management_dependency_item_editable_control_1).id,
@@ -139,8 +139,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_equal 'Updated text',
       assigns(:control_objective_item).control_objective_text
 
-    assert_equal control_objective_item.reload.scored_business_unit_id,
-                 business_unit_one.id
+    assert_equal control_objective_item.reload.scored_business_unit_type_id,
+                 business_unit_type_one.id
   end
 
   test 'update control_objective_item with business unit scores' do
