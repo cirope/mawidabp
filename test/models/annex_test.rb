@@ -10,7 +10,7 @@ class PlanTest < ActiveSupport::TestCase
 
     refute @annex.valid?
 
-    assert @annex.errors.added? :title, :blank
+    assert_error @annex, :title, :blank
   end
 
   test 'invalid without description and images' do
@@ -18,8 +18,8 @@ class PlanTest < ActiveSupport::TestCase
 
     refute @annex.valid?
 
-    assert @annex.errors.added? :description, :blank
-    assert @annex.errors.added? :image_models, :blank
+    assert_error @annex, :description, :blank
+    assert_error @annex, :image_models, :blank
   end
 
   test 'valid with description without images' do
