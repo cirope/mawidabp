@@ -1,0 +1,30 @@
+<%
+  id = f.object.object_id
+  auxiliar_business_unit_type = f.object
+%>
+<fieldset class="auxiliar_business_unit_types">
+  <div class="row" data-nested>
+    <div class="col-md-11">
+      <% if auxiliar_business_unit_type.business_unit_type.blank? %>
+        <%= f.input :business_unit_type_id, as: :string, label: false, input_html: {
+          value: auxiliar_business_unit_type.business_unit_type.to_s,
+          id: "plan_item_auxiliar_business_unit_type_#{id}",
+          title: t('label.search'), autocomplete: :off, autofocus: true,
+          data: {
+            autocomplete_params: { kind: 'plan_item', excluded_id: excluded_id },
+            autocomplete_url: url_for([:auto_complete_for_business_unit_type, Plan]),
+            autocomplete_id_target: "#hidden_business_unit_type_#{id}"
+          }
+        } %>
+      <% else %>
+        <%= f.input "plan_item_auxiliar_business_unit_type_#{id}", label: false, input_html: { value: auxiliar_business_unit_type.business_unit_type.to_s, readonly: true } %>
+      <% end %>
+      <%= f.input :business_unit_type_id, as: :hidden, input_html: { id: "hidden_business_unit_type_#{id}" } %>
+    </div>
+    <div class="col-md-1">
+      <div class="mt-2 text-right">
+        <%= link_to_remove_nested_item f %>
+      </div>
+    </div>
+  </div>
+</fieldset>

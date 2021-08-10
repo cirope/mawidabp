@@ -1,5 +1,6 @@
 class PlansController < ApplicationController
   include AutoCompleteFor::BusinessUnit
+  include AutoCompleteFor::BusinessUnitType
   include AutoCompleteFor::Tagging
 
   respond_to :html, :js
@@ -81,8 +82,8 @@ class PlansController < ApplicationController
           taggings_attributes: [
             :id, :tag_id, :_destroy
           ],
-          auxiliar_business_units_attributes: [
-            :id, :business_unit_id, :_destroy
+          auxiliar_business_unit_types_attributes: [
+            :id, :business_unit_type_id, :_destroy
           ]
         ]
       )
