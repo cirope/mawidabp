@@ -93,7 +93,7 @@ module Findings::State
           STATUS[:unanswered], STATUS[:incomplete]
         ] |
         (show_assumed_risk ? [STATUS[:assumed_risk]] : []) |
-        (USE_SCOPE_CYCLE ? [] : STATUS[:notify]) |
+        (USE_SCOPE_CYCLE ? [] : [STATUS[:notify]]) |
         (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]]) |
         (SHOW_WEAKNESS_PROGRESS ? [STATUS[:awaiting]] : [])
       end
