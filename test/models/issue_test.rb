@@ -23,12 +23,14 @@ class IssueTest < ActiveSupport::TestCase
     @issue.customer    = "\n\t"
     @issue.entry       = "\n\t"
     @issue.operation   = "\n\t"
+    @issue.currency    = "\n\t"
     @issue.comments    = "\n\t"
 
     assert @issue.invalid?
     assert_error @issue, :customer, :pdf_encoding
     assert_error @issue, :entry, :pdf_encoding
     assert_error @issue, :operation, :pdf_encoding
+    assert_error @issue, :currency, :pdf_encoding
     assert_error @issue, :comments, :pdf_encoding
   end
 
@@ -36,11 +38,13 @@ class IssueTest < ActiveSupport::TestCase
     @issue.customer  = 'abcde' * 52
     @issue.entry     = 'abcde' * 52
     @issue.operation = 'abcde' * 52
+    @issue.currency = 'abcde' * 52
 
     assert @issue.invalid?
     assert_error @issue, :customer, :too_long, count: 255
     assert_error @issue, :entry, :too_long, count: 255
     assert_error @issue, :operation, :too_long, count: 255
+    assert_error @issue, :currency, :too_long, count: 255
   end
 
   test 'validates well formated attributes' do

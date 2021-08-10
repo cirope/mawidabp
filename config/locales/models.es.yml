@@ -386,7 +386,8 @@ es:
       issue:
         customer: 'Cliente'
         entry: 'Rubro'
-        transaction: 'Operación'
+        operation: 'Operación'
+        currency: 'Moneda'
         amount: 'Monto'
         comments: 'Comentarios'
         close_date: 'Fecha de regularización'

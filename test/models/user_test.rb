@@ -513,6 +513,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify finding changes function' do
+    skip if USE_SCOPE_CYCLE
+
     Current.organization = nil
     user = users :administrator
 
