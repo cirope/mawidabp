@@ -208,7 +208,7 @@ jQuery(function ($) {
       total += +$(e).val()
     })
 
-    var currency    = $('[data-current-currency]').val()
+    var currency = $('[data-current-currency]').val()
 
     $('[data-sum-amount-impact-risks]').text(currency + total.toFixed(2))
 
@@ -267,6 +267,7 @@ jQuery(function ($) {
         return false
       }
     })
+
     return impactValue
   }
 
@@ -294,6 +295,7 @@ jQuery(function ($) {
 
     } else if ($(this).val() == '2') {
       var probabilityValue = $('[data-probability-representativeness-amount]').data('probabilityRepresentativenessAmount')
+
       $('select[name$="[probability]"]').attr('disabled', true)
       $('input[name$="[probability]"]').attr('disabled', false)
 

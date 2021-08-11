@@ -78,7 +78,8 @@
         <% if USE_SCOPE_CYCLE %>
           <div class="row">
             <div class="col">
-              <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true, disabled: use_suggested_impact_value(@weakness),
+              <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
+                disabled: use_suggested_impact_value(@weakness),
                 input_html: {
                   data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
                 } %>

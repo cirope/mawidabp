@@ -57,15 +57,15 @@
             <div class="row">
               <div class="col">
                 <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
-                  disabled: @finding.use_suggested_impact,
+                  disabled: use_suggested_impact_value(@finding),
                   input_html: {
                     autofocus: true,
                     data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
                   } %>
-                <%= f.input :impact_risk, as: :hidden, disabled: !@finding.use_suggested_impact %>
+                <%= f.input :impact_risk, as: :hidden, disabled: !(use_suggested_impact_value(@finding)) %>
               </div>
               <div class="col">
-                <%= f.input :use_suggested_impact, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
+                <%= f.input :use_suggested_impact, collection: suggested_type_risks, input_html: {
                   data: { toggle_suggested_impact_disabled_attr: true }
                 } %>
               </div>
@@ -77,7 +77,7 @@
                 <%= f.input :probability, as: :hidden, disabled: !@finding.use_suggested_probability %>
               </div>
               <div class="col">
-                <%= f.input :use_suggested_probability, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
+              <%= f.input :use_suggested_probability, collection: suggested_type_risks, input_html: {
                   data: { toggle_suggested_probability_disabled_attr: true }
                 } %>
               </div>
@@ -380,7 +380,9 @@
         <%= f.input :probability_amount,
           input_html: {
             data: {
-              probability_previous_amount: @finding.probability_risk_previous
+              probability_previous_amount: @finding.probability_risk_previous,
+              probability_representativeness_amount: @finding.probability_risks_representativeness,
+              probability_risks_types: finding_percentage_impact_risks_types(@finding)
             }
           } %>
       </div>
@@ -425,12 +427,19 @@
         </div>
       </div>
     </div>
-    <div data-impact-risks-value="<%= @finding.impact_risk_value %>" data-impact-risks-types="<%= finding_impact_risks_types(@finding) %>"></div>
+    <div
+      data-impact-risks-value="<%= @finding.impact_risk_value %>"
+      data-impact-risks-percentage-value="<%= @finding.impact_risk_percentage %>"
+      data-percentage-impact-risks-types="<%= finding_percentage_impact_risks_types(@finding) %>"
+      data-impact-risks-types="<%= finding_impact_risks_types(@finding) %>">
+    </div>
 
     <%= link_to_add_fields(
       t('finding.add_issue'), f,
       :issues, nil,
-      { insert_into: '#finding_issues' }
+      { insert_into: '#finding_issues',
+        probability_calculate: true
+      }
     ) %>
   </div>
 

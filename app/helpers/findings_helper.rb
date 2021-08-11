@@ -427,7 +427,6 @@ module FindingsHelper
     end
 
     def finding_probability_risks_types finding
-      byebug
       finding.percentage_by_probability.invert.reverse_each.to_json
     end
 end
