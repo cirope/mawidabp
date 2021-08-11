@@ -16,11 +16,14 @@
       <div class="col-md-2 d-none d-md-block">
         <%= f.input :operation, label: false, input_html: { readonly: readonly } %>
       </div>
-      <div class="col-md-2 d-none d-md-block">
+      <div class="col-md-2">
         <%= f.input :comments, label: false, input_html: { readonly: readonly, rows: 1 } %>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-1">
         <%= f.input :close_date, as: :date_picker, label: false, input_html: { readonly: readonly } %>
+      </div>
+      <div class="col-md-1">
+        <%= f.input :currency, label: false, input_html: { readonly: readonly } %>
       </div>
       <div class="col-md-2">
         <div class="row">

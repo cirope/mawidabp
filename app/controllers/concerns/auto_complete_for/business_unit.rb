@@ -33,6 +33,10 @@ module AutoCompleteFor::BusinessUnit
     ).merge(PlanItem.allowed_by_business_units
     ).references(:business_unit_type).limit(10)
 
+    if params[:excluded_id].present?
+      @business_units = @business_units.where.not(id: params[:excluded_id])
+    end
+
     respond_to do |format|
       format.json { render json: @business_units }
     end

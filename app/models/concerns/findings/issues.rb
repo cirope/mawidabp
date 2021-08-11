@@ -74,8 +74,13 @@ module Findings::Issues
           self.state            = Finding::STATUS['being_implemented']
           self.follow_up_date ||= 9.months.from_now.to_date
         elsif !some_closed && !awaiting?
-          self.state          = Finding::STATUS['awaiting']
-          self.follow_up_date = nil
+          self.state = Finding::STATUS['awaiting']
+
+          if USE_SCOPE_CYCLE
+            self.follow_up_date ||= 9.months.from_now.to_date
+          else
+            self.follow_up_date = nil
+          end
         end
       end
     end

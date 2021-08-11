@@ -164,8 +164,9 @@ class WeaknessesController < ApplicationController
   end
 
   private
+
     def weakness_params
-      params.require(:weakness).permit(
+      casted_params = params.require(:weakness).permit(
         :control_objective_item_id, :review_code, :title, :description, :brief,
         :answer, :audit_comments, :state, :origination_date, :solution_date,
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
@@ -194,8 +195,8 @@ class WeaknessesController < ApplicationController
           :id, :description, :related_finding_id, :_destroy
         ],
         issues_attributes: [
-          :id, :customer, :entry, :operation, :amount, :comments, :close_date,
-          :_destroy
+          :id, :customer, :entry, :operation, :amount, :currency, :comments,
+          :close_date, :_destroy
         ],
         tasks_attributes: [
           :id, :code, :description, :status, :due_on, :_destroy
@@ -209,6 +210,10 @@ class WeaknessesController < ApplicationController
         image_model_attributes: [
           :id, :image, :image_cache
         ]
+      )
+
+      casted_params.merge(
+        can_close_findings: USE_SCOPE_CYCLE && can_perform?(:approval)
       )
     end
 

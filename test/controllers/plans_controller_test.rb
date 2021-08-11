@@ -163,6 +163,11 @@ class PlansControllerTest < ActionController::TestCase
                     {
                       tag_id: tags(:extra).id
                     }
+                  ],
+                  auxiliar_business_units_attributes: [
+                    {
+                      business_unit_id: business_units(:business_unit_one).id
+                    }
                   ]
                 },
                 '1' => {
@@ -339,6 +344,16 @@ class PlansControllerTest < ActionController::TestCase
     business_units = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 2, business_units.size # All in the organization (one and two)
+    assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
+
+    business_unit_one = business_units(:business_unit_one)
+
+    get :auto_complete_for_business_unit, params: { q: 'business', excluded_id: business_unit_one.id }, as: :json
+    assert_response :success
+
+    business_units = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 3, business_units.size # All in the organization (two, three and four, excluded one)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
   end
 end
