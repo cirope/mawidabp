@@ -9,8 +9,17 @@ module Findings::Issues
     accepts_nested_attributes_for :issues, allow_destroy: true, reject_if: :all_blank
   end
 
+  SUGGESTED_RISK_TYPES = {
+    repeatability: 1,
+    representativeness: 2
+  }
+
   def issues_amount
     issues.sum &:amount
+  end
+
+  def issues_percentage
+     impact_amount? ? issues.sum(&:amount) / impact_amount.to_f : 0
   end
 
   def get_amount_by_impact
@@ -19,12 +28,22 @@ module Findings::Issues
     amount_by_impact.reverse_each.to_h.detect { |id, value| amount >= value }
   end
 
+  def get_percentage_by_impact
+    percentage = issues_percentage
+
+    percentage_by_impact.reverse_each.to_h.detect { |id, value| percentage >= value }
+  end
+
   def impact_risk_text
     I18n.t "impact_risk_types.#{Finding::IMPACT_RISKS.invert[get_amount_by_impact.first]}"
   end
 
   def impact_risk_value
     get_amount_by_impact&.first
+  end
+
+  def impact_risk_percentage
+    get_percentage_by_impact&.first
   end
 
   def probability_risk_previous
@@ -44,6 +63,20 @@ module Findings::Issues
     end
   end
 
+  def get_percentage_by_probability
+    percentage = issues_percentage_by_probability
+
+    percentage_by_probability.reverse_each.to_h.detect { |id, value| percentage >= value }
+  end
+
+  def issues_percentage_by_probability
+    probability_amount? ? (issues.count / probability_amount) : 0
+  end
+
+  def probability_risks_representativeness
+    get_percentage_by_probability&.first
+  end
+
   def previous_weakness_by_template? review
     Array(review&.weaknesses).map(&:weakness_template_id).include? weakness_template_id
   end
@@ -55,6 +88,26 @@ module Findings::Issues
       3 => 20844081,
       4 => 208440815,
       5 => 2084408150
+    }
+  end
+
+  def percentage_by_impact
+    {
+      1 => 0,
+      2 => 0.2,
+      3 => 0.4,
+      4 => 0.6,
+      5 => 0.8,
+    }
+  end
+
+  def percentage_by_probability
+    {
+      1 => 0,
+      2 => 0.2,
+      3 => 0.4,
+      4 => 0.6,
+      5 => 0.8,
     }
   end
 

@@ -9,6 +9,7 @@
         <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'operation' %></th>
         <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'comments'  %></th>
         <th><%= Issue.human_attribute_name 'close_date' %></th>
+        <th><%= Issue.human_attribute_name 'currency' %></th>
         <th><%= Issue.human_attribute_name 'amount' %></th>
       </tr>
     </thead>
@@ -21,10 +22,12 @@
           <td class="d-none d-md-table-cell"><%= issue.operation %></td>
           <td class="d-none d-md-table-cell"><%= issue.comments %></td>
           <td><%= l(issue.close_date, format: :minimal) if issue.close_date %></td>
+          <td><%= issue.currency %></td>
           <td><%= issue.amount %></td>
         </tr>
       <% end %>
       <tr>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>

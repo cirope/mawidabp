@@ -293,6 +293,10 @@ module FindingsHelper
     end
   end
 
+  def use_suggested_impact_value weakness
+    weakness.use_suggested_impact ? true : false
+  end
+
   private
 
     def finding_state_options_for finding
@@ -416,5 +420,14 @@ module FindingsHelper
 
     def finding_impact_risks_types finding
       finding.amount_by_impact.invert.reverse_each.to_json
+    end
+
+    def finding_percentage_impact_risks_types finding
+      finding.percentage_by_impact.invert.reverse_each.to_json
+    end
+
+    def finding_probability_risks_types finding
+      byebug
+      finding.percentage_by_probability.invert.reverse_each.to_json
     end
 end
