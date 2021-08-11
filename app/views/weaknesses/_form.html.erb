@@ -98,7 +98,9 @@
               <%= f.input :probability, as: :hidden, disabled: !@weakness.use_suggested_probability %>
             </div>
 
-            <div class="col">
+            <div class="col"
+                 data-repeatability-value="<%= Finding::SUGGESTED_RISK_TYPES[:repeatability] %>"
+                 data-representativeness-value="<%= Finding::SUGGESTED_RISK_TYPES[:representativeness] %>">
               <%= f.input :use_suggested_probability, collection: suggested_type_risks, input_html: {
                 data: { toggle_suggested_probability_disabled_attr: true }
               } %>

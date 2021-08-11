@@ -69,7 +69,10 @@
                   data: { toggle_suggested_impact_disabled_attr: true }
                 } %>
               </div>
-              <div class="col">
+              <div class="col"
+                 data-repeatability-value="<%= Finding::SUGGESTED_RISK_TYPES[:repeatability] %>"
+                 data-representativeness-value="<%= Finding::SUGGESTED_RISK_TYPES[:representativeness] %>">
+
                 <%= f.input :probability, collection: weakness_probabilities, prompt: true, disabled: @finding.use_suggested_probability,
                   input_html: {
                     data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
