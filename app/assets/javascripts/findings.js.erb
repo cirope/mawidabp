@@ -183,14 +183,14 @@ jQuery(function ($) {
     var repeatabilityValue      = $('[data-repeatability-value]').data('repeatabilityValue')
     var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
 
-    if ($(this).val() === repeatabilityValue) {
+    if ($(this).val() === String(repeatabilityValue)) {
       var impactValue = $('[data-impact-risks-value]').data('impactRisksValue')
 
       $('select[name$="[impact_risk]"]').attr('disabled', true)
       $('input[name$="[impact_risk]"]').attr('disabled', false)
 
       $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
-    } else if ($(this).val() === representativenessValue) {
+    } else if ($(this).val() === String(representativenessValue)) {
       var impactValuePercentage = $('[data-impact-risks-percentage-value]').data('impactRisksPercentageValue')
 
       $('select[name$="[impact_risk]"]').attr('disabled', true)
@@ -249,7 +249,7 @@ jQuery(function ($) {
       probability_calculate()
   })
 
-  var probability_calculate = function( ) {
+  var probability_calculate = function() {
     var total_issues             = $('[data-finding-issue-amount]:visible').length
     var currentProbabilityAmount = +$('[data-probability-risks-types]').val()
     var issuePercentage          = total_issues / currentProbabilityAmount
@@ -260,7 +260,7 @@ jQuery(function ($) {
 
     $('[data-probability-representativeness-amount]').data('probabilityRepresentativenessAmount', impactValue)
 
-    if ($('[data-toggle-suggested-probability-disabled-attr]').val() == String(representativenessValue)) {
+    if ($('[data-toggle-suggested-probability-disabled-attr]').val() === String(representativenessValue)) {
       if (probabilityRiskChanged) {
         $('[name$="[probability]"]').val(impactValue).trigger('change')
       }
