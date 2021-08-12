@@ -293,10 +293,6 @@ module FindingsHelper
     end
   end
 
-  def use_suggested_impact_value weakness
-    weakness.use_suggested_impact ? true : false
-  end
-
   private
 
     def finding_state_options_for finding

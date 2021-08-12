@@ -228,6 +228,40 @@ jQuery(function ($) {
         $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
       }
     } else if ($('[data-toggle-suggested-impact-disabled-attr]').val() === String(representativenessValue)) {
+        refreshAmountImpact(total)
+    }
+  })
+
+  $(document).on('keyup', '[data-amount-impact]', function () {
+    var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
+    var total                   = 0
+
+    $('[data-finding-issue-amount]').each(function (i, e) {
+      total += +$(e).val()
+    })
+
+    if ($('[data-toggle-suggested-impact-disabled-attr]').val() === String(representativenessValue)) {
+      refreshAmountImpact(total)
+    }
+  })
+
+  $(document).on('click', '[data-add-issues]', function() {
+    refreshProbability()
+  })
+
+  $(document).on('dynamic-item:removed', '[data-dynamic-target=".issue"]', function(){
+    refreshProbability()
+  })
+
+  $(document).on('keyup', '[data-probability-amount]', function () {
+    var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
+
+    if ($('[data-toggle-suggested-probability-disabled-attr]').val() === String(representativenessValue)) {
+      refreshProbability()
+    }
+  })
+
+  var refreshAmountImpact = function (total) {
       var types              = $('[data-impact-risks-types]').data('percentageImpactRisksTypes')
       var currentImpactValue = +$('[data-amount-impact]').val()
       var issuePercentage    = total / currentImpactValue
@@ -238,21 +272,12 @@ jQuery(function ($) {
         $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
         $('[data-impact-risks-percentage-value]').data('impactRisksPercentageValue', impactValue)
       }
-    }
-  })
+  }
 
-  $(document).on('click', '[data-add-issues]', function() {
-    probability_calculate()
-  })
-
-  $(document).on('click', '[data-dynamic-form-event]', function(){
-      probability_calculate()
-  })
-
-  var probability_calculate = function() {
-    var total_issues             = $('[data-finding-issue-amount]:visible').length
+  var refreshProbability = function () {
+    var totalIssues             = $('[data-finding-issue-amount]:visible').length
     var currentProbabilityAmount = +$('[data-probability-risks-types]').val()
-    var issuePercentage          = total_issues / currentProbabilityAmount
+    var issuePercentage          = totalIssues / currentProbabilityAmount
     var types                    = $('[data-probability-risks-types]').data('probabilityRisksTypes')
     var impactValue              = impactRisksTypesValue(types, issuePercentage)
     var probabilityRiskChanged   = $('[name$="[probability]"]').val() !== String(impactValue)
@@ -266,6 +291,7 @@ jQuery(function ($) {
       }
     }
   }
+
   var impactRisksTypesValue = function(types, total) {
     var impactValue
 
@@ -307,7 +333,6 @@ jQuery(function ($) {
       $('input[name$="[probability]"]').attr('disabled', false)
 
       $('[name$="[probability]"]').val(probabilityValue).trigger('change')
-
     } else if ($(this).val() === String(representativenessValue)) {
       var probabilityValue = $('[data-probability-representativeness-amount]').data('probabilityRepresentativenessAmount')
 
