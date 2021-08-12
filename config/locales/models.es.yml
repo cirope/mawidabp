@@ -28,6 +28,9 @@ es:
       activity_group:
         one: 'Grupo actividad'
         other: 'Grupo de actividades'
+      annex:
+        one: 'Anexo'
+        other: 'Anexos'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -207,6 +210,10 @@ es:
         require_detail: 'Require detalle'
       activity_group:
         name: 'Nombre'
+      annex:
+        title: 'Título'
+        description: 'Descripción'
+        image_models: 'Imágenes'
       answer:
         answer: 'Respuesta'
         comments: 'Comentarios respuesta'
