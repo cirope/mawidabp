@@ -16,6 +16,7 @@ module ConclusionReviews::PatPdf
 
       put_pat_weaknesses_section_on pdf
       put_pat_workflow_on           pdf if review.plan_item.sustantive?
+      put_pat_annexes_on            pdf
     end
 
     if options[:return_object]
@@ -496,5 +497,33 @@ module ConclusionReviews::PatPdf
       )
 
       setting&.value || DEFAULT_SETTINGS[:conclusion_review_receiver][:value]
+    end
+
+    def put_pat_annexes_on pdf
+      if annexes.any?
+        pdf.start_new_page
+
+        pdf.text Annex.model_name.human(count: 0).upcase, align: :center, style: :bold
+        pdf.move_down PDF_FONT_SIZE * 2
+
+        annexes.each do |annex|
+          pdf.text annex.title, style: :bold
+
+          if annex.description.present?
+            pdf.move_down PDF_FONT_SIZE
+            pdf.text annex.description
+          end
+
+          if annex.image_models.any?
+            pdf.move_down PDF_FONT_SIZE
+
+            annex.image_models.each do |image_model|
+              pdf.move_down PDF_FONT_SIZE
+              pdf.image image_model.image.path, position: :center,
+                fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
+            end
+          end
+        end
+      end
     end
 end
