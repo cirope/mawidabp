@@ -507,23 +507,20 @@ module ConclusionReviews::PatPdf
         pdf.move_down PDF_FONT_SIZE * 2
 
         annexes.each do |annex|
-          pdf.text "#{Annex.human_attribute_name('title')}:", style: :bold
-          pdf.text annex.title
+          pdf.text annex.title, style: :bold
 
           if annex.description.present?
-            pdf.move_down PDF_FONT_SIZE 
-            pdf.text "#{Annex.human_attribute_name('description')}:", style: :bold
+            pdf.move_down PDF_FONT_SIZE
             pdf.text annex.description
           end
 
           if annex.image_models.any?
-            pdf.move_down PDF_FONT_SIZE 
-            pdf.text "#{Annex.human_attribute_name('image_models')}", style: :bold
+            pdf.move_down PDF_FONT_SIZE
 
             annex.image_models.each do |image_model|
               pdf.move_down PDF_FONT_SIZE
               pdf.image image_model.image.path, position: :center,
-                fit: [300, 300]
+                fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
             end
           end
         end
