@@ -19,7 +19,6 @@ class ControlObjectiveItem < ApplicationRecord
   include ControlObjectiveItems::Pdf
   include ControlObjectiveItems::Relevance
   include ControlObjectiveItems::Scopes
-  include ControlObjectiveItems::ScoredBusinessUnit
   include ControlObjectiveItems::Scores
   include ControlObjectiveItems::Search
   include ControlObjectiveItems::UpdateCallbacks

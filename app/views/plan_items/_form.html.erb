@@ -31,11 +31,11 @@
         <% end %>
       </div>
 
-      <div id="auxiliar_business_units_<%= index %>">
-        <% plan_item.auxiliar_business_units.each do |auxiliar_business_unit| %>
-          <% auxiliar_business_unit_child_index = plan_item.auxiliar_business_units.index auxiliar_business_unit %>
-          <%= pi_f.simple_fields_for :auxiliar_business_units, auxiliar_business_unit, child_index: auxiliar_business_unit_child_index do |aux_bu_f| %>
-            <%= render 'plan_items/auxiliar_business_unit', f: aux_bu_f %>
+      <div id="auxiliar_business_unit_types_<%= index %>">
+        <% plan_item.auxiliar_business_unit_types.each do |auxiliar_business_unit_type| %>
+          <% auxiliar_business_unit_type_child_index = plan_item.auxiliar_business_unit_types.index auxiliar_business_unit_type %>
+          <%= pi_f.simple_fields_for :auxiliar_business_unit_types, auxiliar_business_unit_type, child_index: auxiliar_business_unit_type_child_index do |aux_bu_t_f| %>
+            <%= render 'plan_items/auxiliar_business_unit_type', f: aux_bu_t_f %>
           <% end %>
         <% end %>
       </div>

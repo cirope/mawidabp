@@ -329,7 +329,7 @@ es:
       add_human_resource_utilization: 'Agregar recurso humano'
       add_material_resource_utilization: 'Agregar recurso material'
       add_tagging: 'Agregar etiqueta'
-      add_auxiliar_business_unit: 'Agregar unidad de negocio'
+      add_auxiliar_business_unit_type: 'Agregar unidad organizativa auxiliar'
     plan_items:
       add_plan_item: 'Agregar proyecto'
     duplication_or_overload_form:

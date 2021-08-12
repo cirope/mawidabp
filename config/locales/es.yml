@@ -537,7 +537,6 @@
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     not_rated: "No evaluado"
-    not_scored_business_unit: "Misma unidad de negocio del proyecto"
     not_apply_text: 'No aplica calificación'
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
     not_applicable: "No aplica"
@@ -1627,7 +1626,7 @@
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
         work_papers: "Papeles de trabajo"
-        scored_business_unit_id: "Unidad de negocio evaluada"
+        scored_business_unit_type_id: "Unidad organizativa evaluada"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"
