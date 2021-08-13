@@ -72,8 +72,14 @@ class ConclusionFinalReviewsController < ApplicationController
   # * POST /conclusion_final_reviews
   def create
     @title = t 'conclusion_final_review.new_title'
+
+    @images_duplicates    = duplicate_images new_conclusion_final_review_params
+    params_without_images = params_without_images_attributes new_conclusion_final_review_params
+
     @conclusion_final_review =
-      ConclusionFinalReview.list.new(conclusion_final_review_params)
+      ConclusionFinalReview.list.new(params_without_images)
+
+    assign_duplicate_images params_without_images[:review_id]
 
     respond_to do |format|
       if @conclusion_final_review.save
@@ -84,6 +90,8 @@ class ConclusionFinalReviewsController < ApplicationController
       end
     end
   end
+
+  
 
   # Actualiza el contenido de un informe definitivo siempre que cumpla con las
   # validaciones.
@@ -383,6 +391,30 @@ class ConclusionFinalReviewsController < ApplicationController
       ).find(params[:id])
     end
 
+    def new_conclusion_final_review_params
+      params.require(:conclusion_final_review).permit(
+        :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
+        :summary, :recipients, :evolution, :evolution_justification, :sectors,
+        :observations, :main_weaknesses_text, :corrective_actions,
+        :affects_compliance, :collapse_control_objectives,
+        :reference, :scope, :previous_identification, :previous_date,
+        :main_recommendations, :effectiveness_notes, :additional_comments,
+        :lock_version,
+        review_attributes: [
+          :id, :manual_score, :description, :lock_version,
+          best_practice_comments_attributes: [
+            :id, :best_practice_id, :auditor_comment
+          ]
+        ],
+        annexes_attributes: [
+          :title, :description, :_destroy,
+          image_models_attributes: [
+            :id, :image, :image_cache, :_destroy
+          ]
+        ]
+      )
+    end
+
     def conclusion_final_review_params
       params.require(:conclusion_final_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
@@ -396,6 +428,12 @@ class ConclusionFinalReviewsController < ApplicationController
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [
             :id, :best_practice_id, :auditor_comment
+          ]
+        ],
+        annexes_attributes: [
+          :id, :title, :description, :_destroy,
+          image_models_attributes: [
+            :id, :image, :image_cache, :_destroy
           ]
         ]
       )
@@ -412,5 +450,62 @@ class ConclusionFinalReviewsController < ApplicationController
           compose_email: :modify,
           send_by_email: :modify
         })
+    end
+
+    def assign_duplicate_images review_id
+      draft = ConclusionDraftReview.where(review_id: review_id).first
+  
+      if draft
+        @images_duplicates.reverse_each do |image_duplicate|
+          aux_annex = image_duplicate.imageable
+          @conclusion_final_review.annexes.each do |annex_duplicate|
+            if aux_annex.title == annex_duplicate.title && aux_annex.description == annex_duplicate.description
+              annex_duplicate.image_models << image_duplicate
+              image_duplicate.imageable = nil
+            end
+          end
+        end
+      end
+    end
+
+    def duplicate_images attributes_params
+      images_duplicates = []
+      hash_params       = attributes_params.to_h
+
+      if hash_params['annexes_attributes'].present?
+        hash_params['annexes_attributes'].each do |annex|
+          if annex[1]['image_models_attributes'].present?
+            annex[1]['image_models_attributes'].each do |image|
+              if image[1]['id'].present? && image[1]['_destroy'] == '0'
+                aux_image = ImageModel.find image[1]['id']
+                new_image = ImageModel.new
+                new_image.image = File.open aux_image.image.file.file
+                new_image.imageable = aux_image.imageable
+                images_duplicates << new_image
+              end
+            end
+          end
+        end
+      end
+
+      images_duplicates
+    end
+
+    def params_without_images_attributes attributes_params
+      hash_params = attributes_params.to_h
+
+      if hash_params['annexes_attributes'].present?
+        hash_params['annexes_attributes'].each do |annex|
+          if annex[1]['image_models_attributes'].present?
+            annex[1]['image_models_attributes'].each do |image|
+              if image[1]['id'].present?
+                annex[1]['image_models_attributes'].delete(image[0])
+              end
+            end
+          end
+        end
+      end
+
+      hash_params
     end
 end
