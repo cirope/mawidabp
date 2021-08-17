@@ -41,6 +41,7 @@ module ConclusionReviews::NbcPdf
                       rua.user.full_name
                      end
       column_data = [
+        [I18n.t('conclusion_review.nbc.cover.issue_date'), I18n.l(issue_date, format: :long)  ],
         [I18n.t('conclusion_review.nbc.cover.to'), I18n.t('conclusion_review.nbc.cover.to_label')],
         [I18n.t('conclusion_review.nbc.cover.from'), I18n.t('conclusion_review.nbc.cover.from_label')],
         [I18n.t('conclusion_review.nbc.cover.cc'), responsibles.join("\n") ]
@@ -103,7 +104,7 @@ module ConclusionReviews::NbcPdf
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.subtitle'), inline_format: true
 
       pdf.move_down PDF_FONT_SIZE
-      pdf.text review.description, align: :justify, inline_format: true
+      pdf.text applied_procedures, align: :justify, inline_format: true
 
       pdf.start_new_page
     end

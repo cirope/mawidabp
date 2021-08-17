@@ -110,6 +110,7 @@ es:
     nbc:
       cover:
         title: "<b>Informe de Auditoría Interna</b>"
+        issue_date: "<b>Fecha</b>"
         to: "<b>A</b>"
         from: "<b>DE</b>"
         cc: "<b>CC</b>"
@@ -122,7 +123,7 @@ es:
       weaknesses:
         title: "<b>RESUMEN EJECUTIVO</b>"
         subtitle: "<b>Objetivo</b>"
-        main_observations: "<b>Principales Observaciones</b>"
+        main_observations: "<b>Observaciones sugeridas por la auditoría</b>"
         audit_conclusion: "<b>Conclusión General de la Auditoría</b>"
         highest_responsible: "<b>%{responsible}</b>"
         signature_label: "<b>Gerencia de Auditoría Interna</b>"
