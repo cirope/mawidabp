@@ -203,11 +203,11 @@ jQuery(function ($) {
     }
   })
 
-  $(document).on('keyup', '[data-finding-issue-amount]', function () {
+  $(document).on('keyup change', '[data-finding-issue-amount]', function () {
     var impactValue
     var repeatabilityValue      = $('[data-repeatability-value]').data('repeatabilityValue')
     var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
-    var currency                = $('[data-current-currency]').val()
+    var currency                = $('[data-current-currency]').data('currentCurrency')
 
     var total = sumAmountIssues()
 
@@ -229,7 +229,7 @@ jQuery(function ($) {
     }
   })
 
-  $(document).on('keyup', '[data-amount-impact]', function () {
+  $(document).on('keyup change', '[data-amount-impact]', function () {
     var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
 
     var total = sumAmountIssues()
@@ -251,7 +251,7 @@ jQuery(function ($) {
     $('[data-sum-amount-impact-risks]').text(total.toFixed(2))
   })
 
-  $(document).on('keyup', '[data-probability-amount]', function () {
+  $(document).on('keyup change', '[data-probability-amount]', function () {
     var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
 
     if ($('[data-toggle-suggested-probability-disabled-attr]').val() === String(representativenessValue)) {
