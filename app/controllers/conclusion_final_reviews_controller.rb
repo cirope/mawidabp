@@ -73,14 +73,14 @@ class ConclusionFinalReviewsController < ApplicationController
   def create
     @title = t 'conclusion_final_review.new_title'
 
-    @images_duplicates    = duplicate_images new_conclusion_final_review_params
-    params_without_images = params_without_images_attributes new_conclusion_final_review_params
+    id_images_to_duplicate = ids_images_to_duplicate new_conclusion_final_review_params
+    params_without_images  = params_without_existing_images new_conclusion_final_review_params
 
     @conclusion_final_review =
       ConclusionFinalReview.list.new(params_without_images)
-
-    assign_duplicate_images params_without_images[:review_id]
-
+    byebug
+    @conclusion_final_review.assign_duplicate_images_from_draft id_images_to_duplicate
+    byebug
     respond_to do |format|
       if @conclusion_final_review.save
         flash.notice = t 'conclusion_final_review.correctly_created'
@@ -452,46 +452,26 @@ class ConclusionFinalReviewsController < ApplicationController
         })
     end
 
-    def assign_duplicate_images review_id
-      draft = ConclusionDraftReview.where(review_id: review_id).first
-  
-      if draft
-        @images_duplicates.reverse_each do |image_duplicate|
-          aux_annex = image_duplicate.imageable
-          @conclusion_final_review.annexes.each do |annex_duplicate|
-            if aux_annex.title == annex_duplicate.title && aux_annex.description == annex_duplicate.description
-              annex_duplicate.image_models << image_duplicate
-              image_duplicate.imageable = nil
-            end
-          end
-        end
-      end
-    end
-
-    def duplicate_images attributes_params
-      images_duplicates = []
-      hash_params       = attributes_params.to_h
+    def ids_images_to_duplicate attributes_params
+      ids         = []
+      hash_params = attributes_params.to_h
 
       if hash_params['annexes_attributes'].present?
         hash_params['annexes_attributes'].each do |annex|
           if annex[1]['image_models_attributes'].present?
             annex[1]['image_models_attributes'].each do |image|
               if image[1]['id'].present? && image[1]['_destroy'] == '0'
-                aux_image = ImageModel.find image[1]['id']
-                new_image = ImageModel.new
-                new_image.image = File.open aux_image.image.file.file
-                new_image.imageable = aux_image.imageable
-                images_duplicates << new_image
+                ids << image[1]['id']
               end
             end
           end
         end
       end
 
-      images_duplicates
+      ids
     end
 
-    def params_without_images_attributes attributes_params
+    def params_without_existing_images attributes_params
       hash_params = attributes_params.to_h
 
       if hash_params['annexes_attributes'].present?
