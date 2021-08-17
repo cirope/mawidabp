@@ -153,18 +153,14 @@
     <% end %>
   </div>
 
-  <h4 class="mt-3">
-    <%= Annex.model_name.human count: 0 %>
-  </h4>
+  <% if USE_SCOPE_CYCLE %>
+    <h4 class="mt-3">
+      <%= Annex.model_name.human count: 0 %>
+    </h4>
 
-  <div id="annexes">
-    <% if @conclusion_final_review.annexes.any? %>
-      <%= render 'annexes' %>
-    <% end %>
-  </div>
-
-  <% if @conclusion_final_review.new_record? && @conclusion_final_review.review_id.present? %>
-    <%= link_to_add_fields t('conclusion_draft_review.add_annex'), f, :annexes, 'annex', { insert_into: "#annexes", association: 'annexes' } %>
+    <div id="annexes">
+      <%= render 'annexes', f: f %>
+    </div>
   <% end %>
 
   <hr />

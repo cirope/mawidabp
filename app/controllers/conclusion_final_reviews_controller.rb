@@ -73,14 +73,11 @@ class ConclusionFinalReviewsController < ApplicationController
   def create
     @title = t 'conclusion_final_review.new_title'
 
-    id_images_to_duplicate = ids_images_to_duplicate new_conclusion_final_review_params
-    params_without_images  = params_without_existing_images new_conclusion_final_review_params
-
     @conclusion_final_review =
-      ConclusionFinalReview.list.new(params_without_images)
-    byebug
-    @conclusion_final_review.assign_duplicate_images_from_draft id_images_to_duplicate
-    byebug
+      ConclusionFinalReview.list.new(new_conclusion_final_review_params)
+
+    @conclusion_final_review.duplicate_annexes_and_images_from_draft
+
     respond_to do |format|
       if @conclusion_final_review.save
         flash.notice = t 'conclusion_final_review.correctly_created'
@@ -405,12 +402,6 @@ class ConclusionFinalReviewsController < ApplicationController
           best_practice_comments_attributes: [
             :id, :best_practice_id, :auditor_comment
           ]
-        ],
-        annexes_attributes: [
-          :title, :description, :_destroy,
-          image_models_attributes: [
-            :id, :image, :image_cache, :_destroy
-          ]
         ]
       )
     end
@@ -450,42 +441,5 @@ class ConclusionFinalReviewsController < ApplicationController
           compose_email: :modify,
           send_by_email: :modify
         })
-    end
-
-    def ids_images_to_duplicate attributes_params
-      ids         = []
-      hash_params = attributes_params.to_h
-
-      if hash_params['annexes_attributes'].present?
-        hash_params['annexes_attributes'].each do |annex|
-          if annex[1]['image_models_attributes'].present?
-            annex[1]['image_models_attributes'].each do |image|
-              if image[1]['id'].present? && image[1]['_destroy'] == '0'
-                ids << image[1]['id']
-              end
-            end
-          end
-        end
-      end
-
-      ids
-    end
-
-    def params_without_existing_images attributes_params
-      hash_params = attributes_params.to_h
-
-      if hash_params['annexes_attributes'].present?
-        hash_params['annexes_attributes'].each do |annex|
-          if annex[1]['image_models_attributes'].present?
-            annex[1]['image_models_attributes'].each do |image|
-              if image[1]['id'].present?
-                annex[1]['image_models_attributes'].delete(image[0])
-              end
-            end
-          end
-        end
-      end
-
-      hash_params
     end
 end
