@@ -205,14 +205,11 @@ jQuery(function ($) {
 
   $(document).on('keyup', '[data-finding-issue-amount]', function () {
     var impactValue
-    var total                   = 0
     var repeatabilityValue      = $('[data-repeatability-value]').data('repeatabilityValue')
     var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
     var currency                = $('[data-current-currency]').val()
 
-    $('[data-finding-issue-amount]').each(function (i, e) {
-      total += +$(e).val()
-    })
+    var total = sumAmountIssues()
 
     $('[data-sum-amount-impact-risks]').text(currency + total.toFixed(2))
 
@@ -233,13 +230,9 @@ jQuery(function ($) {
   })
 
   $(document).on('keyup', '[data-amount-impact]', function () {
-    var total                   = 0
     var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
 
-
-    $('[data-finding-issue-amount]').each(function (i, e) {
-      total += +$(e).val()
-    })
+    var total = sumAmountIssues()
 
     if ($('[data-toggle-suggested-impact-disabled-attr]').val() === String(representativenessValue)) {
       refreshImpactAmount(total)
@@ -252,6 +245,10 @@ jQuery(function ($) {
 
   $(document).on('dynamic-item:removed', '[data-dynamic-target=".issue"]', function () {
     refreshProbability()
+
+    var total = sumAmountIssues()
+
+    $('[data-sum-amount-impact-risks]').text(total.toFixed(2))
   })
 
   $(document).on('keyup', '[data-probability-amount]', function () {
@@ -261,6 +258,16 @@ jQuery(function ($) {
       refreshProbability()
     }
   })
+
+  var sumAmountIssues = function () {
+    var total = 0
+
+    $('[data-finding-issue-amount]:visible').each(function (i, e) {
+      total += +$(e).val()
+    })
+
+    return total
+  }
 
   var refreshImpactAmount = function (total) {
       var types              = $('[data-impact-risks-types]').data('percentageImpactRisksTypes')
@@ -311,12 +318,9 @@ jQuery(function ($) {
   }
 
   $(document).on('change', '[name$="[impact_amount]"]', function () {
-    var total        = 0
     var impactAmount = +$(this).val()
 
-    $('[data-finding-issue-amount]').each(function (i, e) {
-      total += +$(e).val()
-    })
+    var total = sumAmountIssues()
 
     var amountPorcentageIssues = total / impactAmount * 100
 
