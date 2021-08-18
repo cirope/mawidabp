@@ -413,4 +413,16 @@ module FindingsHelper
 
       "#{ConclusionReview.human_attribute_name 'summary'}: #{summary}"
     end
+
+    def finding_impact_risks_types finding
+      finding.amount_by_impact.invert.reverse_each.to_json
+    end
+
+    def finding_percentage_impact_risks_types finding
+      finding.percentage_by_impact.invert.reverse_each.to_json
+    end
+
+    def finding_probability_risks_types finding
+      finding.percentage_by_probability.invert.reverse_each.to_json
+    end
 end

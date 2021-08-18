@@ -274,8 +274,8 @@ ActiveRecord::Schema.define(version: 2021_08_10_201109) do
     t.string "previous_identification"
     t.date "previous_date"
     t.text "main_recommendations"
-    t.text "effectiveness_notes"
     t.text "additional_comments"
+    t.text "effectiveness_notes"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
@@ -533,6 +533,10 @@ ActiveRecord::Schema.define(version: 2021_08_10_201109) do
     t.integer "probability"
     t.integer "impact_risk"
     t.boolean "manual_risk", default: true, null: false
+    t.string "use_suggested_impact"
+    t.string "use_suggested_probability"
+    t.decimal "impact_amount", precision: 17, scale: 2
+    t.decimal "probability_amount", precision: 17, scale: 2
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -1183,6 +1187,7 @@ ActiveRecord::Schema.define(version: 2021_08_10_201109) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "reference"
+    t.text "notes"
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
     t.index ["reference"], name: "index_weakness_templates_on_reference"
   end

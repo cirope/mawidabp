@@ -1543,6 +1543,47 @@ class FindingTest < ActiveSupport::TestCase
     Current.user = nil
   end
 
+  test 'issues amount' do
+    @finding.issues.create!(customer: 'Some customer', amount: 10)
+    @finding.issues.create!(customer: 'Some customer dup', amount: 23)
+
+    assert_equal @finding.issues_amount, 33
+  end
+
+  test 'get amount by impact' do
+    amount = 30844081
+
+    @finding.issues.create!(customer: 'Some customer', amount: amount)
+
+    amount_by_impact = @finding.amount_by_impact
+
+    result = amount_by_impact.reverse_each.to_h.detect { |id, value| amount >= value }
+
+    assert_equal result.first,  @finding.impact_risk_value
+  end
+
+  test 'probability risk previuos' do
+    Current.organization = organizations :cirope
+    Current.user         = users :auditor
+
+    assert_nil @finding.probability_risk_previous
+
+    @finding.weakness_template = weakness_templates :security
+
+    assert @finding.valid?
+
+    assert_equal @finding.probability_risk_previous, 1
+
+    weakness_previous = @finding.review.previous.weaknesses.first
+
+    weakness_previous.update_column :weakness_template_id, weakness_templates(:security).id
+
+    assert_equal @finding.probability_risk_previous, 2
+  ensure
+    Current.organization = nil
+    Current.user         = nil
+  end
+
   test 'notify action not found when subject have no finding_id' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
