@@ -242,9 +242,9 @@ jQuery(function ($) {
   })
 
   $(document).on('dynamic-item:removed', '[data-dynamic-target=".issue"]', function () {
-    refreshProbability()
-
     var total = sumAmountIssues()
+
+    refreshProbability()
 
     $('[data-sum-amount-impact-risks]').text(total.toFixed(2))
   })
@@ -268,16 +268,16 @@ jQuery(function ($) {
   }
 
   var refreshImpactAmount = function (total) {
-      var types              = $('[data-impact-risks-types]').data('percentageImpactRisksTypes')
-      var currentImpactValue = +$('[data-amount-impact]').val()
-      var issuePercentage    = total / currentImpactValue
-      var impactValue        = impactRisksTypesValue(types, issuePercentage)
-      var impactRiskChanged  = $('[name$="[impact_risk]"]').val() !== String(impactValue)
+    var types              = $('[data-impact-risks-types]').data('percentageImpactRisksTypes')
+    var currentImpactValue = +$('[data-amount-impact]').val()
+    var issuePercentage    = total / currentImpactValue
+    var impactValue        = impactRisksTypesValue(types, issuePercentage)
+    var impactRiskChanged  = $('[name$="[impact_risk]"]').val() !== String(impactValue)
 
-      if (impactRiskChanged) {
-        $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
-        $('[data-impact-risks-percentage-value]').data('impactRisksPercentageValue', impactValue)
-      }
+    if (impactRiskChanged) {
+      $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
+      $('[data-impact-risks-percentage-value]').data('impactRisksPercentageValue', impactValue)
+    }
   }
 
   var refreshProbability = function () {
