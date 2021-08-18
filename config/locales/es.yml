@@ -1629,6 +1629,7 @@
         oportunities: "Oportunidades de mejora"
         work_papers: "Papeles de trabajo"
         scored_business_unit_id: "Proceso crítico evaluado"
+        scored_business_unit_type_id: "Unidad organizativa evaluada"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"

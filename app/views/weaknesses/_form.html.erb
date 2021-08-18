@@ -78,13 +78,34 @@
         <% if USE_SCOPE_CYCLE %>
           <div class="row">
             <div class="col">
-              <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true, input_html: {
-                data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+              <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
+                disabled: !!@weakness.use_suggested_impact,
+                input_html: {
+                  data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+                } %>
+              <%= f.input :impact_risk, as: :hidden, disabled: !@weakness.use_suggested_impact %>
+            </div>
+            <div class="col">
+              <%= f.input :use_suggested_impact, collection: suggested_type_risks, input_html: {
+                data: {
+                  toggle_suggested_impact_disabled_attr: true,
+                  suggested_impact_option: true
+                }
               } %>
             </div>
             <div class="col">
-              <%= f.input :probability, collection: weakness_probabilities, prompt: true, input_html: {
-                data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+              <%= f.input :probability, collection: weakness_probabilities, prompt: true, disabled: @weakness.use_suggested_probability,
+                input_html: {
+                  data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
+                } %>
+              <%= f.input :probability, as: :hidden, disabled: !@weakness.use_suggested_probability %>
+            </div>
+
+            <div class="col"
+                 data-repeatability-value="<%= Finding::SUGGESTED_RISK_TYPES[:repeatability] %>"
+                 data-representativeness-value="<%= Finding::SUGGESTED_RISK_TYPES[:representativeness] %>">
+              <%= f.input :use_suggested_probability, collection: suggested_type_risks, input_html: {
+                data: { toggle_suggested_probability_disabled_attr: true }
               } %>
             </div>
           </div>
@@ -395,28 +416,48 @@
   </div>
 
   <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
-
+  <% if USE_SCOPE_CYCLE %>
+    <div class="row">
+      <div class="col-md-2">
+        <%= f.input :impact_amount,
+          input_html: {
+            data: { amount_impact: true }
+          } %>
+      </div>
+      <div class="col-md-2">
+        <%= f.input :probability_amount,
+          input_html: {
+            data: {
+              probability_previous_amount: @weakness.probability_risk_previous,
+              probability_representativeness_amount: @weakness.probability_risks_representativeness,
+              probability_risks_types: finding_percentage_impact_risks_types(@weakness),
+              probability_amount: true
+            }
+          } %>
+      </div>
+    </div>
+  <% end %>
   <div class="row">
     <div class="col-md-2">
       <h5 class="h6"><%= Issue.human_attribute_name 'customer' %></h5>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2 d-none d-md-block">
       <h5 class="h6"><%= Issue.human_attribute_name 'entry' %></h5>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2 d-none d-md-block">
       <h5 class="h6"><%= Issue.human_attribute_name 'operation' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'comments' %></h5>
+    </div>
+    <div class="col-md-1">
+      <h5 class="h6"><%= Issue.human_attribute_name 'close_date' %></h5>
     </div>
     <div class="col-md-1">
       <h5 class="h6"><%= Issue.human_attribute_name 'currency' %></h5>
     </div>
     <div class="col-md-2">
       <h5 class="h6"><%= Issue.human_attribute_name 'amount' %></h5>
-    </div>
-    <div class="col-md-1">
-      <h5 class="h6"><%= Issue.human_attribute_name 'comments' %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= Issue.human_attribute_name 'close_date' %></h5>
     </div>
   </div>
 

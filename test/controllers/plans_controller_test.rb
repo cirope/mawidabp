@@ -345,15 +345,29 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_equal 2, business_units.size # All in the organization (one and two)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
+  end
 
-    business_unit_one = business_units(:business_unit_one)
-
-    get :auto_complete_for_business_unit, params: { q: 'business', excluded_id: business_unit_one.id }, as: :json
+  test 'auto complete for business unit type' do
+    get :auto_complete_for_business_unit_type, params: { q: 'noway' }, as: :json
     assert_response :success
 
-    business_units = ActiveSupport::JSON.decode(@response.body)
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 3, business_units.size # All in the organization (two, three and four, excluded one)
-    assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
+    assert_equal 0, business_unit_types.size # Fifth is in another organization
+
+    get :auto_complete_for_business_unit_type, params: { q: 'cycle' }, as: :json
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_unit_types.size # One only
+    assert business_unit_types.all? { |u| u['label'].match /cycle/i }
+
+    get :auto_complete_for_business_unit_type, params: { q: 'cycle', excluded_id: business_unit_types(:cycle).id }, as: :json
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, business_unit_types.size # Cycle is excluded in params
   end
 end

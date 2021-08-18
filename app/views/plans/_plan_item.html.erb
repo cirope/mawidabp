@@ -115,11 +115,11 @@
         }
       ) %>
       <%= link_to_add_fields(
-        t('.add_auxiliar_business_unit'),
-        f, :auxiliar_business_units, 'plan_items/auxiliar_business_unit', {
-          insert_into: "#auxiliar_business_units_#{id}",
-          association: 'auxiliar_business_units'
-        }, { excluded_id: f.object.business_unit_id }
+        t('.add_auxiliar_business_unit_type'),
+        f, :auxiliar_business_unit_types, 'plan_items/auxiliar_business_unit_type', {
+          insert_into: "#auxiliar_business_unit_types_#{id}",
+          association: 'auxiliar_business_unit_types'
+        }, { excluded_id: params[:business_unit_type] }
       ) %>
     </p>
   </div>

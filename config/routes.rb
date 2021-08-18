@@ -420,6 +420,7 @@ Rails.application.routes.draw do
     collection do
       get :auto_complete_for_business_unit
       get :auto_complete_for_tagging
+      get :auto_complete_for_business_unit_type
     end
   end
 

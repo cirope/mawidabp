@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_06_094421) do
+ActiveRecord::Schema.define(version: 2021_08_10_201109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -78,13 +78,13 @@ ActiveRecord::Schema.define(version: 2021_08_06_094421) do
     t.index ["type", "id"], name: "index_answers_on_type_and_id"
   end
 
-  create_table "auxiliar_business_units", force: :cascade do |t|
+  create_table "auxiliar_business_unit_types", force: :cascade do |t|
     t.bigint "plan_item_id", null: false
-    t.bigint "business_unit_id", null: false
+    t.bigint "business_unit_type_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["business_unit_id"], name: "index_auxiliar_business_units_on_business_unit_id"
-    t.index ["plan_item_id"], name: "index_auxiliar_business_units_on_plan_item_id"
+    t.index ["business_unit_type_id"], name: "index_auxiliar_business_unit_types_on_business_unit_type_id"
+    t.index ["plan_item_id"], name: "index_auxiliar_business_unit_types_on_plan_item_id"
   end
 
   create_table "benefits", id: :serial, force: :cascade do |t|
@@ -291,8 +291,8 @@ ActiveRecord::Schema.define(version: 2021_08_06_094421) do
     t.string "previous_identification"
     t.date "previous_date"
     t.text "main_recommendations"
-    t.text "effectiveness_notes"
     t.text "additional_comments"
+    t.text "effectiveness_notes"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
@@ -321,11 +321,9 @@ ActiveRecord::Schema.define(version: 2021_08_06_094421) do
     t.integer "organization_id"
     t.integer "issues_count"
     t.integer "alerts_count"
-    t.bigint "scored_business_unit_id"
     t.index ["control_objective_id"], name: "index_control_objective_items_on_control_objective_id"
     t.index ["organization_id"], name: "index_control_objective_items_on_organization_id"
     t.index ["review_id"], name: "index_control_objective_items_on_review_id"
-    t.index ["scored_business_unit_id"], name: "index_control_objective_items_on_scored_business_unit_id"
   end
 
   create_table "control_objective_projects", force: :cascade do |t|
@@ -552,6 +550,10 @@ ActiveRecord::Schema.define(version: 2021_08_06_094421) do
     t.integer "probability"
     t.integer "impact_risk"
     t.boolean "manual_risk", default: true, null: false
+    t.string "use_suggested_impact"
+    t.string "use_suggested_probability"
+    t.decimal "impact_amount", precision: 17, scale: 2
+    t.decimal "probability_amount", precision: 17, scale: 2
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -1215,6 +1217,7 @@ ActiveRecord::Schema.define(version: 2021_08_06_094421) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "reference"
+    t.text "notes"
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
     t.index ["reference"], name: "index_weakness_templates_on_reference"
   end
@@ -1277,8 +1280,8 @@ ActiveRecord::Schema.define(version: 2021_08_06_094421) do
   add_foreign_key "activities", "activity_groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "activity_groups", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "annexes", "conclusion_reviews", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "auxiliar_business_units", "business_units", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "auxiliar_business_units", "plan_items", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "auxiliar_business_unit_types", "business_unit_types", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "auxiliar_business_unit_types", "plan_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "benefits", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "best_practices", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "reviews", on_update: :restrict, on_delete: :restrict
@@ -1305,7 +1308,6 @@ ActiveRecord::Schema.define(version: 2021_08_06_094421) do
   add_foreign_key "comments", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "commitment_supports", "finding_answers", on_update: :restrict, on_delete: :restrict
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "control_objective_items", "business_units", column: "scored_business_unit_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_projects", "control_objectives", on_update: :restrict, on_delete: :restrict

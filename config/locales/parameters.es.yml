@@ -55,6 +55,9 @@ es:
     possible: 'Posible'
     probable: 'Probable'
     almost_certain: 'Casi Certeza'
+  suggested_type_risks:
+    representativeness: 'Representatividad'
+    repeatability: 'Repetitividad'
   score_types:
     satisfactory: 'Bueno'
     improve: 'Satisfactorio'

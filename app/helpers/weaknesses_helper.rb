@@ -111,4 +111,10 @@ module WeaknessesHelper
       [t("probability_types.#{key}"), value]
     end
   end
+
+  def suggested_type_risks
+    Finding::SUGGESTED_RISK_TYPES.map do |key, value|
+      [t("suggested_type_risks.#{key}"), value]
+    end
+  end
 end
