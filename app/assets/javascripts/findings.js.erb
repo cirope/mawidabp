@@ -208,12 +208,12 @@ jQuery(function ($) {
     var repeatabilityValue      = $('[data-repeatability-value]').data('repeatabilityValue')
     var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
     var currency                = $('[data-current-currency]').data('currentCurrency')
-
+    var $suggestedImpactOption  = $('[data-suggested-impact-option]').val()
     var total = sumAmountIssues()
 
     $('[data-sum-amount-impact-risks]').text(currency + total.toFixed(2))
 
-    if ($('[data-toggle-suggested-impact-disabled-attr]').val() === String(repeatabilityValue)) {
+    if ($suggestedImpactOption === String(repeatabilityValue)) {
       var types       = $('[data-impact-risks-types]').data('impactRisksTypes')
       var impactValue = impactRisksTypesValue(types, total)
 
@@ -224,7 +224,7 @@ jQuery(function ($) {
       if (impactRiskChanged) {
         $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
       }
-    } else if ($('[data-toggle-suggested-impact-disabled-attr]').val() === String(representativenessValue)) {
+    } else if ($suggestedImpactOption === String(representativenessValue)) {
       refreshImpactAmount(total)
     }
   })
@@ -300,7 +300,7 @@ jQuery(function ($) {
     }
   }
 
-  var impactRisksTypesValue = function(types, total) {
+  var impactRisksTypesValue = function (types, total) {
     var impactValue
 
     $.each(types, function (i, data) {
@@ -320,8 +320,7 @@ jQuery(function ($) {
   $(document).on('change', '[name$="[impact_amount]"]', function () {
     var impactAmount = +$(this).val()
 
-    var total = sumAmountIssues()
-
+    var total                  = sumAmountIssues()
     var amountPorcentageIssues = total / impactAmount * 100
 
     $('[data-percentage-issue]').text(amountPorcentageIssues)

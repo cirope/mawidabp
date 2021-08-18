@@ -87,7 +87,10 @@
             </div>
             <div class="col">
               <%= f.input :use_suggested_impact, collection: suggested_type_risks, input_html: {
-                data: { toggle_suggested_impact_disabled_attr: true }
+                data: {
+                  toggle_suggested_impact_disabled_attr: true,
+                  suggested_impact_option: true
+                }
               } %>
             </div>
             <div class="col">
