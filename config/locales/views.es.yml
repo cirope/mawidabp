@@ -78,7 +78,7 @@ es:
 
   business_unit_kinds:
     index:
-      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
+      empty_html: 'No hay tipos de proceso crítico, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
   closing_interviews:
     edit:
       title: 'Editar entrevista de cierre'
@@ -183,7 +183,7 @@ es:
       implemented_audited: 'Implementada / Auditada'
       assumed_risk: 'Riesgo asumido'
       notify: 'Notificar'
-      incomplete: 'Incompleta'
+      incomplete: 'A definir'
       repeated: 'Reiterada'
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
@@ -343,6 +343,7 @@ es:
       add_human_resource_utilization: 'Agregar recurso humano'
       add_material_resource_utilization: 'Agregar recurso material'
       add_tagging: 'Agregar etiqueta'
+      add_auxiliar_business_unit: 'Agregar proceso crítico'
     plan_items:
       add_plan_item: 'Agregar proyecto'
     duplication_or_overload_form:
@@ -381,9 +382,9 @@ es:
       show:
         title: 'Cronograma'
         empty: 'No hay proyectos en el plan seleccionado'
-        empty_with_no_business_units: 'No hay unidades de negocio seleccionadas'
+        empty_with_no_business_units: 'No hay procesos críticos seleccionados'
         detail: 'Detalle'
-        by_business_unit: 'Ver calendario por unidad de negocio'
+        by_business_unit: 'Ver calendario por proceso crítico'
         by_project: 'Ver calendario por proyecto'
     resources:
       show:
@@ -408,7 +409,7 @@ es:
     download_detailed_business_unit_type_plan: 'Descargar plan %{business_unit_type} detallado'
     download_detailed_business_unit_type_plan_csv: 'Descargar plan %{business_unit_type} en CSV'
     download_business_unit_type_plan_csv: 'Descargar plan en CSV'
-    without_business_unit_type: 'Sin unidad de negocio'
+    without_business_unit_type: 'Sin proceso crítico'
 
   profiles:
     edit:
@@ -560,6 +561,7 @@ es:
     skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
     hours_of_work_per_day: 'Horas de trabajo por día'
+    conclusion_review_receiver: 'Receptor/es del informe'
 
   tags:
     edit:
@@ -601,6 +603,8 @@ es:
       current_week: 'Semana actual'
       empty: 'Sin registros'
       add: 'Agregar actividad'
+      edit: 'Editar actividad'
+      destroy: 'Eliminar actividad'
       total_amount:
         one: 'Total de horas acumuladas: %{amount}'
         other: 'Total de horas acumuladas por %{count} personas: %{amount}'
@@ -621,6 +625,8 @@ es:
         quantity_hours_per_day: "Cantidad horas por día"
         task: "Tarea"
         user: "Usuario"
+        business_unit_types: "Unidades organizativas"
+        detail: "Detalle"
 
   users:
     index:

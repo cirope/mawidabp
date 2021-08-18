@@ -141,7 +141,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :reference => 'Some reference',
           :observations => 'Some observations',
           :scope => 'Some scope',
-          :affects_compliance => '0'
+          :affects_compliance => '0',
+          :annexes_attributes => [
+            :title => 'title',
+            :description => 'description'
+          ]
         }
       }
     end
@@ -179,7 +183,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :reference => 'Some reference',
           :observations => 'Some observations',
           :scope => 'Some scope',
-          :affects_compliance => '0'
+          :affects_compliance => '0',
+          :annexes_attributes => [
+            :title => 'title',
+            :description => 'description'
+          ]
         }
       }
     end
