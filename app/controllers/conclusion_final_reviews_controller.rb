@@ -74,7 +74,7 @@ class ConclusionFinalReviewsController < ApplicationController
     @title = t 'conclusion_final_review.new_title'
 
     @conclusion_final_review =
-      ConclusionFinalReview.list.new(new_conclusion_final_review_params)
+      ConclusionFinalReview.list.new(conclusion_final_review_params)
 
     @conclusion_final_review.duplicate_annexes_and_images_from_draft
 
@@ -388,24 +388,6 @@ class ConclusionFinalReviewsController < ApplicationController
       ).find(params[:id])
     end
 
-    def new_conclusion_final_review_params
-      params.require(:conclusion_final_review).permit(
-        :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
-        :summary, :recipients, :evolution, :evolution_justification, :sectors,
-        :observations, :main_weaknesses_text, :corrective_actions,
-        :affects_compliance, :collapse_control_objectives,
-        :reference, :scope, :previous_identification, :previous_date,
-        :main_recommendations, :effectiveness_notes, :additional_comments,
-        :lock_version,
-        review_attributes: [
-          :id, :manual_score, :description, :lock_version,
-          best_practice_comments_attributes: [
-            :id, :best_practice_id, :auditor_comment
-          ]
-        ]
-      )
-    end
-
     def conclusion_final_review_params
       params.require(:conclusion_final_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
@@ -419,12 +401,6 @@ class ConclusionFinalReviewsController < ApplicationController
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [
             :id, :best_practice_id, :auditor_comment
-          ]
-        ],
-        annexes_attributes: [
-          :id, :title, :description, :_destroy,
-          image_models_attributes: [
-            :id, :image, :image_cache, :_destroy
           ]
         ]
       )
