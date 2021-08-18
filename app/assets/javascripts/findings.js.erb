@@ -209,17 +209,16 @@ jQuery(function ($) {
     var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
     var currency                = $('[data-current-currency]').data('currentCurrency')
     var $suggestedImpactOption  = $('[data-suggested-impact-option]').val()
-    var total = sumAmountIssues()
+    var total                   = sumAmountIssues()
 
     $('[data-sum-amount-impact-risks]').text(currency + total.toFixed(2))
 
     if ($suggestedImpactOption === String(repeatabilityValue)) {
-      var types       = $('[data-impact-risks-types]').data('impactRisksTypes')
-      var impactValue = impactRisksTypesValue(types, total)
+      var types             = $('[data-impact-risks-types]').data('impactRisksTypes')
+      var impactValue       = impactRisksTypesValue(types, total)
+      var impactRiskChanged = $('[name$="[impact_risk]"]').val() !== String(impactValue)
 
       $('[data-impact-risks-value]').data('impactRisksValue', impactValue)
-
-      var impactRiskChanged = $('[name$="[impact_risk]"]').val() !== String(impactValue)
 
       if (impactRiskChanged) {
         $('[name$="[impact_risk]"]').val(impactValue).trigger('change')
@@ -231,8 +230,7 @@ jQuery(function ($) {
 
   $(document).on('keyup change', '[data-amount-impact]', function () {
     var representativenessValue = $('[data-representativeness-value]').data('representativenessValue')
-
-    var total = sumAmountIssues()
+    var total                   = sumAmountIssues()
 
     if ($('[data-toggle-suggested-impact-disabled-attr]').val() === String(representativenessValue)) {
       refreshImpactAmount(total)
@@ -318,8 +316,7 @@ jQuery(function ($) {
   }
 
   $(document).on('change', '[name$="[impact_amount]"]', function () {
-    var impactAmount = +$(this).val()
-
+    var impactAmount           = +$(this).val()
     var total                  = sumAmountIssues()
     var amountPorcentageIssues = total / impactAmount * 100
 
