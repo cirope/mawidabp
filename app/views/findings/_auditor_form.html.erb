@@ -83,7 +83,7 @@
                 <%= f.input :probability, as: :hidden, disabled: !@finding.use_suggested_probability %>
               </div>
               <div class="col">
-              <%= f.input :use_suggested_probability, collection: suggested_type_risks, input_html: {
+              <%= f.input :use_suggested_probability, collection: suggested_type_probabilities, input_html: {
                   data: { toggle_suggested_probability_disabled_attr: true }
                 } %>
               </div>

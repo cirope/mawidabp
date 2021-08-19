@@ -113,8 +113,14 @@ module WeaknessesHelper
   end
 
   def suggested_type_risks
-    Finding::SUGGESTED_RISK_TYPES.map do |key, value|
+    Finding::SUGGESTED_IMPACT_RISK_TYPES.map do |key, value|
       [t("suggested_type_risks.#{key}"), value]
+    end
+  end
+
+  def suggested_type_probabilities
+    Finding::SUGGESTED_PROBABILITIES_TYPES.map do |key, value|
+      [t("suggested_type_probabilities.#{key}"), value]
     end
   end
 end
