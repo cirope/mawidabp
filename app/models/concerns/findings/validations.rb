@@ -16,7 +16,7 @@ module Findings::Validations
     validates :brief, presence: true, if: :require_brief?
     validate :validate_answer
     validate :validate_state
-    validate :validate_review_code
+    validate :validate_review_code, if: -> { repeated_of.blank? }
     validate :validate_finding_user_assignments
     validate :validate_manager_presence, if: :validate_manager_presence?
     validate :validate_follow_up_date,   if: :check_dates?
