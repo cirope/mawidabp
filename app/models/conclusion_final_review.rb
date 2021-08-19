@@ -113,8 +113,7 @@ class ConclusionFinalReview < ConclusionReview
           if finding.repeated_of.present?
             code = finding.repeated_of.review_code
           else
-            last_code = last_code.next
-            code = last_code
+            code = last_code = last_code.next
           end
 
           final_finding.review_code = finding.review_code = code
