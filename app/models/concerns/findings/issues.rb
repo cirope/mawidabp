@@ -9,7 +9,12 @@ module Findings::Issues
     accepts_nested_attributes_for :issues, allow_destroy: true, reject_if: :all_blank
   end
 
-  SUGGESTED_RISK_TYPES = {
+  SUGGESTED_IMPACT_RISK_TYPES = {
+    absolute_value: 1,
+    representativeness: 2
+  }
+
+  SUGGESTED_PROBABILITIES_TYPES = {
     repeatability: 1,
     representativeness: 2
   }
