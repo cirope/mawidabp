@@ -25,7 +25,9 @@
   $('#conclusion_final_review_review_attributes_id').val('<%= @conclusion_final_review.review.id %>')
 
   $('#best_practice_comments_container').html('<%= j best_practice_comments_form(@conclusion_final_review) %>')
-  $('#annexes').html('<%= j render('annexes') %>')
+  <%= simple_fields_for @conclusion_final_review do |f| %>
+    $('#annexes').html('<%= j render('annexes', f: f) %>')
+  <% end %>
 <% else %>
   var elementsForUpdate = [
     'applied_procedures',

@@ -6,6 +6,9 @@
           <p class="mb-2">
             <%= icon 'fas', 'image', class: 'mr-2' %>
             <%= f.object.image.file.filename %>
+            <% if f.object.image_cache %>
+              <%= f.input :image_cache, as: :hidden %>
+            <% end %>
           </p>
         <% else %>
           <div class="file-container float-left small">
