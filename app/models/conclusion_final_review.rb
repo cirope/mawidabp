@@ -108,10 +108,11 @@ class ConclusionFinalReview < ConclusionReview
             wp.attributes.dup.merge('id' => nil)
           ).check_code_prefix = false
         end
-
+        byebug
         if Current.global_weakness_code && finding.kind_of?(Weakness)
+          byebug
           code = finding.repeated_of.present? ? finding.repeated_of.review_code : last_code.next
-
+          byebug
           final_finding.review_code = finding.review_code = code
         end
 
