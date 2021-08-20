@@ -107,7 +107,10 @@
               data-probability-repeatability-value="<%= Finding::SUGGESTED_PROBABILITIES_TYPES[:repeatability] %>"
               data-probability-representativeness-value="<%= Finding::SUGGESTED_PROBABILITIES_TYPES[:representativeness] %>">
                 <%= f.input :use_suggested_probability, collection: suggested_type_probabilities, input_html: {
-                   data: { toggle_suggested_probability_disabled_attr: true }
+                  data: {
+                    toggle_suggested_probability_disabled_attr: true,
+                    suggested_probability_option: true
+                  }
                  } %>
             </div>
           </div>
