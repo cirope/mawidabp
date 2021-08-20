@@ -72,7 +72,6 @@ class ConclusionFinalReviewsController < ApplicationController
   # * POST /conclusion_final_reviews
   def create
     @title = t 'conclusion_final_review.new_title'
-
     @conclusion_final_review =
       ConclusionFinalReview.list.new(conclusion_final_review_params)
 
