@@ -87,8 +87,6 @@ class ConclusionFinalReviewsController < ApplicationController
     end
   end
 
-  
-
   # Actualiza el contenido de un informe definitivo siempre que cumpla con las
   # validaciones.
   #
