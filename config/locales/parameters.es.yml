@@ -57,6 +57,9 @@ es:
     almost_certain: 'Casi Certeza'
   suggested_type_risks:
     representativeness: 'Representatividad'
+    absolute_value: 'Valor absoluto'
+  suggested_type_probability:
+    representativeness: 'Representatividad'
     repeatability: 'Repetitividad'
   score_types:
     satisfactory: 'Satisfactorio'

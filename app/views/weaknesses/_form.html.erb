@@ -85,7 +85,9 @@
                 } %>
               <%= f.input :impact_risk, as: :hidden, disabled: !@weakness.use_suggested_impact %>
             </div>
-            <div class="col">
+            <div class="col"
+              data-impact-absolute-value="<%= Finding::SUGGESTED_IMPACT_RISK_TYPES[:absolute_value] %>"
+              data-impact-representativeness-value="<%= Finding::SUGGESTED_IMPACT_RISK_TYPES[:representativeness] %>">
               <%= f.input :use_suggested_impact, collection: suggested_type_risks, input_html: {
                 data: {
                   toggle_suggested_impact_disabled_attr: true,
@@ -102,11 +104,14 @@
             </div>
 
             <div class="col"
-                 data-repeatability-value="<%= Finding::SUGGESTED_RISK_TYPES[:repeatability] %>"
-                 data-representativeness-value="<%= Finding::SUGGESTED_RISK_TYPES[:representativeness] %>">
-              <%= f.input :use_suggested_probability, collection: suggested_type_risks, input_html: {
-                data: { toggle_suggested_probability_disabled_attr: true }
-              } %>
+              data-probability-repeatability-value="<%= Finding::SUGGESTED_PROBABILITIES_TYPES[:repeatability] %>"
+              data-probability-representativeness-value="<%= Finding::SUGGESTED_PROBABILITIES_TYPES[:representativeness] %>">
+                <%= f.input :use_suggested_probability, collection: suggested_type_probabilities, input_html: {
+                  data: {
+                    toggle_suggested_probability_disabled_attr: true,
+                    suggested_probability_option: true
+                  }
+                 } %>
             </div>
           </div>
 
