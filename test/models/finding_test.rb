@@ -1515,7 +1515,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'automatic issue based state' do
-    skip unless USE_SCOPE_CYCLE
+    skip unless USE_SCOPE_CYCLE && SHOW_WEAKNESS_PROGRESS
 
     @finding.issues.build customer: 'Some customer'
 
