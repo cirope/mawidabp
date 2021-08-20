@@ -1669,7 +1669,7 @@ class FindingTest < ActiveSupport::TestCase
     ENV['REGEX_REPLY_EMAIL'] = old_regex
   end
 
-  test 'valid with same review code' do
+  test 'valid with same review code when repeated' do
     @finding.repeated_of = findings(:unconfirmed_weakness)
     @finding.review_code = findings(:unconfirmed_weakness).review_code
 
