@@ -15,7 +15,7 @@ module ConclusionFinalReviews::Defaults
         new_annex = annexes.build annex.attributes.dup.merge('id' => nil)
 
         annex.image_models.each do |image_model|
-          new_image = ImageModel.new
+          new_image       = ImageModel.new
           new_image.image = File.open image_model.image.path
 
           new_annex.image_models << new_image
