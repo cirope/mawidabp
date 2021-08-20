@@ -43,7 +43,7 @@
         <td>
           <abbr title="<%= t 'workflow.human_resources' %>"><%= t 'workflow.human_resources_abbr' %></abbr>:
           <%= '%.2f' % @workflow.human_units %> /
-          <%= '%.2f' % @workflow.review.time_consumptions.sum(&:amount).to_f %>
+          <%= '%.2f' % @workflow.review&.time_consumptions&.sum(&:amount).to_f %>
           <abbr title="<%= t 'workflow.material_resources' %>"><%= t 'workflow.material_resources_abbr' %></abbr>:
           <%= '%.2f' % @workflow.material_units %>
 
