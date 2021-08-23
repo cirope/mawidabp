@@ -57,51 +57,16 @@
             <div class="row">
               <div class="col">
                 <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
-                  disabled:  !!@finding.use_suggested_impact,
-                  input_html: {
-                    autofocus: true,
-                    data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
-                  } %>
-                <%= f.input :impact_risk, as: :hidden, disabled: !(@finding.use_suggested_impact) %>
-              </div>
-              <div class="col"
-                data-impact-absolute-value="<%= Finding::SUGGESTED_IMPACT_RISK_TYPES[:absolute_value] %>"
-                data-impact-representativeness-value="<%= Finding::SUGGESTED_IMPACT_RISK_TYPES[:representativeness] %>">
-                <%= f.input :use_suggested_impact, collection: suggested_type_risks, input_html: {
-                  data: {
-                    toggle_suggested_impact_disabled_attr: true,
-                    suggested_impact_option: true
-                  }
-                } %>
-              </div>
-              <div class="col"
-                data-probability-repeatability-value="<%= Finding::SUGGESTED_PROBABILITIES_TYPES[:repeatability] %>"
-                data-probability-representativeness-value="<%= Finding::SUGGESTED_PROBABILITIES_TYPES[:representativeness] %>">
-                <%= f.input :probability, collection: weakness_probabilities, prompt: true, disabled: !!@finding.use_suggested_probability,
-                  input_html: {
-                    data: { risk_modifier: Finding.auto_risk_thresholds.to_json }
-                } %>
-                <%= f.input :probability, as: :hidden, disabled: !@finding.use_suggested_probability %>
+                  disabled: true %>
               </div>
               <div class="col">
-              <%= f.input :use_suggested_probability, collection: suggested_type_probabilities, input_html: {
-                data: {
-                  toggle_suggested_probability_disabled_attr: true,
-                  suggested_probability_option: true
-                }
-              } %>
+              <%= f.input :probability, collection: weakness_probabilities, prompt: true, disabled: true %>
               </div>
             </div>
-
             <div class="row">
-              <div class="col-9">
+              <div class="col">
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
                   data: weakness_risk_data_options
-                } %>
-              </div>
-              <div class="col-3 text-right">
-                <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
-                  data: { toggle_risk_disabled_attr: true }
                 } %>
               </div>
             </div>
@@ -380,78 +345,16 @@
   <% if USE_SCOPE_CYCLE %>
     <div class="row">
       <div class="col-md-2">
-        <%= f.input :impact_amount,
-          input_html: {
-            data: { amount_impact: true }
-          } %>
-        <span data-percentage-issue></span>
+        <%= f.input :impact_amount, disabled: true %>
       </div>
       <div class="col-md-2">
-        <%= f.input :probability_amount,
-          input_html: {
-            data: {
-              probability_previous_amount: @finding.probability_risk_previous,
-              probability_representativeness_amount: @finding.probability_risks_representativeness,
-              probability_risks_types: finding_percentage_impact_risks_types(@finding),
-              probability_amount: true
-            }
-          } %>
+        <%= f.input :probability_amount, disabled: true %>
       </div>
     </div>
   <% end %>
+
   <div class="row">
-    <div class="col-md-2">
-      <h5 class="h6"><%= Issue.human_attribute_name 'customer' %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= Issue.human_attribute_name 'entry' %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= Issue.human_attribute_name 'operation' %></h5>
-    </div>
-    <div class="col-md-1">
-      <h5 class="h6"><%= Issue.human_attribute_name 'comments' %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= Issue.human_attribute_name 'close_date' %></h5>
-    </div>
-    <div class="col-md-1">
-      <h5 class="h6"><%= Issue.human_attribute_name 'currency' %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= Issue.human_attribute_name 'amount' %></h5>
-    </div>
-  </div>
-
-  <div id="issues">
-    <%= f.simple_fields_for :issues do |fr_f| %>
-      <%= render 'issue', f: fr_f %>
-    <% end %>
-
-    <div id="finding_issues"></div>
-    <div class="row justify-content-end">
-      <div class="col-2 text-right" data-sum-amount-impact-risks data-current-currency="<%= t 'number.currency.format.unit' %>">
-        <div class="row">
-          <div class="col-10 text-right">
-            <%= number_to_currency @finding.issues_amount %>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      data-impact-risks-value="<%= @finding.impact_risk_value %>"
-      data-impact-risks-percentage-value="<%= @finding.impact_risk_percentage %>"
-      data-percentage-impact-risks-types="<%= finding_percentage_impact_risks_types(@finding) %>"
-      data-impact-risks-types="<%= finding_impact_risks_types(@finding) %>">
-    </div>
-
-    <%= link_to_add_fields(
-      t('finding.add_issue'), f,
-      :issues, nil,
-      { insert_into: '#finding_issues',
-        add_issues: true
-      }
-    ) %>
+    <%= render 'issues' %>
   </div>
 
   <h5 class="mt-3">

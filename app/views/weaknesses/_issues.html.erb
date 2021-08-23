@@ -24,7 +24,5 @@
 <%= link_to_add_fields(
   t('finding.add_issue'), f,
   (:issues unless readonly), nil,
-  { insert_into: '#weakness_issues',
-    add_issues: true
-  }
+  { insert_into: '#weakness_issues' }
 ) %>
