@@ -280,8 +280,8 @@ jQuery(function ($) {
         $('[name$="[probability]"]').val(probabilityId).trigger('change')
       }
     } else {
-      var probabilityId           = impactRisksTypesValue(probabilityRisksTypes, probabilityPreviousTotal)
-      var probabilityRiskChanged  = $('[name$="[probability]"]').val() !== String(probabilityId)
+      var probabilityId          = impactRisksTypesValue(probabilityRisksTypes, probabilityPreviousTotal)
+      var probabilityRiskChanged = $('[name$="[probability]"]').val() !== String(probabilityId)
 
       if (probabilityRiskChanged) {
         $('[name$="[probability]"]').val(probabilityPreviousTotal).trigger('change')
