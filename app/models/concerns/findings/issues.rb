@@ -52,6 +52,8 @@ module Findings::Issues
   end
 
   def probability_risk_previous
+    quantity = 0
+
     if weakness_template_id
       quantity       = 1
       current_review = review
@@ -63,9 +65,9 @@ module Findings::Issues
           quantity += 1
         end
       end
-
-      quantity
     end
+
+    quantity
   end
 
   def get_percentage_by_probability
