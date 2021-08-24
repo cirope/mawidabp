@@ -9,7 +9,12 @@ module Findings::Issues
     accepts_nested_attributes_for :issues, allow_destroy: true, reject_if: :all_blank
   end
 
-  SUGGESTED_RISK_TYPES = {
+  SUGGESTED_IMPACT_RISK_TYPES = {
+    absolute_value: 1,
+    representativeness: 2
+  }
+
+  SUGGESTED_PROBABILITIES_TYPES = {
     repeatability: 1,
     representativeness: 2
   }
@@ -47,6 +52,8 @@ module Findings::Issues
   end
 
   def probability_risk_previous
+    quantity = 0
+
     if weakness_template_id
       quantity       = 1
       current_review = review
@@ -58,9 +65,9 @@ module Findings::Issues
           quantity += 1
         end
       end
-
-      quantity
     end
+
+    quantity
   end
 
   def get_percentage_by_probability

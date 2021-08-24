@@ -504,9 +504,9 @@ module ConclusionReviews::PatPdf
         pdf.start_new_page
 
         pdf.text Annex.model_name.human(count: 0).upcase, align: :center, style: :bold
-        pdf.move_down PDF_FONT_SIZE * 2
 
         annexes.each do |annex|
+          pdf.move_down PDF_FONT_SIZE * 2
           pdf.text annex.title, style: :bold
 
           if annex.description.present?

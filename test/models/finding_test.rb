@@ -1515,11 +1515,11 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'automatic issue based state' do
-    skip unless USE_SCOPE_CYCLE
+    skip unless USE_SCOPE_CYCLE && SHOW_WEAKNESS_PROGRESS
 
     @finding.issues.build customer: 'Some customer'
 
-    assert @finding.valid?
+    assert @finding.valid?, @finding.errors.full_messages.to_sentence
     assert @finding.awaiting?
 
     Current.user = users :supervisor
@@ -1667,6 +1667,13 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.finding_answers.last.imported
 
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'valid with same review code when repeated' do
+    @finding.repeated_of = findings(:unconfirmed_weakness)
+    @finding.review_code = findings(:unconfirmed_weakness).review_code
+
+    assert @finding.valid?
   end
 
   private

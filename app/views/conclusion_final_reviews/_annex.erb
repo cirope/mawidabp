@@ -1,0 +1,27 @@
+<%
+  id = f.object.object_id
+  annex = f.object
+%>
+<fieldset class="annexes pb-3">
+  <div class="row" data-nested>
+    <div class="col-md-11">
+
+      <%= f.input :title, input_html: { readonly: true } %>
+      <%= f.input :description, input_html: { rows: 3, readonly: true } %> 
+
+      <h5 class="mb-1">
+        <%= ImageModel.model_name.human count: 0 %>
+      </h5>
+    
+      <% annex.errors.full_messages_for(:image_models).each do |error| %>
+        <p class="text-danger"><%= error %></p>
+      <% end %>
+
+      <%= f.simple_fields_for :image_models do |imf| %>
+        <%= render 'image_model', f: imf %>
+      <% end %>
+      
+      <%= f.input :id, as: :hidden, input_html: { id: "hidden_annex_#{id}" } %>
+    </div>
+  </div>
+</fieldset>

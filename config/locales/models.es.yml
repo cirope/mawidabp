@@ -337,8 +337,8 @@ es:
         manual_risk: 'Manual'
         use_suggested_impact: 'Impacto sugerido'
         use_suggested_probability: 'Probabilidad sugerida'
-        impact_amount: 'Monto impacto'
-        probability_amount: 'Monto probabilidad'
+        impact_amount: 'Monto universo'
+        probability_amount: 'Universo en cantidad de casos'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
