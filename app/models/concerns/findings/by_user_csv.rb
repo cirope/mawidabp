@@ -62,7 +62,7 @@ module Findings::ByUserCsv
           weakness.business_unit,
           weakness.review_code,
           weakness.title,
-          id,
+          weakness.id,
           auditors.map(&:full_name).join('; '),
           process_owners.map(&:full_name).join('; '),
           auditeds.map(&:full_name).join('; '),
