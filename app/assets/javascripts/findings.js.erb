@@ -60,7 +60,11 @@ jQuery(function ($) {
       changeFollowUpDate()
   }
 
-  $(document).on('dynamic-item:added', '[data-association="tasks"]', disableFollowUpDate)
+  $(document).on('dynamic-item:added', '[data-association="tasks"]', function () {
+    refreshProbability()
+    disableFollowUpDate()
+  })
+
   $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".task"]', disableFollowUpDate)
 
   var disableState = function () {
@@ -205,10 +209,6 @@ jQuery(function ($) {
 
   $(document).on('keyup change', '[data-amount-impact]', function () {
     refreshImpactAmount()
-  })
-
-  $(document).on('dynamic-item:added', '[data-dynamic-target=".issue"]', function () {
-    refreshProbability()
   })
 
   $(document).on('dynamic-item:removed', '[data-dynamic-target=".issue"]', function () {
