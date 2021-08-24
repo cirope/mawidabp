@@ -60,7 +60,7 @@ jQuery(function ($) {
       changeFollowUpDate()
   }
 
-  $(document).on('dynamic-item:added', '[data-association="tasks"]', disableState)
+  $(document).on('dynamic-item:added', '[data-association="tasks"]', disableFollowUpDate)
   $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".task"]', disableFollowUpDate)
 
   var disableState = function () {
@@ -74,7 +74,15 @@ jQuery(function ($) {
     disableState()
   })
 
-  $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".issue"]', disableState)
+  $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".issue"]', function () {
+    var total = sumAmountIssues()
+
+    $('[data-sum-amount-impact-risks]').text(total.toFixed(2))
+
+    refreshProbability()
+    refreshImpactAmount()
+    disableState()
+  })
 
   var changeFollowUpDate = function () {
     var lang     = $('html').prop('lang')
@@ -208,15 +216,6 @@ jQuery(function ($) {
   })
 
   $(document).on('keyup change', '[data-amount-impact]', function () {
-    refreshImpactAmount()
-  })
-
-  $(document).on('dynamic-item:removed', '[data-dynamic-target=".issue"]', function () {
-    var total = sumAmountIssues()
-
-    $('[data-sum-amount-impact-risks]').text(total.toFixed(2))
-
-    refreshProbability()
     refreshImpactAmount()
   })
 
