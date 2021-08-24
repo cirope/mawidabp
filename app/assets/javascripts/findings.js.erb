@@ -60,11 +60,7 @@ jQuery(function ($) {
       changeFollowUpDate()
   }
 
-  $(document).on('dynamic-item:added', '[data-association="tasks"]', function () {
-    refreshProbability()
-    disableFollowUpDate()
-  })
-
+  $(document).on('dynamic-item:added', '[data-association="tasks"]', disableState)
   $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".task"]', disableFollowUpDate)
 
   var disableState = function () {
@@ -73,7 +69,11 @@ jQuery(function ($) {
     $('[name$="[state]"]').attr('readonly', hasVisibleIssues)
   }
 
-  $(document).on('dynamic-item:added', '[data-association="issues"]', disableState)
+  $(document).on('dynamic-item:added', '[data-association="issues"]', function () {
+    refreshProbability()
+    disableState()
+  })
+
   $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".issue"]', disableState)
 
   var changeFollowUpDate = function () {
