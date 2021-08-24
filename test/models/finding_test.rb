@@ -10,6 +10,12 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'create' do
+    state = if USE_SCOPE_CYCLE
+              Finding::STATUS[:incomplete]
+            else
+              Finding::STATUS[:notify]
+            end
+
     assert_difference 'Finding.count' do
       assert_difference 'Tagging.count', 2 do
         @finding.class.list.create!(
@@ -20,7 +26,7 @@ class FindingTest < ActiveSupport::TestCase
           brief: 'New brief',
           answer: 'New answer',
           audit_comments: 'New audit comments',
-          state: Finding::STATUS[:notify],
+          state: state,
           origination_date: 1.day.ago.to_date,
           solution_date: nil,
           audit_recommendations: 'New proposed action',
@@ -60,6 +66,12 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'control objective from final review can not be used to create new finding' do
+    state = if USE_SCOPE_CYCLE
+              Finding::STATUS[:incomplete]
+            else
+              Finding::STATUS[:notify]
+            end
+
     assert_no_difference 'Finding.count' do
       finding = Finding.list.create(
         control_objective_item: control_objective_items(:impact_analysis_item),
@@ -69,7 +81,7 @@ class FindingTest < ActiveSupport::TestCase
         brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
-        state: Finding::STATUS[:notify],
+        state: state,
         origination_date: 35.days.from_now.to_date,
         audit_recommendations: 'New proposed action',
         effect: 'New effect',
@@ -1503,11 +1515,11 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'automatic issue based state' do
-    skip unless USE_SCOPE_CYCLE
+    skip unless USE_SCOPE_CYCLE && SHOW_WEAKNESS_PROGRESS
 
     @finding.issues.build customer: 'Some customer'
 
-    assert @finding.valid?
+    assert @finding.valid?, @finding.errors.full_messages.to_sentence
     assert @finding.awaiting?
 
     Current.user = users :supervisor
@@ -1529,6 +1541,47 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.being_implemented?
   ensure
     Current.user = nil
+  end
+
+  test 'issues amount' do
+    @finding.issues.create!(customer: 'Some customer', amount: 10)
+    @finding.issues.create!(customer: 'Some customer dup', amount: 23)
+
+    assert_equal @finding.issues_amount, 33
+  end
+
+  test 'get amount by impact' do
+    amount = 30844081
+
+    @finding.issues.create!(customer: 'Some customer', amount: amount)
+
+    amount_by_impact = @finding.amount_by_impact
+
+    result = amount_by_impact.reverse_each.to_h.detect { |id, value| amount >= value }
+
+    assert_equal result.first,  @finding.impact_risk_value
+  end
+
+  test 'probability risk previuos' do
+    Current.organization = organizations :cirope
+    Current.user         = users :auditor
+
+    assert_nil @finding.probability_risk_previous
+
+    @finding.weakness_template = weakness_templates :security
+
+    assert @finding.valid?
+
+    assert_equal @finding.probability_risk_previous, 1
+
+    weakness_previous = @finding.review.previous.weaknesses.first
+
+    weakness_previous.update_column :weakness_template_id, weakness_templates(:security).id
+
+    assert_equal @finding.probability_risk_previous, 2
+  ensure
+    Current.organization = nil
+    Current.user         = nil
   end
 
   test 'notify action not found when subject have no finding_id' do
@@ -1614,6 +1667,13 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.finding_answers.last.imported
 
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'valid with same review code when repeated' do
+    @finding.repeated_of = findings(:unconfirmed_weakness)
+    @finding.review_code = findings(:unconfirmed_weakness).review_code
+
+    assert @finding.valid?
   end
 
   private

@@ -22,6 +22,9 @@ es:
       achievement:
         one: 'Beneficio / perjuicio estimado'
         other: 'Beneficios / perjuicios estimados'
+      annex:
+        one: 'Anexo'
+        other: 'Anexos'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -193,6 +196,10 @@ es:
         benefit: 'Nombre'
         amount: 'Monto'
         comment: 'Comentario'
+      annex:
+        title: 'Título'
+        description: 'Descripción'
+        image_models: 'Imágenes'
       answer:
         answer: 'Respuesta'
         comments: 'Comentarios respuesta'
@@ -224,10 +231,10 @@ es:
       business_unit_kind:
         name: 'Nombre'
       business_unit_type_users:
-        business_unit_type_id: "Unidad organizativa"
+        business_unit_type_id: "Sector"
         user_id: "Usuario"
       business_unit_type_reviews:
-        business_unit_type_id: "Unidad organizativa"
+        business_unit_type_id: "Sector"
         review_id: "Informe"
       business_unit_score:
         business_unit_id: 'Ciclo'
@@ -314,6 +321,10 @@ es:
         probability: 'Probabilidad'
         impact_risk: 'Impacto'
         manual_risk: 'Manual'
+        use_suggested_impact: 'Impacto sugerido'
+        use_suggested_probability: 'Probabilidad sugerida'
+        impact_amount: 'Monto universo'
+        probability_amount: 'Universo en cantidad de casos'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -379,7 +390,8 @@ es:
       issue:
         customer: 'Cliente'
         entry: 'Rubro'
-        transaction: 'Operación'
+        operation: 'Operación'
+        currency: 'Moneda'
         amount: 'Monto'
         comments: 'Comentarios'
         close_date: 'Fecha de regularización'
@@ -687,6 +699,7 @@ es:
         risk: 'Riesgo'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
+        notes: 'Notas'
         internal_control_components: 'Componentes de CI'
         allow_duplication: 'Permitir título duplicado'
 

@@ -129,6 +129,8 @@
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
+    add_annex: "Agregar anexo"
+    add_image: "Agregar imagen"
     errors:
       without_corrective_actions: "no tiene acciones correctivas"
 
@@ -711,7 +713,7 @@
     weaknesses_by_user_title: "Observaciones por usuario"
     status_user: "Estado de usuario"
     process_control_stats_title: "Observaciones por proceso de negocio"
-    business_unit_type_title: "Unidad organizativa"
+    business_unit_type_title: "Sector"
     business_unit_title: "Unidad de negocio"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario.pdf"
@@ -1224,18 +1226,19 @@
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
+      subject: "Notificación por inactividad [#%{finding_id}]"
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los usuarios de la siguiente observación"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación o si se altera el organigrama"
     expired_finding_to_manager:
+      subject: "Observación vencida [#%{finding_id}]"
       title: "Observación vencida"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación de la siguiente observación"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
-    unanswered_findings:
-      title: "Notificación de cambios"
-      the_following_findings_are_now_unanswered:
-        one: "La siguiente observación ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
-        other: "Las siguientes observaciones han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+    unanswered_finding:
+      subject: "Notificación de cambio [#%{finding_id}]"
+      title: "Notificación de cambio"
+      the_following_finding_are_now_unanswered: "La siguiente observación ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
@@ -1562,10 +1565,10 @@
         name: "Nombre"
       business_unit_type_user:
         user_id: "Usuario"
-        business_unit_type_id: "Unidad organizativa"
+        business_unit_type_id: "Sector"
       business_unit_type_review:
         review_id: "Informe"
-        business_unit_type_id: "Unidad organizativa"
+        business_unit_type_id: "Sector"
       comment:
         comment: "Comentario"
         user_id: "Usuario"
@@ -1625,6 +1628,7 @@
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
         work_papers: "Papeles de trabajo"
+        scored_business_unit_type_id: "Sector evaluado"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (detalle objetivo de control)"

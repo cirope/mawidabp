@@ -3,6 +3,7 @@ class PlanItem < ApplicationRecord
   include Comparable
   include ParameterSelector
   include PlanItems::AttributeTypes
+  include PlanItems::AuxiliarBusinessUnitTypes
   include PlanItems::BestPractices
   include PlanItems::Comparable
   include PlanItems::ControlObjectives

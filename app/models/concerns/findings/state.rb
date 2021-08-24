@@ -75,17 +75,25 @@ module Findings::State
       end
 
       def final_status
+        show_assumed_risk = ALLOW_FINDING_ASSUMED_RISK_TO_PENDING      &&
+                            !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK &&
+                            !USE_SCOPE_CYCLE
+
         [STATUS[:implemented_audited], STATUS[:revoked], STATUS[:expired], STATUS[:failure]] |
-          (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING || HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:assumed_risk]]) |
+          (show_assumed_risk ? [STATUS[:assumed_risk]] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [STATUS[:criteria_mismatch]])
       end
 
       def pending_status
+        show_assumed_risk = ALLOW_FINDING_ASSUMED_RISK_TO_PENDING      &&
+                            !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK &&
+                            !USE_SCOPE_CYCLE
         [
-          STATUS[:being_implemented], STATUS[:notify], STATUS[:unconfirmed],
-          STATUS[:confirmed], STATUS[:unanswered], STATUS[:incomplete]
+          STATUS[:being_implemented], STATUS[:unconfirmed], STATUS[:confirmed],
+          STATUS[:unanswered], STATUS[:incomplete]
         ] |
-        (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING && !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [STATUS[:assumed_risk]] : []) |
+        (show_assumed_risk ? [STATUS[:assumed_risk]] : []) |
+        (USE_SCOPE_CYCLE ? [] : [STATUS[:notify]]) |
         (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]]) |
         (SHOW_WEAKNESS_PROGRESS ? [STATUS[:awaiting]] : [])
       end
@@ -112,27 +120,37 @@ module Findings::State
       end
 
       def exclude_from_reports_status
-        [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked] |
-          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [:implemented, :assumed_risk] : []) |
-          (SHOW_WEAKNESS_PROGRESS ? [] : [:awaiting, :failure])
+        show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
+
+        [:unconfirmed, :confirmed, :incomplete, :repeated, :revoked] |
+          (USE_SCOPE_CYCLE ? [] : [:notify]) |
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [:implemented] : []) |
+          (SHOW_WEAKNESS_PROGRESS ? [] : [:awaiting, :failure]) |
+          (show_assumed_risk ? [:assumed_risk] : [])
       end
 
       def pending_for_review_status
+        show_assumed_risk = SHOW_ASSUMED_RISK_AS_REVIEW_PENDING        &&
+                            !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK &&
+                            !USE_SCOPE_CYCLE
         [
           STATUS[:awaiting],
           STATUS[:being_implemented],
           STATUS[:unanswered],
         ] |
-        (SHOW_ASSUMED_RISK_AS_REVIEW_PENDING && !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [STATUS[:assumed_risk]] : []) |
+        (show_assumed_risk ? [STATUS[:assumed_risk]] : []) |
         (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]])
       end
 
       def confirmed_transitions final
+        show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
+
         [:confirmed, :unanswered, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
-          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk]) |
-          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
+          (show_assumed_risk ? [:assumed_risk] : [])
       end
 
       def unconfirmed_transitions final
@@ -140,33 +158,45 @@ module Findings::State
       end
 
       def unanswered_transitions final
+        show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
+
         [:unanswered, :being_implemented, :implemented_audited, :expired, :repeated] |
           (final ? [] : [:revoked]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
-          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
+          (show_assumed_risk ? [:assumed_risk] : [])
       end
 
       def awaiting_transitions final
-        [:awaiting, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :expired, :repeated, :unanswered] |
+        show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
+
+        [:awaiting, :being_implemented, :implemented, :implemented_audited, :expired, :repeated, :unanswered] |
           (final ? [] : [:revoked]) |
-          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
+          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
+          (show_assumed_risk ? [:assumed_risk] : [])
       end
 
       def being_implemented_transitions final
+        show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
+
         [:being_implemented, :implemented_audited, :expired, :repeated] |
           (final ? [] : [:revoked]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
-          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
+          (show_assumed_risk ? [:assumed_risk] : [])
       end
 
       def implemented_transitions final
+        show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
+
         [:being_implemented, :implemented_audited, :expired, :repeated] |
           (final ? [] : [:revoked]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
-          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
+          (show_assumed_risk ? [:assumed_risk] : [])
       end
 
       def implemented_audited_transitions final
@@ -189,20 +219,28 @@ module Findings::State
       end
 
       def notify_transitions final
-        [:notify, :incomplete, :confirmed, :being_implemented, :implemented_audited, :expired] |
+        show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
+
+        [:incomplete, :confirmed, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
+          (USE_SCOPE_CYCLE ? [] : [:notify]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
-          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
+          (show_assumed_risk ? [:assumed_risk] : [])
       end
 
       def incomplete_transitions final
-        [:incomplete, :notify, :being_implemented, :implemented_audited, :expired] |
+        show_assumed_risk = !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK && !USE_SCOPE_CYCLE
+
+        [:incomplete, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
+          (USE_SCOPE_CYCLE ? [] : [:notify]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (SHOW_WEAKNESS_PROGRESS ? [:failure] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
-          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
+          (show_assumed_risk ? [:assumed_risk] : [])
       end
 
       def repeated_transitions final

@@ -1,9 +1,7 @@
-class LdapMailer < ActionMailer::Base
+class LdapMailer < ApplicationMailer
   include ActionView::Helpers::TextHelper
 
   helper :markdown
-
-  default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
 
   def import_notifier(imported_users_json, organization_id)
     @users = {
