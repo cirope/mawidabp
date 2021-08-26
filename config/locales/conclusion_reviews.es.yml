@@ -138,6 +138,29 @@ es:
         responsible_name: "<b>Nombre del Responsable de Regularización</b>"
         follow_up_date: "<b>Fecha Estimada de Regularización</b>"
         messages: "Nuestro trabajo se realizó en los meses de noviembre y diciembre de 2020, y para llevarlo a cabo se mantuvieron reuniones con el siguiente personal de Entidad:"
+      scores:
+        cycle: '<b>CLASIFICACION DE CICLO</b>'
+        description: 'De acuerdo con la metodología de calificación de ciclos aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, a continuación, exponemos la calificación correspondiente: '
+        legend_score: "Para la determinación de esta calificación hemos evaluado:\n  • el nivel de criticidad de nuestras observaciones y su impacto sobre la estructura de control interno de la Entidad;\n • las respuestas a nuestras observaciones que nos fueron enviadas por los responsables y el plan de acción desarrollado a efectos de regularizar las situaciones observadas;\n  • las consideraciones sobre los sistemas aplicativos y sus controles automáticos, cuyas conclusiones se detallan en el informe SIS 2020 - 15 Ciclo Inversiones surgidas del informe de Auditoria de Sistemas;\n  • los controles manuales compensatorios y la suficiencia de la documentación de respaldo almacenada; y\n  • la antigüedad de las observaciones"
+        risk: 'Riesgo'
+        amount_weaknesses: 'Cantidad de Observaciones'
+        level_risk: 'Nievel de riesgo'
+        status: 'Estado'
+        age_parameter: 'Parámetro Antigüedad'
+        weighing: 'Ponderación'
+        footer_table: 'Calificación de GIR'
+      age_parameter:
+        follow_up: 'Seguimiento (Hasta 2 años)'
+        data_between_3_4_years: 'Antigua data (entre 3 y 4 años)'
+        data_between_5_6_years: 'Antigua data (entre 5 y 6 años)'
+        data_older_than_6_years: 'Antigua data (mayor a 6 años)'
+      results_by_weighting:
+        suitable: 'Adecuado'
+        requires_some_improvements: 'Requiere algunas mejoras'
+        tight: 'Ajustado'
+        requires_significant_improvements: 'Requiere mejoras significativas'
+        inadequate: 'Inadecuado'
+
       weaknesses_detected:
         name: "Debilidades detectadas"
         title: "<b>Título</b>"
