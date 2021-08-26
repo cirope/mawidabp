@@ -262,7 +262,8 @@ jQuery(function ($) {
   }
 
   var refreshProbability = function () {
-    var totalIssues                = $('[data-finding-issue-amount]:visible').filter((i, e) => e.value.trim() !== '').length
+    var filterAmount               = function (i, e) { return e.value.trim() }
+    var totalIssues                = $('[data-finding-issue-amount]:visible').filter(filterAmount).length
     var currentProbabilityAmount   = +$('[data-probability-risks-types]').val()
     var representativenessValueId  = $('[data-probability-representativeness-value]').data('probabilityRepresentativenessValue')
     var repeatabilityValueId       = $('[data-probability-representativeness-value]').data('probabilityRepeatabilityValue')
