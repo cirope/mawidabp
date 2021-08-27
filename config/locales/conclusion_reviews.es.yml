@@ -149,16 +149,11 @@ es:
         age_parameter: 'Parámetro Antigüedad'
         weighing: 'Ponderación'
         footer_table: 'Calificación de GIR'
-      age_parameter:
-        follow_up: 'Seguimiento (Hasta 2 años)'
-        data_between_3_4_years: 'Antigua data (entre 3 y 4 años)'
-        data_between_5_6_years: 'Antigua data (entre 5 y 6 años)'
-        data_older_than_6_years: 'Antigua data (mayor a 6 años)'
       results_by_weighting:
-        suitable: 'Adecuado'
-        requires_some_improvements: 'Requiere algunas mejoras'
-        tight: 'Ajustado'
-        requires_significant_improvements: 'Requiere mejoras significativas'
+        adequate: 'Adecuado'
+        require_some_improvements: 'Requiere algunas mejoras'
+        require_improvements: 'Ajustado'
+        require_lots_of_improvements: 'Requiere mejoras significativas'
         inadequate: 'Inadecuado'
 
       weaknesses_detected:

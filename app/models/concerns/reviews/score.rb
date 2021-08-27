@@ -17,7 +17,7 @@ module Reviews::Score
       self.class.scores(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
-    when :weaknesses, :none
+    when :weaknesses, :none, :alternative
       self.class.scores_by_weaknesses(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
@@ -106,6 +106,26 @@ module Reviews::Score
                      end
   end
 
+  def score_by_weight date
+    weaknesses = has_final_review? ? final_weaknesses : self.weaknesses
+
+    scores = weaknesses.map { |w| score_for w, date }
+    total  = scores.compact.sum
+
+    self.score = case
+                 when total <= 2
+                   100
+                 when total <= 15
+                   80
+                 when total <= 50
+                   60
+                 when total <= 150
+                   40
+                 when total > 150
+                   0
+                 end
+  end
+
   def scored_by_weaknesses?
     score_type == 'weaknesses'
   end
@@ -130,12 +150,16 @@ module Reviews::Score
                               USE_SCOPE_CYCLE &&
                               REVIEW_SCOPES[plan_item&.scope]&.fetch(:type, nil) == :cycle
 
+      alternative = Current.conclusion_pdf_format == 'nbc'
+
       if splitted_effectiveness
         :splitted_effectiveness
       elsif by_weaknesses
         score_type&.to_sym == :none ? :none : :weaknesses
       elsif SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
+      elsif alternative
+        :alternative
       else
         :effectiveness
       end
@@ -151,6 +175,8 @@ module Reviews::Score
         score_by_splitted_effectiveness date
       when :manual, :none
         self.score = 100
+      when :alternative
+        score_by_weight date
       end
     end
 
@@ -159,9 +185,25 @@ module Reviews::Score
         old_score_for weakness
       elsif weakness.take_as_repeated_for_score? date: date
         repeated_score_for weakness
+      elsif weakness.take_as_alternative_score
+          alternative_score_for weakness
       else
         normal_score_for weakness
       end
+    end
+
+    def alternative_score_for weakness
+      risks = weakness.class.risks
+
+      case weakness.risk
+      when risks[:high]
+        weakness_weights[:normal_high] / 2
+      when risks[:medium]
+        weakness_weights[:normal_medium]
+      when risks[:low], risks[:none]
+        weakness_weights[:normal_low]
+      end
+
     end
 
     def normal_score_for weakness

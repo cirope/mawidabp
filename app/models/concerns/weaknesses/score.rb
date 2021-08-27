@@ -30,4 +30,33 @@ module Weaknesses::Score
       origination_date &&
       (origination_date < date - 2.years)
   end
+
+  def take_as_alternative_score
+    Current.conclusion_pdf_format == 'nbc'
+  end
+
+  def risk_weight
+    risk.next
+  end
+
+  def state_weight
+    being_implemented? ? 1 : 0
+  end
+
+  def age_weight date: Time.zone.today
+    #Utilizar case
+    #Fecha de emsión para comparar
+    #Explicar temas de fechas
+    calculate_days = (date - follow_up_date)
+    case
+    when calculate_days <= 730
+      1
+    when calculate_days  <= 1460
+      1.5
+    when calculate_days <= 2190
+      2
+    when calculate_days > 2190
+      2.5
+    end
+  end
 end

@@ -1,21 +1,6 @@
 module ConclusionReviews::NbcPdf
   extend ActiveSupport::Concern
 
-  AGE_PARAMETERS = {
-    follow_up: 1,
-    data_between_3_4_years: 1.5,
-    data_between_5_6_years: 2,
-    data_older_than_6_years: 2.5,
-  }
-
-  RESULTS_BY_WEIGHTING = {
-    suitable: 0,
-    requires_some_improvements: 3,
-    tight: 16,
-    requires_significant_improvements: 51,
-    inadequate: 150
-  }
-
   def nbc_pdf organization = nil, *args
     pdf = Prawn::Document.create_generic_pdf :portrait
 
@@ -127,13 +112,24 @@ module ConclusionReviews::NbcPdf
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.nbc.scores.description')
 
-      data = [
-        nbc_header_scores,
-        ['Riego Medio', '1', '2','1', '1', '2.00'],
-        ['Riego Bajo', '2', '1','1', '1', '2.00'],
-        ['Totales', '3', {content: '', colspan: 3}, '4.00'],
-        nbc_footer_scores(get_result_by_weighting(200))
-      ]
+      data = [nbc_header_scores]
+
+      nbc_get_weaknesses_by_risk.each do |arr, w|
+        risk_text       = w.first.risk_text
+        weaknesses_size = w.size
+
+        arr.unshift weaknesses_size
+        row = [risk_text] + arr
+        row.push(arr.inject &:*)
+
+        data << row
+      end
+
+
+      #data << nbc_footer_scores(get_result_by_weighting(200))
+      data << nbc_footer_scores(review.score_array)
+
+       # ['Totales', '3', {content: '', colspan: 3}, '4.00'],
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -176,25 +172,14 @@ module ConclusionReviews::NbcPdf
     end
 
     def get_result_by_weighting score
-      types_of_weaknesses
-      RESULTS_BY_WEIGHTING.reverse_each.to_h.detect { |id, value| score >= value }
+      #RESULTS_BY_WEIGHTING.reverse_each.to_h.detect { |id, value| score >= value }
     end
 
-    def types_of_weaknesses
-      grouped_weaknesses = review.weaknesses.where(state: []).group_by(&:risk)
-
-      labels = []
-      series = []
-
-      grouped_weaknesses.each do |status, weaknesses|
-        risk_types << weaknesses.first.risk_text
-        risk_types << weaknesses.first.state_text
-        series << weaknesses.size
+    def nbc_get_weaknesses_by_risk
+      #revisar el review.weakneses pasar a weaknesses
+      weaknesses.select { |w| w.state_weight > 0 }.group_by do |w|
+        [w.risk_weight, w.state_weight, w.age_weight]
       end
-byebug
-      { labels: labels, series: series }
-
-      byebug
     end
 
     def put_nbc_conclusion_on pdf
