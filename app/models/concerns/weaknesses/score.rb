@@ -47,15 +47,16 @@ module Weaknesses::Score
     #Utilizar case
     #Fecha de emsión para comparar
     #Explicar temas de fechas
-    calculate_days = (date - follow_up_date)
+    days = (date - follow_up_date)
+
     case
-    when calculate_days <= 730
+    when days <= 2.years.days
       1
-    when calculate_days  <= 1460
+    when days.days <= 4.years.days
       1.5
-    when calculate_days <= 2190
+    when days <= 6.years.days
       2
-    when calculate_days > 2190
+    else
       2.5
     end
   end

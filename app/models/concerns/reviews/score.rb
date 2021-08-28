@@ -13,11 +13,11 @@ module Reviews::Score
     date = conclusion_final_review&.issue_date || created_at
 
     case type
-    when :effectiveness, :manual, :splitted_effectiveness
+    when :effectiveness, :manual, :splitted_effectiveness,:weaknesses_alt
       self.class.scores(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
-    when :weaknesses, :none, :alternative
+    when :weaknesses, :none
       self.class.scores_by_weaknesses(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
@@ -106,7 +106,7 @@ module Reviews::Score
                      end
   end
 
-  def score_by_weight date
+  def score_by_weighted_weaknesses date
     weaknesses = has_final_review? ? final_weaknesses : self.weaknesses
 
     scores = weaknesses.map { |w| score_for w, date }
@@ -150,7 +150,7 @@ module Reviews::Score
                               USE_SCOPE_CYCLE &&
                               REVIEW_SCOPES[plan_item&.scope]&.fetch(:type, nil) == :cycle
 
-      alternative = Current.conclusion_pdf_format == 'nbc'
+      by_weaknesses_alt = Current.conclusion_pdf_format == 'nbc'
 
       if splitted_effectiveness
         :splitted_effectiveness
@@ -158,8 +158,8 @@ module Reviews::Score
         score_type&.to_sym == :none ? :none : :weaknesses
       elsif SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
-      elsif alternative
-        :alternative
+      elsif by_weaknesses_alt
+        :weaknesses_alt
       else
         :effectiveness
       end
@@ -175,8 +175,8 @@ module Reviews::Score
         score_by_splitted_effectiveness date
       when :manual, :none
         self.score = 100
-      when :alternative
-        score_by_weight date
+      when :weaknesses_alt
+        score_by_weighted_weaknesses date
       end
     end
 
@@ -203,7 +203,6 @@ module Reviews::Score
       when risks[:low], risks[:none]
         weakness_weights[:normal_low]
       end
-
     end
 
     def normal_score_for weakness

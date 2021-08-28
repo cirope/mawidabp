@@ -41,7 +41,7 @@ module ConclusionReviews::NbcPdf
       responsibles = review.review_user_assignments.where(owner: true)&.map do |rua|
                       rua.user.full_name
                      end
-      column_data = [
+      column_data  = [
         [I18n.t('conclusion_review.nbc.cover.issue_date'), I18n.l(issue_date, format: :long)  ],
         [I18n.t('conclusion_review.nbc.cover.to'), I18n.t('conclusion_review.nbc.cover.to_label')],
         [I18n.t('conclusion_review.nbc.cover.from'), I18n.t('conclusion_review.nbc.cover.from_label')],
@@ -100,7 +100,7 @@ module ConclusionReviews::NbcPdf
     def put_nbc_weaknesses_on pdf
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
 
-      review.weaknesses.each do |weakness|
+      weaknesses.each do |weakness|
         pdf.text "• #{weakness.description}" if weakness.being_implemented?
       end
 
@@ -124,12 +124,7 @@ module ConclusionReviews::NbcPdf
 
         data << row
       end
-
-
-      #data << nbc_footer_scores(get_result_by_weighting(200))
       data << nbc_footer_scores(review.score_array)
-
-       # ['Totales', '3', {content: '', colspan: 3}, '4.00'],
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -171,12 +166,7 @@ module ConclusionReviews::NbcPdf
       ]
     end
 
-    def get_result_by_weighting score
-      #RESULTS_BY_WEIGHTING.reverse_each.to_h.detect { |id, value| score >= value }
-    end
-
     def nbc_get_weaknesses_by_risk
-      #revisar el review.weakneses pasar a weaknesses
       weaknesses.select { |w| w.state_weight > 0 }.group_by do |w|
         [w.risk_weight, w.state_weight, w.age_weight]
       end
@@ -204,33 +194,26 @@ module ConclusionReviews::NbcPdf
 
     def put_nbc_weaknesses_detailed_on pdf
       title_options = [(PDF_FONT_SIZE * 1.5).round, :center, false]
-
       pdf.add_title I18n.t('conclusion_review.nbc.weaknesses.detailed_review'), *title_options
 
       pdf.move_down PDF_FONT_SIZE * 2
-
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.introduction_and_scope'), inline_format: true
 
       pdf.move_down PDF_FONT_SIZE
-
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.introduction',
                       date: I18n.l(review.plan_item.end, format: :long),
                       project: review.plan_item.project)
 
       pdf.move_down PDF_FONT_SIZE * 2
-
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.scope')
 
       pdf.move_down PDF_FONT_SIZE
-
       pdf.text applied_procedures, align: :justify, inline_format: true
 
       pdf.move_down PDF_FONT_SIZE * 2
-
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.review_procedures')
 
       pdf.move_down PDF_FONT_SIZE * 2
-
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages')
 
       data = review.review_user_assignments.select(&:include_signature).map do |rua|
@@ -247,7 +230,7 @@ module ConclusionReviews::NbcPdf
         I18n.t('conclusion_review.nbc.weaknesses.area')
       ]
 
-      pdf.table(data, cell_style: { inline_format: true }, :column_widths => [width_column1, width_column2]) do
+      pdf.table(data, cell_style: { inline_format: true }, column_widths: [width_column1, width_column2]) do
         row(0).style(
           background_color: 'cccccc',
           align: :center
@@ -260,7 +243,7 @@ module ConclusionReviews::NbcPdf
     def put_nbc_weaknesses_detected_on pdf
       pdf.text I18n.t('conclusion_review.nbc.weaknesses_detected.name')
 
-      review.weaknesses.each do |weakness|
+      weaknesses.each do |weakness|
         put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.title')
 
         pdf.move_down PDF_FONT_SIZE
@@ -309,7 +292,7 @@ module ConclusionReviews::NbcPdf
       width_column1 = PDF_FONT_SIZE * 30
       width_column2 = pdf.bounds.width - width_column1
 
-      pdf.table(data, cell_style: { inline_format: true }, :column_widths => [width_column1, width_column2]) do
+      pdf.table(data, cell_style: { inline_format: true }, column_widths: [width_column1, width_column2]) do
         row(0).style(
           background_color: 'cccccc',
           align: :center
