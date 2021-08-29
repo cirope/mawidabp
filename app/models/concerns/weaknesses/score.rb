@@ -44,9 +44,6 @@ module Weaknesses::Score
   end
 
   def age_weight date: Time.zone.today
-    #Utilizar case
-    #Fecha de emsión para comparar
-    #Explicar temas de fechas
     days = (date - follow_up_date)
 
     case

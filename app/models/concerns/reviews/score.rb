@@ -13,12 +13,16 @@ module Reviews::Score
     date = conclusion_final_review&.issue_date || created_at
 
     case type
-    when :effectiveness, :manual, :splitted_effectiveness,:weaknesses_alt
+    when :effectiveness, :manual, :splitted_effectiveness
       self.class.scores(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
     when :weaknesses, :none
       self.class.scores_by_weaknesses(date).to_a.sort do |s1, s2|
+        s2[1].to_i <=> s1[1].to_i
+      end
+    when :weaknesses_alt
+      self.class.scores_by_weighted(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
     end
@@ -109,21 +113,24 @@ module Reviews::Score
   def score_by_weighted_weaknesses date
     weaknesses = has_final_review? ? final_weaknesses : self.weaknesses
 
-    scores = weaknesses.map { |w| score_for w, date }
+    scores = weaknesses.select {|w| w.state_weight > 0 }.map { |w| score_for w, date }
     total  = scores.compact.sum
+    percentage_medium = 50
+    percentage_high = 150
 
-    self.score = case
-                 when total <= 2
-                   100
-                 when total <= 15
-                   80
-                 when total <= 50
-                   60
-                 when total <= 150
-                   40
-                 when total > 150
-                   0
-                 end
+    if total <= 50
+      self.score = 100 - total
+    elsif total <= 150
+      min = ((100 - 51) / 3).to_i
+      max = 100 - 51
+
+      self.score = max - ((total * min) / 150)
+    else
+      min = 1
+      max = 16
+
+      self.score = max - ((total * min) / 151).to_i
+    end
   end
 
   def scored_by_weaknesses?
@@ -186,7 +193,7 @@ module Reviews::Score
       elsif weakness.take_as_repeated_for_score? date: date
         repeated_score_for weakness
       elsif weakness.take_as_alternative_score
-          alternative_score_for weakness
+        alternative_score_for weakness
       else
         normal_score_for weakness
       end

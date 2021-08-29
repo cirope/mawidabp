@@ -152,7 +152,7 @@ es:
       results_by_weighting:
         adequate: 'Adecuado'
         require_some_improvements: 'Requiere algunas mejoras'
-        require_improvements: 'Ajustado'
+        tight: 'Ajustado'
         require_lots_of_improvements: 'Requiere mejoras significativas'
         inadequate: 'Inadecuado'
 
