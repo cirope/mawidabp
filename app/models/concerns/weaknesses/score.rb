@@ -31,10 +31,6 @@ module Weaknesses::Score
       (origination_date < date - 2.years)
   end
 
-  def take_as_alternative_score
-    Current.conclusion_pdf_format == 'nbc'
-  end
-
   def risk_weight
     risk.next
   end

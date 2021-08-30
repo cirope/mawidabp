@@ -111,25 +111,36 @@ module Reviews::Score
   end
 
   def score_by_weighted_weaknesses date
-    weaknesses = has_final_review? ? final_weaknesses : self.weaknesses
+    weaknesses      = has_final_review? ? final_weaknesses : self.weaknesses
+    total           = 0
+    high_score      = 150
+    medium_score    = 50
+    hundred_percent = 100
 
-    scores = weaknesses.select {|w| w.state_weight > 0 }.map { |w| score_for w, date }
-    total  = scores.compact.sum
-    percentage_medium = 50
-    percentage_high = 150
+    scores = weaknesses.select { |w| w.state_weight > 0 }.group_by do |w|
+      [w.risk_weight, w.state_weight, w.age_weight(date: date)]
+    end
 
-    if total <= 50
-      self.score = 100 - total
-    elsif total <= 150
-      min = ((100 - 51) / 3).to_i
-      max = 100 - 51
+    scores.each do |row, weakness|
+      weaknesses_size = weakness.size
 
-      self.score = max - ((total * min) / 150)
+      row.unshift weaknesses_size
+
+      total += row.inject &:*
+    end
+
+    if total <= medium_score
+      self.score = hundred_percent - total
+    elsif total <= high_score
+      min = ((hundre_percent - medium_score.next) / 3).to_i
+      max = hundred_percent - medium_score.next
+
+      self.score = max - ((total * min) / high_score)
     else
       min = 1
       max = 16
 
-      self.score = max - ((total * min) / 151).to_i
+      self.score = max - ((total * min) / high_score.next).to_i
     end
   end
 
@@ -192,23 +203,8 @@ module Reviews::Score
         old_score_for weakness
       elsif weakness.take_as_repeated_for_score? date: date
         repeated_score_for weakness
-      elsif weakness.take_as_alternative_score
-        alternative_score_for weakness
       else
         normal_score_for weakness
-      end
-    end
-
-    def alternative_score_for weakness
-      risks = weakness.class.risks
-
-      case weakness.risk
-      when risks[:high]
-        weakness_weights[:normal_high] / 2
-      when risks[:medium]
-        weakness_weights[:normal_medium]
-      when risks[:low], risks[:none]
-        weakness_weights[:normal_low]
       end
     end
 
