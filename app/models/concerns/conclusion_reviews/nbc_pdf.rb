@@ -174,17 +174,21 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_conclusion_on pdf
+
+
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.audit_conclusion'), inline_format: true
-byebug
+
       if conclusion.present?
+        manager = User.list.managers.not_hidden.take
+
         pdf.move_down PDF_FONT_SIZE
         pdf.text conclusion, align: :justify, inline_format: true
 
         pdf.move_down PDF_FONT_SIZE * 5
 
         pdf.font_size (PDF_FONT_SIZE).round do
-          pdf.text I18n.t('conclusion_review.nbc.weaknesses.highest_responsible', responsible: review.review_user_assignments), inline_format: true
+          pdf.text I18n.t('conclusion_review.nbc.weaknesses.highest_responsible', responsible: manager&.full_name), inline_format: true
           pdf.text I18n.t('conclusion_review.nbc.weaknesses.signature_label'), inline_format: true
           pdf.text I18n.t('conclusion_review.nbc.weaknesses.organization'), inline_format: true
         end
