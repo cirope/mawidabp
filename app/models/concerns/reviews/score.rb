@@ -121,12 +121,12 @@ module Reviews::Score
       [w.risk_weight, w.state_weight, w.age_weight(date: date)]
     end
 
-    scores.each do |row, weakness|
+    total = scores.sum do |row, weakness|
       weaknesses_size = weakness.size
 
       row.unshift weaknesses_size
 
-      total += row.inject &:*
+      row.inject &:*
     end
 
     if total <= medium_score

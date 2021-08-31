@@ -76,7 +76,7 @@ module ConclusionReviews::NbcPdf
           review.identification,
           I18n.t('conclusion_review.nbc.cover.prepared_by'),
           I18n.t('conclusion_review.nbc.cover.internal_audit')
-        ],
+        ]
       ]
 
       w_c = pdf.bounds.width / 4
@@ -119,9 +119,10 @@ module ConclusionReviews::NbcPdf
         weaknesses_size = weakness.size
 
         row.unshift weaknesses_size
-        weighted_calculated = row.inject &:*
 
-        data << [risk_text] + row + [weighted_calculated]
+        weight = row.inject &:*
+
+        data << [risk_text] + row + [weight]
       end
 
       data << nbc_footer_scores(review.score_array)
@@ -149,14 +150,14 @@ module ConclusionReviews::NbcPdf
     end
 
     def nbc_header_scores
-     [
-      I18n.t('conclusion_review.nbc.scores.risk'),
-      I18n.t('conclusion_review.nbc.scores.amount_weaknesses'),
-      I18n.t('conclusion_review.nbc.scores.level_risk'),
-      I18n.t('conclusion_review.nbc.scores.status'),
-      I18n.t('conclusion_review.nbc.scores.age_parameter'),
-      I18n.t('conclusion_review.nbc.scores.weighing'),
-     ]
+      [
+        I18n.t('conclusion_review.nbc.scores.risk'),
+        I18n.t('conclusion_review.nbc.scores.amount_weaknesses'),
+        I18n.t('conclusion_review.nbc.scores.level_risk'),
+        I18n.t('conclusion_review.nbc.scores.status'),
+        I18n.t('conclusion_review.nbc.scores.age_parameter'),
+        I18n.t('conclusion_review.nbc.scores.weighing'),
+      ]
     end
 
     def nbc_footer_scores score
@@ -175,7 +176,7 @@ module ConclusionReviews::NbcPdf
     def put_nbc_conclusion_on pdf
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.audit_conclusion'), inline_format: true
-
+byebug
       if conclusion.present?
         pdf.move_down PDF_FONT_SIZE
         pdf.text conclusion, align: :justify, inline_format: true
@@ -183,7 +184,7 @@ module ConclusionReviews::NbcPdf
         pdf.move_down PDF_FONT_SIZE * 5
 
         pdf.font_size (PDF_FONT_SIZE).round do
-          pdf.text I18n.t('conclusion_review.nbc.weaknesses.highest_responsible', responsible: 'xxxxx'), inline_format: true
+          pdf.text I18n.t('conclusion_review.nbc.weaknesses.highest_responsible', responsible: review.review_user_assignments), inline_format: true
           pdf.text I18n.t('conclusion_review.nbc.weaknesses.signature_label'), inline_format: true
           pdf.text I18n.t('conclusion_review.nbc.weaknesses.organization'), inline_format: true
         end
@@ -320,7 +321,7 @@ module ConclusionReviews::NbcPdf
       ]
 
       w_c = pdf.bounds.width
-      pdf.table(data, cell_style: { inline_format: true }, :column_widths => w_c ) do
+      pdf.table(data, cell_style: { inline_format: true }, :column_widths => w_c) do
         row(0).style(
           background_color: 'EEEEEE',
           borders: [],
