@@ -322,6 +322,7 @@ module ConclusionReviews::NbcPdf
       data = [[value]]
 
       w_c = pdf.bounds.width
+
       pdf.table(data, cell_style: { inline_format: true }, :column_widths => w_c) do
         row(0).style(
           background_color: 'EEEEEE',
