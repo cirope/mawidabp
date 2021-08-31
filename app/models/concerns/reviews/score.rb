@@ -121,10 +121,8 @@ module Reviews::Score
       [w.risk_weight, w.state_weight, w.age_weight(date: date)]
     end
 
-    total = scores.sum do |row, weakness|
-      weaknesses_size = weakness.size
-
-      row.unshift weaknesses_size
+    total = scores.sum do |row, weaknesses|
+      row.unshift weaknesses.size
 
       row.inject &:*
     end

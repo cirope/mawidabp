@@ -82,7 +82,7 @@ module ConclusionReviews::NbcPdf
       w_c = pdf.bounds.width / 4
 
       pdf.table(column_data, cell_style: { size: (PDF_FONT_SIZE * 0.75).round, inline_format: true },
-                :column_widths => w_c)
+                column_widths: w_c)
     end
 
     def put_nbc_brief_on pdf
@@ -156,7 +156,7 @@ module ConclusionReviews::NbcPdf
         I18n.t('conclusion_review.nbc.scores.level_risk'),
         I18n.t('conclusion_review.nbc.scores.status'),
         I18n.t('conclusion_review.nbc.scores.age_parameter'),
-        I18n.t('conclusion_review.nbc.scores.weighing'),
+        I18n.t('conclusion_review.nbc.scores.weighing')
       ]
     end
 
@@ -175,7 +175,6 @@ module ConclusionReviews::NbcPdf
 
     def put_nbc_conclusion_on pdf
 
-
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.audit_conclusion'), inline_format: true
 
@@ -188,7 +187,10 @@ module ConclusionReviews::NbcPdf
         pdf.move_down PDF_FONT_SIZE * 5
 
         pdf.font_size (PDF_FONT_SIZE).round do
-          pdf.text I18n.t('conclusion_review.nbc.weaknesses.highest_responsible', responsible: manager&.full_name), inline_format: true
+          if manager
+            pdf.text I18n.t('conclusion_review.nbc.weaknesses.highest_responsible', responsible: manager&.full_name), inline_format: true
+          end
+
           pdf.text I18n.t('conclusion_review.nbc.weaknesses.signature_label'), inline_format: true
           pdf.text I18n.t('conclusion_review.nbc.weaknesses.organization'), inline_format: true
         end
