@@ -114,11 +114,10 @@ module ConclusionReviews::NbcPdf
 
       data = [nbc_header_scores]
 
-      nbc_get_weaknesses_by_risk.each do |row, weakness|
-        risk_text       = weakness.first.risk_text
-        weaknesses_size = weakness.size
+      nbc_get_weaknesses_by_risk.each do |row, weaknesses|
+        risk_text       = weaknesses.first.risk_text
 
-        row.unshift weaknesses_size
+        row.unshift weaknesses.size
 
         weight = row.inject &:*
 
