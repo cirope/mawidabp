@@ -188,11 +188,10 @@ module ConclusionReviews::NbcPdf
 
         pdf.font_size (PDF_FONT_SIZE).round do
           if manager
-            pdf.text I18n.t('conclusion_review.nbc.weaknesses.highest_responsible', responsible: manager&.full_name), inline_format: true
+            pdf.text I18n.t('conclusion_review.nbc.weaknesses.highest_responsible', responsible: manager.full_name), inline_format: true
+            pdf.text I18n.t('conclusion_review.nbc.weaknesses.signature_label'), inline_format: true
+            pdf.text I18n.t('conclusion_review.nbc.weaknesses.organization'), inline_format: true
           end
-
-          pdf.text I18n.t('conclusion_review.nbc.weaknesses.signature_label'), inline_format: true
-          pdf.text I18n.t('conclusion_review.nbc.weaknesses.organization'), inline_format: true
         end
       end
 
