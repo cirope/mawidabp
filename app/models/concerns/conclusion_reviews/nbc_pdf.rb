@@ -173,7 +173,6 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_conclusion_on pdf
-
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.audit_conclusion'), inline_format: true
 
