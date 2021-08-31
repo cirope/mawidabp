@@ -123,4 +123,8 @@ module WeaknessesHelper
       [t("suggested_type_probabilities.#{key}"), value]
     end
   end
+
+  def formated_issue_amount weakness
+    number_to_currency weakness.issues_amount, separator: ',', delimiter: '.'
+  end
 end
