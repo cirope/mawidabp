@@ -198,6 +198,7 @@ module ConclusionReviews::NbcPdf
 
     def put_nbc_weaknesses_detailed_on pdf
       title_options = [(PDF_FONT_SIZE * 1.5).round, :center, false]
+
       pdf.add_title I18n.t('conclusion_review.nbc.weaknesses.detailed_review'), *title_options
 
       pdf.move_down PDF_FONT_SIZE * 2
