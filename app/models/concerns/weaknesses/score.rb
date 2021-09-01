@@ -43,11 +43,11 @@ module Weaknesses::Score
     days = date - follow_up_date
 
     case
-    when days.to_i <= 2.years.to_i / 3600 / 24
+    when days.days <= 2.years
       1
-    when days.to_i <= 4.years.to_i / 3600 / 24
+    when days.days <= 4.years
       1.5
-    when days.to_i <= 6.years.to_i / 3600 / 24
+    when days.days <= 6.years
       2
     else
       2.5
