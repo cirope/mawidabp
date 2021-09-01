@@ -241,14 +241,15 @@ module ConclusionReviews::NbcPdf
           align: :center
         )
       end
-
-      pdf.start_new_page
     end
 
     def put_nbc_weaknesses_detected_on pdf
+      pdf.start_new_page
+
       pdf.text I18n.t('conclusion_review.nbc.weaknesses_detected.name')
 
       weaknesses.each do |weakness|
+        pdf.move_down PDF_FONT_SIZE
         put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.title')
 
         pdf.move_down PDF_FONT_SIZE
@@ -276,8 +277,6 @@ module ConclusionReviews::NbcPdf
 
         pdf.move_down PDF_FONT_SIZE
         nbc_responsible_and_follow_up_date weakness, pdf
-
-        pdf.start_new_page
       end
     end
 
