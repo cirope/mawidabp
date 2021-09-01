@@ -30,6 +30,10 @@ module Parameters::Score
       DEFAULT_SCORE_BY_WEAKNESSES.merge scores.symbolize_keys
     end
 
+    def scores_by_weighted date = nil
+      scores_for_date date || Time.zone.today
+    end
+
     private
 
       def scores_for_date date
