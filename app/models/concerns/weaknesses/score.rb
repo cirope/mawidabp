@@ -40,14 +40,14 @@ module Weaknesses::Score
   end
 
   def age_weight date: Time.zone.today
-    days = date - follow_up_date
+    age_in_days = (date - follow_up_date).days
 
     case
-    when days.days <= 2.years
+    when age_in_days <= 2.years
       1
-    when days.days <= 4.years
+    when age_in_days <= 4.years
       1.5
-    when days.days <= 6.years
+    when age_in_days <= 6.years
       2
     else
       2.5
