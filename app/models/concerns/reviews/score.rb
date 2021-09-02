@@ -17,12 +17,8 @@ module Reviews::Score
       self.class.scores(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
-    when :weaknesses, :none
+    when :weaknesses, :none, :weaknesses_alt
       self.class.scores_by_weaknesses(date).to_a.sort do |s1, s2|
-        s2[1].to_i <=> s1[1].to_i
-      end
-    when :weaknesses_alt
-      self.class.scores_by_weighted(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
     end
