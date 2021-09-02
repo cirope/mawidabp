@@ -23,6 +23,6 @@
 
 <%= link_to_add_fields(
   t('finding.add_issue'), f,
-  (:issues unless readonly), nil,
+  :issues, nil,
   { insert_into: '#weakness_issues' }
-) %>
+) unless readonly %>
