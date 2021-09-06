@@ -80,6 +80,8 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings sorted with search by date' do
+    expected_count = USE_SCOPE_CYCLE ? 3 : 4
+
     get :index, params: {
       completion_state: 'incomplete',
       search: {
@@ -90,7 +92,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 4, assigns(:findings).count
+    assert_equal expected_count, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date }
   end
 
