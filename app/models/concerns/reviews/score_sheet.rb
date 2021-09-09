@@ -105,16 +105,25 @@ module Reviews::ScoreSheet
       process_controls = collect_process_controls
 
       process_controls.each do |process_control, coi_data|
-        effectiveness = control_objective_effectiveness_for coi_data
-        exclude       = coi_data.all? { |e| e[3] }
-        row           =
-          process_control_row_data(process_control, effectiveness, exclude)
+        effectiveness      = control_objective_effectiveness_for coi_data
+        effectiveness_text = effectiveness_text coi_data
+        exclude            = coi_data.all? { |e| e[3] }
+        row                =
+          process_control_row_data(process_control, effectiveness, exclude, effectiveness_text: effectiveness_text)
 
         row_data << row
         row_data += control_objective_row_data coi_data
       end
 
       row_data
+    end
+
+    def effectiveness_text coi_data
+      option = nil
+
+      coi_data.each {|e| option = e[5]}
+
+      option
     end
 
     def initial_control_objective_row_data

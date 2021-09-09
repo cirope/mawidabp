@@ -155,15 +155,15 @@ es:
       pdf_name: "analisis_de_costos_%{from_date}_al_%{to_date}.pdf"
       detailed_title: "ANÁLISIS DE COSTOS\nDETALLADO POR INFORME\nDE AUDITORÍA INTERNA"
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin tareas en el plan"
+      without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       period:
         title: "Intervalo"
     cost_summary:
       pdf_name: "resumen_de_costos_%{from_date}_al_%{to_date}.pdf"
       title: "RESUMEN DE COSTOS\nDE AUDITORÍA INTERNA"
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin tareas en el plan"
+      without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       column_month: "Mes"
       column_estimated_amount: "Unidades estimadas"
       column_real_amount: "Unidades reales"
@@ -215,7 +215,7 @@ es:
       pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
       title: "Beneficios / Perjuicios"
       subtitle: "INFORMES DEFINITIVOS"
-      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      without_audits_in_the_period: 'Sin tareas con beneficios / perjuicios en el periodo'
       total: 'Monto total: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
@@ -226,22 +226,22 @@ es:
         one: '%{effectiveness} en un informe'
         other: '%{effectiveness} en %{count} informes'
       without_weaknesses: 'Sin observaciones'
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
+      without_audits_in_the_period: 'Sin tareas en el periodo'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
     control_objective_stats_by_review:
       pdf_name: 'observaciones_por_objetivo_de_control_sin_calificacion_%{from_date}_al_%{to_date}.pdf'
       title: 'OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL SIN CALIFICACIÓN'
       subtitle: 'INFORMES DEFINITIVOS'
       without_weaknesses: 'Sin observaciones'
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
+      without_audits_in_the_period: 'Sin tareas en el plan'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES SOLUCIONADAS - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto solucionadas en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto solucionadas en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin tareas de riesgo alto solucionadas en el plan"
+      without_audits_in_the_interval: "Sin tareas de riesgo alto solucionadas en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     high_risk_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
@@ -249,8 +249,8 @@ es:
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin tareas de riesgo alto en el plan"
+      without_audits_in_the_interval: "Sin tareas de riesgo alto en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     period:
       title: "Intervalo"
@@ -264,7 +264,7 @@ es:
         one: '%{effectiveness} con observaciones en un informe'
         other: '%{effectiveness} con observaciones en %{count} informes'
       without_weaknesses: 'Sin observaciones'
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
+      without_audits_in_the_period: 'Sin tareas en el plan'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
     qa_indicators:
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
@@ -272,7 +272,7 @@ es:
       indicator: "Indicador"
       value: "Valor"
       pdf_name: "indicadores_de_calidad_%{from_date}_al_%{to_date}.pdf"
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
+      without_audits_in_the_period: 'Sin tareas en el plan'
       indicators:
         highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
@@ -285,8 +285,8 @@ es:
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       organization_score: "Calificación de la organización: %{score}% (*)"
       organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin tareas en el plan"
+      without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
       generic_score_average:
@@ -337,7 +337,7 @@ es:
       weaknesses: "Observaciones"
       oportunities: "Oportunidades"
       without_weaknesses: "Sin observaciones"
-      pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_informes_definitivos_por_tipo_de_tarea_%{from_date}_al_%{to_date}.pdf"
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
       total: "TOTAL"
 
@@ -408,7 +408,7 @@ es:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
-      project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
+      project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de UPLA correspondiente al siguiente proceso:"
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
@@ -454,7 +454,7 @@ es:
       control_objective_oportunities: "Oportunidades"
       finding_work_papers: "Papeles de trabajo del hallazgo"
     scope_detail:
-      title: "CALIFICACION DE LOS DISTINTOS ITEMS EVALUADOS DENTRO DEL ALCANCE DE ESTA AUDITORIA"
+      title: "CALIFICACION DE LOS DISTINTOS ITEMS EVALUADOS DENTRO DEL ALCANCE DE ESTA TAREA"
 
   control_objective:
     errors:
@@ -513,8 +513,8 @@ es:
       title: "RESUMEN GERENCIAL\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES EN EJECUCIÓN"
       clarification: "Nota: las Observaciones / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin tareas en el plan"
+      without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
       references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
@@ -522,8 +522,8 @@ es:
     planned_cost_summary:
       pdf_name: "resumen_de_costos_planificados_%{from_date}_al_%{to_date}.pdf"
       title: "RESUMEN DE COSTOS PLANIFICADOS\nDE AUDITORÍA INTERNA"
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin tareas en el plan"
+      without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       column_month: "Mes"
       column_estimated_amount: "Unidades estimadas"
     planned_cost_summary_title: "Análisis de costos planificados"
@@ -607,11 +607,11 @@ es:
       column_review: "Informe"
       column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)"
       column_audited_cost: "Cantidad de horas dedicas a la solución (suma de las horas de seguimiento de los auditados)"
-      title: "ANALISIS DE COSTOS\nDE SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA\nPOR INFORME DE AUDITORIA INTERNA"
+      title: "ANALISIS DE COSTOS\nDE SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA\nPOR INFORME DE LA TAREA INTERNA"
       weaknesses: "OBSERVACIONES"
       oportunities: "OPORTUNIDADES DE MEJORA"
-      without_weaknesses: "Sin Observaciones en el periodo"
-      without_oportunities: "Sin Oportunidades de Mejora en el periodo"
+      without_weaknesses: "Sin Observaciones en el plan"
+      without_oportunities: "Sin Oportunidades de Mejora en el plan"
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
 
   follow_up_committee:
@@ -664,7 +664,7 @@ es:
       pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
       title: "Beneficios / Perjuicios"
       subtitle: "INFORMES DEFINITIVOS"
-      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      without_audits_in_the_period: 'Sin tareas con beneficios / perjuicios en el plan'
       total: 'Monto total: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
@@ -681,15 +681,15 @@ es:
       title: 'OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL SIN CALIFICACIÓN'
       subtitle: "SEGUIMIENTO DE INFORMES"
       without_weaknesses: 'Sin observaciones'
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
+      without_audits_in_the_period: 'Sin tareas en el plan'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES SOLUCIONADAS - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto solucionadas en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto solucionadas en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin tareas de riesgo alto solucionadas en el plan"
+      without_audits_in_the_interval: "Sin tareas de riesgo alto solucionadas en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     high_risk_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
@@ -697,8 +697,8 @@ es:
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin tareas de riesgo alto en el plan"
+      without_audits_in_the_interval: "Sin tareas de riesgo alto en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     period:
       title: "Intervalo"
@@ -712,7 +712,7 @@ es:
         one: '%{effectiveness} con observaciones en un informe'
         other: '%{effectiveness} con observaciones en %{count} informes'
       without_weaknesses: 'Sin observaciones'
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
+      without_audits_in_the_period: 'Sin tareas en el plan'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
@@ -721,7 +721,7 @@ es:
       indicator: "Indicador"
       value: "Valor"
       pdf_name: "indicadores_de_calidad_%{from_date}_al_%{to_date}.pdf"
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
+      without_audits_in_the_period: 'Sin tareas en el plan'
       indicators:
         production_level: "Nivel de Producción"
         highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
@@ -737,8 +737,8 @@ es:
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
       organization_score: "Calificación de la organización: %{score}% (*)"
       organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin tareas en el plan"
+      without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
       generic_score_average:
@@ -775,7 +775,7 @@ es:
       weaknesses: "Observaciones"
       oportunities: "Oportunidades"
       without_weaknesses: "Sin observaciones"
-      pdf_name: "observaciones_seguimiento_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_seguimiento_por_tipo_de_tarea_%{from_date}_al_%{to_date}.pdf"
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR TIPO DE AUDITORÍA"
       total: "TOTAL"
 
@@ -824,7 +824,7 @@ es:
     changes_notification:
       title: "Notificación de cambios"
     conclusion_review_notification:
-      title: "Informe de auditoría %{type} %{review}"
+      title: "Informe de UPLA %{type} %{review}"
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
       final: "definitivo"
       draft: "borrador"
@@ -904,7 +904,7 @@ es:
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
-      without_audit_recommendations: "no tiene recomendaciones de auditoria"
+      without_audit_recommendations: "no tiene recomendaciones de tarea"
 
   pdf:
     export: "Exportar"
@@ -1104,7 +1104,7 @@ es:
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
-      without_audit_recommendations: "no tiene recomendaciones de auditoria"
+      without_audit_recommendations: "no tiene recomendaciones de tarea"
 
   welcome:
     index_title: "Bienvenido"

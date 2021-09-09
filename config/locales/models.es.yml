@@ -125,8 +125,8 @@ es:
         one: 'Versión'
         other: 'Versiones'
       period:
-        one: 'Período'
-        other: 'Periodos'
+        one: 'Plan'
+        other: 'Planes'
       permalink:
         one: 'Enlace permanente'
         other: 'Enlaces permanentes'

@@ -15,7 +15,7 @@ module ConclusionReviews::UplPdf
     put_upl_applied_procedures             pdf, options
     put_default_finding_assignments_on     pdf
     put_upl_closing_interviews             pdf
-    put_default_review_signatures_table_on pdf
+    put_upl_review_signatures_table_on     pdf
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -291,7 +291,7 @@ module ConclusionReviews::UplPdf
       pdf.repeat :all do
         font_size = PDF_HEADER_FONT_SIZE
 
-        pdf.add_organization_image organization, font_size
+        pdf.add_organization_image organization, font_size * 0.75
 
         y_pointer = pdf.y
 
@@ -306,7 +306,7 @@ module ConclusionReviews::UplPdf
               column_widths: [column_width * 0.45, column_width * 0.4, column_width * 0.15],
               cell_style:    {
                 align: :right,
-                size:  (font_size * 0.75).round
+                size:  (font_size * 1).round
               }
           end
         end
@@ -318,11 +318,10 @@ module ConclusionReviews::UplPdf
     def upl_table_data_header
       [
         [
-          { content: "", rowspan: 3 }, I18n.t('conclusion_final_review.downloads.general_assistant_manager'),
-          { content: I18n.t('conclusion_final_review.downloads.page_number'), rowspan: 3 }
+          { content: "", rowspan: 2 }, I18n.t('conclusion_final_review.downloads.general_assistant_manager'),
+          { content: I18n.t('conclusion_final_review.downloads.page_number'), rowspan: 2 }
         ],
-        [I18n.t('conclusion_final_review.downloads.departmental_management')],
-        [I18n.t('conclusion_final_review.downloads.departmental_assistant_manager')],
+        [I18n.t('conclusion_final_review.downloads.departmental_management')]
       ]
     end
 
@@ -344,6 +343,43 @@ module ConclusionReviews::UplPdf
             size: (font_size * 0.75)
           pdf.draw_text string_sheet, at: [x, (font_size.pt * 1.75)],
             size: (font_size * 0.75)
+        end
+      end
+    end
+
+    def put_upl_review_signatures_table_on pdf
+      users = review.review_user_assignments.select(&:include_signature)
+      users = users.sort_by { |rua| rua.assignment_type }
+
+      if users.present?
+        column_data    = [[]]
+        column_headers = []
+        column_widths  = []
+
+        users.each do |rua, i|
+          column_headers << "<b>#{rua.user.roles.first.name}</b>"
+          column_data[0] << "\n\n\n\n#{rua.user.full_name}"
+          column_widths  << pdf.percent_width(
+            100.0 / users.size)
+        end
+
+        pdf.font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
+          table_options = {
+            header: true,
+              cell_style: {
+                padding: (PDF_FONT_SIZE * 0.3).round,
+                inline_format: true
+            },
+            width: column_widths.sum,
+            column_widths: column_widths
+          }
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              background_color: 'cccccc',
+              padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       end
     end
