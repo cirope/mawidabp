@@ -8,7 +8,7 @@
   <div class="col-2 text-right" data-sum-amount-impact-risks data-current-currency="<%= t 'number.currency.format.unit' %>">
     <div class="row">
       <div class="col-10 text-right">
-        <%= formated_issue_amount @weakness%>
+        <%= number_to_currency @weakness.issues_amount %>
       </div>
     </div>
   </div>

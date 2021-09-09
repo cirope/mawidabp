@@ -396,8 +396,6 @@ module ConclusionReviews::PatPdf
                    [
                      Issue.human_attribute_name('amount'),
                      number_to_currency(issue.amount,
-                                        separator: ',',
-                                        delimiter: '.',
                                         unit: issue.currency || default_currency)
                    ].join ': '
                  end
