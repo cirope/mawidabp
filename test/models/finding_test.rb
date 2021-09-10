@@ -1566,7 +1566,7 @@ class FindingTest < ActiveSupport::TestCase
     Current.organization = organizations :cirope
     Current.user         = users :auditor
 
-    assert_nil @finding.probability_risk_previous
+    assert_equal @finding.probability_risk_previous, 0
 
     @finding.weakness_template = weakness_templates :security
 
