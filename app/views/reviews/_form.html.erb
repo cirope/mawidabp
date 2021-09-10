@@ -101,18 +101,6 @@
           </div>
         <% end %>
       </div>
-
-      <h5 class="h6 mt-3">
-        <%= BusinessUnitTypeReview.human_attribute_name 'business_unit_type_id' %>
-      </h5>
-
-      <div>
-        <%= f.simple_fields_for :business_unit_type_reviews do |but_r| %>
-          <%= render 'business_unit_type_review', f: but_r %>
-        <% end %>
-
-        <%= link_to_add_fields t('.add_business_unit_type'), f, :business_unit_type_reviews %>
-      </div>
     <% end %>
 
     <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
