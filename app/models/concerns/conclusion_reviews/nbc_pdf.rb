@@ -168,7 +168,7 @@ module ConclusionReviews::NbcPdf
 
     def nbc_get_weaknesses_by_risk
       weaknesses.select { |w| w.state_weight > 0 }.group_by do |w|
-        [w.risk_weight, w.state_weight, w.age_weight]
+        [w.risk_weight, w.state_weight, w.age_weight(date: issue_date)]
       end
     end
 
