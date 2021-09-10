@@ -6,7 +6,7 @@
   </div>
 
   <div class="list-group list-group-flush">
-    <% plan_business_unit_type_list.each do |but, count_plan_items| %>
+    <% count_plan_items_for_allowed_business_unit_types.each do |but, count_plan_items| %>
       <%= link_to_plan_business_unit_type but do %>
         <%= but&.name || t('plans.without_business_unit_type') %>
         <span class="float-right">

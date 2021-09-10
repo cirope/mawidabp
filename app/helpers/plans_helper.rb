@@ -55,6 +55,14 @@ module PlansHelper
   end
 
   def plan_business_unit_type_list
+    grouped_plan_items = @plan.grouped_plan_items
+
+    BusinessUnitType.allowed_business_unit_types.map do |but|
+      [but, Array(grouped_plan_items[but])]
+    end
+  end
+
+  def count_plan_items_for_allowed_business_unit_types
     BusinessUnitType.allowed_business_unit_types.map do |but|
       count = @plan.plan_items.select do |pi|
         pi.business_unit&.business_unit_type_id == but.try(:id) ||
