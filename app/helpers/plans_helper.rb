@@ -50,7 +50,7 @@ module PlansHelper
 
     @plan.plan_items.select do |pi|
       pi.business_unit&.business_unit_type_id == business_unit_type ||
-        pi.auxiliar_business_unit_types.any? { |auxbu| auxbu.business_unit_type_id == business_unit_type}
+        pi.auxiliar_business_unit_types.any? { |auxbu| auxbu.business_unit_type_id == business_unit_type }
     end.sort
   end
 
