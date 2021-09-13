@@ -53,9 +53,9 @@ class ReviewTest < ActiveSupport::TestCase
       )
     end
 
-    # assert @review.score > 0
-    # assert @review.achieved_scale > 0
-    # assert @review.top_scale > 0
+    assert @review.score > 0
+    assert @review.achieved_scale > 0
+    assert @review.top_scale > 0
   end
 
   # Prueba de actualización de un reporte
