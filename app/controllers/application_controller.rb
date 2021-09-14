@@ -37,9 +37,22 @@ class ApplicationController < ActionController::Base
     allowed_by_privileges = @auth_privileges[@current_module] &&
       @auth_privileges[@current_module][privilege]
 
-    allowed_by_type && allowed_by_privileges
+    select_module_in_clidren(privilege) if @drop_down_menu
+    # byebug
+    allowed_by_type && allowed_by_privileges && @current_module
   end
   helper_method :can_perform?
+
+  def select_module_in_clidren(privilege)
+    @current_module = nil
+    # byebug
+    @current_menu_item.children.each do |children_menu_item|
+      if @current_module.blank? && @auth_privileges[children_menu_item.menu_name] && @auth_privileges[children_menu_item.menu_name][privilege]
+        @current_module    = children_menu_item.try(:menu_name)
+        @current_menu_item = children_menu_item
+      end
+    end
+  end
 
   def search_params
     @search_params ||= params[:search]&.permit(:query, columns: []).to_h.symbolize_keys
@@ -193,15 +206,28 @@ class ApplicationController < ActionController::Base
           end
         end
 
-        modules = selected_module ? selected_module.children : []
+        # modules = selected_module ? selected_module.children : []
+
+        if selected_module && !selected_is_drop_down_menu?(selected_module)
+          modules = selected_module.children
+        else
+          modules = []
+        end
       end
 
       selected_module
     end
 
+    def selected_is_drop_down_menu?(selected_module)
+      selected_module.drop_down_menu && @drop_down_menu
+    end
+
     def load_current_module
+      @drop_down_menu = params[:drop_down_menu]
       controller_name = controller_path.split('/').first
-      @current_module ||= module_name_for(controller_name.to_sym).try(:menu_name)
+
+      @current_menu_item ||= module_name_for(controller_name.to_sym)
+      @current_module    ||= @current_menu_item.try(:menu_name)
     end
 
     # Comprueba que se tengan privilegios para la acción en curso, en caso de no
@@ -217,7 +243,10 @@ class ApplicationController < ActionController::Base
         else
           redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
         end
+      else
+        redirect_to @current_menu_item.url if @drop_down_menu
       end
+
     end
 
     def check_group_admin
