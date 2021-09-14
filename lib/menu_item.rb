@@ -23,7 +23,7 @@ class MenuItem
     @children.each { |child| child.parent ||= self }
 
     @drop_down_menu = options[:drop_down_menu] || false
-    @url = @url.merge(drop_down_menu: true) if @drop_down_menu
+    @url            = @url.merge(drop_down_menu: true) if @drop_down_menu
   end
 
   def <=>(other)

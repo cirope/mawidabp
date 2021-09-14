@@ -37,13 +37,13 @@ class ApplicationController < ActionController::Base
     allowed_by_privileges = @auth_privileges[@current_module] &&
       @auth_privileges[@current_module][privilege]
 
-    select_module_in_clidren privilege if @drop_down_menu
+    select_module_in_children privilege if @drop_down_menu
 
     allowed_by_type && allowed_by_privileges && @current_module
   end
   helper_method :can_perform?
 
-  def select_module_in_clidren privilege
+  def select_module_in_children privilege
     @current_module = nil
 
     @current_menu_item.children.each do |children_menu_item|
@@ -56,7 +56,6 @@ class ApplicationController < ActionController::Base
       if @current_module.blank? && allowed_by_type && allowed_by_privileges
         @current_module    = children_menu_item.try(:menu_name)
         @current_menu_item = children_menu_item
-
       end
     end
   end
