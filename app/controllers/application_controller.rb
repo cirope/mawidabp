@@ -37,19 +37,26 @@ class ApplicationController < ActionController::Base
     allowed_by_privileges = @auth_privileges[@current_module] &&
       @auth_privileges[@current_module][privilege]
 
-    select_module_in_clidren(privilege) if @drop_down_menu
-    # byebug
+    select_module_in_clidren privilege if @drop_down_menu
+
     allowed_by_type && allowed_by_privileges && @current_module
   end
   helper_method :can_perform?
 
-  def select_module_in_clidren(privilege)
+  def select_module_in_clidren privilege
     @current_module = nil
-    # byebug
+
     @current_menu_item.children.each do |children_menu_item|
-      if @current_module.blank? && @auth_privileges[children_menu_item.menu_name] && @auth_privileges[children_menu_item.menu_name][privilege]
+      allowed_by_type = ALLOWED_MODULES_BY_TYPE[@auth_user.get_type].try(
+        :include?, children_menu_item.menu_name)
+
+      allowed_by_privileges = @auth_privileges[children_menu_item.menu_name] &&
+        @auth_privileges[children_menu_item.menu_name][privilege]
+
+      if @current_module.blank? && allowed_by_type && allowed_by_privileges
         @current_module    = children_menu_item.try(:menu_name)
         @current_menu_item = children_menu_item
+
       end
     end
   end
@@ -206,19 +213,17 @@ class ApplicationController < ActionController::Base
           end
         end
 
-        # modules = selected_module ? selected_module.children : []
-
-        if selected_module && !selected_is_drop_down_menu?(selected_module)
-          modules = selected_module.children
-        else
+        if selected_module.blank? || selected_module_is_drop_down_menu?(selected_module)
           modules = []
+        else
+          modules = selected_module.children
         end
       end
 
       selected_module
     end
 
-    def selected_is_drop_down_menu?(selected_module)
+    def selected_module_is_drop_down_menu? selected_module
       selected_module.drop_down_menu && @drop_down_menu
     end
 
@@ -236,17 +241,14 @@ class ApplicationController < ActionController::Base
     def check_privileges #:doc:
       current_action = action_name.to_sym
 
-      unless can_perform?(current_action)
-        if request.xhr?
-          render :partial => 'shared/ajax_message', :layout => false,
-            :locals => {:message => t('message.insufficient_privileges')}
-        else
-          redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
-        end
-      else
+      if can_perform? current_action
         redirect_to @current_menu_item.url if @drop_down_menu
+      elsif request.xhr?
+        render :partial => 'shared/ajax_message', :layout => false,
+               :locals => {:message => t('message.insufficient_privileges')}
+      else
+        redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
       end
-
     end
 
     def check_group_admin
