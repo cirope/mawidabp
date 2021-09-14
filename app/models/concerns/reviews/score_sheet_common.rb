@@ -143,12 +143,6 @@ module Reviews::ScoreSheetCommon
     end
 
     def coi_options coi
-      selected_name_qualifications( ControlObjectiveItem.qualifications, coi.compliance_score)
-    end
-
-    def selected_name_qualifications options, value
-      selected = options.rassoc(value)
-
-      return selected ? selected.first : nil
+      ControlObjectiveItem.qualifications.invert[coi.compliance_score]
     end
 end

@@ -359,19 +359,18 @@ module ConclusionReviews::UplPdf
         users.each do |rua, i|
           column_headers << "<b>#{rua.user.roles.first.name}</b>"
           column_data[0] << "\n\n\n\n#{rua.user.full_name}"
-          column_widths  << pdf.percent_width(
-            100.0 / users.size)
+          column_widths  << pdf.percent_width(100.0 / users.size)
         end
 
         pdf.font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
           table_options = {
             header: true,
-              cell_style: {
-                padding: (PDF_FONT_SIZE * 0.3).round,
-                inline_format: true
-            },
             width: column_widths.sum,
-            column_widths: column_widths
+            column_widths: column_widths,
+            cell_style: {
+              padding: (PDF_FONT_SIZE * 0.3).round,
+              inline_format: true
+            },
           }
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
