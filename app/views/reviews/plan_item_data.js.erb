@@ -72,7 +72,7 @@
       $('#estimated_amount').effect('highlight', {}, 2000)
     })
 
-    <% if USE_SCOPE_CYCLE && @plan_item.auxiliar_business_unit_types.any? %>
+    <% if @plan_item.auxiliar_business_unit_types.any? %>
       $('[data-target="auxiliar-business-unit-types"]').html('<%= j render('auxiliar_business_unit_types', format: :html, plan_item: @plan_item) %>')
     <% end %>
 
