@@ -302,7 +302,7 @@ jQuery(function ($) {
       var impactRiskId     = data[1]
       var impactRiskAmount = data[0]
 
-      if (total >= impactRiskAmount) {
+      if (total > impactRiskAmount || (total === 0 && impactRiskAmount === 0)) {
         impactValue = impactRiskId
 
         return false
