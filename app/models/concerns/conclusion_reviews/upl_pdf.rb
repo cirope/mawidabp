@@ -370,7 +370,7 @@ module ConclusionReviews::UplPdf
             cell_style: {
               padding: (PDF_FONT_SIZE * 0.3).round,
               inline_format: true
-            },
+            }
           }
 
           pdf.table(column_data.insert(0, column_headers), table_options) do

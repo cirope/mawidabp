@@ -4,10 +4,9 @@ module Users::Name
   included do
     alias_method :resource_name, :full_name
     alias_method :label, :full_name_with_function
-    alias_method :role_name, :user_role_name
   end
 
-  def user_role_name from = nil
+  def role_name from = nil
     version   = paper_trail.version_at from if from
     version ||= self
 
