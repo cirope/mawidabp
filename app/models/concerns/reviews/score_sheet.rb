@@ -106,7 +106,7 @@ module Reviews::ScoreSheet
 
       process_controls.each do |process_control, coi_data|
         effectiveness      = control_objective_effectiveness_for coi_data
-        effectiveness_text = effectiveness_text(coi_data).first
+        effectiveness_text = effectiveness_text coi_data
         exclude            = coi_data.all? { |e| e[3] }
         row                = process_control_row_data(
                                process_control, effectiveness,
@@ -121,7 +121,7 @@ module Reviews::ScoreSheet
     end
 
     def effectiveness_text coi_data
-      coi_data.map { |e| e[5] }
+      coi_data.first[5]
     end
 
     def initial_control_objective_row_data
