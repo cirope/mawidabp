@@ -77,7 +77,7 @@ es:
       title: 'Crear entrevista de cierre'
     form:
       add_responsible: 'Agregar responsable'
-      add_auditor: 'Agregar auditor'
+      add_auditor: 'Agregar integrante'
       add_assistant: 'Agregar asistente'
     show:
       title: 'Ver entrevista de cierre'
@@ -257,7 +257,7 @@ es:
       title: 'Crear entrevista de inicio'
     form:
       add_responsible: 'Agregar responsable'
-      add_auditor: 'Agregar auditor'
+      add_auditor: 'Agregar integrante'
       add_assistant: 'Agregar asistente'
     show:
       title: 'Ver entrevista de inicio'

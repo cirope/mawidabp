@@ -37,7 +37,7 @@ es:
     excellent: 'Óptimo'
     # Short qualifications
     ok: 'Cumple'
-    observed: 'Cumple medianamente'
+    observed: 'Cumple parcialmente'
     not_apply: 'No cumple'
   risk_types:
     low: 'Bajo'

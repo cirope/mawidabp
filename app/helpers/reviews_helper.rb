@@ -67,7 +67,7 @@ module ReviewsHelper
 
   def user_assignment_type_options_for(user, include_blank: false)
     options = Array(user&.review_assignment_options).map do |k, v|
-      [t("review.user_assignment.type_#{k}"), v]
+      [user.role_name, v]
     end
 
     if include_blank && options.size > 1
