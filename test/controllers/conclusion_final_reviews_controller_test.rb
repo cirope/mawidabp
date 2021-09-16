@@ -124,26 +124,28 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   test 'create conclusion final review' do
     login
     assert_difference 'ConclusionFinalReview.count' do
-      post :create, :params => {
-        :conclusion_final_review => {
-          :review_id => reviews(:review_approved_with_conclusion).id,
-          :issue_date => Date.today,
-          :close_date => Date.tomorrow,
-          :applied_procedures => 'New applied procedures',
-          :conclusion => CONCLUSION_OPTIONS.first,
-          :summary => 'ACT 12',
-          :recipients => 'John Doe',
-          :sectors => 'Area 51',
-          :evolution => EVOLUTION_OPTIONS.second,
-          :evolution_justification => 'Ok',
-          :main_weaknesses_text => 'Some main weakness X',
-          :corrective_actions => 'You should do it this way',
-          :reference => 'Some reference',
-          :observations => 'Some observations',
-          :scope => 'Some scope',
-          :affects_compliance => '0'
+      assert_difference 'Annex.count' do
+        post :create, :params => {
+          :conclusion_final_review => {
+            :review_id => reviews(:review_approved_with_conclusion).id,
+            :issue_date => Date.today,
+            :close_date => Date.tomorrow,
+            :applied_procedures => 'New applied procedures',
+            :conclusion => CONCLUSION_OPTIONS.first,
+            :summary => 'ACT 12',
+            :recipients => 'John Doe',
+            :sectors => 'Area 51',
+            :evolution => EVOLUTION_OPTIONS.second,
+            :evolution_justification => 'Ok',
+            :main_weaknesses_text => 'Some main weakness X',
+            :corrective_actions => 'You should do it this way',
+            :reference => 'Some reference',
+            :observations => 'Some observations',
+            :scope => 'Some scope',
+            :affects_compliance => '0'
+          }
         }
-      }
+      end
     end
   end
 

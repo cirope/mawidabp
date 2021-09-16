@@ -152,6 +152,7 @@ es:
         format: ! '%u%n'
         precision: 2
         separator: ! ','
+        delimiter: '.'
         significant: false
         strip_insignificant_zeros: false
         unit: $

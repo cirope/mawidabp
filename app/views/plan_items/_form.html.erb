@@ -31,6 +31,15 @@
         <% end %>
       </div>
 
+      <div id="auxiliar_business_unit_types_<%= index %>">
+        <% plan_item.auxiliar_business_unit_types.each do |auxiliar_business_unit_type| %>
+          <% auxiliar_business_unit_type_child_index = plan_item.auxiliar_business_unit_types.index auxiliar_business_unit_type %>
+          <%= pi_f.simple_fields_for :auxiliar_business_unit_types, auxiliar_business_unit_type, child_index: auxiliar_business_unit_type_child_index do |aux_bu_t_f| %>
+            <%= render 'plan_items/auxiliar_business_unit_type', f: aux_bu_t_f %>
+          <% end %>
+        <% end %>
+      </div>
+
       <% if plan_item.persisted? %>
         <%= pi_f.input :id, as: :hidden, input_html: { id: "nested_plan_plan_item_#{plan_item.id}" } %>
       <% end %>

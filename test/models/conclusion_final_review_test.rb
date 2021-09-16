@@ -414,6 +414,24 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     }
   end
 
+  test 'duplicate annexes' do
+    conclusion_final_review = conclusion_reviews(:conclusion_past_final_review)
+    conclusion_draft_review = ConclusionDraftReview.where(review_id: conclusion_final_review.review_id).first
+
+    assert conclusion_final_review.annexes.empty?
+    assert conclusion_draft_review.annexes.any?
+
+    assert_difference('conclusion_final_review.annexes.count') do
+      conclusion_final_review.duplicate_annexes_and_images_from_draft
+      conclusion_final_review.save
+    end
+
+    conclusion_final_review.annexes.each_with_index do |annex_duplicate, index|
+      assert_equal annex_duplicate.title, conclusion_draft_review.annexes[index].title
+      assert_equal annex_duplicate.description, conclusion_draft_review.annexes[index].description
+    end
+  end
+
   private
 
     def has_extra_sort_method? organization
