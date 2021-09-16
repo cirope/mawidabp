@@ -291,6 +291,12 @@ class ConclusionDraftReviewsController < ApplicationController
           best_practice_comments_attributes: [
             :id, :best_practice_id, :auditor_comment
           ]
+        ],
+        annexes_attributes: [
+          :id, :title, :description, :_destroy,
+          image_models_attributes: [
+            :id, :image, :image_cache, :_destroy
+          ]
         ]
       )
     end

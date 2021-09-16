@@ -1,6 +1,7 @@
 class ConclusionReview < ApplicationRecord
   include Auditable
   include ParameterSelector
+  include ConclusionReviews::Annexes
   include ConclusionReviews::AttributeTypes
   include ConclusionReviews::BicPdf
   include ConclusionReviews::BundleIndexPdf
@@ -9,12 +10,12 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::CoverPdf
   include ConclusionReviews::CroPdf
   include ConclusionReviews::DefaultPdf
-  include ConclusionReviews::UplPdf
   include ConclusionReviews::DestroyValidation
   include ConclusionReviews::Email
   include ConclusionReviews::FindingsFollowUpPdf
   include ConclusionReviews::FindingsSheetPdf
   include ConclusionReviews::GalPdf
+  include ConclusionReviews::NbcPdf
   include ConclusionReviews::PatPdf
   include ConclusionReviews::Pdf
   include ConclusionReviews::Review

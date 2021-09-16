@@ -6,6 +6,13 @@ module Users::Name
     alias_method :label, :full_name_with_function
   end
 
+  def role_name from = nil
+    version   = paper_trail.version_at from if from
+    version ||= self
+
+    [version.organization_role.role.name, version.string_to_append_if_function, version.string_to_append_if_disable].join
+  end
+
   def informal_name from = nil
     version = paper_trail.version_at(from) || self
 

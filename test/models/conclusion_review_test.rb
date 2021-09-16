@@ -401,6 +401,32 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     Current.user = nil
   end
 
+  test 'nbc pdf conversion' do
+    Current.user = users :auditor
+    organization = organizations :cirope
+
+    assert_nothing_raised do
+      @conclusion_review.nbc_pdf organization
+    end
+
+    size = File.size @conclusion_review.absolute_pdf_path
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert size > 0
+
+    assert_nothing_raised do
+      @conclusion_review.pat_pdf organization, :brief => '1'
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+  ensure
+    Current.user = nil
+  end
+
   test 'create bundle zip' do
     if File.exist?(@conclusion_review.absolute_bundle_zip_path)
       FileUtils.rm @conclusion_review.absolute_bundle_zip_path

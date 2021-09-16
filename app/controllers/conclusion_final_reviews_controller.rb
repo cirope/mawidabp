@@ -75,6 +75,8 @@ class ConclusionFinalReviewsController < ApplicationController
     @conclusion_final_review =
       ConclusionFinalReview.list.new(conclusion_final_review_params)
 
+    @conclusion_final_review.duplicate_annexes_and_images_from_draft
+
     respond_to do |format|
       if @conclusion_final_review.save
         flash.notice = t 'conclusion_final_review.correctly_created'

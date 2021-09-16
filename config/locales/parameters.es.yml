@@ -37,7 +37,7 @@ es:
     excellent: 'Óptimo'
     # Short qualifications
     ok: 'Cumple'
-    observed: 'Cumple medianamente'
+    observed: 'Cumple parcialmente'
     not_apply: 'No cumple'
   risk_types:
     low: 'Bajo'
@@ -55,6 +55,12 @@ es:
     possible: 'Posible'
     probable: 'Probable'
     almost_certain: 'Casi Certeza'
+  suggested_type_risks:
+    representativeness: 'Representatividad'
+    absolute_value: 'Valor absoluto'
+  suggested_type_probabilities:
+    representativeness: 'Representatividad'
+    repeatability: 'Repetitividad'
   score_types:
     satisfactory: 'Satisfactorio'
     improve: 'Necesita mejorar'
