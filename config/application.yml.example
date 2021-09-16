@@ -10,6 +10,15 @@ APP_HOST: 'lvh.me'
 APP_PROTOCOL: 'http'
 EMAIL_ADDRESS: 'noreply@change.me'
 
+EMAIL_METHOD: 'pop3'
+EMAIL_SERVER: 'pop.gmail.com'
+EMAIL_PORT: '995'
+EMAIL_USER_NAME: 'mail@gmail.com'
+EMAIL_PASSWORD: '<password>'
+EMAIL_SSL: 'true'
+
+REGEX_REPLY_EMAIL: 'El .*escribió:'
+
 REDIS_HOST: 'localhost'
 REDIS_PORT: '6379'
 

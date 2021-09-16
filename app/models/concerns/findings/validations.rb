@@ -2,7 +2,7 @@ module Findings::Validations
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :skip_work_paper
+    attr_accessor :skip_work_paper, :can_close_findings
 
     validates :control_objective_item_id, :title, :description, :review_code,
       :organization_id, presence: true
@@ -16,7 +16,7 @@ module Findings::Validations
     validates :brief, presence: true, if: :require_brief?
     validate :validate_answer
     validate :validate_state
-    validate :validate_review_code
+    validate :validate_review_code, if: -> { repeated_of.blank? }
     validate :validate_finding_user_assignments
     validate :validate_manager_presence, if: :validate_manager_presence?
     validate :validate_follow_up_date,   if: :check_dates?
@@ -52,9 +52,10 @@ module Findings::Validations
 
     def validate_follow_up_date
       if kind_of?(Weakness)
-        check_for_blank = being_implemented? ||
-                          implemented?       ||
-                          implemented_audited?
+        check_for_blank = being_implemented?             ||
+                          implemented?                   ||
+                          implemented_audited?           ||
+                          (USE_SCOPE_CYCLE && awaiting?)
 
         errors.add :follow_up_date, :blank         if check_for_blank  && follow_up_date.blank?
         errors.add :follow_up_date, :must_be_blank if !check_for_blank && follow_up_date.present?
@@ -118,7 +119,9 @@ module Findings::Validations
         (new_record? && final) # comes from a final review _clone_
 
       if !skip_validation && state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
-        has_role_to_do_it = Current.user&.supervisor? || Current.user&.manager?
+        has_role_to_do_it = Current.user&.supervisor? ||
+                            Current.user&.manager?    ||
+                            can_close_findings
 
         errors.add :state, :must_be_done_by_proper_role unless has_role_to_do_it
       end

@@ -22,6 +22,10 @@ module AutoCompleteFor::BusinessUnitType
       [conditions.map { |c| "(#{c})" }.join(' AND '), parameters]
     ).order(name: :asc).limit(10)
 
+    if params[:excluded_id].present?
+      @business_unit_types = @business_unit_types.where.not(id: params[:excluded_id])
+    end
+
     respond_to do |format|
       format.json { render json: @business_unit_types }
     end

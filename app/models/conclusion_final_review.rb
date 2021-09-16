@@ -110,8 +110,13 @@ class ConclusionFinalReview < ConclusionReview
         end
 
         if Current.global_weakness_code && finding.kind_of?(Weakness)
-          last_code                 = last_code.next
-          final_finding.review_code = finding.review_code = last_code
+          if finding.repeated_of.present?
+            code = finding.repeated_of.review_code
+          else
+            code = last_code = last_code.next
+          end
+
+          final_finding.review_code = finding.review_code = code
         end
 
         final_finding.save!
