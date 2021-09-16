@@ -35,6 +35,7 @@ APP_AUDITED_MENU_ITEMS = [
         :reports,
         order: 5,
         url: { controller: '/follow_up_audited' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :audited,
@@ -59,6 +60,7 @@ APP_AUDITOR_MENU_ITEMS = [
         :organization,
         order: 1,
         url: { controller: '/organizations' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :management,
@@ -85,6 +87,7 @@ APP_AUDITOR_MENU_ITEMS = [
         :security,
         order: 2,
         url: { controller: '/users' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :users,
@@ -109,8 +112,22 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :best_practices,
         order: 3,
-        controllers: :best_practices,
-        url: { controller: '/best_practices' }
+        url: { controller: '/best_practices' },
+        drop_down_menu: true,
+        children: [
+          MenuItem.new(
+            :best_practices,
+            order: 1,
+            controllers: :best_practices,
+            url: { controller: '/best_practices' }
+          ),
+          MenuItem.new(
+            :control_objectives,
+            order: 1,
+            controllers: :control_objectives,
+            url: { controller: '/control_objectives' }
+          )
+        ]
       ),
       MenuItem.new(
         :settings,
@@ -164,6 +181,7 @@ APP_AUDITOR_MENU_ITEMS = [
         :questionnaires,
         order: 12,
         url: { controller: '/questionnaires' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :definition,
@@ -257,6 +275,7 @@ APP_AUDITOR_MENU_ITEMS = [
         :interviews,
         order: 6,
         url: { controller: '/opening_interviews' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :opening_interviews,
@@ -341,6 +360,7 @@ APP_AUDITOR_MENU_ITEMS = [
         :reports,
         order: 5,
         url: { controller: '/follow_up_audited' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :audited,
