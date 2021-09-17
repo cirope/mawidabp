@@ -11,7 +11,7 @@
           id: "plan_item_auxiliar_business_unit_type_#{id}",
           title: t('label.search'), autocomplete: :off, autofocus: true,
           data: {
-            autocomplete_params: { kind: 'plan_item', excluded_id: excluded_id },
+            autocomplete_params: { kind: 'plan_item', plan_item_id: plan_item_id },
             autocomplete_url: url_for([:auto_complete_for_business_unit_type, Plan]),
             autocomplete_id_target: "#hidden_business_unit_type_#{id}"
           }
