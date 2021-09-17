@@ -102,17 +102,11 @@
         <% end %>
       </div>
 
-      <h5 class="h6 mt-3">
-        <%= BusinessUnitTypeReview.human_attribute_name 'business_unit_type_id' %>
-      </h5>
-
-      <div>
-        <%= f.simple_fields_for :business_unit_type_reviews do |but_r| %>
-          <%= render 'business_unit_type_review', f: but_r %>
-        <% end %>
-
-        <%= link_to_add_fields t('.add_business_unit_type'), f, :business_unit_type_reviews %>
-      </div>
+      <% if @review.persisted? && @review.plan_item.auxiliar_business_unit_types.any? %>
+        <%= render partial: 'auxiliar_business_unit_types', locals: { plan_item: @review.plan_item } %>
+      <% else %>
+        <div data-target="auxiliar-business-unit-types"></div>
+      <% end %>
     <% end %>
 
     <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>

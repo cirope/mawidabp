@@ -6,7 +6,6 @@ class Review < ApplicationRecord
   include Reviews::AutomaticIdentification
   include Reviews::Approval
   include Reviews::BestPracticeComments
-  include Reviews::BusinessUnitTypes
   include Reviews::Clone
   include Reviews::ConclusionReview
   include Reviews::ControlObjectiveItems

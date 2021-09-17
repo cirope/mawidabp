@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_10_201109) do
+ActiveRecord::Schema.define(version: 2021_09_10_152202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -159,15 +159,6 @@ ActiveRecord::Schema.define(version: 2021_08_10_201109) do
     t.datetime "updated_at", null: false
     t.index ["business_unit_id"], name: "index_business_unit_scores_on_business_unit_id"
     t.index ["control_objective_item_id"], name: "index_business_unit_scores_on_control_objective_item_id"
-  end
-
-  create_table "business_unit_type_reviews", force: :cascade do |t|
-    t.bigint "business_unit_type_id", null: false
-    t.bigint "review_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["business_unit_type_id"], name: "index_business_unit_type_reviews_on_business_unit_type_id"
-    t.index ["review_id"], name: "index_business_unit_type_reviews_on_review_id"
   end
 
   create_table "business_unit_type_users", force: :cascade do |t|
@@ -1294,8 +1285,6 @@ ActiveRecord::Schema.define(version: 2021_08_10_201109) do
   add_foreign_key "business_unit_kinds", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "control_objective_items", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "business_unit_type_reviews", "business_unit_types", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "business_unit_type_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_users", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_users", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict
