@@ -26,7 +26,7 @@ module AutoCompleteFor::BusinessUnitType
       plan_item    = PlanItem.find params[:plan_item_id]
       excluded_ids = []
 
-      excluded_ids << plan_item.business_unit.id
+      excluded_ids << plan_item.business_unit_type.id
 
       plan_item.auxiliar_business_unit_types.each { |aux_but| excluded_ids << aux_but.business_unit_type_id }
 

@@ -363,11 +363,12 @@ class PlansControllerTest < ActionController::TestCase
     assert_equal 1, business_unit_types.size # One only
     assert business_unit_types.all? { |u| u['label'].match /cycle/i }
 
-    get :auto_complete_for_business_unit_type, params: { q: 'cycle', excluded_id: business_unit_types(:cycle).id }, as: :json
+    get :auto_complete_for_business_unit_type, params: { q: 'C', plan_item_id: plan_items(:current_plan_item_1).id }, as: :json
     assert_response :success
 
     business_unit_types = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, business_unit_types.size # Cycle is excluded in params
+    assert_equal 1, business_unit_types.size # Cycle and Consolidated Sustantive is excluded in params
+    assert_equal 'B.C.R.A.', business_unit_types[0]['label']
   end
 end
