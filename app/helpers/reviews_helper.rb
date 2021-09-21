@@ -241,4 +241,10 @@ module ReviewsHelper
   def count_control_objective_items_by_finished_status review, finished: false
     review.control_objective_items.select { |coi| coi.finished == finished }.count
   end
+
+  def type_review
+    Review::TYPES_REVIEW.map do |key, value|
+      [t("reviews.form.#{key}"), value]
+    end
+  end
 end

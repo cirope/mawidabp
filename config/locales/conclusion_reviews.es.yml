@@ -116,8 +116,7 @@ es:
         to_label: "Miembros del Comité de Auditoría del Nuevo Banco del Chaco S.A."
         from_label: "Gerencia Auditoría Interna – Nuevo Banco del Chaco S.A"
         number_review: "<b>Numero de Informe</b>"
-        prepared_by: "<b>Preparado por</b>"
-        internal_audit: "Auditoría Interna - NBCH"
+        prepared_by: "<b>Preparado por</b> Auditoría Interna - NBCH"
         audit_date: "<b>Fecha de Auditoría</b>"
       weaknesses:
         title: "<b>RESUMEN EJECUTIVO</b>"
@@ -129,14 +128,11 @@ es:
         organization: "<b>Nuevo Banco del Chaco S.A.</b>"
         detailed_review: "INFORME DETALLADO"
         introduction_and_scope: "<b>INTRODUCCION Y ALCANCE DEL TRABAJO</b>"
-        introduction: "Como parte de los procedimientos de revisión de control interno planificados en el marco del plan de Auditoria Interna del Nuevo Banco del Chaco S.A. para el ejercicio que finalizará el %{date}, hemos realizado una revisión del control interno y análisis del ciclo de %{project}"
-        scope: "El alcance de nuestro trabajo incluyó el análisis de los siguientes aspectos"
-        review_procedures: "Asimismo, los procedimientos de revisión efectuados fueron los siguientes:\n• Entrevistas con el administrador del sistema, operadores y responsables del mantenimiento del mismo;\n• Elaboración del borrador preliminar de la auditoría y discusión con los responsables;\n• Redacción del correspondiente informe de debilidades detectadas y conclusión sobre el nivel de adecuación de los controles existentes;\n• Presentación del informe al Comité de Auditoría."
         full_name: "<b>Nombre y Apellido</b>"
         area: "<b>Área</b>"
         responsible_name: "<b>Nombre del Responsable de Regularización</b>"
         follow_up_date: "<b>Fecha Estimada de Regularización</b>"
-        messages: "Nuestro trabajo se realizó en los meses de noviembre y diciembre de 2020, y para llevarlo a cabo se mantuvieron reuniones con el siguiente personal de Entidad:"
+        messages: "Los procedimientos incluyeron la realización de consultas, la inspección de documentación y observación de las actividades y operaciones. Los funcionarios entrevistados fueron:"
       scores:
         cycle: '<b>CLASIFICACION DE CICLO</b>'
         description: 'De acuerdo con la metodología de calificación de ciclos aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, a continuación, exponemos la calificación correspondiente: '
@@ -156,9 +152,11 @@ es:
         inadequate: 'Inadecuado'
 
       weaknesses_detected:
-        name: "Debilidades detectadas"
+        name: "Observaciones de la presente revisión"
+        repeated: "Observaciones de seguimiento"
         title: "<b>Título</b>"
         description: "<b>Descripción</b>"
         effect: "<b>Riesgo Asociado</b>"
+        risk: "<b>Nivel de rieso</b>"
         audit_recommendations: "<b>Sugerencia de Mejora</b>"
         audit_comments: "<b>Comentarios del Responsable</b>"
