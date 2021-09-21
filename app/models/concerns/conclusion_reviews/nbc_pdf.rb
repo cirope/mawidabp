@@ -48,7 +48,7 @@ module ConclusionReviews::NbcPdf
         [I18n.t('conclusion_review.nbc.cover.issue_date'), I18n.l(issue_date, format: :long)  ],
         [I18n.t('conclusion_review.nbc.cover.to'), I18n.t('conclusion_review.nbc.cover.to_label')],
         [I18n.t('conclusion_review.nbc.cover.from'), I18n.t('conclusion_review.nbc.cover.from_label')],
-        [I18n.t('conclusion_review.nbc.cover.cc'), responsibles.join("\n") ]
+        [I18n.t('conclusion_review.nbc.cover.cc'), responsibles&.join("\n") ]
       ]
 
       width_column1 = PDF_FONT_SIZE * 7
