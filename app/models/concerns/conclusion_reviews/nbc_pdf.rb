@@ -267,7 +267,6 @@ module ConclusionReviews::NbcPdf
     def weakness_partial pdf, weakness
       pdf.move_down PDF_FONT_SIZE
       put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.title')
-
       pdf.move_down PDF_FONT_SIZE
       pdf.text weakness.title
 
