@@ -296,7 +296,7 @@ module ConclusionReviews::NbcPdf
     end
 
     def nbc_audit_comment_last audit_comments
-      audit_comments.split("\r\n\r\n").last
+      audit_comments.split("\n\n").last
     end
 
     def nbc_responsible_and_follow_up_date weakness, pdf
