@@ -1393,6 +1393,8 @@ es:
         work_papers: "Papeles de trabajo"
         review_user_assignments: "Integrantes"
         taggings: "Etiquetas"
+        review_objective: "Objectivo del informe"
+        type_review: "Tipo de informe"
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"
