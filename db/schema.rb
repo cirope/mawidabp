@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_10_152202) do
+ActiveRecord::Schema.define(version: 2021_09_20_044345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -971,6 +971,8 @@ ActiveRecord::Schema.define(version: 2021_09_10_152202) do
     t.string "score_type", default: "effectiveness", null: false
     t.integer "score_alt", default: 100, null: false
     t.decimal "manual_score_alt", precision: 6, scale: 2
+    t.text "review_objective"
+    t.integer "type_review"
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "index_reviews_on_identification"
     t.index ["organization_id"], name: "index_reviews_on_organization_id"

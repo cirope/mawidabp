@@ -38,14 +38,17 @@ module ConclusionReviews::NbcPdf
 
       pdf.move_down PDF_FONT_SIZE * 10
 
-      responsibles = review.review_user_assignments.where(owner: true)&.map do |rua|
-                      rua.user.full_name
-                     end
+      if recipients.present?
+        responsibles = recipients.lines.reject(&:blank?).map do |recipient|
+          "• #{recipient}"
+        end
+      end
+
       column_data  = [
         [I18n.t('conclusion_review.nbc.cover.issue_date'), I18n.l(issue_date, format: :long)  ],
         [I18n.t('conclusion_review.nbc.cover.to'), I18n.t('conclusion_review.nbc.cover.to_label')],
         [I18n.t('conclusion_review.nbc.cover.from'), I18n.t('conclusion_review.nbc.cover.from_label')],
-        [I18n.t('conclusion_review.nbc.cover.cc'), responsibles.join("\n") ]
+        [I18n.t('conclusion_review.nbc.cover.cc'), responsibles&.join("\n") ]
       ]
 
       width_column1 = PDF_FONT_SIZE * 7
@@ -74,12 +77,11 @@ module ConclusionReviews::NbcPdf
         [
           I18n.t('conclusion_review.nbc.cover.number_review'),
           review.identification,
-          I18n.t('conclusion_review.nbc.cover.prepared_by'),
-          I18n.t('conclusion_review.nbc.cover.internal_audit')
+          I18n.t('conclusion_review.nbc.cover.prepared_by')
         ]
       ]
 
-      w_c = pdf.bounds.width / 4
+      w_c = pdf.bounds.width / 3
 
       pdf.table(column_data, cell_style: { size: (PDF_FONT_SIZE * 0.75).round, inline_format: true },
                 column_widths: w_c)
@@ -92,7 +94,7 @@ module ConclusionReviews::NbcPdf
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.subtitle'), inline_format: true
 
       pdf.move_down PDF_FONT_SIZE
-      pdf.text review.description, align: :justify, inline_format: true
+      pdf.text review.review_objective, align: :justify, inline_format: true
 
       pdf.start_new_page
     end
@@ -101,50 +103,52 @@ module ConclusionReviews::NbcPdf
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
 
       weaknesses.each do |weakness|
-        pdf.text "• #{weakness.description}" if weakness.being_implemented?
+        pdf.text "• #{weakness.review_code}" if weakness.being_implemented?
       end
 
       pdf.start_new_page
     end
 
     def put_nbc_scores_on pdf
-      pdf.text I18n.t('conclusion_review.nbc.scores.cycle'), inline_format: true
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text I18n.t('conclusion_review.nbc.scores.description')
+      if review[:type_review] == Review::TYPES_REVIEW[:operational_audit]
+        pdf.text I18n.t('conclusion_review.nbc.scores.cycle'), inline_format: true
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.nbc.scores.description')
 
-      data = [nbc_header_scores]
+        data = [nbc_header_scores]
 
-      nbc_get_weaknesses_by_risk.each do |row, weaknesses|
-        risk_text = weaknesses.first.risk_text
+        nbc_get_weaknesses_by_risk.each do |row, weaknesses|
+          risk_text = weaknesses.first.risk_text
 
-        row.unshift weaknesses.size
+          row.unshift weaknesses.size
 
-        weight = row.inject &:*
+          weight = row.inject &:*
 
-        data << [risk_text] + row + [weight]
-      end
-
-      data << nbc_footer_scores(review.score_array)
-
-      pdf.move_down PDF_FONT_SIZE
-
-      pdf.font_size (PDF_FONT_SIZE * 0.75).round do
-        pdf.table data do |t|
-          t.cells.align = :center
-          t.cells.row(0).style(
-            background_color: '6e9fcf',
-            align: :center,
-            font_style: :bold
-          )
-          t.cells.row(-1).style(
-            background_color: '6e9fcf',
-            align: :center,
-            font_style: :bold
-          )
+          data << [risk_text] + row + [weight]
         end
 
+        data << nbc_footer_scores(review.score_array)
+
         pdf.move_down PDF_FONT_SIZE
-        pdf.text I18n.t('conclusion_review.nbc.scores.legend_score')
+
+        pdf.font_size (PDF_FONT_SIZE * 0.75).round do
+          pdf.table data do |t|
+            t.cells.align = :center
+            t.cells.row(0).style(
+              background_color: '6e9fcf',
+              align: :center,
+              font_style: :bold
+            )
+            t.cells.row(-1).style(
+              background_color: '6e9fcf',
+              align: :center,
+              font_style: :bold
+            )
+          end
+
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text I18n.t('conclusion_review.nbc.scores.legend_score')
+        end
       end
     end
 
@@ -205,23 +209,12 @@ module ConclusionReviews::NbcPdf
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.introduction_and_scope'), inline_format: true
 
       pdf.move_down PDF_FONT_SIZE
-      pdf.text I18n.t('conclusion_review.nbc.weaknesses.introduction',
-                      date: I18n.l(review.plan_item.end, format: :long),
-                      project: review.plan_item.project)
-
-      pdf.move_down PDF_FONT_SIZE * 2
-      pdf.text I18n.t('conclusion_review.nbc.weaknesses.scope')
-
-      pdf.move_down PDF_FONT_SIZE
       pdf.text applied_procedures, align: :justify, inline_format: true
-
-      pdf.move_down PDF_FONT_SIZE * 2
-      pdf.text I18n.t('conclusion_review.nbc.weaknesses.review_procedures')
 
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages')
 
-      data = review.review_user_assignments.select(&:include_signature).map do |rua|
+      data = review.review_user_assignments.select(&:audited?).map do |rua|
                [rua.user.full_name, rua.user.full_name]
              end
 
@@ -246,38 +239,64 @@ module ConclusionReviews::NbcPdf
     def put_nbc_weaknesses_detected_on pdf
       pdf.start_new_page
 
+      repeated = weaknesses.not_revoked.where.not repeated_of_id: nil
+
+      if repeated.any?
+        pdf.text I18n.t('conclusion_review.nbc.weaknesses_detected.repetead')
+
+        repeated.each_with_index do |weakness, idx|
+          weakness_partial pdf, weakness
+
+          pdf.start_new_page if idx < repeated.size - 1
+        end
+      end
+
       pdf.text I18n.t('conclusion_review.nbc.weaknesses_detected.name')
 
-      weaknesses.each do |weakness|
-        pdf.move_down PDF_FONT_SIZE
-        put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.title')
+      weaknesses.where(repeated_of_id: nil).each_with_index do |weakness, idx|
+        weakness_partial pdf, weakness
 
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text weakness.title
-
-        pdf.move_down PDF_FONT_SIZE
-        put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.description')
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text weakness.description
-
-        pdf.move_down PDF_FONT_SIZE
-        put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.effect')
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text weakness.effect
-
-        pdf.move_down PDF_FONT_SIZE
-        put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.audit_recommendations')
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text weakness.audit_recommendations
-
-        pdf.move_down PDF_FONT_SIZE
-        put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.audit_comments')
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text weakness.audit_comments
-
-        pdf.move_down PDF_FONT_SIZE
-        nbc_responsible_and_follow_up_date weakness, pdf
+        pdf.start_new_page if idx < weaknesses.size - 1
       end
+    end
+
+    def weakness_partial pdf, weakness
+      pdf.move_down PDF_FONT_SIZE
+      put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.title')
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text weakness.title
+
+      pdf.move_down PDF_FONT_SIZE
+      put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.description')
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text weakness.description
+
+      pdf.move_down PDF_FONT_SIZE
+      put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.effect')
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text weakness.effect
+
+      pdf.move_down PDF_FONT_SIZE
+      put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.risk')
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text weakness.risk_text
+
+      pdf.move_down PDF_FONT_SIZE
+      put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.audit_recommendations')
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text weakness.audit_recommendations
+
+      pdf.move_down PDF_FONT_SIZE
+      put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.audit_comments')
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text nbc_audit_comment_last weakness.audit_comments
+
+      pdf.move_down PDF_FONT_SIZE
+      nbc_responsible_and_follow_up_date weakness, pdf
+    end
+
+    def nbc_audit_comment_last audit_comments
+      audit_comments.split("\r\n\r\n").last
     end
 
     def nbc_responsible_and_follow_up_date weakness, pdf
