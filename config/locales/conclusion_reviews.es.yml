@@ -157,6 +157,6 @@ es:
         title: "<b>Título</b>"
         description: "<b>Descripción</b>"
         effect: "<b>Riesgo Asociado</b>"
-        risk: "<b>Nivel de rieso</b>"
+        risk: "<b>Nivel de riesgo</b>"
         audit_recommendations: "<b>Sugerencia de Mejora</b>"
         audit_comments: "<b>Comentarios del Responsable</b>"

@@ -247,9 +247,7 @@ module ConclusionReviews::NbcPdf
         repeated.each_with_index do |weakness, idx|
           weakness_partial pdf, weakness
 
-          if idx < repeated.size - 1
-            pdf.start_new_page
-          end
+          pdf.start_new_page if idx < repeated.size - 1
         end
       end
 
@@ -258,9 +256,7 @@ module ConclusionReviews::NbcPdf
       weaknesses.where(repeated_of_id: nil).each_with_index do |weakness, idx|
         weakness_partial pdf, weakness
 
-        if idx < weaknesses.size - 1
-          pdf.start_new_page
-        end
+        pdf.start_new_page if idx < weaknesses.size - 1
       end
     end
 
