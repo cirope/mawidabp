@@ -70,7 +70,8 @@ module ConclusionReviews::PatRtf
     end
 
     def put_pat_cover_header_on_rtf document
-      but_names = [review.business_unit_type.name] + review.business_unit_types.map(&:name)
+      but_names = [review.business_unit_type.name] +
+                  review.plan_item.auxiliar_business_unit_types.map { |aux_bu| aux_bu.business_unit_type.name }
       to_text   = I18n.t 'conclusion_review.pat.cover.to', receiver: pat_receiver
 
       header_right_identifacion = style bold: true, size: 1.1
