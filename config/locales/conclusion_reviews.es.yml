@@ -106,6 +106,13 @@ es:
         subtitle: "Programa de Trabajo"
       footer:
         text: "Auditoría"
+      rtf:
+        cover:
+          bank: "Banco Patagonia S.A."
+          department: "Gerencia de Auditoría Interna"
+          to: "A: %{receiver}"
+        weaknesses:
+          risk: "Nivel de riesgo:"
     nbc:
       cover:
         title: "<b>Informe de Auditoría Interna</b>"
