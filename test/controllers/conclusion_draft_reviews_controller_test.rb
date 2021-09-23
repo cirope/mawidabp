@@ -243,6 +243,18 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
+  test 'export to rtf conclusion draft review' do
+    login
+
+    conclusion_review = ConclusionDraftReview.find(
+      conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
+
+    assert_nothing_raised do
+      get :export_to_rtf, :params => { :id => conclusion_review.id },
+        format: :rtf
+    end
+  end
+
   test 'score sheet of draft review' do
     login
 
