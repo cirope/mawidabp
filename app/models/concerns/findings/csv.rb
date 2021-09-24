@@ -49,7 +49,11 @@ module Findings::Csv
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
+      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?),
+      (try(:weakness_template)&.notes&.to_s if USE_SCOPE_CYCLE).to_s,
+      (try(:weakness_template)&.title&.to_s if USE_SCOPE_CYCLE).to_s,
+      (try(:weakness_template)&.reference&.to_s if USE_SCOPE_CYCLE).to_s,
+      (review.period if USE_SCOPE_CYCLE)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -341,7 +345,12 @@ module Findings::Csv
           (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
-          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?)
+          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?),
+          (WeaknessTemplate.human_attribute_name('notes') if USE_SCOPE_CYCLE),
+          (WeaknessTemplate.human_attribute_name('title') if USE_SCOPE_CYCLE),
+          (WeaknessTemplate.human_attribute_name('reference') if USE_SCOPE_CYCLE),
+          (Period.human_attribute_name('description') if USE_SCOPE_CYCLE),
+          (I18n.t('finding.weakness_template_previous') if USE_SCOPE_CYCLE)
         ].compact
       end
   end
