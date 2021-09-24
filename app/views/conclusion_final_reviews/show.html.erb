@@ -95,10 +95,12 @@ end %>
 <div>
   <%= link_to_edit edit_conclusion_final_review_path(@conclusion_final_review) %> |
   <%= link_to_index conclusion_final_reviews_path %> |
-  <% if %w(gal pat).include? Current.conclusion_pdf_format %>
+  <% if %w(gal).include? Current.conclusion_pdf_format %>
     <%= render 'gal_downloads' %>
   <% elsif Current.conclusion_pdf_format == 'bic' %>
     <%= render 'bic_downloads' %>
+  <% elsif Current.conclusion_pdf_format == 'pat' %>
+    <%= render 'pat_downloads' %>
   <% elsif Current.conclusion_pdf_format != 'default' %>
     <%= render('shared/downloads',
       right: true,

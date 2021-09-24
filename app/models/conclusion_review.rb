@@ -10,6 +10,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::CoverPdf
   include ConclusionReviews::CroPdf
   include ConclusionReviews::DefaultPdf
+  include ConclusionReviews::DefaultRtf
   include ConclusionReviews::DestroyValidation
   include ConclusionReviews::Email
   include ConclusionReviews::FindingsFollowUpPdf
