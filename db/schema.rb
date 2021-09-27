@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_20_044345) do
+ActiveRecord::Schema.define(version: 2021_09_27_165030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -26,6 +26,23 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
     t.datetime "updated_at", null: false
     t.index ["benefit_id"], name: "index_achievements_on_benefit_id"
     t.index ["finding_id"], name: "index_achievements_on_finding_id"
+  end
+
+  create_table "activities", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "activity_group_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "require_detail", default: false, null: false
+    t.index ["activity_group_id"], name: "index_activities_on_activity_group_id"
+  end
+
+  create_table "activity_groups", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_activity_groups_on_organization_id"
   end
 
   create_table "annexes", force: :cascade do |t|
@@ -528,6 +545,7 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
     t.string "use_suggested_probability"
     t.decimal "impact_amount", precision: 17, scale: 2
     t.decimal "probability_amount", precision: 17, scale: 2
+    t.boolean "extension", default: false, null: false
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -1117,6 +1135,19 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
     t.index ["finding_id"], name: "index_tasks_on_finding_id"
   end
 
+  create_table "time_consumptions", force: :cascade do |t|
+    t.date "date", null: false
+    t.decimal "amount", precision: 3, scale: 1, null: false
+    t.bigint "resource_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "resource_type", default: "Activity"
+    t.text "detail"
+    t.index ["resource_id"], name: "index_time_consumptions_on_resource_id"
+    t.index ["user_id"], name: "index_time_consumptions_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name", limit: 100
     t.string "last_name", limit: 100
@@ -1240,6 +1271,8 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
 
   add_foreign_key "achievements", "benefits", on_update: :restrict, on_delete: :restrict
   add_foreign_key "achievements", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "activities", "activity_groups", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "activity_groups", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "annexes", "conclusion_reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "auxiliar_business_unit_types", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "auxiliar_business_unit_types", "plan_items", on_update: :restrict, on_delete: :restrict
@@ -1356,6 +1389,7 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tasks", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "time_consumptions", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict

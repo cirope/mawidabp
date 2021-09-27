@@ -175,7 +175,18 @@
           <% end %>
         <% end %>
         <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
-        <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
+        <% if USE_SCOPE_CYCLE %>          
+          <div class="row">
+            <div class="col-9">
+              <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
+            </div>
+            <div class="col-3 text-right">
+              <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' } %>
+            </div>
+          </div>
+        <% else %>
+          <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
+        <% end %>
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
 

@@ -687,6 +687,7 @@ es:
         probability: 'Probabilidad'
         impact_risk: 'Impacto'
         manual_risk: 'Manual'
+        extension: 'Prorroga'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
