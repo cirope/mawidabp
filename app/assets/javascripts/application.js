@@ -19,6 +19,7 @@
 //= require popper
 //= require bootstrap
 //
+//= require add_days_to_input
 //= require ajax
 //= require autocomplete
 //= require best_practices
@@ -57,6 +58,7 @@
 //= require risk_assessment_templates
 //= require risk_assessments
 //= require select_change_label
+//= require select_enable_checkbox
 //= require sessions
 //= require show
 //= require tags

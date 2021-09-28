@@ -147,10 +147,13 @@
         <% options_for_select = if USE_SCOPE_CYCLE
                                   {
                                     data:
-                                      { target_value: Finding::STATUS[:implemented_audited],
+                                      { target_value_change_label: Finding::STATUS[:implemented_audited],
                                         suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
                                         target_label: :follow_up_date,
-                                        form_class: f.object.class.name }
+                                        form_class: f.object.class.name,
+                                        target_value_enable_checkbox: Finding::STATUS[:being_implemented],
+                                        target_checkbox: :extension,
+                                        disabled_and_deny: true }
                                   }
                                 else
                                   {}
@@ -175,13 +178,24 @@
           <% end %>
         <% end %>
         <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
-        <% if USE_SCOPE_CYCLE %>          
+        <% if USE_SCOPE_CYCLE %>    
+          <% options_for_extension_checkbox = if USE_SCOPE_CYCLE
+                                                {
+                                                  data:
+                                                    { date_input_target: :follow_up_date,
+                                                      form_class: f.object.class.name,
+                                                      add_days: 90,
+                                                      from_date: :origination_date }
+                                                }
+                                              else
+                                                {}
+                                              end %>       
           <div class="row">
             <div class="col-9">
               <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
             </div>
             <div class="col-3 text-right">
-              <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' } %>
+              <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' }, input_html: options_for_extension_checkbox %>
             </div>
           </div>
         <% else %>

@@ -13,7 +13,7 @@ jQuery(function () {
     var idLabel = element.data('formClass').toLowerCase().concat('_', element.data('targetLabel'))
     var $labelTarget = $('label[for="' + idLabel + '"]')
 
-    if (element.find(':selected').val() == element.data('targetValue')) {  
+    if (element.find(':selected').val() == element.data('targetValueChangeLabel')) {  
       var text = $labelTarget.text().concat(element.data('suffix'))
     } else {
       var text = $labelTarget.text().split(element.data('suffix'))[0]
