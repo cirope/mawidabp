@@ -51,7 +51,7 @@ module ConclusionReviews::NbcPdf
         [I18n.t('conclusion_review.nbc.cover.cc'), responsibles&.join("\n") ]
       ]
 
-      width_column1 = PDF_FONT_SIZE * 8
+      width_column1 = PDF_FONT_SIZE * 7
       width_column2 = pdf.bounds.width - width_column1
 
       pdf.table(column_data, cell_style: { inline_format: true }, column_widths: [width_column1, width_column2]) do
@@ -66,7 +66,7 @@ module ConclusionReviews::NbcPdf
         )
       end
 
-      pdf.move_down PDF_FONT_SIZE * 15
+      pdf.move_down (pdf.y - PDF_FONT_SIZE.pt * 10)
       put_nbc_grid pdf
 
       pdf.start_new_page
@@ -240,8 +240,7 @@ module ConclusionReviews::NbcPdf
       pdf.start_new_page
 
       repeated      = weaknesses.not_revoked.where.not repeated_of_id: nil
-      title_options = [(PDF_FONT_SIZE * 1.5).round, :center, false]
-
+      title_options = [(PDF_FONT_SIZE).round, :center, false]
 
       if repeated.any?
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.repeated'), *title_options
