@@ -43,7 +43,7 @@ class WeaknessTest < ActiveSupport::TestCase
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true,
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
@@ -99,7 +99,7 @@ class WeaknessTest < ActiveSupport::TestCase
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true,
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
