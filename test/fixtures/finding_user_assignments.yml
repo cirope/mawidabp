@@ -17,7 +17,7 @@ being_implemented_weakness_audited:
   finding_type: Weakness
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 being_implemented_weakness_bare:
   finding: being_implemented_weakness
@@ -66,7 +66,7 @@ unconfirmed_for_notification_weakness_audited:
   finding_type: Weakness
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 unconfirmed_for_notification_weakness_bare:
   finding: unconfirmed_for_notification_weakness
@@ -102,7 +102,7 @@ unanswered_for_level_<%= level %>_notification_audited:
   finding_type: Weakness
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 unanswered_for_level_<%= level %>_notification_bare:
   finding: unanswered_for_level_<%= level %>_notification
@@ -139,7 +139,7 @@ incomplete_weakness_audited:
   finding_type: Weakness
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 incomplete_weakness_bare:
   finding: incomplete_weakness
@@ -181,7 +181,7 @@ other_unconfirmed_for_notification_weakness_audited:
   finding_type: Weakness
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 other_unconfirmed_for_notification_weakness_bare:
   finding: other_unconfirmed_for_notification_weakness
@@ -223,7 +223,7 @@ notify_oportunity_audited:
   finding_type: Oportunity
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 notify_oportunity_bare:
   finding: notify_oportunity
@@ -265,7 +265,7 @@ being_implemented_oportunity_audited:
   finding_type: Oportunity
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 being_implemented_oportunity_first_time:
   finding: being_implemented_oportunity
@@ -307,7 +307,7 @@ being_implemented_weakness_on_draft_audited:
   finding_type: Weakness
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 being_implemented_weakness_on_draft_bare:
   finding: being_implemented_weakness_on_draft
@@ -349,7 +349,7 @@ unanswered_weakness_audited:
   finding_type: Weakness
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 unanswered_weakness_bare:
   finding: unanswered_weakness
@@ -391,7 +391,7 @@ unconfirmed_weakness_audited:
   finding_type: Weakness
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 unconfirmed_weakness_bare:
   finding: unconfirmed_weakness
@@ -433,7 +433,7 @@ unconfirmed_oportunity_audited:
   finding_type: Oportunity
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 unconfirmed_oportunity_bare:
   finding: unconfirmed_oportunity
@@ -475,7 +475,7 @@ confirmed_oportunity_audited:
   finding_type: Oportunity
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 confirmed_oportunity_bare:
   finding: confirmed_oportunity
@@ -517,7 +517,7 @@ being_implemented_weakness_on_final_audited:
   finding_type: Weakness
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 being_implemented_weakness_on_final_bare:
   finding: being_implemented_weakness_on_final
@@ -559,7 +559,7 @@ confirmed_oportunity_on_draft_audited:
   finding_type: Oportunity
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 confirmed_oportunity_on_draft_bare:
   finding: confirmed_oportunity_on_draft
@@ -601,7 +601,7 @@ being_implemented_weakness_on_approved_draft_audited:
   finding_type: Weakness
   user: audited
   process_owner: true
-  responsible_auditor: true
+  responsible_auditor: false
 
 being_implemented_weakness_on_approved_draft_bare:
   finding: being_implemented_weakness_on_approved_draft
