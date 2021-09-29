@@ -30,4 +30,27 @@ module Weaknesses::Score
       origination_date &&
       (origination_date < date - 2.years)
   end
+
+  def risk_weight
+    risk.next
+  end
+
+  def state_weight
+    being_implemented? ? 1 : 0
+  end
+
+  def age_weight date: Time.zone.today
+    age_in_days = (date - follow_up_date).days
+
+    case
+    when age_in_days <= 2.years
+      1
+    when age_in_days <= 4.years
+      1.5
+    when age_in_days <= 6.years
+      2
+    else
+      2.5
+    end
+  end
 end

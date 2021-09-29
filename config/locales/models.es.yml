@@ -720,6 +720,7 @@ es:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
               required: 'debe tener un auditado responsable'
               must_have_a_manager: 'debe contener un gerente de auditoría'
+              reference_auditor_required: 'debe tener un auditor referente'
         finding_user_assignment:
           attributes:
             user:

@@ -1,6 +1,8 @@
 module ConclusionReviews::PatPdf
   extend ActiveSupport::Concern
 
+  include ActionView::Helpers::NumberHelper
+
   def pat_pdf organization = nil, *args
     options = args.extract_options!.with_indifferent_access
     pdf     = Prawn::Document.create_generic_pdf :portrait, hide_brand: true, footer: false
@@ -45,7 +47,8 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_cover_header_on pdf, brief: false
-      but_names = [review.business_unit_type.name] + review.business_unit_types.map(&:name)
+      but_names = [review.business_unit_type.name] +
+                  review.plan_item.auxiliar_business_unit_types.map { |aux_bu| aux_bu.business_unit_type.name }
       to_text   = I18n.t 'conclusion_review.pat.cover.to', receiver: pat_receiver
       from_text = I18n.t 'conclusion_review.pat.cover.from', business_unit_types: but_names.to_sentence
 
@@ -384,6 +387,8 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_issues_on pdf, weakness
+      default_currency = I18n.t 'number.currency.format.unit'
+
       pdf.move_down PDF_FONT_SIZE
       pdf.text Issue.model_name.human(count: 0), style: :bold
 
@@ -391,7 +396,8 @@ module ConclusionReviews::PatPdf
         amount_text = if issue.amount
                    [
                      Issue.human_attribute_name('amount'),
-                     [issue.currency, issue.amount].compact.join
+                     number_to_currency(issue.amount,
+                                        unit: issue.currency || default_currency)
                    ].join ': '
                  end
 

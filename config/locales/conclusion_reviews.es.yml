@@ -93,7 +93,7 @@ es:
         previous_title: "%{prefix} Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."
         current_title:
           cycle: "%{prefix} Observaciones surgidas durante la revisión correspondiente al año %{year}."
-          sustantive: "%{prefix} Observaciones del ciclo surgidas durante la revisión correspondiente al Plan %{year}."
+          sustantive: "%{prefix} Observaciones del ciclo surgidas durante la revisión correspondiente al %{year}."
         follow_up: "%{prefix} Seguimiento de aspectos observados en otras inspecciones."
         current_situation: "Situación Actual:"
         risk: "<b>Nivel de riesgo</b>: %{risk}"
@@ -106,3 +106,63 @@ es:
         subtitle: "Programa de Trabajo"
       footer:
         text: "Auditoría"
+      rtf:
+        cover:
+          bank: "Banco Patagonia S.A."
+          department: "Gerencia de Auditoría Interna"
+          to: "A: %{receiver}"
+        weaknesses:
+          risk: "Nivel de riesgo:"
+    nbc:
+      cover:
+        title: "<b>Informe de Auditoría Interna</b>"
+        issue_date: "<b>Fecha</b>"
+        to: "<b>A</b>"
+        from: "<b>DE</b>"
+        cc: "<b>CC</b>"
+        to_label: "Miembros del Comité de Auditoría del Nuevo Banco del Chaco S.A."
+        from_label: "Gerencia Auditoría Interna – Nuevo Banco del Chaco S.A"
+        number_review: "<b>Numero de Informe</b>"
+        prepared_by: "<b>Preparado por</b> Auditoría Interna - NBCH"
+        audit_date: "<b>Fecha de Auditoría</b>"
+      weaknesses:
+        title: "<b>RESUMEN EJECUTIVO</b>"
+        subtitle: "<b>Objetivo</b>"
+        main_observations: "<b>Observaciones en proceso de regularización</b>"
+        audit_conclusion: "<b>Conclusión General de la Auditoría</b>"
+        highest_responsible: "<b>%{responsible}</b>"
+        signature_label: "<b>Gerencia de Auditoría Interna</b>"
+        organization: "<b>Nuevo Banco del Chaco S.A.</b>"
+        detailed_review: "INFORME DETALLADO"
+        introduction_and_scope: "<b>INTRODUCCION Y ALCANCE DEL TRABAJO</b>"
+        full_name: "<b>Nombre y Apellido</b>"
+        area: "<b>Área</b>"
+        responsible_name: "<b>Nombre del Responsable de Regularización</b>"
+        follow_up_date: "<b>Fecha Estimada de Regularización</b>"
+        messages: "Los procedimientos incluyeron la realización de consultas, la inspección de documentación y observación de las actividades y operaciones. Los funcionarios entrevistados fueron:"
+      scores:
+        cycle: '<b>CLASIFICACION DE CICLO</b>'
+        description: 'De acuerdo con la metodología de calificación de ciclos aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, a continuación, exponemos la calificación correspondiente: '
+        legend_score: "Para la determinación de esta calificación hemos evaluado:\n  • el nivel de criticidad de nuestras observaciones y su impacto sobre la estructura de control interno de la Entidad;\n • las respuestas a nuestras observaciones que nos fueron enviadas por los responsables y el plan de acción desarrollado a efectos de regularizar las situaciones observadas;\n  • las consideraciones sobre los sistemas aplicativos y sus controles automáticos, cuyas conclusiones se detallan en el informe SIS 2020 - 15 Ciclo Inversiones surgidas del informe de Auditoria de Sistemas;\n  • los controles manuales compensatorios y la suficiencia de la documentación de respaldo almacenada; y\n  • la antigüedad de las observaciones"
+        risk: 'Riesgo'
+        amount_weaknesses: 'Cantidad de Observaciones'
+        level_risk: 'Nievel de riesgo'
+        status: 'Estado'
+        age_parameter: 'Parámetro Antigüedad'
+        weighing: 'Ponderación'
+        footer_table: 'Calificación de GIR'
+      results_by_weighting:
+        adequate: 'Adecuado'
+        require_some_improvements: 'Requiere algunas mejoras'
+        require_improvements: 'Ajustado'
+        require_lots_of_improvements: 'Requiere mejoras significativas'
+        inadequate: 'Inadecuado'
+
+      weaknesses_detected:
+        name: "Observaciones de la presente revisión"
+        repeated: "Observaciones de seguimiento"
+        title: "<b>Título</b>"
+        description: "<b>Descripción</b>"
+        risk: "<b>Nivel de riesgo</b>"
+        audit_recommendations: "<b>Sugerencia de Mejora</b>"
+        audit_comments: "<b>Comentarios del Responsable</b>"

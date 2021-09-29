@@ -6,7 +6,6 @@ class Review < ApplicationRecord
   include Reviews::AutomaticIdentification
   include Reviews::Approval
   include Reviews::BestPracticeComments
-  include Reviews::BusinessUnitTypes
   include Reviews::Clone
   include Reviews::ConclusionReview
   include Reviews::ControlObjectiveItems
@@ -33,6 +32,7 @@ class Review < ApplicationRecord
   include Reviews::Search
   include Reviews::SortColumns
   include Reviews::SurveyPdf
+  include Reviews::TypeReview
   include Reviews::UpdateCallbacks
   include Reviews::Users
   include Reviews::Validations

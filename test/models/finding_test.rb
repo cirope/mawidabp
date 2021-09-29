@@ -46,7 +46,7 @@ class FindingTest < ActiveSupport::TestCase
               user_id: users(:audited).id, process_owner: true
             },
             new_2: {
-              user_id: users(:auditor).id, process_owner: false
+              user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
             },
             new_3: {
               user_id: users(:supervisor).id, process_owner: false
@@ -100,7 +100,7 @@ class FindingTest < ActiveSupport::TestCase
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
@@ -1566,7 +1566,7 @@ class FindingTest < ActiveSupport::TestCase
     Current.organization = organizations :cirope
     Current.user         = users :auditor
 
-    assert_nil @finding.probability_risk_previous
+    assert_equal @finding.probability_risk_previous, 0
 
     @finding.weakness_template = weakness_templates :security
 

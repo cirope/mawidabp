@@ -174,7 +174,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               }, {
                 user_id: users(:audited).id, process_owner: '1'
               }, {
-                user_id: users(:auditor).id, process_owner: ''
+                user_id: users(:auditor).id, process_owner: '', responsible_auditor: true
               }, {
                 user_id: users(:manager).id, process_owner: ''
               }, {

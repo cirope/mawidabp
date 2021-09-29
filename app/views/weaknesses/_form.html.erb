@@ -143,7 +143,21 @@
         <%= f.label :state, raw(Weakness.human_attribute_name(:state) + ' ' +
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : '')) %>
-        <%= finding_status_field(f, disabled: readonly || @weakness.issues.any?) %>
+
+        <% options_for_select = if USE_SCOPE_CYCLE
+                                  {
+                                    data:
+                                      { target_value: Finding::STATUS[:implemented_audited],
+                                        suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
+                                        target_label: :follow_up_date,
+                                        form_class: f.object.class.name }
+                                  }
+                                else
+                                  {}
+                                end %>              
+        <%= finding_status_field(f, 
+                                 disabled: readonly || @weakness.issues.any?,
+                                 options_html: options_for_select) %>
 
         <% if show_skip_work_paper_for @weakness %>
           <%= f.input :skip_work_paper, as: :boolean %>

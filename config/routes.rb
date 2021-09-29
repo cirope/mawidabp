@@ -293,6 +293,7 @@ Rails.application.routes.draw do
   resources :conclusion_draft_reviews, except: [:destroy] do
     member do
       get :export_to_pdf
+      get :export_to_rtf
       get :compose_email
       patch :send_by_email
       get :download_work_papers

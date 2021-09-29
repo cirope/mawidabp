@@ -185,6 +185,8 @@ es:
     endorsement_item:
       approve: 'Aprobar'
       reject: 'Rechazar'
+    weakness:
+      follow_up_date_label_append: ' - Realizada'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -581,6 +583,10 @@ es:
         label: 'OCF'
     form:
       add_business_unit_type: 'Agregar sector'
+      operational_audit: 'Auditoría operativa'
+      system_audit: 'Auditoría de sistema'
+    auxiliar_business_unit_types:
+      title: 'Unidades organizativas auxiliares'
 
   users:
     index:
