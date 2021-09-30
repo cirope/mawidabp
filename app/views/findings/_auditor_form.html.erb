@@ -104,7 +104,18 @@
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <%= f.input :answer, input_html: { rows: finding_answer_rows } %>
-        <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
+        <% if USE_SCOPE_CYCLE %>     
+          <div class="row">
+            <div class="col-9">
+              <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
+            </div>
+            <div class="col-3 text-right">
+              <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' }, input_html: { readonly: @finding.tasks.any? } %>
+            </div>
+          </div>
+        <% else %>
+          <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
+        <% end %>
         <% if @finding.follow_up_date && show_follow_up_timestamps? %>
           <%= show_weakness_previous_follow_up_dates(@finding) %>
         <% end %>
