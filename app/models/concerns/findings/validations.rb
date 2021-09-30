@@ -21,6 +21,7 @@ module Findings::Validations
     validate :validate_manager_presence, if: :validate_manager_presence?
     validate :validate_follow_up_date,   if: :check_dates?
     validate :validate_solution_date,    if: :check_dates?
+    validate :extension_enabled,         if: :extension
   end
 
   def is_in_a_final_review?
@@ -189,5 +190,18 @@ module Findings::Validations
       from = should_validate && setting&.updated_at
 
       should_validate && from && (new_record? || created_at >= from)
+    end
+
+    def extension_enabled?
+      if being_implemented? && had_extension?
+        errors.add :extension, :had_extension, { extension: Finding.human_attribute_name(:extension) }
+      else
+        errors.add :extension, :must_be_being_implemented, { extension: Finding.human_attribute_name(:extension),
+                                                             state: t('findings.state.being_implemented') }
+      end
+    end
+
+    def had_extension?
+      !extension_was && versions.detect { |v| v.reify&.extension }
     end
 end

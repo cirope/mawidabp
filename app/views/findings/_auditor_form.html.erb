@@ -84,7 +84,19 @@
         <% end %>
         <%= f.label :state, raw(Finding.human_attribute_name(:state) + ' ' +
           (show_history_changes ? finding_show_status_change_history(:finding_status_change_history) : '')) %>
-        <%= finding_status_field(f, disabled: @finding.issues.any?) %>
+
+        <% options_for_select = if USE_SCOPE_CYCLE
+                                  {
+                                    data:
+                                      { form_class: 'finding',
+                                        target_value_enable_checkbox: Finding::STATUS[:being_implemented],
+                                        target_checkbox: :extension,
+                                        disabled_and_deny: true }
+                                  }
+                                else
+                                  {}
+                                end %> 
+        <%= finding_status_field(f, disabled: @finding.issues.any?, options_html: options_for_select) %>
 
         <% if show_skip_work_paper_for @finding %>
           <%= f.input :skip_work_paper, as: :boolean %>
