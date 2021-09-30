@@ -17,7 +17,9 @@ jQuery(function () {
       $checkBox.removeAttr("disabled");
     } else {
       $checkBox.attr("disabled", true);
-      $checkBox.prop('checked', false);
+      if (element.data('disabledAndDeny')) {
+        $checkBox.prop('checked', false);
+      }
     }
   }
 })
