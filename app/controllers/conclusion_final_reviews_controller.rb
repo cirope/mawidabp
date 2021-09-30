@@ -75,6 +75,8 @@ class ConclusionFinalReviewsController < ApplicationController
     @conclusion_final_review =
       ConclusionFinalReview.list.new(conclusion_final_review_params)
 
+    @conclusion_final_review.duplicate_annexes_and_images_from_draft
+
     respond_to do |format|
       if @conclusion_final_review.save
         flash.notice = t 'conclusion_final_review.correctly_created'
@@ -390,7 +392,8 @@ class ConclusionFinalReviewsController < ApplicationController
         :observations, :main_weaknesses_text, :corrective_actions,
         :affects_compliance, :collapse_control_objectives,
         :reference, :scope, :previous_identification, :previous_date,
-        :main_recommendations, :additional_comments, :lock_version,
+        :main_recommendations, :effectiveness_notes, :additional_comments,
+        :lock_version,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [

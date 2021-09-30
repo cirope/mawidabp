@@ -329,6 +329,37 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     FileUtils.rm @conclusion_review.absolute_pdf_path
   end
 
+  test 'upl pdf conversion' do
+    assert_nothing_raised do
+      @conclusion_review.upl_pdf organizations(:cirope)
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+
+    assert_nothing_raised do
+      @conclusion_review.upl_pdf(
+        organizations(:cirope), :hide_score => true
+      )
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
+    assert_nothing_raised do
+      @conclusion_review.upl_pdf organizations(:cirope), :brief => '1'
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+  end
+
   test 'pat pdf conversion' do
     Current.user = users :auditor
     organization = organizations :cirope
@@ -364,6 +395,43 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     end
 
     FileUtils.rm @conclusion_review.absolute_pdf_path
+  ensure
+    Current.user = nil
+  end
+
+  test 'nbc pdf conversion' do
+    Current.user = users :auditor
+    organization = organizations :cirope
+
+    assert_nothing_raised do
+      @conclusion_review.nbc_pdf organization
+    end
+
+    size = File.size @conclusion_review.absolute_pdf_path
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert size > 0
+
+    assert_nothing_raised do
+      @conclusion_review.pat_pdf organization, :brief => '1'
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+  ensure
+    Current.user = nil
+  end
+
+  test 'pat rtf conversion' do
+    Current.user = users :auditor
+    organization = organizations :cirope
+
+    assert_nothing_raised do
+      @conclusion_review.pat_rtf organization
+    end
   ensure
     Current.user = nil
   end

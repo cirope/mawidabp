@@ -8,6 +8,12 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'create' do
+    state = if USE_SCOPE_CYCLE
+              Finding::STATUS[:incomplete]
+            else
+              Finding::STATUS[:notify]
+            end
+
     assert_difference 'Weakness.count' do
       weakness = Weakness.list.create!(
         control_objective_item: control_objective_items(:impact_analysis_item_editable),
@@ -17,7 +23,7 @@ class WeaknessTest < ActiveSupport::TestCase
         brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
-        state: Finding::STATUS[:notify],
+        state: state,
         solution_date: nil,
         origination_date: 1.day.ago.to_date,
         audit_recommendations: 'New proposed action',
@@ -37,7 +43,7 @@ class WeaknessTest < ActiveSupport::TestCase
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
@@ -58,6 +64,12 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'control objective from final review can not be used to create new weakness' do
+    state = if USE_SCOPE_CYCLE
+              Finding::STATUS[:incomplete]
+            else
+              Finding::STATUS[:notify]
+            end
+
     assert_no_difference 'Weakness.count' do
       weakness = Weakness.list.create(
         control_objective_item: control_objective_items(:impact_analysis_item),
@@ -67,7 +79,7 @@ class WeaknessTest < ActiveSupport::TestCase
         brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
-        state: Finding::STATUS[:notify],
+        state: state,
         solution_date: nil,
         origination_date: 1.day.ago.to_date,
         audit_recommendations: 'New proposed action',
@@ -87,7 +99,7 @@ class WeaknessTest < ActiveSupport::TestCase
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false

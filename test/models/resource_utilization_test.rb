@@ -11,7 +11,7 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
       @resource_utilization = ResourceUtilization.create(
         units: '21.5',
         resource_consumer: plan_items(:current_plan_item_1),
-        resource: resources(:laptop_resource)
+        resource: resources(:mouse_resource)
       )
     end
   end
@@ -43,5 +43,16 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
 
     assert @resource_utilization.invalid?
     assert_error @resource_utilization, :units, :not_a_number
+  end
+
+  test 'validates duplicated attributes' do
+    @resource_utilization_dup = @resource_utilization.dup
+
+    assert @resource_utilization_dup.invalid?
+    assert_error @resource_utilization_dup, :resource_id, :taken
+
+    @resource_utilization_dup.resource_consumer_type = 'WorkflowItem'
+
+    assert @resource_utilization_dup.valid?
   end
 end

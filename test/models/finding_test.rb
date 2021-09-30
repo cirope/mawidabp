@@ -10,6 +10,12 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'create' do
+    state = if USE_SCOPE_CYCLE
+              Finding::STATUS[:incomplete]
+            else
+              Finding::STATUS[:notify]
+            end
+
     assert_difference 'Finding.count' do
       assert_difference 'Tagging.count', 2 do
         @finding.class.list.create!(
@@ -20,7 +26,7 @@ class FindingTest < ActiveSupport::TestCase
           brief: 'New brief',
           answer: 'New answer',
           audit_comments: 'New audit comments',
-          state: Finding::STATUS[:notify],
+          state: state,
           origination_date: 1.day.ago.to_date,
           solution_date: nil,
           audit_recommendations: 'New proposed action',
@@ -40,7 +46,7 @@ class FindingTest < ActiveSupport::TestCase
               user_id: users(:audited).id, process_owner: true
             },
             new_2: {
-              user_id: users(:auditor).id, process_owner: false
+              user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
             },
             new_3: {
               user_id: users(:supervisor).id, process_owner: false
@@ -60,6 +66,12 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'control objective from final review can not be used to create new finding' do
+    state = if USE_SCOPE_CYCLE
+              Finding::STATUS[:incomplete]
+            else
+              Finding::STATUS[:notify]
+            end
+
     assert_no_difference 'Finding.count' do
       finding = Finding.list.create(
         control_objective_item: control_objective_items(:impact_analysis_item),
@@ -69,7 +81,7 @@ class FindingTest < ActiveSupport::TestCase
         brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
-        state: Finding::STATUS[:notify],
+        state: state,
         origination_date: 35.days.from_now.to_date,
         audit_recommendations: 'New proposed action',
         effect: 'New effect',
@@ -88,7 +100,7 @@ class FindingTest < ActiveSupport::TestCase
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
@@ -1503,11 +1515,11 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'automatic issue based state' do
-    skip unless USE_SCOPE_CYCLE
+    skip unless USE_SCOPE_CYCLE && SHOW_WEAKNESS_PROGRESS
 
     @finding.issues.build customer: 'Some customer'
 
-    assert @finding.valid?
+    assert @finding.valid?, @finding.errors.full_messages.to_sentence
     assert @finding.awaiting?
 
     Current.user = users :supervisor
@@ -1531,7 +1543,163 @@ class FindingTest < ActiveSupport::TestCase
     Current.user = nil
   end
 
+  test 'issues amount' do
+    @finding.issues.create!(customer: 'Some customer', amount: 10)
+    @finding.issues.create!(customer: 'Some customer dup', amount: 23)
+
+    assert_equal @finding.issues_amount, 33
+  end
+
+  test 'get amount by impact' do
+    amount = 30844081
+
+    @finding.issues.create!(customer: 'Some customer', amount: amount)
+
+    amount_by_impact = @finding.amount_by_impact
+
+    result = amount_by_impact.reverse_each.to_h.detect { |id, value| amount >= value }
+
+    assert_equal result.first,  @finding.impact_risk_value
+  end
+
+  test 'probability risk previuos' do
+    Current.organization = organizations :cirope
+    Current.user         = users :auditor
+
+    assert_equal @finding.probability_risk_previous, 0
+
+    @finding.weakness_template = weakness_templates :security
+
+    assert @finding.valid?
+
+    assert_equal @finding.probability_risk_previous, 1
+
+    weakness_previous = @finding.review.previous.weaknesses.first
+
+    weakness_previous.update_column :weakness_template_id, weakness_templates(:security).id
+
+    assert_equal @finding.probability_risk_previous, 2
+  ensure
+    Current.organization = nil
+    Current.user         = nil
+  end
+
+  test 'notify action not found when subject have no finding_id' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email(supervisor.email, 'subject without id', body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[supervisor.email], "Reply "]
+
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'notify action not found when email does not belong to any user' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+
+    finding = findings :confirmed_oportunity
+
+    body = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email('nouser@nouser.com', "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [['nouser@nouser.com'], "Reply "]
+
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'notify action not found when auditee is not related' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited_second
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email(audited.email, "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[audited.email], "Reply "]
+
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'add finding answer when auditee is related' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email(audited.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, audited
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'add finding answer to finding as supervisor' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+
+    finding    = findings :confirmed_oportunity
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email(supervisor.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, supervisor
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+  end
+
+  test 'valid with same review code when repeated' do
+    @finding.repeated_of = findings(:unconfirmed_weakness)
+    @finding.review_code = findings(:unconfirmed_weakness).review_code
+
+    assert @finding.valid?
+  end
+
   private
+
+    def new_email from, subject, body
+      mail = create_mail from, subject
+
+      mail.text_part = Mail::Part.new do
+        body body
+      end
+
+      mail.html_part = Mail::Part.new do
+        content_type 'text/html; charset=UTF-8'
+        body          body
+      end
+
+      mail
+    end
+
+    def create_mail from, subject
+      Mail.new do
+        from    from
+        to      'support@postman.com'
+        subject subject
+      end
+    end
 
     def review_codes_on_findings_by_user method
       review_codes_by_user = {}

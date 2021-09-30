@@ -36,37 +36,39 @@
   </div>
 
   <div id="resource_utilizations_for_<%= id %>" style="display: none;">
-    <div class="row pl-4" data-nested>
-      <div class="col-md-8">
-        <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'resource' %></h5>
+    <% if !USE_SCOPE_CYCLE %>
+      <div class="row pl-4" data-nested>
+        <div class="col-md-8">
+          <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'resource' %></h5>
+        </div>
+        <div class="col-md-3">
+          <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'units' %></h5>
+        </div>
       </div>
-      <div class="col-md-3">
-        <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'units' %></h5>
+
+      <div id="material_resource_utilizations_<%= id %>">
+        <%= f.simple_fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
+          <%= render 'material_resource_utilization', f: ru_f %>
+        <% end %>
       </div>
-    </div>
 
-    <div id="material_resource_utilizations_<%= id %>">
-      <%= f.simple_fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
-        <%= render 'material_resource_utilization', f: ru_f %>
-      <% end %>
-    </div>
+      <div id="human_resource_utilizations_<%= id %>">
+        <%= f.simple_fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
+          <%= render 'human_resource_utilization', f: ru_f %>
+        <% end %>
+      </div>
 
-    <div id="human_resource_utilizations_<%= id %>">
-      <%= f.simple_fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
-        <%= render 'human_resource_utilization', f: ru_f %>
-      <% end %>
-    </div>
-
-    <p class="pl-4" data-nested>
+      <p class="pl-4" data-nested>
       <%= link_to_add_fields(t('workflow.add_material_resource_utilization'), f, :resource_utilizations,
-        'material_resource_utilization', {
-        insert_into: "#material_resource_utilizations_#{id}", association: 'material_resource_utilizations'
-      } ) %>
-      <%= link_to_add_fields(t('workflow.add_human_resource_utilization'), f, :resource_utilizations,
-        'human_resource_utilization', {
-        insert_into: "#human_resource_utilizations_#{id}", association: 'human_resource_utilizations'
-      } ) %>
-    </p>
+                             'material_resource_utilization', {
+                               insert_into: "#material_resource_utilizations_#{id}", association: 'material_resource_utilizations'
+                             } ) %>
+                           <%= link_to_add_fields(t('workflow.add_human_resource_utilization'), f, :resource_utilizations,
+                                                  'human_resource_utilization', {
+                                                    insert_into: "#human_resource_utilizations_#{id}", association: 'human_resource_utilizations'
+                                                  } ) %>
+                                              <% end %>
+      </p>
   </div>
 </fieldset>
 <script type="text/javascript">

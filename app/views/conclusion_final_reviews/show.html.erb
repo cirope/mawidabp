@@ -51,9 +51,9 @@
 <% end %>
 
 <h5 class="mt-3"><%= t('conclusion_review.conclusion') %></h5>
-<% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
+<% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) && Current.conclusion_pdf_format != 'pat' %>
   <%= conclusion_review_score_text @conclusion_final_review.review %>
-<% elsif Current.conclusion_pdf_format != 'gal' %>
+<% elsif %w(gal pat).exclude? Current.conclusion_pdf_format %>
   <%= conclusion_review_score_details_table @conclusion_final_review.review %>
   <p class="mb-1 small"><%= t('review.review_qualification_explanation') %></p>
 <% end %>
@@ -95,7 +95,7 @@ end %>
 <div>
   <%= link_to_edit edit_conclusion_final_review_path(@conclusion_final_review) %> |
   <%= link_to_index conclusion_final_reviews_path %> |
-  <% if Current.conclusion_pdf_format == 'gal' %>
+  <% if %w(gal pat).include? Current.conclusion_pdf_format %>
     <%= render 'gal_downloads' %>
   <% elsif Current.conclusion_pdf_format == 'bic' %>
     <%= render 'bic_downloads' %>

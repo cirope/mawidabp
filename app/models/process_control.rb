@@ -47,6 +47,10 @@ class ProcessControl < ApplicationRecord
   # Relaciones
   belongs_to :best_practice, optional: true
 
+  def to_s
+    name
+  end
+
   def <=>(other)
     if other.kind_of?(ProcessControl)
       if self.best_practice_id == other.best_practice_id

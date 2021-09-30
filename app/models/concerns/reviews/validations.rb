@@ -4,8 +4,9 @@ module Reviews::Validations
   included do
     validates :identification, :period_id, :plan_item_id, :organization_id, presence: true
     validates :description, presence: true, unless: -> { HIDE_REVIEW_DESCRIPTION }
+    validates :scope, presence: true, if: -> { USE_SCOPE_CYCLE }
+    validates :identification, :scope, length: { maximum: 255 }
     validates :identification,
-      length:      { maximum: 255 },
       format:      { with: /\A\w([.\w\sáéíóúÁÉÍÓÚñÑ-]|\/)*\z/ },
       allow_nil:   true,
       allow_blank: true
@@ -16,7 +17,7 @@ module Reviews::Validations
       :include_sox, pdf_encoding: true
     validates :plan_item_id, uniqueness: { case_sensitive: false }
     validates :score_type, inclusion: {
-      in: %w(effectiveness manual none weaknesses splitted_effectiveness)
+      in: %w(effectiveness manual none weaknesses splitted_effectiveness weaknesses_alt)
     }, allow_blank: true, allow_nil: true
 
     validates :scope,

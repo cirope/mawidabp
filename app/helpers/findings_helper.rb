@@ -1,5 +1,5 @@
 module FindingsHelper
-  def finding_status_field form, disabled: false
+  def finding_status_field form, disabled: false, options_html: {}
     finding = form.object
 
     form.input :state,
@@ -8,7 +8,7 @@ module FindingsHelper
       prompt:     true,
       input_html: {
         disabled: (disabled || finding.unconfirmed?)
-      }
+      }.merge(options_html)
   end
 
   def finding_repeated_of_label form, readonly:
@@ -412,5 +412,17 @@ module FindingsHelper
       summary = review.conclusion_final_review.summary || '-'
 
       "#{ConclusionReview.human_attribute_name 'summary'}: #{summary}"
+    end
+
+    def finding_impact_risks_types finding
+      finding.amount_by_impact.invert.reverse_each.to_json
+    end
+
+    def finding_percentage_impact_risks_types finding
+      finding.percentage_by_impact.invert.reverse_each.to_json
+    end
+
+    def finding_probability_risks_types finding
+      finding.percentage_by_probability.invert.reverse_each.to_json
     end
 end
