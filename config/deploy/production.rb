@@ -1,4 +1,4 @@
-set :branch,    'c-dino'
+set :branch,    'c-dino-production'
 set :stage,     :production
 set :rails_env, 'production'
 
