@@ -26,11 +26,12 @@ module Users::Import
         ou        = row[1]&.gsub /\A(cn|uid)=[\w\s]+,/i, ''
 
         if role_allowed?(role) && username.present?
-          users[username] ||= {}
+          users[username]        ||= {}
+          users[username][:role] ||= []
 
-          role = users[username].has_key?(:role) ? users[username][:role].push(role) : [role]
+          users[username][:role] << role
 
-          users[username].merge!(role: role, user: user_ldap, ou: ou)
+          users[username].merge!(user: user_ldap, ou: ou)
         end
       end
 
@@ -115,30 +116,6 @@ module Users::Import
         hierarchy = managers.split(/\W/).reject &:blank?
 
         hierarchy.first if hierarchy.present?
-      end
-
-      def find_user data
-        User.group_list.by_email(data[:email])             ||
-          User.without_organization.by_email(data[:email]) ||
-          User.list.by_user(data[:user])
-      end
-
-      def update_user user: nil, data: nil, roles: nil
-        new_roles = roles.map do |r|
-          unless user.organization_roles.detect { |o_r| o_r.role_id == r.id }
-            { organization_id: r.organization_id, role_id: r.id }
-          end
-        end
-
-        removed_roles = user.organization_roles.map do |o_r|
-          if roles.map(&:id).exclude? o_r.role_id
-            { id: o_r.id, _destroy: '1' } if o_r.organization_id == Current.organization&.id
-          end
-        end
-
-        data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
-
-        user.update data
       end
 
       def create_user data, roles
