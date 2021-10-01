@@ -54,7 +54,7 @@
           <% end %>
         <% end %>
 
-        <% if %w(default pat).include? Current.conclusion_pdf_format %>
+        <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
           <%= f.input :recipients, input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 2 : 5 } %>
 
           <% if USE_SCOPE_CYCLE %>

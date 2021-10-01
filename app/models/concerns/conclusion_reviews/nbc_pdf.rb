@@ -66,7 +66,7 @@ module ConclusionReviews::NbcPdf
         )
       end
 
-      pdf.move_down PDF_FONT_SIZE * 15
+      pdf.move_down (pdf.y - PDF_FONT_SIZE.pt * 10)
       put_nbc_grid pdf
 
       pdf.start_new_page
@@ -103,7 +103,7 @@ module ConclusionReviews::NbcPdf
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
 
       weaknesses.each do |weakness|
-        pdf.text "• #{weakness.review_code}" if weakness.being_implemented?
+        pdf.text "• #{weakness.title}" if weakness.being_implemented?
       end
 
       pdf.start_new_page
@@ -239,19 +239,20 @@ module ConclusionReviews::NbcPdf
     def put_nbc_weaknesses_detected_on pdf
       pdf.start_new_page
 
-      repeated = weaknesses.not_revoked.where.not repeated_of_id: nil
+      repeated      = weaknesses.not_revoked.where.not repeated_of_id: nil
+      title_options = [(PDF_FONT_SIZE).round, :center, false]
 
       if repeated.any?
-        pdf.text I18n.t('conclusion_review.nbc.weaknesses_detected.repetead')
+        pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.repeated'), *title_options
 
         repeated.each_with_index do |weakness, idx|
           weakness_partial pdf, weakness
 
-          pdf.start_new_page if idx < repeated.size - 1
+          pdf.start_new_page
         end
       end
 
-      pdf.text I18n.t('conclusion_review.nbc.weaknesses_detected.name')
+      pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.name'), *title_options
 
       weaknesses.where(repeated_of_id: nil).each_with_index do |weakness, idx|
         weakness_partial pdf, weakness
@@ -272,11 +273,6 @@ module ConclusionReviews::NbcPdf
       pdf.text weakness.description
 
       pdf.move_down PDF_FONT_SIZE
-      put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.effect')
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text weakness.effect
-
-      pdf.move_down PDF_FONT_SIZE
       put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.risk')
       pdf.move_down PDF_FONT_SIZE
       pdf.text weakness.risk_text
@@ -289,14 +285,10 @@ module ConclusionReviews::NbcPdf
       pdf.move_down PDF_FONT_SIZE
       put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.audit_comments')
       pdf.move_down PDF_FONT_SIZE
-      pdf.text nbc_audit_comment_last weakness.audit_comments
+      pdf.text weakness.answer
 
       pdf.move_down PDF_FONT_SIZE
       nbc_responsible_and_follow_up_date weakness, pdf
-    end
-
-    def nbc_audit_comment_last audit_comments
-      audit_comments.split("\n\n").last
     end
 
     def nbc_responsible_and_follow_up_date weakness, pdf
