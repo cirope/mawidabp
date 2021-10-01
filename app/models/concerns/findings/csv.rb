@@ -46,10 +46,10 @@ module Findings::Csv
       (last_commitment_date_text if self.class.show_follow_up_timestamps?),
       (finding_answers_text if self.class.show_follow_up_timestamps?),
       latest_answer_text,
-      (commitment_support_plans_text if Finding.show_commitment_support?),
-      (commitment_support_controls_text if Finding.show_commitment_support?),
-      (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?),
+      (commitment_support_plans_text if Finding.show_commitment_support?).to_s,
+      (commitment_support_controls_text if Finding.show_commitment_support?).to_s,
+      (commitment_support_reasons_text if Finding.show_commitment_support?).to_s,
+      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?).to_s,
       (try(:weakness_template)&.notes&.to_s if USE_SCOPE_CYCLE).to_s,
       (try(:weakness_template)&.title&.to_s if USE_SCOPE_CYCLE).to_s,
       (try(:weakness_template)&.reference&.to_s if USE_SCOPE_CYCLE).to_s,
@@ -349,7 +349,7 @@ module Findings::Csv
           (WeaknessTemplate.human_attribute_name('notes') if USE_SCOPE_CYCLE),
           (WeaknessTemplate.human_attribute_name('title') if USE_SCOPE_CYCLE),
           (WeaknessTemplate.human_attribute_name('reference') if USE_SCOPE_CYCLE),
-          (Period.human_attribute_name('description') if USE_SCOPE_CYCLE),
+          (Plan.human_attribute_name('period_id') if USE_SCOPE_CYCLE),
           (I18n.t('finding.weakness_template_previous') if USE_SCOPE_CYCLE)
         ].compact
       end
