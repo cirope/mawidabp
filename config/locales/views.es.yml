@@ -199,6 +199,8 @@ es:
     endorsement_item:
       approve: 'Aprobar'
       reject: 'Rechazar'
+    weakness:
+      follow_up_date_label_append: ' - Realizada'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'

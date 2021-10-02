@@ -1,5 +1,5 @@
 module FindingsHelper
-  def finding_status_field form, disabled: false
+  def finding_status_field form, disabled: false, options_html: {}
     finding = form.object
 
     form.input :state,
@@ -8,7 +8,7 @@ module FindingsHelper
       prompt:     true,
       input_html: {
         disabled: (disabled || finding.unconfirmed?)
-      }
+      }.merge(options_html)
   end
 
   def finding_repeated_of_label form, readonly:
