@@ -195,7 +195,7 @@
               <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
             </div>
             <div class="col-3 text-right">
-              <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' }, input_html: { disabled: readonly }.merge options_for_extension_checkbox %>
+              <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' }, input_html: { disabled: readonly }.merge(options_for_extension_checkbox) %>
             </div>
           </div>
         <% else %>

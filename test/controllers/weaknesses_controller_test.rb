@@ -162,6 +162,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             internal_control_components: ['risk_evaluation', 'monitoring'],
             impact_risk: Finding.impact_risks[:small],
             probability: Finding.probabilities[:rare],
+            extension: false,
             manual_risk: '1',
             image_model_attributes: {
               image: Rack::Test::UploadedFile.new(
@@ -295,6 +296,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               internal_control_components: ['risk_evaluation', 'monitoring'],
               impact_risk: Finding.impact_risks[:small],
               probability: Finding.probabilities[:rare],
+              extension: false,
               manual_risk: '1',
               finding_user_assignments_attributes: [
                 {

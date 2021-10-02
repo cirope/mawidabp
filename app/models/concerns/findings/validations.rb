@@ -192,12 +192,12 @@ module Findings::Validations
       should_validate && from && (new_record? || created_at >= from)
     end
 
-    def extension_enabled?
+    def extension_enabled
       if being_implemented? && had_extension?
         errors.add :extension, :had_extension, { extension: Finding.human_attribute_name(:extension) }
-      else
+      elsif !being_implemented?
         errors.add :extension, :must_be_being_implemented, { extension: Finding.human_attribute_name(:extension),
-                                                             state: t('findings.state.being_implemented') }
+                                                             state: I18n.t('findings.state.being_implemented') }
       end
     end
 

@@ -1676,6 +1676,73 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.valid?
   end
 
+  test 'should not extension' do
+    old_use_scope_cycle    = ENV['USE_SCOPE_CYCLE']
+    ENV['USE_SCOPE_CYCLE'] = 'true'
+    finding                = findings :being_implemented_weakness
+    finding.extension      = false
+
+    assert finding.not_extension?
+
+    ENV['USE_SCOPE_CYCLE'] = old_use_scope_cycle
+  end
+
+  test 'should extension' do
+    old_use_scope_cycle    = ENV['USE_SCOPE_CYCLE']
+    ENV['USE_SCOPE_CYCLE'] = 'true'
+    finding                = findings :being_implemented_weakness
+    finding.extension      = true
+
+    refute finding.not_extension?
+
+    ENV['USE_SCOPE_CYCLE'] = old_use_scope_cycle
+  end
+
+  test 'should be valid because has no extension' do
+    finding = findings :being_implemented_weakness
+
+    finding.versions.each { |v| v.object[:extension] = false }
+
+    finding.extension = true
+
+    assert finding.valid?
+  end
+
+  test 'should be invalid because has extension' do
+    finding           = findings :being_implemented_weakness
+    finding.extension = true
+
+    refute finding.valid?
+  end
+
+  test 'should return reschedule' do
+    old_use_scope_cycle    = ENV['USE_SCOPE_CYCLE']
+    ENV['USE_SCOPE_CYCLE'] = 'true'
+    finding                = findings :being_implemented_weakness
+
+    finding.versions.each { |v| v.object[:extension] = false }
+
+    reschedules = finding.calculate_reschedule_count
+
+    assert reschedules.positive?
+
+    ENV['USE_SCOPE_CYCLE'] = old_use_scope_cycle
+  end
+
+  test 'should return not reschedule' do
+    old_use_scope_cycle    = ENV['USE_SCOPE_CYCLE']
+    ENV['USE_SCOPE_CYCLE'] = 'true'
+    finding                = findings :being_implemented_weakness
+
+    finding.versions.each { |v| v.object[:extension] = true }
+
+    reschedules = finding.calculate_reschedule_count
+
+    assert reschedules.zero?
+
+    ENV['USE_SCOPE_CYCLE'] = old_use_scope_cycle
+  end
+
   private
 
     def new_email from, subject, body

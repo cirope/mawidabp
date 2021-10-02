@@ -25,3 +25,39 @@ important_new_version:
   object: {name: 'new_name'}
   important: true
   created_at: <%= Time.now.to_s(:db) %>
+
+finding_being_implemented_weakness_without_extension_before_final_review:
+  item_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness) %>
+  item_type: Finding
+  event: create
+  whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
+  organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
+  object: { extension: false, 
+            follow_up_date: <%= Finding.find(ActiveRecord::FixtureSet.identify('being_implemented_weakness')).follow_up_date - 3.days %>,
+            state: <%= Finding::STATUS[:being_implemented] %> }
+  important: true
+  created_at: <%= Finding.find(ActiveRecord::FixtureSet.identify('being_implemented_weakness')).final_review_created_at - 2.hours %>
+
+finding_being_implemented_weakness_with_extension_after_final_review:
+  item_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness) %>
+  item_type: Finding
+  event: create
+  whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
+  organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
+  object: { extension: true, 
+            follow_up_date: <%= Finding.find(ActiveRecord::FixtureSet.identify('being_implemented_weakness')).follow_up_date - 2.days %>,
+            state: <%= Finding::STATUS[:being_implemented] %> }
+  important: true
+  created_at: <%= Finding.find(ActiveRecord::FixtureSet.identify('being_implemented_weakness')).final_review_created_at + 1.hours %>
+
+finding_being_implemented_weakness_without_extension_after_final_review:
+  item_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness) %>
+  item_type: Finding
+  event: update
+  whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
+  organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
+  object: { extension: false, 
+            follow_up_date: <%= Finding.find(ActiveRecord::FixtureSet.identify('being_implemented_weakness')).follow_up_date - 1.days %>,
+            state: <%= Finding::STATUS[:being_implemented] %> }
+  important: true
+  created_at: <%= Finding.find(ActiveRecord::FixtureSet.identify('being_implemented_weakness')).final_review_created_at + 2.hours %>
