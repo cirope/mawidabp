@@ -155,6 +155,10 @@ module Findings::Validations
         unless finding_user_assignments.any? &:process_owner
           errors.add :finding_user_assignments, :required
         end
+
+        unless finding_user_assignments.any? &:responsible_auditor
+          errors.add :finding_user_assignments, :reference_auditor_required
+        end
       end
 
       unless all_roles_fullfilled_by? users.compact

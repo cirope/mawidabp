@@ -135,7 +135,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).count
+    assert_equal 2, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.users.include?(user) }
   end
 
