@@ -718,13 +718,10 @@ es:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
               required: 'debe tener un auditado responsable'
               must_have_a_manager: 'debe contener un gerente de auditoría'
-<<<<<<< HEAD
             extension:
               must_be_being_implemented: 'Para indicar que es %{extension} debe estar en estado %{state}'
               had_extension: 'Ya tuvo una %{extension} en su historial'
-=======
               reference_auditor_required: 'debe tener un auditor referente'
->>>>>>> master
         finding_user_assignment:
           attributes:
             user:
