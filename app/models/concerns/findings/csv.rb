@@ -53,7 +53,8 @@ module Findings::Csv
       (try(:weakness_template)&.notes&.to_s if USE_SCOPE_CYCLE).to_s,
       (try(:weakness_template)&.title&.to_s if USE_SCOPE_CYCLE).to_s,
       (try(:weakness_template)&.reference&.to_s if USE_SCOPE_CYCLE).to_s,
-      (review.period if USE_SCOPE_CYCLE)
+      (review.period if USE_SCOPE_CYCLE).to_s,
+      (has_previous_review if USE_SCOPE_CYCLE)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -62,6 +63,14 @@ module Findings::Csv
   end
 
   private
+
+    def has_previous_review
+      if weakness_template_id
+        I18n.t "label.#{(previous_weakness_by_template? review&.previous) ? 'yes' : 'no'}"
+      else
+        I18n.t "label.no"
+      end
+    end
 
     def issue_date_text
       issue_date ? I18n.l(issue_date, format: :minimal) : '-'
