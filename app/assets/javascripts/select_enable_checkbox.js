@@ -10,8 +10,7 @@ jQuery(function () {
   })
 
   function modifyCheckbox(element) {
-    var idCheckBox = element.data('formClass').toLowerCase().concat('_', element.data('targetCheckbox'))
-    var $checkBox = $('#' + idCheckBox)
+    var $checkBox = $(element.data('targetCheckbox'))
 
     if (element.find(':selected').val() == element.data('targetValueEnableCheckbox')) {  
       $checkBox.removeAttr("disabled");

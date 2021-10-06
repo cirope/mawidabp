@@ -88,9 +88,8 @@
         <% options_for_select = if USE_SCOPE_CYCLE
                                   {
                                     data:
-                                      { form_class: 'finding',
-                                        target_value_enable_checkbox: Finding::STATUS[:being_implemented],
-                                        target_checkbox: :extension,
+                                      { target_value_enable_checkbox: Finding::STATUS[:being_implemented],
+                                        target_checkbox: '#finding_extension',
                                         disabled_and_deny: true }
                                   }
                                 else
@@ -115,19 +114,17 @@
         <% end %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
-        <%= f.input :answer, input_html: { rows: finding_answer_rows } %>
-        <% if USE_SCOPE_CYCLE %>     
-          <div class="row">
-            <div class="col-9">
-              <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
-            </div>
+        <%= f.input :answer, input_html: { rows: finding_answer_rows } %>     
+        <div class="row">
+          <div class="col-<%= USE_SCOPE_CYCLE ? 9 : 12 %>">
+            <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
+          </div>
+          <% if USE_SCOPE_CYCLE %>
             <div class="col-3 text-right">
               <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' }, input_html: { readonly: @finding.tasks.any? } %>
             </div>
-          </div>
-        <% else %>
-          <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
-        <% end %>
+          <% end %>
+        </div>
         <% if @finding.follow_up_date && show_follow_up_timestamps? %>
           <%= show_weakness_previous_follow_up_dates(@finding) %>
         <% end %>
