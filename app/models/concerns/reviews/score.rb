@@ -158,9 +158,8 @@ module Reviews::Score
 
     def guess_score_type
       by_weaknesses = ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization&.prefix
-      splitted_effectiveness = by_weaknesses &&
-                              USE_SCOPE_CYCLE &&
-                              REVIEW_SCOPES[plan_item&.scope]&.fetch(:type, nil) == :cycle
+      splitted_effectiveness = USE_SCOPE_CYCLE &&
+                               REVIEW_SCOPES[plan_item&.scope]&.fetch(:type, nil) == :cycle
 
       by_weaknesses_alt = Current.conclusion_pdf_format == 'nbc'
 
