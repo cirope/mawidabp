@@ -46,15 +46,15 @@ module Findings::Csv
       (last_commitment_date_text if self.class.show_follow_up_timestamps?),
       (finding_answers_text if self.class.show_follow_up_timestamps?),
       latest_answer_text,
-      (commitment_support_plans_text if Finding.show_commitment_support?).to_s,
-      (commitment_support_controls_text if Finding.show_commitment_support?).to_s,
-      (commitment_support_reasons_text if Finding.show_commitment_support?).to_s,
-      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?).to_s,
-      (try(:weakness_template)&.notes&.to_s if USE_SCOPE_CYCLE).to_s,
-      (try(:weakness_template)&.title&.to_s if USE_SCOPE_CYCLE).to_s,
-      (try(:weakness_template)&.reference&.to_s if USE_SCOPE_CYCLE).to_s,
-      (review.period if USE_SCOPE_CYCLE).to_s,
-      (has_previous_review if USE_SCOPE_CYCLE)
+      (try(:weakness_template)&.notes.to_s if USE_SCOPE_CYCLE),
+      (try(:weakness_template)&.title.to_s if USE_SCOPE_CYCLE),
+      (try(:weakness_template)&.reference.to_s if USE_SCOPE_CYCLE),
+      (review.period.to_s if USE_SCOPE_CYCLE),
+      (has_previous_review_label.to_s if USE_SCOPE_CYCLE),
+      (commitment_support_plans_text.to_s if Finding.show_commitment_support?),
+      (commitment_support_controls_text.to_s if Finding.show_commitment_support?),
+      (commitment_support_reasons_text.to_s if Finding.show_commitment_support?),
+      (commitment_date_required_level_text.to_s if Finding.show_commitment_support? && being_implemented?)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -64,7 +64,7 @@ module Findings::Csv
 
   private
 
-    def has_previous_review
+    def has_previous_review_label
       if weakness_template_id
         I18n.t "label.#{(previous_weakness_by_template? review&.previous) ? 'yes' : 'no'}"
       else
@@ -351,15 +351,15 @@ module Findings::Csv
           (FindingAnswer.human_attribute_name('commitment_date') if show_follow_up_timestamps?),
           (I18n.t('finding.finding_answers') if show_follow_up_timestamps?),
           (I18n.t('finding.latest_answer') if show_follow_up_timestamps?),
-          (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
-          (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
-          (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
-          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?),
           (WeaknessTemplate.human_attribute_name('notes') if USE_SCOPE_CYCLE),
           (WeaknessTemplate.human_attribute_name('title') if USE_SCOPE_CYCLE),
           (WeaknessTemplate.human_attribute_name('reference') if USE_SCOPE_CYCLE),
           (Plan.human_attribute_name('period_id') if USE_SCOPE_CYCLE),
-          (I18n.t('finding.weakness_template_previous') if USE_SCOPE_CYCLE)
+          (I18n.t('finding.weakness_template_previous') if USE_SCOPE_CYCLE),
+          (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?)
         ].compact
       end
   end
