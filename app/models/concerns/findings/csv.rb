@@ -49,12 +49,12 @@ module Findings::Csv
       (try(:weakness_template)&.notes.to_s if USE_SCOPE_CYCLE),
       (try(:weakness_template)&.title.to_s if USE_SCOPE_CYCLE),
       (try(:weakness_template)&.reference.to_s if USE_SCOPE_CYCLE),
-      (review.period.to_s if USE_SCOPE_CYCLE),
-      (has_previous_review_label.to_s if USE_SCOPE_CYCLE),
-      (commitment_support_plans_text.to_s if Finding.show_commitment_support?),
-      (commitment_support_controls_text.to_s if Finding.show_commitment_support?),
-      (commitment_support_reasons_text.to_s if Finding.show_commitment_support?),
-      (commitment_date_required_level_text.to_s if Finding.show_commitment_support? && being_implemented?)
+      (review.period if USE_SCOPE_CYCLE),
+      (has_previous_review_label if USE_SCOPE_CYCLE),
+      (commitment_support_plans_text if Finding.show_commitment_support?),
+      (commitment_support_controls_text if Finding.show_commitment_support?),
+      (commitment_support_reasons_text if Finding.show_commitment_support?),
+      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
     ].compact
 
     row.unshift organization.prefix if corporate
