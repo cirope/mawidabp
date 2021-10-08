@@ -19,6 +19,9 @@ module Findings::Issues
     representativeness: 2
   }
 
+  REPEATABILITY_BASE_DIRECTORY = '/home/deployer/repeatibility/base/'
+  REPEATABILITY_FILENAME       = 'repeatibility_base.csv'
+
   def issues_amount
     issues.sum &:amount
   end
@@ -64,6 +67,24 @@ module Findings::Issues
         if review && previous_weakness_by_template?(current_review)
           quantity += 1
         end
+      end
+
+      quantity = csv_base quantity
+    end
+
+    quantity
+  end
+
+  def csv_base quantity
+    csv_options  = { headers: true }
+    file = REPEATABILITY_BASE_DIRECTORY
+
+    CSV.foreach("scripts/repeticiones.csv", csv_options) do |row|
+      if row['id_ofinal'].to_i == weakness_template_id
+        (row['count1'] == '1' && quantity <= 5) ? quantity += 1 : quantity
+        (row['count2'] == '1' && quantity <= 5) ? quantity += 1 : quantity
+        (row['count3'] == '1' && quantity <= 5) ? quantity += 1 : quantity
+        (row['count4'] == '1' && quantity <= 5) ? quantity += 1 : quantity
       end
     end
 
