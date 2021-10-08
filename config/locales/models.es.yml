@@ -720,7 +720,7 @@ es:
               must_have_a_manager: 'debe contener un gerente de auditoría'
             extension:
               must_be_being_implemented: 'Para indicar que es %{extension} debe estar en estado %{state}'
-              had_extension: 'Ya tuvo una %{extension} en su historial'
+              had_no_extension_when_being_implemented: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension}'
               reference_auditor_required: 'debe tener un auditor referente'
         finding_user_assignment:
           attributes:

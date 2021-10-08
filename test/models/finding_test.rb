@@ -950,7 +950,7 @@ class FindingTest < ActiveSupport::TestCase
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
     assert finding.rescheduled?
-    assert_equal 1, finding.reschedule_count
+    assert_equal 2, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
@@ -1677,70 +1677,112 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'should not extension' do
-    old_use_scope_cycle    = ENV['USE_SCOPE_CYCLE']
-    ENV['USE_SCOPE_CYCLE'] = 'true'
-    finding                = findings :being_implemented_weakness
-    finding.extension      = false
+    skip unless ENV['USE_SCOPE_CYCLE'] == 'true'
+
+    finding           = findings :being_implemented_weakness
+    finding.extension = false
 
     assert finding.not_extension?
-
-    ENV['USE_SCOPE_CYCLE'] = old_use_scope_cycle
   end
 
   test 'should extension' do
-    old_use_scope_cycle    = ENV['USE_SCOPE_CYCLE']
-    ENV['USE_SCOPE_CYCLE'] = 'true'
-    finding                = findings :being_implemented_weakness
-    finding.extension      = true
+    skip unless ENV['USE_SCOPE_CYCLE'] == 'true'
+
+    finding           = findings :being_implemented_weakness
+    finding.extension = true
 
     refute finding.not_extension?
-
-    ENV['USE_SCOPE_CYCLE'] = old_use_scope_cycle
   end
 
-  test 'should be valid because has no extension' do
+  test 'should be invalid because has extension when it no being implementation' do
+    finding           = findings :incomplete_weakness
+    finding.extension = true
+
+    refute finding.valid?
+  end
+
+  test 'should be invalid because the last version had not extension' do
     finding = findings :being_implemented_weakness
 
-    finding.versions.each { |v| v.object[:extension] = false }
+    finding.extension = true
+
+    refute finding.valid?
+  end
+
+  test 'should be valid because is the first version in being implemented' do
+    finding = findings :incomplete_weakness
+
+    finding.extension      = true
+    finding.state          = Finding::STATUS[:being_implemented]
+    finding.follow_up_date = FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
+
+    assert finding.valid?
+  end
+
+  test 'should be valid because had versions with extension' do
+    finding = findings :being_implemented_weakness
+
+    finding.versions.each do |v|
+      if v.object['state'] == Finding::STATUS[:being_implemented]
+        v.object['extension'] = true
+      end
+    end
+
+    finding.extension = true
+    finding.save(validate: false)
 
     finding.extension = true
 
     assert finding.valid?
   end
 
-  test 'should be invalid because has extension' do
-    finding           = findings :being_implemented_weakness
-    finding.extension = true
-
-    refute finding.valid?
-  end
-
   test 'should return reschedule' do
-    old_use_scope_cycle    = ENV['USE_SCOPE_CYCLE']
-    ENV['USE_SCOPE_CYCLE'] = 'true'
-    finding                = findings :being_implemented_weakness
+    skip unless ENV['USE_SCOPE_CYCLE'] == 'true'
 
-    finding.versions.each { |v| v.object[:extension] = false }
+    finding = findings :being_implemented_weakness
+
+    finding.versions.each do |v|
+      v.object['extension'] = false
+      v.save
+    end
 
     reschedules = finding.calculate_reschedule_count
 
     assert reschedules.positive?
-
-    ENV['USE_SCOPE_CYCLE'] = old_use_scope_cycle
   end
 
   test 'should return not reschedule' do
-    old_use_scope_cycle    = ENV['USE_SCOPE_CYCLE']
-    ENV['USE_SCOPE_CYCLE'] = 'true'
-    finding                = findings :being_implemented_weakness
+    skip unless ENV['USE_SCOPE_CYCLE'] == 'true'
 
-    finding.versions.each { |v| v.object[:extension] = true }
+    finding = findings :being_implemented_weakness
+
+    finding.versions.each do |v|
+      v.object['extension'] = true
+      v.save
+    end
 
     reschedules = finding.calculate_reschedule_count
 
     assert reschedules.zero?
+  end
 
-    ENV['USE_SCOPE_CYCLE'] = old_use_scope_cycle
+  test 'should return had version with being implemented' do
+    finding = findings :being_implemented_weakness
+
+    assert finding.had_version_with_being_implemented?
+  end
+
+  test 'should return not had version with being implemented' do
+    finding = findings :being_implemented_weakness
+
+    finding.versions.each do |v|
+      if v.object['state'] == Finding::STATUS[:being_implemented]
+        v.object['state'] = Finding::STATUS[:incomplete]
+        v.save
+      end
+    end
+
+    refute finding.had_version_with_being_implemented?
   end
 
   private

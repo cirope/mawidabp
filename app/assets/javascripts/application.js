@@ -43,6 +43,7 @@
 //= require form_submit
 //= require hide
 //= require licenses
+//= require needs_confirm_form
 //= require news
 //= require opening_interviews
 //= require organizations

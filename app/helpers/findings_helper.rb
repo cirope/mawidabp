@@ -293,6 +293,16 @@ module FindingsHelper
     end
   end
 
+  def extension_enabled? finding
+    first_version_in_being_implementation?(finding) ||
+      (finding.being_implemented? && finding.extension)
+  end
+
+  def first_version_in_being_implementation? finding
+    finding.new_record? ||
+      (!finding.had_version_with_being_implemented? && !finding.being_implemented?)
+  end
+
   private
 
     def finding_state_options_for finding
