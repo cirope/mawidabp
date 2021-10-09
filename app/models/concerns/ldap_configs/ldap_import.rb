@@ -32,8 +32,6 @@ module LdapConfigs::LdapImport
       assign_managers managers, users_by_dn unless skip_function_and_manager?
 
       users = check_state_for_late_changes(users)
-
-      import_extra_users_info
     end
 
     users
@@ -54,7 +52,7 @@ module LdapConfigs::LdapImport
         role_names = role_data entry
         roles      = clean_roles Role.list_with_corporate.where(name: role_names)
         data       = trivial_data entry
-        user       = find_user data
+        user       = User.find_user data
 
         if user&.roles.blank? && roles.blank?
           false
@@ -70,7 +68,7 @@ module LdapConfigs::LdapImport
       data[:manager_id] = nil if manager_dn.blank? && !skip_function_and_manager?
 
       state = if user
-                update_user user: user, data: data, roles: roles
+                User.update_user user: user, data: data, roles: roles
 
                 if user.roles.any?
                   user.saved_changes? ? :updated : :unchanged
@@ -87,12 +85,6 @@ module LdapConfigs::LdapImport
       { user: user, manager_dn: manager_dn, state: state }
     end
 
-    def find_user data
-      User.group_list.by_email(data[:email])             ||
-        User.without_organization.by_email(data[:email]) ||
-        User.list.by_user(data[:user])
-    end
-
     def role_data entry
       entry_roles = entry[roles_attribute].map do |r|
         r&.force_encoding('UTF-8')&.sub(/.*?cn=(.*?),.*/i, '\1')&.to_s
@@ -107,8 +99,8 @@ module LdapConfigs::LdapImport
         name:                casted_attribute(entry, name_attribute),
         last_name:           casted_attribute(entry, last_name_attribute),
         email:               casted_attribute(entry, email_attribute),
+        organizational_unit: casted_organizational_unit(entry),
         office:              casted_attribute(entry, office_attribute),
-        organizational_unit: organizational_unit(entry),
         hidden:              false,
         enable:              true
       }.merge(
@@ -124,8 +116,8 @@ module LdapConfigs::LdapImport
       attr_name && entry[attr_name].first&.force_encoding('UTF-8')&.to_s
     end
 
-    def organizational_unit entry
-      casted_ou = casted_attribute(entry, 'dn')
+    def casted_organizational_unit entry
+      casted_ou = casted_attribute(entry, organizational_unit_attribute)
 
       casted_ou&.gsub /\Acn=[\w\s]+,/i, ''
     end
@@ -140,22 +132,6 @@ module LdapConfigs::LdapImport
           clean_roles roles
         end.flatten
       end
-    end
-
-    def update_user user: nil, data: nil, roles: nil
-      new_roles = roles.map do |r|
-        unless user.organization_roles.detect { |o_r| o_r.role_id == r.id }
-          { organization_id: r.organization_id, role_id: r.id }
-        end
-      end
-      removed_roles = user.organization_roles.map do |o_r|
-        if roles.map(&:id).exclude? o_r.role_id
-          { id: o_r.id, _destroy: '1' } if o_r.organization_id == Current.organization&.id
-        end
-      end
-      data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
-
-      user.update data
     end
 
     def create_user user: nil, data: nil, roles: nil

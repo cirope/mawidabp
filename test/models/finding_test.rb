@@ -1566,19 +1566,26 @@ class FindingTest < ActiveSupport::TestCase
     Current.organization = organizations :cirope
     Current.user         = users :auditor
 
+    repeatability_in_file =
+      if FINDING_REPEATABILITY_FILE.include? Current.organization.prefix
+        1
+      else
+        0
+      end
+
     assert_equal @finding.probability_risk_previous, 0
 
     @finding.weakness_template = weakness_templates :security
 
     assert @finding.valid?
 
-    assert_equal @finding.probability_risk_previous, 1
+    assert_equal @finding.probability_risk_previous, repeatability_in_file + 1
 
     weakness_previous = @finding.review.previous.weaknesses.first
 
     weakness_previous.update_column :weakness_template_id, weakness_templates(:security).id
 
-    assert_equal @finding.probability_risk_previous, 2
+    assert_equal @finding.probability_risk_previous, repeatability_in_file + 2
   ensure
     Current.organization = nil
     Current.user         = nil
