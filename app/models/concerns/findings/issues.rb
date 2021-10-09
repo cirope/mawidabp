@@ -66,7 +66,7 @@ module Findings::Issues
         end
       end
 
-      quantity = csv_base quantity if ISSUE_REPEATABILITY_FILE.include? current.organization.prefix
+      quantity = csv_base quantity if FINDING_REPEATABILITY_FILE.include? current.organization.prefix
     end
 
     quantity
@@ -74,12 +74,12 @@ module Findings::Issues
 
   def csv_base quantity
     csv_options = { headers: true }
-    file        = ISSUE_REPEATABILITY_FILE[current.organization.prefix]
+    file        = FINDING_REPEATABILITY_FILE[current.organization.prefix]
 
     CSV.foreach(file, csv_options) do |row|
       if row['id_ofinal'] == weakness_template.reference
         (1..4).each do |idx|
-          (row["count#{idx}"] == '1' && quantity <= 5) ? quantity += 1 : quantity
+          quantity += (row["count#{idx}"] == '1' && quantity <= 5) ? 1 : 0
         end
       end
     end

@@ -1567,7 +1567,7 @@ class FindingTest < ActiveSupport::TestCase
     Current.user         = users :auditor
 
     repeatability_in_file =
-      if ISSUE_REPEATABILITY_FILE.include? Current.organization.prefix
+      if FINDING_REPEATABILITY_FILE.include? Current.organization.prefix
         1
       else
         0
