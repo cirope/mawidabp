@@ -12,6 +12,7 @@ class User < ApplicationRecord
   include Users::Defaults
   include Users::DestroyValidation
   include Users::Findings
+  include Users::Import
   include Users::Group
   include Users::Licenses
   include Users::MarkChanges
@@ -30,6 +31,7 @@ class User < ApplicationRecord
   include Users::BaseValidations
   include Users::Validations
   include Users::Tree
+  include Users::Update
 
   trimmed_fields :user, :email, :name, :last_name
 
