@@ -950,7 +950,10 @@ class FindingTest < ActiveSupport::TestCase
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
     assert finding.rescheduled?
-    assert_equal 2, finding.reschedule_count
+
+    count_reschedule = USE_SCOPE_CYCLE ? 2 : 3 
+
+    assert_equal count_reschedule, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
@@ -1677,16 +1680,15 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'should not extension' do
-    skip unless ENV['USE_SCOPE_CYCLE'] == 'true'
+    skip unless USE_SCOPE_CYCLE
 
-    finding           = findings :being_implemented_weakness
-    finding.extension = false
+    finding = findings :being_implemented_weakness
 
     assert finding.not_extension?
   end
 
   test 'should extension' do
-    skip unless ENV['USE_SCOPE_CYCLE'] == 'true'
+    skip unless USE_SCOPE_CYCLE
 
     finding           = findings :being_implemented_weakness
     finding.extension = true
@@ -1737,8 +1739,6 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'should return reschedule' do
-    skip unless ENV['USE_SCOPE_CYCLE'] == 'true'
-
     finding = findings :being_implemented_weakness
 
     finding.versions.each do |v|
@@ -1746,13 +1746,11 @@ class FindingTest < ActiveSupport::TestCase
       v.save
     end
 
-    reschedules = finding.calculate_reschedule_count
-
-    assert reschedules.positive?
+    assert_equal 2, finding.calculate_reschedule_count
   end
 
   test 'should return not reschedule' do
-    skip unless ENV['USE_SCOPE_CYCLE'] == 'true'
+    skip unless USE_SCOPE_CYCLE
 
     finding = findings :being_implemented_weakness
 

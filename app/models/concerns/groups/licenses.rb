@@ -8,8 +8,7 @@ module Groups::Licenses
   end
 
   def auditors_limit
-    # licensed? ? license.auditors_limit : Rails.application.credentials.auditors_limit
-    1000000
+    licensed? ? license.auditors_limit : Rails.application.credentials.auditors_limit
   end
 
   def auditor_users_count
