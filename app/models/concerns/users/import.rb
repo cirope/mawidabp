@@ -34,7 +34,7 @@ module Users::Import
         user  = find_user data
 
         User.transaction do
-          if user&.roles.blank? && roles.blank?
+          if user&.roles.blank? && roles.blank? && !user&.can_act_as_audited?
             false
           else
             process_args = { user: user, roles: roles, data: data }
