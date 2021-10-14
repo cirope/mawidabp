@@ -29,18 +29,18 @@ module Users::Import
       arg_data = {}
 
       CSV.foreach(extra_users_info_attr(prefix, 'path'), options) do |row|
-        roles    = find_role I18n.t "role.type_audited"
-        data     = trivial_data_pat row
-        user     = find_user data
+        roles = find_role I18n.t "role.type_audited"
+        data  = trivial_data_pat row
+        user  = find_user data
 
         User.transaction do
           if user&.roles.blank? && roles.blank?
             false
           else
-            arg_data = { user: user, roles: roles, data: data }
+            process_args = { user: user, roles: roles, data: data }
           end
 
-          process_entry user, **arg_data
+          process_entry user, **process_args
         end
       end
     end
