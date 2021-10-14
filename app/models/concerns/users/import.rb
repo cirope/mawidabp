@@ -16,6 +16,36 @@ module Users::Import
     end
 
     def import_from_file prefix
+      if extra_users_info_format(prefix) == 'peoplesoft_txt'
+        peoplesoft_file prefix
+      elsif extra_users_info_format(prefix) == 'pat_txt'
+        pat_file prefix
+      end
+    end
+
+    def pat_file prefix
+      users    = {}
+      options  = { col_sep: ';', headers: true }
+      arg_data = {}
+
+      CSV.foreach(extra_users_info_attr(prefix, 'path'), options) do |row|
+        roles    = find_role I18n.t "role.type_audited"
+        data     = trivial_data_pat row
+        user     = find_user data
+
+        User.transaction do
+          if user&.roles.blank? && roles.blank?
+            false
+          else
+            arg_data = { user: user, roles: roles, data: data }
+          end
+
+          process_entry user, **arg_data
+        end
+      end
+    end
+
+    def peoplesoft_file prefix
       users   = {}
       options = { col_sep: ';' }
 
@@ -139,6 +169,18 @@ module Users::Import
           hidden: false,
           enable: true,
           organizational_unit: user[:ou]
+        }
+      end
+
+      def trivial_data_pat row
+        {
+          name: row['Nombres'],
+          last_name: row['Apellidos'],
+          user: row['Usuario Meta4'],
+          email: row['Correo Electronico'],
+          hidden: false,
+          enable: true,
+          organizational_unit: ''
         }
       end
 
