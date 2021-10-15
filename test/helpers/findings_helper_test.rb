@@ -51,4 +51,25 @@ class FindingsHelperTest < ActionView::TestCase
 
     refute first_version_in_being_implementation?(finding)
   end
+
+  test 'Data for submit' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding       = findings :being_implemented_weakness
+    expected_hash = {
+                      data: {
+                        confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
+                                                {
+                                                  state: I18n.t('findings.state.being_implemented'),
+                                                  extension: Finding.human_attribute_name(:extension)
+                                                }),
+                        checkbox_target: '#finding_extension',
+                        target_value_checkbox: false,
+                        state_target: Finding::STATUS[:being_implemented],
+                        input_with_state: '#finding_state',
+                        condition_to_receive_confirm: first_version_in_being_implementation?(finding) }
+                    }
+
+    assert_equal expected_hash, data_for_submit(finding)
+  end
 end

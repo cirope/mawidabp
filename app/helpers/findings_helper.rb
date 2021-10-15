@@ -304,19 +304,23 @@ module FindingsHelper
   end
 
   def data_for_submit finding
-    {
-      data: {
-        confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
-                                {
-                                  state: I18n.t('findings.state.being_implemented'),
-                                  extension: Finding.human_attribute_name(:extension)
-                                }),
-        checkbox_target: '#finding_extension',
-        target_value_checkbox: false,
-        state_target: Finding::STATUS[:being_implemented],
-        input_with_state: '#finding_state',
-        condition_to_receive_confirm: first_version_in_being_implementation?(finding) }
-    }
+    if USE_SCOPE_CYCLE
+      {
+        data: {
+          confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
+                                  {
+                                    state: I18n.t('findings.state.being_implemented'),
+                                    extension: Finding.human_attribute_name(:extension)
+                                  }),
+          checkbox_target: '#finding_extension',
+          target_value_checkbox: false,
+          state_target: Finding::STATUS[:being_implemented],
+          input_with_state: '#finding_state',
+          condition_to_receive_confirm: first_version_in_being_implementation?(finding) }
+      }
+    else
+      {}
+    end
   end
 
   private
