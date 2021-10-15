@@ -12,7 +12,7 @@ jQuery(function () {
   function changeLabel(element) {
     var $labelTarget = $('label[for="' + element.data('targetInputWithLabel').replace('#', '') + '"]')
 
-    if (element.find(':selected').val() == element.data('targetValueChangeLabel')) {  
+    if (element.find(':selected').val() == element.data('targetValueChangeLabel')) {
       var text = $labelTarget.text().concat(element.data('suffix'))
     } else {
       var text = $labelTarget.text().split(element.data('suffix'))[0]
@@ -21,5 +21,3 @@ jQuery(function () {
     $($labelTarget).text(text)
   }
 })
-
-

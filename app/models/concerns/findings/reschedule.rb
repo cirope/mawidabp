@@ -36,6 +36,7 @@ module Findings::Reschedule
     def calculate_reschedule_count?
       recalculate_attributes_changed? &&
         repeated_or_on_final_review?  &&
+        not_extension?                &&
         being_implemented?
     end
 

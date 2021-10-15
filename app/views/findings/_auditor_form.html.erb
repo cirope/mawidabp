@@ -1,19 +1,8 @@
 <% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? || @finding.expired? %>
 <% show_history_changes = show_follow_up_timestamps? && @finding.status_change_history.size > 1 %>
-<% if USE_SCOPE_CYCLE
-    data_for_submit = {
-                        data: { confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension', 
-                                                        { state: I18n.t('findings.state.being_implemented'),
-                                                          extension: Finding.human_attribute_name(:extension) }),
-                                checkbox_target: '#finding_extension',
-                                target_value_checkbox: false,
-                                state_target: Finding::STATUS[:being_implemented],
-                                input_with_state: '#finding_state',
-                                condition_to_receive_confirm: first_version_in_being_implementation?(@finding) }
-                      }
-    end %> 
+<% data_for_submit = data_for_submit @finding if USE_SCOPE_CYCLE %>
 
-<%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completion_state], @finding), 
+<%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completion_state], @finding),
     :html => {:method => :patch, :id => "edit_finding_#{@finding.id}"}.merge(data_for_submit) do |f| %>
 
   <% content_for :js_extra do %>
@@ -107,7 +96,7 @@
                                   }
                                 else
                                   {}
-                                end %> 
+                                end %>
         <%= finding_status_field(f, disabled: @finding.issues.any?, options_html: options_for_select) %>
 
         <% if show_skip_work_paper_for @finding %>
@@ -127,7 +116,7 @@
         <% end %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
-        <%= f.input :answer, input_html: { rows: finding_answer_rows } %>     
+        <%= f.input :answer, input_html: { rows: finding_answer_rows } %>
         <div class="row">
           <div class="col-<%= USE_SCOPE_CYCLE ? 9 : 12 %>">
             <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>

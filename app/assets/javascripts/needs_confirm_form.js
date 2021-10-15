@@ -1,24 +1,21 @@
 jQuery(function () {
   $(document).ready(function () {
-    $('[data-condition-to-receive-confirm]').submit(function() {
-      debugger;
-      if (($(this).data('conditionToReceiveConfirm') == true) && 
-            ($($(this).data('inputWithState')).find(':selected').val() == $(this).data('stateTarget')) && 
-            ($($(this).data('checkboxTarget')).prop('checked') == $(this).data('targetValueCheckbox'))) {
-        
-              message = confirm($(this).data('confirmMessage'));
+    $('[data-condition-to-receive-confirm]').submit(function(event) {
+      var conditionToReceiveConfirm = $(this).data('conditionToReceiveConfirm')
+      var selectedInputWithState    = $($(this).data('inputWithState')).find(':selected').val()
+      var checkboxTargetchecked     = $($(this).data('checkboxTarget')).prop('checked')
 
-              if(message) {
-                return true
-              } else {
-               return false
-              }
+      if ((conditionToReceiveConfirm == true) &&
+        (selectedInputWithState == $(this).data('stateTarget')) &&
+        (checkboxTargetchecked == $(this).data('targetValueCheckbox'))) {
 
-      } else {
-        return true
-      }
+          var message = confirm($(this).data('confirmMessage'));
+
+            if (!message) {
+              event.stopPropagation()
+              event.preventDefault()
+            }
+        }
     })
   })
 })
-
-
