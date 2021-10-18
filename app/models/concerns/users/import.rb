@@ -20,6 +20,8 @@ module Users::Import
         peoplesoft_file prefix
       elsif extra_users_info_format(prefix) == 'pat_txt'
         pat_file prefix
+      else
+        raise I18n.t 'errors.messages.unknown_format'
       end
     end
 
@@ -29,18 +31,18 @@ module Users::Import
       arg_data = {}
 
       CSV.foreach(extra_users_info_attr(prefix, 'path'), options) do |row|
-        roles = find_role I18n.t "role.type_audited"
-        data  = trivial_data_pat row
-        user  = find_user data
+        roles  = find_role I18n.t 'role.type_audited'
+        header = extra_users_info_headers prefix
+        data   = trivial_data_pat header, row
+        user   = find_user data
 
         User.transaction do
-          if user&.roles.blank? && roles.blank? && !user&.can_act_as_audited?
-            false
-          else
-            process_args = { user: user, roles: roles, data: data }
-          end
+          if roles.present?
+            user_audited = user if user&.can_act_as_audited?
+            process_args = { user: user_audited, roles: roles, data: data }
 
-          process_entry user, **process_args
+            process_entry user, **process_args
+          end
         end
       end
     end
@@ -172,12 +174,12 @@ module Users::Import
         }
       end
 
-      def trivial_data_pat row
+      def trivial_data_pat header, row
         {
-          name: row['Nombres'],
-          last_name: row['Apellidos'],
-          user: row['Usuario Meta4'],
-          email: row['Correo Electronico'],
+          name: row[header['name']],
+          last_name: row[header['lastname']],
+          user: row[header['user']],
+          email: row[header['email']],
           hidden: false,
           enable: true,
           organizational_unit: ''
@@ -214,6 +216,10 @@ module Users::Import
 
       def extra_users_info_prefixes
         EXTRA_USERS_INFO.keys
+      end
+
+      def extra_users_info_headers prefix
+        extra_users_info_attr prefix, 'header'
       end
     end
 end
