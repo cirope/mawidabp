@@ -26,9 +26,7 @@ module Users::Import
     end
 
     def pat_file prefix
-      users    = {}
       options  = { col_sep: ';', headers: true }
-      arg_data = {}
 
       CSV.foreach(extra_users_info_attr(prefix, 'path'), options) do |row|
         roles  = find_role I18n.t 'role.type_audited'
