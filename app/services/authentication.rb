@@ -58,12 +58,13 @@ class Authentication
 
     def saml_user_for email, attributes
       pruned_attributes = send("prune_#{@current_organization.saml_provider}_attributes", attributes)
+      email             = pruned_attributes[:email] || email
       @params[:user]    = pruned_attributes[:user]
 
-      if user = @current_organization.users.readonly(false).find_by(user: user)
-        update_user user, pruned_attributes
+      if User.find_by(user: @params[:user])
+        update_user user, pruned_attributes.merge(email: email)
       else
-        create_user pruned_attributes
+        create_user pruned_attributes.merge(email: email)
       end
     end
 
@@ -117,6 +118,7 @@ class Authentication
       {
         user:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, ''),
         name:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first,
+        email:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first,
         last_name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first,
         roles:     attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
       }
