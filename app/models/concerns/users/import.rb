@@ -70,7 +70,7 @@ module Users::Import
       end
     end
 
-    def log error
+    def log_error error
       Rails.logger.error error
     end
 
@@ -141,12 +141,12 @@ module Users::Import
                   :created
                 end
 
-         if user.errors.any?
+        if user.errors.any?
           state = :errored
-          text  = [user.user, user.errors.messages].join ' - '
+          error = [:errored, "user: #{user.user}", user.errors.messages].join ' - '
 
-          log text
-         end
+          log_error error
+        end
 
         { user: user, state: state }
       end
