@@ -513,6 +513,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify finding changes function' do
+    skip if USE_SCOPE_CYCLE
+
     Current.organization = nil
     user = users :administrator
 
@@ -544,7 +546,7 @@ class UserTest < ActiveSupport::TestCase
       review_codes_by_user[user] = user.findings.for_notification.pluck 'review_code'
     end
 
-    assert_enqueued_emails 6 do
+    assert_enqueued_emails 12 do
       User.notify_new_findings
     end
 
@@ -708,5 +710,22 @@ class UserTest < ActiveSupport::TestCase
     assert_enqueued_emails 1 do
       user.save!
     end
+  end
+
+  test 'import' do
+    Current.organization = organizations(:google)
+    organization         = Current.organization
+
+    skip unless EXTRA_USERS_INFO.has_key? organization.prefix
+
+    assert_difference 'User.count', 2 do
+      User.import organization, 'admin', 'admin123'
+    end
+
+    one_user_file = User.find_by email: 'juan127@cirope.com'
+    two_user_file = User.find_by email: 'pedro127@cirope.com'
+
+    assert_equal one_user_file.manager_id, two_user_file.id
+    assert_equal one_user_file.roles.count, 2
   end
 end

@@ -28,6 +28,9 @@ es:
       activity_group:
         one: 'Grupo actividad'
         other: 'Grupo de actividades'
+      annex:
+        one: 'Anexo'
+        other: 'Anexos'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -206,6 +209,10 @@ es:
         name: 'Nombre'
       activity_group:
         name: 'Nombre'
+      annex:
+        title: 'Título'
+        description: 'Descripción'
+        image_models: 'Imágenes'
       answer:
         answer: 'Respuesta'
         comments: 'Comentarios respuesta'
@@ -239,9 +246,6 @@ es:
       business_unit_type_users:
         business_unit_type_id: "Unidad organizativa"
         user_id: "Usuario"
-      business_unit_type_reviews:
-        business_unit_type_id: "Unidad organizativa"
-        review_id: "Informe"
       business_unit_score:
         business_unit_id: 'Unidad de negocio'
         design_score: 'Calificación pruebas de diseño'
@@ -327,6 +331,10 @@ es:
         probability: 'Probabilidad'
         impact_risk: 'Impacto'
         manual_risk: 'Manual'
+        use_suggested_impact: 'Impacto sugerido'
+        use_suggested_probability: 'Probabilidad sugerida'
+        impact_amount: 'Monto universo'
+        probability_amount: 'Universo en cantidad de casos'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -392,7 +400,8 @@ es:
       issue:
         customer: 'Cliente'
         entry: 'Rubro'
-        transaction: 'Operación'
+        operation: 'Operación'
+        currency: 'Moneda'
         amount: 'Monto'
         comments: 'Comentarios'
         close_date: 'Fecha de regularización'
@@ -418,6 +427,8 @@ es:
         test_password: 'Contraseña'
         user: 'Usuario de servicio'
         password: 'Contraseña de servicio'
+        organizational_unit_attribute: "Unidad organizacional (OU)"
+        organizational_unit: "Unidad organizacional por defecto (OU)"
       license:
         paid_until: 'Pagada hasta'
         auditors_limit: 'Limite de usuarios auditores'
@@ -699,11 +710,13 @@ es:
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
+        reference: 'Referencia'
         title: 'Título'
         description: 'Observación'
         risk: 'Riesgo'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
+        notes: 'Notas'
         internal_control_components: 'Componentes de CI'
         allow_duplication: 'Permitir título duplicado'
 
@@ -724,6 +737,7 @@ es:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
               required: 'debe tener un auditado responsable'
               must_have_a_manager: 'debe contener un gerente de auditoría'
+              reference_auditor_required: 'debe tener un auditor referente'
         finding_user_assignment:
           attributes:
             user:

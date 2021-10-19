@@ -5,7 +5,7 @@ parameter_<%= name %>_default:
   organization: cirope
   value: <%= value[:value] %>
 
-parameter_<%= name %>_second: 
+parameter_<%= name %>_second:
   name: <%= name %>
   description: Setting <%= name %>
   organization: google

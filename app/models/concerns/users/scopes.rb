@@ -90,6 +90,12 @@ module Users::Scopes
         select(column_names - ['notes'])
     end
 
+    def find_user data
+      User.group_list.by_email(data[:email])             ||
+        User.without_organization.by_email(data[:email]) ||
+        User.list.by_user(data[:user])
+    end
+
     private
 
       def organizations_table

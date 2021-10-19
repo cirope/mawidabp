@@ -296,6 +296,7 @@ Rails.application.routes.draw do
   resources :conclusion_draft_reviews, except: [:destroy] do
     member do
       get :export_to_pdf
+      get :export_to_rtf
       get :compose_email
       patch :send_by_email
       get :download_work_papers
@@ -316,6 +317,7 @@ Rails.application.routes.draw do
   resources :conclusion_final_reviews do
     member do
       get :export_to_pdf
+      get :export_to_rtf
       get :compose_email
       patch :send_by_email
       get :download_work_papers
@@ -420,6 +422,7 @@ Rails.application.routes.draw do
     collection do
       get :auto_complete_for_business_unit
       get :auto_complete_for_tagging
+      get :auto_complete_for_business_unit_type
     end
   end
 

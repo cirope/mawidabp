@@ -5,3 +5,4 @@ auditor_answer:
   user: supervisor
   file_model:
   skip_commitment_support: false
+  imported: false

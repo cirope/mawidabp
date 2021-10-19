@@ -56,6 +56,7 @@
 //= require reviews
 //= require risk_assessment_templates
 //= require risk_assessments
+//= require select_change_label
 //= require sessions
 //= require show
 //= require tags
