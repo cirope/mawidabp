@@ -5,7 +5,6 @@ module Users::Import
     def import organization, username = nil, password = nil
       prefixes = extra_users_info_prefixes
       prefix   = organization.prefix
-      log_file
 
       if prefixes.include? prefix
         import_from_file prefix
@@ -72,11 +71,9 @@ module Users::Import
     end
 
     def log text
-      File.open('log/import_log.txt', 'a') { |f| f.puts text }
-    end
+      logger = Logger.new 'log/import.log'
 
-    def log_file
-      FileUtils.rm 'log/import_log.txt' if File.exists? 'log/import_log.txt'
+      logger.error "Exception occurred import\n#{text}"
     end
 
     private
