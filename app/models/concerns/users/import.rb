@@ -70,10 +70,8 @@ module Users::Import
       end
     end
 
-    def log text
-      logger = Logger.new 'log/import.log'
-
-      logger.error "Exception occurred import\n#{text}"
+    def log error
+      Rails.logger.error error
     end
 
     private
