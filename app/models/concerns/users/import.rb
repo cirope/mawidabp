@@ -5,6 +5,7 @@ module Users::Import
     def import organization, username = nil, password = nil
       prefixes = extra_users_info_prefixes
       prefix   = organization.prefix
+      log_file
 
       if prefixes.include? prefix
         import_from_file prefix
@@ -68,6 +69,14 @@ module Users::Import
       User.transaction do
         import_extra_users_info_role users, prefix
       end
+    end
+
+    def log text
+      File.open('log/import_log.txt', 'a') { |f| f.puts text }
+    end
+
+    def log_file
+      FileUtils.rm 'log/import_log.txt' if File.exists? 'log/import_log.txt'
     end
 
     private
@@ -137,7 +146,12 @@ module Users::Import
                   :created
                 end
 
-        state = :errored if user.errors.any?
+         if user.errors.any?
+          state = :errored
+          text  = [user.user, user.errors.messages].join ' - '
+
+          log text
+         end
 
         { user: user, state: state }
       end
