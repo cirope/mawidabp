@@ -1,0 +1,85 @@
+<h2 class="h1">
+  <%= @title %> | <%= @user.full_name %>
+</h2>
+
+<h3 class="h4">
+  <%= t '.period', start: l(@start_date, format: :minimal), end: l(@end_date, format: :minimal) %>
+</h3>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="btn-group" role="group">
+      <%= link_to raw("&laquo; #{t 'label.previous'}"), time_summary_prev_week_path, class: 'btn btn-secondary' %>
+      <%= link_to t('.current_week'), time_summary_index_path, class: 'btn btn-secondary' %>
+      <%= link_to raw("#{t 'label.next'} &raquo;"), time_summary_next_week_path, class: 'btn btn-secondary' %>
+    </div>
+  </div>
+  <div class="col-md-6 mt-3 mt-md-0">
+    <%= time_summary_user_select if @self_and_descendants.size > 1 %>
+  </div>
+</div>
+
+<hr>
+
+<% (@start_date..@end_date).each do |date| %>
+  <% if date.workday? %>
+    <h4 class="h5">
+      <%= l date, format: :minimal %>
+
+      <% unless time_summary_completed? date %>
+        <%= link_to new_time_summary_path(
+          date: date,
+          limit: time_summary_remaining_hours(date),
+          resource_type: 'Activity'), title: t('.add'), class: 'ml-1 h6' do %>
+            <i class="fas fa-plus-circle"></i>
+          <% end %>
+      <% end %>
+    </h4>
+
+    <% if @items[date].present? %>
+      <ul>
+        <% @items[date].each do |item, hours, id| %>
+          <li>
+            <%= item %>: <%= number_with_precision hours, precision: 1 %>
+            <% if time_summary_enabled_edit item, date %>
+              <%= link_to edit_time_summary_path(
+                  id,
+                  date: date,
+                  limit: time_summary_remaining_hours(date) + hours
+                ),
+                title: t('.edit'),
+                class: 'ml-1 h6' do %>
+                  <i class="fas fa-pen"></i>
+                <% end %>
+            <% end %>
+            <% if time_summary_enabled_edit item, date %>
+              <%= link_to time_summary_path(id),
+                data: {
+                  method: :delete,
+                  confirm: t('messages.confirmation')
+                },
+                title: t('.destroy'),
+                class: 'ml-1 h6' do %>
+                  <i class="fas fa-trash"></i>
+                <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="mb-3">
+      <%= t '.empty' %>
+      </p>
+    <% end %>
+  <% end %>
+<% end %>
+<div>
+  <h4>
+    <%= t '.total_amount', amount: @total_amount, count: @self_and_descendants.size %>
+  </h4>
+</div>
+<hr>
+
+<div>
+  <%= render 'downloads' %>
+</div>

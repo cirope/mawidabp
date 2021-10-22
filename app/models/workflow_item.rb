@@ -78,6 +78,10 @@ class WorkflowItem < ApplicationRecord
     end
   end
 
+  def to_s
+    [workflow.review.long_identification, task].join ' - '
+  end
+
   def start
     super.try :to_date
   end

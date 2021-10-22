@@ -113,6 +113,8 @@ class WorkflowItemTest < ActiveSupport::TestCase
     workflow_item_3 = WorkflowItem.find(
       workflow_items(:current_workflow_item_3).id)
 
+    Current.organization = organizations :cirope
+
     assert workflow_item_3.valid?
 
     workflow_item_3.resource_utilizations <<
@@ -121,6 +123,9 @@ class WorkflowItemTest < ActiveSupport::TestCase
 
     assert workflow_item_3.invalid?
     assert_error workflow_item_3, :start, :resource_overload
+
+  ensure
+    Current.organization = nil
   end
 
   test 'can be modified' do

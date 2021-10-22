@@ -178,8 +178,14 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/e_mails' }
       ),
       MenuItem.new(
-        :questionnaires,
+        :activity_groups,
         order: 12,
+        controllers: :activity_groups,
+        url: { controller: '/activity_groups' }
+      ),
+      MenuItem.new(
+        :questionnaires,
+        order: 13,
         url: { controller: '/questionnaires' },
         drop_down_menu: true,
         children: [
@@ -254,26 +260,32 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/workflows' }
       ),
       MenuItem.new(
-        :control_objectives,
+        :time_summary,
         order: 3,
+        controllers: :time_summary,
+        url: { controller: '/time_summary' }
+      ),
+      MenuItem.new(
+        :control_objectives,
+        order: 4,
         controllers: :control_objective_items,
         url: { controller: '/control_objective_items' }
       ),
       MenuItem.new(
         :weaknesses,
-        order: 4,
+        order: 5,
         controllers: :weaknesses,
         url: { controller: '/weaknesses' }
       ),
       (MenuItem.new(
         :oportunities,
-        order: 5,
+        order: 6,
         controllers: :oportunities,
         url: { controller: '/oportunities' }
       ) unless HIDE_OPORTUNITIES),
       MenuItem.new(
         :interviews,
-        order: 6,
+        order: 7,
         url: { controller: '/opening_interviews' },
         drop_down_menu: true,
         children: [
@@ -293,7 +305,7 @@ APP_AUDITOR_MENU_ITEMS = [
       ),
       MenuItem.new(
         :reports,
-        order: 6,
+        order: 8,
         controllers: :execution_reports,
         url: { controller: '/execution_reports' }
       )

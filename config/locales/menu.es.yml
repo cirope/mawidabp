@@ -24,6 +24,7 @@ es:
       news: 'Noticias'
       benefits: 'Beneficios / Perjuicios'
       e_mails: 'Correos'
+      activity_groups: 'Actividades'
       questionnaires_title: 'Cuestionarios'
       questionnaires:
         definition: 'Definición'
@@ -39,6 +40,7 @@ es:
     execution:
       reviews: 'Informes'
       workflows: 'Programas de trabajo'
+      time_summary: 'Resumen horario'
       control_objectives: 'Objetivos de control'
       weaknesses: 'Observaciones'
       oportunities: 'Oportunidades de mejora'
