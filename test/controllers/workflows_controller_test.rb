@@ -147,7 +147,7 @@ class WorkflowsControllerTest < ActionController::TestCase
                   {
                     :id => resource_utilizations(:auditor_for_20_units_with_conclusion_workflow_item_1).id,
                     :resource_id => users(:manager).id,
-                    :units => '12.21'
+                    :units => '7'
                   }
                 ]
               },

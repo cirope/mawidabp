@@ -27,28 +27,57 @@
       <%= l date, format: :minimal %>
 
       <% unless time_summary_completed? date %>
-        <%= link_to new_time_summary_path(date: date, limit: time_summary_remaining_hours(date)), title: t('.add'), class: 'ml-1 h6' do %>
-          <i class="fas fa-plus-circle"></i>
-        <% end %>
+        <%= link_to new_time_summary_path(
+          date: date,
+          limit: time_summary_remaining_hours(date),
+          resource_type: 'Activity'), title: t('.add'), class: 'ml-1 h6' do %>
+            <i class="fas fa-plus-circle"></i>
+          <% end %>
       <% end %>
     </h4>
 
     <% if @items[date].present? %>
       <ul>
-        <% @items[date].each do |item, hours| %>
+        <% @items[date].each do |item, hours, id| %>
           <li>
             <%= item %>: <%= number_with_precision hours, precision: 1 %>
+            <% if time_summary_enabled_edit item, date %>
+              <%= link_to edit_time_summary_path(
+                  id,
+                  date: date,
+                  limit: time_summary_remaining_hours(date) + hours
+                ),
+                title: t('.edit'),
+                class: 'ml-1 h6' do %>
+                  <i class="fas fa-pen"></i>
+                <% end %>
+            <% end %>
+            <% if time_summary_enabled_edit item, date %>
+              <%= link_to time_summary_path(id),
+                data: {
+                  method: :delete,
+                  confirm: t('messages.confirmation')
+                },
+                title: t('.destroy'),
+                class: 'ml-1 h6' do %>
+                  <i class="fas fa-trash"></i>
+                <% end %>
+            <% end %>
           </li>
         <% end %>
       </ul>
     <% else %>
       <p class="mb-3">
-        <%= t '.empty' %>
+      <%= t '.empty' %>
       </p>
     <% end %>
   <% end %>
 <% end %>
-
+<div>
+  <h4>
+    <%= t '.total_amount', amount: @total_amount, count: @self_and_descendants.size %>
+  </h4>
+</div>
 <hr>
 
 <div>

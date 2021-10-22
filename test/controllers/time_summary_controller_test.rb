@@ -25,7 +25,8 @@ class TimeSummaryControllerTest < ActionController::TestCase
         time_consumption: {
           date: date.to_s(:db),
           amount: '1',
-          activity_id: activities(:special_activity).id
+          resource_id: reviews(:current_review).id,
+          resource_type: 'Review'
         }
       }
     end
@@ -74,5 +75,14 @@ class TimeSummaryControllerTest < ActionController::TestCase
     assert_response :success
     assert_select 'body h2',
       "#{I18n.t('time_summary.index.title')} | #{user_descendant.full_name}"
+  end
+
+  test 'time summary show' do
+    get :show, xhr: true, params: {
+      id: reviews(:current_review)
+    }, as: :js
+
+    assert_response :success
+    assert_match Mime[:js].to_s, @response.content_type
   end
 end

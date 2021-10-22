@@ -53,4 +53,31 @@ module TimeSummaryHelper
       [user.full_name_with_function, user.id, selected: user == @user]
     end
   end
+
+  def time_summary_url time_summary
+    time_summary.new_record? ? time_summary_index_path : time_summary_path(time_summary)
+  end
+
+  def time_summary_enabled_edit item, date
+    date >= 3.weeks.ago
+  end
+
+  def time_summary_reviews
+    Review.list_without_final_review_or_not_closed.
+      map { |r| [r.identification, r.id] }
+  end
+
+  def time_summary_activities
+    ActivityGroup.list.order(:name).map do |ag|
+      children = ag.activities.order(:name).map do |a|
+        [a.name, a.id, { data: { require_detail: a.require_detail }}]
+      end
+
+      [ag.name, children]
+    end
+  end
+
+  def time_summary_require_detail_class
+    'd-none' unless @time_consumption.require_detail?
+  end
 end

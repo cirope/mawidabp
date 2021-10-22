@@ -28,11 +28,20 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
     t.index ["finding_id"], name: "index_achievements_on_finding_id"
   end
 
+  create_table "annexes", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description"
+    t.bigint "conclusion_review_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["conclusion_review_id"], name: "index_annexes_on_conclusion_review_id"
+
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "activity_group_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "require_detail", default: false
     t.index ["activity_group_id"], name: "index_activities_on_activity_group_id"
   end
 
@@ -42,14 +51,6 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_activity_groups_on_organization_id"
-
-  create_table "annexes", force: :cascade do |t|
-    t.string "title", null: false
-    t.text "description"
-    t.bigint "conclusion_review_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["conclusion_review_id"], name: "index_annexes_on_conclusion_review_id"
   end
 
   create_table "answer_options", id: :serial, force: :cascade do |t|
@@ -1137,11 +1138,13 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
   create_table "time_consumptions", force: :cascade do |t|
     t.date "date", null: false
     t.decimal "amount", precision: 3, scale: 1, null: false
-    t.bigint "activity_id", null: false
+    t.bigint "resource_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["activity_id"], name: "index_time_consumptions_on_activity_id"
+    t.string "resource_type", default: "Activity"
+    t.text "detail"
+    t.index ["resource_id"], name: "index_time_consumptions_on_resource_id"
     t.index ["user_id"], name: "index_time_consumptions_on_user_id"
   end
 
@@ -1386,7 +1389,6 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tasks", "findings", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "time_consumptions", "activities", on_update: :restrict, on_delete: :restrict
   add_foreign_key "time_consumptions", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
