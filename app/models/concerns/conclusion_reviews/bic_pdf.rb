@@ -10,6 +10,10 @@ module ConclusionReviews::BicPdf
                            review.weaknesses
                          end
 
+    if exclude_regularized_findings
+      weaknesses = weaknesses.where.not(state: Finding::STATUS[:implemented_audited])
+    end
+
     put_default_watermark_on pdf
     put_bic_header_on        pdf, organization
     put_bic_cover_on         pdf
