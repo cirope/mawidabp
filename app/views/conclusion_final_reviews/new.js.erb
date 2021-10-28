@@ -23,6 +23,8 @@
 
   $('#conclusion_final_review_review_attributes_description').val('<%== j @conclusion_final_review.review.description %>')
   $('#conclusion_final_review_review_attributes_id').val('<%= @conclusion_final_review.review.id %>')
+  
+  $('#conclusion_final_review_exclude_regularized_findings').prop('checked', <%= @conclusion_final_review.exclude_regularized_findings %>)
 
   $('#best_practice_comments_container').html('<%= j best_practice_comments_form(@conclusion_final_review) %>')
 <% else %>
