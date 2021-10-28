@@ -75,9 +75,10 @@ module Findings::Issues
   def csv_base quantity
     csv_options = { headers: true }
     file        = FINDING_REPEATABILITY_FILE[current.organization.prefix]
+    suc_id      = /\((\d+)\)/.match(review.plan_item.project)[1]
 
     CSV.foreach(file, csv_options) do |row|
-      if row['id_ofinal'] == weakness_template.reference
+      if row['id_ofinal'] == weakness_template.reference && row['id_suc'] == suc_id
         (1..4).each do |idx|
           quantity += (row["count#{idx}"] == '1' && quantity <= 5) ? 1 : 0
         end
