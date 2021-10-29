@@ -7,7 +7,7 @@ module Weaknesses::Validations
     validates :risk, :priority, presence: true
     validates :audit_recommendations, presence: true, if: :notify?
     validate :review_code_has_valid_prefix
-    validates :impact_risk, :probability, presence: USE_SCOPE_CYCLE
+    validates :impact_risk, :probability, presence: true, if: :require_impact_risk_and_probability?
 
     validates :compliance, length: { maximum: 255 },
       allow_nil: true, allow_blank: true
@@ -23,6 +23,10 @@ module Weaknesses::Validations
   end
 
   private
+
+    def require_impact_risk_and_probability?
+      USE_SCOPE_CYCLE && !manual_risk
+    end
 
     def compliance_require_observations?
       SHOW_WEAKNESS_EXTRA_ATTRIBUTES && compliance == 'yes'

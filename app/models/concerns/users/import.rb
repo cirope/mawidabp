@@ -70,6 +70,10 @@ module Users::Import
       end
     end
 
+    def log_error error
+      Rails.logger.error error
+    end
+
     private
 
       def role_allowed? role
@@ -137,7 +141,12 @@ module Users::Import
                   :created
                 end
 
-        state = :errored if user.errors.any?
+        if user.errors.any?
+          state = :errored
+          error = [:errored, "user: #{user.user}", user.errors.messages].join ' - '
+
+          log_error error
+        end
 
         { user: user, state: state }
       end
