@@ -13,12 +13,12 @@ jQuery(function () {
     var $checkBox = $(element.data('targetCheckbox'))
 
     if (element.find(':selected').val() == element.data('targetValueEnableCheckbox')) {
-      $checkBox.removeAttr('disabled');
+      $checkBox.removeAttr('disabled')
     } else {
-      $checkBox.attr('disabled', true);
+      $checkBox.attr('disabled', true)
 
       if (element.data('disabledAndDeny')) {
-        $checkBox.prop('checked', false);
+        $checkBox.prop('checked', false)
       }
     }
   }

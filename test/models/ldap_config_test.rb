@@ -187,7 +187,6 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)
     assert user.organization_roles.map(&:role_id).include?(corp_role.id)
-    assert user.organizational_unit.present?
     assert_equal user.id, User.find_by(user: 'new_user').manager_id
     assert_nil user.manager_id
   end
@@ -235,7 +234,7 @@ class LdapConfigTest < ActiveSupport::TestCase
   test 'massive import' do
     user         = users(:supervisor)
     organization = organizations(:google)
-    emails_count = if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+    emails_count = if SHOW_WEAKNESS_EXTRA_ATTRIBUTES || EXTRA_USERS_INFO.size > 0
                      0
                    elsif NOTIFY_NEW_ADMIN
                      2

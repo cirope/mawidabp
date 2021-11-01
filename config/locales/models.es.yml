@@ -25,6 +25,12 @@ es:
       annex:
         one: 'Anexo'
         other: 'Anexos'
+      activity:
+        one: 'Actividad'
+        other: 'Actividades'
+      activity_group:
+        one: 'Grupo actividad'
+        other: 'Grupo de actividades'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -178,6 +184,9 @@ es:
       task:
         one: 'Tarea'
         other: 'Tareas'
+      time_consumption:
+        one: 'Actividad'
+        other: 'Actividades'
       user:
         one: 'Usuario'
         other: 'Usuarios'
@@ -200,6 +209,11 @@ es:
         title: 'Título'
         description: 'Descripción'
         image_models: 'Imágenes'
+      activity:
+        name: 'Nombre'
+        require_detail: 'Require detalle'
+      activity_group:
+        name: 'Nombre'
       answer:
         answer: 'Respuesta'
         comments: 'Comentarios respuesta'
@@ -414,6 +428,8 @@ es:
         test_password: 'Contraseña'
         user: 'Usuario de servicio'
         password: 'Contraseña de servicio'
+        organizational_unit_attribute: "Unidad organizacional (OU)"
+        organizational_unit: "Unidad organizacional por defecto (OU)"
       license:
         paid_until: 'Pagada hasta'
         auditors_limit: 'Limite de usuarios auditores'
@@ -492,6 +508,12 @@ es:
         description: 'Descripción'
         status: 'Estado'
         due_on: 'Fecha de finalización'
+      time_consumption:
+        date: 'Fecha'
+        activity: 'Actividad'
+        resource_id: 'Recurso'
+        amount: 'Tiempo en horas'
+        detail: 'Detalle'
       user:
         email: 'Correo'
         enable: 'Habilitado'

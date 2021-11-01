@@ -9,7 +9,7 @@ jQuery(function () {
         (selectedInputWithState == $(this).data('stateTarget')) &&
         (checkboxTargetchecked == $(this).data('targetValueCheckbox'))) {
 
-          var message = confirm($(this).data('confirmMessage'));
+          var message = confirm($(this).data('confirmMessage'))
 
             if (!message) {
               event.stopPropagation()

@@ -143,6 +143,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.tag_ids = []
     @weakness.impact_risk = nil
     @weakness.probability = nil
+    @weakness.manual_risk = false
 
     if WEAKNESS_TAG_VALIDATION_START
       @weakness.created_at = WEAKNESS_TAG_VALIDATION_START
