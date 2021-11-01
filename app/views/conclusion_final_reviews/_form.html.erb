@@ -142,6 +142,12 @@
           <%= f.input :main_recommendations, input_html: { rows: 4, readonly: readonly } %>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :exclude_regularized_findings, input_html: { readonly: readonly } %>
+        </div>
+      </div>
     <% end %>
 
     <% if show_review_best_practice_comments? %>

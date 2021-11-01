@@ -709,6 +709,7 @@ es:
         probability: 'Probabilidad'
         impact_risk: 'Impacto'
         manual_risk: 'Manual'
+        extension: 'Días de gracia'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
@@ -739,6 +740,9 @@ es:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
               required: 'debe tener un auditado responsable'
               must_have_a_manager: 'debe contener un gerente de auditoría'
+            extension:
+              must_be_being_implemented: 'Para indicar que es %{extension} debe estar en estado %{state}'
+              had_no_extension_when_being_implemented: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension}'
               reference_auditor_required: 'debe tener un auditor referente'
         finding_user_assignment:
           attributes:

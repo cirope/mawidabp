@@ -30,6 +30,7 @@ being_implemented_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
+  extension: false
 
 unconfirmed_for_notification_weakness:
   type: Weakness

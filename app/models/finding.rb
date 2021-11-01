@@ -27,6 +27,7 @@ class Finding < ApplicationRecord
   include Findings::DestroyValidation
   include Findings::Display
   include Findings::Expiration
+  include Findings::Extension
   include Findings::FinalReview
   include Findings::FirstFollowUp
   include Findings::FollowUp
