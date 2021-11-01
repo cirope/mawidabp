@@ -950,7 +950,10 @@ class FindingTest < ActiveSupport::TestCase
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
     assert finding.rescheduled?
-    assert_equal 1, finding.reschedule_count
+
+    count_reschedule = USE_SCOPE_CYCLE ? 2 : 3 
+
+    assert_equal count_reschedule, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
@@ -1681,6 +1684,174 @@ class FindingTest < ActiveSupport::TestCase
     @finding.review_code = findings(:unconfirmed_weakness).review_code
 
     assert @finding.valid?
+  end
+
+  test 'should not extension' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    assert finding.not_extension?
+  end
+
+  test 'should extension' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_attribute('extension', true)
+
+    refute finding.not_extension?
+  end
+
+  test 'should not extension was' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.extension = true
+
+    assert finding.not_extension_was?
+  end
+
+  test 'should extension was' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_attribute('extension', true)
+    
+    finding.extension = false
+
+    refute finding.not_extension_was?
+  end
+
+  test 'should be invalid because has extension when it no being implementation' do
+    finding           = findings :incomplete_weakness
+    finding.extension = true
+
+    refute finding.valid?
+  end
+
+  test 'should be invalid because the last version had not extension' do
+    finding = findings :being_implemented_weakness
+
+    finding.extension = true
+
+    refute finding.valid?
+  end
+
+  test 'should be valid because is the first version in being implemented' do
+    finding = findings :incomplete_weakness
+
+    finding.extension      = true
+    finding.state          = Finding::STATUS[:being_implemented]
+    finding.follow_up_date = FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
+
+    assert finding.valid?
+  end
+
+  test 'should be valid because had versions with extension' do
+    finding = findings :being_implemented_weakness
+
+    finding.versions.each do |v|
+      if v.object['state'] == Finding::STATUS[:being_implemented]
+        v.object['extension'] = true
+      end
+    end
+
+    finding.extension = true
+    finding.save(validate: false)
+
+    finding.extension = true
+
+    assert finding.valid?
+  end
+
+  test 'should return reschedule' do
+    finding = findings :being_implemented_weakness
+
+    reschedules = finding.calculate_reschedule_count
+
+    assert reschedules.positive?
+
+    finding.extension      = false
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    assert_equal reschedules + 1, finding.calculate_reschedule_count
+
+    finding.save!
+
+    finding.extension      = false
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 1.days).to_s(:db)
+
+    assert_equal reschedules + 1, finding.calculate_reschedule_count
+
+    finding.save!
+
+    finding.extension      = false
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 4.days).to_s(:db)
+
+    assert_equal reschedules + 2, finding.calculate_reschedule_count
+  end
+
+  test 'should return not reschedule' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_attribute('extension', true)
+
+    finding.versions.each do |v|
+      v.object['extension'] = true
+
+      v.save
+    end
+    
+    finding.extension      = false
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+    reschedules            = finding.calculate_reschedule_count
+
+    assert reschedules.zero?
+
+    finding.extension = true
+    reschedules       = finding.calculate_reschedule_count
+
+    assert reschedules.zero?
+  end
+
+  test 'should return not reschedule because versions and extension had extension' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.versions.each do |v|
+      v.object['extension'] = true
+      v.save
+    end
+
+    reschedules = finding.calculate_reschedule_count
+
+    assert reschedules.zero?
+  end
+
+  test 'should return had version with being implemented' do
+    finding = findings :being_implemented_weakness
+
+    assert finding.had_version_with_being_implemented?
+  end
+
+  test 'should return not had version with being implemented' do
+    finding = findings :being_implemented_weakness
+
+    finding.versions.each do |v|
+      if v.object['state'] == Finding::STATUS[:being_implemented]
+        v.object['state'] = Finding::STATUS[:incomplete]
+        v.save
+      end
+    end
+
+    refute finding.had_version_with_being_implemented?
   end
 
   private

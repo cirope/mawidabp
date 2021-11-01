@@ -174,7 +174,7 @@ class WeaknessesController < ApplicationController
         :probability, :skip_work_paper, :weakness_template_id,
         :compliance_observations, :manual_risk, :use_suggested_impact,
         :use_suggested_probability, :impact_amount, :probability_amount,
-        :lock_version,
+        :lock_version, :extension,
         operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [], tag_ids: [],
         achievements_attributes: [

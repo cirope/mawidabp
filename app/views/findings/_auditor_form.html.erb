@@ -1,7 +1,9 @@
 <% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? || @finding.expired? %>
 <% show_history_changes = show_follow_up_timestamps? && @finding.status_change_history.size > 1 %>
-<%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completion_state], @finding), :html =>
-  {:method => :patch, :id => "edit_finding_#{@finding.id}"} do |f| %>
+<% data_for_submit = data_for_submit @finding %>
+
+<%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completion_state], @finding),
+    :html => {:method => :patch, :id => "edit_finding_#{@finding.id}"}.merge(data_for_submit) do |f| %>
 
   <% content_for :js_extra do %>
     <%= raw "var lastWorkPaperCode = '#{@finding.kind_of?(Weakness) ?
@@ -84,7 +86,18 @@
         <% end %>
         <%= f.label :state, raw(Finding.human_attribute_name(:state) + ' ' +
           (show_history_changes ? finding_show_status_change_history(:finding_status_change_history) : '')) %>
-        <%= finding_status_field(f, disabled: @finding.issues.any?) %>
+
+        <% options_for_select = if USE_SCOPE_CYCLE
+                                  {
+                                    data:
+                                      { target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
+                                        target_checkbox: '#finding_extension',
+                                        disabled_and_deny: true }
+                                  }
+                                else
+                                  {}
+                                end %>
+        <%= finding_status_field(f, disabled: @finding.issues.any?, options_html: options_for_select) %>
 
         <% if show_skip_work_paper_for @finding %>
           <%= f.input :skip_work_paper, as: :boolean %>
@@ -104,7 +117,16 @@
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <%= f.input :answer, input_html: { rows: finding_answer_rows } %>
-        <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
+        <div class="row">
+          <div class="col-<%= USE_SCOPE_CYCLE ? 9 : 12 %>">
+            <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
+          </div>
+          <% if USE_SCOPE_CYCLE %>
+            <div class="col-3 text-right">
+              <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' }, input_html: { readonly: @finding.tasks.any? } %>
+            </div>
+          <% end %>
+        </div>
         <% if @finding.follow_up_date && show_follow_up_timestamps? %>
           <%= show_weakness_previous_follow_up_dates(@finding) %>
         <% end %>

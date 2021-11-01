@@ -1,19 +1,18 @@
 jQuery(function () {
   $(document).ready(function () {
-    $('[data-target-label]').each(function () {
+    $('[data-target-input-with-label]').each(function () {
       changeLabel($(this))
     })
   })
 
-  $(document).on('change', '[data-target-label]', function () {
+  $(document).on('change', '[data-target-input-with-label]', function () {
     changeLabel($(this))
   })
 
   function changeLabel(element) {
-    var idLabel = element.data('formClass').toLowerCase().concat('_', element.data('targetLabel'))
-    var $labelTarget = $('label[for="' + idLabel + '"]')
+    var $labelTarget = $('label[for="' + element.data('targetInputWithLabel').replace('#', '') + '"]')
 
-    if (element.find(':selected').val() == element.data('targetValue')) {  
+    if (element.find(':selected').val() == element.data('targetValueChangeLabel')) {
       var text = $labelTarget.text().concat(element.data('suffix'))
     } else {
       var text = $labelTarget.text().split(element.data('suffix'))[0]
@@ -22,5 +21,3 @@ jQuery(function () {
     $($labelTarget).text(text)
   }
 })
-
-

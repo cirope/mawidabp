@@ -545,6 +545,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_181626) do
     t.string "use_suggested_probability"
     t.decimal "impact_amount", precision: 17, scale: 2
     t.decimal "probability_amount", precision: 17, scale: 2
+    t.boolean "extension", default: false, null: false
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
