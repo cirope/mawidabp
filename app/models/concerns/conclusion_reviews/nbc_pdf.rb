@@ -190,12 +190,12 @@ module ConclusionReviews::NbcPdf
 
         pdf.font_size (PDF_FONT_SIZE).round do
 
-          responsible = review.review_user_assignments.select do |rua|
+          responsible = review.review_user_assignments.detect do |rua|
             rua.responsible?
           end
 
-          if responsible.size > 0
-            pdf.text I18n.t('conclusion_review.nbc.weaknesses.highest_responsible', responsible: responsible.first.user.full_name), inline_format: true
+          if responsible.present?
+            pdf.text I18n.t('conclusion_review.nbc.weaknesses.highest_responsible', responsible: responsible.user.full_name), inline_format: true
             pdf.text I18n.t('conclusion_review.nbc.weaknesses.signature_label'), inline_format: true
             pdf.text I18n.t('conclusion_review.nbc.weaknesses.organization'), inline_format: true
           end
