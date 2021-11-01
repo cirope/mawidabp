@@ -165,4 +165,4 @@ es:
         description: "<b>Descripción</b>"
         risk: "<b>Nivel de riesgo</b>"
         audit_recommendations: "<b>Sugerencia de Mejora</b>"
-        audit_comments: "<b>Comentarios del Responsable</b>"
+        audit_comments: "<b>Plan de acción propuesto por el responsable</b>"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_20_044345) do
+ActiveRecord::Schema.define(version: 2021_10_27_181626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -283,6 +283,7 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
     t.text "main_recommendations"
     t.text "effectiveness_notes"
     t.text "additional_comments"
+    t.boolean "exclude_regularized_findings", default: false, null: false
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
@@ -544,6 +545,7 @@ ActiveRecord::Schema.define(version: 2021_09_20_044345) do
     t.string "use_suggested_probability"
     t.decimal "impact_amount", precision: 17, scale: 2
     t.decimal "probability_amount", precision: 17, scale: 2
+    t.boolean "extension", default: false, null: false
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
