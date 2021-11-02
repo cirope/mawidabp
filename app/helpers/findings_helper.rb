@@ -455,4 +455,8 @@ module FindingsHelper
     def finding_probability_risks_types finding
       finding.percentage_by_probability.invert.reverse_each.to_json
     end
+
+    def date_solution_text date
+      USE_SCOPE_CYCLE ? I18n.t('findings.index.finding_solved') : l(date, format: :short)
+    end
 end
