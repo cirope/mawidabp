@@ -456,7 +456,11 @@ module FindingsHelper
       finding.percentage_by_probability.invert.reverse_each.to_json
     end
 
-    def date_solution_text date
-      USE_SCOPE_CYCLE ? I18n.t('findings.index.finding_solved') : l(date, format: :short)
+    def date_solution_text finding
+      if USE_SCOPE_CYCLE && finding.implemented_audited?
+        I18n.t('findings.index.finding_solved')
+      else
+        l(finding.solution_date, format: :short)
+      end
     end
 end
