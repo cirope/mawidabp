@@ -72,4 +72,24 @@ class FindingsHelperTest < ActionView::TestCase
 
     assert_equal expected_hash, data_for_submit(finding)
   end
+
+  test 'Should solved finding in date solution' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.state = Finding::STATUS[:implemented_audited]
+
+    assert_equal I18n.t('findings.index.finding_solved'), date_solution_text(finding)
+  end
+
+  test 'Should date in date solution' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.solution_date = Time.now.to_s :db
+
+    assert_equal I18n.l(finding.solution_date, format: :short), date_solution_text(finding)
+  end
 end
