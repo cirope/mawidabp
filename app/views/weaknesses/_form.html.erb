@@ -9,7 +9,7 @@
   }
 } %>
 <% if USE_SCOPE_CYCLE
-    form_options[:data] = form_options[:data].merge({ confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension', 
+    form_options[:data] = form_options[:data].merge({ confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
                                                                        { state: I18n.t('findings.state.being_implemented'),
                                                                          extension: Finding.human_attribute_name(:extension) }),
                                                       checkbox_target: '#weakness_extension',
@@ -17,7 +17,7 @@
                                                       state_target: Finding::STATUS[:being_implemented],
                                                       input_with_state: '#weakness_state',
                                                       condition_to_receive_confirm: first_version_in_being_implementation?(@weakness) })
-    end %> 
+    end %>
 
 <%= simple_form_for @weakness, form_options do |f| %>
   <% content_for :js_extra do %>
@@ -85,6 +85,34 @@
         <%= f.input :origination_date, as: :date_picker, input_html: {
           readonly: (readonly || @weakness.repeated_of)
         } %>
+
+      <div class="col">
+        <%= f.input :state_regulations, collection: weakness_state_regulations, prompt: true,
+          input_html: {
+            data: { bic_calculate_risk: true }
+          } %>
+        <%= f.input :degree_compliance, collection: weakness_degree_compliance, prompt: true,
+          input_html: {
+            data: { bic_calculate_risk: true }
+          } %>
+        <%= f.input :observation_originated_tests, collection: weakness_observation_origination_tests, prompt: true,
+          input_html: {
+            data: { bic_calculate_risk: true }
+          } %>
+        <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
+          input_html: {
+            data: { bic_calculate_risk: true }
+          } %>
+        <%= f.input :probability, collection: weakness_probabilities, prompt: true,
+          input_html: {
+            data: { bic_calculate_risk: true }
+          } %>
+        <%= f.input :sample_deviation, collection: weakness_sample_deviation, prompt: true,
+          input_html: {
+            data: { bic_calculate_risk: true }
+          } %>
+      </div>
+
         <% if USE_SCOPE_CYCLE %>
           <div class="row">
             <div class="col">
@@ -166,8 +194,8 @@
                                   }
                                 else
                                   {}
-                                end %>              
-        <%= finding_status_field(f, 
+                                end %>
+        <%= finding_status_field(f,
                                  disabled: readonly || @weakness.issues.any?,
                                  options_html: options_for_select) %>
 
@@ -186,7 +214,7 @@
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
         <% end %>
-        <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>  
+        <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
         <% options_for_extension_checkbox = if USE_SCOPE_CYCLE
                                               {
                                                 data:
@@ -196,7 +224,7 @@
                                               }
                                             else
                                               {}
-                                            end %>       
+                                            end %>
         <div class="row">
           <div class="col-<%= USE_SCOPE_CYCLE ? 9 : 12 %>">
             <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>

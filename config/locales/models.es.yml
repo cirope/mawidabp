@@ -337,6 +337,11 @@ es:
         impact_amount: 'Monto universo'
         probability_amount: 'Universo en cantidad de casos'
         organization: 'Organización'
+        frequency: 'Frecuencia'
+        state_regulations: 'Normativa Estado'
+        degree_compliance: 'Grado Cumpliento Normativa'
+        observation_originated_tests: 'Observación originada en prueba de'
+        sample_deviation: 'Desvio de la muestra'
       finding/achievements:
         one: 'Beneficio estimado'
         amount: 'Monto'

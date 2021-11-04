@@ -357,6 +357,17 @@ jQuery(function ($) {
     }
   })
 
+  $(document).on('change', '[data-bic-calculate-risk]', function () {
+    var total = 0
+
+    $('[data-bic-calculate-risk]').each(function (i, e) {
+      total += +$(e).val()
+    })
+
+
+    $('[name$="[risk]"]').val(risk).change()
+  })
+
   $(document).on('change', '[data-skip-commitment-support]', function () {
     if ($(this).is(':checked')) {
       $('[data-commitment-support]').addClass('d-none')

@@ -13,6 +13,10 @@ es:
     moderate: 'Moderado'
     high: 'Alto'
     critical: 'Crítico'
+  bic_impact_risk_types:
+    low: 'Bajo'
+    moderate: 'Medio'
+    high: 'Alto'
   relevance_types:
     not_rated: 'Nulo'
     low: 'Bajo'
@@ -55,6 +59,25 @@ es:
     possible: 'Posible'
     probable: 'Probable'
     almost_certain: 'Casi Certeza'
+  frequencies_types:
+    low: 'Bajo'
+    moderate: 'Medio'
+    high: 'Alto'
+  state_regulations_types:
+    not_exist: 'No existe'
+    inadequate: 'Desactualizada/inadecuada/requiere ajuste'
+    exist: 'Existe actualizada'
+  degree_compliance_types:
+    fails: 'No cumple'
+    partially: 'Se cumple parcialmente'
+    comply: 'Se cumple'
+  observation_originated_tests_types:
+    design: 'Diseño'
+    compliance: 'Cumplimiento'
+    sustantive: 'Sustantiva'
+  sample_deviation_types:
+    less_expected: 'Menos esperado'
+    most_expected: 'Mas esperado'
   suggested_type_risks:
     representativeness: 'Representatividad'
     absolute_value: 'Valor absoluto'

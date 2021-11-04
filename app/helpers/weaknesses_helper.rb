@@ -101,14 +101,52 @@ module WeaknessesHelper
   end
 
   def weakness_impact_risks
-    Finding.impact_risks.map do |key, value|
-      [t("impact_risk_types.#{key}"), value]
+    if USE_SCOPE_CYCLE
+      Finding.impact_risks.map do |key, value|
+        [t("impact_risk_types.#{key}"), value]
+      end
+    else
+      Finding.impact_risks_bic.map do |key, value|
+        [t("bic_impact_risk_types.#{key}"), value]
+      end
     end
   end
 
+
   def weakness_probabilities
-    Finding.probabilities.map do |key, value|
-      [t("probability_types.#{key}"), value]
+    if USE_SCOPE_CYCLE
+      Finding.probabilities.map do |key, value|
+        [t("probability_types.#{key}"), value]
+      end
+      else
+        Finding.frequencies.map do |key, value|
+          [t("frequencies_types.#{key}"), value]
+        end
+    end
+  end
+
+  def weakness_state_regulations
+    Finding.state_regulations.map do |key, value|
+      [t("state_regulations_types.#{key}"), value]
+    end
+  end
+
+
+  def weakness_degree_compliance
+    Finding.degree_compliance.map do |key, value|
+      [t("degree_compliance_types.#{key}"), value]
+    end
+  end
+
+  def weakness_observation_origination_tests
+    Finding.observation_origination_tests.map do |key, value|
+      [t("observation_originated_tests_types.#{key}"), value]
+    end
+  end
+
+  def weakness_sample_deviation
+    Finding.sample_deviation.map do |key, value|
+      [t("sample_deviation_types.#{key}"), value]
     end
   end
 
