@@ -51,28 +51,28 @@ module Findings::Issues
     get_percentage_by_impact&.first
   end
 
-  def probability_risk_previous
+  def probability_risk_previous weakness_template_params
     quantity = 0
-
-    if weakness_template_id
+    wt = weakness_template || weakness_template_params
+    if wt
       quantity       = 1
       current_review = review
 
       4.times do
         current_review = current_review&.previous
 
-        if review && previous_weakness_by_template?(current_review)
+        if review && previous_weakness_by_template?(current_review, wt)
           quantity += 1
         end
       end
 
-      quantity = csv_base quantity if FINDING_REPEATABILITY_FILE.include? current.organization.prefix
+      quantity = csv_base quantity, wt if FINDING_REPEATABILITY_FILE.include? current.organization.prefix
     end
 
     quantity
   end
 
-  def csv_base quantity
+  def csv_base quantity, weakness_template
     csv_options  = { headers: true }
     file         = FINDING_REPEATABILITY_FILE[current.organization.prefix]
     project_name = review.plan_item.project
@@ -103,8 +103,8 @@ module Findings::Issues
     get_percentage_by_probability&.first
   end
 
-  def previous_weakness_by_template? review
-    Array(review&.weaknesses).map(&:weakness_template_id).include? weakness_template_id
+  def previous_weakness_by_template? review, weakness_template
+    Array(review&.weaknesses).map(&:weakness_template_id).include? weakness_template.id
   end
 
   def amount_by_impact

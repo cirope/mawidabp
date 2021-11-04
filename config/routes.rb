@@ -381,6 +381,7 @@ Rails.application.routes.draw do
       get :auto_complete_for_control_objective_item
       get :auto_complete_for_weakness_template
       get :weakness_template_changed
+      get :search_weakness_template_previous
     end
 
     member do

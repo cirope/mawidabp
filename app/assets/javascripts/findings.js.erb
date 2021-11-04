@@ -270,6 +270,8 @@ jQuery(function ($) {
     var probabilityPreviousTotal   = $('[data-probability-previous-amount]').data('probabilityPreviousAmount')
     var probabilityRisksTypes      = $('[data-probability-risks-types]').data('probabilityRisksTypes')
     var issuePercentage            = 0
+    var probabilityWeaknessNew     = $('[data-probability-weakness-new]').data('probabilityWeaknessNew')
+    var probabilityPreviousUrl     = $('[data-probability-previous-url]').data('probabilityPreviousUrl')
 
     if (currentProbabilityAmount > 0) {
       issuePercentage = totalIssues / currentProbabilityAmount
@@ -286,6 +288,28 @@ jQuery(function ($) {
       var probabilityRiskChanged = $('[name$="[probability]"]').val() !== String(probabilityId)
 
       if (probabilityRiskChanged) {
+        if (probabilityWeaknessNew) {
+          var weaknessTemplateId = $('[name$="[weakness_template_id]"]').val()
+          var urlTemplate        = decodeURI(probabilityPreviousUrl)
+          var url                = urlTemplate.replace('[WEAKNESS_ID]', 1).replace('[WEAKNESS_TEMPLATE_ID]', 1)
+
+          console.log( probabilityPreviousTotal)
+          // $.ajax({
+          //   url: url,
+          //   dataType: 'json',
+          //   success: function(data) {
+          //     console.log(data)
+          //   }
+          // })
+
+          fetch(url).then(function(response) {
+            console.log(response)
+          })
+          // $.getScript(url, function (data){
+          //    probabilityPreviousTotal = data
+          // })
+        }
+console.log( probabilityPreviousTotal)
         if (probabilityPreviousTotal === 0) {
           probabilityPreviousTotal = ''
         }
