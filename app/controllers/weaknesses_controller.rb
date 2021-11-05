@@ -145,7 +145,7 @@ class WeaknessesController < ApplicationController
 
   # Deshace la reiteración de la observación
   #
-  ## * PATCH /weaknesses/undo_reiteration/1
+  # * PATCH /weaknesses/undo_reiteration/1
   def undo_reiteration
     @weakness.undo_reiteration
 
