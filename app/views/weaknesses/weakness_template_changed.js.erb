@@ -8,6 +8,7 @@ $('[id^=weakness_internal_control_components]').prop('checked', false).trigger('
   $('[data-notes]').text('<%= j @weakness_template.notes %>')
   $('[name$="[brief]"]').val('<%= j @weakness_template.description %>')
   $('[name$="[risk]"]').val('<%= @weakness_template.risk %>')
+  $('[data-probability-previous-amount]').data('probabilityPreviousAmount', '<%= @probability_risk_amount %>')
 
   <% Array(@weakness_template.impact).each do |value| %>
     $('[id^=weakness_impact][value="<%= j value %>"]').prop('checked', true).trigger('custom:change')
