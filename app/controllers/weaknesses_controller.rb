@@ -156,7 +156,7 @@ class WeaknessesController < ApplicationController
 
   # * GET /weaknesses/weakness_template_changed
   def weakness_template_changed
-    control_objective_item   = ControlObjectiveItem.find_by id: params[:control_objective_item_id]
+    control_objective_item   = ControlObjectiveItem.list.find_by id: params[:control_objective_item_id]
     @weakness_template       = WeaknessTemplate.list.find_by id: params[:id]
     @probability_risk_amount = Finding.list.probability_risk_previous control_objective_item&.review,
                                  @weakness_template
