@@ -644,6 +644,7 @@
     undo_reiteration: 'Deshacer reiteración'
     change_history: "Historial de cambios"
     submit_answer: "Guardar comentario"
+    supervisor: "Jefe"
     auditors:
       one: "Auditor"
       other: "Auditores"
