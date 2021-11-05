@@ -951,7 +951,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.reload.repeated_of
     assert finding.rescheduled?
 
-    count_reschedule = USE_SCOPE_CYCLE ? 2 : 3 
+    count_reschedule = USE_SCOPE_CYCLE ? 2 : 3
 
     assert_equal count_reschedule, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
@@ -1576,19 +1576,24 @@ class FindingTest < ActiveSupport::TestCase
         0
       end
 
-    assert_equal @finding.probability_risk_previous, 0
+    assert_equal Finding.probability_risk_previous(@finding.review), 0
 
     @finding.weakness_template = weakness_templates :security
 
     assert @finding.valid?
 
-    assert_equal @finding.probability_risk_previous, repeatability_in_file + 1
+    probability_risk_previous_amount = Finding.probability_risk_previous @finding.review, @finding.weakness_template
+
+    assert_equal probability_risk_previous_amount, repeatability_in_file + 1
 
     weakness_previous = @finding.review.previous.weaknesses.first
 
     weakness_previous.update_column :weakness_template_id, weakness_templates(:security).id
 
-    assert_equal @finding.probability_risk_previous, repeatability_in_file + 2
+    probability_risk_previous_amount = Finding.probability_risk_previous @finding.review, @finding.weakness_template
+
+    assert_equal probability_risk_previous_amount, repeatability_in_file + 2
+
   ensure
     Current.organization = nil
     Current.user         = nil
@@ -1720,7 +1725,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = findings :being_implemented_weakness
 
     finding.update_attribute('extension', true)
-    
+
     finding.extension = false
 
     refute finding.not_extension_was?
@@ -1807,7 +1812,7 @@ class FindingTest < ActiveSupport::TestCase
 
       v.save
     end
-    
+
     finding.extension      = false
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
     reschedules            = finding.calculate_reschedule_count
