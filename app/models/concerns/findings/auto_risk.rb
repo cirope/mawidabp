@@ -60,6 +60,14 @@ module Findings::AutoRisk
     !manual_risk
   end
 
+  def bic_risks_types
+    {
+      0 => 0,
+      1 => 383.34,
+      2 => 691.67
+    }
+  end
+
   module ClassMethods
     def auto_risk_thresholds
       {
@@ -69,13 +77,7 @@ module Findings::AutoRisk
       }
     end
 
-    def bic_risk
-      {
-        risks[:low]    => 383.33,
-        risks[:medium] => 691.66,
-        risks[:high]   => 1000
-      }
-    end
+
 
     def probabilities
       PROBABILITIES

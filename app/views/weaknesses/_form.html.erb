@@ -85,32 +85,45 @@
         <%= f.input :origination_date, as: :date_picker, input_html: {
           readonly: (readonly || @weakness.repeated_of)
         } %>
-
-      <div class="col">
-        <%= f.input :state_regulations, collection: weakness_state_regulations, prompt: true,
+      <div class="row">
+        <div class="col" data-bic-risks-types="<%= finding_bic_risks_types(@weakness) %>">
+          <%= f.input :state_regulations, collection: weakness_state_regulations, prompt: true,
+            input_html: {
+              data: { bic_calculate_risk: true }
+            } %>
+        </div>
+        <div class="col">
+          <%= f.input :degree_compliance, collection: weakness_degree_compliance, prompt: true,
+            input_html: {
+              data: { bic_calculate_risk: true }
+            } %>
+        </div>
+        <div class="col">
+          <%= f.input :observation_originated_tests, collection: weakness_observation_origination_tests, prompt: true,
+            input_html: {
+              data: { bic_calculate_risk: true }
+            } %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
+            input_html: {
+              data: { bic_calculate_risk: true }
+            } %>
+        </div>
+        <div class="col">
+          <%= f.input :probability, collection: weakness_probabilities, prompt: true,
+            input_html: {
+              data: { bic_calculate_risk: true }
+            } %>
+        </div>
+        <div class="col">
+          <%= f.input :sample_deviation, collection: weakness_sample_deviation, prompt: true,
           input_html: {
             data: { bic_calculate_risk: true }
           } %>
-        <%= f.input :degree_compliance, collection: weakness_degree_compliance, prompt: true,
-          input_html: {
-            data: { bic_calculate_risk: true }
-          } %>
-        <%= f.input :observation_originated_tests, collection: weakness_observation_origination_tests, prompt: true,
-          input_html: {
-            data: { bic_calculate_risk: true }
-          } %>
-        <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
-          input_html: {
-            data: { bic_calculate_risk: true }
-          } %>
-        <%= f.input :probability, collection: weakness_probabilities, prompt: true,
-          input_html: {
-            data: { bic_calculate_risk: true }
-          } %>
-        <%= f.input :sample_deviation, collection: weakness_sample_deviation, prompt: true,
-          input_html: {
-            data: { bic_calculate_risk: true }
-          } %>
+        </div>
       </div>
 
         <% if USE_SCOPE_CYCLE %>
@@ -169,6 +182,9 @@
               } %>
             </div>
           </div>
+        <% elsif 1 == 1 %>
+          <%= f.input :risk, collection: risks, prompt: true, disabled: true %>
+          <%= f.input :risk, as: :hidden, disabled: false %>
         <% else %>
           <%= f.input :risk, collection: risks, prompt: true, disabled: readonly, input_html: {
             data: weakness_risk_data_options

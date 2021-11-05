@@ -546,10 +546,10 @@ ActiveRecord::Schema.define(version: 2021_11_02_230414) do
     t.decimal "impact_amount", precision: 17, scale: 2
     t.decimal "probability_amount", precision: 17, scale: 2
     t.boolean "extension", default: false, null: false
-    t.integer "state_regulations", default: 0
-    t.integer "degree_compliance", default: 0
-    t.integer "observation_originated_tests", default: 0
-    t.integer "sample_deviation", default: 0
+    t.integer "state_regulations"
+    t.integer "degree_compliance"
+    t.integer "observation_originated_tests"
+    t.integer "sample_deviation"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"

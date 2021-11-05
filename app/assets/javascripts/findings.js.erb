@@ -358,14 +358,31 @@ jQuery(function ($) {
   })
 
   $(document).on('change', '[data-bic-calculate-risk]', function () {
+    var types = $('[data-bic-risks-types]').data('bicRisksTypes')
     var total = 0
+    var risk
+
 
     $('[data-bic-calculate-risk]').each(function (i, e) {
       total += +$(e).val()
     })
 
+    $.each(types, function (i, data) {
+      riskValue = data[0]
+      riskId    = data[1]
 
-    $('[name$="[risk]"]').val(risk).change()
+      if (total > riskValue) {
+        risk = riskId
+
+        return false
+      }
+    })
+
+    var riskChanged = $('[name$="[risk]"]').val() !== String(risk)
+
+    if (riskChanged) {
+      $('[name$="[risk]"]').val(risk).trigger('change')
+    }
   })
 
   $(document).on('change', '[data-skip-commitment-support]', function () {
