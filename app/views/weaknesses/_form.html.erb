@@ -485,9 +485,7 @@
               probability_previous_amount: @weakness.probability_risk_previous(@weakness.weakness_template),
               probability_representativeness_amount: @weakness.probability_risks_representativeness,
               probability_risks_types: finding_percentage_impact_risks_types(@weakness),
-              probability_amount: true,
-              probability_weakness_new: @weakness.new_record?,
-              probability_previous_url: weakness_template_previous(@weakness)
+              probability_amount: true
             }
           } %>
       </div>

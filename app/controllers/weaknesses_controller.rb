@@ -163,15 +163,6 @@ class WeaknessesController < ApplicationController
     end
   end
 
-  def search_weakness_template_previous
-    weakness = Weakness.list.find params[:id]
-    wt =  WeaknessTemplate.list.find_by id: params[:weakness_template_id]
-    qq = weakness.probability_risk_previous(wt)
-    respond_to do |format|
-      format.json { render json: qq }
-    end
-  end
-
   private
 
     def weakness_params
@@ -240,8 +231,7 @@ class WeaknessesController < ApplicationController
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
         auto_complete_for_weakness_template: :read,
-        undo_reiteration: :modify,
-        search_weakness_template_previous: :read
+        undo_reiteration: :modify
       )
     end
 

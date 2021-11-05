@@ -455,11 +455,4 @@ module FindingsHelper
     def finding_probability_risks_types finding
       finding.percentage_by_probability.invert.reverse_each.to_json
     end
-
-    def weakness_template_previous(weakness)
-      url_for controller: weakness.class.to_s.tableize,
-        action:     :search_weakness_template_previous,
-        id:         '[WEAKNESS_ID]',
-        weakness_template_id: '[WEAKNESS_TEMPLATE_ID]'
-    end
 end
