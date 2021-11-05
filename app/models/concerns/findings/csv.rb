@@ -135,7 +135,11 @@ module Findings::Csv
     end
 
     def solution_date_text
-      solution_date ? I18n.l(solution_date, format: :minimal) : '-'
+      solution_date ? date_solution_text : '-'
+    end
+
+    def date_solution_text
+      USE_SCOPE_CYCLE ? I18n.t('findings.csv.finding_solved') : I18n.l(solution_date, format: :minimal)
     end
 
     def implemented_at_text
