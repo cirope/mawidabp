@@ -43,7 +43,7 @@ module Findings::Issues
 
     def csv_base quantity, weakness_template, review
       csv_options  = { headers: true }
-      file         = FINDING_REPEATABILITY_FILE[current.organization.prefix]
+      file         = FINDING_REPEATABILITY_FILE[review.organization.prefix]
       project_name = review.plan_item.project
       suc_id       = project_name[/\((\d+)\)/, 1]
 
