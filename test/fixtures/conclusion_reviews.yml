@@ -20,6 +20,7 @@ conclusion_current_final_review:
   previous_date:
   previous_identification:
   main_recommendations: 'Main recommendations'
+  additional_comments: 'Additional comments'
   organization: cirope
   created_at: <%= 2.days.ago.to_date.to_s(:db) %>
 
@@ -43,6 +44,7 @@ conclusion_current_draft_review:
   previous_date:
   previous_identification:
   main_recommendations: 'Main recommendations'
+  additional_comments: 'Additional comments'
   organization: cirope
 
 conclusion_past_final_review:
@@ -67,6 +69,7 @@ conclusion_past_final_review:
   previous_date:
   previous_identification:
   main_recommendations: 'Main recommendations'
+  additional_comments: 'Additional comments'
   organization: cirope
   created_at: <%= 2.months.ago.to_date.to_s(:db) %>
 
@@ -90,6 +93,7 @@ conclusion_past_draft_review:
   previous_date:
   previous_identification:
   main_recommendations: 'Main recommendations'
+  additional_comments: 'Additional comments'
   organization: cirope
 
 conclusion_with_conclusion_draft_review:
@@ -112,6 +116,7 @@ conclusion_with_conclusion_draft_review:
   previous_date:
   previous_identification:
   main_recommendations: 'Main recommendations'
+  additional_comments: 'Additional comments'
   organization: cirope
 
 conclusion_approved_with_conclusion_draft_review:
@@ -134,4 +139,5 @@ conclusion_approved_with_conclusion_draft_review:
   previous_date:
   previous_identification:
   main_recommendations: 'Main recommendations'
+  additional_comments: 'Additional comments'
   organization: cirope

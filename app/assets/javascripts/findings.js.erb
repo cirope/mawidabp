@@ -63,6 +63,27 @@ jQuery(function ($) {
   $(document).on('dynamic-item:added', '[data-association="tasks"]', disableFollowUpDate)
   $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".task"]', disableFollowUpDate)
 
+  var disableState = function () {
+    var hasVisibleIssues = !!$('.issue:visible').length
+
+    $('[name$="[state]"]').attr('readonly', hasVisibleIssues)
+  }
+
+  $(document).on('dynamic-item:added', '[data-association="issues"]', function () {
+    refreshProbability()
+    disableState()
+  })
+
+  $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".issue"]', function () {
+    var total = sumAmountIssues()
+
+    $('[data-sum-amount-impact-risks]').text(total.toFixed(2))
+
+    refreshProbability()
+    refreshImpactAmount()
+    disableState()
+  })
+
   var changeFollowUpDate = function () {
     var lang     = $('html').prop('lang')
     var format   = $.datepicker.regional[lang].dateFormat
@@ -99,6 +120,12 @@ jQuery(function ($) {
       val('<%= Finding.priorities[:low] %>')
   })
 
+  $(document).on('change', '[data-copy-priority]', function () {
+    var risk_value = $(this).val()
+
+    $('[name$="[priority]"]').val(risk_value)
+  })
+
   $(document).on('change', '[data-toggle-compliance]', function () {
     var disabledFor = $(this).data('toggleCompliance')
     var $compliance = $('select[name$="[compliance]"]')
@@ -128,6 +155,185 @@ jQuery(function ($) {
       $.getScript(url).always(function () {
         $commitmentDate.prop('disabled', false)
       })
+    }
+  })
+
+  $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
+    $('[name$="[risk]"]').attr('disabled', ! $(this).is(':checked'))
+    $('[data-risk-modifier]').change()
+  })
+
+  $(document).on('change', '[data-risk-modifier]', function () {
+    var automatic = !$('[name$="[manual_risk]"]').is(':checked')
+    var values    = $('[data-risk-modifier]').map(function () {
+      return +$(this).val()
+    }).get()
+
+    if (automatic) {
+      var risk = undefined
+
+      if (values.every(function (v) { return v })) {
+        var result     = values.reduce(function (acc, v) { return acc * v }, 1)
+        var thresholds = $(this).data('riskModifier')
+
+        $.each(thresholds, function (risk_value, threshold) {
+          if (! risk && result <= threshold) {
+            risk = risk_value
+          }
+        })
+      }
+
+      if (risk) {
+        $('[name$="[risk]"]').val(risk).change()
+      } else {
+        $('[name$="[risk]"]').val(risk)
+      }
+    }
+  })
+
+  $(document).on('change', '[data-suggested-impact-option]', function () {
+    var absoluteValueId           = $('[data-impact-absolute-value]').data('impactAbsoluteValue')
+    var representativenessValueId = $('[data-impact-representativeness-value]').data('impactRepresentativenessValue')
+
+    if ($(this).val() === String(absoluteValueId) || $(this).val() === String(representativenessValueId)) {
+      $('select[name$="[impact_risk]"]').attr('disabled', true)
+      $('input[name$="[impact_risk]"]').attr('disabled', false)
+
+      refreshImpactAmount()
+    } else {
+      $('select[name$="[impact_risk]"]').attr('disabled', false)
+      $('input[name$="[impact_risk]"]').attr('disabled', true)
+    }
+  })
+
+  $(document).on('keyup change', '[data-finding-issue-amount]', function () {
+    var currency = $('[data-current-currency]').data('currentCurrency')
+    var total    = sumAmountIssues()
+
+    $('[data-sum-amount-impact-risks]').text(currency + total.toFixed(2))
+
+    refreshImpactAmount()
+    refreshProbability()
+  })
+
+  $(document).on('keyup change', '[data-amount-impact]', function () {
+    refreshImpactAmount()
+  })
+
+  $(document).on('keyup change', '[data-probability-amount]', function () {
+    refreshProbability()
+  })
+
+  var refreshImpactAmount = function () {
+    var currentImpactValue        = +$('[data-amount-impact]').val()
+    var absoluteValueId           = $('[data-impact-absolute-value]').data('impactAbsoluteValue')
+    var representativenessValueId = $('[data-impact-representativeness-value]').data('impactRepresentativenessValue')
+    var suggestedImpactOption     = $('[data-suggested-impact-option]').val()
+    var total                     = sumAmountIssues()
+    var issuePercentage           = 0
+
+    if (currentImpactValue > 0) {
+      issuePercentage = total / currentImpactValue
+    }
+
+    if (suggestedImpactOption === String(absoluteValueId)) {
+      var impactRisksTypes = $('[data-impact-risks-types]').data('impactRisksTypes')
+      var totalIssues      = $('[data-finding-issue-amount]:visible').length
+
+      if (totalIssues === 0) {
+        total = currentImpactValue
+      }
+
+      var impactValueId     = impactRisksTypesValue(impactRisksTypes, total)
+      var impactRiskChanged = $('[name$="[impact_risk]"]').val() !== String(impactValueId)
+
+      if (impactRiskChanged) {
+        $('[name$="[impact_risk]"]').val(impactValueId).trigger('change')
+      }
+    } else if (suggestedImpactOption === String(representativenessValueId)) {
+      var percentageImpactRisksTypes = $('[data-impact-risks-types]').data('percentageImpactRisksTypes')
+      var impactRisksId              = impactRisksTypesValue(percentageImpactRisksTypes, issuePercentage)
+      var impactRiskChanged          = $('[name$="[impact_risk]"]').val() !== String(impactRisksId)
+
+      if (impactRiskChanged) {
+        $('[name$="[impact_risk]"]').val(impactRisksId).trigger('change')
+      }
+    }
+  }
+
+  var refreshProbability = function () {
+    var filterAmount               = function (i, e) { return e.value.trim() }
+    var totalIssues                = $('[data-finding-issue-amount]:visible').filter(filterAmount).length
+    var currentProbabilityAmount   = +$('[data-probability-risks-types]').val()
+    var representativenessValueId  = $('[data-probability-representativeness-value]').data('probabilityRepresentativenessValue')
+    var repeatabilityValueId       = $('[data-probability-representativeness-value]').data('probabilityRepeatabilityValue')
+    var probabilityPreviousTotal   = $('[data-probability-previous-amount]').data('probabilityPreviousAmount')
+    var probabilityRisksTypes      = $('[data-probability-risks-types]').data('probabilityRisksTypes')
+    var issuePercentage            = 0
+
+    if (currentProbabilityAmount > 0) {
+      issuePercentage = totalIssues / currentProbabilityAmount
+    }
+
+    if ($('[data-suggested-probability-option]').val() === String(representativenessValueId)) {
+      var probabilityId           = impactRisksTypesValue(probabilityRisksTypes, issuePercentage)
+      var probabilityRiskChanged  = $('[name$="[probability]"]').val() !== String(probabilityId)
+
+      if (probabilityRiskChanged) {
+        $('[name$="[probability]"]').val(probabilityId).trigger('change')
+      }
+    } else if ($('[data-suggested-probability-option]').val() === String(repeatabilityValueId)) {
+      var probabilityRiskChanged = $('[name$="[probability]"]').val() !== String(probabilityId)
+
+      if (probabilityRiskChanged) {
+        if (probabilityPreviousTotal === 0) {
+          probabilityPreviousTotal = ''
+        }
+
+        $('[name$="[probability]"]').val(probabilityPreviousTotal).trigger('change')
+      }
+    }
+  }
+
+  var impactRisksTypesValue = function (types, total) {
+    var impactValue
+
+    $.each(types, function (i, data) {
+      var impactRiskId     = data[1]
+      var impactRiskAmount = data[0]
+
+      if (total > impactRiskAmount || (total === 0 && impactRiskAmount === 0)) {
+        impactValue = impactRiskId
+
+        return false
+      }
+    })
+
+    return impactValue
+  }
+
+  var sumAmountIssues = function () {
+    var total = 0
+
+    $('[data-finding-issue-amount]:visible').each(function (i, e) {
+      total += +$(e).val()
+    })
+
+    return total
+  }
+
+  $(document).on('change', '[data-suggested-probability-option]', function () {
+    var repeatabilityValue      = $('[data-probability-repeatability-value]').data('probabilityRepeatabilityValue')
+    var representativenessValue = $('[data-probability-representativeness-value]').data('probabilityRepresentativenessValue')
+
+    if ($(this).val() === String(repeatabilityValue) || $(this).val() === String(representativenessValue)) {
+      $('select[name$="[probability]"]').attr('disabled', true)
+      $('input[name$="[probability]"]').attr('disabled', false)
+
+      refreshProbability()
+    } else {
+      $('select[name$="[probability]"]').attr('disabled', false)
+      $('input[name$="[probability]"]').attr('disabled', true)
     }
   })
 

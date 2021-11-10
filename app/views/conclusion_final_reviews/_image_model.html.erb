@@ -1,0 +1,26 @@
+<fieldset class="image_model">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-10">
+        <% if f.object.image? %>
+          <p class="mb-2">
+            <%= icon 'fas', 'image', class: 'mr-2' %>
+            <%= f.object.image.file.filename %>
+            <% if f.object.image_cache %>
+              <%= f.input :image_cache, as: :hidden %>
+            <% end %>
+          </p>
+        <% else %>
+          <div class="file-container float-left small">
+            <%= link_to_upload f.object, :image %>
+            <% if f.object.image_cache %>
+              <%= f.input :image_cache, as: :hidden %>
+            <% else %>
+              <%= f.input :image, label: false %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</fieldset>

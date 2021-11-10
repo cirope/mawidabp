@@ -18,6 +18,8 @@ class Authentication
     if @valid && @valid_user
       if @current_organization.try(:ldap_config)
         verify_pending_poll
+      elsif @current_organization&.saml_provider.present?
+        verify_pending_poll
       else
         verify_days_for_password_expiration
         verify_pending_poll
@@ -25,7 +27,8 @@ class Authentication
       end
     else
       @message ||= I18n.t 'message.invalid_user_or_password'
-      @redirect_url = { controller: 'sessions', action: 'new' }
+      @redirect_url ||= { controller: 'sessions', action: 'new' }
+
       register_login_error
     end
 
@@ -35,9 +38,90 @@ class Authentication
   private
 
     def set_resources
+      set_saml_user
       set_login_user
       set_ldap_config
       set_valid_user
+    end
+
+    def set_saml_user
+      if @current_organization&.saml_provider.present?
+        provider      = @current_organization.saml_provider
+        saml_config   = IdpSettingsAdapter.saml_settings provider
+        saml_response = OneLogin::RubySaml::Response.new @params[:SAMLResponse], settings: saml_config
+
+        if saml_response.is_valid?
+          @user = saml_user_for saml_response.nameid, saml_response.attributes
+        end
+      end
+    end
+
+    def saml_user_for email, attributes
+      pruned_attributes = send("prune_#{@current_organization.saml_provider}_attributes", attributes)
+      email             = pruned_attributes[:email] || email
+      @params[:user]    = pruned_attributes[:user]
+
+      if user = User.find_by(user: @params[:user])
+        update_user user, pruned_attributes.merge(email: email)
+      else
+        create_user pruned_attributes.merge(email: email)
+      end
+    end
+
+    def update_user user, attributes
+      current_roles = user.organization_roles.where organization_id: @current_organization.id
+      remove_roles  = current_roles.includes(:role).references(:roles).where.not roles: { name: attributes[:roles] }
+      add_roles     = Array(attributes[:roles]).select do |name|
+        current_roles.includes(:role).references(:roles).where(roles: { name: name }).empty?
+      end
+
+      User.transaction do
+        user.organization_roles.where(id: remove_roles.ids).destroy_all
+
+        add_roles.each do |name|
+          role = Role.where(organization_id: @current_organization.id, name: name).take
+
+          if role
+            user.organization_roles.create! organization_id: role.organization_id,
+                                            role_id:         role.id
+          end
+        end
+
+        user.update! user:      attributes[:user],
+                     email:     attributes[:email],
+                     name:      attributes[:name],
+                     last_name: attributes[:last_name],
+                     enable:    true
+      end
+
+      user if user.organization_roles.where(organization_id: @current_organization.id).any?
+    end
+
+    def create_user attributes
+      roles = Role.where organization_id: @current_organization.id, name: attributes[:roles]
+
+      if roles.any?
+        User.create!(
+          name:                          attributes[:name],
+          last_name:                     attributes[:last_name],
+          email:                         attributes[:email],
+          user:                          attributes[:user],
+          enable:                        true,
+          organization_roles_attributes: roles.map do |r|
+            { organization_id: r.organization_id, role_id: r.id }
+          end
+        )
+      end
+    end
+
+    def prune_azure_attributes attributes
+      {
+        user:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, ''),
+        name:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first,
+        email:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first,
+        last_name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first,
+        roles:     attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
+      }
     end
 
     def unmasked_user
@@ -47,7 +131,7 @@ class Authentication
     end
 
     def set_login_user
-      @user = User.new user: @params[:user], password: @params[:password]
+      @user ||= User.new user: @params[:user], password: @params[:password]
     end
 
     def set_ldap_config
@@ -84,8 +168,22 @@ class Authentication
     def authenticate
       if @current_organization.try(:ldap_config)
         ldap_auth
+      elsif @current_organization&.saml_provider.present?
+        saml_auth
       else
         local_auth
+      end
+    end
+
+    def saml_auth
+      if @user&.valid?
+        @valid        = true
+        @valid_user   = @user
+        @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
+
+        register_login
+      else
+        @redirect_url = { controller: 'sessions', action: 'new', saml_error: true }
       end
     end
 
@@ -186,7 +284,7 @@ class Authentication
     def verify_if_must_change_the_password
       if @valid_user.must_change_the_password?
         @message = I18n.t 'message.must_change_the_password'
-        @redirect_url = [:edit, 'users_password', id: @valid_user]
+        @redirect_url = [:edit, :users_password, id: @valid_user]
       end
     end
 
@@ -214,7 +312,7 @@ class Authentication
           count: @valid_user.list_unanswered_polls.count
         )
 
-        @redirect_url = ['edit', poll, token: poll.access_token]
+        @redirect_url = [:edit, poll, token: poll.access_token]
       end
     end
 

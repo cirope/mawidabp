@@ -3,7 +3,7 @@ module WeaknessesHelper
     list = String.new.html_safe
     out = String.new.html_safe
 
-    if weakness.being_implemented?
+    if weakness.being_implemented? || weakness.awaiting?
       dates = weakness.all_follow_up_dates
     end
 
@@ -88,5 +88,39 @@ module WeaknessesHelper
 
     control_objective &&
       WeaknessTemplate.list.by_control_objective(control_objective)
+  end
+
+  def weakness_risk_data_options
+    if SHOW_CONDENSED_PRIORITIES
+      { toggle_priority: Finding.risks[:medium], toggle_compliance: Finding.risks[:low] }
+    elsif USE_SCOPE_CYCLE
+      { copy_priority: true }
+    else
+      {}
+    end
+  end
+
+  def weakness_impact_risks
+    Finding.impact_risks.map do |key, value|
+      [t("impact_risk_types.#{key}"), value]
+    end
+  end
+
+  def weakness_probabilities
+    Finding.probabilities.map do |key, value|
+      [t("probability_types.#{key}"), value]
+    end
+  end
+
+  def suggested_type_risks
+    Finding::SUGGESTED_IMPACT_RISK_TYPES.map do |key, value|
+      [t("suggested_type_risks.#{key}"), value]
+    end
+  end
+
+  def suggested_type_probabilities
+    Finding::SUGGESTED_PROBABILITIES_TYPES.map do |key, value|
+      [t("suggested_type_probabilities.#{key}"), value]
+    end
   end
 end

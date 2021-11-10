@@ -167,3 +167,8 @@ auditor_role_for_jane_in_alphabet:
   user: jane
   organization: alphabet
   role: auditor_second_alphabet_role
+
+audited_role_for_corporate_in_cirope:
+  user: jane
+  organization: cirope
+  role: audited_role

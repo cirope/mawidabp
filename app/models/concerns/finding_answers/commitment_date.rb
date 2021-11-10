@@ -5,7 +5,8 @@ module FindingAnswers::CommitmentDate
     ENV['DISABLE_FINDING_ANSWER_COMMITMENT_DATE'].blank? &&
       has_date_required_status? &&
       has_follow_up_date_blank_or_expired? &&
-      has_expired_commitment_date?
+      has_expired_commitment_date? &&
+      !imported
   end
 
   private

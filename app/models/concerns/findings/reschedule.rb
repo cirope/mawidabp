@@ -58,6 +58,9 @@ module Findings::Reschedule
     def last_being_implemented_follow_up_date
       if implemented? || implemented_audited?
         last_being_implemented = versions.reverse.detect do |v|
+          prev = v.reify dup: true
+
+          prev&.being_implemented? || prev&.awaiting?
           v.reify(dup: true)&.being_implemented?
         end&.reify dup: true
 
@@ -68,11 +71,16 @@ module Findings::Reschedule
     end
 
     def follow_up_dates_to_check_against
-      follow_up_dates = [follow_up_date, follow_up_date_was].compact.sort.reverse
+      follow_up_dates = []
+
+      follow_up_dates << follow_up_date_was if not_extension_was? && follow_up_date_was.present?
+      follow_up_dates << follow_up_date if not_extension? && follow_up_date.present?
+
+      follow_up_dates.compact.sort.reverse
 
       versions_after_final_review.reverse.each do |v|
         prev = v.reify dup: true
-        date = prev.follow_up_date if prev&.being_implemented?
+        date = prev.follow_up_date if (prev&.being_implemented? && prev&.not_extension?) || prev&.awaiting?
 
         follow_up_dates << date if date.present?
       end

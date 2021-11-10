@@ -97,3 +97,5 @@ LICENSE_PLANS = YAML.load(
 # Redis config
 REDIS_HOST = ENV['REDIS_HOST'] || 'localhost'
 REDIS_PORT = ENV['REDIS_PORT'] || '6379'
+# Tamaño de fuente en los RTF
+RTF_FONT_SIZE = 22

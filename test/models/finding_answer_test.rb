@@ -79,10 +79,12 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
   test 'validates blank attributes with auditor' do
     @finding_answer.answer = '      '
+    @finding_answer.finding = nil
     @finding_answer.commitment_date = ''
 
     assert @finding_answer.invalid?
     assert_error @finding_answer, :answer, :blank
+    assert_error @finding_answer, :finding, :blank
   end
 
   test 'validates blank attributes with audited' do
@@ -118,11 +120,15 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
     @finding_answer.finding.follow_up_date = Time.zone.today
 
-    assert !@finding_answer.requires_commitment_date?
+    refute @finding_answer.requires_commitment_date?
 
     @finding_answer.finding.follow_up_date = 1.day.ago
 
     assert @finding_answer.requires_commitment_date?
+
+    @finding_answer.imported = true
+
+    refute @finding_answer.requires_commitment_date?
 
     Current.organization = nil
   end

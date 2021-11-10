@@ -408,6 +408,7 @@ es:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
@@ -819,11 +820,6 @@ es:
       title: "Nuevo comentario en el informe %{review}"
       finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver observación / oportunidad de mejora"
-    notify_new_findings:
-      title: "Notificación de observaciones / oportunidades de mejora"
-      created_title:
-        one: "Nueva observación / oportunidad de mejora"
-        other: "Nuevas observaciones / oportunidades de mejora"
     change_password: "Cambiar contraseña"
     changes_notification:
       title: "Notificación de cambios"
@@ -908,6 +904,7 @@ es:
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   pdf:
     export: "Exportar"
@@ -1107,6 +1104,7 @@ es:
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   welcome:
     index_title: "Bienvenido"
@@ -1182,6 +1180,7 @@ es:
     attributes:
       business_unit:
         name: "Nombre"
+        business_unit_kind_id: 'Tipo de unidad de negocio'
       business_unit_type:
         name: "Nombre"
         business_unit_label: "Etiqueta de la unidad de negocio en el informe"
@@ -1192,10 +1191,14 @@ es:
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
         require_counts: "Requerir cantidades en objetivos de control"
+        hide_review_logo: "Ocultar logo en informes"
+        independent_identification: "Numeración independiente"
+        shared_business_units: "Unidades de negocio compartidas"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
         name: "Unidad de negocio"
+        business_unit_kind_id: "Tipo de unidad de negocio"
       business_unit_type_user:
         business_unit_type_id: "Unidad de negocio"
       comment:
@@ -1229,6 +1232,8 @@ es:
         previous_identification: "Informe previo"
         previous_date: "Fecha de emisión previa"
         main_recommendations: "Principales Recomendaciones de Auditoría"
+        additional_comments: "Comentarios adicionales"
+        exclude_regularized_findings: "Excluir hallazgos regularizados"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:
@@ -1360,9 +1365,13 @@ es:
         modify: "Modificación"
         erase: "Baja"
         approval: "Aprobación"
+      process_controls/control_objectives/control:
+        effects: "Efectos"
+        compliance_tests: "Pruebas de cumplimientos"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
+        notify: 'Incluir en notificaciones'
       resource_utilization:
         resource_id: "Recurso"
       review:
@@ -1376,13 +1385,17 @@ es:
         plan_item: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
+        score_alt: "Calificación cumplimiento"
         scope: "Alcance auditoría"
         risk_exposure: "Exposición al riesgo"
         manual_score: "Puntaje de auditoría"
+        manual_score_alt: "Puntaje de auditoría cumplimiento"
         include_sox: "Incluye prueba SOX"
         work_papers: "Papeles de trabajo"
         review_user_assignments: "Integrantes"
         taggings: "Etiquetas"
+        review_objective: "Objectivo del informe"
+        type_review: "Tipo de informe"
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"

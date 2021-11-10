@@ -28,6 +28,7 @@ class UserTest < ActiveSupport::TestCase
         language: 'es',
         email: 'emailxx@emailxx.ccc',
         function: 'New function',
+        office: 'New office',
         user: 'new_user',
         enable: true,
         failed_attempts: 0,
@@ -62,6 +63,7 @@ class UserTest < ActiveSupport::TestCase
       language: 'es',
       email: users(:bare).email,
       function: 'New function',
+      office: 'New office',
       user: 'new_user',
       enable: true,
       failed_attempts: 0,
@@ -197,6 +199,8 @@ class UserTest < ActiveSupport::TestCase
     @user.email = "#{'abcde' * 21}@email.com"
     @user.password = 'aB1d_' * 26
     @user.function = 'abcde' * 52
+    @user.office = 'abcde' * 52
+    @user.organizational_unit = 'abcde' * 52
     @user.salt = 'abcde' * 52
     @user.change_password_hash = 'abcde' * 52
 
@@ -207,6 +211,8 @@ class UserTest < ActiveSupport::TestCase
     assert_error @user, :email, :too_long, count: 100
     assert_error @user, :password, :too_long, count: 128
     assert_error @user, :function, :too_long, count: 255
+    assert_error @user, :office, :too_long, count: 255
+    assert_error @user, :organizational_unit, :too_long, count: 255
     assert_error @user, :salt, :too_long, count: 255
     assert_error @user, :change_password_hash, :too_long, count: 255
   end
@@ -343,6 +349,7 @@ class UserTest < ActiveSupport::TestCase
       language: 'es',
       email: 'emailxx@emailxx.ccc',
       function: 'New function',
+      office: 'New office',
       user: 'new_user',
       enable: true,
       failed_attempts: 0,
@@ -506,6 +513,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify finding changes function' do
+    skip if USE_SCOPE_CYCLE
+
     Current.organization = nil
     user = users :administrator
 
@@ -537,7 +546,7 @@ class UserTest < ActiveSupport::TestCase
       review_codes_by_user[user] = user.findings.for_notification.pluck 'review_code'
     end
 
-    assert_enqueued_emails 6 do
+    assert_enqueued_emails 12 do
       User.notify_new_findings
     end
 
@@ -666,6 +675,7 @@ class UserTest < ActiveSupport::TestCase
           language:                      'es',
           email:                         email,
           function:                      'New function',
+          office:                        'New office',
           user:                          'new_user',
           enable:                        true,
           failed_attempts:               0,
@@ -700,5 +710,22 @@ class UserTest < ActiveSupport::TestCase
     assert_enqueued_emails 1 do
       user.save!
     end
+  end
+
+  test 'import' do
+    Current.organization = organizations(:google)
+    organization         = Current.organization
+
+    skip unless EXTRA_USERS_INFO.has_key? organization.prefix
+
+    assert_difference 'User.count', 2 do
+      User.import organization, 'admin', 'admin123'
+    end
+
+    one_user_file = User.find_by email: 'juan127@cirope.com'
+    two_user_file = User.find_by email: 'pedro127@cirope.com'
+
+    assert_equal one_user_file.manager_id, two_user_file.id
+    assert_equal one_user_file.roles.count, 2
   end
 end

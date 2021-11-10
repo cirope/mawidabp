@@ -18,7 +18,7 @@
             autocomplete: :off,
             autofocus: !finding_user,
             data: {
-              autocomplete_url: url_for([finding.class.model_name.plural, :users]),
+              autocomplete_url: url_for([finding.class.model_name.plural.to_sym, :users]),
               autocomplete_id_target: "#user_id_#{id}"
             }
           } %>

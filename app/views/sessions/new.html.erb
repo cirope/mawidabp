@@ -1,44 +1,58 @@
 <div class="row justify-content-center">
   <div class="col-md-6">
-    <%= form_tag sessions_path, novalidate: 'novalidate', data: { no_observe_changes: true } do %>
-      <div class="card mb-3<%= ' pb-3' if current_organization&.ldap_config&.present? %>">
+    <% if current_organization&.saml_provider.blank? %>
+      <%= form_tag sessions_path, novalidate: 'novalidate', data: { no_observe_changes: true } do %>
+        <div class="card mb-3<%= ' pb-3' if current_organization&.ldap_config&.present? %>">
+          <div class="card-header text-center bg-white border-white pt-5 pb-4">
+            <%= image_tag 'logo.svg', alt: t('app_name'), height: 40 %>
+          </div>
+          <div class="card-body py-0 px-5">
+            <%= render 'shared/flash' if flash_message %>
+
+            <div class="form-inputs">
+              <div class="form-group">
+                <%= label_tag :user, t('.user'), class: 'col-form-label' %>
+                <div class="controls">
+                  <%= text_field_tag :user, params[:user], class: 'form-control form-control-lg',
+                    autofocus: true, autocomplete: 'off', maxlength: 30 %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= label_tag :password, t('.password'), class: 'col-form-label' %>
+                <div class="controls">
+                  <%= password_field_tag :password, nil, class: 'form-control form-control-lg',
+                    maxlength: 128, autocomplete: 'off' %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer text-center bg-white border-white pb-4">
+            <div class="form-actions">
+              <%= submit_tag t('.log_in'), class: 'btn btn-lg btn-outline-secondary' %>
+            </div>
+
+            <% if current_organization.blank? || (current_organization.ldap_config.blank? && current_organization.saml_provider.blank?) %>
+              <hr>
+
+              <p>
+                <%= link_to t('sessions.new.forgot_password'), new_users_password_path %>
+              </p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="card">
         <div class="card-header text-center bg-white border-white pt-5 pb-4">
           <%= image_tag 'logo.svg', alt: t('app_name'), height: 40 %>
         </div>
-        <div class="card-body py-0 px-5">
+        <div class="card-body px-5 pb-5">
           <%= render 'shared/flash' if flash_message %>
-
-          <div class="form-inputs">
-            <div class="form-group">
-              <%= label_tag :user, t('.user'), class: 'col-form-label' %>
-              <div class="controls">
-                <%= text_field_tag :user, params[:user], class: 'form-control form-control-lg',
-                  autofocus: true, autocomplete: 'off', maxlength: 30 %>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <%= label_tag :password, t('.password'), class: 'col-form-label' %>
-              <div class="controls">
-                <%= password_field_tag :password, nil, class: 'form-control form-control-lg',
-                  maxlength: 128, autocomplete: 'off' %>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-footer text-center bg-white border-white pb-4">
-          <div class="form-actions">
-            <%= submit_tag t('.log_in'), class: 'btn btn-lg btn-outline-secondary' %>
-          </div>
-
-          <% if current_organization.blank? || current_organization.ldap_config.blank? %>
-            <hr>
-
-            <p>
-              <%= link_to t('sessions.new.forgot_password'), new_users_password_path %>
-            </p>
-          <% end %>
+          <p class="text-center mb-0">
+            <%= link_to t('sessions.new.try_again'), new_saml_session_path %>
+          </p>
         </div>
       </div>
     <% end %>

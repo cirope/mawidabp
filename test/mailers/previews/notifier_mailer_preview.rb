@@ -48,12 +48,12 @@ class NotifierMailerPreview < ActionMailer::Preview
     NotifierMailer.stale_notification user
   end
 
-  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/unanswered_findings_notification
-  def unanswered_findings_notification
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/unanswered_finding_notification
+  def unanswered_finding_notification
     conditions = { state: Finding::STATUS[:unanswered] }
     user       = User.joins(:findings).merge(Finding.where(conditions)).take
 
-    NotifierMailer.unanswered_findings_notification user, user.findings.where(conditions)
+    NotifierMailer.unanswered_finding_notification user, user.findings.find_by(conditions)
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/unanswered_finding_to_manager_notification
