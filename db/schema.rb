@@ -28,20 +28,12 @@ ActiveRecord::Schema.define(version: 2021_10_27_181626) do
     t.index ["finding_id"], name: "index_achievements_on_finding_id"
   end
 
-  create_table "annexes", force: :cascade do |t|
-    t.string "title", null: false
-    t.text "description"
-    t.bigint "conclusion_review_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["conclusion_review_id"], name: "index_annexes_on_conclusion_review_id"
-
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "activity_group_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "require_detail", default: false
+    t.boolean "require_detail", default: false, null: false
     t.index ["activity_group_id"], name: "index_activities_on_activity_group_id"
   end
 
@@ -51,6 +43,15 @@ ActiveRecord::Schema.define(version: 2021_10_27_181626) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_activity_groups_on_organization_id"
+  end
+
+  create_table "annexes", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description"
+    t.bigint "conclusion_review_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["conclusion_review_id"], name: "index_annexes_on_conclusion_review_id"
   end
 
   create_table "answer_options", id: :serial, force: :cascade do |t|

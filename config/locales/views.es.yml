@@ -78,7 +78,7 @@ es:
 
   business_unit_kinds:
     index:
-      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
+      empty_html: 'No hay tipos de proceso crítico, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
   closing_interviews:
     edit:
       title: 'Editar entrevista de cierre'
@@ -155,6 +155,7 @@ es:
       unread_answers:
         one: 'Tiene un comentario sin leer'
         other: 'Tiene %{count} comentarios sin leer'
+      finding_solved: 'Realizada'
     show:
       title: 'Detalles del hallazgo'
     edit:
@@ -183,7 +184,7 @@ es:
       implemented_audited: 'Implementada / Auditada'
       assumed_risk: 'Riesgo asumido'
       notify: 'Notificar'
-      incomplete: 'Incompleta'
+      incomplete: 'A definir'
       repeated: 'Reiterada'
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
@@ -202,6 +203,8 @@ es:
     weakness:
       follow_up_date_label_append: ' - Realizada'
       confirm_first_version_being_implemented_withou_extension: '¿Seguro desea establecer el estado %{state} sin %{extension}?'
+    csv:
+      finding_solved: 'Realizada'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -346,6 +349,7 @@ es:
       add_human_resource_utilization: 'Agregar recurso humano'
       add_material_resource_utilization: 'Agregar recurso material'
       add_tagging: 'Agregar etiqueta'
+      add_auxiliar_business_unit: 'Agregar proceso crítico'
       add_auxiliar_business_unit_type: 'Agregar unidad organizativa auxiliar'
     plan_items:
       add_plan_item: 'Agregar proyecto'
@@ -385,9 +389,9 @@ es:
       show:
         title: 'Cronograma'
         empty: 'No hay proyectos en el plan seleccionado'
-        empty_with_no_business_units: 'No hay unidades de negocio seleccionadas'
+        empty_with_no_business_units: 'No hay procesos críticos seleccionados'
         detail: 'Detalle'
-        by_business_unit: 'Ver calendario por unidad de negocio'
+        by_business_unit: 'Ver calendario por proceso crítico'
         by_project: 'Ver calendario por proyecto'
     resources:
       show:
@@ -412,7 +416,7 @@ es:
     download_detailed_business_unit_type_plan: 'Descargar plan %{business_unit_type} detallado'
     download_detailed_business_unit_type_plan_csv: 'Descargar plan %{business_unit_type} en CSV'
     download_business_unit_type_plan_csv: 'Descargar plan en CSV'
-    without_business_unit_type: 'Sin unidad de negocio'
+    without_business_unit_type: 'Sin proceso crítico'
 
   profiles:
     edit:

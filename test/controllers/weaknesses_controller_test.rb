@@ -405,7 +405,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
 
     get :weakness_template_changed, xhr: true, params: {
-      id: weakness_templates(:security).id
+      id: weakness_templates(:security).id,
+      control_objective_item_id: control_objective_items(:management_dependency_item).id
     }, as: :js
 
     assert_response :success
