@@ -99,11 +99,9 @@ module Findings::Csv
     end
 
     def taggings_format
-      if USE_SCOPE_CYCLE
-        taggings.map(&:tag).join ' - '
-      else
-        taggings.map(&:tag).to_sentence
-      end
+      tags = taggings.map(&:tag)
+
+      USE_SCOPE_CYCLE ? tags.join(' - ') : tags.to_sentence
     end
 
     def rescheduled_text
