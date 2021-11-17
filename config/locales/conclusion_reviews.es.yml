@@ -98,6 +98,8 @@ es:
         current_situation: "Situación Actual:"
         risk: "<b>Nivel de riesgo</b>: %{risk}"
         follow_up_date: "Fecha estimada de regularización:"
+        follow_up_date_failure: "Falla con reporte semestral al CDA"
+        follow_up_date_implemented_audited: "Regularizada"
         effect: "Efecto:"
         answer: "Comentario del Sector:"
         audit_recommendations: "Recomendación:"
