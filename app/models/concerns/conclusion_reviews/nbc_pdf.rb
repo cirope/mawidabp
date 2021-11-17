@@ -318,8 +318,7 @@ module ConclusionReviews::NbcPdf
 
       pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2]) do
         row(0).style(
-          background_color: 'EEEEEE',
-          align: :center
+          background_color: 'EEEEEE'
         )
       end
     end
