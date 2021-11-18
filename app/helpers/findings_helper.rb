@@ -323,14 +323,6 @@ module FindingsHelper
     end
   end
 
-  def date_solution_text finding
-    if USE_SCOPE_CYCLE && finding.implemented_audited?
-      I18n.t('findings.index.finding_solved')
-    else
-      l(finding.solution_date, format: :short)
-    end
-  end
-
   private
 
     def finding_state_options_for finding

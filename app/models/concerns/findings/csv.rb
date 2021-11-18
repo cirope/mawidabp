@@ -109,15 +109,7 @@ module Findings::Csv
     end
 
     def solution_date_text
-      solution_date ? date_solution_text : '-'
-    end
-
-    def date_solution_text
-      if USE_SCOPE_CYCLE && implemented_audited?
-        I18n.t('findings.csv.finding_solved')
-      else
-        I18n.l(solution_date, format: :short)
-      end
+      solution_date ? I18n.l(solution_date, format: :minimal) : '-'
     end
 
     def implemented_at_text
