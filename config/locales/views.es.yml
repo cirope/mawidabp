@@ -155,7 +155,6 @@ es:
       unread_answers:
         one: 'Tiene un comentario sin leer'
         other: 'Tiene %{count} comentarios sin leer'
-      finding_solved: 'Realizada'
     show:
       title: 'Detalles del hallazgo'
     edit:
@@ -203,8 +202,6 @@ es:
     weakness:
       follow_up_date_label_append: ' - Regularizada'
       confirm_first_version_being_implemented_withou_extension: '¿Seguro desea establecer el estado %{state} sin %{extension}?'
-    csv:
-      finding_solved: 'Realizada'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
