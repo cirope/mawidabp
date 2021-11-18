@@ -201,7 +201,7 @@ es:
       approve: 'Aprobar'
       reject: 'Rechazar'
     weakness:
-      follow_up_date_label_append: ' - Realizada'
+      follow_up_date_label_append: ' - Regularizada'
       confirm_first_version_being_implemented_withou_extension: '¿Seguro desea establecer el estado %{state} sin %{extension}?'
     csv:
       finding_solved: 'Realizada'
