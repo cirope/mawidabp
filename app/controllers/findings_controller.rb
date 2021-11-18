@@ -35,7 +35,7 @@ class FindingsController < ApplicationController
   def update
     update_resource @finding, finding_params
 
-    location = if @finding.pending? || @finding.invalid?
+    location = if @finding.invalid? || @finding.reload.pending?
                  edit_finding_url params[:completion_state], @finding
                else
                  finding_url 'complete', @finding
@@ -47,20 +47,27 @@ class FindingsController < ApplicationController
   private
 
     def finding_params
-      if @auth_user.can_act_as_audited?
-        audited_finding_params
-      else
-        auditor_finding_params
-      end
+      casted_params = if @auth_user.can_act_as_audited?
+                        audited_finding_params
+                      else
+                        auditor_finding_params
+                      end
+
+      casted_params.merge(
+        can_close_findings: USE_SCOPE_CYCLE && can_perform?(:approval)
+      )
     end
 
     def auditor_finding_params
       params.require(:finding).permit(
         :id, :control_objective_item_id, :review_code, :title, :description,
-        :answer, :current_situation, :current_situation_verified,
+        :brief, :answer, :current_situation, :current_situation_verified,
         :audit_comments, :state, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
-        :compliance, :compliance_observations, :nested_user, :skip_work_paper, :lock_version,
+        :compliance, :impact_risk, :probability, :compliance_observations,
+        :manual_risk, :nested_user, :skip_work_paper,:use_suggested_impact,
+        :use_suggested_probability, :impact_amount, :probability_amount,
+        :extension, :lock_version,
         impact: [],
         operational_risk: [],
         internal_control_components: [],
@@ -81,6 +88,10 @@ class FindingsController < ApplicationController
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
+        ],
+        issues_attributes: [
+          :id, :customer, :entry, :operation, :amount, :currency, :comments,
+          :close_date, :_destroy
         ],
         tasks_attributes: [
           :id, :code, :description, :status, :due_on, :_destroy
@@ -144,7 +155,7 @@ class FindingsController < ApplicationController
     end
 
     def check_if_editable
-      not_editable = !@finding.pending? ||
+      not_editable = (!@finding.pending? && @finding.valid?) ||
         (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
 
       raise ActiveRecord::RecordNotFound if not_editable

@@ -1,7 +1,7 @@
 <% organization = @finding.review.period.organization %>
 <div style="font-family: arial, helvetica; font-size: 11px;">
   <h3 style="text-decoration: underline;">
-    <%= t('notifier.notify_new_finding.title') %>
+    <%= t('notifier.notify_new_finding.created_title') %>
   </h3>
 
   <%= render partial: 'finding', locals: {finding: @finding} %>

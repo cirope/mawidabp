@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.3.5'
+gem 'rails', '~> 6.0.3.7'
 
 gem 'pg'
 gem 'activerecord-nulldb-adapter'
@@ -23,7 +23,7 @@ gem 'prawn-table'
 gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
-gem 'bootstrap'
+gem 'bootstrap', '< 5'
 gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
@@ -33,8 +33,11 @@ gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
+gem 'execjs', '< 2.8'
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
+
+gem 'ruby-saml'
 
 gem 'sassc'
 gem 'sassc-rails'
@@ -51,8 +54,6 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
-
-  gem 'rubocop-github'
 
   # Support for ed25519 ssh keys
   gem 'ed25519'

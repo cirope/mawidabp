@@ -8,7 +8,8 @@ module PlanItems::Validations
     validates :order_number, numericality: { only_integer: true }, allow_nil: true
     validates :start, timeliness: { type: :date }
     validates :end, timeliness: { type: :date, on_or_after: :start }
-    validates :risk_exposure, :scope, presence: true, if: :validate_extra_attributes?
+    validates :risk_exposure, presence: true, if: :validate_extra_attributes?
+    validates :scope, presence: true, if: :require_scope?
     validates :business_unit_type, presence: true, if: :validate_business_unit_type?
     validate :project_is_unique
     validate :dates_are_included_in_period
@@ -100,6 +101,10 @@ module PlanItems::Validations
 
       def validate_extra_attributes?
         SHOW_REVIEW_EXTRA_ATTRIBUTES
+      end
+
+      def require_scope?
+        SHOW_REVIEW_EXTRA_ATTRIBUTES || USE_SCOPE_CYCLE
       end
 
       def validate_business_unit_type?

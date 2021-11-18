@@ -5,6 +5,7 @@ class Finding < ApplicationRecord
   include Findings::Achievements
   include Findings::Answers
   include Findings::AttributeTypes
+  include Findings::AutoRisk
   include Findings::Brief
   include Findings::BusinessUnits
   include Findings::ByControlObjectiveProcessCsv
@@ -26,16 +27,19 @@ class Finding < ApplicationRecord
   include Findings::DestroyValidation
   include Findings::Display
   include Findings::Expiration
+  include Findings::Extension
   include Findings::FinalReview
   include Findings::FirstFollowUp
   include Findings::FollowUp
   include Findings::FollowUpPdf
   include Findings::ImportantDates
+  include Findings::Issues
   include Findings::Json
   include Findings::NotificationLevel
   include Findings::Notifications
   include Findings::Overrides
   include Findings::Pdf
+  include Findings::ProcessEmail
   include (POSTGRESQL_ADAPTER ? Findings::Reiterations : Findings::ReiterationsAlt)
   include Findings::Relations
   include Findings::RepeatedCsv

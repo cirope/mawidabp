@@ -2,3 +2,8 @@ link:
   token: <%= SecureRandom.urlsafe_base64 32 %>
   action: 'follow_up_audit/weaknesses_current_situation'
   organization: cirope
+
+execution_link:
+  token: <%= SecureRandom.urlsafe_base64 32 %>
+  action: 'execution_reports/weaknesses_current_situation'
+  organization: cirope

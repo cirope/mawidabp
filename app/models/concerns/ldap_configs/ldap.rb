@@ -6,7 +6,7 @@ module LdapConfigs::Ldap
   end
 
   def mask_regex
-    /\A#{login_mask % { user: '(.*)', basedn: Regexp.escape(basedn) }}\z/
+    /\A#{login_mask % { user: '(.*)', basedn: Regexp.escape(basedn), ou: '(.*)' }}\z/
   end
 
   def unmasked_user username
@@ -62,7 +62,15 @@ module LdapConfigs::Ldap
       if username =~ mask_regex
         username
       else
-        login_mask % { user: username, basedn: basedn }
+        user = if Current.organization
+                 Current.organization.users.by_user username
+               else
+                 User.by_user username
+               end
+
+        ou = user&.organizational_unit.presence || organizational_unit
+
+        login_mask % { user: username, basedn: basedn, ou: ou }
       end
     end
 end

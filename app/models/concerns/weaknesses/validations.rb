@@ -7,6 +7,7 @@ module Weaknesses::Validations
     validates :risk, :priority, presence: true
     validates :audit_recommendations, presence: true, if: :notify?
     validate :review_code_has_valid_prefix
+    validates :impact_risk, :probability, presence: true, if: :require_impact_risk_and_probability?
 
     validates :compliance, length: { maximum: 255 },
       allow_nil: true, allow_blank: true
@@ -23,13 +24,22 @@ module Weaknesses::Validations
 
   private
 
+    def require_impact_risk_and_probability?
+      USE_SCOPE_CYCLE && !manual_risk
+    end
+
     def compliance_require_observations?
       SHOW_WEAKNESS_EXTRA_ATTRIBUTES && compliance == 'yes'
     end
 
     def review_code_has_valid_prefix
-      revoked_prefix = I18n.t 'code_prefixes.revoked'
-      regex          = /\A#{revoked_prefix}?#{prefix}\d+\Z/
+      regex = if Current.global_weakness_code && (parent || children.any?)
+               /\A#{prefix}\d+\Z/
+             else
+               revoked_prefix = I18n.t 'code_prefixes.revoked'
+
+               /\A#{revoked_prefix}?#{prefix}\d+\Z/
+             end
 
       errors.add :review_code, :invalid unless review_code =~ regex
     end

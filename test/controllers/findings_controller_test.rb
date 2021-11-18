@@ -80,6 +80,8 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings sorted with search by date' do
+    expected_count = USE_SCOPE_CYCLE ? 3 : 4
+
     get :index, params: {
       completion_state: 'incomplete',
       search: {
@@ -90,7 +92,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 4, assigns(:findings).count
+    assert_equal expected_count, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date }
   end
 
@@ -133,7 +135,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).count
+    assert_equal 2, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.users.include?(user) }
   end
 
@@ -305,7 +307,8 @@ class FindingsControllerTest < ActionController::TestCase
     skip # Just for this customer
     finding = findings :being_implemented_weakness
 
-    finding.update_column :state, Finding::STATUS[:implemented_audited]
+    finding.update_columns state:         Finding::STATUS[:implemented_audited],
+                           solution_date: Time.zone.today
 
     assert_raise ActiveRecord::RecordNotFound do
       get :edit, params: {
@@ -358,6 +361,10 @@ class FindingsControllerTest < ActionController::TestCase
               operational_risk: ['internal fraud'],
               impact: ['econimic', 'regulatory'],
               internal_control_components: ['risk_evaluation', 'monitoring'],
+              impact_risk: Finding.impact_risks[:small],
+              probability: Finding.probabilities[:rare],
+              extension: false,
+              manual_risk: '1',
               business_unit_ids: [business_units(:business_unit_three).id],
               finding_user_assignments_attributes: [
                 {
@@ -487,6 +494,10 @@ class FindingsControllerTest < ActionController::TestCase
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
+            impact_risk: Finding.impact_risks[:small],
+            probability: Finding.probabilities[:rare],
+            extension: false,
+            manual_risk: '1',
             finding_user_assignments_attributes: [
               {
                 user_id: users(:audited).id,
@@ -572,6 +583,10 @@ class FindingsControllerTest < ActionController::TestCase
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
           users_for_notification: [users(:bare).id],
+          impact_risk: Finding.impact_risks[:small],
+          probability: Finding.probabilities[:rare],
+          extension: false,
+          manual_risk: '1',
           finding_user_assignments_attributes: [
             {
               id: finding_user_assignments(:unconfirmed_weakness_bare).id,
@@ -630,6 +645,10 @@ class FindingsControllerTest < ActionController::TestCase
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
+          impact_risk: Finding.impact_risks[:small],
+          probability: Finding.probabilities[:rare],
+          extension: false,
+          manual_risk: '1',
           tag_ids: [
             tags(:important).id,
             tags(:pending).id,

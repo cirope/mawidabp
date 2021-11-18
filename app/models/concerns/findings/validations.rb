@@ -2,7 +2,7 @@ module Findings::Validations
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :skip_work_paper
+    attr_accessor :skip_work_paper, :can_close_findings
 
     validates :control_objective_item_id, :title, :description, :review_code,
       :organization_id, presence: true
@@ -13,13 +13,15 @@ module Findings::Validations
       pdf_encoding: true
     validates :follow_up_date, :solution_date, :origination_date,
       :first_notification_date, timeliness: { type: :date }, allow_blank: true
+    validates :brief, presence: true, if: :require_brief?
     validate :validate_answer
     validate :validate_state
-    validate :validate_review_code
+    validate :validate_review_code, if: -> { repeated_of.blank? }
     validate :validate_finding_user_assignments
     validate :validate_manager_presence, if: :validate_manager_presence?
     validate :validate_follow_up_date,   if: :check_dates?
     validate :validate_solution_date,    if: :check_dates?
+    validate :extension_enabled,         if: :extension
   end
 
   def is_in_a_final_review?
@@ -34,6 +36,7 @@ module Findings::Validations
 
     (to_pending || to_implemented) && !has_new_comment
   end
+
   private
 
     def audit_comments_should_be_present?
@@ -44,11 +47,16 @@ module Findings::Validations
       !incomplete? && !revoked? && !repeated?
     end
 
+    def require_brief?
+      USE_SCOPE_CYCLE
+    end
+
     def validate_follow_up_date
       if kind_of?(Weakness)
-        check_for_blank = being_implemented? ||
-                          implemented?       ||
-                          implemented_audited?
+        check_for_blank = being_implemented?             ||
+                          implemented?                   ||
+                          implemented_audited?           ||
+                          (USE_SCOPE_CYCLE && awaiting?)
 
         errors.add :follow_up_date, :blank         if check_for_blank  && follow_up_date.blank?
         errors.add :follow_up_date, :must_be_blank if !check_for_blank && follow_up_date.present?
@@ -112,7 +120,9 @@ module Findings::Validations
         (new_record? && final) # comes from a final review _clone_
 
       if !skip_validation && state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
-        has_role_to_do_it = Current.user&.supervisor? || Current.user&.manager?
+        has_role_to_do_it = Current.user&.supervisor? ||
+                            Current.user&.manager?    ||
+                            can_close_findings
 
         errors.add :state, :must_be_done_by_proper_role unless has_role_to_do_it
       end
@@ -144,6 +154,10 @@ module Findings::Validations
       if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
         unless finding_user_assignments.any? &:process_owner
           errors.add :finding_user_assignments, :required
+        end
+
+        unless finding_user_assignments.any? &:responsible_auditor
+          errors.add :finding_user_assignments, :reference_auditor_required
         end
       end
 
@@ -180,5 +194,26 @@ module Findings::Validations
       from = should_validate && setting&.updated_at
 
       should_validate && from && (new_record? || created_at >= from)
+    end
+
+    def extension_enabled
+      if !being_implemented?
+        errors.add :extension, :must_be_being_implemented, { extension: Finding.human_attribute_name(:extension),
+                                                             state: I18n.t('findings.state.being_implemented') }
+      elsif persisted? && cant_have_an_extension?
+        errors.add :extension, :had_no_extension_when_being_implemented, { extension: Finding.human_attribute_name(:extension) }
+      end
+    end
+
+    def cant_have_an_extension?
+      not_the_first_version_of_being_implemented? && !extension_was && being_implemented_was?
+    end
+
+    def not_the_first_version_of_being_implemented?
+      had_version_with_being_implemented? || being_implemented_was?
+    end
+
+    def being_implemented_was?
+      state_was == Finding::STATUS[:being_implemented]
     end
 end

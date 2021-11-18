@@ -5,6 +5,8 @@
     <%= render 'gal_downloads' %>
   <% elsif Current.conclusion_pdf_format == 'bic' %>
     <%= render 'bic_downloads' %>
+  <% elsif Current.conclusion_pdf_format == 'pat' %>
+    <%= render 'pat_downloads' %>
   <% elsif Current.conclusion_pdf_format != 'default' %>
     <%= render('shared/downloads',
       right: true,

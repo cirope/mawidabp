@@ -1,0 +1,25 @@
+<%= simple_form_for @activity_group do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name, input_html: { autofocus: true } %>
+
+    <hr />
+
+    <h5 class="h6"><%= Activity.model_name.human count: 0 %></h5>
+
+    <div id="activities">
+      <%= f.simple_fields_for :activities do |bu_f| %>
+        <%= render 'activity', f: bu_f %>
+      <% end %>
+
+      <%= link_to_add_fields t('.add_activity'), f, :activities %>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn-primary' %>
+  </div>
+<% end %>

@@ -20,5 +20,7 @@ DEFAULT_SETTINGS = {
   show_print_date_on_pdfs: { value: '1', validates: 'numericality' },
   hide_import_from_ldap: { value: '0', validates: 'numericality' },
   skip_function_and_manager_from_ldap_sync: { value: '0', validates: 'numericality' },
-  hide_obsolete_best_practices: { value: '0', validates: 'numericality' }
+  hide_obsolete_best_practices: { value: '0', validates: 'numericality' },
+  hours_of_work_per_day: { value: '0', validates: 'numericality' },
+  conclusion_review_receiver: { value: '_', validates: 'presence' }
 }.with_indifferent_access.freeze

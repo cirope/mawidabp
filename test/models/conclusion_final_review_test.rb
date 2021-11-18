@@ -30,8 +30,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un informe final
   test 'create' do
-    Current.user = users :supervisor
-    review = Review.find reviews(:review_approved_with_conclusion).id
+    Current.user   = users :supervisor
+    review         = reviews :review_approved_with_conclusion
     findings_count = (review.weaknesses + review.oportunities).size
 
     assert findings_count > 0
@@ -79,6 +79,16 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     if DISABLE_COI_AUDIT_DATE_VALIDATION
       assert review.control_objective_items.any? { |coi| coi.audit_date.today? }
       assert review.control_objective_items.all? { |coi| coi.audit_date.present? }
+    end
+
+    if Current.global_weakness_code
+      last_weakness  = Weakness.finals(true).reorder(review_code: :desc).first
+
+      assert_equal last_weakness.review_code, Finding.finals(true).last.review_code
+
+      new_conclusion_final_review review
+
+      assert_equal last_weakness.review_code.next, Finding.finals(true).last.review_code
     end
   end
 
@@ -404,11 +414,104 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     }
   end
 
+  test 'duplicate annexes' do
+    conclusion_final_review = conclusion_reviews(:conclusion_past_final_review)
+    conclusion_draft_review = ConclusionDraftReview.where(review_id: conclusion_final_review.review_id).first
+
+    assert conclusion_final_review.annexes.empty?
+    assert conclusion_draft_review.annexes.any?
+
+    assert_difference('conclusion_final_review.annexes.count') do
+      conclusion_final_review.duplicate_annexes_and_images_from_draft
+      conclusion_final_review.save
+    end
+
+    conclusion_final_review.annexes.each_with_index do |annex_duplicate, index|
+      assert_equal annex_duplicate.title, conclusion_draft_review.annexes[index].title
+      assert_equal annex_duplicate.description, conclusion_draft_review.annexes[index].description
+    end
+  end
+
   private
 
     def has_extra_sort_method? organization
       methods = JSON.parse ENV['AUTOMATICALLY_SORT_FINDINGS_ON_CONCLUSION'] || '{}'
 
       organization && methods.present? && methods[organization.prefix]
+    end
+
+    def new_conclusion_final_review review
+      review_dup = review.dup
+
+      review_dup.identification                     = '2 3 4'     
+      review_dup.period_id                          = periods(:current_period).id
+      review_dup.plan_item_id                       = plan_items(:past_plan_item_2).id
+      review_dup.review_user_assignments_attributes = {
+          :new_1 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:auditor],
+            :user => users(:first_time)
+          },
+          :new_2 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
+            :user => users(:supervisor)
+          },
+          :new_3 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:manager],
+            :user => users(:supervisor_second)
+          },
+          :new_4 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:audited],
+            :user => users(:audited)
+          }
+        }
+
+      review_dup.control_objective_item_ids = control_objective_items(
+        :management_dependency_item_approved_and_editable
+      ).id  
+
+      review_dup.save
+
+      conclusion_draft_review_dup = ConclusionDraftReview.list.new(
+        :review => review_dup,
+        :issue_date => Date.today,
+        :close_date => 2.days.from_now.to_date,
+        :applied_procedures => 'New applied procedures',
+        :conclusion => CONCLUSION_OPTIONS.first,
+        :recipients => 'John Doe',
+        :sectors => 'Area 51',
+        :evolution => EVOLUTION_OPTIONS.second,
+        :evolution_justification => 'Ok',
+        :main_weaknesses_text => 'Some main weakness X',
+        :corrective_actions => 'You should do it this way',
+        :reference => 'Some reference',
+        :observations => 'Some observations',
+        :scope => 'Some scope',
+        :affects_compliance => false,
+        :approved => true,
+        :force_approval =>true
+      )
+
+      conclusion_draft_review_dup.save 
+      review_dup.reload
+
+      conclusion_final_review_dup = ConclusionFinalReview.list.new(
+        :review => review_dup,
+        :issue_date => Date.today,
+        :close_date => 2.days.from_now.to_date,
+        :applied_procedures => 'New applied procedures',
+        :conclusion => CONCLUSION_OPTIONS.first,
+        :recipients => 'John Doe',
+        :sectors => 'Area 51',
+        :evolution => EVOLUTION_OPTIONS.second,
+        :evolution_justification => 'Ok',
+        :main_weaknesses_text => 'Some main weakness X',
+        :corrective_actions => 'You should do it this way',
+        :reference => 'Some reference',
+        :observations => 'Some observations',
+        :scope => 'Some scope',
+        :affects_compliance => false
+      )
+
+      conclusion_final_review_dup.save
     end
 end

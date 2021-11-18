@@ -6,6 +6,7 @@ es:
       organization:
         management: 'Gestión'
         business_units: 'Unidades organizativas'
+        business_unit_kind: 'Tipos de unidad de negocio'
       security_title: 'Seguridad'
       security:
         reports: 'Reportes de seguridad'
@@ -23,6 +24,7 @@ es:
       news: 'Noticias'
       benefits: 'Beneficios / Perjuicios'
       e_mails: 'Correos'
+      activity_groups: 'Actividades'
       questionnaires_title: 'Cuestionarios'
       questionnaires:
         definition: 'Definición'
@@ -38,6 +40,7 @@ es:
     execution:
       reviews: 'Informes'
       workflows: 'Programas de trabajo'
+      time_summary: 'Resumen horario'
       control_objectives: 'Objetivos de control'
       weaknesses: 'Observaciones'
       oportunities: 'Oportunidades de mejora'

@@ -7,8 +7,14 @@ Rails.application.routes.draw do
   post   'sessions', to: 'sessions#create',  as: 'sessions'
   delete 'logout',   to: 'sessions#destroy', as: 'logout'
 
+  # SAML
+  get 'saml/auth', to: 'saml_sessions#new', as: :new_saml_session
+  post 'saml/callback', to: 'saml_sessions#create', as: :saml_session
+  get 'saml/metadata', to: 'saml_sessions#metadata', as: :saml_metadata
+
   resources :settings, only: [:index, :show, :edit, :update]
 
+  resources :activity_groups
   resources :benefits
 
   resources :opening_interviews
@@ -61,6 +67,7 @@ Rails.application.routes.draw do
   resources :e_mails, only: [:index, :show]
 
   resources :business_unit_types
+  resources :business_unit_kinds
 
   resources :groups
 
@@ -69,6 +76,8 @@ Rails.application.routes.draw do
   resources :tags, only: [] do
     resources :documents, only: [:index]
   end
+
+  resources :time_summary
 
   scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
     resources :tags
@@ -83,6 +92,7 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_state_execution',
+    'weaknesses_current_situation',
     'weaknesses_report',
     'detailed_management_report',
     'planned_cost_summary',
@@ -93,6 +103,8 @@ Rails.application.routes.draw do
 
   [
     'create_weaknesses_by_state_execution',
+    'create_weaknesses_current_situation',
+    'create_weaknesses_current_situation_permalink',
     'create_detailed_management_report',
     'create_planned_cost_summary',
     'create_weaknesses_report'
@@ -284,6 +296,7 @@ Rails.application.routes.draw do
   resources :conclusion_draft_reviews, except: [:destroy] do
     member do
       get :export_to_pdf
+      get :export_to_rtf
       get :compose_email
       patch :send_by_email
       get :download_work_papers
@@ -304,6 +317,7 @@ Rails.application.routes.draw do
   resources :conclusion_final_reviews do
     member do
       get :export_to_pdf
+      get :export_to_rtf
       get :compose_email
       patch :send_by_email
       get :download_work_papers
@@ -408,6 +422,7 @@ Rails.application.routes.draw do
     collection do
       get :auto_complete_for_business_unit
       get :auto_complete_for_tagging
+      get :auto_complete_for_business_unit_type
     end
   end
 
