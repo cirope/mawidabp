@@ -90,7 +90,10 @@
         <% options_for_select = if USE_SCOPE_CYCLE
                                   {
                                     data:
-                                      { target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
+                                      { target_value_change_label: Finding::STATUS[:implemented_audited],
+                                        suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
+                                        target_input_with_label: '#weakness_follow_up_date',
+                                        target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
                                         target_checkbox: '#finding_extension',
                                         disabled_and_deny: true }
                                   }
