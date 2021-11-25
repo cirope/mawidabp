@@ -392,7 +392,7 @@
       weaknesses: "Observaciones"
       oportunities: "Oportunidades"
       without_weaknesses: "Sin hallazgos"
-      pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_informes_definitivos_UPLA_%{from_date}_al_%{to_date}.pdf"
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE TAREA"
       total: "TOTAL"
 
@@ -1167,7 +1167,7 @@
     changes_notification:
       title: "Notificación de cambios"
     conclusion_review_notification:
-      title: "Informe de auditoría %{type} %{review}"
+      title: "Informe de UPLA %{type} %{review}"
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
       final: "definitivo"
       draft: "borrador"
@@ -1286,8 +1286,8 @@
       without_audited: "no tiene auditado"
       without_auditor: "no tiene auditor"
       without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
-      without_audit_recommendations: "no tiene recomendaciones de auditoria"
+      without_audit_comments: "no tiene comentarios de UPLA"
+      without_audit_recommendations: "no tiene recomendaciones de UPLA"
 
   organization:
     index_title: "Listado de organizaciones"
@@ -1497,8 +1497,8 @@
       without_effect: "no tiene efecto"
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
-      without_audit_recommendations: "no tiene recomendaciones de auditoria"
+      without_audit_comments: "no tiene comentarios de UPLA"
+      without_audit_recommendations: "no tiene recomendaciones de UPLA"
 
   welcome:
     index_title: "Bienvenido"

@@ -903,7 +903,7 @@ es:
       without_auditor: "no tiene auditor"
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_comments: "no tiene comentarios de UPLA"
       without_audit_recommendations: "no tiene recomendaciones de tarea"
 
   pdf:
@@ -1103,7 +1103,7 @@ es:
       without_effect: "no tiene efecto"
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_comments: "no tiene comentarios de UPLA"
       without_audit_recommendations: "no tiene recomendaciones de tarea"
 
   welcome:
