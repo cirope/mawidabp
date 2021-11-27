@@ -154,7 +154,7 @@ class PlansControllerTest < ActionController::TestCase
                   resource_utilizations_attributes: {
                     '1' => {
                       id: resource_utilizations(:auditor_for_20_units_past_plan_item_1).id,
-                      resource_id: resources(:laptop_resource).id,
+                      resource_id: resources(:mouse_resource).id,
                       resource_type: 'Resource',
                       units: '12.21'
                     }
@@ -162,6 +162,11 @@ class PlansControllerTest < ActionController::TestCase
                   taggings_attributes: [
                     {
                       tag_id: tags(:extra).id
+                    }
+                  ],
+                  auxiliar_business_units_attributes: [
+                    {
+                      business_unit_id: business_units(:business_unit_one).id
                     }
                   ]
                 },
@@ -340,5 +345,30 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_equal 2, business_units.size # All in the organization (one and two)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
+  end
+
+  test 'auto complete for business unit type' do
+    get :auto_complete_for_business_unit_type, params: { q: 'noway' }, as: :json
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, business_unit_types.size # Fifth is in another organization
+
+    get :auto_complete_for_business_unit_type, params: { q: 'cycle' }, as: :json
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_unit_types.size # One only
+    assert business_unit_types.all? { |u| u['label'].match /cycle/i }
+
+    get :auto_complete_for_business_unit_type, params: { q: 'C', plan_item_id: plan_items(:current_plan_item_1).id }, as: :json
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_unit_types.size # Cycle and Consolidated Sustantive is excluded in params
+    assert_equal 'B.C.R.A.', business_unit_types[0]['label']
   end
 end

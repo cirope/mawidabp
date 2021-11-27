@@ -56,8 +56,6 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
 
-  gem 'rubocop-github'
-
   # Support for ed25519 ssh keys
   gem 'ed25519'
   gem 'bcrypt_pbkdf'

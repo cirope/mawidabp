@@ -81,7 +81,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert review.control_objective_items.all? { |coi| coi.audit_date.present? }
     end
 
-    if USE_GLOBAL_WEAKNESS_REVIEW_CODE
+    if Current.global_weakness_code
       last_weakness  = Weakness.finals(true).reorder(review_code: :desc).first
 
       assert_equal last_weakness.review_code, Finding.finals(true).last.review_code
@@ -412,6 +412,24 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert codes.sort.each_with_index.all? { |c, i|
       c.match(/\d+\Z/).to_a.first.to_i == i.next
     }
+  end
+
+  test 'duplicate annexes' do
+    conclusion_final_review = conclusion_reviews(:conclusion_past_final_review)
+    conclusion_draft_review = ConclusionDraftReview.where(review_id: conclusion_final_review.review_id).first
+
+    assert conclusion_final_review.annexes.empty?
+    assert conclusion_draft_review.annexes.any?
+
+    assert_difference('conclusion_final_review.annexes.count') do
+      conclusion_final_review.duplicate_annexes_and_images_from_draft
+      conclusion_final_review.save
+    end
+
+    conclusion_final_review.annexes.each_with_index do |annex_duplicate, index|
+      assert_equal annex_duplicate.title, conclusion_draft_review.annexes[index].title
+      assert_equal annex_duplicate.description, conclusion_draft_review.annexes[index].description
+    end
   end
 
   private

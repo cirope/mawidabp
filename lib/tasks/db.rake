@@ -2,7 +2,7 @@ namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
     ActiveRecord::Base.transaction do
-      update_organization_settings        # 2017-03-15
+      update_organization_settings        # 2017-03-15 last 2021-08-09
       add_new_answer_options              # 2017-06-29
       add_best_practice_privilege         # 2018-01-31
       add_control_objective_privilege     # 2018-01-31
@@ -97,6 +97,18 @@ private
                            description: I18n.t('settings.hours_of_work_per_day')
       end
     end
+
+    if set_conclusion_review_receiver? # 2021-08-09
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'conclusion_review_receiver',
+                           value:       DEFAULT_SETTINGS[:conclusion_review_receiver][:value],
+                           description: I18n.t('settings.conclusion_review_receiver')
+      end
+    end
+  end
+
+  def set_conclusion_review_receiver?
+    USE_SCOPE_CYCLE && Setting.where(name: 'conclusion_review_receiver').empty?
   end
 
   def set_hours_of_work_per_day?

@@ -120,11 +120,15 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
     @finding_answer.finding.follow_up_date = Time.zone.today
 
-    assert !@finding_answer.requires_commitment_date?
+    refute @finding_answer.requires_commitment_date?
 
     @finding_answer.finding.follow_up_date = 1.day.ago
 
     assert @finding_answer.requires_commitment_date?
+
+    @finding_answer.imported = true
+
+    refute @finding_answer.requires_commitment_date?
 
     Current.organization = nil
   end

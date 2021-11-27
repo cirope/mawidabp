@@ -13,6 +13,7 @@
       <thead id="column_headers">
         <tr>
           <%= make_filterable_column WeaknessTemplate.human_attribute_name('title'), nil, 'title' %>
+          <%= make_filterable_column WeaknessTemplate.human_attribute_name('reference'), { class: 'd-none d-lg-table-cell' }, 'reference' %>
           <%= make_filterable_column WeaknessTemplate.human_attribute_name('description'), { class: 'd-none d-md-table-cell' }, 'description' %>
           <%= make_not_available_column WeaknessTemplate.human_attribute_name('risk'), class: 'd-none d-sm-table-cell' %>
           <th colspan="3" class="text-right"><%= link_to_search %></th>
@@ -23,6 +24,7 @@
         <% @weakness_templates.each do |weakness_template| %>
           <tr>
             <td><%= super_truncate weakness_template.title, 30 %></td>
+            <td class="d-none d-lg-table-cell"><%= super_truncate weakness_template.reference, 30 %></td>
             <td class="d-none d-md-table-cell"><%= super_truncate weakness_template.description, 30 %></td>
             <td class="d-none d-sm-table-cell"><%= weakness_template.risk_text %></td>
             <td class="text-right"><%= link_to_show weakness_template %></td>
