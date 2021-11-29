@@ -60,8 +60,8 @@ es:
     probable: 'Probable'
     almost_certain: 'Casi Certeza'
   frequencies_types:
-    low: 'Bajo'
-    moderate: 'Medio'
+    low: 'Remota'
+    moderate: 'Probable'
     high: 'Alto'
   state_regulations_types:
     not_exist: 'No existe'
@@ -78,6 +78,9 @@ es:
   sample_deviation_types:
     less_expected: 'Menos esperado'
     most_expected: 'Mas esperado'
+  external_repeated_types:
+    repeated: 'Si'
+    no_repeated: 'No'
   suggested_type_risks:
     representativeness: 'Representatividad'
     absolute_value: 'Valor absoluto'

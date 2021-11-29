@@ -175,7 +175,8 @@ class WeaknessesController < ApplicationController
         :compliance_observations, :manual_risk, :use_suggested_impact,
         :use_suggested_probability, :impact_amount, :probability_amount,
         :lock_version, :extension, :state_regulations, :degree_compliance,
-        :observation_originated_tests, :sample_deviation,
+        :observation_originated_tests, :sample_deviation, :external_repeated,
+        :risk_justification,
         operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [], tag_ids: [],
         achievements_attributes: [

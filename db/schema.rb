@@ -550,6 +550,8 @@ ActiveRecord::Schema.define(version: 2021_11_02_230414) do
     t.integer "degree_compliance"
     t.integer "observation_originated_tests"
     t.integer "sample_deviation"
+    t.integer "external_repeated"
+    t.text "risk_justification"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"

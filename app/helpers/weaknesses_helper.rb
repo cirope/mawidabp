@@ -150,6 +150,12 @@ module WeaknessesHelper
     end
   end
 
+  def weakness_external_repeated
+    Finding.external_repeated.map do |key, value|
+      [t("external_repeated_types.#{key}"), value]
+    end
+  end
+
   def suggested_type_risks
     Finding::SUGGESTED_IMPACT_RISK_TYPES.map do |key, value|
       [t("suggested_type_risks.#{key}"), value]

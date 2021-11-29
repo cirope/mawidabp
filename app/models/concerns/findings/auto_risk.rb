@@ -39,7 +39,7 @@ module Findings::AutoRisk
     }
 
     SAMPLE_DEVIATION = {
-      less_expected: 200,
+      less_expected: 150,
       most_expected: 0
     }
 
@@ -54,6 +54,11 @@ module Findings::AutoRisk
       moderate: 50,
       low:      0
     }
+
+    EXTERNAL_REPEATED = {
+      repeated:    150,
+      no_repeated: 0
+    }
   end
 
   def automatic_risk?
@@ -63,8 +68,8 @@ module Findings::AutoRisk
   def bic_risks_types
     {
       0 => 0,
-      1 => 383.34,
-      2 => 691.67
+      1 => 350.01,
+      2 => 625.01
     }
   end
 
@@ -110,18 +115,24 @@ module Findings::AutoRisk
     def frequencies
       FREQUENCIES
     end
+
+    def external_repeated
+      EXTERNAL_REPEATED
+    end
   end
 
   private
 
     def assign_auto_risk
-      if probability && impact_risk
+      if probability && impact_risk && USE_SCOPE_CYCLE
         result  = probability * impact_risk
         risk, _ = self.class.auto_risk_thresholds.detect do |_, threshold|
           result <= threshold
         end
 
         self.risk = risk
+      elsif Current.conclusion_pdf_format == 'bic'
+        self.risk
       else
         self.risk = nil
       end
