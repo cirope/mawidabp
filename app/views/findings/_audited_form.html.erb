@@ -71,7 +71,7 @@
                                     data:
                                       { target_value_change_label: Finding::STATUS[:implemented_audited],
                                         suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
-                                        target_input_with_label: '#weakness_follow_up_date' 
+                                        target_input_with_label: '#weakness_follow_up_date'
                                       }
                                   }
                                 else
@@ -257,6 +257,7 @@
           <th><%= WorkPaper.human_attribute_name 'code' %></th>
           <th><%= WorkPaper.human_attribute_name 'number_of_pages' %></th>
           <th><%= WorkPaper.human_attribute_name 'description' %></th>
+          <th><%= WorkPaper.human_attribute_name 'created_at' %></th>
           <th><%= WorkPaper.human_attribute_name 'file_model' %></th>
         </tr>
       </thead>
@@ -267,6 +268,7 @@
             <td><%= work_paper.code %></td>
             <td><%= work_paper.number_of_pages %></td>
             <td><%= simple_format work_paper.description, class: 'mb-1' %></td>
+            <td><%= l(work_paper.created_at, format: :minimal) %></td>
             <td><%= work_paper.file_model.try(:file?) ?
               link_to(t('label.download'), work_paper.file_model.file.url) : '-' %></td>
           </tr>

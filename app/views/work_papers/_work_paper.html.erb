@@ -14,8 +14,11 @@
     <div class="col-md-1">
       <%= f.input :number_of_pages, as: :string, label: false %>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <%= f.input :description, as: :string, label: false, input_html: { data: { work_paper_description: true } } %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :created_at, as: :string, label: false, input_html: { readonly: true } %>
     </div>
     <div class="col-md-2">
       <% unless frozen %>
