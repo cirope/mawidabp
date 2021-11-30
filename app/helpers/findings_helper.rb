@@ -323,6 +323,10 @@ module FindingsHelper
     end
   end
 
+  def file_model_created_at work_paper
+    work_paper&.file_model ? l(work_paper.file_model.created_at, format: '%d/%m/%Y') : '-'
+  end
+
   private
 
     def finding_state_options_for finding
