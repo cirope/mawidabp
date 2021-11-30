@@ -1,0 +1,7 @@
+<%= t '.title' %>
+
+<ul>
+  <% plan_item.auxiliar_business_unit_types.each do |aux_bu| %>
+    <li><%= aux_bu.business_unit_type.name %></li>
+  <% end %>
+</ul>

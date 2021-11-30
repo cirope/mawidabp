@@ -145,8 +145,8 @@
 
     def oportunity_params
       params.require(:oportunity).permit(
-        :control_objective_item_id, :review_code, :title, :description, :answer,
-        :audit_comments, :follow_up_date, :state, :organization_date,
+        :control_objective_item_id, :review_code, :title, :description, :brief,
+        :answer, :audit_comments, :follow_up_date, :state, :organization_date,
         :solution_date, :repeated_of_id, :origination_date, :skip_work_paper,
         :lock_version,
         business_unit_ids: [],

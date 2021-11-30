@@ -65,8 +65,18 @@ module Findings::Scopes
     end
 
     def by_review identification
+      identifications = identification.split(SEARCH_OR_REGEXP).reject(&:blank?)
+      conditions = []
+      parameters = {}
+
+      identifications.each_with_index do |identification, i|
+        conditions << "LOWER(#{Review.quoted_table_name}.#{Review.qcn 'identification'}) LIKE :i_#{i}"
+
+        parameters[:"i_#{i}"] = identification.mb_chars.downcase.strip
+      end
+
       includes(:review).
-        where("LOWER(#{Review.quoted_table_name}.#{Review.qcn 'identification'}) LIKE ?", "%#{identification.mb_chars.downcase}%").
+        where(conditions.join(' OR '), parameters).
         references(:reviews)
     end
 
@@ -148,7 +158,7 @@ module Findings::Scopes
       includes(control_objective: :tags).where(conditions.join(' OR '), parameters)
     end
 
-    def by_wilcard_tags *tags
+    def by_wilcard_tags tags, negate: false
       conditions = []
       parameters = {}
 
@@ -158,7 +168,22 @@ module Findings::Scopes
         parameters[:"wt_#{i}"] = "%#{tag.downcase}%"
       end
 
-      includes(:tags).references(:tags).where conditions.join(' OR '), parameters
+      if negate
+        result  = all
+        tag_ids = Tag.list.for_findings.where(
+          conditions.join(' OR '), parameters
+        ).ids
+
+        search_by_tags_count(tags, tag_ids.size).ids.each_slice(900) do |n_ids|
+          where.not(id: n_ids).ids.each_slice(900) do |ids|
+            result = result.where id: ids
+          end
+        end
+
+        result
+      else
+        includes(:tags).references(:tags).where conditions.join(' OR '), parameters
+      end
     end
 
     def by_review_tags *tags
@@ -185,5 +210,21 @@ module Findings::Scopes
         [risk: :desc, priority: :desc, review_code: :asc]
       end
     end
+
+    private
+
+      def search_by_tags_count tags, min_tag_count
+        having = "COUNT(DISTINCT #{Tag.quoted_table_name}.#{Tag.qcn 'id'}) >= ?"
+        query  = tags.join ' OR '
+
+        ids = where(
+          *[prepare_search(raw_query: query, columns: ['tags'])].flatten
+        ).
+        having(having, min_tag_count).
+        group(:id).
+        pluck 'id'
+
+        where id: ids
+      end
   end
 end

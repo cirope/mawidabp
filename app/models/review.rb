@@ -32,6 +32,7 @@ class Review < ApplicationRecord
   include Reviews::Search
   include Reviews::SortColumns
   include Reviews::SurveyPdf
+  include Reviews::TypeReview
   include Reviews::UpdateCallbacks
   include Reviews::Users
   include Reviews::Validations
@@ -47,6 +48,7 @@ class Review < ApplicationRecord
   belongs_to :organization
   has_one :workflow, dependent: :destroy
   has_many :business_unit_scores, through: :control_objective_items
+  has_many :time_consumptions, as: :resource, dependent: :destroy
 
   def long_identification
     "#{identification} - #{plan_item.project}"

@@ -120,7 +120,7 @@ class Workflow < ApplicationRecord
       column_widths << pdf.percent_width(col_name.last)
     end
 
-    column_data[0] = column_headers
+    column_data << column_headers
 
     self.workflow_items.sort_by(&:order_number).each do |workflow_item|
       resource_text = [
@@ -128,7 +128,7 @@ class Workflow < ApplicationRecord
         "#{I18n.t 'workflow.material_resources_abbr'}: #{'%.2f' % workflow_item.material_units}"
       ].join "\n"
 
-      column_data[workflow_item.order_number] = [
+      column_data << [
         workflow_item.order_number,
         workflow_item.task,
         I18n.l(workflow_item.start, :format => :default),

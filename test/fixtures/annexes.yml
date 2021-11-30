@@ -1,0 +1,14 @@
+annex_one:
+  conclusion_review: conclusion_current_final_review
+  title: 'a title'
+  description: 'a description'
+
+annex_of_conclusion_approved:
+  conclusion_review: conclusion_approved_with_conclusion_draft_review
+  title: 'Annex of conclusion approved'
+  description: 'a description'
+
+annex_of_conclusion_past_draft_review:
+  conclusion_review: conclusion_past_draft_review
+  title: 'Annex of conclusion past draft review'
+  description: 'a description'

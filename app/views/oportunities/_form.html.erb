@@ -51,6 +51,9 @@
         <%= finding_repeated_of_label f, readonly: readonly %>
         <%= finding_repeated_of_if_field f, readonly: readonly %>
         <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: 5 } %>
+        <% if USE_SCOPE_CYCLE %>
+          <%= f.input :brief, input_html: { readonly: readonly, rows: 1 } %>
+        <% end %>
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
       </div>
       <div class="col-md-6">

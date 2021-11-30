@@ -2,6 +2,7 @@ module Findings::ReportScopes
   extend ActiveSupport::Concern
 
   included do
+    scope :awaiting,          -> { where state: Finding::STATUS[:awaiting] }
     scope :being_implemented, -> { where state: Finding::STATUS[:being_implemented] }
     scope :implemented,       -> { where state: Finding::STATUS[:implemented] }
     scope :not_incomplete,    -> { where "state <> ?", Finding::STATUS[:incomplete] }
@@ -10,11 +11,6 @@ module Findings::ReportScopes
 
     scope :with_status_for_report, -> {
       exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS
-
-      where state: Finding::STATUS.except(*exclude).values
-    }
-    scope :with_repeated_status_for_report, -> {
-      exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:repeated]
 
       where state: Finding::STATUS.except(*exclude).values
     }
@@ -66,6 +62,18 @@ module Findings::ReportScopes
       ).where(
         "#{BusinessUnitType.table_name}.external" => external
       ).references(:business_unit_types)
+    end
+
+    def with_repeated_status_for_report(execution: false)
+      except = if execution
+                 [:incomplete, :notify, :unconfirmed, :confirmed, :repeated]
+               else
+                 [:repeated]
+               end
+
+      exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - except
+
+      where state: Finding::STATUS.except(*exclude).values
     end
 
     def for_user user_id

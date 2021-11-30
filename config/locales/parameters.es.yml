@@ -7,6 +7,12 @@ es:
     monthly: 'Mensual'
     biyearly: 'Semestral'
     yearly: 'Anual'
+  impact_risk_types:
+    small: 'Insignificante'
+    low: 'Bajo'
+    moderate: 'Moderado'
+    high: 'Alto'
+    critical: 'Crítico'
   relevance_types:
     not_rated: 'Nulo'
     low: 'Bajo'
@@ -37,10 +43,24 @@ es:
     low: 'Bajo'
     medium: 'Medio'
     high: 'Alto'
+    none: 'Organismo contralor'
   priority_types:
     low: 'Baja'
     medium: 'Media'
     high: 'Alta'
+    none: 'Organismo contralor'
+  probability_types:
+    rare: 'Raro'
+    unlikely: 'Improbable'
+    possible: 'Posible'
+    probable: 'Probable'
+    almost_certain: 'Casi Certeza'
+  suggested_type_risks:
+    representativeness: 'Representatividad'
+    absolute_value: 'Valor absoluto'
+  suggested_type_probabilities:
+    representativeness: 'Representatividad'
+    repeatability: 'Repetitividad'
   score_types:
     satisfactory: 'Satisfactorio'
     improve: 'Necesita mejorar'

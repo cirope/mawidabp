@@ -35,17 +35,19 @@ $(document).on('change', '[data-review-role]', function () {
 })
 
 $(document).on('change', '[data-next-identification-number-url]', function () {
-  var prefix = $('[name="review[identification_prefix]"]').val()
-  var suffix = $('[name="review[identification_suffix]"]').val()
-  var url    = $(this).data('nextIdentificationNumberUrl')
+  var prefix        = $('[name="review[identification_prefix]"]').val()
+  var suffix        = $('[name="review[identification_suffix]"]').val()
+  var independentId = $(this).find(':selected').data('usePrefix')
+  var url           = $(this).data('nextIdentificationNumberUrl')
 
   if (prefix) {
     $.ajax({
       url: url,
       dataType: 'script',
       data: {
-        prefix: prefix,
-        suffix: suffix
+        prefix:     prefix,
+        suffix:     suffix,
+        use_prefix: independentId
       }
     })
   } else {

@@ -7,9 +7,15 @@ module LdapConfigs::LdapImport
     users_by_dn  = {}
     managers     = {}
     users        = []
+    search_options = {
+      base:                     basedn,
+      filter:                   ldap_filter,
+      ignore_server_caps:       true,
+      paged_searches_supported: true
+    }
 
     User.transaction do
-      connection.search(base: basedn, filter: ldap_filter) do |entry|
+      connection.search(search_options) do |entry|
         if (process_args = process_entry? entry)
           users << (result = process_entry entry, **process_args)
           user   = result[:user]
@@ -46,7 +52,7 @@ module LdapConfigs::LdapImport
         role_names = role_data entry
         roles      = clean_roles Role.list_with_corporate.where(name: role_names)
         data       = trivial_data entry
-        user       = find_user data
+        user       = User.find_user data
 
         if user&.roles.blank? && roles.blank?
           false
@@ -62,7 +68,7 @@ module LdapConfigs::LdapImport
       data[:manager_id] = nil if manager_dn.blank? && !skip_function_and_manager?
 
       state = if user
-                update_user user: user, data: data, roles: roles
+                User.update_user user: user, data: data, roles: roles
 
                 if user.roles.any?
                   user.saved_changes? ? :updated : :unchanged
@@ -79,12 +85,6 @@ module LdapConfigs::LdapImport
       { user: user, manager_dn: manager_dn, state: state }
     end
 
-    def find_user data
-      User.group_list.by_email(data[:email])             ||
-        User.without_organization.by_email(data[:email]) ||
-        User.list.by_user(data[:user])
-    end
-
     def role_data entry
       entry_roles = entry[roles_attribute].map do |r|
         r&.force_encoding('UTF-8')&.sub(/.*?cn=(.*?),.*/i, '\1')&.to_s
@@ -95,12 +95,14 @@ module LdapConfigs::LdapImport
 
     def trivial_data entry
       {
-        user:      casted_attribute(entry, username_attribute),
-        name:      casted_attribute(entry, name_attribute),
-        last_name: casted_attribute(entry, last_name_attribute),
-        email:     casted_attribute(entry, email_attribute),
-        hidden:    false,
-        enable:    true
+        user:                casted_attribute(entry, username_attribute),
+        name:                casted_attribute(entry, name_attribute),
+        last_name:           casted_attribute(entry, last_name_attribute),
+        email:               casted_attribute(entry, email_attribute),
+        organizational_unit: casted_organizational_unit(entry),
+        office:              casted_attribute(entry, office_attribute),
+        hidden:              false,
+        enable:              true
       }.merge(
         if skip_function_and_manager?
           {}
@@ -114,6 +116,12 @@ module LdapConfigs::LdapImport
       attr_name && entry[attr_name].first&.force_encoding('UTF-8')&.to_s
     end
 
+    def casted_organizational_unit entry
+      casted_ou = casted_attribute(entry, organizational_unit_attribute)
+
+      casted_ou&.gsub /\Acn=[\w\s]+,/i, ''
+    end
+
     def clean_roles roles
       if roles.all?(&:audited?)
         roles
@@ -124,22 +132,6 @@ module LdapConfigs::LdapImport
           clean_roles roles
         end.flatten
       end
-    end
-
-    def update_user user: nil, data: nil, roles: nil
-      new_roles = roles.map do |r|
-        unless user.organization_roles.detect { |o_r| o_r.role_id == r.id }
-          { organization_id: r.organization_id, role_id: r.id }
-        end
-      end
-      removed_roles = user.organization_roles.map do |o_r|
-        if roles.map(&:id).exclude? o_r.role_id
-          { id: o_r.id, _destroy: '1' } if o_r.organization_id == Current.organization&.id
-        end
-      end
-      data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
-
-      user.update data
     end
 
     def create_user user: nil, data: nil, roles: nil

@@ -4,5 +4,7 @@ class Current < ActiveSupport::CurrentAttributes
             :corporate_ids,
             :user,
             :conclusion_pdf_format,
-            :settings
+            :settings,
+            :global_weakness_code
+
 end

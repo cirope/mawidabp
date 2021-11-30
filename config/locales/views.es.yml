@@ -23,6 +23,20 @@ es:
     _yes: 'Si'
     _no: 'No'
 
+  activity_groups:
+    edit:
+      title: 'Editar grupo de actividades'
+    index:
+      new: 'Nuevo grupo de actividades'
+      title: 'Listado de grupos de actividades'
+      empty_html: 'No hay grupos de actividades, puede crear uno con el botón <span class="badge badge-primary">Nuevo grupo de actividades</span>'
+    new:
+      title: 'Crear grupo de actividades'
+    show:
+      title: 'Ver grupo de actividades'
+    form:
+      add_activity: 'Agregar actividad'
+
   answer_options:
     not_apply: 'No aplica'
     strongly_disagree: 'Muy en desacuerdo'
@@ -62,6 +76,9 @@ es:
     control_objectives:
       new: 'Agregar objetivo'
 
+  business_unit_kinds:
+    index:
+      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
   closing_interviews:
     edit:
       title: 'Editar entrevista de cierre'
@@ -155,6 +172,8 @@ es:
       confirmed: 'Confirmada'
       unconfirmed: 'No confirmada'
       unanswered: 'Sin respuesta'
+      awaiting: 'A regularizar'
+      failure: 'Falla'
       being_implemented: 'En proceso de implementación'
       being_implemented_current: 'Vigente'
       being_implemented_current_rescheduled: 'Reprogramada vigente'
@@ -180,6 +199,9 @@ es:
     endorsement_item:
       approve: 'Aprobar'
       reject: 'Rechazar'
+    weakness:
+      follow_up_date_label_append: ' - Regularizada'
+      confirm_first_version_being_implemented_withou_extension: '¿Seguro desea establecer el estado %{state} sin %{extension}?'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -324,6 +346,7 @@ es:
       add_human_resource_utilization: 'Agregar recurso humano'
       add_material_resource_utilization: 'Agregar recurso material'
       add_tagging: 'Agregar etiqueta'
+      add_auxiliar_business_unit_type: 'Agregar unidad organizativa auxiliar'
     plan_items:
       add_plan_item: 'Agregar proyecto'
     duplication_or_overload_form:
@@ -484,6 +507,17 @@ es:
       human: 'Personas'
       material: 'Materiales'
 
+  reviews:
+    index:
+      control_objective_items_open:
+        title: 'Objetivos de control abiertos'
+        label: 'OCA'
+      control_objective_items_finished:
+        title: 'Objetivos de control finalizados'
+        label: 'OCF'
+    form:
+      add_business_unit_type: 'Agregar unidad organizativa'
+
   sessions:
     new:
       title: 'Ingreso'
@@ -492,6 +526,7 @@ es:
       user: 'Usuario'
       password: 'Contraseña'
       remember_me: 'Recordarme'
+      try_again: 'Ingresar nuevamente'
       forgot_password: '¿Olvidaste tu contraseña?'
     create:
       invalid: 'Tu correo y/o contraseña no están bien =('
@@ -528,6 +563,8 @@ es:
     hide_import_from_ldap: 'Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación'
     skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
+    hours_of_work_per_day: 'Horas de trabajo por día'
+    conclusion_review_receiver: 'Receptor/es del informe'
 
   tags:
     edit:
@@ -562,10 +599,48 @@ es:
       in_progress: 'En proceso'
       finished: 'Finalizada'
 
+  time_summary:
+    index:
+      title: 'Resumen horario'
+      period: 'Desde el %{start} al %{end}'
+      current_week: 'Semana actual'
+      empty: 'Sin registros'
+      add: 'Agregar actividad'
+      edit: 'Editar actividad'
+      destroy: 'Eliminar actividad'
+      total_amount:
+        one: 'Total de horas acumuladas: %{amount}'
+        other: 'Total de horas acumuladas por %{count} personas: %{amount}'
+
+    new:
+      title: 'Nueva actividad'
+    form:
+      add_business_unit_type: 'Agregar unidad organizativa'
+      operational_audit: 'Auditoría operativa'
+      system_audit: 'Auditoría de sistema'
+    auxiliar_business_unit_types:
+      title: 'Unidades organizativas auxiliares'
+      activity: 'Actividad'
+      review: 'Informe'
+      workflow_amount: 'Cantidad de horas programadas'
+      time_consumption_amount: 'Cantidad de horas asignadas'
+    downloads:
+      current_week: "Descarga semana actual"
+      current_month: "Descarga mes actual"
+      current_year: "Descarga año actual"
+      csv:
+        date: "Fecha"
+        quantity_hours_per_day: "Cantidad horas por día"
+        task: "Tarea"
+        user: "Usuario"
+        business_unit_types: "Unidades organizativas"
+        detail: "Detalle"
+
   users:
     index:
       title: 'Listado de usuarios'
       import_from_ldap: 'Importar desde LDAP'
+      show_hidden: 'Mostrar ocultos'
     show:
       title: 'Detalles de usuario'
       profiles: 'Perfiles'
@@ -584,7 +659,6 @@ es:
       add_organization_role: 'Agregar un nuevo perfil'
     create:
       correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
-
     imports:
       new:
         title: 'Importar usuarios desde LDAP'
@@ -665,6 +739,9 @@ es:
           complete:
             one: '**Una** observación solucionada'
             other: '**%{count}** observaciones solucionadas'
+          repeated:
+            one: '**Una** observación reiterada'
+            other: '**%{count}** observaciones reiteradas'
 
   risk_assessments:
     edit:

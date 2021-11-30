@@ -2,7 +2,7 @@ module Findings::FollowUp
   extend ActiveSupport::Concern
 
   def stale?
-    being_implemented? &&
+    (being_implemented? || awaiting?) &&
       follow_up_date &&
       follow_up_date < Time.zone.today
   end
@@ -17,7 +17,7 @@ module Findings::FollowUp
       end
 
       dates.reverse.each do |d|
-        if d.present? && d < last_date
+        if d.present? && last_date && d < last_date
           @all_follow_up_dates << last_date = d
         end
       end

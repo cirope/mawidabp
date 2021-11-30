@@ -23,7 +23,7 @@ module Findings::Csv
       state_text,
       full_state_text,
       try(:risk_text) || '',
-      respond_to?(:risk_text) ? priority_text : '',
+      (respond_to?(:risk_text) ? priority_text : '' unless USE_SCOPE_CYCLE),
       auditeds_as_process_owner.join('; '),
       audited_users.join('; '),
       auditor_users.join('; '),
@@ -33,8 +33,8 @@ module Findings::Csv
       origination_date_text,
       follow_up_date_text,
       solution_date_text,
-      implemented_at_text,
-      closed_at_text,
+      (implemented_at_text if self.class.show_follow_up_timestamps?),
+      (closed_at_text if self.class.show_follow_up_timestamps?),
       rescheduled_text,
       next_pending_task_date,
       listed_tasks,
@@ -45,6 +45,11 @@ module Findings::Csv
       (last_commitment_date_text if self.class.show_follow_up_timestamps?),
       (finding_answers_text if self.class.show_follow_up_timestamps?),
       latest_answer_text,
+      (try(:weakness_template)&.notes.to_s if USE_SCOPE_CYCLE),
+      (try(:weakness_template)&.title.to_s if USE_SCOPE_CYCLE),
+      (try(:weakness_template)&.reference.to_s if USE_SCOPE_CYCLE),
+      (review.period if USE_SCOPE_CYCLE),
+      (has_previous_review_label if USE_SCOPE_CYCLE),
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
@@ -57,6 +62,14 @@ module Findings::Csv
   end
 
   private
+
+    def has_previous_review_label
+      if weakness_template_id
+        I18n.t "label.#{(previous_weakness_by_template? review&.previous) ? 'yes' : 'no'}"
+      else
+        I18n.t "label.no"
+      end
+    end
 
     def issue_date_text
       issue_date ? I18n.l(issue_date, format: :minimal) : '-'
@@ -318,7 +331,7 @@ module Findings::Csv
           Weakness.human_attribute_name('state'),
           I18n.t('finding.state_full'),
           Weakness.human_attribute_name('risk'),
-          Weakness.human_attribute_name('priority'),
+          (Weakness.human_attribute_name('priority') unless USE_SCOPE_CYCLE),
           FindingUserAssignment.human_attribute_name('process_owner'),
           I18n.t('finding.audited', count: 0),
           I18n.t('finding.auditors', count: 0),
@@ -328,8 +341,8 @@ module Findings::Csv
           Finding.human_attribute_name('origination_date'),
           Finding.human_attribute_name('follow_up_date'),
           Finding.human_attribute_name('solution_date'),
-          Finding.human_attribute_name('implemented_at'),
-          Finding.human_attribute_name('closed_at'),
+          (Finding.human_attribute_name('implemented_at') if show_follow_up_timestamps?),
+          (Finding.human_attribute_name('closed_at') if show_follow_up_timestamps?),
           Finding.human_attribute_name('rescheduled'),
           I18n.t('finding.next_pending_task_date'),
           Task.model_name.human(count: 0),
@@ -340,6 +353,11 @@ module Findings::Csv
           (FindingAnswer.human_attribute_name('commitment_date') if show_follow_up_timestamps?),
           (I18n.t('finding.finding_answers') if show_follow_up_timestamps?),
           (I18n.t('finding.latest_answer') if show_follow_up_timestamps?),
+          (WeaknessTemplate.human_attribute_name('notes') if USE_SCOPE_CYCLE),
+          (WeaknessTemplate.human_attribute_name('title') if USE_SCOPE_CYCLE),
+          (WeaknessTemplate.human_attribute_name('reference') if USE_SCOPE_CYCLE),
+          (Plan.human_attribute_name('period_id') if USE_SCOPE_CYCLE),
+          (I18n.t('finding.weakness_template_previous') if USE_SCOPE_CYCLE),
           (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),

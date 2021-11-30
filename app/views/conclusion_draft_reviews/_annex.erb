@@ -1,0 +1,34 @@
+<%
+  id = f.object.object_id
+  annex = f.object
+%>
+<fieldset class="annexes pb-3">
+  <div class="row" data-nested>
+    <div class="col-md-11">
+
+      <%= f.input :title %>
+      <%= f.input :description, input_html: { rows: 3 } %> 
+
+      <h5 class="mb-1">
+        <%= ImageModel.model_name.human count: 0 %>
+      </h5>
+    
+      <% annex.errors.full_messages_for(:image_models).each do |error| %>
+        <p class="text-danger"><%= error %></p>
+      <% end %>
+
+      <%= f.simple_fields_for :image_models do |imf| %>
+        <%= render 'image_model', f: imf %>
+      <% end %>
+
+      <%= link_to_add_fields t('conclusion_draft_review.add_image'), f, :image_models, 'conclusion_draft_reviews/image_model' %>
+        
+      <%= f.input :id, as: :hidden, input_html: { id: "hidden_annex_#{id}" } %>
+    </div>
+    <div class="col-md-1">
+      <div class="mt-2 text-right">
+        <%= link_to_remove_nested_item f %>
+      </div>
+    </div>
+  </div>
+</fieldset>

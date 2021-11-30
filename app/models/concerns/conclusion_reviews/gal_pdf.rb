@@ -18,7 +18,9 @@ module ConclusionReviews::GalPdf
   private
 
     def put_gal_header_on pdf, organization
-      pdf.add_review_header organization, nil, nil
+      hide_logo = review.business_unit_type.hide_review_logo
+
+      pdf.add_review_header organization, nil, nil, hide_logo: hide_logo
       pdf.add_page_footer
     end
 
@@ -56,9 +58,11 @@ module ConclusionReviews::GalPdf
     end
 
     def put_executive_summary_on pdf, organization
-      title         = I18n.t 'conclusion_review.executive_summary.title'
-      project_title = I18n.t 'conclusion_review.executive_summary.project'
-      project       = review.plan_item.project
+      title           = I18n.t 'conclusion_review.executive_summary.title'
+      use_alt_project = review.business_unit_type.independent_identification
+      project_label   = use_alt_project ? 'project_alt' : 'project'
+      project_title   = I18n.t "conclusion_review.executive_summary.#{project_label}"
+      project         = review.plan_item.project
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
@@ -821,6 +825,6 @@ module ConclusionReviews::GalPdf
       !show_review_best_practice_comments?(organization) &&
         !collapse_control_objectives &&
         SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START &&
-        review.period.start >= SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START
+        review.period.start >= SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START.to_date
     end
 end

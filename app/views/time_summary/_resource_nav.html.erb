@@ -1,0 +1,20 @@
+<% if @time_consumption.new_record? %>
+  <ul class="nav nav-tabs d-none d-md-flex">
+    <li class="nav-item">
+      <%= link_to t('time_summary.form.activity'),
+        new_time_summary_path(
+          date: params[:date],
+          limit: params[:limit],
+          resource_type: 'Activity'),
+        class: (@time_consumption.activity? ? 'nav-link active' : 'nav-link'), readonly: true %>
+    </li>
+    <li class="nav-item">
+      <%= link_to t('time_summary.form.review'),
+        new_time_summary_path(
+          date: params[:date],
+          limit: params[:limit],
+          resource_type: 'Review'),
+        class: (@time_consumption.review? ? 'nav-link active' : 'nav-link'), readonly: true %>
+    </li>
+  </ul>
+<% end %>

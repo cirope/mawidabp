@@ -8,6 +8,8 @@ class SessionsController < ApplicationController
 
     if auth_user && auth_user.is_enable? && auth_user.logged_in?
       redirect_to welcome_url
+    elsif redirect_to_saml?
+      redirect_to new_saml_session_url
     end
   end
 
@@ -25,6 +27,8 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    logout_params = { saml_logout: true } if current_organization&.saml_provider.present?
+
     if session[:record_id] && LoginRecord.exists?(session[:record_id])
       LoginRecord.find(session[:record_id]).end!
     end
@@ -32,7 +36,7 @@ class SessionsController < ApplicationController
     @auth_user.logout! if @auth_user
 
     restart_session
-    redirect_to_login t('message.session_closed_correctly')
+    redirect_to_login t('message.session_closed_correctly'), :notice, logout_params
   end
 
   private
@@ -53,5 +57,11 @@ class SessionsController < ApplicationController
       session[:user_id]     = user.id
 
       user.logged_in! session[:last_access]
+    end
+
+    def redirect_to_saml?
+      current_organization&.saml_provider.present? &&
+        params[:saml_error].blank? &&
+        params[:saml_logout].blank?
     end
 end

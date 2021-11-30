@@ -1,0 +1,28 @@
+<%= f.simple_fields_for :issues do |i_f| %>
+  <%= render 'issue', f: i_f, readonly: readonly %>
+<% end %>
+
+<div id="weakness_issues"></div>
+
+<div class="row justify-content-end">
+  <div class="col-2 text-right" data-sum-amount-impact-risks data-current-currency="<%= t 'number.currency.format.unit' %>">
+    <div class="row">
+      <div class="col-10 text-right">
+        <%= number_to_currency @weakness.issues_amount %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  data-impact-risks-value="<%= @weakness.impact_risk_value %>"
+  data-impact-risks-percentage-value="<%= @weakness.impact_risk_percentage %>"
+  data-percentage-impact-risks-types="<%= finding_percentage_impact_risks_types(@weakness) %>"
+  data-impact-risks-types="<%= finding_impact_risks_types(@weakness) %>">
+</div>
+
+<%= link_to_add_fields(
+  t('finding.add_issue'), f,
+  :issues, nil,
+  { insert_into: '#weakness_issues' }
+) unless readonly %>
