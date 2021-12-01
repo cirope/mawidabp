@@ -112,7 +112,6 @@ module WeaknessesHelper
     end
   end
 
-
   def weakness_probabilities
     if USE_SCOPE_CYCLE
       Finding.probabilities.map do |key, value|
