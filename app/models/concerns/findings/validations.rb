@@ -22,6 +22,7 @@ module Findings::Validations
     validate :validate_follow_up_date,   if: :check_dates?
     validate :validate_solution_date,    if: :check_dates?
     validate :extension_enabled,         if: :extension
+    validates :risk_justification, presence: true, if: :bic_require_is_manual_risk_enabled?
   end
 
   def is_in_a_final_review?
@@ -38,6 +39,10 @@ module Findings::Validations
   end
 
   private
+
+    def bic_require_is_manual_risk_enabled?
+      Current.conclusion_pdf_format == 'bic' && manual_risk
+    end
 
     def audit_comments_should_be_present?
       revoked? || criteria_mismatch?

@@ -26,17 +26,31 @@ module Weaknesses::Validations
               :sample_deviation, :impact_risk,
               :probability, :external_repeated,
               presence: true, if: :bic_require_is_manual_risk_disabled?
-    validates :risk_justification, presence: true, if: :bic_require_is_manual_risk_enabled?
+    validate  :bic_calculated_risk
   end
 
   private
 
-    def bic_require_is_manual_risk_disabled?
-      Current.conclusion_pdf_format == 'bic' && !manual_risk
+    def bic_calculated_risk
+      amount = 0
+
+      if bic_require_is_manual_risk_disabled?
+        amount += state_regulations
+        amount += degree_compliance
+        amount += observation_originated_tests
+        amount += sample_deviation
+        amount += impact_risk
+        amount += probability
+        amount += external_repeated
+
+        risk_new = bic_risks_types.reverse_each.to_h.detect { |id, value| amount >= value }
+
+        errors.add :risk, :invalid if risk_new.first != risk
+      end
     end
 
-    def bic_require_is_manual_risk_enabled?
-      Current.conclusion_pdf_format == 'bic' && manual_risk
+    def bic_require_is_manual_risk_disabled?
+      Current.conclusion_pdf_format == 'bic' && !manual_risk
     end
 
     def require_impact_risk_and_probability?

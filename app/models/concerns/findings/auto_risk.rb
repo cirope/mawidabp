@@ -82,8 +82,6 @@ module Findings::AutoRisk
       }
     end
 
-
-
     def probabilities
       PROBABILITIES
     end
