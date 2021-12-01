@@ -951,7 +951,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.reload.repeated_of
     assert finding.rescheduled?
 
-    count_reschedule = USE_SCOPE_CYCLE ? 2 : 3 
+    count_reschedule = USE_SCOPE_CYCLE ? 2 : 3
 
     assert_equal count_reschedule, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
@@ -1498,23 +1498,37 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'automatic risk' do
-    @finding.risk        = Finding.risks[:low]
-    @finding.probability = Finding.probabilities[:almost_certain]
-    @finding.impact_risk = Finding.impact_risks[:critical]
+    @finding.risk               = Finding.risks[:low]
+    @finding.probability        = Finding.probabilities[:almost_certain]
+    @finding.impact_risk        = Finding.impact_risks[:critical]
+    @finding.risk_justification = 'test' if Current.conclusion_pdf_format == 'bic'
 
     assert @finding.valid?
     assert_equal Finding.risks[:low], @finding.risk
 
     @finding.manual_risk = false
 
-    assert @finding.valid?
-    assert_equal Finding.risks[:high], @finding.risk
+    if Current.conclusion_pdf_format == 'bic'
+      @finding.state_regulations            = Finding.state_regulations[:exist]
+      @finding.degree_compliance            = Finding.degree_compliance[:comply]
+      @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
+      @finding.sample_deviation             = Finding.sample_deviation[:most_expected]
+      @finding.impact_risk                  = Finding.impact_risks_bic[:low]
+      @finding.probability                  = Finding.frequencies[:low]
+      @finding.external_repeated            = Finding.external_repeated[:repeated]
 
-    @finding.probability = Finding.probabilities[:possible]
-    @finding.impact_risk = Finding.impact_risks[:moderate]
+      assert @finding.valid?
+      assert_equal Finding.risks[:low], @finding.risk
+    else
+      assert @finding.valid?
+      assert_equal Finding.risks[:high], @finding.risk
 
-    assert @finding.valid?
-    assert_equal Finding.risks[:medium], @finding.risk
+      @finding.probability = Finding.probabilities[:possible]
+      @finding.impact_risk = Finding.impact_risks[:moderate]
+
+      assert @finding.valid?
+      assert_equal Finding.risks[:medium], @finding.risk
+    end
   end
 
   test 'automatic issue based state' do
@@ -1720,7 +1734,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = findings :being_implemented_weakness
 
     finding.update_attribute('extension', true)
-    
+
     finding.extension = false
 
     refute finding.not_extension_was?
@@ -1807,7 +1821,7 @@ class FindingTest < ActiveSupport::TestCase
 
       v.save
     end
-    
+
     finding.extension      = false
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
     reschedules            = finding.calculate_reschedule_count
