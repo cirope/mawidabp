@@ -34,6 +34,20 @@ class FindingsHelperTest < ActionView::TestCase
     refute extension_enabled?(finding)
   end
 
+  test 'Show attachment creation date when have file_model' do
+    work_paper_with_file     = work_papers :image_work_paper
+    file_model_creation_date = work_paper_with_file.file_model.created_at.strftime('%d/%m/%Y')
+
+    assert_equal file_model_created_at(work_papers :image_work_paper), file_model_creation_date
+  end
+
+  test 'Dont show attachment creation date when not have file_model' do
+    finding    = findings :being_implemented_weakness
+    work_paper = finding.work_papers.first
+
+    assert_equal file_model_created_at(work_paper), '-'
+  end
+
   test 'Should first version in being implementation when is a new record' do
     finding = Finding.new
 
