@@ -8,6 +8,16 @@
     assignment_confirm_message: t('finding.assignment_confirm_message')
   }
 } %>
+<% if USE_SCOPE_CYCLE
+    form_options[:data] = form_options[:data].merge({ confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
+                                                                       { state: I18n.t('findings.state.being_implemented'),
+                                                                         extension: Finding.human_attribute_name(:extension) }),
+                                                      checkbox_target: '#weakness_extension',
+                                                      target_value_checkbox: false,
+                                                      state_target: Finding::STATUS[:being_implemented],
+                                                      input_with_state: '#weakness_state',
+                                                      condition_to_receive_confirm: first_version_in_being_implementation?(@weakness) })
+    end %>
 
 <%= simple_form_for @weakness, form_options do |f| %>
   <% content_for :js_extra do %>
@@ -73,30 +83,30 @@
         <% if %w(bic).include? Current.conclusion_pdf_format %>
           <div class="row">
             <div class="col-md-4">
-              <%= f.input :year, 
-                          input_html: 
-                          { 
+              <%= f.input :year,
+                          input_html:
+                          {
                             maxlength: 4,
-                            readonly: readonly, 
-                            data: { input_text_only_accept_numerics: true } 
+                            readonly: readonly,
+                            data: { input_text_only_accept_numerics: true }
                           } %>
             </div>
             <div class="col-md-4">
-              <%= f.input :nsisio, 
-                          input_html: 
-                          { 
+              <%= f.input :nsisio,
+                          input_html:
+                          {
                             maxlength: 4,
-                            readonly: readonly, 
-                            data: { input_text_only_accept_numerics: true } 
+                            readonly: readonly,
+                            data: { input_text_only_accept_numerics: true }
                           } %>
             </div>
             <div class="col-md-4">
-              <%= f.input :nobs, 
-                          input_html: 
-                          { 
+              <%= f.input :nobs,
+                          input_html:
+                          {
                             maxlength: 4,
-                            readonly: readonly, 
-                            data: { input_text_only_accept_numerics: true } 
+                            readonly: readonly,
+                            data: { input_text_only_accept_numerics: true }
                           } %>
             </div>
           </div>
@@ -233,8 +243,8 @@
                 data: { bic_field_to_disabled_when_is_manual: true } %>
             </div>
             <div class="col-3 text-right">
-              <%= f.input :manual_risk, 
-                          wrapper_html: { class: 'mt-4 pt-2' }, 
+              <%= f.input :manual_risk,
+                          wrapper_html: { class: 'mt-4 pt-2' },
                           disabled: readonly,
                           input_html: {
                             data: { toggle_risk_disabled_attr: true, replace_with_original_value_when_disabled: false }
@@ -266,7 +276,7 @@
         <% options_for_select = if USE_SCOPE_CYCLE && !readonly
                                   {
                                     data:
-                                      { 
+                                      {
                                         target_values_enable_checkbox: Finding.states_that_allow_extension,
                                         target_checkbox: '#weakness_extension'
                                       }.merge(data_options_for_suggested_follow_up_date('weakness'))
@@ -631,8 +641,11 @@
     <div class="col-md-1">
       <h5 class="h6"><%= WorkPaper.human_attribute_name 'number_of_pages' %></h5>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <h5 class="h6"><%= WorkPaper.human_attribute_name 'description' %></h5>
+    </div>
+    <div class="col-md-1">
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'created_at' %></h5>
     </div>
     <div class="col-md-2">
       <h5 class="h6"><%= WorkPaper.human_attribute_name 'file_model' %></h5>

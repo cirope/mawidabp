@@ -336,6 +336,7 @@
         <th><%= WorkPaper.human_attribute_name :code %></th>
         <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
         <th><%= WorkPaper.human_attribute_name :description %></th>
+        <th><%= WorkPaper.human_attribute_name :created_at %></th>
         <th><%= WorkPaper.human_attribute_name :file_model %></th>
       </tr>
     </thead>
@@ -346,6 +347,7 @@
           <td><%= work_paper.code %></td>
           <td><%= work_paper.number_of_pages %></td>
           <td><%= simple_format work_paper.description, class: 'mb-1' %></td>
+          <td><%= l(work_paper.created_at, format: :minimal) %></td>
           <td><%= work_paper.file_model.try(:file?) ?
             link_to(t('label.download'), work_paper.file_model.file.url) : '-' %></td>
         </tr>
