@@ -42,8 +42,8 @@ class FindingsHelperTest < ActionView::TestCase
   end
 
   test 'Dont show attachment creation date when not have file_model' do
-    finding                  = findings :being_implemented_weakness
-    work_paper               = finding.work_papers.first
+    finding    = findings :being_implemented_weakness
+    work_paper = finding.work_papers.first
 
     assert_equal file_model_created_at(work_paper), '-'
   end
