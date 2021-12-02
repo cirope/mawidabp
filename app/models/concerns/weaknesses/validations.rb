@@ -20,35 +20,9 @@ module Weaknesses::Validations
               :internal_control_components,
               presence: true, if: :validate_extra_attributes?
     validates :compliance_observations, presence: true, if: :compliance_require_observations?
-    validates :state_regulations,
-              :degree_compliance,
-              :observation_originated_tests,
-              :sample_deviation, :impact_risk,
-              :probability, :external_repeated,
-              presence: true, if: :bic_require_is_manual_risk_disabled?
-    validate  :bic_calculated_risk, if: :bic_require_is_manual_risk_disabled?
   end
 
   private
-
-  def bic_calculated_risk
-    amount = 0
-    amount += state_regulations.to_i
-    amount += degree_compliance.to_i
-    amount += observation_originated_tests.to_i
-    amount += sample_deviation.to_i
-    amount += impact_risk.to_i
-    amount += probability.to_i
-    amount += external_repeated.to_i
-
-    risk_new = bic_risks_types.reverse_each.to_h.detect { |id, value| amount >= value }
-
-    errors.add :risk, :invalid if risk_new.first != risk
-  end
-
-    def bic_require_is_manual_risk_disabled?
-      Current.conclusion_pdf_format == 'bic' && !manual_risk
-    end
 
     def require_impact_risk_and_probability?
       USE_SCOPE_CYCLE && !manual_risk

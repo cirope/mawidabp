@@ -751,6 +751,8 @@ es:
               must_be_being_implemented: 'Para indicar que es %{extension} debe estar en estado %{state}'
               had_no_extension_when_being_implemented: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension}'
               reference_auditor_required: 'debe tener un auditor referente'
+            risk_justification:
+              present: 'No debe tener justificacion de riesgo'
         finding_user_assignment:
           attributes:
             user:

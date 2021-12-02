@@ -381,7 +381,7 @@ jQuery(function ($) {
       riskValue = data[0]
       riskId    = data[1]
 
-      if (total > riskValue) {
+      if (total >= riskValue) {
         risk = riskId
 
         return false
@@ -391,6 +391,7 @@ jQuery(function ($) {
     var riskChanged = $('[name$="[risk]"]').val() !== String(risk)
 
     if (riskChanged) {
+      $('[name$="[risk]"]:hidden').val(risk)
       $('[name$="[risk]"]:visible').val(risk).trigger('change')
     }
   }
