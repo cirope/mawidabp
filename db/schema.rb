@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_27_181626) do
+ActiveRecord::Schema.define(version: 2021_11_19_194237) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1255,6 +1255,8 @@ ActiveRecord::Schema.define(version: 2021_10_27_181626) do
     t.integer "workflow_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "file_model_id"
+    t.index ["file_model_id"], name: "index_workflow_items_on_file_model_id"
     t.index ["workflow_id"], name: "index_workflow_items_on_workflow_id"
   end
 
@@ -1397,6 +1399,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_181626) do
   add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "workflow_items", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflow_items", "workflows", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflows", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflows", "periods", on_update: :restrict, on_delete: :restrict
