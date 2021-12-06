@@ -117,10 +117,10 @@ module WeaknessesHelper
       Finding.probabilities.map do |key, value|
         [t("probability_types.#{key}"), value]
       end
-      else
-        Finding.frequencies.map do |key, value|
-          [t("frequencies_types.#{key}"), value]
-        end
+    else
+      Finding.frequencies.map do |key, value|
+        [t("frequencies_types.#{key}"), value]
+      end
     end
   end
 
