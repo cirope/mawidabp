@@ -49,7 +49,7 @@ class ActivityGroupsController < ApplicationController
   private
 
     def set_activity_group
-      @activity_group = ActivityGroup.list.find params[:id]
+      @activity_group = ActivityGroup.group_list.find params[:id]
     end
 
     def activity_group_params
