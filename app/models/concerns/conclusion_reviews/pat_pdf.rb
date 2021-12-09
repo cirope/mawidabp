@@ -314,7 +314,11 @@ module ConclusionReviews::PatPdf
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.pat.weaknesses.risk', risk: weakness.risk_text), inline_format: true
 
-      if weakness.follow_up_date
+      if weakness.implemented_audited? || weakness.failure?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
+        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+      elsif weakness.follow_up_date
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
         pdf.text I18n.l(weakness.follow_up_date, format: :minimal)
@@ -379,7 +383,11 @@ module ConclusionReviews::PatPdf
         pdf.text weakness.answer
       end
 
-      if weakness.follow_up_date
+      if weakness.implemented_audited? || weakness.failure?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
+        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+      elsif weakness.follow_up_date
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
         pdf.text I18n.l(weakness.follow_up_date, format: :minimal)
@@ -465,7 +473,11 @@ module ConclusionReviews::PatPdf
         pdf.text weakness.current_situation
       end
 
-      if weakness.follow_up_date
+      if weakness.implemented_audited? || weakness.failure?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
+        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+      elsif weakness.follow_up_date
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
         pdf.text I18n.l(weakness.follow_up_date, format: :minimal)

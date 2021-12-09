@@ -164,6 +164,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             probability: Finding.probabilities[:rare],
             extension: false,
             manual_risk: '1',
+            risk_justification: 'Test',
             image_model_attributes: {
               image: Rack::Test::UploadedFile.new(
                 "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
