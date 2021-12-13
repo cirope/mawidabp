@@ -187,7 +187,8 @@
                  } %>
           </div>
         </div>
-      <% elsif %w(bic pat).include? Current.conclusion_pdf_format %>
+      <% end %>
+      <% if %w(bic pat).include? Current.conclusion_pdf_format %>
         <div class="row">
           <div class="col-9">
             <%= f.input :risk, collection: risks, prompt: true, disabled: @weakness.automatic_risk? || readonly, input_html: {
