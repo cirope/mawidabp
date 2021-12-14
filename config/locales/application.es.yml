@@ -356,6 +356,7 @@ es:
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
+    download_expanded: "Descargar Ampliado"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"

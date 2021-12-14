@@ -153,7 +153,7 @@ module ConclusionReviews::DefaultPdf
 
         pdf.add_subtitle objectives_and_scopes, PDF_FONT_SIZE, PDF_FONT_SIZE
 
-        put_default_control_objectives_on pdf, grouped_control_objectives
+        put_default_control_objectives_on pdf, grouped_control_objectives, options
       end
 
       if applied_procedures.present?
@@ -221,9 +221,9 @@ module ConclusionReviews::DefaultPdf
       pdf.add_description_item title, dates
     end
 
-    def put_default_control_objectives_on pdf, grouped_control_objectives
+    def put_default_control_objectives_on pdf, grouped_control_objectives, options
       grouped_control_objectives.each do |process_control, cois|
-        coi_data              = cois.sort.map { |coi| ['• ', coi.to_s] }
+        coi_data              = put_default_coi_data cois, options
         process_control_text  = "<b>#{ProcessControl.model_name.human}: "
         process_control_text << "<i>#{process_control.name}</i></b>"
 
@@ -240,6 +240,14 @@ module ConclusionReviews::DefaultPdf
             }
           end
         end
+      end
+    end
+
+    def put_default_coi_data cois, options
+      if options[:expanded].blank?
+        cois.sort.map { |coi| ['• ', coi.to_s] }
+      else
+        cois.sort.map { |coi| ['• ', [coi.to_s, coi.control.control].join("\n\n")] }
       end
     end
 

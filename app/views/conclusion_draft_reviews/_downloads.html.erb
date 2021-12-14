@@ -12,6 +12,11 @@
       }, :class => 'dropdown-item'
     ),
     link_to(
+      t('conclusion_final_review.download_expanded'), {
+        :action => :export_to_pdf, :id => @conclusion_draft_review, :export_options => {:expanded => 1}, :_ts => Time.now.to_i
+      }, :class => 'dropdown-item'
+    ),
+    link_to(
       t('conclusion_draft_review.download_without_score'), {
         :action => :export_to_pdf, :id => @conclusion_draft_review, :export_options => {:hide_score => '1'}, :_ts => Time.now.to_i
       }, :class => 'dropdown-item'
