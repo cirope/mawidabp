@@ -235,7 +235,8 @@ module ConclusionReviews::DefaultPdf
               cell_style: {
                 align:        :justify,
                 border_width: 0,
-                padding:      [0, 0, 5, 0]
+                padding:      [0, 0, 5, 0],
+                inline_format: true
               }
             }
           end
@@ -247,7 +248,9 @@ module ConclusionReviews::DefaultPdf
       if options[:expanded].blank?
         cois.sort.map { |coi| ['• ', coi.to_s] }
       else
-        cois.sort.map { |coi| ['• ', [coi.to_s, coi.control.control].join("\n\n")] }
+        control_text = "\n\n<b>#{Control.human_attribute_name('control')}</b>\n\n"
+
+        cois.sort.map { |coi| ['• ', [coi.to_s, coi.control.control].join(control_text)] }
       end
     end
 
