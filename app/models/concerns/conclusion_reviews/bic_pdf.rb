@@ -10,9 +10,7 @@ module ConclusionReviews::BicPdf
                            review.weaknesses
                          end
 
-    if exclude_regularized_findings
-      weaknesses = weaknesses.where.not(state: Finding::STATUS[:implemented_audited])
-    end
+    weaknesses = bic_exclude_regularized_findings || weaknesses
 
     put_default_watermark_on pdf
     put_bic_header_on        pdf, organization
@@ -31,6 +29,12 @@ module ConclusionReviews::BicPdf
   end
 
   private
+
+    def bic_exclude_regularized_findings
+      if exclude_regularized_findings
+        weaknesses.where.not(state: Finding::STATUS[:implemented_audited])
+      end
+    end
 
     def put_bic_header_on pdf, organization
       font_size = PDF_HEADER_FONT_SIZE
@@ -144,6 +148,8 @@ module ConclusionReviews::BicPdf
                          coi.weaknesses
                        end
 
+          weaknesses = bic_exclude_regularized_findings || weaknesses
+
           weaknesses.not_revoked.sort_for_review.each do |weakness|
             put_bic_weakness_on pdf, weakness, number += 1
           end
@@ -158,6 +164,8 @@ module ConclusionReviews::BicPdf
                    else
                      review.weaknesses
                    end
+
+      weaknesses = bic_exclude_regularized_findings || weaknesses
 
       present  = weaknesses.not_revoked.where repeated_of_id: nil
       repeated = weaknesses.not_revoked.where.not repeated_of_id: nil
@@ -218,6 +226,8 @@ module ConclusionReviews::BicPdf
                          coi.weaknesses
                        end
 
+          weaknesses = bic_exclude_regularized_findings || weaknesses
+
           weaknesses.not_revoked.sort_for_review.each do |weakness|
             put_bic_image_on pdf, weakness, number += 1
           end
@@ -232,6 +242,8 @@ module ConclusionReviews::BicPdf
                    else
                      review.weaknesses
                    end
+
+      weaknesses = bic_exclude_regularized_findings || weaknesses
 
       present  = weaknesses.not_revoked.where repeated_of_id: nil
       repeated = weaknesses.not_revoked.where.not repeated_of_id: nil
