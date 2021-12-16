@@ -10,7 +10,7 @@ module ConclusionReviews::BicPdf
                            review.weaknesses
                          end
 
-    weaknesses = bic_exclude_regularized_findings || weaknesses
+    weaknesses         = bic_exclude_regularized_findings weaknesses
 
     put_default_watermark_on pdf
     put_bic_header_on        pdf, organization
@@ -30,9 +30,11 @@ module ConclusionReviews::BicPdf
 
   private
 
-    def bic_exclude_regularized_findings
+    def bic_exclude_regularized_findings weaknesses
       if exclude_regularized_findings
         weaknesses.where.not(state: Finding::STATUS[:implemented_audited])
+      else
+        weaknesses
       end
     end
 
@@ -148,7 +150,7 @@ module ConclusionReviews::BicPdf
                          coi.weaknesses
                        end
 
-          weaknesses = bic_exclude_regularized_findings || weaknesses
+          weaknesses = bic_exclude_regularized_findings weaknesses
 
           weaknesses.not_revoked.sort_for_review.each do |weakness|
             put_bic_weakness_on pdf, weakness, number += 1
@@ -165,7 +167,7 @@ module ConclusionReviews::BicPdf
                      review.weaknesses
                    end
 
-      weaknesses = bic_exclude_regularized_findings || weaknesses
+      weaknesses = bic_exclude_regularized_findings weaknesses
 
       present  = weaknesses.not_revoked.where repeated_of_id: nil
       repeated = weaknesses.not_revoked.where.not repeated_of_id: nil
@@ -226,7 +228,7 @@ module ConclusionReviews::BicPdf
                          coi.weaknesses
                        end
 
-          weaknesses = bic_exclude_regularized_findings || weaknesses
+          weaknesses = bic_exclude_regularized_findings weaknesses
 
           weaknesses.not_revoked.sort_for_review.each do |weakness|
             put_bic_image_on pdf, weakness, number += 1
@@ -243,7 +245,7 @@ module ConclusionReviews::BicPdf
                      review.weaknesses
                    end
 
-      weaknesses = bic_exclude_regularized_findings || weaknesses
+      weaknesses = bic_exclude_regularized_findings weaknesses
 
       present  = weaknesses.not_revoked.where repeated_of_id: nil
       repeated = weaknesses.not_revoked.where.not repeated_of_id: nil
