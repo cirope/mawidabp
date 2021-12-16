@@ -168,9 +168,8 @@ module ConclusionReviews::BicPdf
                    end
 
       weaknesses = bic_exclude_regularized_findings weaknesses
-
-      present  = weaknesses.not_revoked.where repeated_of_id: nil
-      repeated = weaknesses.not_revoked.where.not repeated_of_id: nil
+      present    = weaknesses.not_revoked.where repeated_of_id: nil
+      repeated   = weaknesses.not_revoked.where.not repeated_of_id: nil
 
       if present.any?
         pdf.start_new_page
