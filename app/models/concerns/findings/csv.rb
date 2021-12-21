@@ -23,7 +23,7 @@ module Findings::Csv
       state_text,
       full_state_text,
       try(:risk_text) || '',
-      (respond_to?(:risk_text) ? priority_text : '' unless USE_SCOPE_CYCLE),
+      (respond_to?(:risk_text) ? priority_text.to_s : '' unless USE_SCOPE_CYCLE),
       auditeds_as_process_owner.join('; '),
       audited_users.join('; '),
       auditor_users.join('; '),
@@ -51,10 +51,12 @@ module Findings::Csv
       (try(:weakness_template)&.reference.to_s if USE_SCOPE_CYCLE),
       (review.period if USE_SCOPE_CYCLE),
       (has_previous_review_label if USE_SCOPE_CYCLE),
-      (commitment_support_plans_text if Finding.show_commitment_support?),
-      (commitment_support_controls_text if Finding.show_commitment_support?),
-      (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
+      (commitment_support_plans_text.to_s if Finding.show_commitment_support?),
+      (commitment_support_controls_text.to_s if Finding.show_commitment_support?),
+      (commitment_support_reasons_text.to_s if Finding.show_commitment_support?),
+      (commitment_date_required_level_text.to_s if Finding.show_commitment_support?),
+      (I18n.t "label.#{extension ? 'yes' : 'no'}" if USE_SCOPE_CYCLE),
+      (follow_up_date_last_changed if USE_SCOPE_CYCLE)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -63,6 +65,22 @@ module Findings::Csv
   end
 
   private
+
+    def follow_up_date_last_changed
+      act = self
+
+      versions.reverse_each do |v|
+        previous = v.reify
+
+        if previous.present? && act.follow_up_date != previous&.follow_up_date
+          return I18n.l(act.updated_at, format: :minimal)
+        elsif previous.present?
+          act = previous
+        end
+      end
+
+      '-'
+    end
 
     def has_previous_review_label
       if weakness_template_id
@@ -359,7 +377,9 @@ module Findings::Csv
           (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
-          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?)
+          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?),
+          (Weakness.human_attribute_name('extension') if USE_SCOPE_CYCLE),
+          (I18n.t('finding.follow_up_date_last_changed') if USE_SCOPE_CYCLE)
         ].compact
       end
   end
