@@ -56,7 +56,7 @@ module Findings::Csv
       (commitment_support_reasons_text.to_s if Finding.show_commitment_support?),
       (commitment_date_required_level_text.to_s if Finding.show_commitment_support?),
       (I18n.t "label.#{extension ? 'yes' : 'no'}" if USE_SCOPE_CYCLE),
-      (follow_up_date_last_changed if USE_SCOPE_CYCLE)
+      (follow_up_date_last_changed.to_s if USE_SCOPE_CYCLE)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -65,22 +65,6 @@ module Findings::Csv
   end
 
   private
-
-    def follow_up_date_last_changed
-      act = self
-
-      versions.reverse_each do |v|
-        previous = v.reify
-
-        if previous.present? && act.follow_up_date != previous&.follow_up_date
-          return I18n.l(act.updated_at, format: :minimal)
-        elsif previous.present?
-          act = previous
-        end
-      end
-
-      '-'
-    end
 
     def has_previous_review_label
       if weakness_template_id

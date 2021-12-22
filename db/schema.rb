@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_19_194237) do
+ActiveRecord::Schema.define(version: 2021_12_22_142340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -552,6 +552,7 @@ ActiveRecord::Schema.define(version: 2021_11_19_194237) do
     t.integer "sample_deviation"
     t.integer "external_repeated"
     t.text "risk_justification"
+    t.date "follow_up_date_last_changed"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -559,6 +560,7 @@ ActiveRecord::Schema.define(version: 2021_11_19_194237) do
     t.index ["first_follow_up_date"], name: "index_findings_on_first_follow_up_date"
     t.index ["first_notification_date"], name: "index_findings_on_first_notification_date"
     t.index ["follow_up_date"], name: "index_findings_on_follow_up_date"
+    t.index ["follow_up_date_last_changed"], name: "index_findings_on_follow_up_date_last_changed"
     t.index ["implemented_at"], name: "index_findings_on_implemented_at"
     t.index ["last_notification_date"], name: "index_findings_on_last_notification_date"
     t.index ["latest_id"], name: "index_findings_on_latest_id"
