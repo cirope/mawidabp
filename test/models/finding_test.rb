@@ -2007,15 +2007,17 @@ class FindingTest < ActiveSupport::TestCase
   test 'should return follow_up_date_last_changed when in last version change follow_up_date' do
     finding = findings :being_implemented_weakness
 
-    assert_equal finding.follow_up_date_last_changed_on_versions,
-                 I18n.l(finding.updated_at, format: :minimal)
+    follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
+
+    assert_equal follow_up_date_last_changed_on_versions, I18n.l(finding.updated_at, format: :minimal)
   end
 
   test 'should return nil when dont have changes in follow_up_date' do
     finding = findings :being_implemented_weakness_on_draft
 
-    assert_equal finding.follow_up_date_last_changed_on_versions,
-                 nil
+    follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
+
+    assert_equal follow_up_date_last_changed_on_versions, nil
   end
 
   test 'should return the same follow_up_date_last_changed when change' do
@@ -2025,8 +2027,9 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.save!
 
-    assert_equal finding.follow_up_date_last_changed_on_versions,
-                 last_updated_at
+    follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
+
+    assert_equal follow_up_date_last_changed_on_versions, last_updated_at
   end
 
   private
