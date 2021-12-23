@@ -403,7 +403,16 @@ module ConclusionReviews::PatRtf
         p1 << weakness.risk_text
       end
 
-      if weakness.follow_up_date
+      if weakness.implemented_audited? || weakness.failure?
+        document.paragraph(title_style) do |p1|
+          p1.line_break
+          p1 << I18n.t('conclusion_review.pat.weaknesses.follow_up_date')
+        end
+
+        document.paragraph(description_style) do |p1|
+          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+        end
+      elsif weakness.follow_up_date
         document.paragraph(title_style) do |p1|
           p1.line_break
           p1 << I18n.t('conclusion_review.pat.weaknesses.follow_up_date')
@@ -509,7 +518,16 @@ module ConclusionReviews::PatRtf
         end
       end
 
-      if weakness.follow_up_date
+      if weakness.implemented_audited? || weakness.failure?
+        document.paragraph(title_style) do |p1|
+          p1.line_break
+          p1 << I18n.t('conclusion_review.pat.weaknesses.follow_up_date')
+        end
+
+        document.paragraph(description_style) do |p1|
+          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+        end
+      elsif weakness.follow_up_date
         document.paragraph(title_style) do |p1|
           p1.line_break
           p1 << I18n.t('conclusion_review.pat.weaknesses.follow_up_date')
@@ -636,7 +654,16 @@ module ConclusionReviews::PatRtf
         end
       end
 
-      if weakness.follow_up_date
+      if weakness.implemented_audited? || weakness.failure?
+        document.paragraph(title_style) do |p1|
+          p1.line_break
+          p1 << I18n.t('conclusion_review.pat.weaknesses.follow_up_date')
+        end
+
+        document.paragraph(description_style) do |p1|
+          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+        end
+      elsif weakness.follow_up_date
         document.paragraph(title_style) do |p1|
           p1 << I18n.t('conclusion_review.pat.weaknesses.follow_up_date')
         end

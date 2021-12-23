@@ -455,4 +455,8 @@ module FindingsHelper
     def finding_probability_risks_types finding
       finding.percentage_by_probability.invert.reverse_each.to_json
     end
+
+    def finding_bic_risks_types finding
+      finding.bic_risks_types.invert.reverse_each.to_json
+    end
 end

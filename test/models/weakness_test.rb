@@ -38,6 +38,7 @@ class WeaknessTest < ActiveSupport::TestCase
         impact_risk: Finding.impact_risks[:small],
         probability: Finding.probabilities[:rare],
         manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -94,6 +95,7 @@ class WeaknessTest < ActiveSupport::TestCase
         impact_risk: Finding.impact_risks[:small],
         probability: Finding.probabilities[:rare],
         manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
