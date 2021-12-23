@@ -370,5 +370,21 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_equal 1, business_unit_types.size # Cycle and Consolidated Sustantive is excluded in params
     assert_equal 'B.C.R.A.', business_unit_types[0]['label']
+
+    get :auto_complete_for_business_unit_type, params: { q: 'C', plan_item_id: plan_items(:current_plan_item_1).id, business_unit_type_id: plan_items(:current_plan_item_1).business_unit_type.id }, as: :json
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_unit_types.size # Cycle and Consolidated Sustantive is excluded in params
+    assert_equal 'B.C.R.A.', business_unit_types[0]['label']
+
+    get :auto_complete_for_business_unit_type, params: { q: 'C', business_unit_type_id: plan_items(:current_plan_item_1).business_unit_type.id }, as: :json
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_unit_types.size # Cycle and Consolidated Sustantive is excluded in params
+    assert_equal 'B.C.R.A.', business_unit_types[0]['label']
   end
 end
