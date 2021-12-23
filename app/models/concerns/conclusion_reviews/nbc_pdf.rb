@@ -264,7 +264,7 @@ module ConclusionReviews::NbcPdf
       weaknesses.where(repeated_of_id: nil).each_with_index do |weakness, idx|
         weakness_partial pdf, weakness
 
-        pdf.start_new_page if idx < weaknesses.size - 1
+        pdf.start_new_page if idx < weaknesses.where(repeated_of_id: nil).size - 1
       end
     end
 
