@@ -345,6 +345,14 @@ class NotifierMailer < ApplicationMailer
          subject: prefix.upcase + t('notifier.notify_new_oportunity.title')
   end
 
+  def notify_implemented_finding_greater_than_90_days(findings)
+    # @oportunity = oportunity
+    # prefix      = "[#{@oportunity.organization.prefix}]"
+
+    mail to: users_to_notify_for(users).map(&:email),
+         subject: prefix.upcase + t('notifier.notify_new_oportunity.title')
+  end
+
   private
 
     def users_to_notify_for(users)

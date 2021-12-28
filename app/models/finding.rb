@@ -33,6 +33,7 @@ class Finding < ApplicationRecord
   include Findings::FollowUp
   include Findings::FollowUpPdf
   include Findings::ImportantDates
+  include Findings::ImplementedNotifications
   include Findings::Issues
   include Findings::Json
   include Findings::NotificationLevel
