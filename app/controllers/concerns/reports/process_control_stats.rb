@@ -210,6 +210,12 @@ module Reports::ProcessControlStats
   end
 
   def process_control_stats_csv
+    respond_to do |format|
+      format.csv  { create_process_control_stats_csv }
+    end
+  end
+
+  def create_process_control_stats_csv
     options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
     process_control_stats
@@ -218,37 +224,23 @@ module Reports::ProcessControlStats
                  from_date: @from_date.to_formatted_s(:db),
                  to_date: @to_date.to_formatted_s(:db))
 
-    column_headers_csv = []
-
-    @columns.each do |_, col_title|
-      column_headers_csv << col_title
-    end
-
-    column_headers_csv << t('conclusion_committee_report.process_control_stats.period_column')
-
     csv_str = CSV.generate(**options) do |csv|
-      csv << column_headers_csv
-    end
-
-    datas = []
-
-    @periods.each do |period|
-      @process_control_data[period].each do |row|
-        new_row = []
-
-        @columns.each do |col_name, _|
-          new_row << (row[col_name].kind_of?(Array) ?
-            row[col_name].map {|l| "  • #{l}"}.join("\n") :
-            row[col_name])
-        end
-        new_row << period.inspect
-        datas   << new_row
-      end
+      csv << ((@columns.map { |column| column[1] }) << t('conclusion_committee_report.process_control_stats.period_column'))
     end
 
     csv_str += CSV.generate(**options) do |csv|
-      datas.each do |data|
-        csv << data
+      @periods.each do |period|
+        @process_control_data[period].each do |row|
+          new_row = []
+
+          @columns.each do |col_name, _|
+            new_row << (row[col_name].kind_of?(Array) ?
+              row[col_name].map {|l| "  • #{l}"}.join("\n") :
+              row[col_name])
+          end
+          new_row << period.inspect
+          csv     << new_row
+        end
       end
     end
 
