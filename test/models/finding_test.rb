@@ -1995,8 +1995,26 @@ class FindingTest < ActiveSupport::TestCase
     refute finding.had_version_with_being_implemented?
   end
 
-  test 'store follow_up_date_last changed' do
+  test 'store follow_up_date_last_changed when change' do
     finding                = findings :being_implemented_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
+  end
+
+  test 'store follow_up_date_last_changed when change to nil' do
+    finding                = findings :being_implemented_weakness
+    finding.follow_up_date = nil
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
+  end
+
+  test 'store follow_up_date_last_changed when change from nil' do
+    finding                = findings :incomplete_weakness
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
 
     finding.save!
@@ -2012,24 +2030,49 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal follow_up_date_last_changed_on_versions, I18n.l(finding.updated_at, format: :minimal)
   end
 
-  test 'should return nil when dont have changes in follow_up_date' do
+  test 'should return created_at when dont have changes from creation in follow_up_date' do
     finding = findings :being_implemented_weakness_on_draft
 
-    follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
-
-    assert_equal follow_up_date_last_changed_on_versions, nil
-  end
-
-  test 'should return the same follow_up_date_last_changed when change' do
-    finding             = findings :being_implemented_weakness
-    last_updated_at     = I18n.l(finding.updated_at, format: :minimal)
     finding.description = 'test'
 
     finding.save!
 
     follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
 
-    assert_equal follow_up_date_last_changed_on_versions, last_updated_at
+    assert_equal follow_up_date_last_changed_on_versions, I18n.l(finding.created_at, format: :minimal)
+  end
+
+  test 'should return nil when never have follow_up_date' do
+    finding = findings :unconfirmed_for_notification_weakness
+
+    finding.description = 'test'
+
+    finding.save!
+
+    assert_nil finding.follow_up_date_last_changed_on_versions
+  end
+
+  test 'should return follow_up_date_last_changed when in past didnt have' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(finding.updated_at, format: :minimal)
+  end
+
+  test 'should return follow_up_date when dont have follow_up_date but in past have' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    follow_up_date_last_changed_expected = finding.updated_at
+    finding.follow_up_date               = nil
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(follow_up_date_last_changed_expected, format: :minimal)
   end
 
   private

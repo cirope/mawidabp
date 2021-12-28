@@ -22,6 +22,6 @@ module Findings::FollowUpLastChanged
       act = reify
     end
 
-    nil
+    act.follow_up_date.present? ? I18n.l(act.updated_at, format: :minimal) : nil
   end
 end
