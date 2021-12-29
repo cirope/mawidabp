@@ -347,6 +347,7 @@ class NotifierMailer < ApplicationMailer
 
   def notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days(finding)
     @finding = finding
+    prefix   = "[#{@finding.organization.prefix}]"
 
     mail to: finding_supervisors(@finding).map(&:email),
          subject: prefix.upcase + t('notifier.notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days.title')

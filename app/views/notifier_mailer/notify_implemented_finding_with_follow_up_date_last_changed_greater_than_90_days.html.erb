@@ -1,14 +1,16 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2><%= t 'notifier.notify_implemented_finding_greater_than_90_days.title' %></h2>
+  <h2><%= t 'notifier.notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days.title' %></h2>
   <h3 style="font-weight: normal;">
     <%= markdown_without_paragraph(
-      t('notifier.notify_implemented_finding_greater_than_90_days.finding_follow_up_date_last_changed_is_grerater_90_days')) %>
+      t('notifier.notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days.finding_follow_up_date_last_changed_is_grerater_90_days')) %>
+  </h3>
+  <h3 style="font-weight: normal;">
+    <%= markdown_without_paragraph(
+      t('notifier.notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days.follow_up_date_last_changed', follow_up_date_last_changed: (l(@finding.follow_up_date_last_changed, format: :long)))) %>
   </h3>
 
-  <% if @finding.organization %>
-    <% Current.organization = @finding.organization %>
-    <h2 style="margin-bottom: 1em;"><%= @finding.organization.name %></h2>
-  <% end %>
+  <% Current.organization = @finding.organization %>
+  <h2 style="margin-bottom: 1em;"><%= @finding.organization.name %></h2>
 
   <%= render :partial => 'finding', :locals => {:finding => @finding} %><br />
   <%= render :partial => 'common_mailer/footer' %>
