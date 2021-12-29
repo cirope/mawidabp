@@ -57,6 +57,9 @@ module Findings::Csv
       (commitment_support_reasons_text if Finding.show_commitment_support?),
       (supervisor_review if USE_SCOPE_CYCLE),
       (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
+      (commitment_date_required_level_text.to_s if Finding.show_commitment_support?),
+      (I18n.t "label.#{extension ? 'yes' : 'no'}" if USE_SCOPE_CYCLE),
+      (follow_up_date_last_changed.to_s if USE_SCOPE_CYCLE)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -388,6 +391,9 @@ module Findings::Csv
           (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
           (I18n.t('finding.supervisor') if USE_SCOPE_CYCLE),
           (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?)
+          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?),
+          (Weakness.human_attribute_name('extension') if USE_SCOPE_CYCLE),
+          (I18n.t('finding.follow_up_date_last_changed') if USE_SCOPE_CYCLE)
         ].compact
       end
   end
