@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_27_181626) do
+ActiveRecord::Schema.define(version: 2021_12_22_142340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -546,6 +546,13 @@ ActiveRecord::Schema.define(version: 2021_10_27_181626) do
     t.decimal "impact_amount", precision: 17, scale: 2
     t.decimal "probability_amount", precision: 17, scale: 2
     t.boolean "extension", default: false, null: false
+    t.integer "state_regulations"
+    t.integer "degree_compliance"
+    t.integer "observation_originated_tests"
+    t.integer "sample_deviation"
+    t.integer "external_repeated"
+    t.text "risk_justification"
+    t.date "follow_up_date_last_changed"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -553,6 +560,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_181626) do
     t.index ["first_follow_up_date"], name: "index_findings_on_first_follow_up_date"
     t.index ["first_notification_date"], name: "index_findings_on_first_notification_date"
     t.index ["follow_up_date"], name: "index_findings_on_follow_up_date"
+    t.index ["follow_up_date_last_changed"], name: "index_findings_on_follow_up_date_last_changed"
     t.index ["implemented_at"], name: "index_findings_on_implemented_at"
     t.index ["last_notification_date"], name: "index_findings_on_last_notification_date"
     t.index ["latest_id"], name: "index_findings_on_latest_id"
@@ -1254,6 +1262,8 @@ ActiveRecord::Schema.define(version: 2021_10_27_181626) do
     t.integer "workflow_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "file_model_id"
+    t.index ["file_model_id"], name: "index_workflow_items_on_file_model_id"
     t.index ["workflow_id"], name: "index_workflow_items_on_workflow_id"
   end
 
@@ -1396,6 +1406,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_181626) do
   add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "workflow_items", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflow_items", "workflows", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflows", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflows", "periods", on_update: :restrict, on_delete: :restrict

@@ -10,9 +10,7 @@ module ConclusionReviews::BicPdf
                            review.weaknesses
                          end
 
-    if exclude_regularized_findings
-      weaknesses = weaknesses.where.not(state: Finding::STATUS[:implemented_audited])
-    end
+    weaknesses         = bic_exclude_regularized_findings weaknesses
 
     put_default_watermark_on pdf
     put_bic_header_on        pdf, organization
@@ -31,6 +29,14 @@ module ConclusionReviews::BicPdf
   end
 
   private
+
+    def bic_exclude_regularized_findings weaknesses
+      if exclude_regularized_findings
+        weaknesses.where.not(state: Finding::STATUS[:implemented_audited])
+      else
+        weaknesses
+      end
+    end
 
     def put_bic_header_on pdf, organization
       font_size = PDF_HEADER_FONT_SIZE
@@ -144,6 +150,8 @@ module ConclusionReviews::BicPdf
                          coi.weaknesses
                        end
 
+          weaknesses = bic_exclude_regularized_findings weaknesses
+
           weaknesses.not_revoked.sort_for_review.each do |weakness|
             put_bic_weakness_on pdf, weakness, number += 1
           end
@@ -159,8 +167,9 @@ module ConclusionReviews::BicPdf
                      review.weaknesses
                    end
 
-      present  = weaknesses.not_revoked.where repeated_of_id: nil
-      repeated = weaknesses.not_revoked.where.not repeated_of_id: nil
+      weaknesses = bic_exclude_regularized_findings weaknesses
+      present    = weaknesses.not_revoked.where repeated_of_id: nil
+      repeated   = weaknesses.not_revoked.where.not repeated_of_id: nil
 
       if present.any?
         pdf.start_new_page
@@ -218,6 +227,8 @@ module ConclusionReviews::BicPdf
                          coi.weaknesses
                        end
 
+          weaknesses = bic_exclude_regularized_findings weaknesses
+
           weaknesses.not_revoked.sort_for_review.each do |weakness|
             put_bic_image_on pdf, weakness, number += 1
           end
@@ -233,8 +244,9 @@ module ConclusionReviews::BicPdf
                      review.weaknesses
                    end
 
-      present  = weaknesses.not_revoked.where repeated_of_id: nil
-      repeated = weaknesses.not_revoked.where.not repeated_of_id: nil
+      weaknesses = bic_exclude_regularized_findings weaknesses
+      present    = weaknesses.not_revoked.where repeated_of_id: nil
+      repeated   = weaknesses.not_revoked.where.not repeated_of_id: nil
 
       present.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
         put_bic_image_on pdf, weakness, number += 1

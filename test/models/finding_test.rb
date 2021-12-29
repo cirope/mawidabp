@@ -41,6 +41,7 @@ class FindingTest < ActiveSupport::TestCase
           impact_risk: Finding.impact_risks[:small],
           probability: Finding.probabilities[:rare],
           manual_risk: true,
+          risk_justification: 'Test',
           finding_user_assignments_attributes: {
             new_1: {
               user_id: users(:audited).id, process_owner: true
@@ -95,6 +96,7 @@ class FindingTest < ActiveSupport::TestCase
         impact_risk: Finding.impact_risks[:small],
         probability: Finding.probabilities[:rare],
         manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -431,6 +433,25 @@ class FindingTest < ActiveSupport::TestCase
     Current.user = users :supervisor
 
     assert finding.valid?
+  end
+
+  test 'invalid when manual risk and blank justification' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @finding.risk_justification = ''
+
+    refute @finding.valid?
+    assert_error @finding, :risk_justification, :blank
+  end
+
+  test 'invalid when automatic risk and present justification' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @finding.manual_risk = false
+    @finding.risk_justification = 'Test'
+
+    refute @finding.valid?
+    assert_error @finding, :risk_justification, :present
   end
 
   test 'import users' do
@@ -951,7 +972,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.reload.repeated_of
     assert finding.rescheduled?
 
-    count_reschedule = USE_SCOPE_CYCLE ? 2 : 3 
+    count_reschedule = USE_SCOPE_CYCLE ? 2 : 3
 
     assert_equal count_reschedule, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
@@ -1497,24 +1518,144 @@ class FindingTest < ActiveSupport::TestCase
     assert_nil without_message
   end
 
-  test 'automatic risk' do
-    @finding.risk        = Finding.risks[:low]
-    @finding.probability = Finding.probabilities[:almost_certain]
-    @finding.impact_risk = Finding.impact_risks[:critical]
+  test 'change risk from manual to automatic' do
+    @finding.risk               = Finding.risks[:low]
+    @finding.probability        = Finding.probabilities[:almost_certain]
+    @finding.impact_risk        = Finding.impact_risks[:critical]
+    @finding.risk_justification = 'test' if Current.conclusion_pdf_format == 'bic'
 
     assert @finding.valid?
     assert_equal Finding.risks[:low], @finding.risk
 
-    @finding.manual_risk = false
+    @finding.manual_risk        = false
+    @finding.risk_justification = nil
+
+    if Current.conclusion_pdf_format == 'bic'
+      @finding.state_regulations            = Finding.state_regulations[:exist]
+      @finding.degree_compliance            = Finding.degree_compliance[:comply]
+      @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
+      @finding.sample_deviation             = Finding.sample_deviation[:most_expected]
+      @finding.impact_risk                  = Finding.impact_risks_bic[:low]
+      @finding.probability                  = Finding.frequencies[:low]
+      @finding.external_repeated            = Finding.external_repeated[:repeated]
+
+      assert @finding.valid?
+      assert_equal Finding.risks[:low], @finding.risk
+    else
+      assert @finding.valid?
+      assert_equal Finding.risks[:high], @finding.risk
+
+      @finding.probability = Finding.probabilities[:possible]
+      @finding.impact_risk = Finding.impact_risks[:moderate]
+
+      assert @finding.valid?
+      assert_equal Finding.risks[:medium], @finding.risk
+    end
+  end
+
+  test 'valid with low risk' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @finding.manual_risk        = false
+    @finding.risk_justification = nil
+
+    @finding.state_regulations            = Finding.state_regulations[:exist]
+    @finding.degree_compliance            = Finding.degree_compliance[:comply]
+    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @finding.sample_deviation             = Finding.sample_deviation[:most_expected]
+    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
+    @finding.probability                  = Finding.frequencies[:low]
+    @finding.external_repeated            = Finding.external_repeated[:repeated]
 
     assert @finding.valid?
-    assert_equal Finding.risks[:high], @finding.risk
+  end
 
-    @finding.probability = Finding.probabilities[:possible]
-    @finding.impact_risk = Finding.impact_risks[:moderate]
+  test 'invalid with low risk' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @finding.manual_risk        = false
+    @finding.risk               = Finding.risks[:high]
+    @finding.risk_justification = nil
+
+    @finding.state_regulations            = Finding.state_regulations[:exist]
+    @finding.degree_compliance            = Finding.degree_compliance[:comply]
+    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @finding.sample_deviation             = Finding.sample_deviation[:most_expected]
+    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
+    @finding.probability                  = Finding.frequencies[:low]
+    @finding.external_repeated            = Finding.external_repeated[:repeated]
+
+    refute @finding.valid?
+  end
+
+  test 'valid with medium risk' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @finding.manual_risk        = false
+    @finding.risk               = Finding.risks[:medium]
+    @finding.risk_justification = nil
+
+    @finding.state_regulations            = Finding.state_regulations[:not_exist]
+    @finding.degree_compliance            = Finding.degree_compliance[:fails]
+    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
+    @finding.probability                  = Finding.frequencies[:low]
+    @finding.external_repeated            = Finding.external_repeated[:no_repeated]
 
     assert @finding.valid?
-    assert_equal Finding.risks[:medium], @finding.risk
+  end
+
+  test 'invalid with medium risk' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @finding.manual_risk        = false
+    @finding.risk_justification = nil
+
+    @finding.state_regulations            = Finding.state_regulations[:not_exist]
+    @finding.degree_compliance            = Finding.degree_compliance[:fails]
+    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
+    @finding.probability                  = Finding.frequencies[:low]
+    @finding.external_repeated            = Finding.external_repeated[:no_repeated]
+
+    refute @finding.valid?
+  end
+
+  test 'valid with high risk' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @finding.manual_risk        = false
+    @finding.risk               = Finding.risks[:high]
+    @finding.risk_justification = nil
+
+    @finding.state_regulations            = Finding.state_regulations[:not_exist]
+    @finding.degree_compliance            = Finding.degree_compliance[:fails]
+    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @finding.impact_risk                  = Finding.impact_risks_bic[:high]
+    @finding.probability                  = Finding.frequencies[:high]
+    @finding.external_repeated            = Finding.external_repeated[:repeated]
+
+    assert @finding.valid?
+  end
+
+  test 'invalid with high risk' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @finding.manual_risk        = false
+    @finding.risk_justification = nil
+
+    @finding.state_regulations            = Finding.state_regulations[:not_exist]
+    @finding.degree_compliance            = Finding.degree_compliance[:fails]
+    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @finding.impact_risk                  = Finding.impact_risks_bic[:high]
+    @finding.probability                  = Finding.frequencies[:high]
+    @finding.external_repeated            = Finding.external_repeated[:repeated]
+
+    refute @finding.valid?
   end
 
   test 'automatic issue based state' do
@@ -1720,7 +1861,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = findings :being_implemented_weakness
 
     finding.update_attribute('extension', true)
-    
+
     finding.extension = false
 
     refute finding.not_extension_was?
@@ -1807,7 +1948,7 @@ class FindingTest < ActiveSupport::TestCase
 
       v.save
     end
-    
+
     finding.extension      = false
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
     reschedules            = finding.calculate_reschedule_count
@@ -1852,6 +1993,90 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     refute finding.had_version_with_being_implemented?
+  end
+
+  test 'store follow_up_date_last_changed when change' do
+    finding                = findings :being_implemented_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
+  end
+
+  test 'store follow_up_date_last_changed when change to nil' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    finding.follow_up_date = nil
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
+  end
+
+  test 'store follow_up_date_last_changed when change from nil' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
+  end
+
+  test 'should return follow_up_date_last_changed when in last version change follow_up_date' do
+    finding = findings :being_implemented_weakness
+
+    follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
+
+    assert_equal follow_up_date_last_changed_on_versions, I18n.l(finding.updated_at, format: :minimal)
+  end
+
+  test 'should return created_at when dont have changes from creation in follow_up_date' do
+    finding = findings :being_implemented_weakness_on_draft
+
+    finding.description = 'test'
+
+    finding.save!
+
+    follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
+
+    assert_equal follow_up_date_last_changed_on_versions, I18n.l(finding.created_at, format: :minimal)
+  end
+
+  test 'should return nil when never have follow_up_date' do
+    finding = findings :unconfirmed_for_notification_weakness
+
+    finding.description = 'test'
+
+    finding.save!
+
+    assert_nil finding.follow_up_date_last_changed_on_versions
+  end
+
+  test 'should return follow_up_date_last_changed when in past didnt have' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(finding.updated_at, format: :minimal)
+  end
+
+  test 'should return follow_up_date when dont have follow_up_date but in past have' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    follow_up_date_last_changed_expected = finding.updated_at
+    finding.follow_up_date               = nil
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(follow_up_date_last_changed_expected, format: :minimal)
   end
 
   private
