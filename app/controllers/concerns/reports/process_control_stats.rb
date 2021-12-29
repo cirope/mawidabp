@@ -238,6 +238,7 @@ module Reports::ProcessControlStats
               row[col_name].map {|l| "  • #{l}"}.join("\n") :
               row[col_name])
           end
+
           new_row << period.inspect
           csv     << new_row
         end
