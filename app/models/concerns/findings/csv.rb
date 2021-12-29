@@ -11,13 +11,14 @@ module Findings::Csv
     row = [
       review.identification,
       review.plan_item.project,
+      (final_created_at_text if USE_SCOPE_CYCLE),
       issue_date_text,
       review.conclusion_final_review&.summary || '-',
       business_unit_type.name,
       business_unit.name,
       review_code,
       id,
-      (taggings.map(&:tag).to_sentence if self.class.show_follow_up_timestamps?),
+      (taggings_format if self.class.show_follow_up_timestamps?),
       title,
       description,
       state_text,
@@ -55,6 +56,7 @@ module Findings::Csv
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
       (commitment_date_required_level_text.to_s if Finding.show_commitment_support?),
+      (supervisor_review if USE_SCOPE_CYCLE),
       (I18n.t "label.#{extension ? 'yes' : 'no'}" if USE_SCOPE_CYCLE),
       (follow_up_date_last_changed.to_s if USE_SCOPE_CYCLE)
     ].compact
@@ -65,6 +67,16 @@ module Findings::Csv
   end
 
   private
+
+    def supervisor_review
+      supervisors = review.review_user_assignments.select do |rua|
+        rua.supervisor?
+      end
+
+      supervisors.map do |supervisor|
+        supervisor.user.full_name
+      end.join ' - '
+    end
 
     def has_previous_review_label
       if weakness_template_id
@@ -78,10 +90,20 @@ module Findings::Csv
       issue_date ? I18n.l(issue_date, format: :minimal) : '-'
     end
 
+    def final_created_at_text
+      review.conclusion_final_review ? I18n.l(review.conclusion_final_review.created_at, format: :minimal) : '-'
+    end
+
     def date_text
       date = solution_date || follow_up_date
 
       date ? I18n.l(date, format: :minimal) : '-'
+    end
+
+    def taggings_format
+      tags = taggings.map(&:tag)
+
+      USE_SCOPE_CYCLE ? tags.join(' - ') : tags.to_sentence
     end
 
     def rescheduled_text
@@ -318,6 +340,7 @@ module Findings::Csv
           (Organization.model_name.human if corporate),
           Review.model_name.human,
           PlanItem.human_attribute_name('project'),
+          (I18n.t('attributes.created_at') if USE_SCOPE_CYCLE),
           ConclusionFinalReview.human_attribute_name('issue_date'),
           ConclusionFinalReview.human_attribute_name('summary'),
           BusinessUnitType.model_name.human,
@@ -362,6 +385,7 @@ module Findings::Csv
           (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?),
+          (I18n.t('finding.supervisor') if USE_SCOPE_CYCLE),
           (Weakness.human_attribute_name('extension') if USE_SCOPE_CYCLE),
           (I18n.t('finding.follow_up_date_last_changed') if USE_SCOPE_CYCLE)
         ].compact
