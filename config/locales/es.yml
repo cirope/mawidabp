@@ -637,7 +637,7 @@
     recode_tasks: "Recodificar tareas"
     create_work_paper: "Agregar como papel de trabajo"
     follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
-    follow_up_date_last_changed: "Ultimo cambio de fecha de implementacion"
+    follow_up_date_last_changed: "Último cambio de fecha de implementación"
     assignment_confirm_message: "No ha seleccionado auditores referentes ni responsables ¿Desea continuar?"
     weakness_template_previous: 'Repite Observación'
     repeated_ancestors: "Reiterada de"

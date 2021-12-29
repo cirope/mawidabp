@@ -2005,7 +2005,11 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'store follow_up_date_last_changed when change to nil' do
-    finding                = findings :being_implemented_weakness
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
     finding.follow_up_date = nil
 
     finding.save!

@@ -635,7 +635,6 @@ private
     if update_finding_follow_up_date_last_changed?
       findings = Finding
                  .where(follow_up_date_last_changed: nil)
-                 .where.not(follow_up_date: nil)
 
       findings.each do |finding|
         follow_up_date_last_changed = finding.follow_up_date_last_changed_on_versions
