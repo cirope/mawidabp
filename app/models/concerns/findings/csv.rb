@@ -11,7 +11,7 @@ module Findings::Csv
     row = [
       review.identification,
       review.plan_item.project,
-      final_created_at_text,
+      (final_created_at_text if USE_SCOPE_CYCLE),
       issue_date_text,
       review.conclusion_final_review&.summary || '-',
       business_unit_type.name,
@@ -55,7 +55,6 @@ module Findings::Csv
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
       (commitment_date_required_level_text.to_s if Finding.show_commitment_support?),
       (supervisor_review if USE_SCOPE_CYCLE),
       (I18n.t "label.#{extension ? 'yes' : 'no'}" if USE_SCOPE_CYCLE),
@@ -385,7 +384,6 @@ module Findings::Csv
           (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
-          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?)
           (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?),
           (I18n.t('finding.supervisor') if USE_SCOPE_CYCLE),
           (Weakness.human_attribute_name('extension') if USE_SCOPE_CYCLE),
