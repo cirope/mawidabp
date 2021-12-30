@@ -308,9 +308,10 @@ module ConclusionReviews::NbcPdf
         ]
       ]
 
-      w_c = pdf.bounds.width / 2
+      width_column1 = PDF_FONT_SIZE * 30
+      width_column2 = pdf.bounds.width - width_column1
 
-      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: w_c) do
+      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2]) do
         row(0).style(
           background_color: 'EEEEEE'
         )
