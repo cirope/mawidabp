@@ -2079,6 +2079,30 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(follow_up_date_last_changed_expected, format: :minimal)
   end
 
+  test 'should notify findings with follow_up_date_last_changed greater than 90 days' do
+    finding                             = findings :being_implemented_weakness
+    finding.state                       = Finding::STATUS[:implemented]
+    finding.follow_up_date_last_changed = Time.zone.today - 91.days
+
+    finding.save!
+
+    assert_enqueued_emails 1 do
+      Finding.notify_implemented_findings_with_follow_up_date_last_changed_greater_than_90_days
+    end
+  end
+
+  test 'should notify not findings with follow_up_date_last_changed greater than 90 days' do
+    finding                             = findings :being_implemented_weakness
+    finding.state                       = Finding::STATUS[:implemented]
+    finding.follow_up_date_last_changed = Time.zone.today - 90.days
+
+    finding.save!
+
+    assert_enqueued_emails 0 do
+      Finding.notify_implemented_findings_with_follow_up_date_last_changed_greater_than_90_days
+    end
+  end
+
   private
 
     def new_email from, subject, body
