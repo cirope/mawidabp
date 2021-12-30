@@ -26,17 +26,20 @@ class WorkflowItemTest < ActiveSupport::TestCase
   # Prueba la creación de un item de plan de trabajo
   test 'create' do
     assert_difference 'WorkflowItem.count' do
-      workflow = Workflow.find workflows(:with_conclusion_workflow).id
+      workflow   = Workflow.find workflows(:with_conclusion_workflow).id
+      file_model = FileModel.find file_models(:document_file).id
 
       @workflow_item = workflow.workflow_items.build(
         :task => 'New task',
         :start => 6.days.from_now.to_date,
         :end => 7.days.from_now.to_date,
         :order_number => 4,
-        :workflow => workflow
+        :workflow => workflow,
+        :file_model => file_model
       )
 
       assert @workflow_item.save, @workflow_item.errors.full_messages.join('; ')
+      assert_not_nil @workflow_item.file_model
     end
   end
 
@@ -113,6 +116,8 @@ class WorkflowItemTest < ActiveSupport::TestCase
     workflow_item_3 = WorkflowItem.find(
       workflow_items(:current_workflow_item_3).id)
 
+    Current.organization = organizations :cirope
+
     assert workflow_item_3.valid?
 
     workflow_item_3.resource_utilizations <<
@@ -121,6 +126,9 @@ class WorkflowItemTest < ActiveSupport::TestCase
 
     assert workflow_item_3.invalid?
     assert_error workflow_item_3, :start, :resource_overload
+
+  ensure
+    Current.organization = nil
   end
 
   test 'can be modified' do

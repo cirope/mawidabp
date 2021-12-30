@@ -427,6 +427,17 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     Current.user = nil
   end
 
+  test 'pat rtf conversion' do
+    Current.user = users :auditor
+    organization = organizations :cirope
+
+    assert_nothing_raised do
+      @conclusion_review.pat_rtf organization
+    end
+  ensure
+    Current.user = nil
+  end
+
   test 'create bundle zip' do
     if File.exist?(@conclusion_review.absolute_bundle_zip_path)
       FileUtils.rm @conclusion_review.absolute_bundle_zip_path

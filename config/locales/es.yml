@@ -125,6 +125,7 @@
     download_work_papers: "Descargar papeles de trabajo"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
+    download_rtf: "Descargar RTF"
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
@@ -300,6 +301,8 @@
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
       pdf_name: "observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf"
+      csv_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}'
+      period_column: 'Período'
       title: "OBSERVACIONES AGRUPADAS POR PROCESO DE NEGOCIO"
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: "Calificación promedio ponderada"
@@ -312,6 +315,7 @@
       without_weaknesses: "Sin observaciones"
       without_audits_in_the_period: "Sin tareas en el plan"
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
+      download_csv: 'Descargar CSV'
     qa_indicators:
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
       subtitle: ""
@@ -413,6 +417,7 @@
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
+    download_rtf: "Descargar RTF"
     global_effectiveness: "Efectividad global"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"
     send_type:
@@ -638,12 +643,15 @@
     recode_tasks: "Recodificar tareas"
     create_work_paper: "Agregar como papel de trabajo"
     follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
+    follow_up_date_last_changed: "Último cambio de fecha de implementación"
     assignment_confirm_message: "No ha seleccionado auditores referentes ni responsables ¿Desea continuar?"
+    weakness_template_previous: 'Repite Observación'
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"
     undo_reiteration: 'Deshacer reiteración'
     change_history: "Historial de cambios"
     submit_answer: "Guardar comentario"
+    supervisor: "Jefe"
     by_user:
       auditors: "Integrantes UPLA"
       audited: "Usuarios"
@@ -1535,6 +1543,7 @@
     hide_resource_utilization: "Ocultar recursos"
     download_global_workflow: "Descargar presupuesto global"
     download_detailed_workflow: "Descargar presupuesto detallado"
+    maximum_exceeded_by_human_resource: "%{user} ha excedido el máximo de hora para la tarea: %{item}"
     period:
       title: "Periodo (%{name})"
       range: "%{from_date} al %{to_date}"

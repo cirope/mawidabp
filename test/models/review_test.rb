@@ -22,7 +22,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un reporte
   test 'create' do
-    assert_difference %w(Review.count BusinessUnitTypeReview.count) do
+    assert_difference 'Review.count' do
       @review = Review.list.create(
         :identification => 'New Identification',
         :description => 'New Description',
@@ -49,12 +49,7 @@ class ReviewTest < ActiveSupport::TestCase
             :assignment_type => ReviewUserAssignment::TYPES[:audited],
             :user => users(:audited)
           }
-        },
-        :business_unit_type_reviews_attributes => [
-          {
-            :business_unit_type_id => business_unit_types(:cycle).id
-          }
-        ]
+        }
       )
     end
 

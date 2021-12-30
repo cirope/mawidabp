@@ -38,12 +38,13 @@ class WeaknessTest < ActiveSupport::TestCase
         impact_risk: Finding.impact_risks[:small],
         probability: Finding.probabilities[:rare],
         manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
@@ -94,12 +95,13 @@ class WeaknessTest < ActiveSupport::TestCase
         impact_risk: Finding.impact_risks[:small],
         probability: Finding.probabilities[:rare],
         manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
@@ -143,6 +145,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.tag_ids = []
     @weakness.impact_risk = nil
     @weakness.probability = nil
+    @weakness.manual_risk = false
 
     if WEAKNESS_TAG_VALIDATION_START
       @weakness.created_at = WEAKNESS_TAG_VALIDATION_START

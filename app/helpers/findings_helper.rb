@@ -1,5 +1,5 @@
 module FindingsHelper
-  def finding_status_field form, disabled: false
+  def finding_status_field form, disabled: false, options_html: {}
     finding = form.object
 
     form.input :state,
@@ -8,7 +8,7 @@ module FindingsHelper
       prompt:     true,
       input_html: {
         disabled: (disabled || finding.unconfirmed?)
-      }
+      }.merge(options_html)
   end
 
   def finding_repeated_of_label form, readonly:
@@ -293,6 +293,36 @@ module FindingsHelper
     end
   end
 
+  def extension_enabled? finding
+    first_version_in_being_implementation?(finding) ||
+      (finding.being_implemented? && finding.extension)
+  end
+
+  def first_version_in_being_implementation? finding
+    finding.new_record? ||
+      (!finding.had_version_with_being_implemented? && !finding.being_implemented?)
+  end
+
+  def data_for_submit finding
+    if USE_SCOPE_CYCLE
+      {
+        data: {
+          confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
+                                  {
+                                    state: I18n.t('findings.state.being_implemented'),
+                                    extension: Finding.human_attribute_name(:extension)
+                                  }),
+          checkbox_target: '#finding_extension',
+          target_value_checkbox: false,
+          state_target: Finding::STATUS[:being_implemented],
+          input_with_state: '#finding_state',
+          condition_to_receive_confirm: first_version_in_being_implementation?(finding) }
+      }
+    else
+      {}
+    end
+  end
+
   private
 
     def finding_state_options_for finding
@@ -424,5 +454,9 @@ module FindingsHelper
 
     def finding_probability_risks_types finding
       finding.percentage_by_probability.invert.reverse_each.to_json
+    end
+
+    def finding_bic_risks_types finding
+      finding.bic_risks_types.invert.reverse_each.to_json
     end
 end

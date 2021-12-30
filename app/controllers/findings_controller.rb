@@ -67,7 +67,7 @@ class FindingsController < ApplicationController
         :compliance, :impact_risk, :probability, :compliance_observations,
         :manual_risk, :nested_user, :skip_work_paper,:use_suggested_impact,
         :use_suggested_probability, :impact_amount, :probability_amount,
-        :lock_version,
+        :extension, :risk_justification, :lock_version,
         impact: [],
         operational_risk: [],
         internal_control_components: [],

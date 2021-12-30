@@ -21,6 +21,16 @@ module Findings::Validations
     validate :validate_manager_presence, if: :validate_manager_presence?
     validate :validate_follow_up_date,   if: :check_dates?
     validate :validate_solution_date,    if: :check_dates?
+    validate :extension_enabled,         if: :extension
+    validates :risk_justification, presence: true, if: :bic_require_is_manual_risk_enabled?
+    validates :risk_justification, absence: true, if: :bic_require_is_manual_risk_disabled?
+    validates :state_regulations,
+              :degree_compliance,
+              :observation_originated_tests,
+              :sample_deviation, :impact_risk,
+              :probability, :external_repeated,
+              presence: true, if: :bic_require_is_manual_risk_disabled?
+    validate  :bic_calculated_risk, if: :bic_require_is_manual_risk_disabled?
   end
 
   def is_in_a_final_review?
@@ -37,6 +47,29 @@ module Findings::Validations
   end
 
   private
+
+    def bic_calculated_risk
+      amount = 0
+      amount += state_regulations.to_i
+      amount += degree_compliance.to_i
+      amount += observation_originated_tests.to_i
+      amount += sample_deviation.to_i
+      amount += impact_risk.to_i
+      amount += probability.to_i
+      amount += external_repeated.to_i
+
+      risk_new = bic_risks_types.reverse_each.to_h.detect { |id, value| amount >= value }
+
+      errors.add :risk, :invalid if risk_new.first != risk
+    end
+
+    def bic_require_is_manual_risk_disabled?
+      Current.conclusion_pdf_format == 'bic' && !manual_risk && kind_of?(Weakness)
+    end
+
+    def bic_require_is_manual_risk_enabled?
+      Current.conclusion_pdf_format == 'bic' && manual_risk && kind_of?(Weakness)
+    end
 
     def audit_comments_should_be_present?
       revoked?
@@ -151,6 +184,10 @@ module Findings::Validations
         unless finding_user_assignments.any? &:process_owner
           errors.add :finding_user_assignments, :required
         end
+
+        unless finding_user_assignments.any? &:responsible_auditor
+          errors.add :finding_user_assignments, :reference_auditor_required
+        end
       end
 
       unless all_roles_fullfilled_by? users.compact
@@ -186,5 +223,26 @@ module Findings::Validations
       from = should_validate && setting&.updated_at
 
       should_validate && from && (new_record? || created_at >= from)
+    end
+
+    def extension_enabled
+      if !being_implemented?
+        errors.add :extension, :must_be_being_implemented, { extension: Finding.human_attribute_name(:extension),
+                                                             state: I18n.t('findings.state.being_implemented') }
+      elsif persisted? && cant_have_an_extension?
+        errors.add :extension, :had_no_extension_when_being_implemented, { extension: Finding.human_attribute_name(:extension) }
+      end
+    end
+
+    def cant_have_an_extension?
+      not_the_first_version_of_being_implemented? && !extension_was && being_implemented_was?
+    end
+
+    def not_the_first_version_of_being_implemented?
+      had_version_with_being_implemented? || being_implemented_was?
+    end
+
+    def being_implemented_was?
+      state_was == Finding::STATUS[:being_implemented]
     end
 end
