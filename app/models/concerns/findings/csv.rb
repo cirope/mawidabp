@@ -8,58 +8,77 @@ module Findings::Csv
   OPTIONS                = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
   def to_csv_a corporate
-    row = [
-      review.identification,
-      review.plan_item.project,
-      (final_created_at_text if USE_SCOPE_CYCLE),
-      issue_date_text,
-      review.conclusion_final_review&.summary || '-',
-      business_unit_type.name,
-      business_unit.name,
-      review_code,
-      id,
-      (taggings_format if self.class.show_follow_up_timestamps?),
-      title,
-      description,
-      state_text,
-      full_state_text,
-      try(:risk_text) || '',
-      (respond_to?(:risk_text) ? priority_text : '' unless USE_SCOPE_CYCLE),
-      auditeds_as_process_owner.join('; '),
-      audited_users.join('; '),
-      auditor_users.join('; '),
-      best_practice.name,
-      process_control.name,
-      control_objective_item.control_objective_text,
-      origination_date_text,
-      follow_up_date_text,
-      solution_date_text,
-      (implemented_at_text if self.class.show_follow_up_timestamps?),
-      (closed_at_text if self.class.show_follow_up_timestamps?),
-      rescheduled_text,
-      reschedule_count.to_s,
-      next_pending_task_date,
-      listed_tasks,
-      reiteration_info,
-      audit_comments,
-      audit_recommendations,
-      answer,
-      (last_commitment_date_text if self.class.show_follow_up_timestamps?),
-      (finding_answers_text if self.class.show_follow_up_timestamps?),
-      latest_answer_text,
-      (try(:weakness_template)&.notes.to_s if USE_SCOPE_CYCLE),
-      (try(:weakness_template)&.title.to_s if USE_SCOPE_CYCLE),
-      (try(:weakness_template)&.reference.to_s if USE_SCOPE_CYCLE),
-      (review.period if USE_SCOPE_CYCLE),
-      (has_previous_review_label if USE_SCOPE_CYCLE),
-      (commitment_support_plans_text if Finding.show_commitment_support?),
-      (commitment_support_controls_text if Finding.show_commitment_support?),
-      (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text.to_s if Finding.show_commitment_support?),
-      (supervisor_review if USE_SCOPE_CYCLE),
-      (I18n.t "label.#{extension ? 'yes' : 'no'}" if USE_SCOPE_CYCLE),
-      (follow_up_date_last_changed.to_s if USE_SCOPE_CYCLE)
-    ].compact
+    row = []
+
+    row += [review.identification,
+            review.plan_item.project]
+
+    row << final_created_at_text if USE_SCOPE_CYCLE
+
+    row += [issue_date_text,
+            review.conclusion_final_review&.summary || '-',
+            business_unit_type.name,
+            business_unit.name,
+            review_code,
+            id]
+
+    row << taggings_format if self.class.show_follow_up_timestamps?
+
+    row += [title,
+            description,
+            state_text,
+            full_state_text,
+            try(:risk_text) || '',]
+
+    row << respond_to?(:risk_text) ? priority_text : '' unless USE_SCOPE_CYCLE
+
+    row += [auditeds_as_process_owner.join('; '),
+            audited_users.join('; '),
+            auditor_users.join('; '),
+            best_practice.name,
+            process_control.name,
+            control_objective_item.control_objective_text,
+            origination_date_text,
+            follow_up_date_text,
+            solution_date_text]
+
+    row += [implemented_at_text, closed_at_text] if self.class.show_follow_up_timestamps?
+
+    row += [rescheduled_text,
+            reschedule_count,
+            next_pending_task_date,
+            listed_tasks,
+            reiteration_info,
+            audit_comments,
+            audit_recommendations,
+            answer]
+
+    row += [last_commitment_date_text, finding_answers_text] if self.class.show_follow_up_timestamps?
+
+    row << latest_answer_text
+
+    if USE_SCOPE_CYCLE
+      row += [try(:weakness_template)&.notes,
+              try(:weakness_template)&.title,
+              try(:weakness_template)&.reference,
+              review.period,
+              has_previous_review_label]
+    end
+
+    if Finding.show_commitment_support?
+      row += [commitment_support_plans_text,
+              commitment_support_controls_text,
+              commitment_support_reasons_text,
+              commitment_date_required_level_text]
+    end
+
+    if USE_SCOPE_CYCLE
+      row += [supervisor_review,
+              I18n.t("label.#{extension ? 'yes' : 'no'}"),
+              follow_up_date_last_changed]
+    end
+
+    row.map { |element| element.blank? ? '' : element }
 
     row.unshift organization.prefix if corporate
 
