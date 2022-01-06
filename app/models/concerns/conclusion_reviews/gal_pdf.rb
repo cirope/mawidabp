@@ -544,6 +544,9 @@ module ConclusionReviews::GalPdf
     end
 
     def put_short_weakness_on pdf, weakness, show_risk: false
+      @__fake_review_code ||= "#{weakness.prefix}#{'%.3d' % 0}"
+      @__fake_review_code = @__fake_review_code.next
+
       show_origination_date =
         weakness.repeated_ancestors.present? &&
         weakness.origination_date.present?
@@ -563,7 +566,7 @@ module ConclusionReviews::GalPdf
         Weakness.human_attribute_name('origination_date'), origination_date
       ].join(': ')
       text = [
-        weakness.review_code,
+        @__fake_review_code,
         weakness.title,
         state_text,
         (risk_text if show_risk),

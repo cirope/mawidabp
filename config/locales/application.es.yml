@@ -125,6 +125,7 @@ es:
     download_work_papers: "Descargar papeles de trabajo"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
+    download_expanded: "Descargar ampliado"
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
@@ -356,6 +357,7 @@ es:
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
+    download_expanded: "Descargar ampliado"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"
@@ -1233,6 +1235,7 @@ es:
         previous_date: "Fecha de emisión previa"
         main_recommendations: "Principales Recomendaciones de Auditoría"
         additional_comments: "Comentarios adicionales"
+        exclude_regularized_findings: "Excluir hallazgos regularizados"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:

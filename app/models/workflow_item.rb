@@ -67,8 +67,10 @@ class WorkflowItem < ApplicationRecord
   belongs_to :workflow
   has_many :resource_utilizations, :as => :resource_consumer,
     :dependent => :destroy
+  belongs_to :file_model, :optional => true
 
   accepts_nested_attributes_for :resource_utilizations, :allow_destroy => true
+  accepts_nested_attributes_for :file_model, :allow_destroy => true
 
   def <=>(other)
     if other.kind_of?(WorkflowItem)
@@ -76,6 +78,10 @@ class WorkflowItem < ApplicationRecord
     else
       -1
     end
+  end
+
+  def to_s
+    [workflow.review.long_identification, task].join ' - '
   end
 
   def start
