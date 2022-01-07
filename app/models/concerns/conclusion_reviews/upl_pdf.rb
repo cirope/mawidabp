@@ -68,7 +68,7 @@ module ConclusionReviews::UplPdf
       pdf.add_subtitle I18n.t('conclusion_final_review.downloads.review_objectives'), PDF_FONT_SIZE
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text I18n.t 'conclusion_final_review.downloads.review_objectives_description'
+      pdf.text review.description
       pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item business_unit_label, review.business_unit.name
