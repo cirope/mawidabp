@@ -73,7 +73,7 @@ module Reviews::ScoreSheetCommon
       [
         "#{ProcessControl.model_name.human}: #{process_control}",
         ('' unless global),
-        exclude ? '-' : effectiveness_format(effectiveness_text)
+        exclude ? '-' : "#{effectiveness.round}%"
       ].compact
     end
 
