@@ -11,7 +11,7 @@ module Findings::Csv
     row = [
       review.identification,
       review.plan_item.project,
-      final_created_at_text,
+      (final_created_at_text if USE_SCOPE_CYCLE),
       issue_date_text,
       review.conclusion_final_review&.summary || '-',
       business_unit_type.name,
@@ -42,21 +42,23 @@ module Findings::Csv
       listed_tasks,
       reiteration_info,
       audit_comments,
-      audit_recommendations,
-      answer,
+      audit_recommendations.to_s,
+      answer.to_s,
       (last_commitment_date_text if self.class.show_follow_up_timestamps?),
       (finding_answers_text if self.class.show_follow_up_timestamps?),
       latest_answer_text,
-      (try(:weakness_template)&.notes.to_s if USE_SCOPE_CYCLE),
-      (try(:weakness_template)&.title.to_s if USE_SCOPE_CYCLE),
-      (try(:weakness_template)&.reference.to_s if USE_SCOPE_CYCLE),
+      ((try(:weakness_template)&.notes).to_s if USE_SCOPE_CYCLE),
+      ((try(:weakness_template)&.title).to_s if USE_SCOPE_CYCLE),
+      ((try(:weakness_template)&.reference).to_s if USE_SCOPE_CYCLE),
       (review.period if USE_SCOPE_CYCLE),
       (has_previous_review_label if USE_SCOPE_CYCLE),
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
+      (commitment_date_required_level_text.to_s if Finding.show_commitment_support?),
       (supervisor_review if USE_SCOPE_CYCLE),
-      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
+      (I18n.t "label.#{extension ? 'yes' : 'no'}" if USE_SCOPE_CYCLE),
+      (follow_up_date_last_changed.to_s if USE_SCOPE_CYCLE)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -101,11 +103,9 @@ module Findings::Csv
     end
 
     def taggings_format
-      if USE_SCOPE_CYCLE
-        taggings.map(&:tag).join ' - '
-      else
-        taggings.map(&:tag).to_sentence
-      end
+      tags = taggings.map(&:tag)
+
+      USE_SCOPE_CYCLE ? tags.join(' - ') : tags.to_sentence
     end
 
     def rescheduled_text
@@ -386,8 +386,10 @@ module Findings::Csv
           (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?),
           (I18n.t('finding.supervisor') if USE_SCOPE_CYCLE),
-          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?)
+          (Weakness.human_attribute_name('extension') if USE_SCOPE_CYCLE),
+          (I18n.t('finding.follow_up_date_last_changed') if USE_SCOPE_CYCLE)
         ].compact
       end
   end

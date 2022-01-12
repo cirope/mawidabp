@@ -459,11 +459,19 @@ module ConclusionReviews::GalPdf
     def put_weakness_details_on pdf, weaknesses, hide: [], show: []
       if weaknesses.any?
         weaknesses.each do |f|
+          @__tmp_review_code ||= "#{f.prefix}#{'%.3d' % 0}"
+          @__tmp_review_code   = @__tmp_review_code.next
+
           coi = f.control_objective_item
 
           if show.include? 'control_objective_title'
             put_control_objective_title_on pdf, coi
           end
+
+          def f.tmp_review_code=(code); @tmp_review_code = code; end
+          def f.tmp_review_code; @tmp_review_code; end
+
+          f.tmp_review_code = @__tmp_review_code
 
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(f, hide: hide, show: show),
@@ -544,6 +552,9 @@ module ConclusionReviews::GalPdf
     end
 
     def put_short_weakness_on pdf, weakness, show_risk: false
+      @__fake_review_code ||= "#{weakness.prefix}#{'%.3d' % 0}"
+      @__fake_review_code = @__fake_review_code.next
+
       show_origination_date =
         weakness.repeated_ancestors.present? &&
         weakness.origination_date.present?
@@ -563,7 +574,7 @@ module ConclusionReviews::GalPdf
         Weakness.human_attribute_name('origination_date'), origination_date
       ].join(': ')
       text = [
-        weakness.review_code,
+        @__fake_review_code,
         weakness.title,
         state_text,
         (risk_text if show_risk),
