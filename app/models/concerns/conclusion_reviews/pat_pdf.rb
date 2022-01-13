@@ -213,8 +213,7 @@ module ConclusionReviews::PatPdf
         review_user_assignments.each do |rua, i|
           data = [
             rua.user.informal_name,
-            rua.user.function,
-            I18n.t('conclusion_review.pat.cover.organization')
+            rua.user.function
           ].reject(&:blank?).join "\n"
 
           column_data   << ["\n\n\n\n#{data}"]
@@ -260,8 +259,8 @@ module ConclusionReviews::PatPdf
       pdf.move_down PDF_FONT_SIZE * 8
 
       if manager
-        pdf.text manager.informal_name, style: :italic
-        pdf.text manager.function, style: :italic
+        pdf.text manager.informal_name, style: :italic, align: :center
+        pdf.text manager.function, style: :italic, align: :center
       end
     end
 
@@ -510,11 +509,7 @@ module ConclusionReviews::PatPdf
     end
 
     def pat_receiver
-      setting = Current.organization.settings.find_by(
-        name: 'conclusion_review_receiver'
-      )
-
-      setting&.value || DEFAULT_SETTINGS[:conclusion_review_receiver][:value]
+      I18n.t 'conclusion_review.pat.cover.audit_committee'
     end
 
     def put_pat_annexes_on pdf
