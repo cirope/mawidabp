@@ -75,7 +75,7 @@ module Users::Import
     end
 
     def file_log_error error
-      logger = Logger.new 'log/import.log'
+      logger = Logger.new "log/import_#{Time.zone.today.to_s :db}.log"
 
       logger.error "Exception occurred import\n#{error}"
     end
