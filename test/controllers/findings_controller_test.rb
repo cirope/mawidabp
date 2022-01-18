@@ -135,7 +135,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).count
+    assert_equal 2, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.users.include?(user) }
   end
 
@@ -362,6 +362,7 @@ class FindingsControllerTest < ActionController::TestCase
               internal_control_components: ['risk_evaluation', 'monitoring'],
               impact_risk: Finding.impact_risks[:small],
               probability: Finding.probabilities[:rare],
+              extension: false,
               manual_risk: '1',
               business_unit_ids: [business_units(:business_unit_three).id],
               finding_user_assignments_attributes: [
@@ -494,6 +495,7 @@ class FindingsControllerTest < ActionController::TestCase
             internal_control_components: ['risk_evaluation', 'monitoring'],
             impact_risk: Finding.impact_risks[:small],
             probability: Finding.probabilities[:rare],
+            extension: false,
             manual_risk: '1',
             finding_user_assignments_attributes: [
               {
@@ -582,6 +584,7 @@ class FindingsControllerTest < ActionController::TestCase
           users_for_notification: [users(:bare).id],
           impact_risk: Finding.impact_risks[:small],
           probability: Finding.probabilities[:rare],
+          extension: false,
           manual_risk: '1',
           finding_user_assignments_attributes: [
             {
@@ -643,6 +646,7 @@ class FindingsControllerTest < ActionController::TestCase
           internal_control_components: ['risk_evaluation', 'monitoring'],
           impact_risk: Finding.impact_risks[:small],
           probability: Finding.probabilities[:rare],
+          extension: false,
           manual_risk: '1',
           tag_ids: [
             tags(:important).id,

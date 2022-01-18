@@ -47,7 +47,8 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_cover_header_on pdf, brief: false
-      but_names = [review.business_unit_type.name] + review.business_unit_types.map(&:name)
+      but_names = [review.business_unit_type.name] +
+                  review.plan_item.auxiliar_business_unit_types.map { |aux_bu| aux_bu.business_unit_type.name }
       to_text   = I18n.t 'conclusion_review.pat.cover.to', receiver: pat_receiver
       from_text = I18n.t 'conclusion_review.pat.cover.from', business_unit_types: but_names.to_sentence
 
@@ -212,8 +213,7 @@ module ConclusionReviews::PatPdf
         review_user_assignments.each do |rua, i|
           data = [
             rua.user.informal_name,
-            rua.user.function,
-            I18n.t('conclusion_review.pat.cover.organization')
+            rua.user.function
           ].reject(&:blank?).join "\n"
 
           column_data   << ["\n\n\n\n#{data}"]
@@ -259,8 +259,8 @@ module ConclusionReviews::PatPdf
       pdf.move_down PDF_FONT_SIZE * 8
 
       if manager
-        pdf.text manager.informal_name, style: :italic
-        pdf.text manager.function, style: :italic
+        pdf.text manager.informal_name, style: :italic, align: :center
+        pdf.text manager.function, style: :italic, align: :center
       end
     end
 
@@ -313,7 +313,11 @@ module ConclusionReviews::PatPdf
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.pat.weaknesses.risk', risk: weakness.risk_text), inline_format: true
 
-      if weakness.follow_up_date
+      if weakness.implemented_audited? || weakness.failure?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
+        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+      elsif weakness.follow_up_date
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
         pdf.text I18n.l(weakness.follow_up_date, format: :minimal)
@@ -378,7 +382,11 @@ module ConclusionReviews::PatPdf
         pdf.text weakness.answer
       end
 
-      if weakness.follow_up_date
+      if weakness.implemented_audited? || weakness.failure?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
+        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+      elsif weakness.follow_up_date
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
         pdf.text I18n.l(weakness.follow_up_date, format: :minimal)
@@ -464,7 +472,11 @@ module ConclusionReviews::PatPdf
         pdf.text weakness.current_situation
       end
 
-      if weakness.follow_up_date
+      if weakness.implemented_audited? || weakness.failure?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
+        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+      elsif weakness.follow_up_date
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
         pdf.text I18n.l(weakness.follow_up_date, format: :minimal)
@@ -497,11 +509,7 @@ module ConclusionReviews::PatPdf
     end
 
     def pat_receiver
-      setting = Current.organization.settings.find_by(
-        name: 'conclusion_review_receiver'
-      )
-
-      setting&.value || DEFAULT_SETTINGS[:conclusion_review_receiver][:value]
+      I18n.t 'conclusion_review.pat.cover.audit_committee'
     end
 
     def put_pat_annexes_on pdf

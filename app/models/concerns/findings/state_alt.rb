@@ -13,6 +13,8 @@ module Findings::StateAlt
 
     define_state_scopes
     define_state_methods
+
+    alias_method :awaiting?, :being_implemented?
   end
 
   def has_final_status?

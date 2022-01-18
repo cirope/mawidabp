@@ -125,6 +125,7 @@ es:
     download_work_papers: "Descargar papeles de trabajo"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
+    download_expanded: "Descargar ampliado"
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
@@ -139,7 +140,7 @@ es:
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de UPLA"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     cost_analysis:
@@ -153,15 +154,15 @@ es:
       general_column_real_amount: "Costo real (ejecutado)"
       general_column_deviation: "Desviación"
       pdf_name: "analisis_de_costos_%{from_date}_al_%{to_date}.pdf"
-      detailed_title: "ANÁLISIS DE COSTOS\nDETALLADO POR INFORME\nDE AUDITORÍA INTERNA"
-      general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
+      detailed_title: "ANÁLISIS DE COSTOS\nDETALLADO POR INFORME\nDE UPLA"
+      general_title: "ANÁLISIS DE COSTOS\nDE UPLA"
       without_audits_in_the_period: "Sin tareas en el plan"
       without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       period:
         title: "Intervalo"
     cost_summary:
       pdf_name: "resumen_de_costos_%{from_date}_al_%{to_date}.pdf"
-      title: "RESUMEN DE COSTOS\nDE AUDITORÍA INTERNA"
+      title: "RESUMEN DE COSTOS\nDE UPLA"
       without_audits_in_the_period: "Sin tareas en el plan"
       without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       column_month: "Mes"
@@ -192,11 +193,11 @@ es:
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
-    findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-    findings_type_external: "Observaciones Auditorías Externas"
-    weaknesses_type_internal: "Observaciones Auditoría Interna"
-    weaknesses_type_external: "Observaciones Auditorías Externas"
+    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de UPLA"
+    findings_type_internal: "Observaciones / Oportunidades de Mejora UPLA"
+    findings_type_external: "Observaciones UPLA"
+    weaknesses_type_internal: "Observaciones UPLA"
+    weaknesses_type_external: "Observaciones UPLA"
     high_risk_weaknesses: "Observaciones de riesgo alto"
     fixed_weaknesses: "Observaciones de riesgo alto solucionadas"
     weaknesses_graphs: "Gráfico de observaciones"
@@ -236,8 +237,8 @@ es:
       without_audits_in_the_period: 'Sin tareas en el plan'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Observaciones UPLA"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES SOLUCIONADAS - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin tareas de riesgo alto solucionadas en el plan"
@@ -245,8 +246,8 @@ es:
       without_weaknesses: "Sin observaciones"
     high_risk_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Observaciones UPLA"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin tareas de riesgo alto en el plan"
@@ -267,7 +268,7 @@ es:
       without_audits_in_the_period: 'Sin tareas en el plan'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
     qa_indicators:
-      title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
+      title: "Sistema de Gestión de la Calidad UPLA - Indicadores de Calidad"
       subtitle: ""
       indicator: "Indicador"
       value: "Valor"
@@ -279,12 +280,12 @@ es:
         digitalized: "Digitalización"
     synthesis_report:
       pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora UPLA"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de UPLA (%{audit_types})."
       without_audits_in_the_period: "Sin tareas en el plan"
       without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -338,7 +339,7 @@ es:
       oportunities: "Oportunidades"
       without_weaknesses: "Sin observaciones"
       pdf_name: "observaciones_informes_definitivos_por_tipo_de_tarea_%{from_date}_al_%{to_date}.pdf"
-      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
+      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE UPLA"
       total: "TOTAL"
 
   conclusion_final_review:
@@ -356,6 +357,7 @@ es:
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
+    download_expanded: "Descargar ampliado"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"
@@ -374,7 +376,7 @@ es:
     index_title: "Reportes de la gerencia"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de upla"
 
   conclusion_review:
     include_global_score_sheet: "¿Incluir planilla de calificación?"
@@ -387,7 +389,7 @@ es:
     new_origination_date: "Nueva"
     estimated_follow_up_date: "Mes estimado de normalización"
     audit_period: "%{start} al %{end}"
-    audit_period_title: "PERIODO DE LA AUDITORÍA"
+    audit_period_title: "PERIODO DE UPLA"
     objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
     conclusion: "CONCLUSIÓN"
@@ -406,8 +408,8 @@ es:
     review_repeated_finding_label: "Informe nro."
     executive_summary:
       title: "Resumen ejecutivo"
-      review_author: "Gerencia de Auditoría Interna"
-      project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      review_author: "Gerencia de UPLA"
+      project: "La UPLA practicada estuvo circunscripta a la revisión de:"
       project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de UPLA correspondiente al siguiente proceso:"
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
@@ -418,10 +420,10 @@ es:
       assumed_risk_weaknesses: "Riesgo asumido"
     detailed_review:
       title: "Informe detallado"
-      legend: "Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
+      legend: "Durante el corriente mes se ha efectuado una UPLA sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
     annex:
       title: "Anexo I"
-      legend: "La Auditoría practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
+      legend: "La UPLA practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
       workflow_text: "El programa de trabajo elaborado para esta casa, así como su desarrollo y demás elementos, forma parte de los antecedentes obrantes en carpeta de trabajo del presente informe."
       scope: "Alcance de la tarea"
       scope_column: "Alcance de la tarea"
@@ -485,10 +487,10 @@ es:
     previous_effectiveness: "Efectividad anterior %{effectiveness}%"
     errors:
       not_finished: "no está terminado"
-      audit_date_ahead_of_issue_date: "la fecha de auditoría es mayor a la fecha de emisión del informe"
+      audit_date_ahead_of_issue_date: "la fecha de UPLA es mayor a la fecha de emisión del informe"
       without_score: "sin calificar"
       without_relevance: "sin importancia"
-      without_audit_date: "sin fecha de auditoría"
+      without_audit_date: "sin fecha de UPLA"
       without_effects: "sin efectos"
       without_controls: "sin controles"
       without_design_tests: "sin pruebas de diseño"
@@ -508,8 +510,8 @@ es:
     cost_analysis_title: "Análisis de costos"
     detailed_management_report:
       pdf_name: "informe_gerencial_detallado_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora UPLA"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "RESUMEN GERENCIAL\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES EN EJECUCIÓN"
       clarification: "Nota: las Observaciones / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
@@ -521,7 +523,7 @@ es:
     detailed_management_report_title: "Resumen gerencial"
     planned_cost_summary:
       pdf_name: "resumen_de_costos_planificados_%{from_date}_al_%{to_date}.pdf"
-      title: "RESUMEN DE COSTOS PLANIFICADOS\nDE AUDITORÍA INTERNA"
+      title: "RESUMEN DE COSTOS PLANIFICADOS\nDE UPLA"
       without_audits_in_the_period: "Sin tareas en el plan"
       without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       column_month: "Mes"
@@ -533,8 +535,8 @@ es:
       empty_incomplete: "No hay informes cerrados sin conformidad auditor en papeles de trabajo"
       empty_revised: "No hay informes cerrados sin revisión supervisor en papeles de trabajo"
     index_title: "Reportes de ejecución"
-    findings_type_external: "Observaciones Auditorías Externas"
-    findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
+    findings_type_external: "Observaciones UPLA"
+    findings_type_internal: "Observaciones / Oportunidades de Mejora UPLA"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -572,11 +574,11 @@ es:
     index_title: "Reportes generales"
 
   follow_up_audit:
-    index_title: "Reportes de auditoría"
+    index_title: "Reportes de UPLA"
     cost_analysis_title: "Análisis de costos"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de UPLA"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     weaknesses_graphs:
@@ -644,7 +646,7 @@ es:
       other: "Reprogramadas vencidas"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de UPLA"
     without_oportunities: "Sin oportunidades en el periodo"
     without_weaknesses: "Sin observaciones en el periodo"
     repeated_count:
@@ -684,8 +686,8 @@ es:
       without_audits_in_the_period: 'Sin tareas en el plan'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Observaciones UPLA"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES SOLUCIONADAS - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin tareas de riesgo alto solucionadas en el plan"
@@ -693,8 +695,8 @@ es:
       without_weaknesses: "Sin observaciones"
     high_risk_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Observaciones UPLA"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin tareas de riesgo alto en el plan"
@@ -716,7 +718,7 @@ es:
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
-      title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad (Seguimiento)"
+      title: "Sistema de Gestión de la Calidad UPLA - Indicadores de Calidad (Seguimiento)"
       subtitle: ""
       indicator: "Indicador"
       value: "Valor"
@@ -731,12 +733,12 @@ es:
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
     synthesis_report:
       pdf_name: "resumen_ejecutivo_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora UPLA"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
       organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de UPLA (%{audit_types})."
       without_audits_in_the_period: "Sin tareas en el plan"
       without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -776,14 +778,14 @@ es:
       oportunities: "Oportunidades"
       without_weaknesses: "Sin observaciones"
       pdf_name: "observaciones_seguimiento_por_tipo_de_tarea_%{from_date}_al_%{to_date}.pdf"
-      title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR TIPO DE AUDITORÍA"
+      title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR TIPO DE UPLA"
       total: "TOTAL"
 
   follow_up_management:
     index_title: "Reportes de la gerencia"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de UPLA"
 
   group:
     index_title: "Listado de grupos"
@@ -903,7 +905,7 @@ es:
       without_auditor: "no tiene auditor"
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_comments: "no tiene comentarios de UPLA"
       without_audit_recommendations: "no tiene recomendaciones de tarea"
 
   pdf:
@@ -960,9 +962,9 @@ es:
       type_auditor: "Auditor"
       type_supervisor: "Supervisor"
       type_manager: "Gerente"
-      type_responsible: "Responsable máximo de auditoría interna"
+      type_responsible: "Responsable máximo de UPLA"
       type_audited: "Auditado"
-      audit_team: "Auditoría"
+      audit_team: "UPLA"
       others: "Usuarios"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
     score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN DETALLADA"
@@ -971,7 +973,7 @@ es:
     global_score_sheet_filename: "planilla_de_calificacion_global"
     draft_score_sheet: "Borrador"
     audit_period: "%{start} al %{end}"
-    audit_period_title: "PERIODO DE LA AUDITORÍA"
+    audit_period_title: "PERIODO DE LA UPLA"
     auditors: "AUDITORES"
     score: "CALIFICACIÓN"
     control_objectives_effectiveness: "Efectividad de control"
@@ -1012,7 +1014,7 @@ es:
     process_control_qualification_explanation: "La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
-      without_score: "no tiene puntaje de auditoría"
+      without_score: "no tiene puntaje de UPLA"
       without_survey: "no tiene relevamiento"
       without_audited: "no tiene usuario auditado"
       without_file_model: "no tiene anexo"
@@ -1051,7 +1053,7 @@ es:
     type_auditor: "Auditor"
     type_audited: "Auditado"
     type_committee: "Comité"
-    type_manager: "Gerente de auditoría"
+    type_manager: "Gerente de UPLA"
     type_executive_manager: "Gerente"
 
   user:
@@ -1103,7 +1105,7 @@ es:
       without_effect: "no tiene efecto"
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_comments: "no tiene comentarios de UPLA"
       without_audit_recommendations: "no tiene recomendaciones de tarea"
 
   welcome:
@@ -1232,8 +1234,9 @@ es:
         reference: "Marco de referencia"
         previous_identification: "Informe previo"
         previous_date: "Fecha de emisión previa"
-        main_recommendations: "Principales Recomendaciones de Auditoría"
+        main_recommendations: "Principales Recomendaciones de UPLA"
         additional_comments: "Comentarios adicionales"
+        exclude_regularized_findings: "Excluir hallazgos regularizados"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:
@@ -1250,7 +1253,7 @@ es:
         design_score: "Calificación pruebas de diseño"
         compliance_score: "Calificación pruebas de cumplimiento"
         sustantive_score: "Calificación pruebas sustantivas"
-        audit_date: "Fecha de auditoría"
+        audit_date: "Fecha de UPLA"
         auditor_comment: "Conclusiones del auditor"
         finished: "Terminado"
         exclude_from_score: "No calificar"
@@ -1386,14 +1389,16 @@ es:
         file_model_id: "Anexos"
         score: "Resultado"
         score_alt: "Resultado cumplimiento"
-        scope: "Alcance auditoría"
+        scope: "Alcance UPLA"
         risk_exposure: "Exposición al riesgo"
-        manual_score: "Puntaje de auditoría"
-        manual_score_alt: "Puntaje de auditoría cumplimiento"
+        manual_score: "Puntaje de UPLA"
+        manual_score_alt: "Puntaje de cumplimiento"
         include_sox: "Incluye prueba SOX"
         work_papers: "Papeles de trabajo"
         review_user_assignments: "Integrantes"
         taggings: "Etiquetas"
+        review_objective: "Objectivo del informe"
+        type_review: "Tipo de informe"
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"

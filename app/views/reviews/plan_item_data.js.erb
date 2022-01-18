@@ -72,6 +72,11 @@
       Helper.hideLoading($element)
       $('#estimated_amount').effect('highlight', {}, 2000)
     })
+
+    <% if @plan_item.auxiliar_business_unit_types.any? %>
+      $('[data-target="auxiliar-business-unit-types"]').html('<%= j render('auxiliar_business_unit_types', format: :html, plan_item: @plan_item) %>')
+    <% end %>
+
   <% else %>
     $('#link_to_suggested_findings').attr('href', '#')
     $('#link_to_suggested_findings').addClass('link_without_action')

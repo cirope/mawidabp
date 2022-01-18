@@ -1,9 +1,9 @@
 class ConclusionDraftReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_draft_review, only: [
-    :show, :edit, :update, :export_to_pdf, :score_sheet,
-    :download_work_papers, :create_bundle, :compose_email,
-    :send_by_email
+    :show, :edit, :update, :export_to_pdf, :export_to_rtf,
+    :score_sheet, :download_work_papers, :create_bundle, 
+    :compose_email, :send_by_email
   ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
@@ -117,6 +117,18 @@ class ConclusionDraftReviewsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to @conclusion_draft_review.relative_pdf_path }
+    end
+  end
+
+  # Exporta el informe en formato RTF
+  #
+  # * GET /conclusion_draft_reviews/export_to_rtf/1
+  def export_to_rtf
+    respond_to do |format|
+      format.rtf do
+        render rtf: @conclusion_draft_review.to_rtf(current_organization),
+               filename: @conclusion_draft_review.rtf_name
+      end
     end
   end
 
@@ -285,7 +297,7 @@ class ConclusionDraftReviewsController < ApplicationController
         :affects_compliance, :collapse_control_objectives, :force_approval,
         :reference, :scope, :previous_identification, :previous_date,
         :main_recommendations, :effectiveness_notes, :additional_comments,
-        :lock_version,
+        :lock_version, :exclude_regularized_findings,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [

@@ -52,7 +52,7 @@ module LdapConfigs::LdapImport
         role_names = role_data entry
         roles      = clean_roles Role.list_with_corporate.where(name: role_names)
         data       = trivial_data entry
-        user       = find_user data
+        user       = User.find_user data
 
         if user&.roles.blank? && roles.blank?
           false
@@ -68,7 +68,7 @@ module LdapConfigs::LdapImport
       data[:manager_id] = nil if manager_dn.blank? && !skip_function_and_manager?
 
       state = if user
-                update_user user: user, data: data, roles: roles
+                User.update_user user: user, data: data, roles: roles
 
                 if user.roles.any?
                   user.saved_changes? ? :updated : :unchanged
@@ -83,12 +83,6 @@ module LdapConfigs::LdapImport
       state = :errored if user.errors.any?
 
       { user: user, manager_dn: manager_dn, state: state }
-    end
-
-    def find_user data
-      User.group_list.by_email(data[:email])             ||
-        User.without_organization.by_email(data[:email]) ||
-        User.list.by_user(data[:user])
     end
 
     def role_data entry

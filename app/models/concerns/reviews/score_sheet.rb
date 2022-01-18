@@ -136,11 +136,19 @@ module Reviews::ScoreSheet
       pad = Prawn::Text::NBSP * 4
 
       control_objective_item_data.map do |coi|
-        [
-          "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[0]}</i>",
-          coi[3] ? '-' : "<i>#{coi[4]}</i>",
-          coi[3] ? '-' : "<i>#{coi[1].round}%</i>"
-        ]
+        if coi[5]
+          [
+            "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[0]}</i>",
+            coi[3] ? '-' : "<i>#{coi[4]}</i>",
+            coi[3] ? '-' : "<i>#{effectiveness_format coi[5]}</i>"
+          ]
+        else
+          [
+            "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[0]}</i>",
+            coi[3] ? '-' : "<i>#{coi[4]}</i>",
+            coi[3] ? '-' : "<i>#{coi[1].round}%</i>"
+          ]
+        end
       end
     end
 
