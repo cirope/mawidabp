@@ -1,15 +1,15 @@
 es:
   conclusion_review:
     bic:
-      header: "INFORME DE AUDITORÍA INTERNA\nN° %{identification}"
+      header: "INFORME DE UPLA\nN° %{identification}"
       cover:
         title_html: "\n<b><i>DISTRIBUCIÓN INFORME N° %{identification}</i></b>\n%{space}"
         to_html: "\n<i><b>A =</b> Ver lista de Distribución</i>"
         date_html: "<i><b>Fecha</b>:\n%{date}</i>"
-        from_html: "\n<i><b>De =</b> Auditoría Interna</i>"
+        from_html: "\n<i><b>De =</b> UPLA</i>"
         draft_html: "<color rgb='ffffff'><b>Versión\nBORRADOR</b></color>"
         final_html: "<color rgb='ffffff'><b>Versión\nFINAL</b></color>"
-        ref_html: "\n<i><b>Ref =</b> Informe de Auditoría N° %{identification}: \"%{project}\"</i>"
+        ref_html: "\n<i><b>Ref =</b> Informe de UPLA N° %{identification}: \"%{project}\"</i>"
         legend: "Nos encontramos a vuestra disposición para aclarar cualquier tema que consideren necesario.\n\nAtentamente,"
         draft_with_weaknesses: "Adjunto al presente distribuimos el informe de referencia en versión borrador, solicitando tenga a bien considerar las observaciones y <b>responder</b>, conforme lo requerido por el Directorio (*)."
         final_with_weaknesses: "Adjunto al presente distribuimos la versión Final del Informe de referencia conteniendo las respuestas de cada una de las áreas."
@@ -18,10 +18,10 @@ es:
       review:
         subject: "Tema"
         previous: "Informe previo\n%{review}"
-        revision: "Revisión de Auditoría Interna:\nIniciada: %{start} - Finalizada: %{end}"
+        revision: "Revisión de UPLA:\nIniciada: %{start} - Finalizada: %{end}"
         applied_procedures: "Alcance"
         observations: "Aclaraciones previas"
-        conclusion: "Comentarios de auditoría"
+        conclusion: "Comentarios de UPLA"
         score: "Evaluación del ciclo"
       weaknesses:
         title: "DETALLE DE OBSERVACIONES - PLANES DE ACCION"
@@ -36,10 +36,10 @@ es:
         legend_html: "<b>Bértora y Asociados</b>\r\nBernardo de Irigoyen 330 Piso 3\r\n\r\nCiudad Autónoma de Buenos Aires\r\nC1072AAF\r\nTeléfono +54 (11)4342 2544\r\n\r\nwww.crowe.com.ar"
       cover:
         date: "Ciudad Autónoma de Buenos Aires, %{date}"
-        to_html: "Señores:\r\nIntegrantes del Comité de Auditoría de\r\n<b><u>%{organization}</u></b>"
+        to_html: "Señores:\r\nIntegrantes del Comité de UPLA de\r\n<b><u>%{organization}</u></b>"
         reference: "REF. INFORME CICLO %{business_unit}\r\n– %{business_unit_type}"
-        text: "De mi mayor consideración:\r\n\r\nTengo el agrado de dirigirme a ustedes, a fin de elevarles el presente informe sobre el ciclo de referencia.\r\n\r\nDicha revisión se realizó a efectos de dar cumplimiento a la planificación de Auditoría Interna, de acuerdo con los requerimientos de la Comunicación “A” 5042 del Banco Central de la República Argentina (BCRA).\r\n\r\nSin otro particular y quedando a vuestra disposición, saludo a ustedes muy atentamente."
-        sign: "Federico Miguel Mazzei\r\nBertora y Asociados S.R.L.\r\nAuditoría Interna"
+        text: "De mi mayor consideración:\r\n\r\nTengo el agrado de dirigirme a ustedes, a fin de elevarles el presente informe sobre el ciclo de referencia.\r\n\r\nDicha revisión se realizó a efectos de dar cumplimiento a la planificación de UPLA, de acuerdo con los requerimientos de la Comunicación “A” 5042 del Banco Central de la República Argentina (BCRA).\r\n\r\nSin otro particular y quedando a vuestra disposición, saludo a ustedes muy atentamente."
+        sign: "Federico Miguel Mazzei\r\nBertora y Asociados S.R.L.\r\nUPLA"
       index:
         title: "ÍNDICE"
       section:
@@ -67,9 +67,9 @@ es:
         audit_recommendations: "Recomendación"
     pat:
       cover:
-        from: "Banco Patagonia S.A.\nGerencia de Auditoría Interna\n%{business_unit_types}"
+        from: "Banco Patagonia S.A.\nGerencia de UPLA\n%{business_unit_types}"
         to: "A: %{receiver}."
-        audit_committee: 'Comité de Auditoría'
+        audit_committee: 'Comité de UPLA'
         scope:
           cycle: "%{prefix} Tareas y Alcance."
           sustantive: "%{prefix} Alcance de las Tareas."

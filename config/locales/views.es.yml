@@ -375,11 +375,11 @@ es:
       title: 'Periodo (%{name})'
       range: 'desde el %{from_date} al %{to_date}'
     pdf:
-      title: 'Plan de auditoría'
+      title: 'Plan de UPLA'
       pdf_name: 'plan_periodo_%{period}.pdf'
       resource_utilization: 'Recursos utilizados'
     csv:
-      title: 'Plan de auditoría'
+      title: 'Plan de UPLA'
       csv_name: 'plan_periodo_%{period}.csv'
     calendar:
       show:
@@ -395,7 +395,7 @@ es:
         empty: 'No hay recursos humanos utilizados en el plan seleccionado'
     stats:
       show:
-        title: 'Estadísiticas del plan de auditoría'
+        title: 'Estadísiticas del plan de UPLA'
         now: 'Ahora'
         total: 'Total'
         planned: 'Planificados'
@@ -517,8 +517,8 @@ es:
         label: 'OCF'
     form:
       add_business_unit_type: 'Agregar unidad organizativa'
-      operational_audit: 'Auditoría operativa'
-      system_audit: 'Auditoría de sistema'
+      operational_audit: 'UPLA operativa'
+      system_audit: 'UPLA de sistema'
 
   sessions:
     new:
@@ -561,7 +561,7 @@ es:
     show_print_date_on_pdfs: 'Mostrar fecha de impresión en PDFs'
     brief_period_in_weeks: 'Periodo de notificación "Resumen de hallazgos" en semanas'
     show_follow_up_timestamps: 'Mostrar marcas de tiempo en seguimiento'
-    require_manager_on_findings: 'Requerir gerente de auditoría en hallazgos'
+    require_manager_on_findings: 'Requerir gerente de UPLA en hallazgos'
     hide_import_from_ldap: 'Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación'
     skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'

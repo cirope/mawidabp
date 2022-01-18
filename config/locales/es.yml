@@ -143,7 +143,7 @@
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
-    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de UPLA"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
@@ -246,8 +246,8 @@
       without_control_objective_items: "Sin objetivos de control"
     fixed_weaknesses_report:
       pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Observaciones UPLA"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "RESUMEN DETALLADO DE TAREAS"
       subtitle: "OBSERVACIONES SOLUCIONADAS - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin tareas en el plan"
@@ -317,7 +317,7 @@
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
       download_csv: 'Descargar CSV'
     qa_indicators:
-      title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
+      title: "Sistema de Gestión de la Calidad UPLA - Indicadores de Calidad"
       subtitle: ""
       indicator: "Indicador"
       value: "Valor"
@@ -426,7 +426,7 @@
       without_score: "Informe sin calificación"
     downloads:
       review_objectives: "OBJETIVOS DE LA REVISIÓN"
-      review_objectives_description: "Realizar el seguimiento de regularización a las observaciones realizadas por la Auditoría Interna (AI) en aquellas sucursales calificadas como No Razonables en grado inadecuado o insatisfactorio en el aspecto PLA/FT."
+      review_objectives_description: "Realizar el seguimiento de regularización a las observaciones realizadas por la UPLA en aquellas sucursales calificadas como No Razonables en grado inadecuado o insatisfactorio en el aspecto PLA/FT."
       general_assistant_manager: 'SubGerencia General de Integridad y Cumplimiento'
       departmental_management: 'Gerencia Departamental de PLAyFT'
       departmental_assistant_manager: 'SubGerencia Departamental de PLAyFT en Sucursales'
@@ -444,7 +444,7 @@
     index_title: "Reportes de la gerencia"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
-    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de UPLA"
 
   conclusion_review:
     include_global_score_sheet: "¿Incluir planilla de calificación?"
@@ -474,7 +474,7 @@
     review_repeated_finding_label: "Informe nro."
     executive_summary:
       title: "Resumen ejecutivo"
-      review_author: "Gerencia de Auditoría Interna"
+      review_author: "Gerencia de UPLA"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
       project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
@@ -552,7 +552,7 @@
       not_finished: "no está terminado"
       without_score: "sin calificar"
       without_relevance: "sin importancia"
-      without_audit_date: "sin fecha de auditoría"
+      without_audit_date: "sin fecha de UPLA"
       without_effects: "sin efectos"
       without_controls: "sin controles"
       without_design_tests: "sin pruebas de diseño"
@@ -853,7 +853,7 @@
       other: "Reprogramadas vencidas"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
-    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de UPLA"
     without_oportunities: "Sin oportunidades en el plan"
     without_weaknesses: "Sin observaciones en el plan"
     repeated_count:
@@ -899,8 +899,8 @@
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
     fixed_weaknesses_report:
       pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Observaciones UPLA"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES SOLUCIONADAS - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin tareas en el plan"
@@ -909,7 +909,7 @@
     weaknesses_by_risk_report:
       pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Tarea/Proceso Interno"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "RESUMEN DETALLADO DE TAREAS"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES POR RIESGO - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin tareas en el plan"
@@ -1068,8 +1068,8 @@
         ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Riesgo Alto"
     synthesis_report:
       pdf_name: "resumen_ejecutivo_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Hallazgos Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Hallazgos UPLA"
+      external_audit_weaknesses: "Observaciones de UPLA"
       title: "RESUMEN DETALLADO DE TAREAS"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
       organization_score: "Calificación de la organización: %{score}% (*)"
@@ -1129,7 +1129,7 @@
     index_title: "Reportes de la gerencia"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
-    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de UPLA"
 
   group:
     index_title: "Listado de grupos"
@@ -1373,7 +1373,7 @@
       type_auditor: "Auditor"
       type_supervisor: "Supervisor"
       type_manager: "Gerente"
-      type_responsible: "Responsable máximo de auditoría interna"
+      type_responsible: "Responsable máximo de UPLA"
       type_audited: "Auditado"
       audit_team: "Integrantes UPLA"
       others: "Usuarios"
@@ -1384,7 +1384,7 @@
     global_score_sheet_filename: "planilla_de_calificacion_global"
     draft_score_sheet: "Borrador"
     audit_period: "%{start} al %{end}"
-    audit_period_title: "PERIODO DE LA AUDITORÍA"
+    audit_period_title: "PERIODO DE LA UPLA"
     auditors: "AUDITORES"
     score: "CALIFICACIÓN"
     control_objectives_effectiveness: "Efectividad de control"
@@ -1412,7 +1412,7 @@
     process_control_qualification_explanation: "La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
-      without_score: "no tiene puntaje de auditoría"
+      without_score: "no tiene puntaje de UPLA"
       without_survey: "no tiene relevamiento"
       without_audited: "no tiene usuario auditado"
       without_file_model: "no tiene anexo"
@@ -1453,7 +1453,7 @@
     type_auditor: "Auditor"
     type_audited: "Auditado"
     type_committee: "Comité"
-    type_manager: "Gerente de auditoría"
+    type_manager: "Gerente de UPLA"
     type_executive_manager: "Gerente"
 
   user:
@@ -1622,7 +1622,7 @@
         reference: "Marco de referencia"
         previous_identification: "Informe previo"
         previous_date: "Fecha de emisión previa"
-        main_recommendations: "Principales Recomendaciones de Auditoría"
+        main_recommendations: "Principales Recomendaciones de UPLA"
         effectiveness_notes: "Nota efectividad"
         additional_comments: "Comentarios adicionales"
       control:
