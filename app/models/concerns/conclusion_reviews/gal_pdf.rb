@@ -459,11 +459,19 @@ module ConclusionReviews::GalPdf
     def put_weakness_details_on pdf, weaknesses, hide: [], show: []
       if weaknesses.any?
         weaknesses.each do |f|
+          @__tmp_review_code ||= "#{f.prefix}#{'%.3d' % 0}"
+          @__tmp_review_code   = @__tmp_review_code.next
+
           coi = f.control_objective_item
 
           if show.include? 'control_objective_title'
             put_control_objective_title_on pdf, coi
           end
+
+          def f.tmp_review_code=(code); @tmp_review_code = code; end
+          def f.tmp_review_code; @tmp_review_code; end
+
+          f.tmp_review_code = @__tmp_review_code
 
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(f, hide: hide, show: show),
