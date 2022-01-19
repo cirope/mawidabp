@@ -183,6 +183,19 @@ class BestPracticesControllerTest < ActionController::TestCase
     end
   end
 
+  test 'not create best_practice' do
+    assert_no_difference 'BestPractice.count' do
+      post :create, params: {
+        best_practice: {
+          name: 'ISO 27001',
+          description: 'copy best practice'
+        }
+      }
+
+      assert_template :new
+    end
+  end
+
   test 'edit best practice' do
     get :edit, params: { id: best_practices(:iso_27001).id }
     assert_response :success
