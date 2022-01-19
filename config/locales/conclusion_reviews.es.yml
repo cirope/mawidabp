@@ -83,7 +83,7 @@ es:
         supervisors: "Supervisado por:"
         organization: "Banco Patagonia S.A."
         brief:
-          title: "Ref: %{description}\nInforme de Auditoría N° %{review}"
+          title: "Ref: %{description}\nInforme de Auditoría %{review}"
           notice:
             one: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} página."
             other: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} páginas."
