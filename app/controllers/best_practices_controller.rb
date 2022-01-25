@@ -39,8 +39,11 @@ class BestPracticesController < ApplicationController
   def create
     @best_practice = BestPractice.new best_practice_params
 
-    @best_practice.save
-    respond_with @best_practice, location: edit_best_practice_url(@best_practice)
+    if @best_practice.save
+      respond_with @best_practice, location: edit_best_practice_url(@best_practice)  
+    else
+      render action: :new
+    end
   end
 
   # * PATCH /best_practices/1
