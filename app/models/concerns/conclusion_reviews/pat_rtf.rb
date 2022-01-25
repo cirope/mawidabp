@@ -293,7 +293,10 @@ module ConclusionReviews::PatRtf
 
           single_data << rua.user.informal_name
           single_data << rua.user.function
-          single_data << I18n.t('conclusion_review.pat.cover.organization')
+
+          if organization&.prefix == 'gpat'
+            single_data << I18n.t('conclusion_review.pat.cover.organization')
+          end
 
           data << single_data
         end
