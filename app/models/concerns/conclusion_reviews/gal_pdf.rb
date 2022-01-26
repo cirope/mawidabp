@@ -583,15 +583,15 @@ module ConclusionReviews::GalPdf
     end
 
     def main_weaknesses
-      w   =  weaknesses.not_revoked.not_assumed_risk.with_high_risk
+      _weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk
 
-      order_review_codes w
+      gal_sort_weaknesses_by_review_code _weaknesses
     end
 
     def other_weaknesses
-      w   = weaknesses.not_revoked.not_assumed_risk.with_other_risk
+      _weaknesses = weaknesses.not_revoked.not_assumed_risk.with_other_risk
 
-      order_review_codes w
+      gal_sort_weaknesses_by_review_code _weaknesses
     end
 
     def put_gal_tmp_reviews_code
@@ -603,11 +603,11 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def order_review_codes w
-      code_sort = pre_population_review_codes
+    def gal_sort_weaknesses_by_review_code w
+      id_keys = pre_population_review_codes
 
       w.sort do |w1, w2|
-        code_sort.index(w1.id) <=> code_sort.index(w2.id)
+        id_keys.index(w1.id) <=> id_keys.index(w2.id)
       end
     end
 
@@ -627,9 +627,7 @@ module ConclusionReviews::GalPdf
     end
 
     def all_weaknesses
-      w = weaknesses.not_revoked
-
-      order_review_codes w
+      gal_sort_weaknesses_by_review_code weaknesses.not_revoked
     end
 
     def weaknesses
