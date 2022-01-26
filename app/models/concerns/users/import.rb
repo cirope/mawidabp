@@ -74,6 +74,12 @@ module Users::Import
       Rails.logger.error error
     end
 
+    def file_log_error error
+      logger = Logger.new "log/import_#{Time.zone.today.to_s :db}.log"
+
+      logger.error "Exception occurred import\n#{error}"
+    end
+
     private
 
       def role_allowed? role
@@ -146,6 +152,7 @@ module Users::Import
           error = [:errored, "user: #{user.user}", user.errors.messages].join ' - '
 
           log_error error
+          file_log_error error
         end
 
         { user: user, state: state }

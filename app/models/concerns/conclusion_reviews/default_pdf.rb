@@ -248,9 +248,9 @@ module ConclusionReviews::DefaultPdf
       if options[:expanded].blank?
         cois.sort.map { |coi| ['• ', coi.to_s] }
       else
-        control_text = "\n\n<b>#{Control.human_attribute_name('control')}</b>\n\n"
-
-        cois.sort.map { |coi| ['• ', [coi.to_s, coi.control.control].join(control_text)] }
+        cois.sort.map do |coi|
+          ['• ', "#{[coi.to_s, coi.control.control].join("\n")}\n\n"]
+        end
       end
     end
 

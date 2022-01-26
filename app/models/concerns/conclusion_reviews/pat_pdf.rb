@@ -214,8 +214,8 @@ module ConclusionReviews::PatPdf
           data = [
             rua.user.informal_name,
             rua.user.function,
-            I18n.t('conclusion_review.pat.cover.organization')
-          ].reject(&:blank?).join "\n"
+            (I18n.t('conclusion_review.pat.cover.organization') if organization&.prefix == 'gpat')
+          ].compact.reject(&:blank?).join "\n"
 
           column_data   << ["\n\n\n\n#{data}"]
           column_widths << pdf.percent_width(100.0 / review_user_assignments.size)
@@ -260,8 +260,8 @@ module ConclusionReviews::PatPdf
       pdf.move_down PDF_FONT_SIZE * 8
 
       if manager
-        pdf.text manager.informal_name, style: :italic
-        pdf.text manager.function, style: :italic
+        pdf.text manager.informal_name, style: :italic, align: :center
+        pdf.text manager.function, style: :italic, align: :center
       end
     end
 
@@ -510,11 +510,7 @@ module ConclusionReviews::PatPdf
     end
 
     def pat_receiver
-      setting = Current.organization.settings.find_by(
-        name: 'conclusion_review_receiver'
-      )
-
-      setting&.value || DEFAULT_SETTINGS[:conclusion_review_receiver][:value]
+      I18n.t 'conclusion_review.pat.cover.audit_committee'
     end
 
     def put_pat_annexes_on pdf
