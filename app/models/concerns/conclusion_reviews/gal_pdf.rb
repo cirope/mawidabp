@@ -603,10 +603,10 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def gal_sort_weaknesses_by_review_code w
+    def gal_sort_weaknesses_by_review_code weaknesses
       id_keys = @__tmp_review_codes.keys
 
-      w.sort do |w1, w2|
+      weaknesses.sort do |w1, w2|
         id_keys.index(w1.id) <=> id_keys.index(w2.id)
       end
     end
