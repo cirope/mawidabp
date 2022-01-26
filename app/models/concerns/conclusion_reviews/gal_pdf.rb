@@ -595,7 +595,7 @@ module ConclusionReviews::GalPdf
     end
 
     def put_gal_tmp_reviews_code
-      weaknesses.not_revoked.sort_by_code.each do |weakness|
+      weaknesses.not_revoked.reorder(risk: :desc, priority: :desc).each do |weakness|
         @__tmp_review_code  ||= "#{weakness.prefix}#{'%.3d' % 0}"
         @__tmp_review_codes ||= {}
 
@@ -615,7 +615,9 @@ module ConclusionReviews::GalPdf
       risks      = [Finding.risks[:medium], Finding.risks[:low]]
       priorities = [Finding.priorities[:low]]
 
-      weaknesses.not_revoked.not_assumed_risk.where(risk: risks, priority: priorities).sort_by_code
+      _weaknesses = weaknesses.not_revoked.not_assumed_risk.where(risk: risks, priority: priorities)
+
+      gal_sort_weaknesses_by_review_code _weaknesses
     end
 
     def assumed_risk_weaknesses
