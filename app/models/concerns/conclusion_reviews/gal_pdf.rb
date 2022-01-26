@@ -5,6 +5,7 @@ module ConclusionReviews::GalPdf
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
+    put_gal_tmp_reviews_code
     put_default_watermark_on pdf
     put_gal_header_on        pdf, organization
     put_gal_cover_on         pdf
@@ -459,10 +460,6 @@ module ConclusionReviews::GalPdf
     def put_weakness_details_on pdf, weaknesses, hide: [], show: []
       if weaknesses.any?
         weaknesses.each do |f|
-          @__tmp_review_codes ||= {}
-          @__tmp_review_code  ||= "#{f.prefix}#{'%.3d' % 0}"
-
-          @__tmp_review_codes[f.id] ||= (@__tmp_review_code = @__tmp_review_code.next)
 
           coi = f.control_objective_item
 
@@ -554,11 +551,6 @@ module ConclusionReviews::GalPdf
     end
 
     def put_short_weakness_on pdf, weakness, show_risk: false
-      @__tmp_review_code  ||= "#{weakness.prefix}#{'%.3d' % 0}"
-      @__tmp_review_codes ||= {}
-
-      @__tmp_review_codes[weakness.id] ||= (@__tmp_review_code = @__tmp_review_code.next)
-
       show_origination_date =
         weakness.repeated_ancestors.present? &&
         weakness.origination_date.present?
@@ -591,11 +583,36 @@ module ConclusionReviews::GalPdf
     end
 
     def main_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code
+      w   =  weaknesses.not_revoked.not_assumed_risk.with_high_risk
+
+      order_review_codes w
     end
 
     def other_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
+      w   = weaknesses.not_revoked.not_assumed_risk.with_other_risk
+
+      order_review_codes w
+    end
+
+    def put_gal_tmp_reviews_code
+      weaknesses.not_revoked.sort_by_code.each do |weakness|
+        @__tmp_review_code  ||= "#{weakness.prefix}#{'%.3d' % 0}"
+        @__tmp_review_codes ||= {}
+
+        @__tmp_review_codes[weakness.id] ||= (@__tmp_review_code = @__tmp_review_code.next)
+      end
+    end
+
+    def order_review_codes w
+      code_sort = pre_population_review_codes
+
+      w.sort do |w1, w2|
+        code_sort.index(w1.id) <=> code_sort.index(w2.id)
+      end
+    end
+
+    def pre_population_review_codes
+      @__tmp_review_codes.keys
     end
 
     def other_not_assumed_risk_weaknesses
@@ -610,7 +627,9 @@ module ConclusionReviews::GalPdf
     end
 
     def all_weaknesses
-      weaknesses.not_revoked.sort_by_code
+      w = weaknesses.not_revoked
+
+      order_review_codes w
     end
 
     def weaknesses
