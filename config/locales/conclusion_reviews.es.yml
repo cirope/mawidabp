@@ -146,7 +146,7 @@ es:
       scores:
         cycle: '<b>CALIFICACION DE CICLO</b>'
         description: 'De acuerdo con la metodología de calificación de ciclos aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, a continuación, exponemos la calificación correspondiente: '
-        legend_score: "Para la determinación de esta calificación hemos evaluado:\n  • el nivel de criticidad de nuestras observaciones y su impacto sobre la estructura de control interno de la Entidad;\n • las respuestas a nuestras observaciones que nos fueron enviadas por los responsables y el plan de acción desarrollado a efectos de regularizar las situaciones observadas;\n  • los controles manuales compensatorios y la suficiencia de la documentación de respaldo almacenada; y\n  • la antigüedad de las observaciones"
+        legend_score: "Para la determinación de esta calificación hemos evaluado:\n  • el nivel de criticidad de nuestras observaciones y su impacto sobre la estructura de control interno de la Entidad;\n • las respuestas a nuestras observaciones que nos fueron enviadas por los responsables y el plan de acción desarrollado a efectos de regularizar las situaciones observadas;\n  • las consideraciones sobre los sistemas aplicativos y sus controles automáticos, cuyas conclusiones se detallan en el informe de Auditoría de Sistemas;\n  • los controles manuales compensatorios y la suficiencia de la documentación de respaldo almacenada; y\n  • la antigüedad de las observaciones"
         risk: 'Riesgo'
         amount_weaknesses: 'Cantidad de Observaciones'
         level_risk: 'Nievel de riesgo'
