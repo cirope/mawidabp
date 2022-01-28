@@ -435,25 +435,6 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.valid?
   end
 
-  test 'invalid when manual risk and blank justification' do
-    skip if Current.conclusion_pdf_format != 'bic'
-
-    @finding.risk_justification = ''
-
-    refute @finding.valid?
-    assert_error @finding, :risk_justification, :blank
-  end
-
-  test 'invalid when automatic risk and present justification' do
-    skip if Current.conclusion_pdf_format != 'bic'
-
-    @finding.manual_risk = false
-    @finding.risk_justification = 'Test'
-
-    refute @finding.valid?
-    assert_error @finding, :risk_justification, :present
-  end
-
   test 'import users' do
     finding = @finding.dup
     review  = @finding.review
@@ -1518,144 +1499,32 @@ class FindingTest < ActiveSupport::TestCase
     assert_nil without_message
   end
 
-  test 'change risk from manual to automatic' do
-    @finding.risk               = Finding.risks[:low]
-    @finding.probability        = Finding.probabilities[:almost_certain]
-    @finding.impact_risk        = Finding.impact_risks[:critical]
-    @finding.risk_justification = 'test' if Current.conclusion_pdf_format == 'bic'
+  test 'check auto risk when change to automatic' do
+    skip unless USE_SCOPE_CYCLE
+
+    @finding.risk = Finding.risks[:high]
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:high], @finding.risk
+
+    @finding.manual_risk = false
+    @finding.probability        = Finding.probabilities[:rare]
+    @finding.impact_risk        = Finding.impact_risks[:moderate]
 
     assert @finding.valid?
     assert_equal Finding.risks[:low], @finding.risk
 
-    @finding.manual_risk        = false
-    @finding.risk_justification = nil
-
-    if Current.conclusion_pdf_format == 'bic'
-      @finding.state_regulations            = Finding.state_regulations[:exist]
-      @finding.degree_compliance            = Finding.degree_compliance[:comply]
-      @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-      @finding.sample_deviation             = Finding.sample_deviation[:most_expected]
-      @finding.impact_risk                  = Finding.impact_risks_bic[:low]
-      @finding.probability                  = Finding.frequencies[:low]
-      @finding.external_repeated            = Finding.external_repeated[:repeated]
-
-      assert @finding.valid?
-      assert_equal Finding.risks[:low], @finding.risk
-    else
-      assert @finding.valid?
-      assert_equal Finding.risks[:high], @finding.risk
-
-      @finding.probability = Finding.probabilities[:possible]
-      @finding.impact_risk = Finding.impact_risks[:moderate]
-
-      assert @finding.valid?
-      assert_equal Finding.risks[:medium], @finding.risk
-    end
-  end
-
-  test 'valid with low risk' do
-    skip if Current.conclusion_pdf_format != 'bic'
-
-    @finding.manual_risk        = false
-    @finding.risk_justification = nil
-
-    @finding.state_regulations            = Finding.state_regulations[:exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:comply]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:most_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
-    @finding.probability                  = Finding.frequencies[:low]
-    @finding.external_repeated            = Finding.external_repeated[:repeated]
+    @finding.probability        = Finding.probabilities[:almost_certain]
+    @finding.impact_risk        = Finding.impact_risks[:critical]
 
     assert @finding.valid?
-  end
+    assert_equal Finding.risks[:high], @finding.risk
 
-  test 'invalid with low risk' do
-    skip if Current.conclusion_pdf_format != 'bic'
-
-    @finding.manual_risk        = false
-    @finding.risk               = Finding.risks[:high]
-    @finding.risk_justification = nil
-
-    @finding.state_regulations            = Finding.state_regulations[:exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:comply]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:most_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
-    @finding.probability                  = Finding.frequencies[:low]
-    @finding.external_repeated            = Finding.external_repeated[:repeated]
-
-    refute @finding.valid?
-  end
-
-  test 'valid with medium risk' do
-    skip if Current.conclusion_pdf_format != 'bic'
-
-    @finding.manual_risk        = false
-    @finding.risk               = Finding.risks[:medium]
-    @finding.risk_justification = nil
-
-    @finding.state_regulations            = Finding.state_regulations[:not_exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:fails]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
-    @finding.probability                  = Finding.frequencies[:low]
-    @finding.external_repeated            = Finding.external_repeated[:no_repeated]
+    @finding.probability = Finding.probabilities[:possible]
+    @finding.impact_risk = Finding.impact_risks[:moderate]
 
     assert @finding.valid?
-  end
-
-  test 'invalid with medium risk' do
-    skip if Current.conclusion_pdf_format != 'bic'
-
-    @finding.manual_risk        = false
-    @finding.risk_justification = nil
-
-    @finding.state_regulations            = Finding.state_regulations[:not_exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:fails]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
-    @finding.probability                  = Finding.frequencies[:low]
-    @finding.external_repeated            = Finding.external_repeated[:no_repeated]
-
-    refute @finding.valid?
-  end
-
-  test 'valid with high risk' do
-    skip if Current.conclusion_pdf_format != 'bic'
-
-    @finding.manual_risk        = false
-    @finding.risk               = Finding.risks[:high]
-    @finding.risk_justification = nil
-
-    @finding.state_regulations            = Finding.state_regulations[:not_exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:fails]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:high]
-    @finding.probability                  = Finding.frequencies[:high]
-    @finding.external_repeated            = Finding.external_repeated[:repeated]
-
-    assert @finding.valid?
-  end
-
-  test 'invalid with high risk' do
-    skip if Current.conclusion_pdf_format != 'bic'
-
-    @finding.manual_risk        = false
-    @finding.risk_justification = nil
-
-    @finding.state_regulations            = Finding.state_regulations[:not_exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:fails]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:high]
-    @finding.probability                  = Finding.frequencies[:high]
-    @finding.external_repeated            = Finding.external_repeated[:repeated]
-
-    refute @finding.valid?
+    assert_equal Finding.risks[:medium], @finding.risk
   end
 
   test 'automatic issue based state' do
