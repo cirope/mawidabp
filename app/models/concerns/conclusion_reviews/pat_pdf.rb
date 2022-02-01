@@ -213,8 +213,9 @@ module ConclusionReviews::PatPdf
         review_user_assignments.each do |rua, i|
           data = [
             rua.user.informal_name,
-            rua.user.function
-          ].reject(&:blank?).join "\n"
+            rua.user.function,
+            (I18n.t('conclusion_review.pat.cover.organization') if organization&.prefix == 'gpat')
+          ].compact.reject(&:blank?).join "\n"
 
           column_data   << ["\n\n\n\n#{data}"]
           column_widths << pdf.percent_width(100.0 / review_user_assignments.size)

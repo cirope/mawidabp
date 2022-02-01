@@ -218,7 +218,7 @@ module FindingsHelper
   end
 
   def finding_tag_options
-    Tag.list.for_findings.order(:name).map do |t|
+    Tag.list.for_findings.where(obsolete: false).order(:name).map do |t|
       options = {
         data: {
           name:     t.name,

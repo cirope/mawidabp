@@ -365,6 +365,7 @@ es:
       normal: "Informe completo"
       brief: "Informe resumido"
       without_score: "Informe sin calificación"
+      expanded: "Informe ampliado"
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:

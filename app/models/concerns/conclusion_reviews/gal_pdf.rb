@@ -5,6 +5,7 @@ module ConclusionReviews::GalPdf
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
+    put_gal_tmp_reviews_code
     put_default_watermark_on pdf
     put_gal_header_on        pdf, organization
     put_gal_cover_on         pdf
@@ -459,8 +460,6 @@ module ConclusionReviews::GalPdf
     def put_weakness_details_on pdf, weaknesses, hide: [], show: []
       if weaknesses.any?
         weaknesses.each do |f|
-          @__tmp_review_code ||= "#{f.prefix}#{'%.3d' % 0}"
-          @__tmp_review_code   = @__tmp_review_code.next
 
           coi = f.control_objective_item
 
@@ -471,7 +470,7 @@ module ConclusionReviews::GalPdf
           def f.tmp_review_code=(code); @tmp_review_code = code; end
           def f.tmp_review_code; @tmp_review_code; end
 
-          f.tmp_review_code = @__tmp_review_code
+          f.tmp_review_code = @__tmp_review_codes[f.id]
 
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(f, hide: hide, show: show),
@@ -552,9 +551,6 @@ module ConclusionReviews::GalPdf
     end
 
     def put_short_weakness_on pdf, weakness, show_risk: false
-      @__fake_review_code ||= "#{weakness.prefix}#{'%.3d' % 0}"
-      @__fake_review_code = @__fake_review_code.next
-
       show_origination_date =
         weakness.repeated_ancestors.present? &&
         weakness.origination_date.present?
@@ -574,7 +570,7 @@ module ConclusionReviews::GalPdf
         Weakness.human_attribute_name('origination_date'), origination_date
       ].join(': ')
       text = [
-        @__fake_review_code,
+        @__tmp_review_codes[weakness.id],
         weakness.title,
         state_text,
         (risk_text if show_risk),
@@ -587,18 +583,41 @@ module ConclusionReviews::GalPdf
     end
 
     def main_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code
+      _weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk
+
+      gal_sort_weaknesses_by_review_code _weaknesses
     end
 
     def other_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
+      _weaknesses = weaknesses.not_revoked.not_assumed_risk.with_other_risk
+
+      gal_sort_weaknesses_by_review_code _weaknesses
+    end
+
+    def put_gal_tmp_reviews_code
+      weaknesses.not_revoked.reorder(risk: :desc, priority: :desc).each do |weakness|
+        @__tmp_review_code  ||= "#{weakness.prefix}#{'%.3d' % 0}"
+        @__tmp_review_codes ||= {}
+
+        @__tmp_review_codes[weakness.id] ||= (@__tmp_review_code = @__tmp_review_code.next)
+      end
+    end
+
+    def gal_sort_weaknesses_by_review_code weaknesses
+      id_keys = @__tmp_review_codes.keys
+
+      weaknesses.sort do |w1, w2|
+        id_keys.index(w1.id) <=> id_keys.index(w2.id)
+      end
     end
 
     def other_not_assumed_risk_weaknesses
       risks      = [Finding.risks[:medium], Finding.risks[:low]]
       priorities = [Finding.priorities[:low]]
 
-      weaknesses.not_revoked.not_assumed_risk.where(risk: risks, priority: priorities).sort_by_code
+      _weaknesses = weaknesses.not_revoked.not_assumed_risk.where(risk: risks, priority: priorities)
+
+      gal_sort_weaknesses_by_review_code _weaknesses
     end
 
     def assumed_risk_weaknesses
@@ -606,7 +625,7 @@ module ConclusionReviews::GalPdf
     end
 
     def all_weaknesses
-      weaknesses.not_revoked.sort_by_code
+      gal_sort_weaknesses_by_review_code weaknesses.not_revoked
     end
 
     def weaknesses
