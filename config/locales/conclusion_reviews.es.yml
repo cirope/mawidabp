@@ -68,7 +68,8 @@ es:
     pat:
       cover:
         from: "Banco Patagonia S.A.\nGerencia de Auditoría Interna\n%{business_unit_types}"
-        to: "A: %{receiver}"
+        to: "A: %{receiver}."
+        audit_committee: 'Comité de Auditoría'
         scope:
           cycle: "%{prefix} Tareas y Alcance."
           sustantive: "%{prefix} Alcance de las Tareas."
@@ -82,7 +83,7 @@ es:
         supervisors: "Supervisado por:"
         organization: "Banco Patagonia S.A."
         brief:
-          title: "Ref: %{description}\nInforme de Auditoría N° %{review}"
+          title: "Ref: %{description}\nInforme de Auditoría %{review}"
           notice:
             one: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} página."
             other: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} páginas."
@@ -98,6 +99,8 @@ es:
         current_situation: "Situación Actual:"
         risk: "<b>Nivel de riesgo</b>: %{risk}"
         follow_up_date: "Fecha estimada de regularización:"
+        follow_up_date_failure: "Falla con reporte semestral al CDA"
+        follow_up_date_implemented_audited: "Regularizada"
         effect: "Efecto:"
         answer: "Comentario del Sector:"
         audit_recommendations: "Recomendación:"
@@ -106,6 +109,13 @@ es:
         subtitle: "Programa de Trabajo"
       footer:
         text: "Auditoría"
+      rtf:
+        cover:
+          bank: "Banco Patagonia S.A."
+          department: "Gerencia de Auditoría Interna"
+          to: "A: %{receiver}"
+        weaknesses:
+          risk: "Nivel de riesgo:"
     nbc:
       cover:
         title: "<b>Informe de Auditoría Interna</b>"
@@ -116,38 +126,34 @@ es:
         to_label: "Miembros del Comité de Auditoría del Nuevo Banco del Chaco S.A."
         from_label: "Gerencia Auditoría Interna – Nuevo Banco del Chaco S.A"
         number_review: "<b>Numero de Informe</b>"
-        prepared_by: "<b>Preparado por</b>"
-        internal_audit: "Auditoría Interna - NBCH"
+        prepared_by: "<b>Preparado por</b> Auditoría Interna - NBCH"
         audit_date: "<b>Fecha de Auditoría</b>"
       weaknesses:
         title: "<b>RESUMEN EJECUTIVO</b>"
         subtitle: "<b>Objetivo</b>"
-        main_observations: "<b>Observaciones sugeridas por la auditoría</b>"
+        main_observations: "<b>Observaciones en proceso de regularización</b>"
         audit_conclusion: "<b>Conclusión General de la Auditoría</b>"
         highest_responsible: "<b>%{responsible}</b>"
         signature_label: "<b>Gerencia de Auditoría Interna</b>"
         organization: "<b>Nuevo Banco del Chaco S.A.</b>"
         detailed_review: "INFORME DETALLADO"
         introduction_and_scope: "<b>INTRODUCCION Y ALCANCE DEL TRABAJO</b>"
-        introduction: "Como parte de los procedimientos de revisión de control interno planificados en el marco del plan de Auditoria Interna del Nuevo Banco del Chaco S.A. para el ejercicio que finalizará el %{date}, hemos realizado una revisión del control interno y análisis del ciclo de %{project}"
-        scope: "El alcance de nuestro trabajo incluyó el análisis de los siguientes aspectos"
-        review_procedures: "Asimismo, los procedimientos de revisión efectuados fueron los siguientes:\n• Entrevistas con el administrador del sistema, operadores y responsables del mantenimiento del mismo;\n• Elaboración del borrador preliminar de la auditoría y discusión con los responsables;\n• Redacción del correspondiente informe de debilidades detectadas y conclusión sobre el nivel de adecuación de los controles existentes;\n• Presentación del informe al Comité de Auditoría."
         full_name: "<b>Nombre y Apellido</b>"
         area: "<b>Área</b>"
         responsible_name: "<b>Nombre del Responsable de Regularización</b>"
         follow_up_date: "<b>Fecha Estimada de Regularización</b>"
-        messages: "Nuestro trabajo se realizó en los meses de noviembre y diciembre de 2020, y para llevarlo a cabo se mantuvieron reuniones con el siguiente personal de Entidad:"
+        messages: "Los procedimientos incluyeron la realización de consultas, la inspección de documentación y observación de las actividades y operaciones. Los funcionarios entrevistados fueron:"
       scores:
-        cycle: '<b>CLASIFICACION DE CICLO</b>'
+        cycle: '<b>CALIFICACION DE CICLO</b>'
         description: 'De acuerdo con la metodología de calificación de ciclos aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, a continuación, exponemos la calificación correspondiente: '
-        legend_score: "Para la determinación de esta calificación hemos evaluado:\n  • el nivel de criticidad de nuestras observaciones y su impacto sobre la estructura de control interno de la Entidad;\n • las respuestas a nuestras observaciones que nos fueron enviadas por los responsables y el plan de acción desarrollado a efectos de regularizar las situaciones observadas;\n  • las consideraciones sobre los sistemas aplicativos y sus controles automáticos, cuyas conclusiones se detallan en el informe SIS 2020 - 15 Ciclo Inversiones surgidas del informe de Auditoria de Sistemas;\n  • los controles manuales compensatorios y la suficiencia de la documentación de respaldo almacenada; y\n  • la antigüedad de las observaciones"
+        legend_score: "Para la determinación de esta calificación hemos evaluado:\n  • el nivel de criticidad de nuestras observaciones y su impacto sobre la estructura de control interno de la Entidad;\n • las respuestas a nuestras observaciones que nos fueron enviadas por los responsables y el plan de acción desarrollado a efectos de regularizar las situaciones observadas;\n  • las consideraciones sobre los sistemas aplicativos y sus controles automáticos, cuyas conclusiones se detallan en el informe de Auditoría de Sistemas;\n  • los controles manuales compensatorios y la suficiencia de la documentación de respaldo almacenada; y\n  • la antigüedad de las observaciones"
         risk: 'Riesgo'
         amount_weaknesses: 'Cantidad de Observaciones'
         level_risk: 'Nievel de riesgo'
         status: 'Estado'
         age_parameter: 'Parámetro Antigüedad'
         weighing: 'Ponderación'
-        footer_table: 'Calificación de GIR'
+        footer_table: 'Calificación de ciclo'
       results_by_weighting:
         adequate: 'Adecuado'
         require_some_improvements: 'Requiere algunas mejoras'
@@ -156,9 +162,12 @@ es:
         inadequate: 'Inadecuado'
 
       weaknesses_detected:
-        name: "Debilidades detectadas"
+        name: "Observaciones de la presente revisión"
+        repeated: "Observaciones de seguimiento"
         title: "<b>Título</b>"
         description: "<b>Descripción</b>"
-        effect: "<b>Riesgo Asociado</b>"
+        risk: "<b>Nivel de riesgo</b>"
+        origination_date: '<b>Fecha de origen</b>'
+        origination_author: '<b>Origen emisor</b>'
         audit_recommendations: "<b>Sugerencia de Mejora</b>"
-        audit_comments: "<b>Comentarios del Responsable</b>"
+        audit_comments: "<b>Plan de acción propuesto por el responsable</b>"

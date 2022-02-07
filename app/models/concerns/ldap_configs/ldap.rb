@@ -63,12 +63,14 @@ module LdapConfigs::Ldap
         username
       else
         user = if Current.organization
-                 Current.organization.users.find_by user: username
+                 Current.organization.users.by_user username
                else
-                 User.find_by user: username
+                 User.by_user username
                end
 
-        login_mask % { user: username, basedn: basedn, ou: user&.organizational_unit }
+        ou = user&.organizational_unit.presence || organizational_unit
+
+        login_mask % { user: username, basedn: basedn, ou: ou }
       end
     end
 end

@@ -159,8 +159,15 @@ jQuery(function ($) {
   })
 
   $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
-    $('[name$="[risk]"]').attr('disabled', ! $(this).is(':checked'))
+    $('select[name$="[risk]"]').attr('disabled', ! $(this).is(':checked'))
+    $('input[name$="[risk]"]').attr('disabled', $(this).is(':checked'))
+    $('[data-bic-calculate-risk]').attr('disabled', $(this).is(':checked'))
+    $('[name$="[risk_justification]"]').attr('disabled', ! $(this).is(':checked'))
     $('[data-risk-modifier]').change()
+
+    if (! $(this).is(':checked')) {
+      bicCalculatedRisk()
+    }
   })
 
   $(document).on('change', '[data-risk-modifier]', function () {
@@ -356,6 +363,38 @@ jQuery(function ($) {
       })
     }
   })
+
+  $(document).on('change', '[data-bic-calculate-risk]', function () {
+    bicCalculatedRisk()
+  })
+
+  var bicCalculatedRisk = function() {
+    var types = $('[data-bic-risks-types]').data('bicRisksTypes')
+    var total = 0
+    var risk
+
+    $('[data-bic-calculate-risk]').each(function (i, e) {
+      total += +$(e).val()
+    })
+
+    $.each(types, function (i, data) {
+      riskValue = data[0]
+      riskId    = data[1]
+
+      if (total >= riskValue) {
+        risk = riskId
+
+        return false
+      }
+    })
+
+    var riskChanged = $('[name$="[risk]"]').val() !== String(risk)
+
+    if (riskChanged) {
+      $('[name$="[risk]"]:hidden').val(risk)
+      $('[name$="[risk]"]:visible').val(risk).trigger('change')
+    }
+  }
 
   $(document).on('change', '[data-skip-commitment-support]', function () {
     if ($(this).is(':checked')) {

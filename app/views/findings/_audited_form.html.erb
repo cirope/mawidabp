@@ -65,7 +65,20 @@
           <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
         <% end %>
         <%= f.label :state, Finding.human_attribute_name(:state) %>
-        <%= finding_status_field(f, disabled: true) %>
+
+        <% options_for_select = if USE_SCOPE_CYCLE
+                                  {
+                                    data:
+                                      { target_value_change_label: Finding::STATUS[:implemented_audited],
+                                        suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
+                                        target_input_with_label: '#weakness_follow_up_date' 
+                                      }
+                                  }
+                                else
+                                  {}
+                                end %>
+
+        <%= finding_status_field(f, disabled: true, options_html: options_for_select) %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>
