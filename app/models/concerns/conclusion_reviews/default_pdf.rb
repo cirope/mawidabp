@@ -240,6 +240,12 @@ module ConclusionReviews::DefaultPdf
               }
             }
           end
+
+          cois&.map(&:tags)&.map do |tag|
+            pdf.indent(10, 15) do
+              pdf.text "- #{tag.to_sentence}" if tag.present?
+            end
+          end
         end
       end
     end
