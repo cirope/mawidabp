@@ -142,9 +142,7 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def review_code_final_exist? code
-    weaknesses = Weakness.list.finals(true).where(review_code: code).count
-
-    weaknesses > 0 ? true : false
+    Weakness.list.finals(true).where(review_code: code).exists?
   end
 
   def last_final_weakness
