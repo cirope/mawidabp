@@ -86,7 +86,8 @@ module Reviews::FindingCode
     end
 
     def next_finding_code prefix, findings
-      last_review_code = findings.where("review_code like '#{prefix}___'").order(:review_code).last&.review_code || '0'
+      last_review_code = findings.where("#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} LIKE ?",
+                                        "#{prefix}___").order(:review_code).last&.review_code || '0'
       last_number      = last_review_code.match(/\d+\Z/).to_a.first.to_i
 
       raise 'A review can not have more than 999 findings' if last_number > 999
