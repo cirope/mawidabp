@@ -595,9 +595,10 @@ module ConclusionReviews::GalPdf
     end
 
     def put_gal_tmp_reviews_code
+      @__tmp_review_codes ||= {}
+
       weaknesses.not_revoked.reorder(risk: :desc, priority: :desc).each do |weakness|
-        @__tmp_review_code  ||= "#{weakness.prefix}#{'%.3d' % 0}"
-        @__tmp_review_codes ||= {}
+        @__tmp_review_code ||= "#{weakness.prefix}#{'%.3d' % 0}"
 
         @__tmp_review_codes[weakness.id] ||= (@__tmp_review_code = @__tmp_review_code.next)
       end
