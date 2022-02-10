@@ -61,7 +61,7 @@ module ConclusionReviews::PatPdf
 
       pdf.move_down PDF_FONT_SIZE
 
-      to_text pdf
+      pat_to_text pdf
     end
 
     def put_pat_extra_brief_info_on pdf, organization
@@ -508,7 +508,7 @@ module ConclusionReviews::PatPdf
       end
     end
 
-    def to_text pdf
+    def pat_to_text pdf
       receiver           = (organization&.prefix == 'gpat') ? 'gpat_company' : 'audit_committee'
       to_text_first_line = I18n.t 'conclusion_review.pat.cover.to', receiver: I18n.t("conclusion_review.pat.cover.#{receiver}")
 
