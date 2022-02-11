@@ -198,7 +198,7 @@ module ConclusionReviews::DefaultPDF
     def put_default_control_objectives_on pdf, grouped_control_objectives
       grouped_control_objectives.each do |process_control, cois|
         coi_data = cois.sort.map do |coi|
-          tags = coi&.tags.map { |tag| tag.name }
+          tags = coi&.tags.map &:name
 
           ['• ', [coi.to_s, "#{tags.join(' -  ')}"].join("\r\n")]
         end
