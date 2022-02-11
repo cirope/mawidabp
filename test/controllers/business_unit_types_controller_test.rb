@@ -74,6 +74,9 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :hide_review_logo => '0',
           :independent_identification => '0',
           :shared_business_units => '0',
+          :without_number => true,
+          :reviews_for => 'reviews for',
+          :detailed_review => 'detailed review',
           :business_units_attributes => [
             {
               :name => 'New business unit',
@@ -115,6 +118,9 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :hide_review_logo => '0',
           :independent_identification => '0',
           :shared_business_units => '0',
+          :without_number => true,
+          :reviews_for => 'reviews for',
+          :detailed_review => 'detailed review',
           :business_units_attributes => [
             {
               :id => business_units(:business_unit_one).id,
