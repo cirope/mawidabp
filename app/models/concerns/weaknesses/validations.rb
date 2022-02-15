@@ -47,14 +47,15 @@ module Weaknesses::Validations
     def count_tags_presence
       prefix = organization&.prefix
 
-      WEAKNESS_TAG_VALIDATION_START.include?(prefix) ? WEAKNESS_TAG_VALIDATION_START[prefix].to_i : 0
+      WEAKNESS_TAG_VALIDATION_START &&
+      WEAKNESS_TAG_COUNT_BY_ORGANIZATION.include?(prefix) ? WEAKNESS_TAG_COUNT_BY_ORGANIZATION[prefix].to_i : 2
     end
 
     def validate_tags_presence?
       WEAKNESS_TAG_VALIDATION_START && (
         new_record? ||
         review&.conclusion_final_review&.blank? ||
-        WEAKNESS_TAG_VALIDATION_START.include?(organization&.prefix)
+        created_at >= WEAKNESS_TAG_VALIDATION_START
       )
     end
 
