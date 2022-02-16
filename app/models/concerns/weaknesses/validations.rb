@@ -13,7 +13,7 @@ module Weaknesses::Validations
       allow_nil: true, allow_blank: true
     validates :tag_ids,
       presence: true,
-      length: { minimum: :count_tags_presence }, if: :validate_tags_presence?
+      length: { minimum: :min_tag_count }, if: :validate_tags_presence?
     validates :compliance,
               :operational_risk,
               :impact,
@@ -44,10 +44,9 @@ module Weaknesses::Validations
       errors.add :review_code, :invalid unless review_code =~ regex
     end
 
-    def count_tags_presence
+    def min_tag_count
       prefix = organization&.prefix
 
-      WEAKNESS_TAG_VALIDATION_START &&
       WEAKNESS_TAG_COUNT_BY_ORGANIZATION.include?(prefix) ? WEAKNESS_TAG_COUNT_BY_ORGANIZATION[prefix].to_i : 2
     end
 
