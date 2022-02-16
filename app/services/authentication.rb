@@ -120,7 +120,7 @@ class Authentication
         name:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first,
         email:     Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first,
         last_name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first,
-        roles:     azure_roles_attributes attributes
+        roles:     azure_roles_attributes(attributes)
       }
     end
 
