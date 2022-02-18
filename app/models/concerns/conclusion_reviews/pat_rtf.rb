@@ -72,7 +72,6 @@ module ConclusionReviews::PatRtf
     def put_pat_cover_header_on_rtf document
       but_names = [review.business_unit_type.name] +
                   review.plan_item.auxiliar_business_unit_types.map { |aux_bu| aux_bu.business_unit_type.name }
-      to_text   = I18n.t 'conclusion_review.pat.cover.to', receiver: pat_receiver
 
       header_right_identifacion = style bold: true, size: 1.1
 
@@ -101,7 +100,17 @@ module ConclusionReviews::PatRtf
         p1 << but_names.to_sentence
         p1.line_break
         p1.line_break
-        p1 << to_text
+
+        receiver           = organization&.prefix == 'gpat' ? 'gpat_company' : 'audit_committee'
+        to_text_first_line = I18n.t 'conclusion_review.pat.cover.to',
+                                    receiver: I18n.t("conclusion_review.pat.cover.#{receiver}")
+
+        p1 << to_text_first_line
+
+        if organization&.prefix == 'gpat'
+          p1.line_break
+          p1 << "    #{I18n.t('conclusion_review.pat.cover.audit_committee')}"
+        end
       end
     end
 
@@ -293,7 +302,10 @@ module ConclusionReviews::PatRtf
 
           single_data << rua.user.informal_name
           single_data << rua.user.function
-          single_data << I18n.t('conclusion_review.pat.cover.organization')
+
+          if organization&.prefix == 'gpat'
+            single_data << I18n.t('conclusion_review.pat.cover.organization')
+          end
 
           data << single_data
         end
