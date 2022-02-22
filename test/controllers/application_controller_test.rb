@@ -73,18 +73,6 @@ class ApplicationControllerTest < ActionController::TestCase
     assert_equal I18n.t('message.session_time_expired'),
       @controller.send(:flash)[:alert]
   end
-  #no se utiliza mas
-  # test 'redirect to index function' do
-  #   @controller = UsersController.new
-  #   @controller.send('response=', @response)
-  #   @controller.send('request=', @request)
-  #   @controller.send(:headers)
-
-  #   @controller.send(:redirect_to_index, :notice, 'notice')
-  #   assert_not_nil @controller.send(:flash)[:notice]
-  #   assert_equal @controller.send(:flash)[:notice], 'notice'
-  #   # assert_redirected_to :controller => :users, :action => :index
-  # end
 
   test 'redirect to login function' do
     login_admin
@@ -106,16 +94,16 @@ class ApplicationControllerTest < ActionController::TestCase
 
   test 'check privileges function' do
     login_admin
-    # @controller.class.instance_variable_set(:@controller_name, 'users')
+
     @controller.class.instance_variable_set(:@controller_path, 'users')
     @controller.instance_variable_set(:@auth_privileges, {
-      'administration_security_users' => {
-        read:   true
-      }
-    })
+                                        'administration_security_users' => {
+                                          read: true
+                                        }
+                                      })
     @controller.send('action_name=', 'index')
-
     @controller.send(:check_privileges)
+
     assert_nil @controller.send(:flash)[:notice]
     assert_response :success
   end
@@ -125,73 +113,79 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.class.instance_variable_set(:@controller_path, 'users')
     @controller.instance_variable_set(:@auth_privileges, {
-      'administration_security_users' => {
-        read:   false
-      }
-    })
+                                        'administration_security_users' => {
+                                          read: false
+                                        }
+                                      })
     @controller.send('action_name=', 'index')
-
     @controller.send(:check_privileges)
+
     assert_not_nil @controller.send(:flash)[:alert]
     assert_redirected_to login_url
   end
 
   test 'check privileges function in dropdownmenu when children have privileges' do
     login_admin
-    # @controller.class.instance_variable_set(:@controller_name, 'users')
-    @controller.class.instance_variable_set(:@controller_path, 'users')
-    @controller.params[:drop_down_menu] = true
-    @controller.instance_variable_set(:@auth_privileges, {
-      'administration_security' => {
-        read:   true
-      },
-      'administration_security_users' => {
-        read:   true
-      }
-    })
-    @controller.send('action_name=', 'index')
 
+    @controller.class.instance_variable_set(:@controller_path, 'users')
+
+    @controller.params[:drop_down_menu] = true
+
+    @controller.instance_variable_set(:@auth_privileges, {
+                                        'administration_security' => {
+                                          read: true
+                                        },
+                                        'administration_security_users' => {
+                                          read: true
+                                        }
+                                      })
+    @controller.send('action_name=', 'index')
     @controller.send(:check_privileges)
+
     assert_nil @controller.send(:flash)[:notice]
     assert_redirected_to users_url
   end
 
   test 'check no privileges function in dropdownmenu when children not have privileges' do
     login_admin
-    # @controller.class.instance_variable_set(:@controller_name, 'users')
-    @controller.class.instance_variable_set(:@controller_path, 'users')
-    @controller.params[:drop_down_menu] = true
-    @controller.instance_variable_set(:@auth_privileges, {
-      'administration_security' => {
-        read:   true
-      },
-      'administration_security_users' => {
-        read:   false
-      }
-    })
-    @controller.send('action_name=', 'index')
 
+    @controller.class.instance_variable_set(:@controller_path, 'users')
+
+    @controller.params[:drop_down_menu] = true
+
+    @controller.instance_variable_set(:@auth_privileges, {
+                                        'administration_security' => {
+                                          read: true
+                                        },
+                                        'administration_security_users' => {
+                                          read: false
+                                        }
+                                      })
+    @controller.send('action_name=', 'index')
     @controller.send(:check_privileges)
+
     assert_not_nil @controller.send(:flash)[:alert]
     assert_redirected_to login_url
   end
 
   test 'check no privileges function in dropdownmenu' do
     login_admin
-    # @controller.class.instance_variable_set(:@controller_name, 'users')
-    @controller.class.instance_variable_set(:@controller_path, 'users')
-    @controller.params[:drop_down_menu] = true
-    @controller.instance_variable_set(:@auth_privileges, {
-      'administration_security' => {
-        read:   false
-      },
-      'administration_security_users' => {
-        read:   true
-      }
-    })
-    @controller.send('action_name=', 'index')
 
+    @controller.class.instance_variable_set(:@controller_path, 'users')
+
+    @controller.params[:drop_down_menu] = true
+
+    @controller.instance_variable_set(:@auth_privileges, {
+                                        'administration_security' => {
+                                          read: false
+                                        },
+                                        'administration_security_users' => {
+                                          read: true
+                                        }
+                                      })
+    @controller.send('action_name=', 'index')
     @controller.send(:check_privileges)
+
     assert_not_nil @controller.send(:flash)[:alert]
     assert_redirected_to login_url
   end
@@ -201,10 +195,10 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.class.instance_variable_set(:@controller_path, 'users')
     @controller.instance_variable_set(:@auth_privileges, {
-      'administration_security_users' => {
-        modify:   true
-      }
-    })
+                                        'administration_security_users' => {
+                                          modify: true
+                                        }
+                                      })
 
     assert @controller.send(:can_perform?, :edit, :modify)
   end
@@ -214,10 +208,10 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.class.instance_variable_set(:@controller_path, 'users')
     @controller.instance_variable_set(:@auth_privileges, {
-      'administration_security_users' => {
-        approval: false
-      }
-    })
+                                        'administration_security_users' => {
+                                          approval: false
+                                        }
+                                      })
 
     refute @controller.send(:can_perform?, :edit, :approval)
   end
@@ -226,15 +220,17 @@ class ApplicationControllerTest < ActionController::TestCase
     login_admin
 
     @controller.class.instance_variable_set(:@controller_path, 'users')
+
     @controller.params[:drop_down_menu] = true
+
     @controller.instance_variable_set(:@auth_privileges, {
-      'administration_security' => {
-        modify:   true
-      },
-      'administration_security_users' => {
-        modify:   true
-      }
-    })
+                                        'administration_security' => {
+                                          modify: true
+                                        },
+                                        'administration_security_users' => {
+                                          modify: true
+                                        }
+                                      })
 
     assert @controller.send(:can_perform?, :edit, :modify)
   end
@@ -243,15 +239,17 @@ class ApplicationControllerTest < ActionController::TestCase
     login_admin
 
     @controller.class.instance_variable_set(:@controller_path, 'users')
+
     @controller.params[:drop_down_menu] = true
+
     @controller.instance_variable_set(:@auth_privileges, {
-      'administration_security' => {
-        modify:   true
-      },
-      'administration_security_users' => {
-        modify:   false
-      }
-    })
+                                        'administration_security' => {
+                                          modify: true
+                                        },
+                                        'administration_security_users' => {
+                                          modify: false
+                                        }
+                                      })
 
     refute @controller.send(:can_perform?, :edit, :modify)
   end
@@ -260,15 +258,17 @@ class ApplicationControllerTest < ActionController::TestCase
     login_admin
 
     @controller.class.instance_variable_set(:@controller_path, 'users')
+
     @controller.params[:drop_down_menu] = true
+
     @controller.instance_variable_set(:@auth_privileges, {
-      'administration_security' => {
-        modify:   false
-      },
-      'administration_security_users' => {
-        modify:   true
-      }
-    })
+                                        'administration_security' => {
+                                          modify: false
+                                        },
+                                        'administration_security_users' => {
+                                          modify: true
+                                        }
+                                      })
 
     refute @controller.send(:can_perform?, :edit, :modify)
   end
@@ -277,6 +277,7 @@ class ApplicationControllerTest < ActionController::TestCase
     login_admin
 
     @controller.send(:check_group_admin)
+
     assert_nil @controller.send(:flash)[:alert]
     assert_response :success
   end
@@ -288,6 +289,7 @@ class ApplicationControllerTest < ActionController::TestCase
     administrator.group_admin = false
 
     administrator.save!
+
     assert @controller.send :auth
 
     @controller.send(:check_group_admin)
