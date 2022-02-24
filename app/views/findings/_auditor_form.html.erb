@@ -2,6 +2,11 @@
 <% show_history_changes = show_follow_up_timestamps? && @finding.status_change_history.size > 1 %>
 <% data_for_submit = data_for_submit @finding %>
 <% risk_justification = users_readonly || !@finding.manual_risk %>
+<% options_for_suggested_follow_up_date = if USE_SCOPE_CYCLE
+                                            data_options_for_suggested_follow_up_date @finding
+                                          else
+                                            {}
+                                          end  %>
 
 <%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completion_state], @finding),
     :html => {:method => :patch, :id => "edit_finding_#{@finding.id}"}.merge(data_for_submit) do |f| %>
@@ -69,7 +74,7 @@
             <div class="row">
               <div class="col">
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
-                  data: weakness_risk_data_options
+                  data: weakness_risk_data_options.merge(options_for_suggested_follow_up_date)
                 } %>
               </div>
             </div>
@@ -166,12 +171,9 @@
         <% options_for_select = if USE_SCOPE_CYCLE
                                   {
                                     data:
-                                      { target_value_change_label: Finding::STATUS[:implemented_audited],
-                                        suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
-                                        target_input_with_label: '#weakness_follow_up_date',
-                                        target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
+                                      { target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
                                         target_checkbox: '#finding_extension',
-                                        disabled_and_deny: true }
+                                        disabled_and_deny: true }.merge(options_for_suggested_follow_up_date)
                                   }
                                 else
                                   {}
@@ -194,7 +196,7 @@
           <% end %>
         <% end %>
         <%= f.input :origination_date, as: :date_picker,
-          label: Finding.human_attribute_name(:origination_date), readonly: true %>
+          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: options_for_suggested_follow_up_date } %>
         <%= f.input :answer, input_html: { rows: finding_answer_rows } %>
         <div class="row">
           <div class="col-<%= USE_SCOPE_CYCLE ? 9 : 12 %>">
