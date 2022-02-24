@@ -20,11 +20,7 @@
                                                       condition_to_receive_confirm: first_version_in_being_implementation?(@weakness) })
    end
 
-   options_for_suggested_follow_up_date = if USE_SCOPE_CYCLE
-                                           data_options_for_suggested_follow_up_date @weakness
-                                          else
-                                            {}
-                                          end
+   options_for_suggested_follow_up_date = USE_SCOPE_CYCLE ? data_options_for_suggested_follow_up_date : {}
 %>
 
 <%= simple_form_for @weakness, form_options do |f| %>

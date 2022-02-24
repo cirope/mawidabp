@@ -1,8 +1,4 @@
-<% options_for_suggested_follow_up_date = if USE_SCOPE_CYCLE
-                                            data_options_for_suggested_follow_up_date @finding
-                                          else
-                                            {}
-                                          end %>
+<% options_for_suggested_follow_up_date = USE_SCOPE_CYCLE ? data_options_for_suggested_follow_up_date : {} %>
 
 <%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completion_state], @finding),
   html: { method: :patch, id: "edit_finding_#{@finding.id}"} do |f| %>
