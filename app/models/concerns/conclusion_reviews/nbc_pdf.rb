@@ -264,7 +264,7 @@ module ConclusionReviews::NbcPdf
       weaknesses.where(repeated_of_id: nil).each_with_index do |weakness, idx|
         weakness_partial pdf, weakness
 
-        pdf.start_new_page if idx < weaknesses.size - 1
+        pdf.start_new_page if idx < weaknesses.where(repeated_of_id: nil).size - 1
       end
     end
 
@@ -280,7 +280,7 @@ module ConclusionReviews::NbcPdf
       pdf.text weakness.description
 
       pdf.move_down PDF_FONT_SIZE
-      nbc_risk_date_origination_tags_header weakness, pdf
+      nbc_risk_date_origination_header weakness, pdf
 
       pdf.move_down PDF_FONT_SIZE
       put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.audit_recommendations')
@@ -296,23 +296,22 @@ module ConclusionReviews::NbcPdf
       nbc_responsible_and_follow_up_date weakness, pdf
     end
 
-    def nbc_risk_date_origination_tags_header weakness, pdf
+    def nbc_risk_date_origination_header weakness, pdf
       data = [
         [
           I18n.t('conclusion_review.nbc.weaknesses_detected.risk'),
-          I18n.t('conclusion_review.nbc.weaknesses_detected.origination_date'),
-          I18n.t('conclusion_review.nbc.weaknesses_detected.origination_author'),
+          I18n.t('conclusion_review.nbc.weaknesses_detected.origination_date')
         ],
         [
           weakness.risk_text,
-          weakness.origination_date,
-          weakness.taggings.map(&:tag).to_sentence
+          weakness.origination_date
         ]
       ]
 
-      w_c = pdf.bounds.width / 3
+      width_column1 = PDF_FONT_SIZE * 30
+      width_column2 = pdf.bounds.width - width_column1
 
-      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: w_c) do
+      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2]) do
         row(0).style(
           background_color: 'EEEEEE'
         )
