@@ -96,11 +96,13 @@ class ApplicationControllerTest < ActionController::TestCase
     login_admin
 
     @controller.class.instance_variable_set(:@controller_path, 'users')
-    @controller.instance_variable_set(:@auth_privileges, {
-                                        'administration_security_users' => {
-                                          read: true
-                                        }
-                                      })
+    @controller.instance_variable_set(
+      :@auth_privileges, {
+        'administration_security_users' => {
+          read: true
+        }
+      }
+    )
     @controller.send('action_name=', 'index')
     @controller.send(:check_privileges)
 
@@ -112,11 +114,13 @@ class ApplicationControllerTest < ActionController::TestCase
     login_admin
 
     @controller.class.instance_variable_set(:@controller_path, 'users')
-    @controller.instance_variable_set(:@auth_privileges, {
-                                        'administration_security_users' => {
-                                          read: false
-                                        }
-                                      })
+    @controller.instance_variable_set(
+      :@auth_privileges, {
+        'administration_security_users' => {
+          read: false
+        }
+      }
+    )
     @controller.send('action_name=', 'index')
     @controller.send(:check_privileges)
 
@@ -131,14 +135,16 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.params[:drop_down_menu] = true
 
-    @controller.instance_variable_set(:@auth_privileges, {
-                                        'administration_security' => {
-                                          read: true
-                                        },
-                                        'administration_security_users' => {
-                                          read: true
-                                        }
-                                      })
+    @controller.instance_variable_set(
+      :@auth_privileges, {
+        'administration_security' => {
+          read: true
+        },
+        'administration_security_users' => {
+          read: true
+        }
+      }
+    )
     @controller.send('action_name=', 'index')
     @controller.send(:check_privileges)
 
@@ -153,14 +159,16 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.params[:drop_down_menu] = true
 
-    @controller.instance_variable_set(:@auth_privileges, {
-                                        'administration_security' => {
-                                          read: true
-                                        },
-                                        'administration_security_users' => {
-                                          read: false
-                                        }
-                                      })
+    @controller.instance_variable_set(
+      :@auth_privileges, {
+        'administration_security' => {
+          read: true
+        },
+        'administration_security_users' => {
+          read: false
+        }
+      }
+    )
     @controller.send('action_name=', 'index')
     @controller.send(:check_privileges)
 
@@ -175,14 +183,16 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.params[:drop_down_menu] = true
 
-    @controller.instance_variable_set(:@auth_privileges, {
-                                        'administration_security' => {
-                                          read: false
-                                        },
-                                        'administration_security_users' => {
-                                          read: true
-                                        }
-                                      })
+    @controller.instance_variable_set(
+      :@auth_privileges, {
+        'administration_security' => {
+          read: false
+        },
+        'administration_security_users' => {
+          read: true
+        }
+      }
+    )
     @controller.send('action_name=', 'index')
     @controller.send(:check_privileges)
 
@@ -194,11 +204,13 @@ class ApplicationControllerTest < ActionController::TestCase
     login_admin
 
     @controller.class.instance_variable_set(:@controller_path, 'users')
-    @controller.instance_variable_set(:@auth_privileges, {
-                                        'administration_security_users' => {
-                                          modify: true
-                                        }
-                                      })
+    @controller.instance_variable_set(
+      :@auth_privileges, {
+        'administration_security_users' => {
+          modify: true
+        }
+      }
+    )
 
     assert @controller.send(:can_perform?, :edit, :modify)
   end
@@ -207,11 +219,13 @@ class ApplicationControllerTest < ActionController::TestCase
     login_admin
 
     @controller.class.instance_variable_set(:@controller_path, 'users')
-    @controller.instance_variable_set(:@auth_privileges, {
-                                        'administration_security_users' => {
-                                          approval: false
-                                        }
-                                      })
+    @controller.instance_variable_set(
+      :@auth_privileges, {
+        'administration_security_users' => {
+          approval: false
+        }
+      }
+    )
 
     refute @controller.send(:can_perform?, :edit, :approval)
   end
@@ -223,14 +237,16 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.params[:drop_down_menu] = true
 
-    @controller.instance_variable_set(:@auth_privileges, {
-                                        'administration_security' => {
-                                          modify: true
-                                        },
-                                        'administration_security_users' => {
-                                          modify: true
-                                        }
-                                      })
+    @controller.instance_variable_set(
+      :@auth_privileges, {
+        'administration_security' => {
+          modify: true
+        },
+        'administration_security_users' => {
+          modify: true
+        }
+      }
+    )
 
     assert @controller.send(:can_perform?, :edit, :modify)
   end
@@ -242,14 +258,16 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.params[:drop_down_menu] = true
 
-    @controller.instance_variable_set(:@auth_privileges, {
-                                        'administration_security' => {
-                                          modify: true
-                                        },
-                                        'administration_security_users' => {
-                                          modify: false
-                                        }
-                                      })
+    @controller.instance_variable_set(
+      :@auth_privileges, {
+        'administration_security' => {
+          modify: true
+        },
+        'administration_security_users' => {
+          modify: false
+        }
+      }
+    )
 
     refute @controller.send(:can_perform?, :edit, :modify)
   end
@@ -261,14 +279,16 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.params[:drop_down_menu] = true
 
-    @controller.instance_variable_set(:@auth_privileges, {
-                                        'administration_security' => {
-                                          modify: false
-                                        },
-                                        'administration_security_users' => {
-                                          modify: true
-                                        }
-                                      })
+    @controller.instance_variable_set(
+      :@auth_privileges, {
+        'administration_security' => {
+          modify: false
+        },
+        'administration_security_users' => {
+          modify: true
+        }
+      }
+    )
 
     refute @controller.send(:can_perform?, :edit, :modify)
   end
