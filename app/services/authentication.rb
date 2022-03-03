@@ -118,10 +118,16 @@ class Authentication
       {
         user:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, ''),
         name:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first,
-        email:     Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']).first,
+        email:     Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first,
         last_name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first,
-        roles:     attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
+        roles:     azure_roles_attributes(attributes)
       }
+    end
+
+    def azure_roles_attributes attributes
+      roles =  attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
+
+      roles.present? ? roles : DEFAULT_SAML_ROLES
     end
 
     def unmasked_user

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   resources :settings, only: [:index, :show, :edit, :update]
 
+  resources :activity_groups
   resources :benefits
 
   resources :opening_interviews
@@ -75,6 +76,8 @@ Rails.application.routes.draw do
   resources :tags, only: [] do
     resources :documents, only: [:index]
   end
+
+  resources :time_summary
 
   scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
     resources :tags
@@ -184,6 +187,10 @@ Rails.application.routes.draw do
       as: "#{action}_follow_up_audit",
       to: "follow_up_audit##{action}"
   end
+
+  get 'conclusion_reports/process_control_stats_csv', 
+    as: 'process_control_stats_csv_conclusion_reports', 
+    to: 'conclusion_reports#process_control_stats_csv'
 
   [
     'create_synthesis_report',
@@ -314,6 +321,7 @@ Rails.application.routes.draw do
   resources :conclusion_final_reviews do
     member do
       get :export_to_pdf
+      get :export_to_rtf
       get :compose_email
       patch :send_by_email
       get :download_work_papers

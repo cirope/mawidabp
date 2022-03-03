@@ -7,13 +7,13 @@ module Weaknesses::Validations
     validates :risk, :priority, presence: true
     validates :audit_recommendations, presence: true, if: :notify?
     validate :review_code_has_valid_prefix
-    validates :impact_risk, :probability, presence: USE_SCOPE_CYCLE
+    validates :impact_risk, :probability, presence: true, if: :require_impact_risk_and_probability?
 
     validates :compliance, length: { maximum: 255 },
       allow_nil: true, allow_blank: true
     validates :tag_ids,
       presence: true,
-      length: { minimum: 2 }, if: :validate_tags_presence?
+      length: { minimum: :min_tag_count }, if: :validate_tags_presence?
     validates :compliance,
               :operational_risk,
               :impact,
@@ -23,6 +23,10 @@ module Weaknesses::Validations
   end
 
   private
+
+    def require_impact_risk_and_probability?
+      USE_SCOPE_CYCLE && !manual_risk
+    end
 
     def compliance_require_observations?
       SHOW_WEAKNESS_EXTRA_ATTRIBUTES && compliance == 'yes'
@@ -38,6 +42,12 @@ module Weaknesses::Validations
              end
 
       errors.add :review_code, :invalid unless review_code =~ regex
+    end
+
+    def min_tag_count
+      prefix = organization&.prefix
+
+      WEAKNESS_TAG_COUNT_BY_ORGANIZATION.include?(prefix) ? WEAKNESS_TAG_COUNT_BY_ORGANIZATION[prefix].to_i : 2
     end
 
     def validate_tags_presence?
