@@ -469,14 +469,18 @@ module FindingsHelper
     end
 
     def data_options_for_suggested_follow_up_date
-      {
-        target_input_with_origination_date: '#weakness_origination_date',
-        target_input_with_risk: '#weakness_risk',
-        target_input_with_state: '#weakness_state',
-        target_values_states_change_label: states_that_suggest_follow_up_date,
-        days_to_add: suggestion_to_add_days_follow_up_date_depending_on_the_risk,
-        suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
-        target_input_with_label: '#weakness_follow_up_date'
-      }
+      if USE_SCOPE_CYCLE
+        {
+          target_input_with_origination_date: '#weakness_origination_date',
+          target_input_with_risk: '#weakness_risk',
+          target_input_with_state: '#weakness_state',
+          target_values_states_change_label: states_that_suggest_follow_up_date,
+          days_to_add: suggestion_to_add_days_follow_up_date_depending_on_the_risk,
+          suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
+          target_input_with_label: '#weakness_follow_up_date'
+        }
+      else
+        {}
+      end
     end
 end

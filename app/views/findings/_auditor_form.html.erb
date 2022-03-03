@@ -2,7 +2,6 @@
 <% show_history_changes = show_follow_up_timestamps? && @finding.status_change_history.size > 1 %>
 <% data_for_submit = data_for_submit @finding %>
 <% risk_justification = users_readonly || !@finding.manual_risk %>
-<% options_for_suggested_follow_up_date = USE_SCOPE_CYCLE ? data_options_for_suggested_follow_up_date : {} %>
 
 <%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completion_state], @finding),
     :html => {:method => :patch, :id => "edit_finding_#{@finding.id}"}.merge(data_for_submit) do |f| %>
@@ -70,7 +69,7 @@
             <div class="row">
               <div class="col">
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
-                  data: weakness_risk_data_options.merge(options_for_suggested_follow_up_date)
+                  data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date)
                 } %>
               </div>
             </div>
@@ -169,7 +168,7 @@
                                     data:
                                       { target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
                                         target_checkbox: '#finding_extension',
-                                        disabled_and_deny: true }.merge(options_for_suggested_follow_up_date)
+                                        disabled_and_deny: true }.merge(data_options_for_suggested_follow_up_date)
                                   }
                                 else
                                   {}
@@ -192,7 +191,7 @@
           <% end %>
         <% end %>
         <%= f.input :origination_date, as: :date_picker,
-          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: options_for_suggested_follow_up_date } %>
+          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: data_options_for_suggested_follow_up_date } %>
         <%= f.input :answer, input_html: { rows: finding_answer_rows } %>
         <div class="row">
           <div class="col-<%= USE_SCOPE_CYCLE ? 9 : 12 %>">

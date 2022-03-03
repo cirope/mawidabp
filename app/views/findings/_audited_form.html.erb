@@ -1,5 +1,3 @@
-<% options_for_suggested_follow_up_date = USE_SCOPE_CYCLE ? data_options_for_suggested_follow_up_date : {} %>
-
 <%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completion_state], @finding),
   html: { method: :patch, id: "edit_finding_#{@finding.id}"} do |f| %>
   <%= render 'shared/error_explanation', f: f %>
@@ -54,7 +52,7 @@
             <div class="row">
               <div class="col">
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
-                  data: weakness_risk_data_options.merge(options_for_suggested_follow_up_date)
+                  data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date)
                 } %>
               </div>
             </div>
@@ -69,14 +67,14 @@
         <%= f.label :state, Finding.human_attribute_name(:state) %>
 
         <% options_for_select = if USE_SCOPE_CYCLE
-                                  { data: options_for_suggested_follow_up_date }
+                                  { data: data_options_for_suggested_follow_up_date }
                                 else
                                   {}
                                 end %>
 
         <%= finding_status_field(f, disabled: true, options_html: options_for_select) %>
         <%= f.input :origination_date, as: :date_picker,
-          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: options_for_suggested_follow_up_date } %>
+          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: data_options_for_suggested_follow_up_date } %>
         <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, label:
           @finding.class.human_attribute_name(:follow_up_date), readonly: true %>

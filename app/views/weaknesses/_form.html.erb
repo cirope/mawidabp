@@ -19,8 +19,6 @@
                                                       input_with_state: '#weakness_state',
                                                       condition_to_receive_confirm: first_version_in_being_implementation?(@weakness) })
    end
-
-   options_for_suggested_follow_up_date = USE_SCOPE_CYCLE ? data_options_for_suggested_follow_up_date : {}
 %>
 
 <%= simple_form_for @weakness, form_options do |f| %>
@@ -87,7 +85,7 @@
       </div>
       <div class="col-md-6">
         <%= f.input :origination_date, as: :date_picker, input_html: {
-          readonly: (readonly || @weakness.repeated_of), data: options_for_suggested_follow_up_date
+          readonly: (readonly || @weakness.repeated_of), data: data_options_for_suggested_follow_up_date
         } %>
       <% if %w(bic).include? Current.conclusion_pdf_format %>
         <div class="row">
@@ -195,7 +193,7 @@
         <div class="row">
           <div class="col-9">
             <%= f.input :risk, collection: risks, prompt: true, disabled: @weakness.automatic_risk? || readonly, input_html: {
-              data: weakness_risk_data_options.merge(options_for_suggested_follow_up_date)
+              data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date)
             } %>
             <%= f.input :risk, as: :hidden, disabled: !@weakness.automatic_risk? %>
           </div>
@@ -228,7 +226,7 @@
                                     data:
                                       { target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
                                         target_checkbox: '#weakness_extension',
-                                        disabled_and_deny: true }.merge(options_for_suggested_follow_up_date)
+                                        disabled_and_deny: true }.merge(data_options_for_suggested_follow_up_date)
                                   }
                                 else
                                   {}
