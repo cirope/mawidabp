@@ -327,7 +327,7 @@ module ConclusionReviews::PatPdf
     def put_pat_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked.sort_by_code.where.not risk: Finding.risks[:none]
+      filtered   = weaknesses.not_revoked.where.not risk: Finding.risks[:none]
 
       if filtered.any?
         i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
@@ -340,7 +340,7 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        filtered.each do |weakness|
+        filtered.sort_by_code.each do |weakness|
           put_pat_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -433,8 +433,8 @@ module ConclusionReviews::PatPdf
     def put_pat_weaknesses_follow_up_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked.sort_by_code.where risk: Finding.risks[:none]
-      assigned   = review.assigned_weaknesses.sort_by_code
+      filtered   = weaknesses.not_revoked.where risk: Finding.risks[:none]
+      assigned   = review.assigned_weaknesses
 
       if filtered.any? || assigned.any?
         pdf.text I18n.t(
@@ -445,12 +445,12 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        filtered.each do |weakness|
+        filtered.sort_by_code.each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
 
-        assigned.each do |weakness|
+        assigned.sort_by_code.each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
