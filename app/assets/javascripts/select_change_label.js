@@ -18,12 +18,11 @@ jQuery(function () {
     var text                       = $labelTarget.text().split(element.data('suffix'))[0]
 
     if ((origination_date != null) && (risk != '') && (values_states_change_label.includes(parseInt(state)))) {
-      var days_to_add    = (element.data('daysToAdd'))[parseInt(risk)]
-      var suggested_date = new Date()
+      var days_to_add = (element.data('daysToAdd'))[parseInt(risk)]
 
-      suggested_date.setDate(origination_date.getDate() + days_to_add)
+      origination_date.setDate(origination_date.getDate() + days_to_add)
 
-      var text = text.concat(element.data('suffix')).concat(formatDate(suggested_date))
+      var text = text.concat(element.data('suffix')).concat(formatDate(origination_date))
     }
 
     $($labelTarget).text(text)
