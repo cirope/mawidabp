@@ -220,6 +220,8 @@ es:
         question: 'Pregunta'
       answers:
         answer_option: 'Opción'
+      auxiliar_business_unit_type:
+        business_unit_type_id: 'Unidad organizativa auxiliar'
       benefit:
         name: 'Nombre'
         kind: 'Tipo'
@@ -572,6 +574,7 @@ es:
         risk_exposure: 'Proyecto (exposición al riesgo)'
         business_unit_id: 'Proyecto (ciclo)'
         status: 'Proyecto (estado)'
+        auxiliar_business_unit_types: 'Unidades organizativas auxiliares'
       plan/plan_items/resource_utilizations:
         one: 'Recurso'
         other: 'Recursos'
@@ -785,6 +788,8 @@ es:
               locked: 'no pueden ser eliminados, ya se utilizaron en al menos un informe'
         plan_item:
           attributes:
+            auxiliar_business_unit_types:
+              taken: 'repetidas'
             start:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:

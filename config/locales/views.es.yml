@@ -508,6 +508,8 @@ es:
       material: 'Materiales'
 
   reviews:
+    auxiliar_business_unit_types:
+      title: 'Unidades organizativas auxiliares'
     index:
       control_objective_items_open:
         title: 'Objetivos de control abiertos'
