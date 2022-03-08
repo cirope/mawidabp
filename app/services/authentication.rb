@@ -87,6 +87,13 @@ class Authentication
           end
         end
 
+        if user.organization_roles.empty? && USE_SCOPE_CYCLE
+            default_role = default_saml_roles
+
+            user.organization_roles.create! organization_id: default_role.organization_id,
+                                            role_id:         default_role.id
+        end
+
         user.update! user:      attributes[:user],
                      email:     attributes[:email],
                      name:      attributes[:name],
@@ -99,6 +106,7 @@ class Authentication
 
     def create_user attributes
       roles = Role.where organization_id: @current_organization.id, name: attributes[:roles]
+      roles = default_saml_roles if add_roles.empty? && USE_SCOPE_CYCLE
 
       if roles.any?
         User.create!(
@@ -120,14 +128,8 @@ class Authentication
         name:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first,
         email:     Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first,
         last_name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first,
-        roles:     azure_roles_attributes(attributes)
+        roles:     attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
       }
-    end
-
-    def azure_roles_attributes attributes
-      roles =  attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
-
-      roles.present? ? roles : DEFAULT_SAML_ROLES
     end
 
     def unmasked_user
@@ -327,5 +329,9 @@ class Authentication
         login_record = LoginRecord.list.create!(user: @valid_user, request: @request)
         @session[:record_id] = login_record.id
       end
+    end
+
+    def default_saml_roles
+      Role.where(organization_id: @current_organization.id, name: DEFAULT_SAML_ROLES).take
     end
 end
