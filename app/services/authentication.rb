@@ -106,7 +106,7 @@ class Authentication
 
     def create_user attributes
       roles = Role.where organization_id: @current_organization.id, name: attributes[:roles]
-      roles = default_saml_roles if add_roles.empty? && USE_SCOPE_CYCLE
+      roles = Array(default_saml_roles) if roles.empty? && USE_SCOPE_CYCLE
 
       if roles.any?
         User.create!(
