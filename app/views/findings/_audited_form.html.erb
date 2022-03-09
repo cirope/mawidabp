@@ -52,7 +52,7 @@
             <div class="row">
               <div class="col">
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
-                  data: weakness_risk_data_options
+                  data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date)
                 } %>
               </div>
             </div>
@@ -67,20 +67,14 @@
         <%= f.label :state, Finding.human_attribute_name(:state) %>
 
         <% options_for_select = if USE_SCOPE_CYCLE
-                                  {
-                                    data:
-                                      { target_value_change_label: Finding::STATUS[:implemented_audited],
-                                        suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
-                                        target_input_with_label: '#weakness_follow_up_date' 
-                                      }
-                                  }
+                                  { data: data_options_for_suggested_follow_up_date }
                                 else
                                   {}
                                 end %>
 
         <%= finding_status_field(f, disabled: true, options_html: options_for_select) %>
         <%= f.input :origination_date, as: :date_picker,
-          label: Finding.human_attribute_name(:origination_date), readonly: true %>
+          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: data_options_for_suggested_follow_up_date } %>
         <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, label:
           @finding.class.human_attribute_name(:follow_up_date), readonly: true %>
