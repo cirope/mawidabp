@@ -332,6 +332,6 @@ class Authentication
     end
 
     def default_saml_roles
-      Role.where(organization_id: @current_organization.id, name: DEFAULT_SAML_ROLES)
+      Role.where organization_id: @current_organization.id, name: DEFAULT_SAML_ROLES
     end
 end
