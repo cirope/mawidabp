@@ -188,6 +188,10 @@ Rails.application.routes.draw do
       to: "follow_up_audit##{action}"
   end
 
+  get 'conclusion_reports/process_control_stats_csv', 
+    as: 'process_control_stats_csv_conclusion_reports', 
+    to: 'conclusion_reports#process_control_stats_csv'
+
   [
     'create_synthesis_report',
     'create_review_stats_report',
