@@ -9,7 +9,15 @@
       [:finding_multiple, true],
       [:risk_levels_multiple, { group: 1 }],
       [:business_unit_type_multiple, { group: 1 }],
-      [:priority, true]
+      [:priority, true],
+      [
+        :tags, {
+          field_name: :weakness_tags,
+          can_negate: true,
+          field_label: t('follow_up_committee_report.weaknesses_current_situation.weakness_tags'),
+          check_label: t('follow_up_committee_report.weaknesses_current_situation.negate_weakness_tags')
+        }
+      ]
     ]
   }
 %>

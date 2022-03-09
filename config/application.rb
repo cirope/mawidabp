@@ -44,6 +44,6 @@ module MawidaBP
 
     # Just needed for SAML + Azure AD
     config.middleware.use ActionDispatch::Cookies # Required for all session management
-    config.middleware.use ActionDispatch::Session::CookieStore #, config.session_options
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_mbp_session', domain: ".#{ENV['APP_HOST'].sub /:.*/, ''}", same_site: :strict
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_22_142340) do
+ActiveRecord::Schema.define(version: 2022_03_07_172716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1223,6 +1223,7 @@ ActiveRecord::Schema.define(version: 2021_12_22_142340) do
     t.datetime "updated_at", null: false
     t.string "reference"
     t.text "notes"
+    t.text "audit_recommendations"
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
     t.index ["reference"], name: "index_weakness_templates_on_reference"
   end
