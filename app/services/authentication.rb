@@ -88,10 +88,10 @@ class Authentication
         end
 
         if user.organization_roles.empty? && USE_SCOPE_CYCLE
-            default_role = default_saml_roles
-
+            default_saml_roles.each do |default_role|
             user.organization_roles.create! organization_id: default_role.organization_id,
                                             role_id:         default_role.id
+          end
         end
 
         user.update! user:      attributes[:user],
@@ -106,7 +106,7 @@ class Authentication
 
     def create_user attributes
       roles = Role.where organization_id: @current_organization.id, name: attributes[:roles]
-      roles = Array(default_saml_roles) if roles.empty? && USE_SCOPE_CYCLE
+      roles = default_saml_roles if roles.empty? && USE_SCOPE_CYCLE
 
       if roles.any?
         User.create!(
@@ -332,6 +332,6 @@ class Authentication
     end
 
     def default_saml_roles
-      Role.where(organization_id: @current_organization.id, name: DEFAULT_SAML_ROLES).take
+      Role.where(organization_id: @current_organization.id, name: DEFAULT_SAML_ROLES)
     end
 end
