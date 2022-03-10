@@ -20,6 +20,7 @@ module Weaknesses::Validations
               :internal_control_components,
               presence: true, if: :validate_extra_attributes?
     validates :compliance_observations, presence: true, if: :compliance_require_observations?
+    validate :fields_bic_cannot_modified
   end
 
   private
@@ -67,5 +68,19 @@ module Weaknesses::Validations
       self.operational_risk = Array(operational_risk).reject &:blank?
       self.internal_control_components =
         Array(internal_control_components).reject &:blank?
+    end
+
+    def fields_bic_cannot_modified
+      if repeated_of.present?
+        %i[year nsisio nobs].each do |attr|
+          errors.add attr, :different_from_repeated_of if self[attr] != repeated_of[attr]
+        end
+      elsif fields_bic_frozen?
+        %i[year nsisio nobs].each { |attr| errors.add attr, :frozen if send("#{attr}_changed?") }
+      end
+    end
+
+    def fields_bic_frozen?
+      review.try(:is_frozen?) || repeated?
     end
 end

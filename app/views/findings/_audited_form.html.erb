@@ -36,6 +36,19 @@
           <% end %>
           <%= f.input :audit_recommendations, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 5 : 2 } %>
         <% end %>
+        <% if %w(bic).include? Current.conclusion_pdf_format %>
+          <div class="row">
+            <div class="col-md-4">
+              <%= f.input :year, input_html: { readonly: true } %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :nsisio, input_html: { readonly: true } %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :nobs, input_html: { readonly: true } %>
+            </div>
+          </div>
+        <% end %>
       </div>
       <div class="col-md-6">
         <% if @finding.kind_of?(Weakness) %>
