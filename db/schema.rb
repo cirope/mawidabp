@@ -1225,6 +1225,7 @@ ActiveRecord::Schema.define(version: 2022_03_09_150058) do
     t.datetime "updated_at", null: false
     t.string "reference"
     t.text "notes"
+    t.text "audit_recommendations"
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
     t.index ["reference"], name: "index_weakness_templates_on_reference"
   end
