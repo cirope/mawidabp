@@ -39,8 +39,8 @@ module Findings::AutoRisk
     }
 
     SAMPLE_DEVIATION = {
-      less_expected: 150,
-      most_expected: 0
+      most_expected: 150,
+      less_expected: 0
     }
 
     IMPACT_RISKS_BIC = {
