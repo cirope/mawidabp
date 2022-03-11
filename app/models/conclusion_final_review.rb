@@ -113,7 +113,11 @@ class ConclusionFinalReview < ConclusionReview
           if finding.repeated_of.present?
             code = finding.repeated_of.review_code
           else
-            code = last_code = last_code.next
+            if finding.review_code.size == 8 && !review_code_final_exist?(finding.review_code)
+              code = finding.review_code
+            else
+              code = last_code = last_code.next
+            end
           end
 
           final_finding.review_code = finding.review_code = code
@@ -135,6 +139,10 @@ class ConclusionFinalReview < ConclusionReview
       Rails.logger.error ex.inspect
       raise ActiveRecord::Rollback
     end
+  end
+
+  def review_code_final_exist? code
+    Weakness.list.finals(true).where(review_code: code).exists?
   end
 
   def last_final_weakness

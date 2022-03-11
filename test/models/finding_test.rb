@@ -1948,6 +1948,23 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(follow_up_date_last_changed_expected, format: :minimal)
   end
 
+  test 'should return suggestion to add days follow up date depending on the risk' do
+    expected = {
+      0 => 180,
+      1 => 365,
+      2 => 270,
+      3 => 180
+    }
+
+    assert_equal Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk,
+                 expected
+  end
+
+  test 'should return states that suggest follow up date' do
+    assert_equal Finding.states_that_suggest_follow_up_date,
+                 [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
+  end
+
   private
 
     def new_email from, subject, body

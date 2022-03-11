@@ -233,7 +233,8 @@ class WeaknessesController < ApplicationController
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
         auto_complete_for_weakness_template: :read,
-        undo_reiteration: :modify
+        undo_reiteration: :modify,
+        weakness_template_changed: :read
       )
     end
 
