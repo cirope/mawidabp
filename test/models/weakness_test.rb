@@ -542,108 +542,108 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'valid with low risk' do
-    skip if Current.conclusion_pdf_format != 'bic' && !USE_SCOPE_CYCLE
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
 
-    @finding.manual_risk        = false
-    @finding.risk_justification = nil
+    @weakness.manual_risk        = false
+    @weakness.risk_justification = nil
 
-    @finding.state_regulations            = Finding.state_regulations[:exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:comply]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:most_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
-    @finding.probability                  = Finding.frequencies[:low]
-    @finding.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.state_regulations            = Finding.state_regulations[:exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:comply]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated]
 
-    assert @finding.valid?
+    assert @weakness.valid?
   end
 
   test 'invalid with low risk' do
-    skip if Current.conclusion_pdf_format != 'bic' && !USE_SCOPE_CYCLE
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
 
-    @finding.manual_risk        = false
-    @finding.risk               = Finding.risks[:high]
-    @finding.risk_justification = nil
+    @weakness.manual_risk        = false
+    @weakness.risk               = Finding.risks[:high]
+    @weakness.risk_justification = nil
 
-    @finding.state_regulations            = Finding.state_regulations[:exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:comply]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:most_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
-    @finding.probability                  = Finding.frequencies[:low]
-    @finding.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.state_regulations            = Finding.state_regulations[:exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:comply]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:most_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated]
 
-    refute @finding.valid?
+    refute @weakness.valid?
   end
 
   test 'valid with medium risk' do
-    skip if Current.conclusion_pdf_format != 'bic' && !USE_SCOPE_CYCLE
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
 
-    @finding.manual_risk        = false
-    @finding.risk               = Finding.risks[:medium]
-    @finding.risk_justification = nil
+    @weakness.manual_risk        = false
+    @weakness.risk               = Finding.risks[:medium]
+    @weakness.risk_justification = nil
 
-    @finding.state_regulations            = Finding.state_regulations[:not_exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:fails]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
-    @finding.probability                  = Finding.frequencies[:low]
-    @finding.external_repeated            = Finding.external_repeated[:no_repeated]
+    @weakness.state_regulations            = Finding.state_regulations[:not_exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:fails]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.external_repeated            = Finding.external_repeated[:no_repeated]
 
-    assert @finding.valid?
+    assert @weakness.valid?
   end
 
   test 'invalid with medium risk' do
-    skip if Current.conclusion_pdf_format != 'bic' && !USE_SCOPE_CYCLE
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
 
-    @finding.manual_risk        = false
-    @finding.risk_justification = nil
+    @weakness.manual_risk        = false
+    @weakness.risk_justification = nil
 
-    @finding.state_regulations            = Finding.state_regulations[:not_exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:fails]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:low]
-    @finding.probability                  = Finding.frequencies[:low]
-    @finding.external_repeated            = Finding.external_repeated[:no_repeated]
+    @weakness.state_regulations            = Finding.state_regulations[:not_exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:fails]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.external_repeated            = Finding.external_repeated[:no_repeated]
 
-    refute @finding.valid?
+    refute @weakness.valid?
   end
 
   test 'valid with high risk' do
-    skip if Current.conclusion_pdf_format != 'bic' && !USE_SCOPE_CYCLE
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
 
-    @finding.manual_risk        = false
-    @finding.risk               = Finding.risks[:high]
-    @finding.risk_justification = nil
+    @weakness.manual_risk        = false
+    @weakness.risk               = Finding.risks[:high]
+    @weakness.risk_justification = nil
 
-    @finding.state_regulations            = Finding.state_regulations[:not_exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:fails]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:high]
-    @finding.probability                  = Finding.frequencies[:high]
-    @finding.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.state_regulations            = Finding.state_regulations[:not_exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:fails]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:high]
+    @weakness.probability                  = Finding.frequencies[:high]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated]
 
-    assert @finding.valid?
+    assert @weakness.valid?
   end
 
   test 'invalid with high risk' do
-    skip if Current.conclusion_pdf_format != 'bic' && !USE_SCOPE_CYCLE
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
 
-    @finding.manual_risk        = false
-    @finding.risk_justification = nil
+    @weakness.manual_risk        = false
+    @weakness.risk_justification = nil
 
-    @finding.state_regulations            = Finding.state_regulations[:not_exist]
-    @finding.degree_compliance            = Finding.degree_compliance[:fails]
-    @finding.observation_originated_tests = Finding.observation_origination_tests[:design]
-    @finding.sample_deviation             = Finding.sample_deviation[:less_expected]
-    @finding.impact_risk                  = Finding.impact_risks_bic[:high]
-    @finding.probability                  = Finding.frequencies[:high]
-    @finding.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.state_regulations            = Finding.state_regulations[:not_exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:fails]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:high]
+    @weakness.probability                  = Finding.frequencies[:high]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated]
 
-    refute @finding.valid?
+    refute @weakness.valid?
   end
 
   private
