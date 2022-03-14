@@ -31,6 +31,8 @@ module AutoCompleteFor::BusinessUnitType
       plan_item.auxiliar_business_unit_types.each { |aux_but| excluded_ids << aux_but.business_unit_type_id }
 
       @business_unit_types = @business_unit_types.where.not(id: excluded_ids)
+    elsif params[:business_unit_type_id].present?
+      @business_unit_types = @business_unit_types.where.not(id: params[:business_unit_type_id])
     end
 
     respond_to do |format|

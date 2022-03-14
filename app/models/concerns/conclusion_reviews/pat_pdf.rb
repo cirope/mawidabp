@@ -49,7 +49,6 @@ module ConclusionReviews::PatPdf
     def put_pat_cover_header_on pdf, brief: false
       but_names = [review.business_unit_type.name] +
                   review.plan_item.auxiliar_business_unit_types.map { |aux_bu| aux_bu.business_unit_type.name }
-      to_text   = I18n.t 'conclusion_review.pat.cover.to', receiver: pat_receiver
       from_text = I18n.t 'conclusion_review.pat.cover.from', business_unit_types: but_names.to_sentence
 
       unless brief
@@ -62,7 +61,7 @@ module ConclusionReviews::PatPdf
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text "<i><b>#{to_text}</b></i>", inline_format: true
+      pat_to_text_pdf pdf
     end
 
     def put_pat_extra_brief_info_on pdf, organization
@@ -292,7 +291,7 @@ module ConclusionReviews::PatPdf
         pdf.text previous_title, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        previous.weaknesses.each do |weakness|
+        previous.weaknesses.sort_by_code.each do |weakness|
           put_pat_previous_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -341,7 +340,7 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        filtered.each do |weakness|
+        filtered.sort_by_code.each do |weakness|
           put_pat_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -446,12 +445,12 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        filtered.each do |weakness|
+        filtered.sort_by_code.each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
 
-        assigned.each do |weakness|
+        assigned.sort_by_code.each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -489,7 +488,7 @@ module ConclusionReviews::PatPdf
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
       weaknesses.not_revoked.any? ||
-        (review.plan_item.sustantive? && review.previous&.weaknesses&.any?)
+        (review.plan_item.sustantive? && review.previous&.weaknesses&.with_pending_status&.any?)
     end
 
     def put_pat_workflow_on pdf
@@ -509,8 +508,18 @@ module ConclusionReviews::PatPdf
       end
     end
 
-    def pat_receiver
-      I18n.t 'conclusion_review.pat.cover.audit_committee'
+    def pat_to_text_pdf pdf
+      receiver           = organization&.prefix == 'gpat' ? 'gpat_company' : 'audit_committee'
+      to_text_first_line = I18n.t 'conclusion_review.pat.cover.to', 
+                                  receiver: I18n.t("conclusion_review.pat.cover.#{receiver}")
+
+      pdf.text "<i><b>#{to_text_first_line}</b></i>", inline_format: true
+
+      if organization&.prefix == 'gpat'
+        pdf.indent(14) do
+          pdf.text "<i><b>#{I18n.t('conclusion_review.pat.cover.audit_committee')}</b></i>", inline_format: true
+        end
+      end
     end
 
     def put_pat_annexes_on pdf

@@ -126,7 +126,7 @@ module Reviews::Score
     if total <= medium_score
       self.score = hundred_percent - total
     elsif total <= high_score
-      min = ((hundre_percent - medium_score.next) / 3).to_i
+      min = ((hundred_percent - medium_score.next) / 3).to_i
       max = hundred_percent - medium_score.next
 
       self.score = max - ((total * min) / high_score)

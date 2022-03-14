@@ -8,6 +8,7 @@ $('[id^=weakness_internal_control_components]').prop('checked', false).trigger('
   $('[data-notes]').text('<%= j @weakness_template.notes %>')
   $('[name$="[brief]"]').val('<%= j @weakness_template.description %>')
   $('[name$="[risk]"]').val('<%= @weakness_template.risk %>')
+  $('[name$="[audit_recommendations]"]').val('<%= j @weakness_template.audit_recommendations %>')
 
   <% Array(@weakness_template.impact).each do |value| %>
     $('[id^=weakness_impact][value="<%= j value %>"]').prop('checked', true).trigger('custom:change')
@@ -25,4 +26,5 @@ $('[id^=weakness_internal_control_components]').prop('checked', false).trigger('
   $('[name$="[description]"]').val('')
   $('[name$="[risk]"]').val('')
   $('[data-notes]').text('')
+  $('[name$="[audit_recommendations]"]').val('')
 <% end %>
