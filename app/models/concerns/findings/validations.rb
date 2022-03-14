@@ -86,7 +86,7 @@ module Findings::Validations
       validate_state_work_paper_presence
       validate_state_revocation
       validate_state_transition
-      validate_state_repetition
+      #validate_state_repetition
       validate_state_user_if_final
     end
 

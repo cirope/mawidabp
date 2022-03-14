@@ -59,6 +59,7 @@ module Findings::Approval
         unanswered?                          ||
         assumed_risk?                        ||
         criteria_mismatch?                   ||
+        repeated?                            ||
         expired?
 
       unless has_valid_state
