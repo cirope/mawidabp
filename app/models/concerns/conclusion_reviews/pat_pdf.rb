@@ -291,7 +291,7 @@ module ConclusionReviews::PatPdf
         pdf.text previous_title, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        previous.weaknesses.each do |weakness|
+        previous.weaknesses.sort_by_code.each do |weakness|
           put_pat_previous_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -340,7 +340,7 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        filtered.each do |weakness|
+        filtered.sort_by_code.each do |weakness|
           put_pat_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -445,12 +445,12 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        filtered.each do |weakness|
+        filtered.sort_by_code.each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
 
-        assigned.each do |weakness|
+        assigned.sort_by_code.each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -488,7 +488,7 @@ module ConclusionReviews::PatPdf
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
       weaknesses.not_revoked.any? ||
-        (review.plan_item.sustantive? && review.previous&.weaknesses&.any?)
+        (review.plan_item.sustantive? && review.previous&.weaknesses&.with_pending_status&.any?)
     end
 
     def put_pat_workflow_on pdf

@@ -20,7 +20,7 @@ module Findings::Issues
   }
 
   def issues_amount
-    issues.sum &:amount
+    issues.map(&:amount).sum(&:to_i)
   end
 
   def issues_percentage
