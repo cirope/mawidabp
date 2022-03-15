@@ -166,13 +166,10 @@ jQuery(function ($) {
   })
 
   $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
-    $('select[name$="[risk]"]').attr('disabled', ! $(this).is(':checked'))
-    $('input[name$="[risk]"]').attr('disabled', $(this).is(':checked'))
     $('[data-bic-calculate-risk]').attr('disabled', $(this).is(':checked'))
-    $('[name$="[risk_justification]"]').attr('disabled', ! $(this).is(':checked'))
-    $('[data-risk-modifier]').change()
+    $('[data-bic-manual-risk]').attr('disabled', !$(this).is(':checked'))
 
-    if (! $(this).is(':checked')) {
+    if (!$(this).is(':checked')) {
       bicCalculatedRisk()
     }
   })
@@ -380,7 +377,7 @@ jQuery(function ($) {
     var total = 0
     var risk
 
-    $('[data-bic-calculate-risk]').each(function (i, e) {
+    $('select[data-bic-calculate-risk]').each(function (i, e) {
       total += +$(e).val()
     })
 
@@ -398,8 +395,8 @@ jQuery(function ($) {
     var riskChanged = $('[name$="[risk]"]').val() !== String(risk)
 
     if (riskChanged) {
-      $('[name$="[risk]"]:hidden').val(risk)
-      $('[name$="[risk]"]:visible').val(risk).trigger('change')
+      $('[name$="[risk]"]:enabled').val(risk)
+      $('[name$="[risk]"]:disabled').val(risk).trigger('change')
     }
   }
 
