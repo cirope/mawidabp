@@ -523,16 +523,16 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'invalid if not same sigen fields from repeated of' do
-    repeated_of = findings :being_implemented_weakness
-    repeated_of.year = 'year test'
+    repeated_of        = findings :being_implemented_weakness
+    repeated_of.year   = 'year test'
     repeated_of.nsisio = 'nsisio test'
-    repeated_of.nobs = 'nobs test'
+    repeated_of.nobs   = 'nobs test'
 
     repeated_of.save!
 
-    @weakness.year = 'test year'
-    @weakness.nsisio = 'test nsisio'
-    @weakness.nobs = 'test nobs'
+    @weakness.year        = 'test year'
+    @weakness.nsisio      = 'test nsisio'
+    @weakness.nobs        = 'test nobs'
     @weakness.repeated_of = repeated_of
 
     assert @weakness.invalid?
@@ -542,30 +542,30 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'valid if same sigen fields from repeated of' do
-    repeated_of = findings :being_implemented_weakness
-    repeated_of.year = 'year test'
+    repeated_of        = findings :being_implemented_weakness
+    repeated_of.year   = 'year test'
     repeated_of.nsisio = 'nsisio test'
-    repeated_of.nobs = 'nobs test'
+    repeated_of.nobs   = 'nobs test'
 
     repeated_of.save!
 
-    @weakness.year = 'year test'
-    @weakness.nsisio = 'nsisio test'
-    @weakness.nobs = 'nobs test'
+    @weakness.year        = 'year test'
+    @weakness.nsisio      = 'nsisio test'
+    @weakness.nobs        = 'nobs test'
     @weakness.repeated_of = repeated_of
-   
+
     assert @weakness.valid?
   end
 
   test 'invalid if change sigen field when frozen final review' do
-    conclusion_final_review = @weakness.review.conclusion_final_review
+    conclusion_final_review            = @weakness.review.conclusion_final_review
     conclusion_final_review.close_date = Time.zone.today - 1.days
 
     conclusion_final_review.save!
 
-    @weakness.year = 'year test'
+    @weakness.year   = 'year test'
     @weakness.nsisio = 'nsisio test'
-    @weakness.nobs = 'nobs test'
+    @weakness.nobs   = 'nobs test'
 
     assert @weakness.invalid?
     assert_error @weakness, :year, :frozen
@@ -578,9 +578,9 @@ class WeaknessTest < ActiveSupport::TestCase
 
     @weakness.save!
 
-    @weakness.year = 'year test'
+    @weakness.year   = 'year test'
     @weakness.nsisio = 'nsisio test'
-    @weakness.nobs = 'nobs test'
+    @weakness.nobs   = 'nobs test'
 
     assert @weakness.invalid?
     assert_error @weakness, :year, :frozen
@@ -589,9 +589,9 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'valid if change sigen field when no frozen final review and no repeated state' do
-    @weakness.year = 'year test'
+    @weakness.year   = 'year test'
     @weakness.nsisio = 'nsisio test'
-    @weakness.nobs = 'nobs test'
+    @weakness.nobs   = 'nobs test'
 
     assert @weakness.valid?
   end
