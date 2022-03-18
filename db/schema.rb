@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_07_172716) do
+ActiveRecord::Schema.define(version: 2022_03_16_162005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -293,6 +293,13 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.index ["type"], name: "index_conclusion_reviews_on_type"
   end
 
+  create_table "control_objective_auditors", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "control_objective_id"
+    t.index ["control_objective_id"], name: "index_control_objective_auditors_on_control_objective_id"
+    t.index ["user_id"], name: "index_control_objective_auditors_on_user_id"
+  end
+
   create_table "control_objective_items", id: :serial, force: :cascade do |t|
     t.text "control_objective_text"
     t.integer "order_number"
@@ -346,6 +353,8 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.boolean "obsolete", default: false
     t.string "support"
     t.string "score_type", default: "option", null: false
+    t.string "audit_sector"
+    t.date "date_charge"
     t.index ["obsolete"], name: "index_control_objectives_on_obsolete"
     t.index ["process_control_id"], name: "index_control_objectives_on_process_control_id"
   end

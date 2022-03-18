@@ -1,5 +1,6 @@
 <% id = f.object.object_id %>
 <% process_control_id = process_control_id %>
+<% control_objective = f.object %>
 
 <fieldset class="control_objective">
   <div class="form-inputs">
@@ -81,6 +82,43 @@
         <%= c_f.input :order, as: :hidden %>
       <% end %>
     </div>
+
+    <% if Current.conclusion_pdf_format == 'gal' %>
+      <div class="row">
+        <div class="col-md-2">
+          <%= f.input :audit_sector, collection: audit_sectors_gal, prompt: true %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :date_charge, as: :date_picker %>
+        </div>
+      </div>
+
+      <div class="card mb-2">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <%= ControlObjectiveAuditor.model_name.human count: 0 %>
+          </h5>
+        </div>
+        <div class="card-body">
+          <div id="control_objective_auditors_<%= id %>">
+            <% control_objective.control_objective_auditors.each do |control_objective_auditor| %>
+              <% control_objective_auditor_child_index = control_objective.control_objective_auditors.index control_objective_auditor %>
+              <%= f.simple_fields_for :control_objective_auditors, control_objective_auditor, child_index: control_objective_auditor_child_index do |aux_coa_f| %>
+                <%= render 'control_objectives/control_objective_auditor', f: aux_coa_f %>
+              <% end %>
+            <% end %>
+          </div>
+    
+          <%= link_to_add_fields(
+            t('control_objectives.new.control_objective_auditor'),
+            f, :control_objective_auditors, 'control_objectives/control_objective_auditor', {
+              insert_into: "#control_objective_auditors_#{id}",
+              association: 'control_objective_auditors'
+            }, { control_objective_id: control_objective.id }
+          ) %>
+        </div>
+      </div>
+    <% end %>
   </div>
   <div class="card">
     <div class="card-header">

@@ -1,0 +1,43 @@
+<%
+  id = f.object.object_id
+  control_objective_auditor = f.object
+%>
+<fieldset class="control_objective_auditor">
+  <div class="row" data-nested>
+    <div class="col-md-11">
+      <% if control_objective_auditor.user.blank? %>
+        <%= f.input :user_id, as: :string, label: false, input_html: {
+          value: control_objective_auditor.user.try(:full_name_with_function),
+          id: "control_objective_auditor_#{id}",
+          title: t('label.search'), 
+          autocomplete: :off, 
+          autofocus: true,
+          data: {
+            autocomplete_params: {
+              control_objective_id: control_objective_id
+            },
+            autocomplete_url: url_for([:auto_complete_for_control_objective_auditor, ControlObjective]),
+            autocomplete_id_target: "#hidden_control_objective_auditor_#{id}"
+          }
+        } %>
+      <% else %>
+        <%= f.input :user_id, 
+                    label: false, 
+                    input_html: { 
+                      name: "control_objective_auditor_#{id}", 
+                      value: control_objective_auditor.user.full_name_with_function, 
+                      type: 'text', 
+                      readonly: true 
+                    } %>
+      <% end %>
+      <%= f.input :user_id, 
+                  as: :hidden, 
+                  input_html: { id: "hidden_control_objective_auditor_#{id}" } %>
+    </div>
+    <div class="col-md-1">
+      <div class="mt-2 text-right">
+        <%= link_to_remove_nested_item f %>
+      </div>
+    </div>
+  </div>
+</fieldset>
