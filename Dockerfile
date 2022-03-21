@@ -63,6 +63,7 @@ COPY Gemfile $APP_ROOT/Gemfile
 COPY Gemfile.lock $APP_ROOT/Gemfile.lock
 
 WORKDIR $APP_ROOT
+
 RUN gem install bundler --no-document --force        && \
     bundle config set deployment 'true'              && \
     bundle config --global silence_root_warning true && \
