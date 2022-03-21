@@ -1,4 +1,4 @@
-FROM centos/ruby-25-centos7
+FROM centos/ruby-26-centos7
 
 ENV APP_ROOT /opt/app
 
@@ -63,7 +63,6 @@ COPY Gemfile $APP_ROOT/Gemfile
 COPY Gemfile.lock $APP_ROOT/Gemfile.lock
 
 WORKDIR $APP_ROOT
-
 RUN gem install bundler --no-document --force        && \
     bundle config set deployment 'true'              && \
     bundle config --global silence_root_warning true && \
@@ -73,8 +72,8 @@ COPY . $APP_ROOT
 COPY config/application.bh.yml $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
-RUN bundle config set deployment 'false' && \
-    bundle exec rake help:install        && \
+RUN gem install bunlder
+RUN bundle exec rake help:install        && \
     bundle exec rake help:generate
 
 RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
