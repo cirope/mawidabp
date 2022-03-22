@@ -11,6 +11,7 @@ class AttachedReportJob < ApplicationJob
     organization_id = args.fetch :organization_id
 
     Current.organization = Organization.find organization_id
+    Current.user         = User.list.find user_id
 
     scope        = build_scope_for model, query_methods
     report       = scope.send method_name, **options
