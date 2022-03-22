@@ -10,8 +10,8 @@ module AutoCompleteFor::ControlObjectiveAuditor
       columns: ::User::COLUMNS_FOR_SEARCH.keys
     )[:conditions]
 
-    control_objective    = ControlObjective.find params[:control_objective_id]
-    excluded_ids         = control_objective.control_objective_auditors.map { |coa| coa.user.id }
+    control_objective = ControlObjective.find params[:control_objective_id]
+    excluded_ids      = control_objective.control_objective_auditors.map { |coa| coa.user.id }
 
     @users = User.where.not(id: excluded_ids).auditors.not_hidden.where(conditions).limit(10)
 

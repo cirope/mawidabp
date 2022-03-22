@@ -86,7 +86,7 @@
     <% if Current.conclusion_pdf_format == 'gal' %>
       <div class="row">
         <div class="col-md-2">
-          <%= f.input :audit_sector, collection: audit_sectors_gal, prompt: true %>
+          <%= f.input :audit_sector, collection: gal_audit_sectors, prompt: true %>
         </div>
         <div class="col-md-3">
           <%= f.input :date_charge, as: :date_picker %>
@@ -110,7 +110,7 @@
           </div>
     
           <%= link_to_add_fields(
-            t('control_objectives.new.control_objective_auditor'),
+            t('control_objectives.new.add_control_objective_auditor'),
             f, :control_objective_auditors, 'control_objectives/control_objective_auditor', {
               insert_into: "#control_objective_auditors_#{id}",
               association: 'control_objective_auditors'
