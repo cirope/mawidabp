@@ -220,6 +220,8 @@ es:
         question: 'Pregunta'
       answers:
         answer_option: 'Opción'
+      auxiliar_business_unit_type:
+        business_unit_type_id: 'Unidad organizativa auxiliar'
       benefit:
         name: 'Nombre'
         kind: 'Tipo'
@@ -344,6 +346,9 @@ es:
         sample_deviation: 'Desvio de la muestra'
         external_repeated: 'Reiterada externa'
         risk_justification: 'Justificar riesgo'
+        year: 'Año'
+        nsisio: 'NSISIO'
+        nobs: 'Nobs'
       finding/achievements:
         one: 'Beneficio estimado'
         amount: 'Monto'
@@ -569,6 +574,7 @@ es:
         risk_exposure: 'Proyecto (exposición al riesgo)'
         business_unit_id: 'Proyecto (proceso crítico)'
         status: 'Proyecto (estado)'
+        auxiliar_business_unit_types: 'Unidades organizativas auxiliares'
       plan/plan_items/resource_utilizations:
         one: 'Recurso'
         other: 'Recursos'
@@ -717,6 +723,9 @@ es:
         impact_risk: 'Impacto'
         manual_risk: 'Manual'
         extension: 'Días de gracia'
+        year: 'Año'
+        nsisio: 'NSISIO'
+        nobs: 'Nobs'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
@@ -729,6 +738,7 @@ es:
         notes: 'Notas'
         internal_control_components: 'Componentes de CI'
         allow_duplication: 'Permitir título duplicado'
+        audit_recommendations: 'Recomendaciones de auditoría'
 
     errors:
       models:
@@ -782,6 +792,8 @@ es:
               locked: 'no pueden ser eliminados, ya se utilizaron en al menos un informe'
         plan_item:
           attributes:
+            auxiliar_business_unit_types:
+              taken: 'repetidas'
             start:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
