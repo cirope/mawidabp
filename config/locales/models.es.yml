@@ -711,6 +711,7 @@ es:
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
         compliance_observations: 'Norma que impacta'
+        compliance_susceptible_to_sanction: 'Suceptible a sanción'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
@@ -763,6 +764,8 @@ es:
               reference_auditor_required: 'debe tener un auditor referente'
             risk_justification:
               present: 'No debe tener justificacion de riesgo'
+            compliance_susceptible_to_sanction:
+              inclusion: 'debe ser uno de la lista'
         finding_user_assignment:
           attributes:
             user:

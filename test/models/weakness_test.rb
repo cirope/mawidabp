@@ -511,15 +511,24 @@ class WeaknessTest < ActiveSupport::TestCase
     refute weakness.rescheduled?
   end
 
-  test 'compliance observations attribute not be empty when option is yes' do
+  test 'invalids compliance observations attributtes' do
     skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
 
-    weakness = findings :being_implemented_weakness_on_approved_draft
+    @weakness.compliance = 'yes'
 
-    weakness.compliance = 'yes'
+    assert @weakness.invalid?
+    assert_error @weakness, :compliance_observations, :blank
+    assert_error @weakness, :compliance_susceptible_to_sanction, :inclusion
+  end
 
-    assert weakness.invalid?
-    assert_error weakness, :compliance_observations, :blank
+  test 'valids compliance observations attributtes' do
+    skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+
+    @weakness.compliance                         = 'yes'
+    @weakness.compliance_observations            = 'test'
+    @weakness.compliance_susceptible_to_sanction = COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values.first
+
+    assert @weakness.valid?
   end
 
   test 'invalid if not same sigen fields from repeated of' do
@@ -719,6 +728,8 @@ class WeaknessTest < ActiveSupport::TestCase
 
     refute @weakness.valid?
   end
+
+  
 
   private
 
