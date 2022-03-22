@@ -249,7 +249,10 @@ class WeaknessesControllerTest < ActionController::TestCase
                 comment: 'Test',
                 user_id: users(:administrator).id
               }
-            ]
+            ],
+            year: 'test year',
+            nsisio: 'test nsisio',
+            nobs: 'test nobs'
           }
         }
       end
@@ -371,7 +374,10 @@ class WeaknessesControllerTest < ActionController::TestCase
                   status: 'pending',
                   due_on: I18n.l(Time.zone.tomorrow)
                 }
-              ]
+              ],
+              year: 'test year',
+              nsisio: 'test nsisio',
+              nobs: 'test nobs'
             }
           }
         end

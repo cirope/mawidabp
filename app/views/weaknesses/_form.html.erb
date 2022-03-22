@@ -81,6 +81,19 @@
           <%= f.input :effect, input_html: { readonly: readonly, rows: 5 } %>
         <% end %>
         <%= f.input :audit_recommendations, input_html: { readonly: readonly, rows: HIDE_WEAKNESS_EFFECT ? 7 : 5 } %>
+        <% if %w(bic).include? Current.conclusion_pdf_format %>
+          <div class="row">
+            <div class="col-md-4">
+              <%= f.input :year, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } }%>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :nsisio, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } } %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :nobs, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } } %>
+            </div>
+          </div>
+        <% end %>
       </div>
       <div class="col-md-6">
         <%= f.input :origination_date, as: :date_picker, input_html: {
