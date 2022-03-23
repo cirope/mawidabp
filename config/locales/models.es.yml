@@ -352,6 +352,9 @@ es:
         sample_deviation: 'Desvio de la muestra'
         external_repeated: 'Reiterada externa'
         risk_justification: 'Justificar riesgo'
+        year: 'Año'
+        nsisio: 'NSISIO'
+        nobs: 'Nobs'
       finding/achievements:
         one: 'Beneficio estimado'
         amount: 'Monto'
@@ -730,6 +733,9 @@ es:
         impact_risk: 'Impacto'
         manual_risk: 'Manual'
         extension: 'Días de gracia'
+        year: 'Año'
+        nsisio: 'NSISIO'
+        nobs: 'Nobs'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:

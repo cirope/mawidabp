@@ -1197,6 +1197,9 @@ es:
         hide_review_logo: "Ocultar logo en informes"
         independent_identification: "Numeración independiente"
         shared_business_units: "Unidades de negocio compartidas"
+        without_number: "Sin número"
+        reviews_for: "Informes para"
+        detailed_review: "Informe detallado"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
