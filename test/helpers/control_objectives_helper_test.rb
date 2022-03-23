@@ -4,8 +4,8 @@ require 'test_helper'
 
 class ControlObjectivesHelperTest < ActionView::TestCase
   test 'Should return audit sectors gal' do
-    expected = ControlObjective::AUDIT_SECTORS_GAL.map { |sector| [sector, sector] }
+    expected = ControlObjective::GAL_AUDIT_SECTORS.map { |sector| [sector, sector] }
 
-    assert_equal expected, audit_sectors_gal
+    assert_equal expected, gal_audit_sectors
   end
 end
