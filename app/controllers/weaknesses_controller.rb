@@ -213,7 +213,7 @@ class WeaknessesController < ApplicationController
           :user_id, :comment
         ],
         image_model_attributes: [
-          :id, :image, :image_cache
+          :id, :image, :image_cache, :_destroy
         ]
       )
 
