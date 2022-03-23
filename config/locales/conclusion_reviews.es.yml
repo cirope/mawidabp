@@ -68,7 +68,7 @@ es:
     pat:
       cover:
         from: "Banco Patagonia S.A.\nGerencia de Auditoría Interna\n%{business_unit_types}"
-        to: "A: %{receiver}."
+        to: "A: %{receiver}"
         audit_committee: 'Comité de Auditoría'
         gpat_company: "GPAT Compañía Financiera S.A.U."
         scope:

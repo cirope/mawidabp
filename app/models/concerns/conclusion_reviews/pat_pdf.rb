@@ -258,9 +258,15 @@ module ConclusionReviews::PatPdf
       pdf.put_hr
       pdf.move_down PDF_FONT_SIZE * 8
 
+      style_options = { style: :italic, align: :center }
+
       if manager
-        pdf.text manager.informal_name, style: :italic, align: :center
-        pdf.text manager.function, style: :italic, align: :center
+        pdf.text manager.informal_name, style_options
+        pdf.text manager.function, style_options
+
+        if organization&.prefix == 'gpat'
+          pdf.text I18n.t('conclusion_review.pat.cover.organization'), style_options
+        end
       end
     end
 
@@ -291,7 +297,7 @@ module ConclusionReviews::PatPdf
         pdf.text previous_title, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        previous.weaknesses.each do |weakness|
+        previous.weaknesses.sort_by_code.each do |weakness|
           put_pat_previous_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -340,7 +346,7 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        filtered.each do |weakness|
+        filtered.sort_by_code.each do |weakness|
           put_pat_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -445,12 +451,12 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        filtered.each do |weakness|
+        filtered.sort_by_code.each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
 
-        assigned.each do |weakness|
+        assigned.sort_by_code.each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -488,7 +494,7 @@ module ConclusionReviews::PatPdf
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
       weaknesses.not_revoked.any? ||
-        (review.plan_item.sustantive? && review.previous&.weaknesses&.any?)
+        (review.plan_item.sustantive? && review.previous&.weaknesses&.with_pending_status&.any?)
     end
 
     def put_pat_workflow_on pdf
@@ -510,7 +516,7 @@ module ConclusionReviews::PatPdf
 
     def pat_to_text_pdf pdf
       receiver           = organization&.prefix == 'gpat' ? 'gpat_company' : 'audit_committee'
-      to_text_first_line = I18n.t 'conclusion_review.pat.cover.to', 
+      to_text_first_line = I18n.t 'conclusion_review.pat.cover.to',
                                   receiver: I18n.t("conclusion_review.pat.cover.#{receiver}")
 
       pdf.text "<i><b>#{to_text_first_line}</b></i>", inline_format: true
