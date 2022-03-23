@@ -323,8 +323,9 @@
                   <%= im_f.input :image, label: false %>
                 <% end %>
               </div>
+            <%= link_to_download_image im_f %>
+            <%= link_to_remove_has_one_image im_f %>
             <% end %>
-            <%= link_to_download_image f.object %>
           </div>
         <% end %>
       </div>
