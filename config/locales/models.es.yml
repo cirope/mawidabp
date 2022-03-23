@@ -25,6 +25,12 @@ es:
       annex:
         one: 'Anexo'
         other: 'Anexos'
+      activity:
+        one: 'Actividad'
+        other: 'Actividades'
+      activity_group:
+        one: 'Grupo actividad'
+        other: 'Grupo de actividades'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -178,6 +184,9 @@ es:
       task:
         one: 'Tarea'
         other: 'Tareas'
+      time_consumption:
+        one: 'Actividad'
+        other: 'Actividades'
       user:
         one: 'Usuario'
         other: 'Usuarios'
@@ -200,12 +209,19 @@ es:
         title: 'Título'
         description: 'Descripción'
         image_models: 'Imágenes'
+      activity:
+        name: 'Nombre'
+        require_detail: 'Require detalle'
+      activity_group:
+        name: 'Nombre'
       answer:
         answer: 'Respuesta'
         comments: 'Comentarios respuesta'
         question: 'Pregunta'
       answers:
         answer_option: 'Opción'
+      auxiliar_business_unit_type:
+        business_unit_type_id: 'Unidad organizativa auxiliar'
       benefit:
         name: 'Nombre'
         kind: 'Tipo'
@@ -233,9 +249,6 @@ es:
       business_unit_type_users:
         business_unit_type_id: "Unidad organizativa"
         user_id: "Usuario"
-      business_unit_type_reviews:
-        business_unit_type_id: "Unidad organizativa"
-        review_id: "Informe"
       business_unit_score:
         business_unit_id: 'Unidad de negocio'
         design_score: 'Calificación pruebas de diseño'
@@ -326,6 +339,16 @@ es:
         impact_amount: 'Monto universo'
         probability_amount: 'Universo en cantidad de casos'
         organization: 'Organización'
+        frequency: 'Frecuencia'
+        state_regulations: 'Normativa Estado'
+        degree_compliance: 'Grado Cumpliento Normativa'
+        observation_originated_tests: 'Originada en prueba de'
+        sample_deviation: 'Desvio de la muestra'
+        external_repeated: 'Reiterada externa'
+        risk_justification: 'Justificar riesgo'
+        year: 'Año'
+        nsisio: 'NSISIO'
+        nobs: 'Nobs'
       finding/achievements:
         one: 'Beneficio estimado'
         amount: 'Monto'
@@ -497,6 +520,12 @@ es:
         description: 'Descripción'
         status: 'Estado'
         due_on: 'Fecha de finalización'
+      time_consumption:
+        date: 'Fecha'
+        activity: 'Actividad'
+        resource_id: 'Recurso'
+        amount: 'Tiempo en horas'
+        detail: 'Detalle'
       user:
         email: 'Correo'
         enable: 'Habilitado'
@@ -545,6 +574,7 @@ es:
         risk_exposure: 'Proyecto (exposición al riesgo)'
         business_unit_id: 'Proyecto (unidad de negocio)'
         status: 'Proyecto (estado)'
+        auxiliar_business_unit_types: 'Unidades organizativas auxiliares'
       plan/plan_items/resource_utilizations:
         one: 'Recurso'
         other: 'Recursos'
@@ -689,9 +719,13 @@ es:
         work_papers: 'Papeles de trabajo'
         implemented_at: 'Fecha de cambio a "Implementada"'
         closed_at: 'Fecha del último cambio de estado'
-        probability: 'Probabilidad'
+        probability: 'Probabilidad ocurrencia'
         impact_risk: 'Impacto'
         manual_risk: 'Manual'
+        extension: 'Días de gracia'
+        year: 'Año'
+        nsisio: 'NSISIO'
+        nobs: 'Nobs'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
@@ -704,6 +738,7 @@ es:
         notes: 'Notas'
         internal_control_components: 'Componentes de CI'
         allow_duplication: 'Permitir título duplicado'
+        audit_recommendations: 'Recomendaciones de auditoría'
 
     errors:
       models:
@@ -722,6 +757,12 @@ es:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
               required: 'debe tener un auditado responsable'
               must_have_a_manager: 'debe contener un gerente de auditoría'
+            extension:
+              must_be_being_implemented: 'Para indicar que es %{extension} debe estar en estado %{state}'
+              had_no_extension_when_being_implemented: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension}'
+              reference_auditor_required: 'debe tener un auditor referente'
+            risk_justification:
+              present: 'No debe tener justificacion de riesgo'
         finding_user_assignment:
           attributes:
             user:
@@ -751,6 +792,8 @@ es:
               locked: 'no pueden ser eliminados, ya se utilizaron en al menos un informe'
         plan_item:
           attributes:
+            auxiliar_business_unit_types:
+              taken: 'repetidas'
             start:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:

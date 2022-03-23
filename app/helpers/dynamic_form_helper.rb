@@ -61,6 +61,32 @@ module DynamicFormHelper
     raw out
   end
 
+  def link_to_remove_has_one_image(form)
+    id  = form.object.object_id
+    out = ''
+
+    if form.object.persisted?
+      out << form.hidden_field(
+        :_destroy,
+        class: 'destroy',
+        value: 0,
+        id: "remove_image_model_hidden_#{id}"
+      )
+      out << link_to(
+        icon('fas', 'times-circle'), '#',
+        title: t('label.delete'),
+        class: 'ml-2',
+        data: {
+          'dynamic-target' => "#image_model_#{id}",
+          'dynamic-form-event' => 'hideItembutton',
+          'show-tooltip' => true
+        }
+      )
+    end
+
+    raw out
+  end
+
   def link_to_remove_support_file(form)
     id         = form.object.object_id
     out        = ''

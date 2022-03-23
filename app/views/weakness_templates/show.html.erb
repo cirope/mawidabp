@@ -15,6 +15,10 @@
   <%= simple_format @weakness_template.notes, class: 'mb-1' %>
 </p>
 <p class="mb-1">
+  <strong><%= WeaknessTemplate.human_attribute_name 'audit_recommendations' %></strong>:
+  <%= simple_format @weakness_template.audit_recommendations, class: 'mb-1' %>
+</p>
+<p class="mb-1">
   <strong><%= WeaknessTemplate.human_attribute_name 'risk' %></strong>:
   <%= @weakness_template.risk_text %>
 </p>

@@ -2,7 +2,8 @@ class ConclusionFinalReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_final_review, only: [
     :show, :edit, :update, :destroy, :export_to_pdf, :score_sheet,
-    :download_work_papers, :create_bundle, :compose_email, :send_by_email
+    :download_work_papers, :create_bundle, :compose_email, :send_by_email,
+    :export_to_rtf
   ]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
@@ -132,6 +133,18 @@ class ConclusionFinalReviewsController < ApplicationController
     end
   end
 
+  # Exporta el informe en formato RTF
+  #
+  # * GET /conclusion_draft_reviews/export_to_rtf/1
+  def export_to_rtf
+    respond_to do |format|
+      format.rtf do
+        render rtf: @conclusion_final_review.to_rtf(current_organization),
+               filename: @conclusion_final_review.rtf_name
+      end
+    end
+  end
+
   # Crea la planilla de calificación del informe en formato PDF
   #
   # * GET /conclusion_final_reviews/score_sheet/1
@@ -204,6 +217,8 @@ class ConclusionFinalReviewsController < ApplicationController
         export_options[:brief] = '1'
       elsif review_type == 'without_score'
         export_options[:hide_score] = '1'
+      elsif review_type == 'expanded'
+        export_options[:expanded] = '1'
       end
     end
 
@@ -393,7 +408,7 @@ class ConclusionFinalReviewsController < ApplicationController
         :affects_compliance, :collapse_control_objectives,
         :reference, :scope, :previous_identification, :previous_date,
         :main_recommendations, :effectiveness_notes, :additional_comments,
-        :lock_version,
+        :lock_version, :exclude_regularized_findings,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [

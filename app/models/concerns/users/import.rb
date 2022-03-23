@@ -16,6 +16,36 @@ module Users::Import
     end
 
     def import_from_file prefix
+      if extra_users_info_format(prefix) == 'peoplesoft_txt'
+        peoplesoft_file prefix
+      elsif extra_users_info_format(prefix) == 'pat_txt'
+        pat_file prefix
+      else
+        raise I18n.t 'errors.messages.unknown_format'
+      end
+    end
+
+    def pat_file prefix
+      options  = { col_sep: ';', headers: true }
+
+      CSV.foreach(extra_users_info_attr(prefix, 'path'), options) do |row|
+        roles  = find_role I18n.t 'role.type_audited'
+        header = extra_users_info_headers prefix
+        data   = trivial_data_pat header, row
+        user   = find_user data
+
+        User.transaction do
+          if roles.present?
+            user_audited = user if user&.can_act_as_audited?
+            process_args = { user: user_audited, roles: roles, data: data }
+
+            process_entry user, **process_args
+          end
+        end
+      end
+    end
+
+    def peoplesoft_file prefix
       users   = {}
       options = { col_sep: ';' }
 
@@ -26,17 +56,28 @@ module Users::Import
         ou        = row[1]&.gsub /\A(cn|uid)=[\w\s]+,/i, ''
 
         if role_allowed?(role) && username.present?
-          users[username] ||= {}
+          users[username]        ||= {}
+          users[username][:role] ||= []
 
-          role = users[username].has_key?(:role) ? users[username][:role].push(role) : [role]
+          users[username][:role] << role
 
-          users[username].merge!(role: role, user: user_ldap, ou: ou)
+          users[username].merge!(user: user_ldap, ou: ou)
         end
       end
 
       User.transaction do
         import_extra_users_info_role users, prefix
       end
+    end
+
+    def log_error error
+      Rails.logger.error error
+    end
+
+    def file_log_error error
+      logger = Logger.new "log/import_#{Time.zone.today.to_s :db}.log"
+
+      logger.error "Exception occurred import\n#{error}"
     end
 
     private
@@ -106,7 +147,13 @@ module Users::Import
                   :created
                 end
 
-        state = :errored if user.errors.any?
+        if user.errors.any?
+          state = :errored
+          error = [:errored, "user: #{user.user}", user.errors.messages].join ' - '
+
+          log_error error
+          file_log_error error
+        end
 
         { user: user, state: state }
       end
@@ -165,6 +212,18 @@ module Users::Import
         }
       end
 
+      def trivial_data_pat header, row
+        {
+          name: row[header['name']],
+          last_name: row[header['lastname']],
+          user: row[header['user']],
+          email: row[header['email']],
+          hidden: false,
+          enable: true,
+          organizational_unit: ''
+        }
+      end
+
       def assign_managers managers, users_by_file
         managers.each do |user, manager|
           manager_id = if users_by_file[manager] == user.user
@@ -195,6 +254,10 @@ module Users::Import
 
       def extra_users_info_prefixes
         EXTRA_USERS_INFO.keys
+      end
+
+      def extra_users_info_headers prefix
+        extra_users_info_attr prefix, 'header'
       end
     end
 end

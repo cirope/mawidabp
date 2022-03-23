@@ -22,8 +22,17 @@ module AutoCompleteFor::BusinessUnitType
       [conditions.map { |c| "(#{c})" }.join(' AND '), parameters]
     ).order(name: :asc).limit(10)
 
-    if params[:excluded_id].present?
-      @business_unit_types = @business_unit_types.where.not(id: params[:excluded_id])
+    if params[:plan_item_id].present?
+      plan_item    = PlanItem.find params[:plan_item_id]
+      excluded_ids = []
+
+      excluded_ids << plan_item.business_unit_type.id
+
+      plan_item.auxiliar_business_unit_types.each { |aux_but| excluded_ids << aux_but.business_unit_type_id }
+
+      @business_unit_types = @business_unit_types.where.not(id: excluded_ids)
+    elsif params[:business_unit_type_id].present?
+      @business_unit_types = @business_unit_types.where.not(id: params[:business_unit_type_id])
     end
 
     respond_to do |format|

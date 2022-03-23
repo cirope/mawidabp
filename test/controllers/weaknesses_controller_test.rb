@@ -162,7 +162,9 @@ class WeaknessesControllerTest < ActionController::TestCase
             internal_control_components: ['risk_evaluation', 'monitoring'],
             impact_risk: Finding.impact_risks[:small],
             probability: Finding.probabilities[:rare],
+            extension: false,
             manual_risk: '1',
+            risk_justification: 'Test',
             image_model_attributes: {
               image: Rack::Test::UploadedFile.new(
                 "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
@@ -174,7 +176,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               }, {
                 user_id: users(:audited).id, process_owner: '1'
               }, {
-                user_id: users(:auditor).id, process_owner: ''
+                user_id: users(:auditor).id, process_owner: '', responsible_auditor: true
               }, {
                 user_id: users(:manager).id, process_owner: ''
               }, {
@@ -247,7 +249,10 @@ class WeaknessesControllerTest < ActionController::TestCase
                 comment: 'Test',
                 user_id: users(:administrator).id
               }
-            ]
+            ],
+            year: 'test year',
+            nsisio: 'test nsisio',
+            nobs: 'test nobs'
           }
         }
       end
@@ -295,6 +300,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               internal_control_components: ['risk_evaluation', 'monitoring'],
               impact_risk: Finding.impact_risks[:small],
               probability: Finding.probabilities[:rare],
+              extension: false,
               manual_risk: '1',
               finding_user_assignments_attributes: [
                 {
@@ -368,7 +374,10 @@ class WeaknessesControllerTest < ActionController::TestCase
                   status: 'pending',
                   due_on: I18n.l(Time.zone.tomorrow)
                 }
-              ]
+              ],
+              year: 'test year',
+              nsisio: 'test nsisio',
+              nobs: 'test nobs'
             }
           }
         end

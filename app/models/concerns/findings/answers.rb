@@ -78,7 +78,7 @@ module Findings::Answers
   def commitment_date_required_level_text date = nil
     level = commitment_date_required_level date
 
-    I18n.t "finding.commitment_date_required_level.#{level}" if level
+    I18n.t "finding.commitment_date_required_level.#{level}" if (level && being_implemented?)
   end
 
   def commitment_date_message_for commitment_date

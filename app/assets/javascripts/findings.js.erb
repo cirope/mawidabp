@@ -18,7 +18,10 @@ jQuery(function ($) {
       'priority',
       'answer',
       'audit_comments',
-      'compliance'
+      'compliance',
+      'year',
+      'nsisio',
+      'nobs'
     ]
 
     if (repeatedId) {
@@ -48,6 +51,10 @@ jQuery(function ($) {
       $('[name$="[origination_date]"]').
         datepicker('setDate', new Date).
         prop('readonly', false)
+
+      $('[data-bic-sigen-fields]').each(function (i, e) {
+        $(e).prop('readonly', false)
+      })
     }
   })
 
@@ -159,8 +166,12 @@ jQuery(function ($) {
   })
 
   $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
-    $('[name$="[risk]"]').attr('disabled', ! $(this).is(':checked'))
-    $('[data-risk-modifier]').change()
+    $('[data-bic-calculate-risk]').attr('disabled', $(this).is(':checked'))
+    $('[data-bic-manual-risk]').attr('disabled', !$(this).is(':checked'))
+
+    if (!$(this).is(':checked')) {
+      bicCalculatedRisk()
+    }
   })
 
   $(document).on('change', '[data-risk-modifier]', function () {
@@ -356,6 +367,38 @@ jQuery(function ($) {
       })
     }
   })
+
+  $(document).on('change', '[data-bic-calculate-risk]', function () {
+    bicCalculatedRisk()
+  })
+
+  var bicCalculatedRisk = function() {
+    var types = $('[data-bic-risks-types]').data('bicRisksTypes')
+    var total = 0
+    var risk
+
+    $('select[data-bic-calculate-risk]').each(function (i, e) {
+      total += +$(e).val()
+    })
+
+    $.each(types, function (i, data) {
+      riskValue = data[0]
+      riskId    = data[1]
+
+      if (total >= riskValue) {
+        risk = riskId
+
+        return false
+      }
+    })
+
+    var riskChanged = $('[name$="[risk]"]').val() !== String(risk)
+
+    if (riskChanged) {
+      $('[name$="[risk]"]:enabled').val(risk)
+      $('[name$="[risk]"]:disabled').val(risk).trigger('change')
+    }
+  }
 
   $(document).on('change', '[data-skip-commitment-support]', function () {
     if ($(this).is(':checked')) {
