@@ -68,7 +68,7 @@ module ControlObjectiveItems::Scopes
     end
 
     def list_with_final_review
-      includes(:review).merge Review.list_with_final_review
+      includes(:review).where(review_id: Review.list_with_final_review)
     end
 
     def by_issue_date operator, date, date_until = nil

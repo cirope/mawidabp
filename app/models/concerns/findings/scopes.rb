@@ -35,8 +35,11 @@ module Findings::Scopes
 
     def list_with_final_review
       includes(control_objective_item: :review).
-        merge(Review.list_with_final_review).
-        where conclusion_reviews: { type: ConclusionFinalReview.name }
+        list.
+        where.not(ConclusionReview.table_name => { review_id: nil }).
+        where(plan_item: PlanItem.allowed_by_business_units)
+        references(:conclusion_reviews).
+        where(conclusion_reviews: { type: ConclusionFinalReview.name })
     end
 
     def list_without_final_review
