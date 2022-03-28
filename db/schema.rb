@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_22_142340) do
+ActiveRecord::Schema.define(version: 2022_03_09_150058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -186,6 +186,9 @@ ActiveRecord::Schema.define(version: 2021_12_22_142340) do
     t.boolean "hide_review_logo", default: false, null: false
     t.boolean "independent_identification", default: false, null: false
     t.boolean "shared_business_units", default: false, null: false
+    t.boolean "without_number", default: false, null: false
+    t.string "reviews_for"
+    t.string "detailed_review"
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
@@ -553,6 +556,9 @@ ActiveRecord::Schema.define(version: 2021_12_22_142340) do
     t.integer "external_repeated"
     t.text "risk_justification"
     t.date "follow_up_date_last_changed"
+    t.string "year"
+    t.string "nsisio"
+    t.string "nobs"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -1222,6 +1228,7 @@ ActiveRecord::Schema.define(version: 2021_12_22_142340) do
     t.datetime "updated_at", null: false
     t.string "reference"
     t.text "notes"
+    t.text "audit_recommendations"
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
     t.index ["reference"], name: "index_weakness_templates_on_reference"
   end
