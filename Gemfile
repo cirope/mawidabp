@@ -24,7 +24,7 @@ gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
 gem 'bootstrap', '< 5'
-gem 'font-awesome-sass'
+gem 'font-awesome-sass', '< 6'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jbuilder'
@@ -34,7 +34,7 @@ gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 gem 'execjs', '< 2.8'
-
+gem 'nokogiri', '1.12.5'
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
 gem 'ruby-saml'
