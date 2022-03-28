@@ -1,4 +1,4 @@
-FROM centos/ruby-25-centos7
+FROM centos/ruby-27-centos7
 
 ENV APP_ROOT /opt/app
 
@@ -73,8 +73,7 @@ COPY . $APP_ROOT
 COPY config/application.bh.yml $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
-RUN bundle config set deployment 'false' && \
-    bundle exec rake help:install        && \
+RUN bundle exec rake help:install        && \
     bundle exec rake help:generate
 
 RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
