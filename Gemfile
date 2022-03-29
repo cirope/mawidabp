@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 6.0.3.7'
 
-gem 'pg'
+gem 'pg', '< 1.3'
 gem 'activerecord-nulldb-adapter'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
