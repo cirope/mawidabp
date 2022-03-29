@@ -67,6 +67,8 @@ SPLIT_OR_TERMS_REGEXP = /\s+o\s+|\s*[,]\s*|\s+OR\s+/i
 TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 # Ruta a un archivo para realizar las pruebas (ruta completa)
 TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
+# Ruta a una imagen para realizar las pruebas (ruta completa)
+TEST_IMAGE_FULL_PATH = File.join(Rails.root, 'test/test_images', 'logo.png').freeze
 # Dirección base para formar los links absolutos
 URL_HOST = (ENV['APP_HOST'] + (Rails.env.development? ? ':3000' : '')).freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador

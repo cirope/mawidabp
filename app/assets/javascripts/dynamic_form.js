@@ -53,14 +53,6 @@
       })
     },
 
-    hideItemAttr: function ($e) {
-      $e.prev('input[type=hidden].destroy').val('1')
-
-      var target = $e.data('dynamic-target')
-
-      $(target).next().remove('small')
-    },
-
     hideItembutton: function ($e) {
       $e.prev('input[type=hidden].destroy').val('1')
 
