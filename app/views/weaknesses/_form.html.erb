@@ -222,7 +222,7 @@
               <%= f.input :risk, collection: risks, prompt: true, disabled: @weakness.automatic_risk? || readonly, input_html: {
                 data: weakness_risk_data_options.merge({ bic_manual_risk: true })
               } %>
-              <%= f.hidden_field :risk, disabled: !@weakness.automatic_risk?, 
+              <%= f.hidden_field :risk, disabled: !@weakness.automatic_risk?,
                 data: { bic_calculate_risk: true } %>
             </div>
             <div class="col-3 text-right">
