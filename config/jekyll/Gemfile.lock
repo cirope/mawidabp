@@ -18,7 +18,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     colorator (1.1.0)
-    concurrent-ruby (1.1.9)
+    concurrent-ruby (1.1.10)
     em-websocket (0.5.3)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0)
@@ -75,7 +75,7 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.10)
     mercenary (0.3.6)
     minitest (5.15.0)
-    nokogiri (1.13.3-x86_64-linux)
+    nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
@@ -115,6 +115,7 @@ DEPENDENCIES
   jekyll-assets
   jekyll-multiple-languages-plugin
   kramdown
+  nokogiri (= 1.12.5)
   sass
   sprockets (~> 3.7)
   uglifier

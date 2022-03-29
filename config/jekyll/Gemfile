@@ -10,6 +10,7 @@ gem 'bootstrap-sass'
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 gem 'execjs', '< 2.8'
 gem 'sprockets', '~> 3.7'
+gem 'nokogiri', '1.12.5'
 
 group :jekyll_plugins do
   gem 'jekyll-assets'
