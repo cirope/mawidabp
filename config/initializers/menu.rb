@@ -80,7 +80,7 @@ APP_AUDITOR_MENU_ITEMS = [
             controllers: :business_unit_kinds,
             url: { controller: '/business_unit_kinds' }
           ) if !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-                    HIDE_FINDING_CRITERIA_MISMATCH)
+              HIDE_FINDING_CRITERIA_MISMATCH)
         ].compact
       ),
       MenuItem.new(
@@ -177,11 +177,13 @@ APP_AUDITOR_MENU_ITEMS = [
         controllers: :e_mails,
         url: { controller: '/e_mails' }
       ),
-      MenuItem.new(
+      (MenuItem.new(
         :activity_groups,
         order: 12,
         controllers: :activity_groups,
         url: { controller: '/activity_groups' }
+      ) unless !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
+                 HIDE_FINDING_CRITERIA_MISMATCH
       ),
       MenuItem.new(
         :questionnaires,
@@ -209,7 +211,7 @@ APP_AUDITOR_MENU_ITEMS = [
           )
         ]
       )
-    ]
+    ].compact
   ),
   # PLANIFICACIÓN
   MenuItem.new(
@@ -259,11 +261,13 @@ APP_AUDITOR_MENU_ITEMS = [
         controllers: :workflows,
         url: { controller: '/workflows' }
       ),
-      MenuItem.new(
+      (MenuItem.new(
         :time_summary,
         order: 3,
         controllers: :time_summary,
         url: { controller: '/time_summary' }
+      ) unless !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
+                 HIDE_FINDING_CRITERIA_MISMATCH
       ),
       MenuItem.new(
         :control_objectives,
