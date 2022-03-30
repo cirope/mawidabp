@@ -2,6 +2,8 @@ require 'test_helper'
 
 class TimeSummaryControllerTest < ActionController::TestCase
   setup do
+    skip if !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
+           HIDE_FINDING_CRITERIA_MISMATCH
     login
   end
 

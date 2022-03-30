@@ -3,6 +3,9 @@ require 'test_helper'
 class ActivityGroupsControllerTest < ActionController::TestCase
 
   setup do
+    skip if !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
+           HIDE_FINDING_CRITERIA_MISMATCH
+
     @activity_group = activity_groups :special_activities
 
     login
