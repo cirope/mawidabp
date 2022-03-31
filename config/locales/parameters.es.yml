@@ -89,7 +89,7 @@ es:
     repeatability: 'Repetitividad'
   score_types:
     satisfactory: 'Satisfactorio'
-    improve: 'Satisfactorio - necesita mejoras'
+    improve: 'Satisfactorio - Necesita mejoras'
     regular: 'Poco satisfactorio'
     unsatisfactory: 'Insatisfactorio'
     # When score by weaknesses is used
