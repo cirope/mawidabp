@@ -14,11 +14,11 @@ module RiskWeights::Risk
 
   module ClassMethods
     def risks
-      RISK_TYPES
+      RISK_WEIGHTS.present? ? RISK_WEIGHTS : RISK_TYPES
     end
 
     def risks_values
-      RISK_TYPES.values
+      risks.values
     end
   end
 end
