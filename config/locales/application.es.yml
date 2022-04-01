@@ -798,6 +798,11 @@ es:
     stale_object_error: "El grupo no fue actualizado, intente nuevamente."
     add_organization: "Agregar organización"
 
+  memo:
+    correctly_created: "Memo agregado correctamente."
+    correctly_updated: "Memo actualizado correctamente."
+    stale_object_error: "El Memo no fue actualizado, intente nuevamente."
+
   notification:
     index_title: "Listado de notificaciones"
     show_title: "Detalles de la notificación"

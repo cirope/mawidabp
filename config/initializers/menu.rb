@@ -44,7 +44,13 @@ APP_AUDITED_MENU_ITEMS = [
             url: { controller: '/follow_up_audited' }
           )
         ]
-      )
+      ),
+      (MenuItem.new(
+        :memos,
+        order: 9,
+        controllers: :memos,
+        url: { controller: '/memos' }
+      ) if SHOW_MEMOS)
     ].compact
   )
 ].freeze
@@ -308,7 +314,13 @@ APP_AUDITOR_MENU_ITEMS = [
         order: 8,
         controllers: :execution_reports,
         url: { controller: '/execution_reports' }
-      )
+      ),
+      (MenuItem.new(
+        :memos,
+        order: 9,
+        controllers: :memos,
+        url: { controller: '/memos' }
+      ) if SHOW_MEMOS)
     ].compact
   ),
   # CONCLUSIÓN

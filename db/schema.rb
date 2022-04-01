@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_09_150058) do
+ActiveRecord::Schema.define(version: 2022_03_29_180508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -433,6 +433,15 @@ ActiveRecord::Schema.define(version: 2022_03_09_150058) do
     t.index ["user_id"], name: "index_error_records_on_user_id"
   end
 
+  create_table "file_model_memos", force: :cascade do |t|
+    t.bigint "file_model_id", null: false
+    t.bigint "memo_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_model_id"], name: "index_file_model_memos_on_file_model_id"
+    t.index ["memo_id"], name: "index_file_model_memos_on_memo_id"
+  end
+
   create_table "file_model_reviews", force: :cascade do |t|
     t.bigint "file_model_id", null: false
     t.bigint "review_id", null: false
@@ -675,6 +684,21 @@ ActiveRecord::Schema.define(version: 2022_03_09_150058) do
     t.index ["organization_id"], name: "index_login_records_on_organization_id"
     t.index ["start"], name: "index_login_records_on_start"
     t.index ["user_id"], name: "index_login_records_on_user_id"
+  end
+
+  create_table "memos", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.date "close_date"
+    t.string "required_by"
+    t.bigint "period_id", null: false
+    t.bigint "plan_item_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_memos_on_organization_id"
+    t.index ["period_id"], name: "index_memos_on_period_id"
+    t.index ["plan_item_id"], name: "index_memos_on_plan_item_id"
   end
 
   create_table "news", id: :serial, force: :cascade do |t|
@@ -1334,6 +1358,8 @@ ActiveRecord::Schema.define(version: 2022_03_09_150058) do
   add_foreign_key "endorsements", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "file_model_memos", "file_models", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "file_model_memos", "memos", on_update: :restrict, on_delete: :restrict
   add_foreign_key "file_model_reviews", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "file_model_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "file_models", on_update: :restrict, on_delete: :restrict
@@ -1354,6 +1380,9 @@ ActiveRecord::Schema.define(version: 2022_03_09_150058) do
   add_foreign_key "licenses", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "memos", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "memos", "periods", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "memos", "plan_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "news", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "news", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "notification_relations", "notifications", on_update: :restrict, on_delete: :restrict

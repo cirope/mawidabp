@@ -497,6 +497,12 @@ Rails.application.routes.draw do
     resource :authorizations, only: [:new, :create], controller: 'licenses/authorizations'
   end
 
+  resources :memos do
+    collection do
+      get :plan_item_refresh
+    end
+  end
+
   root 'sessions#new'
 
   post 'paypal', to: 'paypal#create'
