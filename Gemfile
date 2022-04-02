@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.1.5'
+gem 'rails', '~> 6.1'
 
 gem 'pg'
 gem 'activerecord-nulldb-adapter'
