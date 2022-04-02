@@ -424,7 +424,8 @@ module ConclusionReviews::PatPdf
         description = [
           issue.customer,
           issue.entry,
-          issue.operation
+          issue.operation,
+          issue.comments
         ].reject(&:blank?).join ' | '
 
         data = [amount_text, date_text].compact.join ' - '
@@ -432,7 +433,7 @@ module ConclusionReviews::PatPdf
         space      = Prawn::Text::NBSP
         issue_line = "\n#{space * 4}• #{space * 2} #{description} (#{data})"
 
-        pdf.text issue_line, align: :justify
+        pdf.text issue_line, align: :justify, size: PDF_FONT_SIZE * 0.8
       end
     end
 
