@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BestPracticesController < ApplicationController
   include AutoCompleteFor::Tagging
 
@@ -86,11 +88,14 @@ class BestPracticesController < ApplicationController
         process_controls_attributes: [
           :id, :name, :order, :obsolete, :_destroy,
           control_objectives_attributes: [
-            :id, :name, :relevance, :risk, :obsolete, :support, :support_cache, :order, :_destroy,
-            :remove_support,
+            :id, :name, :relevance, :risk, :obsolete, :support, :support_cache,
+            :audit_sector, :date_charge, :order, :_destroy, :remove_support,
             taggings_attributes: [:id, :tag_id, :_destroy],
             control_attributes:  [
               :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy,
+            ],
+            control_objective_auditors_attributes: [
+              :id, :user_id, :_destroy
             ]
           ]
         ]

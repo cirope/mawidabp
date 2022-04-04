@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Users::Scopes
   extend ActiveSupport::Concern
 
@@ -23,6 +25,13 @@ module Users::Scopes
       includes(organization_roles: :role).where(
         roles: {
           role_type: ::Role::TYPES[:manager]
+        }
+      )
+    }
+    scope :auditors, -> {
+      includes(organization_roles: :role).where(
+        roles: {
+          role_type: ::Role::TYPES[:auditor]
         }
       )
     }

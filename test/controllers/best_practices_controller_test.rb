@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class BestPracticesControllerTest < ActionController::TestCase
@@ -52,8 +54,11 @@ class BestPracticesControllerTest < ActionController::TestCase
       'ProcessControl.count',
       'ControlObjective.count',
       'Control.count',
-      'Tagging.count'
+      'Tagging.count',
+      'ControlObjectiveAuditor.count'
     ]
+
+    auditor = users :auditor
 
     assert_difference counts_array, 4 do
       post :create, params: {
@@ -81,6 +86,11 @@ class BestPracticesControllerTest < ActionController::TestCase
                     {
                       tag_id: tags(:risk_evaluation).id
                     }
+                  ],
+                  control_objective_auditors_attributes: [
+                    {
+                      user_id: auditor.id
+                    }
                   ]
                 },
                 {
@@ -98,6 +108,11 @@ class BestPracticesControllerTest < ActionController::TestCase
                   taggings_attributes: [
                     {
                       tag_id: tags(:risk_evaluation).id
+                    }
+                  ],
+                  control_objective_auditors_attributes: [
+                    {
+                      user_id: auditor.id
                     }
                   ]
                 }
@@ -123,6 +138,11 @@ class BestPracticesControllerTest < ActionController::TestCase
                     {
                       tag_id: tags(:risk_evaluation).id
                     }
+                  ],
+                  control_objective_auditors_attributes: [
+                    {
+                      user_id: auditor.id
+                    }
                   ]
                 },
                 {
@@ -141,6 +161,11 @@ class BestPracticesControllerTest < ActionController::TestCase
                   taggings_attributes: [
                     {
                       tag_id: tags(:risk_evaluation).id
+                    }
+                  ],
+                  control_objective_auditors_attributes: [
+                    {
+                      user_id: auditor.id
                     }
                   ]
                 }
@@ -212,54 +237,62 @@ class BestPracticesControllerTest < ActionController::TestCase
     ]
 
     assert_no_difference counts_array do
-      patch :update, params: {
-        id: best_practices(:iso_27001).id,
-        best_practice: {
-          name: 'updated_best_practice',
-          description: 'Updated description 1',
-          process_controls_attributes: [
-            {
-              id: process_controls(:security_policy).id,
-              name: 'updated process control',
-              order: 1,
-              control_objectives_attributes: [
-                {
-                  id: control_objectives(
-                    :organization_security_4_1).id,
-                  name: 'updated control objective 1 1',
-                  control_attributes: {
-                    id: controls(:organization_security_4_1_control_1).id,
-                    control: 'updated control 1 1',
-                    effects: 'updated effects 1 1',
-                    design_tests: 'new design tests 1 1',
-                    compliance_tests: 'updated compliance tests 1 1',
-                    sustantive_tests: 'updated sustantive tests 1 1'
+      assert_difference 'ControlObjectiveAuditor.count', -1 do
+        patch :update, params: {
+          id: best_practices(:iso_27001).id,
+          best_practice: {
+            name: 'updated_best_practice',
+            description: 'Updated description 1',
+            process_controls_attributes: [
+              {
+                id: process_controls(:security_policy).id,
+                name: 'updated process control',
+                order: 1,
+                control_objectives_attributes: [
+                  {
+                    id: control_objectives(
+                      :organization_security_4_1).id,
+                    name: 'updated control objective 1 1',
+                    control_attributes: {
+                      id: controls(:organization_security_4_1_control_1).id,
+                      control: 'updated control 1 1',
+                      effects: 'updated effects 1 1',
+                      design_tests: 'new design tests 1 1',
+                      compliance_tests: 'updated compliance tests 1 1',
+                      sustantive_tests: 'updated sustantive tests 1 1'
+                    },
+                    relevance: ControlObjective.relevances_values.first,
+                    risk: ControlObjective.risks_values.first,
+                    order: 1,
+                    control_objective_auditors_attributes: [
+                      {
+                        id: control_objective_auditors(:organization_security_4_1_auditor),
+                        _destroy: 1
+                      }
+                    ]
                   },
-                  relevance: ControlObjective.relevances_values.first,
-                  risk: ControlObjective.risks_values.first,
-                  order: 1
-                },
-                {
-                  id: control_objectives(
-                    :organization_security_4_2).id,
-                  name: 'updated control objective 1 2',
-                  control_attributes: {
-                    id: controls(:organization_security_4_2_control_1).id,
-                    control: 'updated control 1 2',
-                    effects: 'updated effects 1 2',
-                    design_tests: 'new design tests 1 2',
-                    compliance_tests: 'updated compliance_tests 1 2',
-                    sustantive_tests: 'updated sustantive_tests 1 2'
-                  },
-                  relevance: ControlObjective.relevances_values.first,
-                  risk: ControlObjective.risks_values.first,
-                  order: 2
-                }
-              ]
-            }
-          ]
+                  {
+                    id: control_objectives(
+                      :organization_security_4_2).id,
+                    name: 'updated control objective 1 2',
+                    control_attributes: {
+                      id: controls(:organization_security_4_2_control_1).id,
+                      control: 'updated control 1 2',
+                      effects: 'updated effects 1 2',
+                      design_tests: 'new design tests 1 2',
+                      compliance_tests: 'updated compliance_tests 1 2',
+                      sustantive_tests: 'updated sustantive_tests 1 2'
+                    },
+                    relevance: ControlObjective.relevances_values.first,
+                    risk: ControlObjective.risks_values.first,
+                    order: 2
+                  }
+                ]
+              }
+            ]
+          }
         }
-      }
+      end
     end
 
     assert_redirected_to edit_best_practice_url(best_practices(:iso_27001).id)
