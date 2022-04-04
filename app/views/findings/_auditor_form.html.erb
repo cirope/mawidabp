@@ -261,11 +261,20 @@
                                      }
                                    } %>
           <%= f.input :compliance, as: :hidden, input_html: { id: 'finding_hidden_compliance' } %>
-          <div data-compliance-observations <%= 'hidden' unless @finding.compliance == 'yes' %>>
+        </div>
+      </div>
+      <div class="row" data-compliance-observations <%= 'hidden' unless @finding.compliance == 'yes' %>>
+        <div class="col-md-6">
             <%= f.input :compliance_observations, input_html: {
               data: { compliance_observations_text: true }
             } %>
-          </div>
+        </div>
+        <div class="col-md-2">
+          <%= f.input :compliance_susceptible_to_sanction, collection: weakness_compliance_susceptible_to_sanction_options,
+                                                include_blank: t('helpers.select.prompt'),
+                                                input_html: { 
+                                                  data: { compliance_susceptible_to_sanction: true }
+                                                } %>
         </div>
       </div>
       <div class="row">
