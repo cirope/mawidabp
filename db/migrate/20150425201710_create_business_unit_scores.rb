@@ -10,7 +10,7 @@ class CreateBusinessUnitScores < ActiveRecord::Migration[4.2]
       t.timestamps null: false
     end
 
-    add_foreign_key :business_unit_scores, :business_units, FOREIGN_KEY_OPTIONS.dup
-    add_foreign_key :business_unit_scores, :control_objective_items, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :business_unit_scores, :business_units, **FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :business_unit_scores, :control_objective_items, **FOREIGN_KEY_OPTIONS.dup
   end
 end
