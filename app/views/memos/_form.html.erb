@@ -24,7 +24,7 @@
           <% if @memo.new_record? %>
             <div class="form-group">
               <%= f.label :plan_item_id, required: true %>
-              <%= memo_plan_item_field(f, false) %>
+              <%= memo_plan_item_field f %>
             </div>
           <% else %>
             <%= f.input :plan_item, label: Memo.human_attribute_name('plan_item_id'),

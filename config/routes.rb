@@ -497,7 +497,7 @@ Rails.application.routes.draw do
     resource :authorizations, only: [:new, :create], controller: 'licenses/authorizations'
   end
 
-  resources :memos do
+  resources :memos, except: [:destroy] do
     collection do
       get :plan_item_refresh
     end

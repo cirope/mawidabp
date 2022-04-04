@@ -1,5 +1,5 @@
 module MemosHelper
-  def memo_plan_item_field form, readonly
+  def memo_plan_item_field form
     require 'ostruct' unless defined? OpenStruct
 
     grouped_plan_items = PlanItem.list_unused(@memo.period_id)
@@ -14,7 +14,7 @@ module MemosHelper
     form.grouped_collection_select :plan_item_id, business_unit_types,
                                    :plan_items, :name, :id, :project_with_dates,
                                    { prompt: true },
-                                   { class: 'form-control', disabled: readonly}
+                                   { class: 'form-control', disabled: false }
   end
 
   def show_file_model_memos memo

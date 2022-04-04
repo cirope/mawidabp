@@ -53,10 +53,6 @@ class MemosController < ApplicationController
     redirect_to action: :edit
   end
 
-  # * DELETE /memos/1
-  def destroy
-  end
-
   # * GET /memos/plan_item_refresh?period_id=1
   def plan_item_refresh
     grouped_plan_items = PlanItem.list_unused(params[:period_id])
