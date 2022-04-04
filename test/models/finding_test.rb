@@ -1439,7 +1439,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'require commitment support' do
-    skip unless %w(true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+    skip unless %(true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
 
     finding = findings :being_implemented_weakness
 
