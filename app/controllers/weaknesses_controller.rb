@@ -176,7 +176,7 @@ class WeaknessesController < ApplicationController
         :use_suggested_probability, :impact_amount, :probability_amount,
         :lock_version, :extension, :state_regulations, :degree_compliance,
         :observation_originated_tests, :sample_deviation, :external_repeated,
-        :risk_justification,
+        :risk_justification, :year, :nsisio, :nobs,
         operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [], tag_ids: [],
         achievements_attributes: [
@@ -210,7 +210,7 @@ class WeaknessesController < ApplicationController
           :user_id, :comment
         ],
         image_model_attributes: [
-          :id, :image, :image_cache
+          :id, :image, :image_cache, :_destroy
         ]
       )
 
