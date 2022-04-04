@@ -17,6 +17,6 @@ class CreateLdapConfigs < ActiveRecord::Migration[4.2]
       t.timestamps null: false
     end
 
-    add_foreign_key :ldap_configs, :organizations, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :ldap_configs, :organizations, **FOREIGN_KEY_OPTIONS.dup
   end
 end

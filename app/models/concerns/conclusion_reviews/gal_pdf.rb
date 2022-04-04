@@ -47,15 +47,22 @@ module ConclusionReviews::GalPdf
         pdf.move_down PDF_FONT_SIZE * 2
       end
 
-      pdf.add_description_item ::Review.model_name.human, review.identification,
-        0, false, items_font_size
+      unless review.business_unit_type.without_number
+        pdf.add_description_item ::Review.model_name.human, review.identification,
+                                 0, false, items_font_size
+      end
+
       pdf.add_description_item issue_date_title, I18n.l(issue_date),
         0, false, items_font_size
 
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
-        size: items_font_size
+      if review.business_unit_type.reviews_for.present?
+        pdf.text review.business_unit_type.reviews_for, size: items_font_size
+      else
+        pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
+                 size: items_font_size
+      end
     end
 
     def put_executive_summary_on pdf, organization
@@ -96,7 +103,12 @@ module ConclusionReviews::GalPdf
     end
 
     def put_detailed_review_on pdf, organization
-      title  = I18n.t 'conclusion_review.detailed_review.title'
+      title  = if review.business_unit_type.detailed_review.present?
+                 review.business_unit_type.detailed_review
+               else
+                 I18n.t 'conclusion_review.detailed_review.title'
+               end
+
       legend = I18n.t 'conclusion_review.detailed_review.legend'
 
       pdf.start_new_page

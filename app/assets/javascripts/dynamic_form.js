@@ -61,6 +61,15 @@
       $(target).next().remove('small')
     },
 
+    hideItembutton: function ($e) {
+      $e.prev('input[type=hidden].destroy').val('1')
+
+      var target = $e.data('dynamic-target')
+
+      $e.remove()
+      $(target).remove()
+    },
+
     removeItem: function ($e) {
       EffectHelper.remove($e.closest('fieldset'), function () {
         $e.trigger('dynamic-item:removed', $e)

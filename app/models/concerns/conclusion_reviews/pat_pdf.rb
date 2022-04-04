@@ -258,9 +258,15 @@ module ConclusionReviews::PatPdf
       pdf.put_hr
       pdf.move_down PDF_FONT_SIZE * 8
 
+      style_options = { style: :italic, align: :center }
+
       if manager
-        pdf.text manager.informal_name, style: :italic, align: :center
-        pdf.text manager.function, style: :italic, align: :center
+        pdf.text manager.informal_name, style_options
+        pdf.text manager.function, style_options
+
+        if organization&.prefix == 'gpat'
+          pdf.text I18n.t('conclusion_review.pat.cover.organization'), style_options
+        end
       end
     end
 
@@ -418,7 +424,8 @@ module ConclusionReviews::PatPdf
         description = [
           issue.customer,
           issue.entry,
-          issue.operation
+          issue.operation,
+          issue.comments
         ].reject(&:blank?).join ' | '
 
         data = [amount_text, date_text].compact.join ' - '
@@ -426,7 +433,7 @@ module ConclusionReviews::PatPdf
         space      = Prawn::Text::NBSP
         issue_line = "\n#{space * 4}• #{space * 2} #{description} (#{data})"
 
-        pdf.text issue_line, align: :justify
+        pdf.text issue_line, align: :justify, size: PDF_FONT_SIZE * 0.8
       end
     end
 
@@ -510,7 +517,7 @@ module ConclusionReviews::PatPdf
 
     def pat_to_text_pdf pdf
       receiver           = organization&.prefix == 'gpat' ? 'gpat_company' : 'audit_committee'
-      to_text_first_line = I18n.t 'conclusion_review.pat.cover.to', 
+      to_text_first_line = I18n.t 'conclusion_review.pat.cover.to',
                                   receiver: I18n.t("conclusion_review.pat.cover.#{receiver}")
 
       pdf.text "<i><b>#{to_text_first_line}</b></i>", inline_format: true
