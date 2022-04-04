@@ -729,8 +729,6 @@ class WeaknessTest < ActiveSupport::TestCase
     refute @weakness.valid?
   end
 
-  
-
   private
 
     def create_conclusion_final_review_for weakness
