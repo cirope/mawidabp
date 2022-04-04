@@ -76,6 +76,9 @@ es:
       control_objective:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
+      control_objective_auditor:
+        one: 'Auditor a cargo'
+        other: 'Auditores a cargo'
       document:
         one: 'Documento'
         other: 'Documentos'
@@ -278,6 +281,9 @@ es:
         support: 'Soporte'
         score_type: 'Tipo de calificación'
         control_objective_id: 'Objetivo de control'
+        audit_sector: 'Sector de Auditoría'
+        date_charge: 'Fecha de alta'
+        control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
       document:
@@ -619,6 +625,10 @@ es:
         order: 'Orden'
         control_objectives: 'Objetivos de control'
         obsolete: 'Obsoleto'
+      process_controls/control_objectives:
+        control_objective_auditors: 'Auditor a cargo'
+      process_controls/control_objectives/control_objective_auditors:
+        user_id: 'Auditor a cargo'
       question:
         sort_order: 'Orden'
         question: 'Pregunta'
