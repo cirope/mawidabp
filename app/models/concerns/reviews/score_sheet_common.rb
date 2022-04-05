@@ -143,6 +143,8 @@ module Reviews::ScoreSheetCommon
     end
 
     def coi_options coi
-      ControlObjectiveItem.qualifications.invert[coi.compliance_score]
+      score_option = ControlObjective.find(coi.control_objective_id).score_type
+
+      ControlObjectiveItem.qualifications.invert[coi.compliance_score] if score_option == 'option'
     end
 end
