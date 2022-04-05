@@ -106,7 +106,7 @@ es:
         answer: "Comentario del Sector:"
         audit_recommendations: "Recomendación:"
       workflow:
-        title: "Anexo II"
+        title: "Anexo %{number}"
         subtitle: "Programa de Trabajo"
       footer:
         text: "Auditoría"

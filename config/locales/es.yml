@@ -1797,6 +1797,10 @@
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
+        control_objective_auditor:
+          attributes:
+            user_id:
+              invalid: "Debe ser auditor"
         file_model:
           attributes:
             file:

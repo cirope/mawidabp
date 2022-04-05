@@ -406,7 +406,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
               :description => 'New workpaper description',
               :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
-                :file => fixture_file_upload(TEST_FILE, 'text/plain')
+                :file => fixture_file_upload(TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
           }
@@ -430,7 +430,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
               :description => 'New post_workpaper description',
               :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
-                :file => fixture_file_upload(TEST_FILE, 'text/plain')
+                :file => fixture_file_upload(TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
           }

@@ -22,7 +22,7 @@ module ConclusionReviews::CroPdf
     put_cro_header_on        pdf, organization
     put_cro_cover_on         pdf, organization
     put_cro_index_on         pdf
-    put_cro_sections_on      pdf
+    put_cro_sections_on      pdf, options
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -90,11 +90,11 @@ module ConclusionReviews::CroPdf
       end
     end
 
-    def put_cro_sections_on pdf
+    def put_cro_sections_on pdf, options
       pdf.start_new_page
 
       put_cro_objective_section_on          pdf
-      put_cro_applied_procedures_section_on pdf
+      put_cro_applied_procedures_section_on pdf, options
       put_cro_findings_section_on           pdf
       put_cro_follow_up_section_on          pdf
       put_cro_conclusion_section_on         pdf
@@ -112,14 +112,14 @@ module ConclusionReviews::CroPdf
       pdf.text text, align: :justify
     end
 
-    def put_cro_applied_procedures_section_on pdf
+    def put_cro_applied_procedures_section_on pdf, options
       grouped_objectives = grouped_control_objectives({})
 
       pdf.move_down PDF_FONT_SIZE
       put_cro_section_dest_on pdf, 'applied_procedures'
       pdf.move_down PDF_FONT_SIZE
 
-      put_default_control_objectives_on pdf, grouped_objectives
+      put_default_control_objectives_on pdf, grouped_objectives, options
     end
 
     def put_cro_findings_section_on pdf

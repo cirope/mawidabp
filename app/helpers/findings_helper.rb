@@ -323,6 +323,10 @@ module FindingsHelper
     end
   end
 
+  def finding_has_issues? finding
+    USE_SCOPE_CYCLE ? finding.issues.any? : false
+  end
+
   private
 
     def finding_state_options_for finding
