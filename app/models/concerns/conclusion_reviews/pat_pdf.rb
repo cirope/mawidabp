@@ -502,7 +502,9 @@ module ConclusionReviews::PatPdf
       if review.workflow
         pdf.start_new_page
 
-        pdf.text I18n.t('conclusion_review.pat.workflow.title'), align: :right, style: :bold
+        number_in_annex =  pat_has_some_weakness? ? 'II' : 'I'
+
+        pdf.text I18n.t('conclusion_review.pat.workflow.title', number: number_in_annex), align: :right, style: :bold
         pdf.move_down PDF_FONT_SIZE
 
         pdf.text "<u><b>#{I18n.t 'conclusion_review.pat.workflow.subtitle'}</b></u>",

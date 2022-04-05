@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.3.7'
+gem 'rails', '~> 6.1'
 
 gem 'pg'
 gem 'activerecord-nulldb-adapter'
@@ -20,6 +20,7 @@ gem 'net-ldap'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'prawn-table'
+gem 'matrix'
 gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
@@ -34,6 +35,7 @@ gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 gem 'execjs', '< 2.8'
+gem 'net-smtp', require: false
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
