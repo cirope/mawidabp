@@ -71,7 +71,7 @@
       </div>
       <div class="col-md-6">
         <% if @finding.kind_of?(Weakness) %>
-          <% if USE_SCOPE_CYCLE %>  
+          <% if USE_SCOPE_CYCLE %>
             <div class="row">
               <div class="col">
                 <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
@@ -165,8 +165,8 @@
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
                   data: weakness_risk_data_options
                 } %>
-                <%= f.hidden_field :risk, disabled: !@finding.automatic_risk?, 
-                  data: { bic_calculate_risk: true } %> 
+                <%= f.hidden_field :risk, disabled: !@finding.automatic_risk?,
+                  data: { bic_calculate_risk: true } %>
               </div>
               <div class="col-3 text-right">
                 <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
@@ -207,7 +207,7 @@
                                 else
                                   {}
                                 end %>
-        <%= finding_status_field(f, disabled: @finding.issues.any?, options_html: options_for_select) %>
+        <%= finding_status_field(f, disabled: finding_has_issues?(@finding), options_html: options_for_select) %>
 
         <% if show_skip_work_paper_for @finding %>
           <%= f.input :skip_work_paper, as: :boolean %>
@@ -261,11 +261,20 @@
                                      }
                                    } %>
           <%= f.input :compliance, as: :hidden, input_html: { id: 'finding_hidden_compliance' } %>
-          <div data-compliance-observations <%= 'hidden' unless @finding.compliance == 'yes' %>>
+        </div>
+      </div>
+      <div class="row" data-compliance-observations <%= 'hidden' unless @finding.compliance == 'yes' %>>
+        <div class="col-md-6">
             <%= f.input :compliance_observations, input_html: {
               data: { compliance_observations_text: true }
             } %>
-          </div>
+        </div>
+        <div class="col-md-2">
+          <%= f.input :compliance_susceptible_to_sanction, collection: weakness_compliance_susceptible_to_sanction_options,
+                                                include_blank: t('helpers.select.prompt'),
+                                                input_html: { 
+                                                  data: { compliance_susceptible_to_sanction: true }
+                                                } %>
         </div>
       </div>
       <div class="row">
@@ -473,7 +482,6 @@
     <%= link_to_add_fields(t('finding.add_task'), f, :tasks) %>
   </div>
 
-  <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
   <% if USE_SCOPE_CYCLE %>
     <div class="row">
       <div class="col-md-2">

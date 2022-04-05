@@ -71,9 +71,13 @@ jQuery(function ($) {
   $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".task"]', disableFollowUpDate)
 
   var disableState = function () {
-    var hasVisibleIssues = !!$('.issue:visible').length
+    var useScopeCycle = $('[data-use-scope-cycle]').data('useScopeCycle')
 
-    $('[name$="[state]"]').attr('readonly', hasVisibleIssues)
+    if (useScopeCycle) {
+      var hasVisibleIssues = !!$('.issue:visible').length
+
+      $('[name$="[state]"]').attr('readonly', hasVisibleIssues)
+    }
   }
 
   $(document).on('dynamic-item:added', '[data-association="issues"]', function () {
