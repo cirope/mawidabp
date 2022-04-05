@@ -84,15 +84,19 @@ class FindingsHelperTest < ActionView::TestCase
   end
 
   test 'should return data options for suggested follow up date' do
-    expected = {
-      target_input_with_origination_date: '#weakness_origination_date',
-      target_input_with_risk: '#weakness_risk',
-      target_input_with_state: '#weakness_state',
-      target_values_states_change_label: Finding.states_that_suggest_follow_up_date,
-      days_to_add: Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk.to_json,
-      suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
-      target_input_with_label: '#weakness_follow_up_date'
-    }
+    expected = if USE_SCOPE_CYCLE
+                 {
+                   target_input_with_origination_date: '#weakness_origination_date',
+                   target_input_with_risk: '#weakness_risk',
+                   target_input_with_state: '#weakness_state',
+                   target_values_states_change_label: Finding.states_that_suggest_follow_up_date,
+                   days_to_add: Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk.to_json,
+                   suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
+                   target_input_with_label: '#weakness_follow_up_date'
+                 }
+               else
+                 {}
+               end
 
     assert_equal data_options_for_suggested_follow_up_date, expected
   end

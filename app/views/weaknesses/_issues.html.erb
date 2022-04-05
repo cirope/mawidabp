@@ -18,7 +18,8 @@
   data-impact-risks-value="<%= @weakness.impact_risk_value %>"
   data-impact-risks-percentage-value="<%= @weakness.impact_risk_percentage %>"
   data-percentage-impact-risks-types="<%= finding_percentage_impact_risks_types(@weakness) %>"
-  data-impact-risks-types="<%= finding_impact_risks_types(@weakness) %>">
+  data-impact-risks-types="<%= finding_impact_risks_types(@weakness) %>"
+  data-use-scope-cycle="<%= USE_SCOPE_CYCLE %>">
 </div>
 
 <%= link_to_add_fields(

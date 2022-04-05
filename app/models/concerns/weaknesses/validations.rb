@@ -20,6 +20,9 @@ module Weaknesses::Validations
               :internal_control_components,
               presence: true, if: :validate_extra_attributes?
     validates :compliance_observations, presence: true, if: :compliance_require_observations?
+    validates :compliance_susceptible_to_sanction,
+              inclusion: { in: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values },
+              if: :compliance_require_observations?
     validate :fields_bic_cannot_modified
     validates :risk_justification, presence: true, if: :bic_require_is_manual_risk_enabled?
     validates :risk_justification, absence: true, if: :bic_require_is_manual_risk_disabled?
