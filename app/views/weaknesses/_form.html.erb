@@ -265,7 +265,7 @@
                                 end  %>
 
         <%= finding_status_field(f,
-                                 disabled: readonly || @weakness.issues.any?,
+                                 disabled: readonly || finding_has_issues?(@weakness),
                                  options_html: options_for_select) %>
 
         <% if show_skip_work_paper_for @weakness %>
