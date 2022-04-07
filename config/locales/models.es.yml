@@ -109,6 +109,9 @@ es:
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
+      memo:
+        one: 'Informe externo'
+        other: 'Informes externos'
       news:
         one: 'Noticia'
         other: 'Noticias'
@@ -838,4 +841,4 @@ es:
               file_model_memos_blank: 'Debe tener al menos un archivo'
               cant_change_fields: 'No puede cambiar ningun campo debido a que supero la fecha de cierre'
             plan_item_id:
-              used: 'El proyecto ya esta siendo utilizado por otro Informe o Memo'
+              used: 'El proyecto ya esta siendo utilizado por otro Informe o Informe externo'
