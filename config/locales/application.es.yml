@@ -799,9 +799,9 @@ es:
     add_organization: "Agregar organización"
 
   memo:
-    correctly_created: "Memo agregado correctamente."
-    correctly_updated: "Memo actualizado correctamente."
-    stale_object_error: "El Memo no fue actualizado, intente nuevamente."
+    correctly_created: "Informe externo agregado correctamente."
+    correctly_updated: "Informe externo actualizado correctamente."
+    stale_object_error: "El Informe externo no fue actualizado, intente nuevamente."
 
   notification:
     index_title: "Listado de notificaciones"
