@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:adzap/validates_timeliness.git
+  remote: https://github.com/adzap/validates_timeliness.git
   revision: 5204ccb2a7aee17c1595d0bbc259e0225867c07d
   tag: v6.0.0.beta2
   specs:
