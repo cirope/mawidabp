@@ -2,7 +2,7 @@
   <%= render 'shared/empty_index', message: t('.empty_html') %>
 <% else %>
   <%= render partial: 'shared/search', locals: {
-    options: { columns_for_sort: Review.columns_for_sort },
+    options: {},
     columns: search_columns_for_model(Memo)
   } %>
 
