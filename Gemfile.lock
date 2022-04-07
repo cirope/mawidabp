@@ -1,3 +1,12 @@
+GIT
+  remote: git@github.com:adzap/validates_timeliness.git
+  revision: 5204ccb2a7aee17c1595d0bbc259e0225867c07d
+  tag: v6.0.0.beta2
+  specs:
+    validates_timeliness (6.0.0.beta2)
+      activemodel (>= 6.0.0, < 7)
+      timeliness (>= 0.3.10, < 1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -288,8 +297,6 @@ GEM
       get_process_mem (~> 0)
       unicorn (>= 4, < 7)
     uniform_notifier (1.16.0)
-    validates_timeliness (5.0.0)
-      timeliness (>= 0.3.10, < 1)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -357,7 +364,7 @@ DEPENDENCIES
   unicorn
   unicorn-rails
   unicorn-worker-killer
-  validates_timeliness
+  validates_timeliness!
   web-console
   whenever
   will_paginate

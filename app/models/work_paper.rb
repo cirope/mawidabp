@@ -229,15 +229,15 @@ class WorkPaper < ApplicationRecord
     self.create_pdf_cover
 
     if File.file?(original_filename) && File.file?(pdf_filename)
-      FileUtils.rm zip_filename if File.exists?(zip_filename)
+      FileUtils.rm zip_filename if File.exist?(zip_filename)
 
       Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
         zipfile.add(self.filename_with_prefix, original_filename) { true }
         zipfile.add(File.basename(pdf_filename), pdf_filename) { true }
       end
 
-      FileUtils.rm pdf_filename if File.exists?(pdf_filename)
-      FileUtils.rm original_filename if File.exists?(original_filename)
+      FileUtils.rm pdf_filename if File.exist?(pdf_filename)
+      FileUtils.rm original_filename if File.exist?(original_filename)
 
       self.file_model.file = File.open(zip_filename)
 
@@ -275,7 +275,7 @@ class WorkPaper < ApplicationRecord
       # Pregunta para evitar eliminar el archivo si es un zip con el mismo
       # nombre
       unless File.basename(zip_path) == self.file_model.identifier
-        FileUtils.rm zip_path if File.exists? zip_path
+        FileUtils.rm zip_path if File.exist? zip_path
       end
     end
   end
