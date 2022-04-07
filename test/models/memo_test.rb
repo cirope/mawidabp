@@ -111,12 +111,17 @@ class MemoTest < ActiveSupport::TestCase
     refute memo.readonly_fields?
   end
 
-  test 'should return false read only fields because close_date is less than today' do
+  test 'should return false read only fields because close_date_was is less than today' do
+    @memo.close_date = 15.days.ago.to_date.to_s(:db)
+
     refute @memo.readonly_fields?
   end
 
-  test 'should return true read only fields because close_date is greater than today' do
+  test 'should return true read only fields because close_date_was is greater than today' do
     @memo.close_date = 15.days.ago.to_date.to_s(:db)
+    @memo.save!
+
+    @memo.close_date = 15.days.from_now.to_date.to_s(:db)
 
     assert @memo.readonly_fields?
   end
