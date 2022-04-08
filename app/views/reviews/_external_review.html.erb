@@ -1,0 +1,1 @@
+<%= f.input :reference_review_id, label: false, collection: Review.list.limit(100).map {|r| [r.identification, r.id]} %>

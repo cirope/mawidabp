@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_22_150158) do
+ActiveRecord::Schema.define(version: 2022_04_08_120621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -440,6 +440,23 @@ ActiveRecord::Schema.define(version: 2022_03_22_150158) do
     t.index ["created_at"], name: "index_error_records_on_created_at"
     t.index ["organization_id"], name: "index_error_records_on_organization_id"
     t.index ["user_id"], name: "index_error_records_on_user_id"
+  end
+
+  create_table "external_reviews", force: :cascade do |t|
+    t.bigint "review_id"
+    t.bigint "reference_review_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["review_id"], name: "index_external_reviews_on_review_id"
+  end
+
+  create_table "file_model_memos", force: :cascade do |t|
+    t.integer "file_model_id", null: false
+    t.integer "memo_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_model_id"], name: "index_file_model_memos_on_file_model_id"
+    t.index ["memo_id"], name: "index_file_model_memos_on_memo_id"
   end
 
   create_table "file_model_reviews", force: :cascade do |t|

@@ -118,7 +118,7 @@ module ConclusionReviews::NbcPdf
         data       = [nbc_header_scores]
         sum_weight = 0
 
-        nbc_get_weaknesses_by_risk.each do |row, weaknesses|
+        review.score_by_reviews(issue_date).each do |row, weaknesses|
           risk_text = weaknesses.first.risk_text
 
           row.unshift weaknesses.size
@@ -170,12 +170,6 @@ module ConclusionReviews::NbcPdf
         { content: I18n.t('conclusion_review.nbc.scores.footer_table'), colspan: 5},
         I18n.t("conclusion_review.nbc.results_by_weighting.#{score.first}")
       ]
-    end
-
-    def nbc_get_weaknesses_by_risk
-      weaknesses.select { |w| w.state_weight > 0 }.group_by do |w|
-        [w.risk_weight, w.state_weight, w.age_weight(date: issue_date)]
-      end
     end
 
     def put_nbc_conclusion_on pdf
