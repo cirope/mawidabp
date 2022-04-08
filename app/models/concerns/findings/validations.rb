@@ -200,7 +200,7 @@ module Findings::Validations
       if !being_implemented?
         errors.add :extension, :must_be_being_implemented, extension: Finding.human_attribute_name(:extension),
                                                            state: I18n.t('findings.state.being_implemented')
-      elsif persisted? && cant_have_an_extension?
+      elsif persisted? && review.conclusion_final_review.present? && cant_have_an_extension?
         errors.add :extension, :had_no_extension_when_being_implemented, extension: Finding.human_attribute_name(:extension)
       end
     end

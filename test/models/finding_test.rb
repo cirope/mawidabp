@@ -1741,6 +1741,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.extension = true
 
     refute finding.valid?
+    assert_error finding, :extension, :must_be_being_implemented
   end
 
   test 'should be invalid because the last version had not extension' do
@@ -1749,10 +1750,11 @@ class FindingTest < ActiveSupport::TestCase
     finding.extension = true
 
     refute finding.valid?
+    assert_error finding, :extension, :had_no_extension_when_being_implemented
   end
 
   test 'should be valid because is the first version in being implemented' do
-    finding = findings :incomplete_weakness
+    finding = findings :unanswered_weakness
 
     finding.extension      = true
     finding.state          = Finding::STATUS[:being_implemented]

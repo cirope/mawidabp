@@ -10,14 +10,15 @@ jQuery(function () {
   })
 
   function modifyCheckbox(element) {
-    var $checkBox = $(element.data('targetCheckbox'))
+    var readOnly = element.data('readonly')
 
-    if (element.find(':selected').val() == element.data('targetValueEnableCheckbox')) {
-      $checkBox.removeAttr('disabled')
-    } else {
-      $checkBox.attr('disabled', true)
-
-      if (element.data('disabledAndDeny')) {
+    if(!readOnly){
+      var $checkBox = $(element.data('targetCheckbox'))
+    
+      if (element.find(':selected').val() == element.data('targetValueEnableCheckbox')) {
+        $checkBox.removeAttr('disabled')
+      } else {
+        $checkBox.attr('disabled', true)
         $checkBox.prop('checked', false)
       }
     }

@@ -316,7 +316,7 @@ module FindingsHelper
           target_value_checkbox: false,
           state_target: Finding::STATUS[:being_implemented],
           input_with_state: '#finding_state',
-          condition_to_receive_confirm: first_version_in_being_implementation?(finding) }
+          condition_to_receive_confirm: !finding.final? && first_version_in_being_implementation?(finding) }
       }
     else
       {}
