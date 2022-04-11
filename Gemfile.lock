@@ -164,6 +164,7 @@ GEM
     method_source (1.0.0)
     mini_magick (4.11.0)
     mini_mime (1.1.2)
+    mini_portile2 (2.8.0)
     minitest (5.15.0)
     nakayoshi_fork (0.0.4)
     net-ldap (0.17.0)
@@ -178,7 +179,8 @@ GEM
     net-ssh (6.1.0)
     newrelic_rpm (8.6.0)
     nio4r (2.5.8)
-    nokogiri (1.13.3-x86_64-linux)
+    nokogiri (1.13.3)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     paper_trail (12.3.0)
       activerecord (>= 5.2)
@@ -311,7 +313,7 @@ GEM
     zeitwerk (2.5.4)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   activerecord-nulldb-adapter
@@ -371,4 +373,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   2.2.16
+   2.1.4
