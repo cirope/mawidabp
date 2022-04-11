@@ -91,9 +91,15 @@ POSTGRESQL_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' 
 # Limite de filas en reportes para servir en real-time
 SEND_REPORT_EMAIL_AFTER_COUNT = 100
 # Planes de licencias
-LICENSE_PLANS = YAML.load(
-  File.read('config/license_plans.yml')
-)[Rails.env].with_indifferent_access.freeze
+LICENSE_PLANS = if RUBY_VERSION >= '3.1.0'
+                  YAML.load(
+                    File.read('config/license_plans.yml'), aliases: true
+                  )[Rails.env].with_indifferent_access.freeze
+                else
+                  YAML.load(
+                    File.read('config/license_plans.yml')
+                  )[Rails.env].with_indifferent_access.freeze
+                end
 # Redis config
 REDIS_HOST = ENV['REDIS_HOST'] || 'localhost'
 REDIS_PORT = ENV['REDIS_PORT'] || '6379'

@@ -199,7 +199,7 @@ module ConclusionReviews::PatPdf
         rua.supervisor? || rua.manager? || rua.responsible?
       end
 
-      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.move_down PDF_FONT_SIZE
 
       add_review_signatures_table pdf, supervisors
     end
@@ -279,7 +279,7 @@ module ConclusionReviews::PatPdf
         pdf.text Weakness.model_name.human(count: 0).upcase, align: :center, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        put_pat_previous_weaknesses_on  pdf
+        #put_pat_previous_weaknesses_on  pdf
         put_pat_weaknesses_on           pdf
         put_pat_weaknesses_follow_up_on pdf
       end
@@ -494,15 +494,17 @@ module ConclusionReviews::PatPdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
-      weaknesses.not_revoked.any? ||
-        (review.plan_item.sustantive? && review.previous&.weaknesses&.with_pending_status&.any?)
+      weaknesses.not_revoked.any? #||
+        #(review.plan_item.sustantive? && review.previous&.weaknesses&.with_pending_status&.any?)
     end
 
     def put_pat_workflow_on pdf
       if review.workflow
         pdf.start_new_page
 
-        pdf.text I18n.t('conclusion_review.pat.workflow.title'), align: :right, style: :bold
+        number_in_annex =  pat_has_some_weakness? ? 'II' : 'I'
+
+        pdf.text I18n.t('conclusion_review.pat.workflow.title', number: number_in_annex), align: :right, style: :bold
         pdf.move_down PDF_FONT_SIZE
 
         pdf.text "<u><b>#{I18n.t 'conclusion_review.pat.workflow.subtitle'}</b></u>",
@@ -522,6 +524,7 @@ module ConclusionReviews::PatPdf
 
       pdf.text "<i><b>#{to_text_first_line}</b></i>", inline_format: true
 
+      pdf.move_down PDF_FONT_SIZE
       if organization&.prefix == 'gpat'
         pdf.indent(14) do
           pdf.text "<i><b>#{I18n.t('conclusion_review.pat.cover.audit_committee')}</b></i>", inline_format: true
