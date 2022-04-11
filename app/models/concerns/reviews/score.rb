@@ -113,7 +113,7 @@ module Reviews::Score
     medium_score    = 50
     hundred_percent = 100
 
-    scores = score_by_reviews date
+    scores = score_by_weakness_reviews date
 
     total = scores.sum do |row, weaknesses|
       row.unshift weaknesses.size
@@ -136,7 +136,7 @@ module Reviews::Score
     end
   end
 
-  def score_by_reviews date
+  def score_by_weakness_reviews date
     weaknesses_total = []
 
     if external_reviews.any?

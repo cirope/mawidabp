@@ -120,7 +120,7 @@ module ConclusionReviews::NbcPdf
         data       = [nbc_header_scores]
         sum_weight = 0
 
-        review.score_by_reviews(issue_date).each do |row, weaknesses|
+        review.score_by_weakness_reviews(issue_date).each do |row, weaknesses|
           risk_text = weaknesses.first.risk_text
 
           row.unshift weaknesses.size
