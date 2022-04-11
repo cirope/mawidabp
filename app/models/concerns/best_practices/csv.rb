@@ -31,9 +31,9 @@ module BestPractices::Csv
         ControlObjective.human_attribute_name('risk'),
         ControlObjective.human_attribute_name('relevance'),
         ControlObjective.human_attribute_name('obsolete'),
-        (ControlObjective.human_attribute_name('audit_sector') if csv_show_columns?),
-        (ControlObjective.human_attribute_name('date_charge') if csv_show_columns?),
-        (ControlObjectiveAuditor.model_name.human if csv_show_columns?)
+        (ControlObjective.human_attribute_name('audit_sector') if show_gal_columns?),
+        (ControlObjective.human_attribute_name('date_charge') if show_gal_columns?),
+        (ControlObjectiveAuditor.model_name.human if show_gal_columns?)
       ].compact
     end
 
@@ -53,9 +53,9 @@ module BestPractices::Csv
             control_objective.risk_text,
             control_objective.relevance_text,
             I18n.t(control_objective.obsolete ? 'label.yes' : 'label.no'),
-            (control_objective.audit_sector.to_s if csv_show_columns?),
-            (control_objective.date_charge.to_s if csv_show_columns?),
-            (control_objective.control_objective_auditors.map { |u| u.user.full_name }.join(' - ') if csv_show_columns?)
+            (control_objective.audit_sector.to_s if show_gal_columns?),
+            (date_charge_format(control_objective) if show_gal_columns?),
+            (control_objective.control_objective_auditors.map { |u| u.user.full_name }.join(' - ') if show_gal_columns?)
           ].compact
         end
       end
@@ -63,7 +63,11 @@ module BestPractices::Csv
       rows
     end
 
-    def csv_show_columns?
+    def date_charge_format control_objective
+      control_objective.date_charge ? I18n.l(control_objective.date_charge, format: :minimal) : '-'
+    end
+
+    def show_gal_columns?
       Current.conclusion_pdf_format == 'gal'
     end
 end
