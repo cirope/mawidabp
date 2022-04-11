@@ -444,9 +444,10 @@ ActiveRecord::Schema.define(version: 2022_04_08_120621) do
 
   create_table "external_reviews", force: :cascade do |t|
     t.bigint "review_id"
-    t.bigint "reference_review_id"
+    t.bigint "alternative_review_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["alternative_review_id"], name: "index_external_reviews_on_alternative_review_id"
     t.index ["review_id"], name: "index_external_reviews_on_review_id"
   end
 

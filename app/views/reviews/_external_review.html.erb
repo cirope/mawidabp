@@ -1,1 +1,15 @@
-<%= f.input :reference_review_id, label: false, collection: Review.list.limit(100).map {|r| [r.identification, r.id]} %>
+<% readonly = readonly %>
+
+<fieldset>
+  <div class="row">
+    <div class="col-md-10">
+      <%= f.input :alternative_review_id, label: false, collection: show_external_review_options(@review) %>
+    </div>
+    <div class="col-md-2">
+      <div class="mt-2 text-right">
+        <%= link_to_remove_nested_item(f) unless readonly %>
+      </div>
+    </div>
+  </div>
+</fieldset>
+

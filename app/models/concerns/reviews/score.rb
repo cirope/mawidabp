@@ -141,8 +141,7 @@ module Reviews::Score
 
     if external_reviews.any?
       external_reviews.each do |er|
-        other_review = Review.list.find er.reference_review_id
-        other_review.weaknesses.each { |w| weaknesses_total << w }
+        er.review.weaknesses.each { |w| weaknesses_total << w }
       end
     end
 
