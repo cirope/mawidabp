@@ -3,5 +3,5 @@ class ExternalReview < ApplicationRecord
   include ExternalReviews::Validations
 
   belongs_to :review
-  belongs_to :alternative_review, class_name: "Review"
+  belongs_to :alternative_review, class_name: 'Review'
 end
