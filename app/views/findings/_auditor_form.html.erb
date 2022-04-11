@@ -200,9 +200,9 @@
         <% options_for_select = if USE_SCOPE_CYCLE
                                   {
                                     data:
-                                      { target_value_enable_checkbox: (@finding.review.conclusion_final_review.blank? || extension_enabled?(f.object)) ? Finding::STATUS[:being_implemented] : '',
-                                        target_checkbox: '#finding_extension',
-                                        readonly: false }.merge(data_options_for_suggested_follow_up_date)
+                                      { target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
+                                        target_checkbox: '#finding_extension'
+                                      }.merge(data_options_for_suggested_follow_up_date('finding'))
                                   }
                                 else
                                   {}

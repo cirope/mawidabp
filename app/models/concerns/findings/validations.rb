@@ -200,13 +200,18 @@ module Findings::Validations
       if !being_implemented?
         errors.add :extension, :must_be_being_implemented, extension: Finding.human_attribute_name(:extension),
                                                            state: I18n.t('findings.state.being_implemented')
-      elsif persisted? && review.conclusion_final_review.present? && cant_have_an_extension?
+      elsif cant_have_an_extension?
         errors.add :extension, :had_no_extension_when_being_implemented, extension: Finding.human_attribute_name(:extension)
       end
     end
 
     def cant_have_an_extension?
-      not_the_first_version_of_being_implemented? && !extension_was && being_implemented_was?
+      persisted? && 
+        review.conclusion_final_review.present? && 
+        not_the_first_version_of_being_implemented? && 
+        !extension_was 
+        # && 
+        # being_implemented_was?
     end
 
     def not_the_first_version_of_being_implemented?

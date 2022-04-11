@@ -86,7 +86,7 @@
       </div>
       <div class="col-md-6">
         <%= f.input :origination_date, as: :date_picker, input_html: {
-          readonly: (readonly || @weakness.repeated_of), data: data_options_for_suggested_follow_up_date
+          readonly: (readonly || @weakness.repeated_of), data: data_options_for_suggested_follow_up_date('weakness')
         } %>
         <% if %w(bic).include? Current.conclusion_pdf_format %>
           <input type="hidden" id="bic-risk-types" data-bic-risks-types="<%= finding_bic_risks_types(@weakness) %>">
@@ -242,12 +242,12 @@
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : '')) %>
 
-        <% options_for_select = if USE_SCOPE_CYCLE
+        <% options_for_select = if USE_SCOPE_CYCLE && !readonly
                                   {
                                     data:
                                       { target_value_enable_checkbox: Finding::STATUS[:being_implemented],
-                                        target_checkbox: '#weakness_extension',
-                                        readonly: readonly }.merge(data_options_for_suggested_follow_up_date)
+                                        target_checkbox: '#weakness_extension'
+                                      }.merge(data_options_for_suggested_follow_up_date('weakness'))
                                   }
                                 else
                                   {}

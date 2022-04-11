@@ -294,8 +294,13 @@ module FindingsHelper
   end
 
   def extension_enabled? finding
-    first_version_in_being_implementation?(finding) ||
-      (finding.being_implemented? && finding.extension)
+    finding.review.conclusion_final_review.blank? ||
+      extension_enabled_when_has_final_review?(finding)
+  end
+
+  def extension_enabled_when_has_final_review? finding
+    (finding.being_implemented? && finding.extension) ||
+      first_version_in_being_implementation?(finding)
   end
 
   def first_version_in_being_implementation? finding
@@ -307,7 +312,7 @@ module FindingsHelper
     if USE_SCOPE_CYCLE
       {
         data: {
-          confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
+          confirm_message: I18n.t('findings.form.confirm_first_version_being_implemented_withou_extension',
                                   {
                                     state: I18n.t('findings.state.being_implemented'),
                                     extension: Finding.human_attribute_name(:extension)
@@ -316,7 +321,7 @@ module FindingsHelper
           target_value_checkbox: false,
           state_target: Finding::STATUS[:being_implemented],
           input_with_state: '#finding_state',
-          condition_to_receive_confirm: !finding.final? && first_version_in_being_implementation?(finding) }
+          condition_to_receive_confirm: finding.review.conclusion_final_review.present? && first_version_in_being_implementation?(finding) }
       }
     else
       {}
@@ -472,16 +477,16 @@ module FindingsHelper
       Finding.states_that_suggest_follow_up_date
     end
 
-    def data_options_for_suggested_follow_up_date
+    def data_options_for_suggested_follow_up_date type_form
       if USE_SCOPE_CYCLE
         {
-          target_input_with_origination_date: '#weakness_origination_date',
-          target_input_with_risk: '#weakness_risk',
-          target_input_with_state: '#weakness_state',
+          target_input_with_origination_date: "##{type_form}_origination_date",
+          target_input_with_risk: "##{type_form}_risk",
+          target_input_with_state: "##{type_form}_state",
           target_values_states_change_label: states_that_suggest_follow_up_date,
           days_to_add: suggestion_to_add_days_follow_up_date_depending_on_the_risk,
-          suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
-          target_input_with_label: '#weakness_follow_up_date'
+          suffix: I18n.t('findings.form.follow_up_date_label_append'),
+          target_input_with_label: "##{type_form}_follow_up_date"
         }
       else
         {}

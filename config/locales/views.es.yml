@@ -162,6 +162,8 @@ es:
       title: 'Editar hallazgo'
     form:
       show_status_change_history: 'Ver historial de cambios de estado'
+      follow_up_date_label_append: ' - Sugerida: '
+      confirm_first_version_being_implemented_withou_extension: '¿Seguro desea establecer el estado %{state} sin %{extension}?'
     auditor_form:
       origin: 'origen'
     current_user_filters:
@@ -200,9 +202,6 @@ es:
     endorsement_item:
       approve: 'Aprobar'
       reject: 'Rechazar'
-    weakness:
-      follow_up_date_label_append: ' - Sugerida: '
-      confirm_first_version_being_implemented_withou_extension: '¿Seguro desea establecer el estado %{state} sin %{extension}?'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
