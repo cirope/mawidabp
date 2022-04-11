@@ -100,13 +100,15 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_on pdf
-      pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
+      if weaknesses.select(&:being_implemented?).any?
+        pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
 
-      weaknesses.each do |weakness|
-        pdf.text "• #{weakness.title}" if weakness.being_implemented?
+        weaknesses.each do |weakness|
+          pdf.text "• #{weakness.title}" if weakness.being_implemented?
+        end
+
+        pdf.start_new_page
       end
-
-      pdf.start_new_page
     end
 
     def put_nbc_scores_on pdf
@@ -294,18 +296,20 @@ module ConclusionReviews::NbcPdf
       data = [
         [
           I18n.t('conclusion_review.nbc.weaknesses_detected.risk'),
+          I18n.t('conclusion_review.nbc.weaknesses_detected.state'),
           I18n.t('conclusion_review.nbc.weaknesses_detected.origination_date')
         ],
         [
           weakness.risk_text,
+          weakness.state_text,
           weakness.origination_date
         ]
       ]
 
-      width_column1 = PDF_FONT_SIZE * 30
-      width_column2 = pdf.bounds.width - width_column1
+      width_column1 = PDF_FONT_SIZE * 17
+      width_column2 = (pdf.bounds.width - width_column1) / 2
 
-      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2]) do
+      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2, width_column2]) do
         row(0).style(
           background_color: 'EEEEEE'
         )
