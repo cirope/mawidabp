@@ -70,5 +70,12 @@
 
   <div class="form-actions mt-2">
     <%= f.button :submit, class: 'btn-primary' %>
+    <div class="float-right">
+      <%= link_to_show @memo %> |
+      <%= link_to_index memos_path %> |
+      <% if Current.conclusion_pdf_format == 'bic' %>
+        <%= render 'bic_downloads' %>
+      <% end %>
+    </div>
   </div>
 <% end %>

@@ -505,6 +505,10 @@ Rails.application.routes.draw do
     collection do
       get :plan_item_refresh
     end
+
+    member do
+      get :export_to_pdf
+    end
   end
 
   root 'sessions#new'

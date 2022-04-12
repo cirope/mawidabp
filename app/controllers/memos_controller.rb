@@ -4,7 +4,7 @@ class MemosController < ApplicationController
   respond_to :html
 
   before_action :auth, :check_privileges
-  before_action :set_memo, only: [:show, :edit, :update]
+  before_action :set_memo, only: [:show, :edit, :update, :export_to_pdf]
   before_action :set_title, except: [:create, :update]
 
   # * GET /memos
@@ -66,6 +66,15 @@ class MemosController < ApplicationController
 
     respond_to do |format|
       format.js
+    end
+  end
+
+  # * GET /memos/1/export_to_pdf
+  def export_to_pdf
+    @memo.to_pdf
+
+    respond_to do |format|
+      format.html { redirect_to @memo.relative_pdf_path }
     end
   end
 

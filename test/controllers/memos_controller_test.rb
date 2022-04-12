@@ -81,4 +81,12 @@ class MemosControllerTest < ActionController::TestCase
     assert_response :success
     assert_match Mime[:js].to_s, @response.content_type
   end
+
+  test 'export memo to pdf' do
+    assert_nothing_raised do
+      get :export_to_pdf, params: { id: @memo.id }
+    end
+
+    assert_redirected_to @memo.relative_pdf_path
+  end
 end
