@@ -68,7 +68,7 @@ es:
     pat:
       cover:
         from: "Banco Patagonia S.A.\nGerencia de Auditoría Interna\n%{business_unit_types}"
-        to: "A: %{receiver}."
+        to: "A: %{receiver}"
         audit_committee: 'Comité de Auditoría'
         gpat_company: "GPAT Compañía Financiera S.A.U."
         scope:
@@ -106,7 +106,7 @@ es:
         answer: "Comentario del Sector:"
         audit_recommendations: "Recomendación:"
       workflow:
-        title: "Anexo II"
+        title: "Anexo %{number}"
         subtitle: "Programa de Trabajo"
       footer:
         text: "Auditoría"
@@ -167,6 +167,7 @@ es:
         repeated: "Observaciones de seguimiento"
         title: "<b>Título</b>"
         description: "<b>Descripción</b>"
+        state: "<b>Estado</b>"
         risk: "<b>Nivel de riesgo</b>"
         origination_date: '<b>Fecha de origen</b>'
         origination_author: '<b>Origen emisor</b>'

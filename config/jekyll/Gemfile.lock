@@ -1,12 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (5.2.6)
+    activesupport (5.2.7)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.7.0)
+    addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     autoprefixer-rails (9.8.6.5)
       execjs
@@ -18,18 +18,18 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     colorator (1.1.0)
-    concurrent-ruby (1.1.8)
-    em-websocket (0.5.2)
+    concurrent-ruby (1.1.10)
+    em-websocket (0.5.3)
       eventmachine (>= 0.12.9)
-      http_parser.rb (~> 0.6.0)
+      http_parser.rb (~> 0)
     eventmachine (1.2.7)
     execjs (2.7.0)
     extras (0.3.0)
       forwardable-extended (~> 2.5)
-    fastimage (2.2.3)
-    ffi (1.15.1)
+    fastimage (2.2.6)
+    ffi (1.15.5)
     forwardable-extended (2.6.0)
-    http_parser.rb (0.6.0)
+    http_parser.rb (0.8.0)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     jekyll (3.8.7)
@@ -56,7 +56,7 @@ GEM
       nokogiri (~> 1.8)
       pathutil (~> 0.16)
       sprockets (>= 3.3, < 4.1.beta)
-    jekyll-multiple-languages-plugin (1.7.0)
+    jekyll-multiple-languages-plugin (1.8.0)
       jekyll (>= 2.0, < 5.0)
     jekyll-sanity (1.6.0)
       jekyll (>= 3.1, < 5.0)
@@ -70,22 +70,24 @@ GEM
     liquid-tag-parser (1.9.0)
       extras (~> 0.3)
       liquid (>= 3.0, < 5.0)
-    listen (3.5.1)
+    listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     mercenary (0.3.6)
-    minitest (5.14.4)
-    nokogiri (1.11.6-arm64-darwin)
+    mini_portile2 (2.8.0)
+    minitest (5.15.0)
+    nokogiri (1.13.4)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
     public_suffix (4.0.6)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
-    rb-fsevent (0.11.0)
+    rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rouge (3.26.0)
+    rouge (3.28.0)
     safe_yaml (1.0.5)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -93,8 +95,6 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
     sassc (2.4.0)
-      ffi (~> 1.9)
-    sassc (2.1.0-x86_64-linux)
       ffi (~> 1.9)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
@@ -107,8 +107,6 @@ GEM
 
 PLATFORMS
   ruby
-  x86_64-linux
-  arm64-darwin-20
 
 DEPENDENCIES
   autoprefixer-rails (< 10)
@@ -124,4 +122,4 @@ DEPENDENCIES
   uglifier
 
 BUNDLED WITH
-   2.2.17
+   2.1.4

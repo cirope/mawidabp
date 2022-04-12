@@ -28,7 +28,7 @@ class ControlObjectiveItem < ApplicationRecord
   alias_attribute :label, :control_objective_text
 
   belongs_to :organization
-  belongs_to :review, inverse_of: :control_objective_items
+  belongs_to :review
   has_one :business_unit, through: :review
   has_one :business_unit_type, through: :business_unit
 

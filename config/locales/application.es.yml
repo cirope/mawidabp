@@ -1197,6 +1197,9 @@ es:
         hide_review_logo: "Ocultar logo en informes"
         independent_identification: "Numeración independiente"
         shared_business_units: "Unidades de negocio compartidas"
+        without_number: "Sin número"
+        reviews_for: "Informes para"
+        detailed_review: "Informe detallado"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
@@ -1399,6 +1402,9 @@ es:
         taggings: "Etiquetas"
         review_objective: "Objectivo del informe"
         type_review: "Tipo de informe"
+      review/external_reviews:
+        alternative_review: 'Informe externo'
+        alternative_review_id: 'Informe externo'
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"

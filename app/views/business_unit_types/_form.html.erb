@@ -59,6 +59,18 @@
         <div class="col-md-3">
           <%= f.input :independent_identification %>
         </div>
+        <div class="col-md-3">
+          <%= f.input :without_number %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :reviews_for, input_html: { maxlength: 255 } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :detailed_review, input_html: { maxlength: 255 } %>
+        </div>
       </div>
     <% end %>
 

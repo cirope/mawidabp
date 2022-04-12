@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_07_172716) do
+ActiveRecord::Schema.define(version: 2022_04_08_120621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -28,20 +28,12 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.index ["finding_id"], name: "index_achievements_on_finding_id"
   end
 
-  create_table "annexes", force: :cascade do |t|
-    t.string "title", null: false
-    t.text "description"
-    t.bigint "conclusion_review_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["conclusion_review_id"], name: "index_annexes_on_conclusion_review_id"
-
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "activity_group_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "require_detail", default: false
+    t.boolean "require_detail", default: false, null: false
     t.index ["activity_group_id"], name: "index_activities_on_activity_group_id"
   end
 
@@ -51,6 +43,15 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_activity_groups_on_organization_id"
+  end
+
+  create_table "annexes", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description"
+    t.bigint "conclusion_review_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["conclusion_review_id"], name: "index_annexes_on_conclusion_review_id"
   end
 
   create_table "answer_options", id: :serial, force: :cascade do |t|
@@ -186,6 +187,9 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.boolean "hide_review_logo", default: false, null: false
     t.boolean "independent_identification", default: false, null: false
     t.boolean "shared_business_units", default: false, null: false
+    t.boolean "without_number", default: false, null: false
+    t.string "reviews_for"
+    t.string "detailed_review"
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
@@ -281,8 +285,8 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.string "previous_identification"
     t.date "previous_date"
     t.text "main_recommendations"
-    t.text "effectiveness_notes"
     t.text "additional_comments"
+    t.text "effectiveness_notes"
     t.boolean "exclude_regularized_findings", default: false, null: false
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
@@ -291,6 +295,13 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.index ["review_id"], name: "index_conclusion_reviews_on_review_id"
     t.index ["summary"], name: "index_conclusion_reviews_on_summary"
     t.index ["type"], name: "index_conclusion_reviews_on_type"
+  end
+
+  create_table "control_objective_auditors", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "control_objective_id"
+    t.index ["control_objective_id"], name: "index_control_objective_auditors_on_control_objective_id"
+    t.index ["user_id"], name: "index_control_objective_auditors_on_user_id"
   end
 
   create_table "control_objective_items", id: :serial, force: :cascade do |t|
@@ -346,6 +357,8 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.boolean "obsolete", default: false
     t.string "support"
     t.string "score_type", default: "option", null: false
+    t.string "audit_sector"
+    t.date "date_charge"
     t.index ["obsolete"], name: "index_control_objectives_on_obsolete"
     t.index ["process_control_id"], name: "index_control_objectives_on_process_control_id"
   end
@@ -428,6 +441,15 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.index ["created_at"], name: "index_error_records_on_created_at"
     t.index ["organization_id"], name: "index_error_records_on_organization_id"
     t.index ["user_id"], name: "index_error_records_on_user_id"
+  end
+
+  create_table "external_reviews", force: :cascade do |t|
+    t.bigint "review_id"
+    t.bigint "alternative_review_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["alternative_review_id"], name: "index_external_reviews_on_alternative_review_id"
+    t.index ["review_id"], name: "index_external_reviews_on_review_id"
   end
 
   create_table "file_model_reviews", force: :cascade do |t|
@@ -553,6 +575,10 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.integer "external_repeated"
     t.text "risk_justification"
     t.date "follow_up_date_last_changed"
+    t.string "year"
+    t.string "nsisio"
+    t.string "nobs"
+    t.boolean "compliance_susceptible_to_sanction"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -669,6 +695,21 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
     t.index ["organization_id"], name: "index_login_records_on_organization_id"
     t.index ["start"], name: "index_login_records_on_start"
     t.index ["user_id"], name: "index_login_records_on_user_id"
+  end
+
+  create_table "memos", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.date "close_date"
+    t.string "required_by"
+    t.integer "period_id", null: false
+    t.integer "plan_item_id", null: false
+    t.integer "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_memos_on_organization_id"
+    t.index ["period_id"], name: "index_memos_on_period_id"
+    t.index ["plan_item_id"], name: "index_memos_on_plan_item_id"
   end
 
   create_table "news", id: :serial, force: :cascade do |t|
@@ -1284,11 +1325,11 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
 
   add_foreign_key "achievements", "benefits", on_update: :restrict, on_delete: :restrict
   add_foreign_key "achievements", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "activities", "activity_groups", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "activity_groups", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "annexes", "conclusion_reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "auxiliar_business_unit_types", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "auxiliar_business_unit_types", "plan_items", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "activities", "activity_groups", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "activity_groups", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "benefits", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "best_practices", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "reviews", on_update: :restrict, on_delete: :restrict
@@ -1328,6 +1369,8 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
   add_foreign_key "endorsements", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "file_model_memos", "file_models", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "file_model_memos", "memos", on_update: :restrict, on_delete: :restrict
   add_foreign_key "file_model_reviews", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "file_model_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "file_models", on_update: :restrict, on_delete: :restrict
@@ -1348,6 +1391,9 @@ ActiveRecord::Schema.define(version: 2022_03_07_172716) do
   add_foreign_key "licenses", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "memos", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "memos", "periods", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "memos", "plan_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "news", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "news", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "notification_relations", "notifications", on_update: :restrict, on_delete: :restrict

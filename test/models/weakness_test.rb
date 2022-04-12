@@ -511,15 +511,98 @@ class WeaknessTest < ActiveSupport::TestCase
     refute weakness.rescheduled?
   end
 
-  test 'compliance observations attribute not be empty when option is yes' do
+  test 'invalids compliance observations attributtes' do
     skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
 
-    weakness = findings :being_implemented_weakness_on_approved_draft
+    @weakness.compliance = 'yes'
 
-    weakness.compliance = 'yes'
+    assert @weakness.invalid?
+    assert_error @weakness, :compliance_observations, :blank
+    assert_error @weakness, :compliance_susceptible_to_sanction, :inclusion
+  end
 
-    assert weakness.invalid?
-    assert_error weakness, :compliance_observations, :blank
+  test 'valids compliance observations attributtes' do
+    skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+
+    @weakness.compliance                         = 'yes'
+    @weakness.compliance_observations            = 'test'
+    @weakness.compliance_susceptible_to_sanction = COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values.first
+
+    assert @weakness.valid?
+  end
+
+  test 'invalid if not same sigen fields from repeated of' do
+    repeated_of        = findings :being_implemented_weakness
+    repeated_of.year   = 'year test'
+    repeated_of.nsisio = 'nsisio test'
+    repeated_of.nobs   = 'nobs test'
+
+    repeated_of.save!
+
+    @weakness.year        = 'test year'
+    @weakness.nsisio      = 'test nsisio'
+    @weakness.nobs        = 'test nobs'
+    @weakness.repeated_of = repeated_of
+
+    assert @weakness.invalid?
+    assert_error @weakness, :year, :different_from_repeated_of
+    assert_error @weakness, :nsisio, :different_from_repeated_of
+    assert_error @weakness, :nobs, :different_from_repeated_of
+  end
+
+  test 'valid if same sigen fields from repeated of' do
+    repeated_of        = findings :being_implemented_weakness
+    repeated_of.year   = 'year test'
+    repeated_of.nsisio = 'nsisio test'
+    repeated_of.nobs   = 'nobs test'
+
+    repeated_of.save!
+
+    @weakness.year        = 'year test'
+    @weakness.nsisio      = 'nsisio test'
+    @weakness.nobs        = 'nobs test'
+    @weakness.repeated_of = repeated_of
+
+    assert @weakness.valid?
+  end
+
+  test 'invalid if change sigen field when frozen final review' do
+    conclusion_final_review            = @weakness.review.conclusion_final_review
+    conclusion_final_review.close_date = Time.zone.today - 1.days
+
+    conclusion_final_review.save!
+
+    @weakness.year   = 'year test'
+    @weakness.nsisio = 'nsisio test'
+    @weakness.nobs   = 'nobs test'
+
+    assert @weakness.invalid?
+    assert_error @weakness, :year, :frozen
+    assert_error @weakness, :nsisio, :frozen
+    assert_error @weakness, :nobs, :frozen
+  end
+
+  test 'invalid if change sigen field when repeated state' do
+    @weakness.state = Finding::STATUS[:repeated]
+
+    @weakness.save!
+
+    @weakness.year   = 'year test'
+    @weakness.nsisio = 'nsisio test'
+    @weakness.nobs   = 'nobs test'
+
+    assert @weakness.invalid?
+    assert_error @weakness, :year, :frozen
+    assert_error @weakness, :nsisio, :frozen
+    assert_error @weakness, :nobs, :frozen
+  end
+
+  test 'valid if change sigen field when no frozen final review and no repeated state' do
+    @weakness.year   = 'year test'
+    @weakness.nsisio = 'nsisio test'
+    @weakness.nobs   = 'nobs test'
+
+    assert @weakness.valid?
   end
 
   test 'invalid when manual risk and blank justification' do

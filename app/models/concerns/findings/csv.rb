@@ -58,7 +58,10 @@ module Findings::Csv
       (commitment_date_required_level_text.to_s if Finding.show_commitment_support?),
       (supervisor_review if USE_SCOPE_CYCLE),
       (I18n.t "label.#{extension ? 'yes' : 'no'}" if USE_SCOPE_CYCLE),
-      (follow_up_date_last_changed.to_s if USE_SCOPE_CYCLE)
+      (follow_up_date_last_changed.to_s if USE_SCOPE_CYCLE),
+      (year.to_s if %w(bic).include? Current.conclusion_pdf_format),
+      (nsisio.to_s if %w(bic).include? Current.conclusion_pdf_format),
+      (nobs.to_s if %w(bic).include? Current.conclusion_pdf_format)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -387,7 +390,10 @@ module Findings::Csv
           (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?),
           (I18n.t('finding.supervisor') if USE_SCOPE_CYCLE),
           (Weakness.human_attribute_name('extension') if USE_SCOPE_CYCLE),
-          (I18n.t('finding.follow_up_date_last_changed') if USE_SCOPE_CYCLE)
+          (I18n.t('finding.follow_up_date_last_changed') if USE_SCOPE_CYCLE),
+          (Finding.human_attribute_name('year') if %w(bic).include? Current.conclusion_pdf_format),
+          (Finding.human_attribute_name('nsisio') if %w(bic).include? Current.conclusion_pdf_format),
+          (Finding.human_attribute_name('nobs') if %w(bic).include? Current.conclusion_pdf_format)
         ].compact
       end
   end

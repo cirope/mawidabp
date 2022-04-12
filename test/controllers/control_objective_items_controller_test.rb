@@ -114,7 +114,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :description => 'New workpaper description',
                 :organization_id => organizations(:cirope).id,
                 :file_model_attributes =>
-                  { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
+                  { :file => fixture_file_upload(TEST_FILE_FULL_PATH, 'text/plain') }
               },
               {
                 :name => 'New workpaper2 name',
@@ -123,7 +123,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :description => 'New workpaper2 description',
                 :organization_id => organizations(:cirope).id,
                 :file_model_attributes =>
-                  { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
+                  { :file => fixture_file_upload(TEST_FILE_FULL_PATH, 'text/plain') }
               }
             ]
           }

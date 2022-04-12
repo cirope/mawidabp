@@ -199,7 +199,7 @@ module ConclusionReviews::PatPdf
         rua.supervisor? || rua.manager? || rua.responsible?
       end
 
-      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.move_down PDF_FONT_SIZE
 
       add_review_signatures_table pdf, supervisors
     end
@@ -258,9 +258,15 @@ module ConclusionReviews::PatPdf
       pdf.put_hr
       pdf.move_down PDF_FONT_SIZE * 8
 
+      style_options = { style: :italic, align: :center }
+
       if manager
-        pdf.text manager.informal_name, style: :italic, align: :center
-        pdf.text manager.function, style: :italic, align: :center
+        pdf.text manager.informal_name, style_options
+        pdf.text manager.function, style_options
+
+        if organization&.prefix == 'gpat'
+          pdf.text I18n.t('conclusion_review.pat.cover.organization'), style_options
+        end
       end
     end
 
@@ -273,7 +279,7 @@ module ConclusionReviews::PatPdf
         pdf.text Weakness.model_name.human(count: 0).upcase, align: :center, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        put_pat_previous_weaknesses_on  pdf
+        #put_pat_previous_weaknesses_on  pdf
         put_pat_weaknesses_on           pdf
         put_pat_weaknesses_follow_up_on pdf
       end
@@ -418,7 +424,8 @@ module ConclusionReviews::PatPdf
         description = [
           issue.customer,
           issue.entry,
-          issue.operation
+          issue.operation,
+          issue.comments
         ].reject(&:blank?).join ' | '
 
         data = [amount_text, date_text].compact.join ' - '
@@ -426,7 +433,7 @@ module ConclusionReviews::PatPdf
         space      = Prawn::Text::NBSP
         issue_line = "\n#{space * 4}• #{space * 2} #{description} (#{data})"
 
-        pdf.text issue_line, align: :justify
+        pdf.text issue_line, align: :justify, size: PDF_FONT_SIZE * 0.8
       end
     end
 
@@ -487,15 +494,17 @@ module ConclusionReviews::PatPdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
-      weaknesses.not_revoked.any? ||
-        (review.plan_item.sustantive? && review.previous&.weaknesses&.with_pending_status&.any?)
+      weaknesses.not_revoked.any? #||
+        #(review.plan_item.sustantive? && review.previous&.weaknesses&.with_pending_status&.any?)
     end
 
     def put_pat_workflow_on pdf
       if review.workflow
         pdf.start_new_page
 
-        pdf.text I18n.t('conclusion_review.pat.workflow.title'), align: :right, style: :bold
+        number_in_annex =  pat_has_some_weakness? ? 'II' : 'I'
+
+        pdf.text I18n.t('conclusion_review.pat.workflow.title', number: number_in_annex), align: :right, style: :bold
         pdf.move_down PDF_FONT_SIZE
 
         pdf.text "<u><b>#{I18n.t 'conclusion_review.pat.workflow.subtitle'}</b></u>",
@@ -510,11 +519,12 @@ module ConclusionReviews::PatPdf
 
     def pat_to_text_pdf pdf
       receiver           = organization&.prefix == 'gpat' ? 'gpat_company' : 'audit_committee'
-      to_text_first_line = I18n.t 'conclusion_review.pat.cover.to', 
+      to_text_first_line = I18n.t 'conclusion_review.pat.cover.to',
                                   receiver: I18n.t("conclusion_review.pat.cover.#{receiver}")
 
       pdf.text "<i><b>#{to_text_first_line}</b></i>", inline_format: true
 
+      pdf.move_down PDF_FONT_SIZE
       if organization&.prefix == 'gpat'
         pdf.indent(14) do
           pdf.text "<i><b>#{I18n.t('conclusion_review.pat.cover.audit_committee')}</b></i>", inline_format: true
