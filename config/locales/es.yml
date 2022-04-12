@@ -1338,6 +1338,8 @@
     copy: "Copiar"
     findings_label: "Observaciones pendientes"
     add_finding_assignment: "Agregar observación pendiente"
+    external_reviews_label: "Informes alternativos"
+    external_reviews_title: "Agregar informe alternativo"
     add_user_assignment: "Agregar usuario relacionado"
     add_past_findings: "Agregar observación solucionada reciente"
     suggest_findings: 'Sugerir observaciones pendientes'

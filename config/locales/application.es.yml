@@ -1402,6 +1402,9 @@ es:
         taggings: "Etiquetas"
         review_objective: "Objectivo del informe"
         type_review: "Tipo de informe"
+      review/external_reviews:
+        alternative_review: 'Informe externo'
+        alternative_review_id: 'Informe externo'
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"

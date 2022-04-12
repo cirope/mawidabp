@@ -91,6 +91,9 @@ es:
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
+      external_review:
+        one: 'Informe Externo'
+        other: 'Informes Externos'
       finding:
         one: 'Observación'
         other: 'Observaciones'
@@ -306,6 +309,10 @@ es:
         data: 'Datos'
         error: 'Error'
         user_id: 'Usuario'
+      external_review:
+        review: 'Informe'
+        review_id: 'Informe'
+        alternative_review_id: 'Informe externo'
       finding:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
