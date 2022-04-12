@@ -360,8 +360,8 @@ es:
         external_repeated: 'Reiterada externa'
         risk_justification: 'Justificar riesgo'
         year: 'Año'
-        nsisio: 'NSISIO'
-        nobs: 'Nobs'
+        nsisio: 'N_SISAC'
+        nobs: 'N_Obs'
       finding/achievements:
         one: 'Beneficio estimado'
         amount: 'Monto'
@@ -742,8 +742,8 @@ es:
         manual_risk: 'Manual'
         extension: 'Días de gracia'
         year: 'Año'
-        nsisio: 'NSISIO'
-        nobs: 'Nobs'
+        nsisio: 'N_SISAC'
+        nobs: 'N_Obs'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:

@@ -51,10 +51,6 @@ jQuery(function ($) {
       $('[name$="[origination_date]"]').
         datepicker('setDate', new Date).
         prop('readonly', false)
-
-      $('[data-bic-sigen-fields]').each(function (i, e) {
-        $(e).prop('readonly', false)
-      })
     }
   })
 
