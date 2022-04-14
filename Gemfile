@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 7.0'
 
 gem 'pg'
 gem 'activerecord-nulldb-adapter'
@@ -10,7 +10,7 @@ gem 'responders'
 gem 'mini_magick'
 gem 'simple_form'
 gem 'newrelic_rpm'
-gem 'validates_timeliness', git: 'https://github.com/adzap/validates_timeliness.git', tag: 'v6.0.0.beta2'
+gem 'validates_timeliness', '~> 6.0.0.beta2', github: 'mitsuru/validates_timeliness', branch: 'rails7'
 gem 'redcarpet'
 gem 'whenever'
 gem 'paper_trail'
