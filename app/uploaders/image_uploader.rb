@@ -2,7 +2,6 @@ class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
   storage :file
-  process convert: 'png'
 
   def store_dir
     id = ('%08d' % model.id).scan(/\d{4}/).join('/')
