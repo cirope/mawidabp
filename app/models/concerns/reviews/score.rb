@@ -141,7 +141,7 @@ module Reviews::Score
 
     if external_reviews.any?
       external_reviews.each do |er|
-        er.review.weaknesses.each { |w| weaknesses_total << w }
+        er.alternative_review.weaknesses.each { |w| weaknesses_total << w }
       end
     end
 
