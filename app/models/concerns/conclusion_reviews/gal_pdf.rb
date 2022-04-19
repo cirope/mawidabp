@@ -609,7 +609,7 @@ module ConclusionReviews::GalPdf
     def put_gal_tmp_reviews_code organization
       @__tmp_review_codes ||= {}
 
-      if organization&.prefix == 'Filiales'
+      if organization&.prefix == 'filiales'
         control_objective_items.order(:order_number).each do |coi|
           coi.weaknesses.not_revoked.reorder(risk: :desc, priority: :desc).each do |weakness|
             @__tmp_review_codes[weakness.id] = weakness.review_code
