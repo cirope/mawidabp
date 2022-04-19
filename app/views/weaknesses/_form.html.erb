@@ -308,26 +308,7 @@
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
 
         <% if %w(bic pat).include? Current.conclusion_pdf_format %>
-          <% @weakness.build_image_model unless @weakness.image_model %>
-
-          <div class="clearfix">
-            <%= f.simple_fields_for :image_model do |im_f| %>
-              <p class="mb-1"><%= ImageModel.model_name.human %></p>
-
-              <div class="file-container float-left">
-                <%= link_to_upload im_f.object, :image %>
-                <% if im_f.object.image_cache %>
-                  <%= im_f.input :image_cache, as: :hidden %>
-                  <%= im_f.input :image, as: :hidden, input_html: { value: nil } %>
-                <% else %>
-                  <%= im_f.input :image, label: false %>
-                <% end %>
-              </div>
-
-              <%= link_to_download_image im_f %>
-              <%= link_to_remove_has_one_image im_f %>
-            <% end %>
-          </div>
+          <%= render 'image_model', f: f, readonly: readonly %>
         <% end %>
       </div>
     </div>
