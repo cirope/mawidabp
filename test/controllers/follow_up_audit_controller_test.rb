@@ -93,8 +93,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.synthesis_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'synthesis_report', 0)
   end
 
@@ -152,8 +152,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.review_stats_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'review_stats_report', 0)
   end
 
@@ -214,8 +214,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.qa_indicators.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'qa_indicators', 0)
   end
 
@@ -255,8 +255,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_state.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_state', 0)
   end
 
@@ -299,8 +299,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_risk.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_risk', 0)
   end
 
@@ -363,8 +363,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_risk_and_business_unit.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_risk_and_business_unit', 0)
   end
 
@@ -385,8 +385,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_risk_and_business_unit.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_risk_and_business_unit', 0)
   end
 
@@ -427,8 +427,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_audit_type.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_audit_type', 0)
   end
 
@@ -465,8 +465,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.follow_up_cost_analysis.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'follow_up_cost_analysis', 0)
   end
 
@@ -528,8 +528,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_risk_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_risk_report', 0)
   end
 
@@ -592,8 +592,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_month.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_month', 0)
   end
 
@@ -726,8 +726,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_current_situation.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_current_situation', 0)
   end
 
@@ -827,8 +827,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_repeated.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_repeated', 0)
   end
 
@@ -939,8 +939,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_control_objective.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_control_objective', 0)
   end
 
@@ -1046,8 +1046,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_business_unit.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_business_unit', 0)
   end
 
@@ -1132,8 +1132,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_user.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_user', 0)
   end
 
@@ -1219,8 +1219,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_heatmap.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_heatmap', 0)
   end
 
@@ -1308,8 +1308,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_control_objective_process.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_by_control_objective_process', 0)
   end
 
@@ -1425,8 +1425,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_evolution.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_evolution', 0)
   end
 
@@ -1609,8 +1609,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_brief.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'weaknesses_brief', 0)
   end
 
@@ -1742,8 +1742,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.fixed_weaknesses_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'fixed_weaknesses_report', 0)
   end
 
@@ -1806,8 +1806,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.control_objective_stats.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'control_objective_stats', 0)
   end
 
@@ -1868,8 +1868,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.control_objective_stats_by_review.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'control_objective_stats_by_review', 0)
   end
 
@@ -1933,8 +1933,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.process_control_stats.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'process_control_stats', 0)
   end
 
@@ -2002,14 +2002,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
           :priority                  => Finding.priorities_values.first,
           :compliance                => 'yes',
           :repeated                  => 'false',
-          :issue_date                => Date.today.to_s(:db),
+          :issue_date                => Date.today.to_fs(:db),
           :issue_date_operator       => '=',
-          :origination_date          => Date.today.to_s(:db),
+          :origination_date          => Date.today.to_fs(:db),
           :origination_date_operator => '>',
-          :follow_up_date            => Date.today.to_s(:db),
-          :follow_up_date_until      => Date.today.to_s(:db),
+          :follow_up_date            => Date.today.to_fs(:db),
+          :follow_up_date_until      => Date.today.to_fs(:db),
           :follow_up_date_operator   => 'between',
-          :solution_date             => Date.today.to_s(:db),
+          :solution_date             => Date.today.to_fs(:db),
           :solution_date_operator    => '='
         }
       }
@@ -2147,8 +2147,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.benefits.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        :from_date => 10.years.ago.to_date.to_fs(:db),
+        :to_date => 10.years.from_now.to_date.to_fs(:db)),
       'benefits', 0)
   end
 

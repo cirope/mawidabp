@@ -142,13 +142,13 @@ module Reports::CostAnalysis
   def save_and_redirect_to_cost_analysis_pdf(pdf)
     pdf.custom_save_as(
       t('conclusion_report.cost_analysis.pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
+        :from_date => @from_date.to_fs(:db),
+        :to_date => @to_date.to_fs(:db)), 'cost_analysis', 0)
 
     @report_path = Prawn::Document.relative_path(
       t('conclusion_report.cost_analysis.pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
+        :from_date => @from_date.to_fs(:db),
+        :to_date => @to_date.to_fs(:db)), 'cost_analysis', 0)
 
     respond_to do |format|
       format.html { redirect_to @report_path }

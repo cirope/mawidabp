@@ -1,5 +1,7 @@
 # Importar Builder si no fue importado previamente
 require 'active_support/builder' unless defined?(Builder)
+require 'action_view/helpers/date_helper/custom_extension'
+require 'prawn/mawida/extension'
 
 ActionView::Base.send :include, ActionView::Helpers::DateHelper::CustomExtension
 

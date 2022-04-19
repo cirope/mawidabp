@@ -4,16 +4,16 @@ module Plans::StatsHelper
     cursor  = @plan.period.start.at_end_of_month
     ending  = @plan.period.end.at_end_of_month
     list    = [
-      active: params[:until] == Time.zone.today.to_s(:db),
+      active: params[:until] == Time.zone.today.to_fs(:db),
       label:  t('.now'),
-      value:  Time.zone.today.to_s(:db)
+      value:  Time.zone.today.to_fs(:db)
     ]
 
     while cursor <= ending
       list << {
-        active: params[:until] == cursor.to_s(:db),
+        active: params[:until] == cursor.to_fs(:db),
         label:  l(cursor, format: '%b %y'),
-        value:  cursor.to_s(:db)
+        value:  cursor.to_fs(:db)
       }
 
       cursor = cursor.advance(months: 1).at_end_of_month

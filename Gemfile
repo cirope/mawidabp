@@ -25,6 +25,7 @@ gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
 gem 'bootstrap', '< 5'
+gem 'bootsnap', require: false
 gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'

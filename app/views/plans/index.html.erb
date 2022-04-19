@@ -16,7 +16,7 @@
         <td class="d-none d-sm-table-cell"><%= l plan.period.end, format: :short %></td>
         <td class="d-none d-sm-table-cell text-right"><%= link_to_calendar [:calendar, plan] %></td>
         <td class="d-none d-sm-table-cell text-right"><%= link_to_resources [:resources, plan] %></td>
-        <td class="d-none d-sm-table-cell text-right"><%= link_to_stats [:stats, plan, until: Time.zone.today.to_s(:db)] %></td>
+        <td class="d-none d-sm-table-cell text-right"><%= link_to_stats [:stats, plan, until: Time.zone.today.to_fs(:db)] %></td>
         <td class="d-none d-sm-table-cell text-right"><%= link_to_clone new_plan_path(clone_from: plan.id) %></td>
         <td class="text-right"><%= link_to_show plan %></td>
         <td class="text-right"><%= link_to_edit [:edit, plan] %></td>

@@ -44,6 +44,7 @@ class ActiveSupport::TestCase
 
   def login user: users(:administrator), prefix: organizations(:cirope).prefix
     set_host_for_organization(prefix)
+    set_organization
     session[:user_id]     = user.id
     session[:last_access] = Time.now
 

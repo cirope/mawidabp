@@ -72,7 +72,7 @@
                   check_commitment_date_url: finding_commitment_path(
                     'incomplete',
                     finding_answer.finding,
-                    finding_answer.commitment_date&.to_s(:db) || 'NEW_DATE',
+                    finding_answer.commitment_date&.to_fs(:db) || 'NEW_DATE',
                     index: f.options[:child_index],
                     show: show
                   )

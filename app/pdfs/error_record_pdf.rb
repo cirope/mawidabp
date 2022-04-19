@@ -86,6 +86,6 @@ class ErrorRecordPdf < Prawn::Document
     end
 
     def pdf_name
-      I18n.t 'error_records.pdf_list_name', from_date: @from.to_s(:db), to_date: @to.to_s(:db)
+      I18n.t 'error_records.pdf_list_name', from_date: @from.to_fs(:db), to_date: @to.to_fs(:db)
     end
 end
