@@ -77,6 +77,9 @@
         <div class="col-md-3">
           <%= f.input :date_charge, as: :date_picker %>
         </div>
+        <div class="col-md-3">
+          <%= f.input :affected_sector_id, collection: affected_sectors, include_blank: t('helpers.select.prompt') %>
+        </div>
       </div>
 
       <div class="card mb-2">
