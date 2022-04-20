@@ -8,4 +8,10 @@ module Findings::Extension
   def not_extension_was?
     USE_SCOPE_CYCLE && extension_was ? false : true
   end
+
+  module ClassMethods
+    def states_that_allow_extension
+      [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
+    end
+  end
 end

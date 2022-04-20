@@ -295,33 +295,23 @@ module FindingsHelper
 
   def extension_enabled? finding
     finding.review.conclusion_final_review.blank? ||
-      extension_enabled_when_has_final_review?(finding)
-  end
-
-  def extension_enabled_when_has_final_review? finding
-    (finding.being_implemented? && finding.extension) ||
-      first_version_in_being_implementation?(finding)
-  end
-
-  def first_version_in_being_implementation? finding
-    finding.new_record? ||
-      (!finding.had_version_with_being_implemented? && !finding.being_implemented?)
+      (Finding.states_that_allow_extension.include?(finding.state) && finding.extension)
   end
 
   def data_for_submit finding
     if USE_SCOPE_CYCLE
       {
         data: {
-          confirm_message: I18n.t('findings.form.confirm_first_version_being_implemented_withou_extension',
+          confirm_message: I18n.t('findings.form.confirm_finding_without_extension',
                                   {
-                                    state: I18n.t('findings.state.being_implemented'),
                                     extension: Finding.human_attribute_name(:extension)
                                   }),
           checkbox_target: '#finding_extension',
           target_value_checkbox: false,
-          state_target: Finding::STATUS[:being_implemented],
+          states_target: Finding.states_that_allow_extension,
           input_with_state: '#finding_state',
-          condition_to_receive_confirm: finding.review.conclusion_final_review.present? && first_version_in_being_implementation?(finding) }
+          condition_to_receive_confirm: finding.review.conclusion_final_review.present? && finding.extension
+        }
       }
     else
       {}

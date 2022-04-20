@@ -245,7 +245,8 @@
         <% options_for_select = if USE_SCOPE_CYCLE && !readonly
                                   {
                                     data:
-                                      { target_value_enable_checkbox: Finding::STATUS[:being_implemented],
+                                      { 
+                                        target_values_enable_checkbox: Finding.states_that_allow_extension,
                                         target_checkbox: '#weakness_extension'
                                       }.merge(data_options_for_suggested_follow_up_date('weakness'))
                                   }

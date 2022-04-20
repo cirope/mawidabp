@@ -197,28 +197,22 @@ module Findings::Validations
     end
 
     def extension_enabled
-      if !being_implemented?
-        errors.add :extension, :must_be_being_implemented, extension: Finding.human_attribute_name(:extension),
-                                                           state: I18n.t('findings.state.being_implemented')
+      if Finding.states_that_allow_extension.exclude?(finding.state)
+        errors.add :extension,
+                   :must_have_state_that_allows_extension,
+                   extension: Finding.human_attribute_name(:extension),
+                   states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
       elsif cant_have_an_extension?
-        errors.add :extension, :had_no_extension_when_being_implemented, extension: Finding.human_attribute_name(:extension)
+        errors.add :extension,
+                   :cant_have_extension_when_didnt_have_extension,
+                   extension: Finding.human_attribute_name(:extension),
+                   states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
       end
     end
 
     def cant_have_an_extension?
-      persisted? && 
-        review.conclusion_final_review.present? && 
-        not_the_first_version_of_being_implemented? && 
-        !extension_was 
-        # && 
-        # being_implemented_was?
-    end
-
-    def not_the_first_version_of_being_implemented?
-      had_version_with_being_implemented? || being_implemented_was?
-    end
-
-    def being_implemented_was?
-      state_was == Finding::STATUS[:being_implemented]
+      persisted? &&
+        review.conclusion_final_review.present? &&
+        !extension_was
     end
 end
