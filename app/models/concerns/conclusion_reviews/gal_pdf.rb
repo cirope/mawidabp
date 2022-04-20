@@ -611,12 +611,12 @@ module ConclusionReviews::GalPdf
 
       if organization&.prefix == 'filiales'
         control_objective_items.order(:order_number).each do |coi|
-          coi.weaknesses.not_revoked.reorder(risk: :desc, priority: :desc).each do |weakness|
+          coi.weaknesses.not_revoked.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
             @__tmp_review_codes[weakness.id] = weakness.review_code
           end
         end
       else
-        weaknesses.not_revoked.reorder(risk: :desc, priority: :desc).each do |weakness|
+        weaknesses.not_revoked.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
           @__tmp_review_codes[weakness.id] = weakness.review_code
         end
       end
