@@ -172,4 +172,8 @@ module WeaknessesHelper
       [t("suggested_type_probabilities.#{key}"), value]
     end
   end
+
+  def disabled_submit_form frozen
+    %w(bic).include?(Current.conclusion_pdf_format) ? false : frozen
+  end
 end
