@@ -8,4 +8,11 @@ class ControlObjectivesHelperTest < ActionView::TestCase
 
     assert_equal expected, gal_audit_sectors
   end
+
+  test 'Should return affected sectors' do
+    Current.organization = organizations :cirope
+    expected             = Sector.list.map { |s| [s.name, s.id] }
+
+    assert_equal expected, affected_sectors
+  end
 end

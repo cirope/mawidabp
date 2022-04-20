@@ -286,6 +286,7 @@ es:
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
         date_charge: 'Fecha de alta'
+        affected_sector_id: 'Sector del Banco Afectado al Alerta'
         control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
