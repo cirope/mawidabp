@@ -83,7 +83,11 @@ module Weaknesses::Validations
     end
 
     def fields_bic_cannot_modified
-      if review.try(:is_frozen?)
+      if repeated_of.present?
+        %i[year nsisio nobs].each do |attr|
+          errors.add attr, :different_from_repeated_of if self[attr] != repeated_of[attr]
+        end
+      elsif repeated?
         %i[year nsisio nobs].each { |attr| errors.add attr, :frozen if send("#{attr}_changed?") }
       end
     end

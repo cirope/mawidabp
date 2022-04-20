@@ -1856,11 +1856,14 @@
         weakness:
           attributes:
             year:
-              frozen: 'No se puede modificar ya que la fecha de cierre del Informe definitivo es menor a hoy'
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
+              different_from_repeated_of: 'Año no puede ser diferente a la de la observacion repetida'
             nsisio:
-              frozen: 'No se puede modificar ya que la fecha de cierre del Informe definitivo es menor a hoy'
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
+              different_from_repeated_of: 'NSISIO no puede ser diferente a la de la observacion repetida'
             nobs:
-              frozen: 'No se puede modificar ya que la fecha de cierre del Informe definitivo es menor a hoy'
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
+              different_from_repeated_of: 'N OBS no puede ser diferente a la de la observacion repetida'
         workflow_item:
           attributes:
             start:
