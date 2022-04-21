@@ -613,6 +613,7 @@
     without_findings: "Sin Hallazgos"
 
   finding:
+    correctly_updated: "Observación actualizada correctamente."
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"

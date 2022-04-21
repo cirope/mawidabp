@@ -271,6 +271,9 @@ Rails.application.routes.draw do
 
       get :follow_up_pdf, on: :member, to: 'findings/follow_up_pdf#show'
 
+      get :edit_bic_sigen_fields, on: :member
+      patch :update_bic_sigen_fields, on: :member
+
       collection do
         get :export_to_pdf
         get :export_to_csv

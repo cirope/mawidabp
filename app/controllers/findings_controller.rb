@@ -8,7 +8,7 @@ class FindingsController < ApplicationController
   respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_finding, only: [:show, :edit, :update]
+  before_action :set_finding, only: [:show, :edit, :update, :edit_bic_sigen_fields, :update_bic_sigen_fields]
   before_action :check_if_editable, only: [:edit, :update]
   before_action :set_title, except: [:destroy]
 
@@ -42,6 +42,25 @@ class FindingsController < ApplicationController
                end
 
     respond_with @finding, location: location unless performed?
+  end
+
+  # * GET /incomplete/findings/1/edit_bic_sigen_fields
+  def edit_bic_sigen_fields
+  end
+
+  # * PATCH /incomplete/findings/1/update_bic_sigen_fields
+  def update_bic_sigen_fields
+    @title = t 'findings.edit_bic_sigen_fields.title'
+
+    Finding.transaction do
+      if @finding.update(bid_sigen_fields_params)
+        flash.notice = t 'finding.correctly_updated'
+        redirect_to(edit_bic_sigen_fields_finding_path('complete', @finding))
+      else
+        render action: :edit_bic_sigen_fields
+        raise ActiveRecord::Rollback
+      end
+    end
   end
 
   private
@@ -108,6 +127,10 @@ class FindingsController < ApplicationController
           :user_id, :comment
         ]
       )
+    end
+
+    def bid_sigen_fields_params
+      params.require(:finding).permit(:year, :nsisio, :nobs)
     end
 
     def audited_finding_params

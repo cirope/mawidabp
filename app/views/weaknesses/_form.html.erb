@@ -1,7 +1,7 @@
 <% readonly = @weakness.final? %>
 <% review = @weakness.review || @weakness.control_objective_item.try(:review) %>
 <% frozen = review.try(:is_frozen?) || @weakness.repeated? %>
-<% bic_sigen_fields_frozen = @weakness.repeated? || @weakness.repeated_of.present? %>
+<% bic_sigen_fields_frozen = readonly || @weakness.repeated? || @weakness.repeated_of.present? %>
 <% show_history_changes = @weakness.status_change_history.size > 1 %>
 <% form_options = {
   data: {
