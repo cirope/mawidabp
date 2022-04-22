@@ -903,6 +903,231 @@ class FindingsControllerTest < ActionController::TestCase
     assert_empty assigns(:findings)
   end
 
+  test 'assert exception when not bic pdf format and get edit bic sigen fields' do
+    set_organization
+
+    skip if %w(bic).include?(Current.conclusion_pdf_format)
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+
+    finding.save!
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :edit_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id
+      }
+    end
+  end
+
+  test 'assert exception when finding is pending and get edit bic sigen fields' do
+    set_organization
+
+    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :edit_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: findings(:being_implemented_weakness).id
+      }
+    end
+  end
+
+  test 'assert exception when finding is repeated and get edit bic sigen fields' do
+    set_organization
+
+    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+
+    finding       = findings :being_implemented_weakness
+    finding.state = Finding::STATUS[:repeated]
+
+    finding.save!
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :edit_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id
+      }
+    end
+  end
+
+  test 'assert exception when user is can act as audited, exclude in finding and get edit bic sigen fields' do
+    set_organization
+
+    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+
+    finding.save!
+
+    user_in_finding = finding_user_assignments :being_implemented_weakness_administrator
+
+    user_in_finding.destroy
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :edit_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id
+      }
+    end
+  end
+
+  test 'assert response get edit bic sigen fields' do
+    set_organization
+
+    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+
+    finding.save!
+
+    assert_nothing_raised do
+      get :edit_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id
+      }
+    end
+    assert_response :success
+  end
+
+  test 'assert exception when not bic pdf format and get update bic sigen fields' do
+    set_organization
+
+    skip if %w(bic).include?(Current.conclusion_pdf_format)
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+
+    finding.save!
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :update_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id,
+        finding: {
+          year: 'test year',
+          nsisio: 'nsisio test',
+          nobs: 'nobs test'
+        }
+      }
+    end
+  end
+
+  test 'assert exception when finding is pending and get update bic sigen fields' do
+    set_organization
+
+    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :update_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: findings(:being_implemented_weakness).id,
+        finding: {
+          year: 'test year',
+          nsisio: 'nsisio test',
+          nobs: 'nobs test'
+        }
+      }
+    end
+  end
+
+  test 'assert exception when finding is repeated and get update bic sigen fields' do
+    set_organization
+
+    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+
+    finding       = findings :being_implemented_weakness
+    finding.state = Finding::STATUS[:repeated]
+
+    finding.save!
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :update_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id,
+        finding: {
+          year: 'test year',
+          nsisio: 'nsisio test',
+          nobs: 'nobs test'
+        }
+      }
+    end
+  end
+
+  test 'assert exception when user is can act as audited, exclude in finding and get update bic sigen fields' do
+    set_organization
+
+    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+
+    finding.save!
+
+    user_in_finding = finding_user_assignments :being_implemented_weakness_administrator
+
+    user_in_finding.destroy
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :update_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id,
+        finding: {
+          year: 'test year',
+          nsisio: 'nsisio test',
+          nobs: 'nobs test'
+        }
+      }
+    end
+  end
+
+  test 'assert response get update bic sigen fields' do
+    set_organization
+
+    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+
+    finding.save!
+
+    assert_nothing_raised do
+      get :update_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id,
+        finding: {
+          year: 'test year',
+          nsisio: 'nsisio test',
+          nobs: 'nobs test'
+        }
+      }
+    end
+    assert_response :redirect
+    assert_equal I18n.t('finding.correctly_updated'), flash[:notice]
+    assert_redirected_to edit_bic_sigen_fields_finding_path('complete', finding)
+
+    finding.reload
+
+    assert_equal 'test year', finding.year
+    assert_equal 'nsisio test', finding.nsisio
+    assert_equal 'nobs test', finding.nobs
+  end
+
   private
 
     def create_finding_answers_for(finding, destroy_readings: false)

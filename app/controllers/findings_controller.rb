@@ -59,7 +59,7 @@ class FindingsController < ApplicationController
     @title = t 'findings.edit_bic_sigen_fields.title'
 
     Finding.transaction do
-      if @finding.update(bid_sigen_fields_params)
+      if @finding.update(bic_sigen_fields_params)
         flash.notice = t 'finding.correctly_updated'
         redirect_to(edit_bic_sigen_fields_finding_path('complete', @finding))
       else
@@ -135,7 +135,7 @@ class FindingsController < ApplicationController
       )
     end
 
-    def bid_sigen_fields_params
+    def bic_sigen_fields_params
       params.require(:finding).permit(:year, :nsisio, :nobs)
     end
 
