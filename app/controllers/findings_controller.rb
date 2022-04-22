@@ -8,8 +8,14 @@ class FindingsController < ApplicationController
   respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_finding, only: [:show, :edit, :update, :edit_bic_sigen_fields, :update_bic_sigen_fields]
+  before_action :set_finding, only: [:show,
+                                     :edit,
+                                     :update,
+                                     :edit_bic_sigen_fields,
+                                     :update_bic_sigen_fields]
   before_action :check_if_editable, only: [:edit, :update]
+  before_action :check_if_editable_bic_sigen_fields, only: [:edit_bic_sigen_fields, 
+                                                            :update_bic_sigen_fields]
   before_action :set_title, except: [:destroy]
 
   # * GET /incomplete/findings
@@ -184,6 +190,15 @@ class FindingsController < ApplicationController
         (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
 
       raise ActiveRecord::RecordNotFound if not_editable
+    end
+
+    def check_if_editable_bic_sigen_fields
+      if %w(bic).exclude?(Current.conclusion_pdf_format)
+        raise ActiveRecord::RecordNotFound
+      elsif @finding.pending? || @finding.repeated? ||
+            (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
+        raise ActiveRecord::RecordNotFound
+      end
     end
 
     def render_index_csv
