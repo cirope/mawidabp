@@ -904,9 +904,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when not bic pdf format and get edit bic sigen fields' do
-    set_organization
-
-    skip if %w(bic).include?(Current.conclusion_pdf_format)
+    skip_if_bic_include_in_current_pdf_format
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -924,9 +922,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when finding is pending and get edit bic sigen fields' do
-    set_organization
-
-    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+    skip_if_bic_exclude_in_current_pdf_format
 
     assert_raise ActiveRecord::RecordNotFound do
       get :edit_bic_sigen_fields, params: {
@@ -937,9 +933,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when finding is repeated and get edit bic sigen fields' do
-    set_organization
-
-    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+    skip_if_bic_exclude_in_current_pdf_format
 
     finding       = findings :being_implemented_weakness
     finding.state = Finding::STATUS[:repeated]
@@ -955,9 +949,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when user is can act as audited, exclude in finding and get edit bic sigen fields' do
-    set_organization
-
-    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+    skip_if_bic_exclude_in_current_pdf_format
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -979,9 +971,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert response get edit bic sigen fields' do
-    set_organization
-
-    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+    skip_if_bic_exclude_in_current_pdf_format
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -1000,9 +990,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when not bic pdf format and get update bic sigen fields' do
-    set_organization
-
-    skip if %w(bic).include?(Current.conclusion_pdf_format)
+    skip_if_bic_include_in_current_pdf_format
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -1025,9 +1013,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when finding is pending and get update bic sigen fields' do
-    set_organization
-
-    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+    skip_if_bic_exclude_in_current_pdf_format
 
     assert_raise ActiveRecord::RecordNotFound do
       get :update_bic_sigen_fields, params: {
@@ -1043,9 +1029,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when finding is repeated and get update bic sigen fields' do
-    set_organization
-
-    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+    skip_if_bic_exclude_in_current_pdf_format
 
     finding       = findings :being_implemented_weakness
     finding.state = Finding::STATUS[:repeated]
@@ -1066,9 +1050,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when user is can act as audited, exclude in finding and get update bic sigen fields' do
-    set_organization
-
-    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+    skip_if_bic_exclude_in_current_pdf_format
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -1095,9 +1077,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert response get update bic sigen fields' do
-    set_organization
-
-    skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+    skip_if_bic_exclude_in_current_pdf_format
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -1142,5 +1122,17 @@ class FindingsControllerTest < ActionController::TestCase
 
     def repeated_status_list
       [Finding::STATUS[:repeated]]
+    end
+
+    def skip_if_bic_include_in_current_pdf_format
+      set_organization
+
+      skip if %w(bic).include?(Current.conclusion_pdf_format)
+    end
+
+    def skip_if_bic_exclude_in_current_pdf_format
+      set_organization
+
+      skip if %w(bic).exclude?(Current.conclusion_pdf_format)
     end
 end

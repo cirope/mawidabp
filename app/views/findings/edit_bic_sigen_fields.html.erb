@@ -1,7 +1,7 @@
 <% bic_sigen_fields_frozen = @finding.repeated? || @finding.repeated_of.present? %>
 
-<%= simple_form_for @finding, :as => :finding, :url => update_bic_sigen_fields_finding_path('complete', @finding),
-    :html => {:method => :patch, :id => "edit_bic_sigen_fields_#{@finding.id}"} do |f| %>
+<%= simple_form_for @finding, as: :finding, url: update_bic_sigen_fields_finding_path('complete', @finding),
+    html: { method: :patch, id: "edit_bic_sigen_fields_#{@finding.id}" } do |f| %>
 
   <%= render 'shared/error_explanation', f: f %>
 
@@ -41,7 +41,7 @@
           ConclusionFinalReview.human_attribute_name(:issue_date), input_html: { readonly: true,
             value: (@finding.issue_date ? l(@finding.issue_date, format: :long) :
               t('finding.without_conclusion_final_review')) } %>
-        <%= f.input :audit_recommendations, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 4 : 2 } %>
+        <%= f.input :audit_recommendations, input_html: { readonly: true, rows: 2 } %>
       </div>
     </div>
   </div>
@@ -50,7 +50,7 @@
 
   <div class="form-actions">
     <div class="float-right">
-      <%= link_to_show finding_path(params[:completion_state], @finding, :user_id => params[:user_id]) %> |
+      <%= link_to_show finding_path(params[:completion_state], @finding, user_id: params[:user_id]) %> |
       <%= link_to_index findings_path(params[:completion_state], user_id: params[:user_id]) %> 
     </div>
     <%= f.input :lock_version, as: :hidden %>
