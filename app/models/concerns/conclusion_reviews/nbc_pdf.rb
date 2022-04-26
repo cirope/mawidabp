@@ -255,7 +255,9 @@ module ConclusionReviews::NbcPdf
         end
       end
 
-      pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.name'), *title_options
+      if weaknesses.where(repeated_of_id: nil).any?
+        pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.name'), *title_options
+      end
 
       weaknesses.where(repeated_of_id: nil).each_with_index do |weakness, idx|
         weakness_partial pdf, weakness
