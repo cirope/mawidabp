@@ -6,4 +6,8 @@ module ControlObjectivesHelper
       [sector, sector]
     end
   end
+
+  def affected_sectors
+    Sector.list.map { |s| [s.name, s.id] }
+  end
 end

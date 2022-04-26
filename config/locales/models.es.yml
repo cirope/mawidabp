@@ -91,6 +91,9 @@ es:
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
+      external_review:
+        one: 'Informe Externo'
+        other: 'Informes Externos'
       finding:
         one: 'Hallazgo'
         other: 'Hallazgos'
@@ -286,6 +289,7 @@ es:
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
         date_charge: 'Fecha de alta'
+        affected_sector_id: 'Sector del banco afectado al alerta'
         control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
@@ -306,6 +310,10 @@ es:
         data: 'Datos'
         error: 'Error'
         user_id: 'Usuario'
+      external_review:
+        review: 'Informe'
+        review_id: 'Informe'
+        alternative_review_id: 'Informe externo'
       finding:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -736,6 +744,7 @@ es:
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
         compliance_observations: 'Norma que impacta'
+        compliance_susceptible_to_sanction: 'Suceptible a sanción'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
@@ -788,6 +797,8 @@ es:
               had_no_extension_when_being_implemented: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension}'
             risk_justification:
               present: 'No debe tener justificacion de riesgo'
+            compliance_susceptible_to_sanction:
+              inclusion: 'debe ser uno de la lista'
         finding_user_assignment:
           attributes:
             user:

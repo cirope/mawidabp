@@ -11,7 +11,7 @@ module ImageModels::Geometry
     dimensions = {}
     path       = get_version(version).path
 
-    if path.present? && File.exists?(path)
+    if path.present? && File.exist?(path)
       MiniMagick::Image.open(path)[:dimensions].tap do |dimension|
         dimensions.merge! width: dimension.first, height: dimension.last
       end

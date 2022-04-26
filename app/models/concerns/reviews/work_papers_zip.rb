@@ -4,7 +4,7 @@ module Reviews::WorkPapersZip
   def zip_all_work_papers organization = nil
     filename = absolute_work_papers_zip_path
 
-    FileUtils.rm filename if File.exists?(filename)
+    FileUtils.rm filename if File.exist?(filename)
     FileUtils.makedirs File.dirname(filename)
 
     Zip::File.open(filename, Zip::File::CREATE) do |zipfile|

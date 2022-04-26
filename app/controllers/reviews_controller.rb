@@ -519,7 +519,8 @@ class ReviewsController < ApplicationController
         control_objective_ids: [],
         process_control_ids: [],
         best_practice_ids: [],
-        control_objective_tag_ids: []
+        control_objective_tag_ids: [],
+        external_reviews_attributes: [:id, :alternative_review_id, :_destroy]
       )
     end
 

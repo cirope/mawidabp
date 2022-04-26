@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_29_180508) do
+ActiveRecord::Schema.define(version: 2022_04_20_144217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
 
   create_table "activities", force: :cascade do |t|
     t.string "name", null: false
-    t.integer "activity_group_id", null: false
+    t.bigint "activity_group_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "require_detail", default: false, null: false
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
 
   create_table "activity_groups", force: :cascade do |t|
     t.string "name", null: false
-    t.integer "organization_id", null: false
+    t.bigint "organization_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_activity_groups_on_organization_id"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
   create_table "annexes", force: :cascade do |t|
     t.string "title", null: false
     t.text "description"
-    t.integer "conclusion_review_id"
+    t.bigint "conclusion_review_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["conclusion_review_id"], name: "index_annexes_on_conclusion_review_id"
@@ -79,8 +79,8 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
   end
 
   create_table "auxiliar_business_unit_types", force: :cascade do |t|
-    t.integer "plan_item_id", null: false
-    t.integer "business_unit_type_id", null: false
+    t.bigint "plan_item_id", null: false
+    t.bigint "business_unit_type_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["business_unit_type_id"], name: "index_auxiliar_business_unit_types_on_business_unit_type_id"
@@ -107,8 +107,8 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
   end
 
   create_table "best_practice_projects", force: :cascade do |t|
-    t.integer "best_practice_id", null: false
-    t.integer "plan_item_id", null: false
+    t.bigint "best_practice_id", null: false
+    t.bigint "plan_item_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["best_practice_id"], name: "index_best_practice_projects_on_best_practice_id"
@@ -143,7 +143,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
 
   create_table "business_unit_kinds", force: :cascade do |t|
     t.string "name", null: false
-    t.integer "organization_id", null: false
+    t.bigint "organization_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_business_unit_kinds_on_organization_id"
@@ -162,8 +162,8 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
   end
 
   create_table "business_unit_type_users", force: :cascade do |t|
-    t.integer "business_unit_type_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "business_unit_type_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["business_unit_type_id"], name: "index_business_unit_type_users_on_business_unit_type_id"
@@ -201,7 +201,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.integer "business_unit_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "business_unit_kind_id"
+    t.bigint "business_unit_kind_id"
     t.index ["business_unit_kind_id"], name: "index_business_units_on_business_unit_kind_id"
     t.index ["business_unit_type_id"], name: "index_business_units_on_business_unit_type_id"
     t.index ["name"], name: "index_business_units_on_name"
@@ -251,7 +251,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.text "reason", null: false
     t.text "plan", null: false
     t.text "controls", null: false
-    t.integer "finding_answer_id", null: false
+    t.bigint "finding_answer_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["finding_answer_id"], name: "index_commitment_supports_on_finding_answer_id"
@@ -285,8 +285,8 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.string "previous_identification"
     t.date "previous_date"
     t.text "main_recommendations"
-    t.text "effectiveness_notes"
     t.text "additional_comments"
+    t.text "effectiveness_notes"
     t.boolean "exclude_regularized_findings", default: false, null: false
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
@@ -329,8 +329,8 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
   end
 
   create_table "control_objective_projects", force: :cascade do |t|
-    t.integer "control_objective_id", null: false
-    t.integer "plan_item_id", null: false
+    t.bigint "control_objective_id", null: false
+    t.bigint "plan_item_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["control_objective_id"], name: "index_control_objective_projects_on_control_objective_id"
@@ -359,6 +359,8 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.string "score_type", default: "option", null: false
     t.string "audit_sector"
     t.date "date_charge"
+    t.bigint "affected_sector_id"
+    t.index ["affected_sector_id"], name: "index_control_objectives_on_affected_sector_id"
     t.index ["obsolete"], name: "index_control_objectives_on_obsolete"
     t.index ["process_control_id"], name: "index_control_objectives_on_process_control_id"
   end
@@ -422,8 +424,8 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
 
   create_table "endorsements", force: :cascade do |t|
     t.string "status", null: false
-    t.integer "user_id", null: false
-    t.integer "finding_answer_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "finding_answer_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "reason"
@@ -452,9 +454,18 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.index ["memo_id"], name: "index_file_model_memos_on_memo_id"
   end
 
+  create_table "external_reviews", force: :cascade do |t|
+    t.bigint "review_id"
+    t.bigint "alternative_review_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["alternative_review_id"], name: "index_external_reviews_on_alternative_review_id"
+    t.index ["review_id"], name: "index_external_reviews_on_review_id"
+  end
+
   create_table "file_model_reviews", force: :cascade do |t|
-    t.integer "file_model_id", null: false
-    t.integer "review_id", null: false
+    t.bigint "file_model_id", null: false
+    t.bigint "review_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["file_model_id"], name: "index_file_model_reviews_on_file_model_id"
@@ -555,7 +566,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.integer "parent_ids", default: [], array: true
     t.date "implemented_at"
     t.date "closed_at"
-    t.integer "latest_id"
+    t.bigint "latest_id"
     t.date "first_follow_up_date"
     t.text "compliance_observations"
     t.jsonb "commitments"
@@ -578,6 +589,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.string "year"
     t.string "nsisio"
     t.string "nobs"
+    t.boolean "compliance_susceptible_to_sanction"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -635,7 +647,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.decimal "amount", precision: 15, scale: 2
     t.text "comments"
     t.date "close_date"
-    t.integer "finding_id", null: false
+    t.bigint "finding_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "currency"
@@ -664,14 +676,14 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.integer "alternative_port"
     t.string "tls"
     t.string "ca_path"
+    t.string "office_attribute"
     t.string "organizational_unit_attribute"
     t.string "organizational_unit"
-    t.string "office_attribute"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
   end
 
   create_table "licenses", force: :cascade do |t|
-    t.integer "group_id", null: false
+    t.bigint "group_id", null: false
     t.string "status", default: "trial", null: false
     t.integer "auditors_limit", null: false
     t.string "subscription_id"
@@ -702,6 +714,9 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.date "close_date"
     t.string "required_by"
     t.integer "lock_version", default: 0, null: false
+    t.integer "period_id", null: false
+    t.integer "plan_item_id", null: false
+    t.integer "organization_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_memos_on_organization_id"
@@ -839,7 +854,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.string "model_type", null: false
     t.bigint "model_id", null: false
     t.datetime "created_at", null: false
-    t.index ["model_type", "model_id"], name: "index_permalink_models_on_model"
+    t.index ["model_type", "model_id"], name: "index_permalink_models_on_model_type_and_model_id"
     t.index ["permalink_id"], name: "index_permalink_models_on_permalink_id"
   end
 
@@ -957,7 +972,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_readings_on_organization_id"
-    t.index ["readable_type", "readable_id"], name: "index_readings_on_readable"
+    t.index ["readable_type", "readable_id"], name: "index_readings_on_readable_type_and_readable_id"
     t.index ["user_id"], name: "index_readings_on_user_id"
   end
 
@@ -1125,6 +1140,14 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.index ["organization_id"], name: "index_roles_on_organization_id"
   end
 
+  create_table "sectors", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_sectors_on_organization_id"
+  end
+
   create_table "settings", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.string "value", null: false
@@ -1145,7 +1168,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
-    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
   end
 
   create_table "tags", id: :serial, force: :cascade do |t|
@@ -1186,8 +1209,8 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
   create_table "time_consumptions", force: :cascade do |t|
     t.date "date", null: false
     t.decimal "amount", precision: 3, scale: 1, null: false
-    t.integer "resource_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "resource_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "resource_type", default: "Activity"
@@ -1313,7 +1336,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "organization_id"
-    t.integer "file_model_id"
+    t.bigint "file_model_id"
     t.index ["file_model_id"], name: "index_workflows_on_file_model_id"
     t.index ["organization_id"], name: "index_workflows_on_organization_id"
     t.index ["period_id"], name: "index_workflows_on_period_id"
@@ -1358,6 +1381,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
   add_foreign_key "control_objective_weakness_template_relations", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_weakness_template_relations", "weakness_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objectives", "process_controls", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objectives", "sectors", column: "affected_sector_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "costs", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "groups", on_update: :restrict, on_delete: :restrict
@@ -1440,6 +1464,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
   add_foreign_key "risk_weights", "risk_assessment_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_weights", "risk_assessment_weights", on_update: :restrict, on_delete: :restrict
   add_foreign_key "roles", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "sectors", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "settings", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "taggings", "tags", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
