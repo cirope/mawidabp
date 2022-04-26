@@ -701,9 +701,7 @@ ActiveRecord::Schema.define(version: 2022_03_29_180508) do
     t.text "description"
     t.date "close_date"
     t.string "required_by"
-    t.bigint "period_id", null: false
-    t.bigint "plan_item_id", null: false
-    t.bigint "organization_id", null: false
+    t.integer "lock_version", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_memos_on_organization_id"

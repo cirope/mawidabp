@@ -3,7 +3,8 @@ module Memos::Validations
 
   included do
     validates :name, :close_date, presence: true
-    validates :required_by, inclusion: { in: Memo::REQUIRED_BY_OPTIONS }
+    validates :required_by, inclusion: { in: Memo::REQUIRED_BY_OPTIONS },
+                            if: :required_by_present?
     validate :has_file_model_memos
     validate :plan_item_is_not_used
     validate :cant_change_fields
@@ -45,5 +46,9 @@ module Memos::Validations
       file_model_memos.any? do |fm_m|
         fm_m.file_model.changed? || fm_m.new_record? || fm_m.marked_for_destruction? 
       end
+    end
+
+    def required_by_present?
+      Memo::REQUIRED_BY_OPTIONS.present?
     end
 end

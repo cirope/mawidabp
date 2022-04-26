@@ -6,8 +6,8 @@ class FileModelsMemoTest < ActiveSupport::TestCase
   end
 
   test 'blank attributes' do
-    @file_model_memo.file_model_id = ''
-    @file_model_memo.memo_id       = ''
+    @file_model_memo.file_model_id = nil
+    @file_model_memo.memo_id       = nil
 
     assert @file_model_memo.invalid?
     assert_error @file_model_memo, :file_model, :required

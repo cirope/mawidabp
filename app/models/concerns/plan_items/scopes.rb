@@ -10,13 +10,14 @@ module PlanItems::Scopes
 
   module ClassMethods
     def list_unused period_id
-      left_joins(:review, :plan, :memo).where(plans: { period_id: period_id },
-                                              reviews: { plan_item_id: nil },
-                                              memos: { plan_item_id: nil })
-                                       .where.not(business_unit_id: nil)
-                                       .allowed_by_business_units
-                                       .references(:plans, :reviews, :memos)
-                                       .order(project: :asc)
+      left_joins(:review, :plan, :memo)
+        .where(plans: { period_id: period_id },
+               reviews: { plan_item_id: nil },
+               memos: { plan_item_id: nil })
+        .where.not(business_unit_id: nil)
+        .allowed_by_business_units
+        .references(:plans, :reviews, :memos)
+        .order(project: :asc)
     end
 
     def allowed_by_business_units

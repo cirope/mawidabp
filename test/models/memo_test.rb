@@ -13,6 +13,8 @@ class MemoTest < ActiveSupport::TestCase
   end
 
   test 'invalid because blank required by' do
+    skip unless Memo::REQUIRED_BY_OPTIONS.present?
+
     @memo.required_by = nil
 
     refute @memo.valid?
@@ -20,6 +22,8 @@ class MemoTest < ActiveSupport::TestCase
   end
 
   test 'invalid because not included required by' do
+    skip unless Memo::REQUIRED_BY_OPTIONS.present?
+
     @memo.required_by = 'test'
 
     refute @memo.valid?
@@ -119,6 +123,7 @@ class MemoTest < ActiveSupport::TestCase
 
   test 'should return true read only fields because close_date_was is greater than today' do
     @memo.close_date = 15.days.ago.to_date.to_s(:db)
+
     @memo.save!
 
     @memo.close_date = 15.days.from_now.to_date.to_s(:db)

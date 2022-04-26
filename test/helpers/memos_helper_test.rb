@@ -25,8 +25,7 @@ class MemosHelperTest < ActionView::TestCase
 
   test 'Should return file model memos' do
     memo = memos :first_memo
-
-    out = '<ul>'
+    out  = '<ul>'
 
     memo.file_model_memos.each do |fm_m|
       link_for_download_attachment = link_to(

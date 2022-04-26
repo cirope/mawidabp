@@ -71,7 +71,7 @@ module Memos::BicPdf
           content: '', border_width: [0, 0, 0, 0]
         },
         {
-          content: '<font name="Helvetica" size="16"><color rgb="#182d34"><b>COMENTARIOS</b></color></font>                      <font name="Helvetica" size="16"><color rgb="#aaaaaa">' + description + '</color></font>',
+          content: '<font name="Helvetica" size="16"><color rgb="#182d34"><b>COMENTARIOS</b></color></font>                      <font name="Helvetica" size="16"><color rgb="#aaaaaa">' + (description || '') + '</color></font>',
           inline_format: true,
           border_width: [0, 0, 0, 4],
           border_left_color: '008385',

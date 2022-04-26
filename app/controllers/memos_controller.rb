@@ -48,6 +48,7 @@ class MemosController < ApplicationController
     else
       render action: :edit
     end
+
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'memo.stale_object_error'
     redirect_to action: :edit
@@ -87,7 +88,7 @@ class MemosController < ApplicationController
     def memo_params
       params.require(:memo).permit(
         :period_id, :plan_item_id, :name, :description,
-        :required_by, :close_date,
+        :required_by, :close_date, :lock_version,
         file_model_memos_attributes: [
           :id, :_destroy,
           file_model_attributes: [:id, :file, :file_cache, :_destroy]

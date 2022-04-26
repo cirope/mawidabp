@@ -5,6 +5,7 @@ class AddMemosAndFileModelMemos < ActiveRecord::Migration[6.0]
       t.text :description
       t.date :close_date
       t.string :required_by
+      t.integer :lock_version, null: false, default: 0
       t.references :period, null: false, index: true, foreign_key: FOREIGN_KEY_OPTIONS.dup
       t.references :plan_item, null: false, index: true, foreign_key: FOREIGN_KEY_OPTIONS.dup
       t.references :organization, null: false, index: true, foreign_key: FOREIGN_KEY_OPTIONS.dup
