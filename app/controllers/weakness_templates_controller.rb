@@ -60,6 +60,7 @@ class WeaknessTemplatesController < ApplicationController
       params.require(:weakness_template).permit(
         :reference, :title, :description, :risk, :allow_duplication,
         :notes, :audit_recommendations, :lock_version,
+        :brief, :subreference, :failure,
         impact: [], operational_risk: [], internal_control_components: [],
         control_objective_weakness_template_relations_attributes: [
           :id, :control_objective_id, :_destroy
