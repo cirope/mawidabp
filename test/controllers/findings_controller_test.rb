@@ -1097,6 +1097,7 @@ class FindingsControllerTest < ActionController::TestCase
         }
       }
     end
+
     assert_response :redirect
     assert_equal I18n.t('finding.correctly_updated'), flash[:notice]
     assert_redirected_to edit_bic_sigen_fields_finding_path('complete', finding)
