@@ -136,7 +136,7 @@ class FindingsController < ApplicationController
     end
 
     def bic_sigen_fields_params
-      params.require(:finding).permit(:year, :nsisio, :nobs)
+      params.require(:finding).permit(:year, :nsisio, :nobs, :skip_work_paper)
     end
 
     def audited_finding_params
