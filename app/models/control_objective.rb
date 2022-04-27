@@ -2,6 +2,7 @@
 
 class ControlObjective < ApplicationRecord
   include Auditable
+  include ControlObjectives::AffectedSectorGal
   include ControlObjectives::AttributeTypes
   include ControlObjectives::AuditSectorsGal
   include ControlObjectives::Control

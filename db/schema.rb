@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_08_120621) do
+ActiveRecord::Schema.define(version: 2022_04_20_144217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -359,6 +359,8 @@ ActiveRecord::Schema.define(version: 2022_04_08_120621) do
     t.string "score_type", default: "option", null: false
     t.string "audit_sector"
     t.date "date_charge"
+    t.bigint "affected_sector_id"
+    t.index ["affected_sector_id"], name: "index_control_objectives_on_affected_sector_id"
     t.index ["obsolete"], name: "index_control_objectives_on_obsolete"
     t.index ["process_control_id"], name: "index_control_objectives_on_process_control_id"
   end
@@ -1128,6 +1130,14 @@ ActiveRecord::Schema.define(version: 2022_04_08_120621) do
     t.index ["organization_id"], name: "index_roles_on_organization_id"
   end
 
+  create_table "sectors", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_sectors_on_organization_id"
+  end
+
   create_table "settings", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.string "value", null: false
@@ -1361,6 +1371,7 @@ ActiveRecord::Schema.define(version: 2022_04_08_120621) do
   add_foreign_key "control_objective_weakness_template_relations", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_weakness_template_relations", "weakness_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objectives", "process_controls", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objectives", "sectors", column: "affected_sector_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "costs", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "groups", on_update: :restrict, on_delete: :restrict
@@ -1443,6 +1454,7 @@ ActiveRecord::Schema.define(version: 2022_04_08_120621) do
   add_foreign_key "risk_weights", "risk_assessment_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_weights", "risk_assessment_weights", on_update: :restrict, on_delete: :restrict
   add_foreign_key "roles", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "sectors", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "settings", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "taggings", "tags", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
