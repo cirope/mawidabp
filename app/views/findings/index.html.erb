@@ -59,7 +59,7 @@
         <td class="d-none d-lg-table-cell"><%= show_finding_answers_count finding %> <%= show_finding_reading_warning finding %></td>
         <td class="d-none d-lg-table-cell"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td class="text-right"><%= link_to_show finding_path(params[:completion_state], finding, user_id: params[:user_id]) %></td>
-        <td class="text-right"><%= link_to_edit(edit_finding_path('incomplete', finding, user_id: params[:user_id])) if finding.pending? && (!@auth_user.can_act_as_audited? || finding.users.reload.include?(@auth_user)) %></td>
+        <td class="text-right"><%= link_to_edit_finding finding, @auth_user %></td>
       </tr>
     <% end %>
   </tbody>

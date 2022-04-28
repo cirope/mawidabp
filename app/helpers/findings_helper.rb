@@ -327,6 +327,16 @@ module FindingsHelper
     USE_SCOPE_CYCLE ? finding.issues.any? : false
   end
 
+  def link_to_edit_finding finding, auth_user
+    if !auth_user.can_act_as_audited? || finding.users.reload.include?(auth_user)
+      if finding.pending?
+        link_to_edit(edit_finding_path('incomplete', finding, user_id: params[:user_id]))
+      elsif !finding.repeated? && %w(bic).include?(Current.conclusion_pdf_format)
+        link_to_edit(edit_bic_sigen_fields_finding_path('complete', finding))
+      end
+    end
+  end
+
   private
 
     def finding_state_options_for finding
