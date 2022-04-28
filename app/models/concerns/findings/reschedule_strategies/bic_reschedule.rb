@@ -22,9 +22,7 @@ class Findings::RescheduleStrategies::BicReschedule < Findings::RescheduleStrate
     follow_up_dates << finding.follow_up_date_was unless finding.extension_was
     follow_up_dates << finding.follow_up_date unless finding.extension
 
-    follow_up_dates.compact.sort.reverse
-
-    finding.versions_after_final_review.reverse.each do |v|
+    finding.versions_after_final_review.each do |v| #hablar sobre sacar el reverse con franco
       prev = v.reify dup: true
 
       if Finding.states_that_allow_extension.include?(prev&.state) && !prev&.extension
@@ -36,6 +34,6 @@ class Findings::RescheduleStrategies::BicReschedule < Findings::RescheduleStrate
       follow_up_dates << finding.repeated_of.follow_up_date
     end
 
-    follow_up_dates
+    follow_up_dates.compact.sort.reverse #hablar de esto con franco
   end
 end

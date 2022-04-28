@@ -13,7 +13,7 @@ module Findings::Reschedule
     count             = 0
     last_checked_date = last_follow_up_date_for_reschedule
 
-    reschedule_strategy.follow_up_dates_to_check_against.each do |date|
+    reschedule_strategy.follow_up_dates_to_check_against(self).each do |date|
       if last_checked_date && date < last_checked_date
         count            += 1
         last_checked_date = date
