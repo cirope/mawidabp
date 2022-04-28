@@ -5,23 +5,27 @@
     <%= f.input :title, input_html: { autofocus: true } %>
 
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-<%= USE_SCOPE_CYCLE ? 4 : 6 %>">
         <%= f.input :reference %>
       </div>
-      <div class="col-md-4">
-        <%= f.input :subreference %>
-      </div>
-      <div class="col-md-4">
+      <% if USE_SCOPE_CYCLE %>
+        <div class="col-md-4">
+          <%= f.input :subreference %>
+        </div>
+      <% end %>
+      <div class="col-md-<%= USE_SCOPE_CYCLE ? 4 : 6 %>">
         <%= f.input :risk, collection: risks, prompt: true %>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-<%= USE_SCOPE_CYCLE ? 6 : 12 %>">
         <%= f.input :description, input_html: { rows: 6 } %>
       </div>
-      <div class="col-md-6">
-        <%= f.input :brief, input_html: { rows: 6 } %>
-      </div>
+      <% if USE_SCOPE_CYCLE %>
+        <div class="col-md-6">
+          <%= f.input :brief, input_html: { rows: 6 } %>
+        </div>
+      <% end %>
     </div>
     <div class="row">
       <div class="col-md-6">
@@ -31,7 +35,9 @@
         <%= f.input :audit_recommendations, input_html: { rows: 6 } %>
       </div>
     </div>
-    <%= f.input :failure %>
+    <% if USE_SCOPE_CYCLE %>
+      <%= f.input :failure %>
+    <% end %>
     <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-4">
