@@ -226,9 +226,12 @@
                 data: { bic_calculate_risk: true } %>
             </div>
             <div class="col-3 text-right">
-              <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
-                data: { toggle_risk_disabled_attr: true }
-              } %>
+              <%= f.input :manual_risk, 
+                          wrapper_html: { class: 'mt-4 pt-2' }, 
+                          disabled: readonly,
+                          input_html: {
+                            data: { toggle_risk_disabled_attr: true, change_disabled_bic_calculate_risk: true }
+                          } %>
             </div>
           </div>
 
@@ -239,9 +242,9 @@
         <% end %>
 
         <% if %w(bic).include? Current.conclusion_pdf_format %>
-          <%= f.input :risk_justification, disabled: @weakness.automatic_risk?,input_html: {
+          <%= f.input :risk_justification, disabled: @weakness.automatic_risk? || readonly, input_html: {
                 data: { bic_manual_risk: true } } %>
-          <%= f.hidden_field :risk_justification, value: nil, disabled: !@weakness.automatic_risk?,
+          <%= f.hidden_field :risk_justification, value: nil, disabled: !@weakness.automatic_risk? || readonly,
                 data: { bic_calculate_risk: true } %>
         <% end %>
 

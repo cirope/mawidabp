@@ -163,7 +163,7 @@
             <div class="row">
               <div class="col-9">
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
-                  data: weakness_risk_data_options
+                  data: weakness_risk_data_options.merge({ bic_manual_risk: true })
                 } %>
                 <%= f.hidden_field :risk, disabled: !@finding.automatic_risk?,
                   data: { bic_calculate_risk: true } %>
@@ -171,7 +171,7 @@
               <div class="col-3 text-right">
                 <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
                   disabled: @finding.manual_risk,
-                  data: { toggle_risk_disabled_attr: true }
+                  data: { toggle_risk_disabled_attr: true, change_disabled_bic_calculate_risk: false }
                 } %>
               </div>
             </div>
@@ -183,7 +183,7 @@
           <% end %>
 
           <% if %w(bic).include? Current.conclusion_pdf_format %>
-            <%= f.input :risk_justification, disabled: @finding.automatic_risk?,input_html: {
+            <%= f.input :risk_justification, disabled: @finding.automatic_risk?, input_html: {
                 data: { bic_manual_risk: true } } %>
             <%= f.hidden_field :risk_justification, value: nil, disabled: !@finding.automatic_risk?,
               data: { bic_calculate_risk: true } %>
