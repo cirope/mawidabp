@@ -66,8 +66,15 @@ module Users::Roles
   end
 
   def can_act_as_audited?
-    (audited? || executive_manager? || admin? || committee?) &&
-      !(auditor? || supervisor? || manager?)
+    USE_SCOPE_CYCLE ? roles_audited? : (roles_audited? && !roles_auditors?)
+  end
+
+  def roles_audited?
+    audited? || executive_manager? || admin?
+  end
+
+  def roles_auditors?
+    auditor? || supervisor? || manager?
   end
 
   def can_act_as_audited_on? organization_id

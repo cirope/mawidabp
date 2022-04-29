@@ -141,7 +141,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :reference => 'Some reference',
           :observations => 'Some observations',
           :scope => 'Some scope',
-          :affects_compliance => '0'
+          :affects_compliance => '0',
+          :annexes_attributes => [
+            :title => 'title',
+            :description => 'description'
+          ]
         }
       }
     end
@@ -179,7 +183,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :reference => 'Some reference',
           :observations => 'Some observations',
           :scope => 'Some scope',
-          :affects_compliance => '0'
+          :affects_compliance => '0',
+          :annexes_attributes => [
+            :title => 'title',
+            :description => 'description'
+          ]
         }
       }
     end
@@ -233,6 +241,20 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to conclusion_review.relative_pdf_path
+  end
+
+  test 'export to rtf conclusion draft review' do
+    skip unless USE_SCOPE_CYCLE
+
+    login
+
+    conclusion_review = ConclusionDraftReview.find(
+      conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
+
+    assert_nothing_raised do
+      get :export_to_rtf, :params => { :id => conclusion_review.id },
+        format: :rtf
+    end
   end
 
   test 'score sheet of draft review' do

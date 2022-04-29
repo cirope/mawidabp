@@ -1,5 +1,5 @@
 module FindingsHelper
-  def finding_status_field form, disabled: false
+  def finding_status_field form, disabled: false, options_html: {}
     finding = form.object
 
     form.input :state,
@@ -8,7 +8,7 @@ module FindingsHelper
       prompt:     true,
       input_html: {
         disabled: (disabled || finding.unconfirmed?)
-      }
+      }.merge(options_html)
   end
 
   def finding_repeated_of_label form, readonly:
@@ -218,7 +218,7 @@ module FindingsHelper
   end
 
   def finding_tag_options
-    Tag.list.for_findings.order(:name).map do |t|
+    Tag.list.for_findings.where(obsolete: false).order(:name).map do |t|
       options = {
         data: {
           name:     t.name,
@@ -280,6 +280,60 @@ module FindingsHelper
       readonly || finding.risk != Finding.risks[:medium]
     else
       readonly
+    end
+  end
+
+  def finding_answer_rows
+    if SHOW_FINDING_CURRENT_SITUATION && USE_SCOPE_CYCLE
+      7
+    elsif SHOW_FINDING_CURRENT_SITUATION
+      9
+    else
+      5
+    end
+  end
+
+  def extension_enabled? finding
+    first_version_in_being_implementation?(finding) ||
+      (finding.being_implemented? && finding.extension)
+  end
+
+  def first_version_in_being_implementation? finding
+    finding.new_record? ||
+      (!finding.had_version_with_being_implemented? && !finding.being_implemented?)
+  end
+
+  def data_for_submit finding
+    if USE_SCOPE_CYCLE
+      {
+        data: {
+          confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
+                                  {
+                                    state: I18n.t('findings.state.being_implemented'),
+                                    extension: Finding.human_attribute_name(:extension)
+                                  }),
+          checkbox_target: '#finding_extension',
+          target_value_checkbox: false,
+          state_target: Finding::STATUS[:being_implemented],
+          input_with_state: '#finding_state',
+          condition_to_receive_confirm: first_version_in_being_implementation?(finding) }
+      }
+    else
+      {}
+    end
+  end
+
+  def finding_has_issues? finding
+    USE_SCOPE_CYCLE ? finding.issues.any? : false
+  end
+
+  def link_to_edit_finding finding, auth_user
+    if !auth_user.can_act_as_audited? || finding.users.reload.include?(auth_user)
+      if finding.pending?
+        link_to_edit(edit_finding_path('incomplete', finding, user_id: params[:user_id]))
+      elsif !finding.repeated? && %w(bic).include?(Current.conclusion_pdf_format)
+        link_to_edit(edit_bic_sigen_fields_finding_path('complete', finding))
+      end
     end
   end
 
@@ -402,5 +456,45 @@ module FindingsHelper
       summary = review.conclusion_final_review.summary || '-'
 
       "#{ConclusionReview.human_attribute_name 'summary'}: #{summary}"
+    end
+
+    def finding_impact_risks_types finding
+      finding.amount_by_impact.invert.reverse_each.to_json
+    end
+
+    def finding_percentage_impact_risks_types finding
+      finding.percentage_by_impact.invert.reverse_each.to_json
+    end
+
+    def finding_probability_risks_types finding
+      finding.percentage_by_probability.invert.reverse_each.to_json
+    end
+
+    def finding_bic_risks_types finding
+      finding.bic_risks_types.invert.reverse_each.to_json
+    end
+
+    def suggestion_to_add_days_follow_up_date_depending_on_the_risk
+      Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk.to_json
+    end
+
+    def states_that_suggest_follow_up_date
+      Finding.states_that_suggest_follow_up_date
+    end
+
+    def data_options_for_suggested_follow_up_date
+      if USE_SCOPE_CYCLE
+        {
+          target_input_with_origination_date: '#weakness_origination_date',
+          target_input_with_risk: '#weakness_risk',
+          target_input_with_state: '#weakness_state',
+          target_values_states_change_label: states_that_suggest_follow_up_date,
+          days_to_add: suggestion_to_add_days_follow_up_date_depending_on_the_risk,
+          suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
+          target_input_with_label: '#weakness_follow_up_date'
+        }
+      else
+        {}
+      end
     end
 end

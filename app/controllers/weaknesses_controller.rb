@@ -84,7 +84,8 @@ class WeaknessesController < ApplicationController
   def new
     @title = t 'weakness.new_title'
     @weakness = Weakness.new(
-      control_objective_item_id: params[:control_objective_item]
+      control_objective_item_id: params[:control_objective_item],
+      manual_risk: !USE_SCOPE_CYCLE
     )
 
     @weakness.import_users
@@ -163,13 +164,20 @@ class WeaknessesController < ApplicationController
   end
 
   private
+
     def weakness_params
-      params.require(:weakness).permit(
+      casted_params = params.require(:weakness).permit(
         :control_objective_item_id, :review_code, :title, :description, :brief,
         :answer, :audit_comments, :state, :origination_date, :solution_date,
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
-        :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
-        :weakness_template_id, :lock_version, :compliance_observations,
+        :follow_up_date, :users_for_notification, :compliance, :impact_risk,
+        :probability, :skip_work_paper, :weakness_template_id,
+        :compliance_observations, :compliance_susceptible_to_sanction, 
+        :manual_risk, :use_suggested_impact,
+        :use_suggested_probability, :impact_amount, :probability_amount,
+        :lock_version, :extension, :state_regulations, :degree_compliance,
+        :observation_originated_tests, :sample_deviation, :external_repeated,
+        :risk_justification, :year, :nsisio, :nobs,
         operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [], tag_ids: [],
         achievements_attributes: [
@@ -189,6 +197,10 @@ class WeaknessesController < ApplicationController
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
         ],
+        issues_attributes: [
+          :id, :customer, :entry, :operation, :amount, :currency, :comments,
+          :close_date, :_destroy
+        ],
         tasks_attributes: [
           :id, :code, :description, :status, :due_on, :_destroy
         ],
@@ -199,8 +211,12 @@ class WeaknessesController < ApplicationController
           :user_id, :comment
         ],
         image_model_attributes: [
-          :id, :image, :image_cache
+          :id, :image, :image_cache, :_destroy
         ]
+      )
+
+      casted_params.merge(
+        can_close_findings: USE_SCOPE_CYCLE && can_perform?(:approval)
       )
     end
 
@@ -218,7 +234,8 @@ class WeaknessesController < ApplicationController
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
         auto_complete_for_weakness_template: :read,
-        undo_reiteration: :modify
+        undo_reiteration: :modify,
+        weakness_template_changed: :read
       )
     end
 

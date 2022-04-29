@@ -50,7 +50,8 @@ class WeaknessTemplatesControllerTest < ActionController::TestCase
             {
               control_objective_id: control_objectives(:impact_analysis).id
             }
-          ]
+          ],
+          audit_recommendations: 'test'
         }
       }
     end

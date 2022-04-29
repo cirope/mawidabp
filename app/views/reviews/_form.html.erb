@@ -39,11 +39,19 @@
           input_html: { value: review_business_unit_text(@review), readonly: true } %>
         <%= f.input :audit_type, label: Review.human_attribute_name(:audit_type), input_html: {
           value: review_business_unit_type_text(@review), readonly: true } %>
+
+        <% if Current.conclusion_pdf_format == 'nbc' %>
+          <%= f.input :review_objective, input_html: { rows: 4 } %>
+        <% end %>
       </div>
       <div class="col-md-6">
+        <% if USE_SCOPE_CYCLE %>
+          <%= f.input :scope %>
+        <% end %>
+
         <% unless HIDE_REVIEW_DESCRIPTION %>
           <%= f.input :description, label: Review.human_attribute_name(:description),
-            input_html: { readonly: readonly, rows: 5 } %>
+            input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 4 : 5 } %>
         <% end %>
 
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
@@ -83,6 +91,9 @@
         <div id="estimated_amount" class="mt-3">
           <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
         </div>
+        <% if Current.conclusion_pdf_format == 'nbc' %>
+          <%= f.input :type_review, collection: type_review, include_blank: t('helpers.select.prompt') %>
+        <% end %>
       </div>
     </div>
 
@@ -98,17 +109,11 @@
         <% end %>
       </div>
 
-      <h5 class="h6 mt-3">
-        <%= BusinessUnitTypeReview.human_attribute_name 'business_unit_type_id' %>
-      </h5>
-
-      <div>
-        <%= f.simple_fields_for :business_unit_type_reviews do |but_r| %>
-          <%= render 'business_unit_type_review', f: but_r %>
-        <% end %>
-
-        <%= link_to_add_fields t('.add_business_unit_type'), f, :business_unit_type_reviews %>
-      </div>
+      <% if @review.persisted? && @review.plan_item.auxiliar_business_unit_types.any? %>
+        <%= render partial: 'auxiliar_business_unit_types', locals: { plan_item: @review.plan_item } %>
+      <% else %>
+        <div data-target="auxiliar-business-unit-types"></div>
+      <% end %>
     <% end %>
 
     <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
@@ -320,6 +325,21 @@
       <%= t 'review.work_papers_marked_as_revised' %>
     </div>
   <% end %>
+
+  <hr />
+
+  <div>
+    <h4 class="mt-3"><%= t 'review.external_reviews_label' %></h4>
+
+    <div>
+      <%= f.simple_fields_for :external_reviews do |er| %>
+        <%= render 'external_review', f: er, readonly: readonly %>
+      <% end %>
+    </div>
+    <div>
+      <%= link_to_add_fields((t 'review.external_reviews_title'), f, :external_reviews) %>
+    </div>
+  </div>
 
   <hr />
 

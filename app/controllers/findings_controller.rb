@@ -8,8 +8,14 @@ class FindingsController < ApplicationController
   respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_finding, only: [:show, :edit, :update]
+  before_action :set_finding, only: [:show,
+                                     :edit,
+                                     :update,
+                                     :edit_bic_sigen_fields,
+                                     :update_bic_sigen_fields]
   before_action :check_if_editable, only: [:edit, :update]
+  before_action :check_if_editable_bic_sigen_fields, only: [:edit_bic_sigen_fields, 
+                                                            :update_bic_sigen_fields]
   before_action :set_title, except: [:destroy]
 
   # * GET /incomplete/findings
@@ -35,7 +41,7 @@ class FindingsController < ApplicationController
   def update
     update_resource @finding, finding_params
 
-    location = if @finding.pending? || @finding.invalid?
+    location = if @finding.invalid? || @finding.reload.pending?
                  edit_finding_url params[:completion_state], @finding
                else
                  finding_url 'complete', @finding
@@ -44,14 +50,37 @@ class FindingsController < ApplicationController
     respond_with @finding, location: location unless performed?
   end
 
+  # * GET /incomplete/findings/1/edit_bic_sigen_fields
+  def edit_bic_sigen_fields
+  end
+
+  # * PATCH /incomplete/findings/1/update_bic_sigen_fields
+  def update_bic_sigen_fields
+    @title = t 'findings.edit_bic_sigen_fields.title'
+
+    Finding.transaction do
+      if @finding.update(bic_sigen_fields_params)
+        flash.notice = t 'finding.correctly_updated'
+        redirect_to(edit_bic_sigen_fields_finding_path('complete', @finding))
+      else
+        render action: :edit_bic_sigen_fields
+        raise ActiveRecord::Rollback
+      end
+    end
+  end
+
   private
 
     def finding_params
-      if @auth_user.can_act_as_audited?
-        audited_finding_params
-      else
-        auditor_finding_params
-      end
+      casted_params = if @auth_user.can_act_as_audited?
+                        audited_finding_params
+                      else
+                        auditor_finding_params
+                      end
+
+      casted_params.merge(
+        can_close_findings: USE_SCOPE_CYCLE && can_perform?(:approval)
+      )
     end
 
     def auditor_finding_params
@@ -60,7 +89,12 @@ class FindingsController < ApplicationController
         :brief, :answer, :current_situation, :current_situation_verified,
         :audit_comments, :state, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
-        :compliance, :compliance_observations, :nested_user, :skip_work_paper, :lock_version,
+        :compliance, :impact_risk, :probability, :compliance_observations,
+        :compliance_susceptible_to_sanction, :manual_risk, :nested_user, 
+        :skip_work_paper, :use_suggested_impact,
+        :use_suggested_probability, :impact_amount, :probability_amount,
+        :extension, :risk_justification, :year, :nsisio, :nobs,
+        :lock_version,
         impact: [],
         operational_risk: [],
         internal_control_components: [],
@@ -82,6 +116,10 @@ class FindingsController < ApplicationController
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
         ],
+        issues_attributes: [
+          :id, :customer, :entry, :operation, :amount, :currency, :comments,
+          :close_date, :_destroy
+        ],
         tasks_attributes: [
           :id, :code, :description, :status, :due_on, :_destroy
         ],
@@ -95,6 +133,10 @@ class FindingsController < ApplicationController
           :user_id, :comment
         ]
       )
+    end
+
+    def bic_sigen_fields_params
+      params.require(:finding).permit(:year, :nsisio, :nobs, :skip_work_paper)
     end
 
     def audited_finding_params
@@ -144,10 +186,19 @@ class FindingsController < ApplicationController
     end
 
     def check_if_editable
-      not_editable = !@finding.pending? ||
+      not_editable = (!@finding.pending? && @finding.valid?) ||
         (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
 
       raise ActiveRecord::RecordNotFound if not_editable
+    end
+
+    def check_if_editable_bic_sigen_fields
+      if %w(bic).exclude?(Current.conclusion_pdf_format)
+        raise ActiveRecord::RecordNotFound
+      elsif @finding.pending? || @finding.repeated? ||
+            (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
+        raise ActiveRecord::RecordNotFound
+      end
     end
 
     def render_index_csv

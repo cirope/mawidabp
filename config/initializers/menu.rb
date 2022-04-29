@@ -35,6 +35,7 @@ APP_AUDITED_MENU_ITEMS = [
         :reports,
         order: 5,
         url: { controller: '/follow_up_audited' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :audited,
@@ -59,6 +60,7 @@ APP_AUDITOR_MENU_ITEMS = [
         :organization,
         order: 1,
         url: { controller: '/organizations' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :management,
@@ -71,13 +73,21 @@ APP_AUDITOR_MENU_ITEMS = [
             order: 2,
             controllers: :business_unit_types,
             url: { controller: '/business_unit_types' }
-          )
-        ]
+          ),
+          (MenuItem.new(
+            :business_unit_kind,
+            order: 3,
+            controllers: :business_unit_kinds,
+            url: { controller: '/business_unit_kinds' }
+          ) if !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
+                    HIDE_FINDING_CRITERIA_MISMATCH)
+        ].compact
       ),
       MenuItem.new(
         :security,
         order: 2,
         url: { controller: '/users' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :users,
@@ -103,6 +113,7 @@ APP_AUDITOR_MENU_ITEMS = [
         :best_practices,
         order: 3,
         url: { controller: '/best_practices' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :best_practices,
@@ -167,9 +178,16 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/e_mails' }
       ),
       MenuItem.new(
-        :questionnaires,
+        :activity_groups,
         order: 12,
+        controllers: :activity_groups,
+        url: { controller: '/activity_groups' }
+      ),
+      MenuItem.new(
+        :questionnaires,
+        order: 13,
         url: { controller: '/questionnaires' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :definition,
@@ -242,27 +260,34 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/workflows' }
       ),
       MenuItem.new(
-        :control_objectives,
+        :time_summary,
         order: 3,
+        controllers: :time_summary,
+        url: { controller: '/time_summary' }
+      ),
+      MenuItem.new(
+        :control_objectives,
+        order: 4,
         controllers: :control_objective_items,
         url: { controller: '/control_objective_items' }
       ),
       MenuItem.new(
         :weaknesses,
-        order: 4,
+        order: 5,
         controllers: :weaknesses,
         url: { controller: '/weaknesses' }
       ),
       (MenuItem.new(
         :oportunities,
-        order: 5,
+        order: 6,
         controllers: :oportunities,
         url: { controller: '/oportunities' }
       ) unless HIDE_OPORTUNITIES),
       MenuItem.new(
         :interviews,
-        order: 6,
+        order: 7,
         url: { controller: '/opening_interviews' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :opening_interviews,
@@ -280,7 +305,7 @@ APP_AUDITOR_MENU_ITEMS = [
       ),
       MenuItem.new(
         :reports,
-        order: 6,
+        order: 8,
         controllers: :execution_reports,
         url: { controller: '/execution_reports' }
       )
@@ -347,6 +372,7 @@ APP_AUDITOR_MENU_ITEMS = [
         :reports,
         order: 5,
         url: { controller: '/follow_up_audited' },
+        drop_down_menu: true,
         children: [
           MenuItem.new(
             :audited,

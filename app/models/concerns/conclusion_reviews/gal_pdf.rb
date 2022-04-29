@@ -5,6 +5,7 @@ module ConclusionReviews::GalPdf
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
+    put_gal_tmp_reviews_code organization
     put_default_watermark_on pdf
     put_gal_header_on        pdf, organization
     put_gal_cover_on         pdf
@@ -46,21 +47,30 @@ module ConclusionReviews::GalPdf
         pdf.move_down PDF_FONT_SIZE * 2
       end
 
-      pdf.add_description_item ::Review.model_name.human, review.identification,
-        0, false, items_font_size
+      unless review.business_unit_type.without_number
+        pdf.add_description_item ::Review.model_name.human, review.identification,
+                                 0, false, items_font_size
+      end
+
       pdf.add_description_item issue_date_title, I18n.l(issue_date),
         0, false, items_font_size
 
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
-        size: items_font_size
+      if review.business_unit_type.reviews_for.present?
+        pdf.text review.business_unit_type.reviews_for, size: items_font_size
+      else
+        pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
+                 size: items_font_size
+      end
     end
 
     def put_executive_summary_on pdf, organization
-      title         = I18n.t 'conclusion_review.executive_summary.title'
-      project_title = I18n.t 'conclusion_review.executive_summary.project'
-      project       = review.plan_item.project
+      title           = I18n.t 'conclusion_review.executive_summary.title'
+      use_alt_project = review.business_unit_type.independent_identification
+      project_label   = use_alt_project ? 'project_alt' : 'project'
+      project_title   = I18n.t "conclusion_review.executive_summary.#{project_label}"
+      project         = review.plan_item.project
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
@@ -93,7 +103,12 @@ module ConclusionReviews::GalPdf
     end
 
     def put_detailed_review_on pdf, organization
-      title  = I18n.t 'conclusion_review.detailed_review.title'
+      title  = if review.business_unit_type.detailed_review.present?
+                 review.business_unit_type.detailed_review
+               else
+                 I18n.t 'conclusion_review.detailed_review.title'
+               end
+
       legend = I18n.t 'conclusion_review.detailed_review.legend'
 
       pdf.start_new_page
@@ -457,11 +472,17 @@ module ConclusionReviews::GalPdf
     def put_weakness_details_on pdf, weaknesses, hide: [], show: []
       if weaknesses.any?
         weaknesses.each do |f|
+
           coi = f.control_objective_item
 
           if show.include? 'control_objective_title'
             put_control_objective_title_on pdf, coi
           end
+
+          def f.tmp_review_code=(code); @tmp_review_code = code; end
+          def f.tmp_review_code; @tmp_review_code; end
+
+          f.tmp_review_code = @__tmp_review_codes[f.id]
 
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(f, hide: hide, show: show),
@@ -561,7 +582,7 @@ module ConclusionReviews::GalPdf
         Weakness.human_attribute_name('origination_date'), origination_date
       ].join(': ')
       text = [
-        weakness.review_code,
+        @__tmp_review_codes[weakness.id],
         weakness.title,
         state_text,
         (risk_text if show_risk),
@@ -574,18 +595,48 @@ module ConclusionReviews::GalPdf
     end
 
     def main_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code
+      _weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk
+
+      gal_sort_weaknesses_by_review_code _weaknesses
     end
 
     def other_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
+      _weaknesses = weaknesses.not_revoked.not_assumed_risk.with_other_risk
+
+      gal_sort_weaknesses_by_review_code _weaknesses
+    end
+
+    def put_gal_tmp_reviews_code organization
+      @__tmp_review_codes ||= {}
+
+      if organization&.prefix == 'filiales'
+        control_objective_items.order(:order_number).each do |coi|
+          coi.weaknesses.not_revoked.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
+            @__tmp_review_codes[weakness.id] = weakness.review_code
+          end
+        end
+      else
+        weaknesses.not_revoked.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
+          @__tmp_review_codes[weakness.id] = weakness.review_code
+        end
+      end
+    end
+
+    def gal_sort_weaknesses_by_review_code weaknesses
+      id_keys = @__tmp_review_codes.keys
+
+      weaknesses.sort do |w1, w2|
+        id_keys.index(w1.id) <=> id_keys.index(w2.id)
+      end
     end
 
     def other_not_assumed_risk_weaknesses
       risks      = [Finding.risks[:medium], Finding.risks[:low]]
       priorities = [Finding.priorities[:low]]
 
-      weaknesses.not_revoked.not_assumed_risk.where(risk: risks, priority: priorities).sort_by_code
+      _weaknesses = weaknesses.not_revoked.not_assumed_risk.where(risk: risks, priority: priorities)
+
+      gal_sort_weaknesses_by_review_code _weaknesses
     end
 
     def assumed_risk_weaknesses
@@ -593,7 +644,7 @@ module ConclusionReviews::GalPdf
     end
 
     def all_weaknesses
-      weaknesses.not_revoked.sort_by_code
+      gal_sort_weaknesses_by_review_code weaknesses.not_revoked
     end
 
     def weaknesses

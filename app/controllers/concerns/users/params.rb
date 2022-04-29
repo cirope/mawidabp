@@ -15,7 +15,7 @@ module Users::Params
 
     def editor_user_params
       [
-        :manager_id, :function, :lock_version,
+        :manager_id, :function, :office, :lock_version,
         child_ids: [],
         related_user_relations_attributes: [:id, :related_user_id, :notify, :_destroy],
         business_unit_type_users_attributes: [:id, :business_unit_type_id, :_destroy]
@@ -26,8 +26,8 @@ module Users::Params
       [
         :user, :name, :last_name, :email, :language, :notes,
         :manager_id, :enable, :logged_in, :password, :password_confirmation,
-        :hidden, :function, :send_notification_email, :confirmation_hash,
-        :lock_version,
+        :hidden, :function, :office, :send_notification_email,
+        :confirmation_hash, :lock_version,
         child_ids: [],
         organization_roles_attributes: [:id, :organization_id, :role_id, :_destroy],
         related_user_relations_attributes: [:id, :related_user_id, :notify, :_destroy],

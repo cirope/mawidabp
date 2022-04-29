@@ -164,12 +164,18 @@ module ControlObjectiveItems::FindingPdfData
     end
 
     def finding_review_code_text_for finding, show
+      review_code = if finding.try(:tmp_review_code)
+                      finding.tmp_review_code
+                    else
+                      finding.review_code
+                    end
+
       show_template_code = show.include?('template_code') &&
                            finding.weakness_template_id.blank?
       code               = if show_template_code
-                             "#{finding.review_code} <sub><b>(NE)</b></sub>"
+                             "#{review_code} <sub><b>(NE)</b></sub>"
                            else
-                             finding.review_code
+                             review_code
                            end
 
       "<b>#{finding.class.human_attribute_name 'review_code'}:</b> #{code}\n"

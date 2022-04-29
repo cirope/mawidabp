@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BestPracticesController < ApplicationController
   include AutoCompleteFor::Tagging
 
@@ -39,8 +41,11 @@ class BestPracticesController < ApplicationController
   def create
     @best_practice = BestPractice.new best_practice_params
 
-    @best_practice.save
-    respond_with @best_practice, location: edit_best_practice_url(@best_practice)
+    if @best_practice.save
+      respond_with @best_practice, location: edit_best_practice_url(@best_practice)  
+    else
+      render action: :new
+    end
   end
 
   # * PATCH /best_practices/1
@@ -83,11 +88,15 @@ class BestPracticesController < ApplicationController
         process_controls_attributes: [
           :id, :name, :order, :obsolete, :_destroy,
           control_objectives_attributes: [
-            :id, :name, :relevance, :risk, :obsolete, :support, :support_cache, :order, :_destroy,
-            :remove_support,
+            :id, :name, :relevance, :risk, :obsolete, :support, :support_cache,
+            :audit_sector, :date_charge, :order, :_destroy, :remove_support,
+            :affected_sector_id,
             taggings_attributes: [:id, :tag_id, :_destroy],
             control_attributes:  [
               :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy,
+            ],
+            control_objective_auditors_attributes: [
+              :id, :user_id, :_destroy
             ]
           ]
         ]

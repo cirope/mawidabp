@@ -7,6 +7,16 @@ es:
     monthly: 'Mensual'
     biyearly: 'Semestral'
     yearly: 'Anual'
+  impact_risk_types:
+    small: 'Insignificante'
+    low: 'Bajo'
+    moderate: 'Moderado'
+    high: 'Alto'
+    critical: 'Crítico'
+  bic_impact_risk_types:
+    low: 'Bajo'
+    moderate: 'Medio'
+    high: 'Alto'
   relevance_types:
     not_rated: 'Nulo'
     low: 'Bajo'
@@ -43,6 +53,40 @@ es:
     medium: 'Media'
     high: 'Alta'
     none: 'Organismo contralor'
+  probability_types:
+    rare: 'Raro'
+    unlikely: 'Improbable'
+    possible: 'Posible'
+    probable: 'Probable'
+    almost_certain: 'Casi Certeza'
+  frequencies_types:
+    low: 'Remota'
+    moderate: 'Probable'
+    high: 'Alto'
+  state_regulations_types:
+    not_exist: 'No existe'
+    inadequate: 'Desactualizada/inadecuada/requiere ajuste'
+    exist: 'Existe actualizada'
+  degree_compliance_types:
+    fails: 'No cumple'
+    partially: 'Se cumple parcialmente'
+    comply: 'Se cumple'
+  observation_originated_tests_types:
+    design: 'Diseño'
+    compliance: 'Cumplimiento'
+    sustantive: 'Sustantiva'
+  sample_deviation_types:
+    less_expected: 'Menos esperado'
+    most_expected: 'Mas esperado'
+  external_repeated_types:
+    repeated: 'Si'
+    no_repeated: 'No'
+  suggested_type_risks:
+    representativeness: 'Representatividad'
+    absolute_value: 'Valor absoluto'
+  suggested_type_probabilities:
+    representativeness: 'Representatividad'
+    repeatability: 'Repetitividad'
   score_types:
     satisfactory: 'Satisfactorio'
     improve: 'Necesita mejorar'

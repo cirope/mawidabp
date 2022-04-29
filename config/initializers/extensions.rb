@@ -61,9 +61,8 @@ class ActiveRecord::Base
     def self.sanitize_hash attrs
       table      = ActiveRecord::TableMetadata.new self, table
       predicate  = ActiveRecord::PredicateBuilder.new table
-      conditions = predicate.resolve_column_aliases attrs
 
-      predicate_builder.build_from_hash(conditions.stringify_keys).map do |b|
+      predicate_builder.build_from_hash(attrs.stringify_keys).map do |b|
         visit_nodes b
       end.join ' AND '
     end

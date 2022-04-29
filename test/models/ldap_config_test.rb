@@ -42,6 +42,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     @ldap_config.last_name_attribute = '?'
     @ldap_config.email_attribute = '?'
     @ldap_config.function_attribute = '?'
+    @ldap_config.office_attribute = '?'
     @ldap_config.roles_attribute = '?'
     @ldap_config.manager_attribute = '?'
 
@@ -53,6 +54,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_error @ldap_config, :last_name_attribute, :invalid
     assert_error @ldap_config, :email_attribute, :invalid
     assert_error @ldap_config, :function_attribute, :invalid
+    assert_error @ldap_config, :office_attribute, :invalid
     assert_error @ldap_config, :roles_attribute, :invalid
     assert_error @ldap_config, :manager_attribute, :invalid
   end
@@ -185,7 +187,6 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)
     assert user.organization_roles.map(&:role_id).include?(corp_role.id)
-    assert user.organizational_unit.present?
     assert_equal user.id, User.find_by(user: 'new_user').manager_id
     assert_nil user.manager_id
   end
@@ -233,7 +234,7 @@ class LdapConfigTest < ActiveSupport::TestCase
   test 'massive import' do
     user         = users(:supervisor)
     organization = organizations(:google)
-    emails_count = if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+    emails_count = if SHOW_WEAKNESS_EXTRA_ATTRIBUTES || EXTRA_USERS_INFO.size > 0
                      0
                    elsif NOTIFY_NEW_ADMIN
                      2

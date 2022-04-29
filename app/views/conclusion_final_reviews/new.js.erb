@@ -27,6 +27,9 @@
   $('#conclusion_final_review_exclude_regularized_findings').prop('checked', <%= @conclusion_final_review.exclude_regularized_findings %>)
 
   $('#best_practice_comments_container').html('<%= j best_practice_comments_form(@conclusion_final_review) %>')
+  <%= simple_fields_for @conclusion_final_review do |f| %>
+    $('#annexes').html('<%= j render('annexes', f: f) %>')
+  <% end %>
 <% else %>
   var elementsForUpdate = [
     'applied_procedures',

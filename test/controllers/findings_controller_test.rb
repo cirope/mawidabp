@@ -80,6 +80,8 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings sorted with search by date' do
+    expected_count = USE_SCOPE_CYCLE ? 3 : 4
+
     get :index, params: {
       completion_state: 'incomplete',
       search: {
@@ -90,7 +92,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 4, assigns(:findings).count
+    assert_equal expected_count, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date }
   end
 
@@ -133,7 +135,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).count
+    assert_equal 2, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.users.include?(user) }
   end
 
@@ -304,7 +306,8 @@ class FindingsControllerTest < ActionController::TestCase
   test 'edit implemented audited finding' do
     finding = findings :being_implemented_weakness
 
-    finding.update_column :state, Finding::STATUS[:implemented_audited]
+    finding.update_columns state:         Finding::STATUS[:implemented_audited],
+                           solution_date: Time.zone.today
 
     assert_raise ActiveRecord::RecordNotFound do
       get :edit, params: {
@@ -357,6 +360,10 @@ class FindingsControllerTest < ActionController::TestCase
               operational_risk: ['internal fraud'],
               impact: ['econimic', 'regulatory'],
               internal_control_components: ['risk_evaluation', 'monitoring'],
+              impact_risk: Finding.impact_risks[:small],
+              probability: Finding.probabilities[:rare],
+              extension: false,
+              manual_risk: '1',
               business_unit_ids: [business_units(:business_unit_three).id],
               finding_user_assignments_attributes: [
                 {
@@ -486,6 +493,10 @@ class FindingsControllerTest < ActionController::TestCase
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
+            impact_risk: Finding.impact_risks[:small],
+            probability: Finding.probabilities[:rare],
+            extension: false,
+            manual_risk: '1',
             finding_user_assignments_attributes: [
               {
                 user_id: users(:audited).id,
@@ -571,6 +582,10 @@ class FindingsControllerTest < ActionController::TestCase
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
           users_for_notification: [users(:bare).id],
+          impact_risk: Finding.impact_risks[:small],
+          probability: Finding.probabilities[:rare],
+          extension: false,
+          manual_risk: '1',
           finding_user_assignments_attributes: [
             {
               id: finding_user_assignments(:unconfirmed_weakness_bare).id,
@@ -629,6 +644,10 @@ class FindingsControllerTest < ActionController::TestCase
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
+          impact_risk: Finding.impact_risks[:small],
+          probability: Finding.probabilities[:rare],
+          extension: false,
+          manual_risk: '1',
           tag_ids: [
             tags(:important).id,
             tags(:pending).id,
@@ -884,6 +903,266 @@ class FindingsControllerTest < ActionController::TestCase
     assert_empty assigns(:findings)
   end
 
+  test 'assert exception when not bic pdf format and get edit bic sigen fields' do
+    skip_if_bic_include_in_current_pdf_format
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+
+    finding.save!
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :edit_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id
+      }
+    end
+  end
+
+  test 'assert exception when finding is pending and get edit bic sigen fields' do
+    skip_if_bic_exclude_in_current_pdf_format
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :edit_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: findings(:being_implemented_weakness).id
+      }
+    end
+  end
+
+  test 'assert exception when finding is repeated and get edit bic sigen fields' do
+    skip_if_bic_exclude_in_current_pdf_format
+
+    finding       = findings :being_implemented_weakness
+    finding.state = Finding::STATUS[:repeated]
+
+    finding.save!
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :edit_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id
+      }
+    end
+  end
+
+  test 'assert exception when user is can act as audited, exclude in finding and get edit bic sigen fields' do
+    skip_if_bic_exclude_in_current_pdf_format
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+
+    finding.save!
+
+    user_in_finding = finding_user_assignments :being_implemented_weakness_administrator
+
+    user_in_finding.destroy
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :edit_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id
+      }
+    end
+  end
+
+  test 'assert response get edit bic sigen fields' do
+    skip_if_bic_exclude_in_current_pdf_format
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+
+    finding.save!
+
+    assert_nothing_raised do
+      get :edit_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id
+      }
+    end
+    assert_response :success
+  end
+
+  test 'assert exception when not bic pdf format and update bic sigen fields' do
+    skip_if_bic_include_in_current_pdf_format
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+    work_paper            = work_papers :text_work_paper_being_implemented_weakness
+
+    finding.save!
+
+    work_paper.destroy
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :update_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id,
+        finding: {
+          year: 'test year',
+          nsisio: 'nsisio test',
+          nobs: 'nobs test',
+          skip_work_paper: '1'
+        }
+      }
+    end
+  end
+
+  test 'assert exception when finding is pending and update bic sigen fields' do
+    skip_if_bic_exclude_in_current_pdf_format
+
+    work_paper = work_papers :text_work_paper_being_implemented_weakness
+
+    work_paper.destroy
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :update_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: findings(:being_implemented_weakness).id,
+        finding: {
+          year: 'test year',
+          nsisio: 'nsisio test',
+          nobs: 'nobs test',
+          skip_work_paper: '1'
+        }
+      }
+    end
+  end
+
+  test 'assert exception when finding is repeated and update bic sigen fields' do
+    skip_if_bic_exclude_in_current_pdf_format
+
+    finding       = findings :being_implemented_weakness
+    finding.state = Finding::STATUS[:repeated]
+    work_paper    = work_papers :text_work_paper_being_implemented_weakness
+
+    finding.save!
+
+    work_paper.destroy
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :update_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id,
+        finding: {
+          year: 'test year',
+          nsisio: 'nsisio test',
+          nobs: 'nobs test',
+          skip_work_paper: '1'
+        }
+      }
+    end
+  end
+
+  test 'assert exception when user is can act as audited, exclude in finding and update bic sigen fields' do
+    skip_if_bic_exclude_in_current_pdf_format
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+    work_paper            = work_papers :text_work_paper_being_implemented_weakness
+
+    finding.save!
+
+    user_in_finding = finding_user_assignments :being_implemented_weakness_administrator
+
+    user_in_finding.destroy
+
+    work_paper.destroy
+
+    assert_raise ActiveRecord::RecordNotFound do
+      get :update_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id,
+        finding: {
+          year: 'test year',
+          nsisio: 'nsisio test',
+          nobs: 'nobs test',
+          skip_work_paper: '1'
+        }
+      }
+    end
+  end
+
+  test 'not update bic sigen fields when not send skip work paper' do
+    skip_if_bic_exclude_in_current_pdf_format
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+    work_paper            = work_papers :text_work_paper_being_implemented_weakness
+
+    finding.save!
+
+    work_paper.destroy
+
+    get :update_bic_sigen_fields, params: {
+      completion_state: 'complete',
+      id: finding.id,
+      finding: {
+        year: 'test year',
+        nsisio: 'nsisio test',
+        nobs: 'nobs test'
+      }
+    }
+
+    assert_match I18n.t('activerecord.errors.models.finding.attributes.state.must_have_a_work_paper'), 
+                 response.body
+
+    finding.reload
+
+    assert_not_equal 'test year', finding.year
+    assert_not_equal 'nsisio test', finding.nsisio
+    assert_not_equal 'nobs test', finding.nobs
+  end
+
+  test 'assert response update bic sigen fields' do
+    skip_if_bic_exclude_in_current_pdf_format
+
+    Current.user          = users :supervisor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today.to_s(:db)
+    work_paper            = work_papers :text_work_paper_being_implemented_weakness
+
+    finding.save!
+
+    work_paper.destroy
+
+    assert_nothing_raised do
+      get :update_bic_sigen_fields, params: {
+        completion_state: 'complete',
+        id: finding.id,
+        finding: {
+          year: 'test year',
+          nsisio: 'nsisio test',
+          nobs: 'nobs test',
+          skip_work_paper: '1'
+        }
+      }
+    end
+
+    assert_response :redirect
+    assert_equal I18n.t('finding.correctly_updated'), flash[:notice]
+    assert_redirected_to edit_bic_sigen_fields_finding_path('complete', finding)
+
+    finding.reload
+
+    assert_equal 'test year', finding.year
+    assert_equal 'nsisio test', finding.nsisio
+    assert_equal 'nobs test', finding.nobs
+  end
+
   private
 
     def create_finding_answers_for(finding, destroy_readings: false)
@@ -898,5 +1177,17 @@ class FindingsControllerTest < ActionController::TestCase
 
     def repeated_status_list
       [Finding::STATUS[:repeated]]
+    end
+
+    def skip_if_bic_include_in_current_pdf_format
+      set_organization
+
+      skip if %w(bic).include?(Current.conclusion_pdf_format)
+    end
+
+    def skip_if_bic_exclude_in_current_pdf_format
+      set_organization
+
+      skip if %w(bic).exclude?(Current.conclusion_pdf_format)
     end
 end

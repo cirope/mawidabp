@@ -45,6 +45,18 @@ module ReviewsHelper
     end
   end
 
+  def review_business_unit_type_prefixes
+    BusinessUnitType.list.map do |but|
+      [
+        but.review_prefix,
+        but.review_prefix,
+        {
+          data: { use_prefix: but.independent_identification }
+        }
+      ]
+    end
+  end
+
   def user_assignment_type_field(form, inline = true, disabled = false)
     input_options = { disabled: disabled, data: { review_role: true } }
     options = user_assignment_type_options_for form.object.user
@@ -228,5 +240,15 @@ module ReviewsHelper
 
   def count_control_objective_items_by_finished_status review, finished: false
     review.control_objective_items.select { |coi| coi.finished == finished }.count
+  end
+
+  def type_review
+    Review::TYPES_REVIEW.map do |key, value|
+      [t("reviews.form.#{key}"), value]
+    end
+  end
+
+  def show_external_review_options review
+    Review.list.map { |r| [r.identification, r.id] }
   end
 end

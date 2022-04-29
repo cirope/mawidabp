@@ -3,8 +3,20 @@
   <%= @weakness_template.title %>
 </p>
 <p class="mb-1">
+  <strong><%= WeaknessTemplate.human_attribute_name 'reference' %></strong>:
+  <%= @weakness_template.reference %>
+</p>
+<p class="mb-1">
   <strong><%= WeaknessTemplate.human_attribute_name 'description' %></strong>:
   <%= simple_format @weakness_template.description, class: 'mb-1' %>
+</p>
+<p class="mb-1">
+  <strong><%= WeaknessTemplate.human_attribute_name 'notes' %></strong>:
+  <%= simple_format @weakness_template.notes, class: 'mb-1' %>
+</p>
+<p class="mb-1">
+  <strong><%= WeaknessTemplate.human_attribute_name 'audit_recommendations' %></strong>:
+  <%= simple_format @weakness_template.audit_recommendations, class: 'mb-1' %>
 </p>
 <p class="mb-1">
   <strong><%= WeaknessTemplate.human_attribute_name 'risk' %></strong>:
@@ -34,7 +46,10 @@
 
   <ul>
     <% @weakness_template.control_objectives.each do |control_objective| %>
-      <li><%= control_objective %></li>
+      <li>
+        <%= control_objective %> | <%= control_objective.process_control %>
+        (<%= link_to control_objective.best_practice, control_objective.best_practice %>)
+      </li>
     <% end %>
   </ul>
 <% end %>

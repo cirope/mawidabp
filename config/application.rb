@@ -20,7 +20,7 @@ module MawidaBP
     end
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
 
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{config.root}/lib)
@@ -44,6 +44,6 @@ module MawidaBP
 
     # Just needed for SAML + Azure AD
     config.middleware.use ActionDispatch::Cookies # Required for all session management
-    config.middleware.use ActionDispatch::Session::CookieStore #, config.session_options
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_mbp_session', domain: ".#{ENV['APP_HOST'].sub /:.*/, ''}", same_site: :strict
   end
 end

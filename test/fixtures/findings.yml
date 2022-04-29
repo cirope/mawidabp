@@ -25,8 +25,18 @@ being_implemented_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
   notification_level: 0
   organization: cirope
+  extension: false
+  state_regulations: <%= Finding.state_regulations[:exist] %>
+  degree_compliance: <%= Finding.degree_compliance[:comply] %>
+  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
+  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
+  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
 
 unconfirmed_for_notification_weakness:
   type: Weakness
@@ -53,8 +63,17 @@ unconfirmed_for_notification_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
   notification_level: 0
   organization: cirope
+  state_regulations: <%= Finding.state_regulations[:exist] %>
+  degree_compliance: <%= Finding.degree_compliance[:comply] %>
+  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
+  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
+  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
 
 <% (1..4).each do |level| %>
 
@@ -83,8 +102,17 @@ unanswered_for_level_<%= level %>_notification:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
   notification_level: <%= level - 1 %>
   organization: cirope
+  state_regulations: <%= Finding.state_regulations[:exist] %>
+  degree_compliance: <%= Finding.degree_compliance[:comply] %>
+  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
+  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
+  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
 
 <% end %>
 
@@ -113,8 +141,17 @@ incomplete_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
   notification_level: 0
   organization: cirope
+  state_regulations: <%= Finding.state_regulations[:exist] %>
+  degree_compliance: <%= Finding.degree_compliance[:comply] %>
+  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
+  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
+  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
 
 other_unconfirmed_for_notification_weakness:
   type: Weakness
@@ -141,8 +178,17 @@ other_unconfirmed_for_notification_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
   notification_level: 0
   organization: cirope
+  state_regulations: <%= Finding.state_regulations[:exist] %>
+  degree_compliance: <%= Finding.degree_compliance[:comply] %>
+  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
+  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
+  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
 
 notify_oportunity:
   type: Oportunity
@@ -206,8 +252,17 @@ being_implemented_weakness_on_draft:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
   notification_level: 0
   organization: cirope
+  state_regulations: <%= Finding.state_regulations[:exist] %>
+  degree_compliance: <%= Finding.degree_compliance[:comply] %>
+  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
+  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
+  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
 
 unanswered_weakness:
   type: Weakness
@@ -233,8 +288,17 @@ unanswered_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
   notification_level: 0
   organization: cirope
+  state_regulations: <%= Finding.state_regulations[:exist] %>
+  degree_compliance: <%= Finding.degree_compliance[:comply] %>
+  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
+  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
+  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
 
 unconfirmed_weakness:
   type: Weakness
@@ -260,8 +324,17 @@ unconfirmed_weakness:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
   notification_level: 0
   organization: cirope
+  state_regulations: <%= Finding.state_regulations[:exist] %>
+  degree_compliance: <%= Finding.degree_compliance[:comply] %>
+  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
+  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
+  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
 
 unconfirmed_oportunity:
   type: Oportunity
@@ -346,8 +419,17 @@ being_implemented_weakness_on_final:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
   notification_level: 0
   organization: cirope
+  state_regulations: <%= Finding.state_regulations[:exist] %>
+  degree_compliance: <%= Finding.degree_compliance[:comply] %>
+  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
+  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
+  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
 
 being_implemented_weakness_on_approved_draft:
   type: Weakness
@@ -373,5 +455,14 @@ being_implemented_weakness_on_approved_draft:
   operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
   notification_level: 0
   organization: cirope
+  state_regulations: <%= Finding.state_regulations[:exist] %>
+  degree_compliance: <%= Finding.degree_compliance[:comply] %>
+  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
+  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
+  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'

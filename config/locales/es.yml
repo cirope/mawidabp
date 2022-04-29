@@ -89,6 +89,10 @@
     show_details: "Ver detalles"
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
+  business_unit_kind:
+    errors:
+      business_unit_kind_related: "El tipo de unidad de negocio no puede ser eliminado, se encuentra relacionada con al menos una unidad de negocio"
+
   business_unit_type:
     index_title: "Listado de unidades organizativas"
     show_title: "Detalle unidad organizativa"
@@ -121,10 +125,13 @@
     download_work_papers: "Descargar papeles de trabajo"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
+    download_rtf: "Descargar RTF"
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
+    add_annex: "Agregar anexo"
+    add_image: "Agregar imagen"
     errors:
       without_corrective_actions: "no tiene acciones correctivas"
 
@@ -291,6 +298,8 @@
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
       pdf_name: "observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf"
+      csv_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}'
+      period_column: 'Período'
       title: "OBSERVACIONES AGRUPADAS POR PROCESO DE NEGOCIO"
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: "Calificación promedio ponderada"
@@ -303,6 +312,7 @@
       without_weaknesses: "Sin observaciones"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
+      download_csv: 'Descargar CSV'
     qa_indicators:
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
       subtitle: ""
@@ -404,11 +414,22 @@
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
+    download_rtf: "Descargar RTF"
+    global_effectiveness: "Efectividad global"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"
     send_type:
       normal: "Informe completo"
       brief: "Informe resumido"
       without_score: "Informe sin calificación"
+    downloads:
+      review_objectives: "OBJETIVOS DE LA REVISIÓN"
+      review_objectives_description: "Realizar el seguimiento de regularización a las observaciones realizadas por la Auditoría Interna (AI) en aquellas sucursales calificadas como No Razonables en grado inadecuado o insatisfactorio en el aspecto PLA/FT."
+      general_assistant_manager: 'SubGerencia General de Integridad y Cumplimiento'
+      departmental_management: 'Gerencia Departamental de PLAyFT'
+      departmental_assistant_manager: 'SubGerencia Departamental de PLAyFT en Sucursales'
+      page_number: "N° de Foja"
+      pdf_page_footer_title: 'Codificación Uso Interno'
+      pdf_page_footer_sheet: 'Hoja'
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:
@@ -452,6 +473,7 @@
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
@@ -591,6 +613,7 @@
     without_findings: "Sin Hallazgos"
 
   finding:
+    correctly_updated: "Observación actualizada correctamente."
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
@@ -607,6 +630,7 @@
     download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
     add_task: "Agregar tarea"
+    add_issue: "Agregar caso"
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
@@ -617,12 +641,15 @@
     recode_tasks: "Recodificar tareas"
     create_work_paper: "Agregar como papel de trabajo"
     follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
+    follow_up_date_last_changed: "Último cambio de fecha de implementación"
     assignment_confirm_message: "No ha seleccionado auditores referentes ni responsables ¿Desea continuar?"
+    weakness_template_previous: 'Repite Observación'
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"
     undo_reiteration: 'Deshacer reiteración'
     change_history: "Historial de cambios"
     submit_answer: "Guardar comentario"
+    supervisor: "Jefe"
     auditors:
       one: "Auditor"
       other: "Auditores"
@@ -691,6 +718,7 @@
   follow_up_audited:
     index_title: "Reportes generales"
     weaknesses_by_user_title: "Observaciones por usuario"
+    status_user: "Estado de usuario"
     process_control_stats_title: "Observaciones por proceso de negocio"
     business_unit_type_title: "Unidad organizativa"
     business_unit_title: "Unidad de negocio"
@@ -899,6 +927,7 @@
       origination_year: "Año de origen"
       control_objective_tags: "Etiquetas objetivos de control"
       weakness_tags: "Etiquetas de observación"
+      negate_weakness_tags: "Excluir"
       review_tags: "Etiquetas de informe"
       cut_date: "Fecha de cómputo"
     weaknesses_by_control_objective:
@@ -1116,20 +1145,19 @@
 
   notifier:
     notify_new_finding:
-      title: "Tiene un nuevo hallazgo"
+      title: "Tiene un nuevo hallazgo [#%{finding_id}]"
       created_title: "Nuevo hallazgo"
     notify_new_oportunity:
       title: "Tiene una nueva oportunidad de mejora"
       oportunity_link: "Ver oportunidad de mejora"
     notify_new_finding_answer:
-      title: "Nuevo comentario en el informe %{review}"
+      title: "Nuevo comentario en el informe %{review} [#%{finding_id}]"
       finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver hallazgo"
-    notify_new_findings:
-      title: "Notificación de hallazgos"
-      created_title:
-        one: "Nuevo hallazgo"
-        other: "Nuevos hallazgos"
+    notify_action_not_found:
+      title: "No se procesó su correo"
+      warning: "No se tomó acción con el correo recibido."
+      reply_receive: "Respuesta recibida"
     change_password: "Cambiar contraseña"
     changes_notification:
       title: "Notificación de cambios"
@@ -1205,18 +1233,19 @@
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
+      subject: "Notificación por inactividad [#%{finding_id}]"
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los usuarios del siguiente hallazgo"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios del hallazgo o si se altera el organigrama"
     expired_finding_to_manager:
+      subject: "Hallazgo vencido [#%{finding_id}]"
       title: "Hallazgo vencido"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
-    unanswered_findings:
-      title: "Notificación de cambios"
-      the_following_findings_are_now_unanswered:
-        one: "El siguiente hallazgo ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
-        other: "Los siguientes hallazgos han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+    unanswered_finding:
+      subject: "Notificación de cambio a hallazgo [#%{finding_id}]"
+      title: "Notificación de cambio"
+      the_following_finding_are_now_unanswered: "El siguiente hallazgo ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
@@ -1307,6 +1336,8 @@
     bundle: "Legajo"
     copy: "Copiar"
     findings_label: "Hallazgos pendientes"
+    external_reviews_label: "Informes alternativos"
+    external_reviews_title: "Agregar informe alternativo"
     add_finding_assignment: "Agregar hallazgo pendiente"
     add_user_assignment: "Agregar usuario relacionado"
     add_past_findings: "Agregar hallazgo solucionado reciente"
@@ -1346,6 +1377,7 @@
     auditors: "AUDITORES"
     score: "CALIFICACIÓN"
     control_objectives_effectiveness: "Efectividad de control"
+    control_objectives_previous_effectiveness: "Efectividad de control anterior"
     control_objectives_relevance: "Peso"
     oportunities_summary: "Resumen de oportunidades de mejora ordenadas por estado"
     oportunities_count_summary: "Cantidad de oportunidades de mejora ordenadas por estado"
@@ -1500,6 +1532,7 @@
     hide_resource_utilization: "Ocultar recursos"
     download_global_workflow: "Descargar programa de trabajo global"
     download_detailed_workflow: "Descargar programa de trabajo detallado"
+    maximum_exceeded_by_human_resource: "%{user} ha excedido el máximo de hora para la tarea: %{item}"
     period:
       title: "Periodo (%{name})"
       range: "%{from_date} al %{to_date}"
@@ -1577,6 +1610,7 @@
         previous_identification: "Informe previo"
         previous_date: "Fecha de emisión previa"
         main_recommendations: "Principales Recomendaciones de Auditoría"
+        effectiveness_notes: "Nota efectividad"
         additional_comments: "Comentarios adicionales"
       control:
         order: "Orden"
@@ -1604,6 +1638,7 @@
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
         work_papers: "Papeles de trabajo"
+        scored_business_unit_type_id: "Unidad organizativa evaluada"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"
@@ -1763,6 +1798,10 @@
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
+        control_objective_auditor:
+          attributes:
+            user_id:
+              invalid: "Debe ser auditor"
         file_model:
           attributes:
             file:
@@ -1815,6 +1854,17 @@
               too_soon:
                 one: "no se puede modificar, debe esperar al menos un día entre cambios"
                 other: "no se puede modificar, debe esperar al menos %{count} días entre cambios"
+        weakness:
+          attributes:
+            year:
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
+              different_from_repeated_of: 'Año no puede ser diferente a la de la observacion repetida'
+            nsisio:
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
+              different_from_repeated_of: 'NSISIO no puede ser diferente a la de la observacion repetida'
+            nobs:
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
+              different_from_repeated_of: 'N OBS no puede ser diferente a la de la observacion repetida'
         workflow_item:
           attributes:
             start:

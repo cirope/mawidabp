@@ -37,9 +37,28 @@ class ApplicationController < ActionController::Base
     allowed_by_privileges = @auth_privileges[@current_module] &&
       @auth_privileges[@current_module][privilege]
 
-    allowed_by_type && allowed_by_privileges
+    select_module_in_children privilege if @drop_down_menu
+
+    allowed_by_type && allowed_by_privileges && @current_module
   end
   helper_method :can_perform?
+
+  def select_module_in_children privilege
+    @current_module = nil
+
+    @current_menu_item.children.each do |children_menu_item|
+      allowed_by_type = ALLOWED_MODULES_BY_TYPE[@auth_user.get_type].try(
+        :include?, children_menu_item.menu_name)
+
+      allowed_by_privileges = @auth_privileges[children_menu_item.menu_name] &&
+        @auth_privileges[children_menu_item.menu_name][privilege]
+
+      if @current_module.blank? && allowed_by_type && allowed_by_privileges
+        @current_module    = children_menu_item.try(:menu_name)
+        @current_menu_item = children_menu_item
+      end
+    end
+  end
 
   def search_params
     @search_params ||= params[:search]&.permit(:query, columns: []).to_h.symbolize_keys
@@ -60,9 +79,14 @@ class ApplicationController < ActionController::Base
     end
 
     def set_conclusion_pdf_format
+      prefix = current_organization&.prefix&.downcase
+
       if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
-        Current.conclusion_pdf_format =
-          SHOW_CONCLUSION_ALTERNATIVE_PDF[current_organization&.prefix&.downcase]
+        Current.conclusion_pdf_format = SHOW_CONCLUSION_ALTERNATIVE_PDF[prefix]
+      end
+
+      if USE_GLOBAL_WEAKNESS_REVIEW_CODE.include? prefix
+        Current.global_weakness_code = true
       end
 
       Current.conclusion_pdf_format ||= 'default'
@@ -148,13 +172,6 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    # Redirige la navegación a la página por defecto
-    # _message_:: Mensaje que se mostrará luego de la redirección
-    def redirect_to_index(message = nil, type = :notice) #:doc:
-      flash[type] = message if message
-      redirect_to :action => :index
-    end
-
     # Redirige la navegación a la página de autenticación
     # _message_:: Mensaje que se mostrará luego de la redirección
     def redirect_to_login(message = nil, type = :notice, params = nil) #:doc:
@@ -188,15 +205,26 @@ class ApplicationController < ActionController::Base
           end
         end
 
-        modules = selected_module ? selected_module.children : []
+        if selected_module.blank? || selected_module_is_drop_down_menu?(selected_module)
+          modules = []
+        else
+          modules = selected_module.children
+        end
       end
 
       selected_module
     end
 
+    def selected_module_is_drop_down_menu? selected_module
+      selected_module.drop_down_menu && @drop_down_menu
+    end
+
     def load_current_module
+      @drop_down_menu = params[:drop_down_menu]
       controller_name = controller_path.split('/').first
-      @current_module ||= module_name_for(controller_name.to_sym).try(:menu_name)
+
+      @current_menu_item ||= module_name_for(controller_name.to_sym)
+      @current_module    ||= @current_menu_item.try(:menu_name)
     end
 
     # Comprueba que se tengan privilegios para la acción en curso, en caso de no
@@ -205,13 +233,13 @@ class ApplicationController < ActionController::Base
     def check_privileges #:doc:
       current_action = action_name.to_sym
 
-      unless can_perform?(current_action)
-        if request.xhr?
-          render :partial => 'shared/ajax_message', :layout => false,
-            :locals => {:message => t('message.insufficient_privileges')}
-        else
-          redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
-        end
+      if can_perform? current_action
+        redirect_to @current_menu_item.url if @drop_down_menu
+      elsif request.xhr?
+        render :partial => 'shared/ajax_message', :layout => false,
+               :locals => {:message => t('message.insufficient_privileges')}
+      else
+        redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
       end
     end
 

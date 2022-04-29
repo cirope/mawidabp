@@ -1,0 +1,6 @@
+<% @conclusion_final_review.annexes.each do |annex| %>
+  <% annex_child_index = @conclusion_final_review.annexes.index annex %>
+  <%= f.simple_fields_for :annexes, annex, child_index: annex_child_index do |ann_f| %>
+    <%= render 'annex', f: ann_f %>
+  <% end %>
+<% end %>

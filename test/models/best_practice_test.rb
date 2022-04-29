@@ -113,7 +113,9 @@ class BestPracticeTest < ActiveSupport::TestCase
               {
                 name: 'new control objective 1 1',
                 control_attributes: {
-                  control: 'new control 1 1'
+                  control: 'new control 1 1',
+                  effects: 'effects',
+                  compliance_tests: 'compliance tests'
                 },
                 order: 1,
                 taggings_attributes: tag_ids.map { |t_id| { tag_id: t_id } }

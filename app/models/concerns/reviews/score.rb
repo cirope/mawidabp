@@ -17,7 +17,7 @@ module Reviews::Score
       self.class.scores(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
-    when :weaknesses, :none
+    when :weaknesses, :none, :weaknesses_alt
       self.class.scores_by_weaknesses(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
@@ -106,6 +106,54 @@ module Reviews::Score
                      end
   end
 
+  def score_by_weighted_weaknesses date
+    weaknesses      = has_final_review? ? final_weaknesses : self.weaknesses
+    total           = 0
+    high_score      = 150
+    medium_score    = 50
+    hundred_percent = 100
+
+    scores = score_by_weakness_reviews date
+
+    total = scores.sum do |row, weaknesses|
+      row.unshift weaknesses.size
+
+      row.inject &:*
+    end
+
+    if total <= medium_score
+      self.score = hundred_percent - total
+    elsif total <= high_score
+      min = ((hundred_percent - medium_score.next) / 3).to_i
+      max = hundred_percent - medium_score.next
+
+      self.score = max - ((total * min) / high_score)
+    else
+      min = 1
+      max = 16
+
+      self.score = max - ((total * min) / high_score.next).to_i
+    end
+  end
+
+  def score_by_weakness_reviews date
+    weaknesses_total = []
+
+    if external_reviews.any?
+      external_reviews.each do |er|
+        er.alternative_review.weaknesses.each { |w| weaknesses_total << w }
+      end
+    end
+
+    weaknesses.each { |w| weaknesses_total << w }
+
+    scores = weaknesses_total.select { |w| w.state_weight > 0 }.group_by do |w|
+      [w.risk_weight, w.state_weight, w.age_weight(date: date)]
+    end
+
+    scores
+  end
+
   def scored_by_weaknesses?
     score_type == 'weaknesses'
   end
@@ -126,9 +174,10 @@ module Reviews::Score
 
     def guess_score_type
       by_weaknesses = ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization&.prefix
-      splitted_effectiveness = by_weaknesses &&
-                              USE_SCOPE_CYCLE &&
-                              REVIEW_SCOPES[plan_item&.scope]&.fetch(:type, nil) == :cycle
+      splitted_effectiveness = USE_SCOPE_CYCLE &&
+                               REVIEW_SCOPES[plan_item&.scope]&.fetch(:type, nil) == :cycle
+
+      by_weaknesses_alt = Current.conclusion_pdf_format == 'nbc'
 
       if splitted_effectiveness
         :splitted_effectiveness
@@ -136,6 +185,8 @@ module Reviews::Score
         score_type&.to_sym == :none ? :none : :weaknesses
       elsif SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
+      elsif by_weaknesses_alt
+        :weaknesses_alt
       else
         :effectiveness
       end
@@ -151,6 +202,8 @@ module Reviews::Score
         score_by_splitted_effectiveness date
       when :manual, :none
         self.score = 100
+      when :weaknesses_alt
+        score_by_weighted_weaknesses date
       end
     end
 

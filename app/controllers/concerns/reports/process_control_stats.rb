@@ -209,6 +209,45 @@ module Reports::ProcessControlStats
     effectiveness_label.join(' / ')
   end
 
+  def process_control_stats_csv
+    respond_to do |format|
+      format.csv  { create_process_control_stats_csv }
+    end
+  end
+
+  def create_process_control_stats_csv
+    options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+    process_control_stats
+
+    filename = t('conclusion_committee_report.process_control_stats.csv_name',
+                 from_date: @from_date.to_formatted_s(:db),
+                 to_date: @to_date.to_formatted_s(:db))
+
+    csv_str = CSV.generate(**options) do |csv|
+      csv << ((@columns.map { |column| column[1] }) << t('conclusion_committee_report.process_control_stats.period_column'))
+    end
+
+    csv_str += CSV.generate(**options) do |csv|
+      @periods.each do |period|
+        @process_control_data[period].each do |row|
+          new_row = []
+
+          @columns.each do |col_name, _|
+            new_row << (row[col_name].kind_of?(Array) ?
+              row[col_name].map {|l| "  • #{l}"}.join("\n") :
+              row[col_name])
+          end
+
+          new_row << period.inspect
+          csv     << new_row
+        end
+      end
+    end
+
+    render request.format.symbol => csv_str, filename: filename
+  end
+
   def create_process_control_stats
     self.process_control_stats
 

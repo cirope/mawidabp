@@ -48,7 +48,8 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def duplicate_review_findings
-    findings = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
+    findings  = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
+    last_code = latest_final_weakness_review_code if Current.global_weakness_code
 
     begin
       findings.all? do |finding|
@@ -84,6 +85,12 @@ class ConclusionFinalReview < ConclusionReview
           )
         end
 
+        finding.issues.each do |i|
+          final_finding.issues.build(
+            i.attributes.dup.merge('id' => nil, 'finding_id' => nil)
+          )
+        end
+
         finding.tasks.each do |t|
           final_finding.tasks.build(
             t.attributes.dup.merge('id' => nil, 'finding_id' => nil)
@@ -102,6 +109,20 @@ class ConclusionFinalReview < ConclusionReview
           ).check_code_prefix = false
         end
 
+        if Current.global_weakness_code && finding.kind_of?(Weakness)
+          if finding.repeated_of.present?
+            code = finding.repeated_of.review_code
+          else
+            if finding.review_code.size == 8 && !review_code_final_exist?(finding.review_code)
+              code = finding.review_code
+            else
+              code = last_code = last_code.next
+            end
+          end
+
+          final_finding.review_code = finding.review_code = code
+        end
+
         final_finding.save!
         finding.save!
       end
@@ -118,6 +139,22 @@ class ConclusionFinalReview < ConclusionReview
       Rails.logger.error ex.inspect
       raise ActiveRecord::Rollback
     end
+  end
+
+  def review_code_final_exist? code
+    Weakness.list.finals(true).where(review_code: code).exists?
+  end
+
+  def last_final_weakness
+    Weakness.list.finals(true).not_revoked.reorder(review_code: :desc).first
+  end
+
+  def latest_final_weakness_review_code
+    prefix         = I18n.t 'code_prefixes.weaknesses'
+    last_used_code = last_final_weakness&.review_code || '0'
+    number_code    = last_used_code.match(/\d+\Z/).to_a.first.to_i
+
+    "#{prefix}#{'%.7d' % number_code}".strip
   end
 
   def assign_audit_date_to_control_objective_items
