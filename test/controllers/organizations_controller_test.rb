@@ -95,7 +95,7 @@ class OrganizationsControllerTest < ActionController::TestCase
           group_id: groups(:main_group).id,
           ldap_config_attributes: {
             hostname: 'localhost',
-            port: ENV['TRAVIS'] ? 3389 : 389,
+            port: ENV['GH_ACTIONS'] ? 3389 : 389,
             basedn: 'ou=people,dc=test,dc=com',
             filter: 'CN=*',
             login_mask: 'cn=%{user},%{basedn}',
