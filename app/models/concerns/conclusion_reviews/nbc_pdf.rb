@@ -240,7 +240,7 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_detected_on pdf
-      pdf.start_new_page
+      pdf.start_new_page if repeated.any? || weaknesses.where(repeated_of_id: nil).any?
 
       repeated      = weaknesses.not_revoked.where.not repeated_of_id: nil
       title_options = [(PDF_FONT_SIZE).round, :center, false]

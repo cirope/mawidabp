@@ -1,9 +1,8 @@
 <% users_readonly = false && @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? || @finding.expired? %>
 <% show_history_changes = show_follow_up_timestamps? && @finding.status_change_history.size > 1 %>
 <% data_for_submit = data_for_submit @finding %>
-<% risk_justification = users_readonly || !@finding.manual_risk %>
 <% review = @finding.review || @finding.control_objective_item.try(:review) %>
-<% frozen = review.try(:is_frozen?) || @finding.repeated? %>
+<% bic_sigen_fields_frozen = @finding.repeated? || @finding.repeated_of.present? %>
 
 <%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completion_state], @finding),
     :html => {:method => :patch, :id => "edit_finding_#{@finding.id}"}.merge(data_for_submit) do |f| %>
@@ -58,13 +57,13 @@
         <% if %w(bic).include? Current.conclusion_pdf_format %>
           <div class="row">
             <div class="col-md-4">
-              <%= f.input :year, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } }%>
+              <%= f.input :year, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } }%>
             </div>
             <div class="col-md-4">
-              <%= f.input :nsisio, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } } %>
+              <%= f.input :nsisio, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } } %>
             </div>
             <div class="col-md-4">
-              <%= f.input :nobs, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } } %>
+              <%= f.input :nobs, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } } %>
             </div>
           </div>
         <% end %>
