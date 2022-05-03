@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Findings::RescheduleStrategies::PatReschedule < Findings::RescheduleStrategies::Strategy
+class Findings::RescheduleStrategies::PatStrategy < Findings::RescheduleStrategies::Strategy
   def initialize; end;
 
   def states_that_calculate_reschedule_count? finding
@@ -19,8 +19,8 @@ class Findings::RescheduleStrategies::PatReschedule < Findings::RescheduleStrate
   def follow_up_dates_to_check_against finding
     follow_up_dates = []
 
-    follow_up_dates << finding.follow_up_date_was unless finding.extension_was
     follow_up_dates << finding.follow_up_date unless finding.extension
+    follow_up_dates << finding.follow_up_date_was unless finding.extension_was
 
     follow_up_dates = follow_up_dates.compact.sort.reverse
 

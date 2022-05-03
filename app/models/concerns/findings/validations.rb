@@ -197,7 +197,7 @@ module Findings::Validations
     end
 
     def extension_enabled
-      if Finding.states_that_allow_extension.exclude?(finding.state)
+      if Finding.states_that_allow_extension.exclude?(state)
         errors.add :extension,
                    :must_have_state_that_allows_extension,
                    extension: Finding.human_attribute_name(:extension),

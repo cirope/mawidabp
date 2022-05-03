@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Findings::RescheduleStrategies::GeneralReschedule < Findings::RescheduleStrategies::Strategy
+class Findings::RescheduleStrategies::GeneralStrategy < Findings::RescheduleStrategies::Strategy
   def initialize; end;
 
   def states_that_calculate_reschedule_count? finding
@@ -18,6 +18,7 @@ class Findings::RescheduleStrategies::GeneralReschedule < Findings::RescheduleSt
 
     finding.versions_after_final_review.reverse.each do |v|
       prev = v.reify dup: true
+
       follow_up_dates << prev.follow_up_date if prev&.being_implemented?
     end
 

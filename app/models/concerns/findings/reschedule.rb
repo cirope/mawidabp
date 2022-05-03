@@ -77,9 +77,9 @@ module Findings::Reschedule
 
     def reschedule_strategy
       @reschedule_strategy ||= if USE_SCOPE_CYCLE
-                                 Findings::RescheduleStrategies::PatReschedule.new
+                                 Findings::RescheduleStrategies::PatStrategy.new
                                else
-                                 Findings::RescheduleStrategies::GeneralReschedule.new
+                                 Findings::RescheduleStrategies::GeneralStrategy.new
                                end
     end
 end

@@ -294,8 +294,7 @@ module FindingsHelper
   end
 
   def extension_enabled? finding
-    finding.review.conclusion_final_review.blank? ||
-      (Finding.states_that_allow_extension.include?(finding.state) && finding.extension)
+    finding.review.conclusion_final_review.blank? || finding.extension
   end
 
   def data_for_submit finding
@@ -320,6 +319,22 @@ module FindingsHelper
 
   def finding_has_issues? finding
     USE_SCOPE_CYCLE ? finding.issues.any? : false
+  end
+
+  def data_options_for_suggested_follow_up_date type_form
+    if USE_SCOPE_CYCLE
+      {
+        target_input_with_origination_date: "##{type_form}_origination_date",
+        target_input_with_risk: "##{type_form}_risk",
+        target_input_with_state: "##{type_form}_state",
+        target_values_states_change_label: Finding.states_that_suggest_follow_up_date,
+        days_to_add: Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk.to_json,
+        suffix: I18n.t('findings.form.follow_up_date_label_append'),
+        target_input_with_label: "##{type_form}_follow_up_date"
+      }
+    else
+      {}
+    end
   end
 
   private
@@ -457,29 +472,5 @@ module FindingsHelper
 
     def finding_bic_risks_types finding
       finding.bic_risks_types.invert.reverse_each.to_json
-    end
-
-    def suggestion_to_add_days_follow_up_date_depending_on_the_risk
-      Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk.to_json
-    end
-
-    def states_that_suggest_follow_up_date
-      Finding.states_that_suggest_follow_up_date
-    end
-
-    def data_options_for_suggested_follow_up_date type_form
-      if USE_SCOPE_CYCLE
-        {
-          target_input_with_origination_date: "##{type_form}_origination_date",
-          target_input_with_risk: "##{type_form}_risk",
-          target_input_with_state: "##{type_form}_state",
-          target_values_states_change_label: states_that_suggest_follow_up_date,
-          days_to_add: suggestion_to_add_days_follow_up_date_depending_on_the_risk,
-          suffix: I18n.t('findings.form.follow_up_date_label_append'),
-          target_input_with_label: "##{type_form}_follow_up_date"
-        }
-      else
-        {}
-      end
     end
 end
