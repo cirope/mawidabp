@@ -90,6 +90,7 @@ class BestPracticesController < ApplicationController
           control_objectives_attributes: [
             :id, :name, :relevance, :risk, :obsolete, :support, :support_cache,
             :audit_sector, :date_charge, :order, :_destroy, :remove_support,
+            :affected_sector_id,
             taggings_attributes: [:id, :tag_id, :_destroy],
             control_attributes:  [
               :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy,

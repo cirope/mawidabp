@@ -5,7 +5,7 @@ module ConclusionReviews::GalPdf
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
-    put_gal_tmp_reviews_code
+    put_gal_tmp_reviews_code organization
     put_default_watermark_on pdf
     put_gal_header_on        pdf, organization
     put_gal_cover_on         pdf
@@ -606,15 +606,17 @@ module ConclusionReviews::GalPdf
       gal_sort_weaknesses_by_review_code _weaknesses
     end
 
-    def put_gal_tmp_reviews_code
+    def put_gal_tmp_reviews_code organization
       @__tmp_review_codes ||= {}
 
-      weaknesses.not_revoked.reorder(risk: :desc, priority: :desc).each do |weakness|
-        if weakness.review_code.length > 4
-          @__tmp_review_code ||= "#{weakness.prefix}#{'%.3d' % 0}"
-
-          @__tmp_review_codes[weakness.id] ||= (@__tmp_review_code = @__tmp_review_code.next)
-        else
+      if organization&.prefix == 'filiales'
+        control_objective_items.order(:order_number).each do |coi|
+          coi.weaknesses.not_revoked.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
+            @__tmp_review_codes[weakness.id] = weakness.review_code
+          end
+        end
+      else
+        weaknesses.not_revoked.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
           @__tmp_review_codes[weakness.id] = weakness.review_code
         end
       end

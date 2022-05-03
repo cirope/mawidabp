@@ -8,8 +8,14 @@ class FindingsController < ApplicationController
   respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_finding, only: [:show, :edit, :update]
+  before_action :set_finding, only: [:show,
+                                     :edit,
+                                     :update,
+                                     :edit_bic_sigen_fields,
+                                     :update_bic_sigen_fields]
   before_action :check_if_editable, only: [:edit, :update]
+  before_action :check_if_editable_bic_sigen_fields, only: [:edit_bic_sigen_fields, 
+                                                            :update_bic_sigen_fields]
   before_action :set_title, except: [:destroy]
 
   # * GET /incomplete/findings
@@ -42,6 +48,25 @@ class FindingsController < ApplicationController
                end
 
     respond_with @finding, location: location unless performed?
+  end
+
+  # * GET /incomplete/findings/1/edit_bic_sigen_fields
+  def edit_bic_sigen_fields
+  end
+
+  # * PATCH /incomplete/findings/1/update_bic_sigen_fields
+  def update_bic_sigen_fields
+    @title = t 'findings.edit_bic_sigen_fields.title'
+
+    Finding.transaction do
+      if @finding.update(bic_sigen_fields_params)
+        flash.notice = t 'finding.correctly_updated'
+        redirect_to(edit_bic_sigen_fields_finding_path('complete', @finding))
+      else
+        render action: :edit_bic_sigen_fields
+        raise ActiveRecord::Rollback
+      end
+    end
   end
 
   private
@@ -110,6 +135,10 @@ class FindingsController < ApplicationController
       )
     end
 
+    def bic_sigen_fields_params
+      params.require(:finding).permit(:year, :nsisio, :nobs, :skip_work_paper)
+    end
+
     def audited_finding_params
       params.require(:finding).permit(
         :id, :lock_version,
@@ -161,6 +190,15 @@ class FindingsController < ApplicationController
         (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
 
       raise ActiveRecord::RecordNotFound if not_editable
+    end
+
+    def check_if_editable_bic_sigen_fields
+      if %w(bic).exclude?(Current.conclusion_pdf_format)
+        raise ActiveRecord::RecordNotFound
+      elsif @finding.pending? || @finding.repeated? ||
+            (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
+        raise ActiveRecord::RecordNotFound
+      end
     end
 
     def render_index_csv

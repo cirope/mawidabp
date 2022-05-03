@@ -166,6 +166,8 @@ es:
       confirm_finding_without_extension: '¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo.'
     auditor_form:
       origin: 'origen'
+    edit_bic_sigen_fields:
+      title: 'Editar campos sigen de observacion.'
     current_user_filters:
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'

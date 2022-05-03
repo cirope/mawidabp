@@ -286,6 +286,7 @@ es:
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
         date_charge: 'Fecha de alta'
+        affected_sector_id: 'Sector del banco afectado al alerta'
         control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
@@ -360,8 +361,8 @@ es:
         external_repeated: 'Reiterada externa'
         risk_justification: 'Justificar riesgo'
         year: 'Año'
-        nsisio: 'NSISIO'
-        nobs: 'Nobs'
+        nsisio: 'N_SISAC'
+        nobs: 'N_Obs'
       finding/achievements:
         one: 'Beneficio estimado'
         amount: 'Monto'
@@ -742,8 +743,8 @@ es:
         manual_risk: 'Manual'
         extension: 'Días de gracia'
         year: 'Año'
-        nsisio: 'NSISIO'
-        nobs: 'Nobs'
+        nsisio: 'N_SISAC'
+        nobs: 'N_Obs'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
