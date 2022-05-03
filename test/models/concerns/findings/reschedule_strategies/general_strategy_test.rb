@@ -29,13 +29,16 @@ class Findings::RescheduleStrategies::GeneralStrategyTest < ActiveSupport::TestC
     version_1_with_being_implemented =
       versions :finding_being_implemented_weakness_with_extension_before_final_review
     version_2_with_being_implemented =
-      versions :finding_being_implemented_weakness_with_extension_after_final_review
+      versions :first_finding_being_implemented_weakness_with_extension_after_final_review
     version_3_with_being_implemented =
+      versions :second_finding_being_implemented_weakness_with_extension_after_final_review
+    version_4_with_being_implemented =
       versions :finding_being_implemented_weakness_without_extension_after_final_review
 
     version_1_with_being_implemented.destroy!
     version_2_with_being_implemented.destroy!
     version_3_with_being_implemented.destroy!
+    version_4_with_being_implemented.destroy!
 
     assert_nil strategy.last_version_for_reschedule(finding)
   end
