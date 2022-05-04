@@ -221,7 +221,7 @@ module ConclusionReviews::DefaultPdf
       pdf.add_description_item title, dates
     end
 
-    def put_default_control_objectives_on pdf, grouped_control_objectives, options
+    def put_default_control_objectives_on pdf, grouped_control_objectives, options = {}
       grouped_control_objectives.each do |process_control, cois|
         coi_data              = put_default_coi_data cois, options
         process_control_text  = "<b>#{ProcessControl.model_name.human}: "

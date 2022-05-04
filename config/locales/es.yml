@@ -613,6 +613,7 @@
     without_findings: "Sin Hallazgos"
 
   finding:
+    correctly_updated: "Observación actualizada correctamente."
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
@@ -1335,6 +1336,8 @@
     bundle: "Legajo"
     copy: "Copiar"
     findings_label: "Hallazgos pendientes"
+    external_reviews_label: "Informes alternativos"
+    external_reviews_title: "Agregar informe alternativo"
     add_finding_assignment: "Agregar hallazgo pendiente"
     add_user_assignment: "Agregar usuario relacionado"
     add_past_findings: "Agregar hallazgo solucionado reciente"
@@ -1795,6 +1798,10 @@
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
+        control_objective_auditor:
+          attributes:
+            user_id:
+              invalid: "Debe ser auditor"
         file_model:
           attributes:
             file:
@@ -1850,13 +1857,13 @@
         weakness:
           attributes:
             year:
-              frozen: 'No se puede modificar ya que la fecha de cierre del Informe definitivo es menor a hoy'
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
               different_from_repeated_of: 'Año no puede ser diferente a la de la observacion repetida'
             nsisio:
-              frozen: 'No se puede modificar ya que la fecha de cierre del Informe definitivo es menor a hoy'
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
               different_from_repeated_of: 'NSISIO no puede ser diferente a la de la observacion repetida'
             nobs:
-              frozen: 'No se puede modificar ya que la fecha de cierre del Informe definitivo es menor a hoy'
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
               different_from_repeated_of: 'N OBS no puede ser diferente a la de la observacion repetida'
         workflow_item:
           attributes:

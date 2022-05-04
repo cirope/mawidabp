@@ -60,7 +60,7 @@ module ConclusionReviews::PatRtf
     def add_organization_image document, organization
       organization_image = organization.image_model&.image&.thumb&.path
 
-      if organization_image && File.exists?(organization_image)
+      if organization_image && File.exist?(organization_image)
         header = RTF::HeaderNode.new document
 
         header.paragraph { |n| n.image(organization_image) }

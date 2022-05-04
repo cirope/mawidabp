@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
@@ -727,5 +729,15 @@ class UserTest < ActiveSupport::TestCase
 
     assert_equal one_user_file.manager_id, two_user_file.id
     assert_equal one_user_file.roles.count, 2
+  end
+
+  test 'should return auditors' do
+    expected = User.includes(organization_roles: :role).where(
+      roles: {
+        role_type: ::Role::TYPES[:auditor]
+      }
+    )
+
+    assert_equal expected, User.auditors
   end
 end

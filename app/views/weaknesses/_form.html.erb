@@ -1,6 +1,7 @@
 <% readonly = @weakness.final? %>
 <% review = @weakness.review || @weakness.control_objective_item.try(:review) %>
 <% frozen = review.try(:is_frozen?) || @weakness.repeated? %>
+<% bic_sigen_fields_frozen = readonly || @weakness.repeated? || @weakness.repeated_of.present? %>
 <% show_history_changes = @weakness.status_change_history.size > 1 %>
 <% form_options = {
   data: {
@@ -84,13 +85,13 @@
         <% if %w(bic).include? Current.conclusion_pdf_format %>
           <div class="row">
             <div class="col-md-4">
-              <%= f.input :year, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } }%>
+              <%= f.input :year, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } }%>
             </div>
             <div class="col-md-4">
-              <%= f.input :nsisio, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } } %>
+              <%= f.input :nsisio, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } } %>
             </div>
             <div class="col-md-4">
-              <%= f.input :nobs, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } } %>
+              <%= f.input :nobs, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } } %>
             </div>
           </div>
         <% end %>
@@ -265,7 +266,7 @@
                                 end  %>
 
         <%= finding_status_field(f,
-                                 disabled: readonly || @weakness.issues.any?,
+                                 disabled: readonly || finding_has_issues?(@weakness),
                                  options_html: options_for_select) %>
 
         <% if show_skip_work_paper_for @weakness %>
@@ -308,26 +309,7 @@
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
 
         <% if %w(bic pat).include? Current.conclusion_pdf_format %>
-          <% @weakness.build_image_model unless @weakness.image_model %>
-
-          <div class="clearfix">
-            <%= f.simple_fields_for :image_model do |im_f| %>
-              <p class="mb-1"><%= ImageModel.model_name.human %></p>
-
-              <div class="file-container float-left">
-                <%= link_to_upload im_f.object, :image %>
-                <% if im_f.object.image_cache %>
-                  <%= im_f.input :image_cache, as: :hidden %>
-                  <%= im_f.input :image, as: :hidden, input_html: { value: nil } %>
-                <% else %>
-                  <%= im_f.input :image, label: false %>
-                <% end %>
-              </div>
-
-              <%= link_to_download_image im_f %>
-              <%= link_to_remove_has_one_image im_f %>
-            <% end %>
-          </div>
+          <%= render 'image_model', f: f, readonly: readonly %>
         <% end %>
       </div>
     </div>
@@ -347,11 +329,20 @@
                                    }
           %>
           <%= f.input :compliance, as: :hidden, input_html: { id: 'weakness_hidden_compliance' } %>
-          <div data-compliance-observations <%= 'hidden' unless @weakness.compliance == 'yes' %>>
-            <%= f.input :compliance_observations, input_html: {
-              data: { compliance_observations_text: true }
+        </div>
+      </div>
+      <div class="row" data-compliance-observations <%= 'hidden' unless @weakness.compliance == 'yes' %>>
+        <div class="col-md-6">
+          <%= f.input :compliance_observations, input_html: { 
+            data: { compliance_observations_text: true } 
             } %>
-          </div>
+        </div>
+        <div class="col-md-2">
+          <%= f.input :compliance_susceptible_to_sanction, collection: weakness_compliance_susceptible_to_sanction_options,
+                                                           include_blank: t('helpers.select.prompt'),
+                                                           input_html: { 
+                                                             data: { compliance_susceptible_to_sanction: true }
+                                                           } %>
         </div>
       </div>
       <div class="row">

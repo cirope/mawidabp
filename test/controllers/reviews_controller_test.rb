@@ -262,6 +262,11 @@ class ReviewsControllerTest < ActionController::TestCase
                   {
                     tag_id: tags(:high_priority).id
                   }
+                ],
+                external_reviews_attributes: [
+                  {
+                    alternative_review_id: reviews(:past_review).id
+                  }
                 ]
               }
             }

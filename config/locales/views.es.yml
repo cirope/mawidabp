@@ -108,6 +108,7 @@ es:
       title: 'Detalle objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
+      add_control_objective_auditor: 'Agregar auditor a cargo'
     score_type:
       option: 'Opciones'
       percentage: 'Porcentaje'
@@ -163,6 +164,8 @@ es:
       show_status_change_history: 'Ver historial de cambios de estado'
     auditor_form:
       origin: 'origen'
+    edit_bic_sigen_fields:
+      title: 'Editar campos sigen de observacion.'
     current_user_filters:
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'
