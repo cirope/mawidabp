@@ -141,14 +141,14 @@ module Reviews::Validations
     end
 
     def plan_item_used?
-      plan_item_used_by_review? || Memo.exists?(plan_item_id: plan_item.id)
+      plan_item_used_by_review? || Memo.list.exists?(plan_item_id: plan_item.id)
     end
 
     def plan_item_used_by_review?
       if new_record?
-        Review.exists?(plan_item_id: plan_item.id)
+        Review.list.exists?(plan_item_id: plan_item.id)
       else
-        Review.where.not(id: id).exists?(plan_item_id: plan_item.id)
+        Review.list.where.not(id: id).exists?(plan_item_id: plan_item.id)
       end
     end
 end

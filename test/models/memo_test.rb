@@ -3,6 +3,8 @@ require 'test_helper'
 class MemoTest < ActiveSupport::TestCase
   setup do
     @memo = memos :first_memo
+
+    set_organization
   end
 
   test 'invalid because blank name' do

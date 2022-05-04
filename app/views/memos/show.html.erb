@@ -23,12 +23,10 @@
   <%= @memo.business_unit_type %>
 </p>
 
-<% unless HIDE_REVIEW_DESCRIPTION %>
-  <div>
-    <strong><%= Memo.human_attribute_name :description %>:</strong>
-    <%= simple_format @memo.description, class: 'mb-1' %>
-  </div>
-<% end %>
+<div>
+  <strong><%= Memo.human_attribute_name :description %>:</strong>
+  <%= simple_format @memo.description, class: 'mb-1' %>
+</div>
 
 <p class="mb-1">
   <strong><%= Memo.human_attribute_name :required_by %>:</strong>
