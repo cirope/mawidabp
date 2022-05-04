@@ -10,6 +10,10 @@ $('[id^=weakness_internal_control_components]').prop('checked', false).trigger('
   $('[name$="[risk]"]').val('<%= @weakness_template.risk %>')
   $('[name$="[audit_recommendations]"]').val('<%= j @weakness_template.audit_recommendations %>')
 
+  <% if @weakness_template.failure %>
+    $('[name$="[state]"]').val('<%= j Finding::STATUS['failure'] %>')
+  <% end %>
+
   <% Array(@weakness_template.impact).each do |value| %>
     $('[id^=weakness_impact][value="<%= j value %>"]').prop('checked', true).trigger('custom:change')
   <% end %>
