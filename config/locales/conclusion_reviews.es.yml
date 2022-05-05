@@ -167,6 +167,7 @@ es:
         repeated: "Observaciones de seguimiento"
         title: "<b>Título</b>"
         description: "<b>Descripción</b>"
+        state: "<b>Estado</b>"
         risk: "<b>Nivel de riesgo</b>"
         origination_date: '<b>Fecha de origen</b>'
         origination_author: '<b>Origen emisor</b>'

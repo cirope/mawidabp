@@ -91,6 +91,9 @@ es:
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
+      external_review:
+        one: 'Informe Externo'
+        other: 'Informes Externos'
       finding:
         one: 'Hallazgo'
         other: 'Hallazgos'
@@ -283,6 +286,7 @@ es:
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
         date_charge: 'Fecha de alta'
+        affected_sector_id: 'Sector del banco afectado al alerta'
         control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
@@ -303,6 +307,10 @@ es:
         data: 'Datos'
         error: 'Error'
         user_id: 'Usuario'
+      external_review:
+        review: 'Informe'
+        review_id: 'Informe'
+        alternative_review_id: 'Informe externo'
       finding:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -353,8 +361,8 @@ es:
         external_repeated: 'Reiterada externa'
         risk_justification: 'Justificar riesgo'
         year: 'Año'
-        nsisio: 'NSISIO'
-        nobs: 'Nobs'
+        nsisio: 'N_SISAC'
+        nobs: 'N_Obs'
       finding/achievements:
         one: 'Beneficio estimado'
         amount: 'Monto'
@@ -735,8 +743,8 @@ es:
         manual_risk: 'Manual'
         extension: 'Días de gracia'
         year: 'Año'
-        nsisio: 'NSISIO'
-        nobs: 'Nobs'
+        nsisio: 'N_SISAC'
+        nobs: 'N_Obs'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
@@ -770,8 +778,8 @@ es:
               must_have_a_manager: 'debe contener un gerente de auditoría'
               reference_auditor_required: 'debe tener un auditor referente'
             extension:
-              must_be_being_implemented: 'Para indicar que es %{extension} debe estar en estado %{state}'
-              had_no_extension_when_being_implemented: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension}'
+              must_have_state_that_allows_extension: 'Para indicar que tiene %{extension} debe estar en estado %{states}'
+              cant_have_extension_when_didnt_have_extension: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension} en los estados %{states}'
             risk_justification:
               present: 'No debe tener justificacion de riesgo'
             compliance_susceptible_to_sanction:

@@ -953,7 +953,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.reload.repeated_of
     assert finding.rescheduled?
 
-    count_reschedule = USE_SCOPE_CYCLE ? 2 : 3
+    count_reschedule = USE_SCOPE_CYCLE ? 3 : 4
 
     assert_equal count_reschedule, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
@@ -1701,113 +1701,139 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.valid?
   end
 
-  test 'should not extension' do
+  test 'should be invalid because has extension when has state excluded from states allowed' do
     skip unless USE_SCOPE_CYCLE
 
-    finding = findings :being_implemented_weakness
-
-    assert finding.not_extension?
-  end
-
-  test 'should extension' do
-    skip unless USE_SCOPE_CYCLE
-
-    finding = findings :being_implemented_weakness
-
-    finding.update_attribute('extension', true)
-
-    refute finding.not_extension?
-  end
-
-  test 'should not extension was' do
-    skip unless USE_SCOPE_CYCLE
-
-    finding = findings :being_implemented_weakness
-
-    finding.extension = true
-
-    assert finding.not_extension_was?
-  end
-
-  test 'should extension was' do
-    skip unless USE_SCOPE_CYCLE
-
-    finding = findings :being_implemented_weakness
-
-    finding.update_attribute('extension', true)
-
-    finding.extension = false
-
-    refute finding.not_extension_was?
-  end
-
-  test 'should be invalid because has extension when it no being implementation' do
     finding           = findings :incomplete_weakness
     finding.extension = true
 
     refute finding.valid?
+    assert_error finding,
+                 :extension, 
+                 :must_have_state_that_allows_extension,
+                 extension: Finding.human_attribute_name(:extension),
+                 states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
   end
 
-  test 'should be invalid because the last version had not extension' do
-    finding = findings :being_implemented_weakness
+  test 'should be invalid when is being implemented and has final review but extension_was is false' do
+    skip unless USE_SCOPE_CYCLE
 
+    finding           = findings :being_implemented_weakness
     finding.extension = true
 
     refute finding.valid?
+    assert_error finding,
+                 :extension,
+                 :cant_have_extension_when_didnt_have_extension,
+                 extension: Finding.human_attribute_name(:extension),
+                 states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
   end
 
-  test 'should be valid because is the first version in being implemented' do
+  test 'should be invalid when is awaiting and has final review but extension_was is false' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+    finding.state = Finding::STATUS[:awaiting]
+    finding.extension = true
+
+    refute finding.valid?
+    assert_error finding,
+                 :extension,
+                 :cant_have_extension_when_didnt_have_extension,
+                 extension: Finding.human_attribute_name(:extension),
+                 states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
+  end
+
+  test 'should be valid when is being implemented and has final review and extension_was is true' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_attribute :extension, true
+
+    finding.extension = true
+
+    assert finding.valid?
+  end
+
+  test 'should be valid when is awaiting and has final review and extension_was is true' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_attribute :extension, true
+
+    finding.state     = Finding::STATUS[:awaiting]
+    finding.extension = true
+
+    assert finding.valid?
+  end
+
+  test 'should be valid when is being implemented and dont has final review' do
+    skip unless USE_SCOPE_CYCLE
+
     finding = findings :incomplete_weakness
 
-    finding.extension      = true
+    finding.update_attribute :extension, true
+
     finding.state          = Finding::STATUS[:being_implemented]
-    finding.follow_up_date = FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
+    finding.follow_up_date = Date.today.to_date.to_s(:db)
+    finding.extension      = true
 
     assert finding.valid?
   end
 
-  test 'should be valid because had versions with extension' do
-    finding = findings :being_implemented_weakness
+  test 'should be valid when is awaiting and dont has final review' do
+    skip unless USE_SCOPE_CYCLE
 
-    finding.versions.each do |v|
-      if v.object['state'] == Finding::STATUS[:being_implemented]
-        v.object['extension'] = true
-      end
-    end
+    finding = findings :incomplete_weakness
 
-    finding.extension = true
-    finding.save(validate: false)
+    finding.update_attribute :extension, true
 
-    finding.extension = true
+    finding.state          = Finding::STATUS[:awaiting]
+    finding.follow_up_date = Date.today.to_date.to_s(:db)
+    finding.extension      = true
 
     assert finding.valid?
   end
 
-  test 'should return reschedule' do
+  test 'calculate reschedule' do
     finding = findings :being_implemented_weakness
 
-    reschedules = finding.calculate_reschedule_count
+    expected_reschedules = USE_SCOPE_CYCLE ? 2 : 3
 
-    assert reschedules.positive?
+    assert_equal expected_reschedules, finding.calculate_reschedule_count
 
-    finding.extension      = false
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
 
-    assert_equal reschedules + 1, finding.calculate_reschedule_count
+    assert_equal expected_reschedules + 1, finding.calculate_reschedule_count
 
     finding.save!
 
-    finding.extension      = false
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 1.days).to_s(:db)
 
-    assert_equal reschedules + 1, finding.calculate_reschedule_count
+    assert_equal expected_reschedules + 1, finding.calculate_reschedule_count
 
     finding.save!
 
-    finding.extension      = false
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 4.days).to_s(:db)
 
-    assert_equal reschedules + 2, finding.calculate_reschedule_count
+    assert_equal expected_reschedules + 2, finding.calculate_reschedule_count
+
+    if USE_SCOPE_CYCLE
+      finding.save!
+
+      finding.state = Finding::STATUS[:awaiting]
+      finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 6.days).to_s(:db)
+
+      assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
+
+      finding.save!
+
+      finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 5.days).to_s(:db)
+
+      assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
+    end
   end
 
   test 'should return not reschedule' do
@@ -1833,40 +1859,6 @@ class FindingTest < ActiveSupport::TestCase
     reschedules       = finding.calculate_reschedule_count
 
     assert reschedules.zero?
-  end
-
-  test 'should return not reschedule because versions and extension had extension' do
-    skip unless USE_SCOPE_CYCLE
-
-    finding = findings :being_implemented_weakness
-
-    finding.versions.each do |v|
-      v.object['extension'] = true
-      v.save
-    end
-
-    reschedules = finding.calculate_reschedule_count
-
-    assert reschedules.zero?
-  end
-
-  test 'should return had version with being implemented' do
-    finding = findings :being_implemented_weakness
-
-    assert finding.had_version_with_being_implemented?
-  end
-
-  test 'should return not had version with being implemented' do
-    finding = findings :being_implemented_weakness
-
-    finding.versions.each do |v|
-      if v.object['state'] == Finding::STATUS[:being_implemented]
-        v.object['state'] = Finding::STATUS[:incomplete]
-        v.save
-      end
-    end
-
-    refute finding.had_version_with_being_implemented?
   end
 
   test 'store follow_up_date_last_changed when change' do
@@ -1967,6 +1959,11 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'should return states that suggest follow up date' do
     assert_equal Finding.states_that_suggest_follow_up_date,
+                 [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
+  end
+
+  test 'should return states that allow extension' do
+    assert_equal Finding.states_that_allow_extension,
                  [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
   end
 

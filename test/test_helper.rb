@@ -107,6 +107,6 @@ class ActiveSupport::TestCase
   end
 
   def ldap_port
-    ENV['TRAVIS'] ? 3389 : 389
+    ENV['GH_ACTIONS'] ? 3389 : 389
   end
 end

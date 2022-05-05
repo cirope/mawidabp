@@ -1,0 +1,61 @@
+<% bic_sigen_fields_frozen = @finding.repeated? || @finding.repeated_of.present? %>
+
+<%= simple_form_for @finding, as: :finding, url: update_bic_sigen_fields_finding_path('complete', @finding),
+    html: { method: :patch, id: "edit_bic_sigen_fields_#{@finding.id}" } do |f| %>
+
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :review, label: Review.model_name.human, input_html: {
+              value: @finding.review.try(:identification), readonly: true } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :review_code, input_html: { readonly: true } %>
+          </div>
+        </div>
+        <%= f.input :title, input_html: { readonly: @finding.title.present? } %>
+        <%= f.input :control_objective_name, label: ControlObjective.model_name.human, input_html: {
+          value: "#{@finding.control_objective_item.control_objective_text}
+          (#{@finding.control_objective_item.process_control.name})",
+        }, readonly: true %>
+        <div class="row">
+          <div class="col-md-4">
+            <%= f.input :year, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } }%>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :nsisio, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } } %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :nobs, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } } %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :project, label: PlanItem.human_attribute_name(:project),
+          input_html: { value: @finding.review.try(:plan_item).try(:project), readonly: true } %>
+        <%= f.input :issue_date, label:
+          ConclusionFinalReview.human_attribute_name(:issue_date), input_html: { readonly: true,
+            value: (@finding.issue_date ? l(@finding.issue_date, format: :long) :
+              t('finding.without_conclusion_final_review')) } %>
+        <%= f.input :audit_recommendations, input_html: { readonly: true, rows: 2 } %>
+      </div>
+    </div>
+  </div>
+
+  <%= f.hidden_field :skip_work_paper, value: 1 %>
+
+  <hr />
+
+  <div class="form-actions">
+    <div class="float-right">
+      <%= link_to_show finding_path(params[:completion_state], @finding, user_id: params[:user_id]) %> |
+      <%= link_to_index findings_path(params[:completion_state], user_id: params[:user_id]) %> 
+    </div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
+<% end %>
