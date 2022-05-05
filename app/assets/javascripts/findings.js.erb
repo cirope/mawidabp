@@ -170,9 +170,7 @@ jQuery(function ($) {
   })
 
   $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
-    if ($(this).data('changeDisabledBicCalculateRisk')) {
-      $('[data-bic-calculate-risk]').attr('disabled', $(this).is(':checked'))
-    }
+    $('[data-bic-calculate-risk]').attr('disabled', $(this).is(':checked'))
     $('[data-bic-manual-risk]').attr('disabled', !$(this).is(':checked'))
 
     if (!$(this).is(':checked')) {

@@ -93,28 +93,25 @@
             <div class="row">
               <div class="col">
                 <%= f.input :state_regulations, collection: weakness_state_regulations, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
+                  disabled: true %>
+                <%= f.hidden_field :state_regulations, disabled: !@finding.automatic_risk?,
+                  data: { bic_calculate_risk: true } %>
                 <%= f.hidden_field :state_regulations, value: nil, disabled: @finding.automatic_risk?,
                   data: { bic_manual_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :degree_compliance, collection: weakness_degree_compliance, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
+                  disabled: true %>
+                <%= f.hidden_field :degree_compliance, disabled: !@finding.automatic_risk?,
+                  data: { bic_calculate_risk: true } %>
                 <%= f.hidden_field :degree_compliance, value: nil, disabled: @finding.automatic_risk?,
                   data: { bic_manual_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :observation_originated_tests, collection: weakness_observation_origination_tests, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
+                  disabled: true %>
+                <%= f.hidden_field :observation_originated_tests, disabled: !@finding.automatic_risk?,
+                  data: { bic_calculate_risk: true } %>
                 <%= f.hidden_field :observation_originated_tests, value: nil, disabled: @finding.automatic_risk?,
                   data: { bic_manual_risk: true } %>
               </div>
@@ -122,28 +119,25 @@
             <div class="row">
               <div class="col">
                 <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
+                  disabled: true %>
+                <%= f.hidden_field :impact_risk, disabled: !@finding.automatic_risk?,
+                  data: { bic_calculate_risk: true } %>
                 <%= f.hidden_field :impact_risk, value: nil, disabled: @finding.automatic_risk?,
                   data: { bic_manual_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :probability, collection: weakness_probabilities, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
+                  disabled: true %>
+                <%= f.hidden_field :probability, disabled: !@finding.automatic_risk?,
+                  data: { bic_calculate_risk: true } %>
                 <%= f.hidden_field :probability, value: nil, disabled: @finding.automatic_risk?,
                   data: { bic_manual_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :sample_deviation, collection: weakness_sample_deviation, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
+                  disabled: true %>
+                <%= f.hidden_field :sample_deviation, disabled: !@finding.automatic_risk?,
+                  data: { bic_calculate_risk: true } %>
                 <%= f.hidden_field :sample_deviation, value: nil, disabled: @finding.automatic_risk?,
                   data: { bic_manual_risk: true } %>
               </div>
@@ -151,10 +145,9 @@
             <div class="row">
               <div class="col">
                 <%= f.input :external_repeated, collection: weakness_external_repeated, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
+                  disabled: true %>
+                <%= f.hidden_field :external_repeated, disabled: !@finding.automatic_risk?,
+                  data: { bic_calculate_risk: true } %>
                 <%= f.hidden_field :external_repeated, value: nil, disabled: @finding.automatic_risk?,
                   data: { bic_manual_risk: true } %>
               </div>
@@ -169,8 +162,8 @@
               </div>
               <div class="col-3 text-right">
                 <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
-                  disabled: @finding.manual_risk,
-                  data: { toggle_risk_disabled_attr: true, change_disabled_bic_calculate_risk: false }
+                  disabled: Finding.find(@finding.id).manual_risk,
+                  data: { toggle_risk_disabled_attr: true }
                 } %>
               </div>
             </div>
