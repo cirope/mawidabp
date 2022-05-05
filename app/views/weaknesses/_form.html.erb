@@ -9,17 +9,6 @@
     assignment_confirm_message: t('finding.assignment_confirm_message')
   }
 } %>
-<% if USE_SCOPE_CYCLE
-    form_options[:data] = form_options[:data].merge({ confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
-                                                                       { state: I18n.t('findings.state.being_implemented'),
-                                                                         extension: Finding.human_attribute_name(:extension) }),
-                                                      checkbox_target: '#weakness_extension',
-                                                      target_value_checkbox: false,
-                                                      state_target: Finding::STATUS[:being_implemented],
-                                                      input_with_state: '#weakness_state',
-                                                      condition_to_receive_confirm: first_version_in_being_implementation?(@weakness) })
-   end
-%>
 
 <%= simple_form_for @weakness, form_options do |f| %>
   <% content_for :js_extra do %>
@@ -98,7 +87,7 @@
       </div>
       <div class="col-md-6">
         <%= f.input :origination_date, as: :date_picker, input_html: {
-          readonly: (readonly || @weakness.repeated_of), data: data_options_for_suggested_follow_up_date
+          readonly: (readonly || @weakness.repeated_of), data: data_options_for_suggested_follow_up_date('weakness')
         } %>
         <% if %w(bic).include? Current.conclusion_pdf_format %>
           <input type="hidden" id="bic-risk-types" data-bic-risks-types="<%= finding_bic_risks_types(@weakness) %>">
@@ -254,12 +243,13 @@
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : '')) %>
 
-        <% options_for_select = if USE_SCOPE_CYCLE
+        <% options_for_select = if USE_SCOPE_CYCLE && !readonly
                                   {
                                     data:
-                                      { target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
-                                        target_checkbox: '#weakness_extension',
-                                        disabled_and_deny: true }.merge(data_options_for_suggested_follow_up_date)
+                                      { 
+                                        target_values_enable_checkbox: Finding.states_that_allow_extension,
+                                        target_checkbox: '#weakness_extension'
+                                      }.merge(data_options_for_suggested_follow_up_date('weakness'))
                                   }
                                 else
                                   {}

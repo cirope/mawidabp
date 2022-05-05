@@ -83,7 +83,7 @@
             <div class="row">
               <div class="col">
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
-                  data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date)
+                  data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date('finding'))
                 } %>
               </div>
             </div>
@@ -199,9 +199,10 @@
         <% options_for_select = if USE_SCOPE_CYCLE
                                   {
                                     data:
-                                      { target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
-                                        target_checkbox: '#finding_extension',
-                                        disabled_and_deny: true }.merge(data_options_for_suggested_follow_up_date)
+                                      { 
+                                        target_values_enable_checkbox: extension_enabled?(f.object) ? Finding.states_that_allow_extension : [],
+                                        target_checkbox: '#finding_extension'
+                                      }.merge(data_options_for_suggested_follow_up_date('finding'))
                                   }
                                 else
                                   {}
@@ -224,7 +225,7 @@
           <% end %>
         <% end %>
         <%= f.input :origination_date, as: :date_picker,
-          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: data_options_for_suggested_follow_up_date } %>
+          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: data_options_for_suggested_follow_up_date('finding') } %>
         <%= f.input :answer, input_html: { rows: finding_answer_rows } %>
         <div class="row">
           <div class="col-<%= USE_SCOPE_CYCLE ? 9 : 12 %>">
