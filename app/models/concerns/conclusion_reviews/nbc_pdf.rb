@@ -100,13 +100,15 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_on pdf
-      pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
+      if weaknesses.select(&:being_implemented?).any?
+        pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
 
-      weaknesses.each do |weakness|
-        pdf.text "• #{weakness.title}" if weakness.being_implemented?
+        weaknesses.each do |weakness|
+          pdf.text "• #{weakness.title}" if weakness.being_implemented?
+        end
+
+        pdf.start_new_page
       end
-
-      pdf.start_new_page
     end
 
     def put_nbc_scores_on pdf
@@ -115,18 +117,20 @@ module ConclusionReviews::NbcPdf
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.nbc.scores.description')
 
-        data = [nbc_header_scores]
+        data       = [nbc_header_scores]
+        sum_weight = 0
 
-        nbc_get_weaknesses_by_risk.each do |row, weaknesses|
+        review.score_by_weakness_reviews(issue_date).each do |row, weaknesses|
           risk_text = weaknesses.first.risk_text
 
           row.unshift weaknesses.size
 
-          weight = row.inject &:*
+          weight      = row.inject &:*
+          sum_weight += weight
 
           data << [risk_text] + row + [weight]
         end
-
+        data << ['', '', '', '', '', sum_weight]
         data << nbc_footer_scores(review.score_array)
 
         pdf.move_down PDF_FONT_SIZE
@@ -168,12 +172,6 @@ module ConclusionReviews::NbcPdf
         { content: I18n.t('conclusion_review.nbc.scores.footer_table'), colspan: 5},
         I18n.t("conclusion_review.nbc.results_by_weighting.#{score.first}")
       ]
-    end
-
-    def nbc_get_weaknesses_by_risk
-      weaknesses.select { |w| w.state_weight > 0 }.group_by do |w|
-        [w.risk_weight, w.state_weight, w.age_weight(date: issue_date)]
-      end
     end
 
     def put_nbc_conclusion_on pdf
@@ -242,10 +240,10 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_detected_on pdf
-      pdf.start_new_page
-
       repeated      = weaknesses.not_revoked.where.not repeated_of_id: nil
       title_options = [(PDF_FONT_SIZE).round, :center, false]
+
+      pdf.start_new_page if repeated.any? || weaknesses.where(repeated_of_id: nil).any?
 
       if repeated.any?
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.repeated'), *title_options
@@ -253,16 +251,18 @@ module ConclusionReviews::NbcPdf
         repeated.each_with_index do |weakness, idx|
           weakness_partial pdf, weakness
 
-          pdf.start_new_page
+          pdf.start_new_page if idx < repeated.size - 1
         end
       end
 
-      pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.name'), *title_options
+      if weaknesses.where(repeated_of_id: nil).any?
+        pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.name'), *title_options
+      end
 
       weaknesses.where(repeated_of_id: nil).each_with_index do |weakness, idx|
         weakness_partial pdf, weakness
 
-        pdf.start_new_page if idx < weaknesses.size - 1
+        pdf.start_new_page if idx < weaknesses.where(repeated_of_id: nil).size - 1
       end
     end
 
@@ -278,9 +278,7 @@ module ConclusionReviews::NbcPdf
       pdf.text weakness.description
 
       pdf.move_down PDF_FONT_SIZE
-      put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.risk')
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text weakness.risk_text
+      nbc_risk_date_origination_header weakness, pdf
 
       pdf.move_down PDF_FONT_SIZE
       put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.audit_recommendations')
@@ -294,6 +292,30 @@ module ConclusionReviews::NbcPdf
 
       pdf.move_down PDF_FONT_SIZE
       nbc_responsible_and_follow_up_date weakness, pdf
+    end
+
+    def nbc_risk_date_origination_header weakness, pdf
+      data = [
+        [
+          I18n.t('conclusion_review.nbc.weaknesses_detected.risk'),
+          I18n.t('conclusion_review.nbc.weaknesses_detected.state'),
+          I18n.t('conclusion_review.nbc.weaknesses_detected.origination_date')
+        ],
+        [
+          weakness.risk_text,
+          weakness.state_text,
+          weakness.origination_date
+        ]
+      ]
+
+      width_column1 = PDF_FONT_SIZE * 17
+      width_column2 = (pdf.bounds.width - width_column1) / 2
+
+      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2, width_column2]) do
+        row(0).style(
+          background_color: 'EEEEEE'
+        )
+      end
     end
 
     def nbc_audit_answer_last answer
@@ -318,8 +340,7 @@ module ConclusionReviews::NbcPdf
 
       pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2]) do
         row(0).style(
-          background_color: 'EEEEEE',
-          align: :center
+          background_color: 'EEEEEE'
         )
       end
     end

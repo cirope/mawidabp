@@ -183,6 +183,7 @@ module Findings::State
         [:being_implemented, :implemented_audited, :expired, :repeated] |
           (final ? [] : [:revoked]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
+          (USE_SCOPE_CYCLE ? [:failure] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
           (show_assumed_risk ? [:assumed_risk] : [])

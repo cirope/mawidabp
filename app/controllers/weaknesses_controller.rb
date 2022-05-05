@@ -175,9 +175,12 @@ class WeaknessesController < ApplicationController
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
         :follow_up_date, :users_for_notification, :compliance, :impact_risk,
         :probability, :skip_work_paper, :weakness_template_id,
-        :compliance_observations, :manual_risk, :use_suggested_impact,
+        :compliance_observations, :compliance_susceptible_to_sanction, 
+        :manual_risk, :use_suggested_impact,
         :use_suggested_probability, :impact_amount, :probability_amount,
-        :lock_version, :extension,
+        :lock_version, :extension, :state_regulations, :degree_compliance,
+        :observation_originated_tests, :sample_deviation, :external_repeated,
+        :risk_justification, :year, :nsisio, :nobs,
         operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [], tag_ids: [],
         achievements_attributes: [
@@ -211,7 +214,7 @@ class WeaknessesController < ApplicationController
           :user_id, :comment
         ],
         image_model_attributes: [
-          :id, :image, :image_cache
+          :id, :image, :image_cache, :_destroy
         ]
       )
 
@@ -234,7 +237,8 @@ class WeaknessesController < ApplicationController
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
         auto_complete_for_weakness_template: :read,
-        undo_reiteration: :modify
+        undo_reiteration: :modify,
+        weakness_template_changed: :read
       )
     end
 

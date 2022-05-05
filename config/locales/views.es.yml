@@ -108,6 +108,7 @@ es:
       title: 'Detalle objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
+      add_control_objective_auditor: 'Agregar auditor a cargo'
     score_type:
       option: 'Opciones'
       percentage: 'Porcentaje'
@@ -163,6 +164,8 @@ es:
       show_status_change_history: 'Ver historial de cambios de estado'
     auditor_form:
       origin: 'origen'
+    edit_bic_sigen_fields:
+      title: 'Editar campos sigen de observacion.'
     current_user_filters:
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'
@@ -200,7 +203,7 @@ es:
       approve: 'Aprobar'
       reject: 'Rechazar'
     weakness:
-      follow_up_date_label_append: ' - Realizada'
+      follow_up_date_label_append: ' - Sugerida: '
       confirm_first_version_being_implemented_withou_extension: '¿Seguro desea establecer el estado %{state} sin %{extension}?'
 
   licenses:
@@ -508,6 +511,8 @@ es:
       material: 'Materiales'
 
   reviews:
+    auxiliar_business_unit_types:
+      title: 'Unidades organizativas auxiliares'
     index:
       control_objective_items_open:
         title: 'Objetivos de control abiertos'
@@ -517,6 +522,8 @@ es:
         label: 'OCF'
     form:
       add_business_unit_type: 'Agregar unidad organizativa'
+      operational_audit: 'Auditoría operativa'
+      system_audit: 'Auditoría de sistema'
 
   sessions:
     new:
@@ -611,13 +618,10 @@ es:
       total_amount:
         one: 'Total de horas acumuladas: %{amount}'
         other: 'Total de horas acumuladas por %{count} personas: %{amount}'
-
     new:
       title: 'Nueva actividad'
     form:
       add_business_unit_type: 'Agregar unidad organizativa'
-      operational_audit: 'Auditoría operativa'
-      system_audit: 'Auditoría de sistema'
     auxiliar_business_unit_types:
       title: 'Unidades organizativas auxiliares'
       activity: 'Actividad'

@@ -328,6 +328,21 @@
 
   <hr />
 
+  <div>
+    <h4 class="mt-3"><%= t 'review.external_reviews_label' %></h4>
+
+    <div>
+      <%= f.simple_fields_for :external_reviews do |er| %>
+        <%= render 'external_review', f: er, readonly: readonly %>
+      <% end %>
+    </div>
+    <div>
+      <%= link_to_add_fields((t 'review.external_reviews_title'), f, :external_reviews) %>
+    </div>
+  </div>
+
+  <hr />
+
   <div class="form-actions">
     <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>

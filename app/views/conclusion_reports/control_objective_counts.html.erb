@@ -36,6 +36,11 @@
     </p>
 
     <p class="mb-1">
+      <span class="text-muted"><%= ProcessControl.model_name.human %></span>:
+      <%= control_objective_item.process_control %>
+    </p>
+
+    <p class="mb-1">
       <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
       <%= l control_objective_item.review.issue_date %>
     </p>

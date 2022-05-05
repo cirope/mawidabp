@@ -1198,6 +1198,17 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'process_control_stats', 0)
   end
 
+  test 'process control stats report as CSV' do
+    login
+
+    assert_nothing_raised do
+      get :process_control_stats_csv, format: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'weaknesses graphs for user' do
     login
 

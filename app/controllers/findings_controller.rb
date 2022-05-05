@@ -8,8 +8,14 @@ class FindingsController < ApplicationController
   respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_finding, only: [:show, :edit, :update]
+  before_action :set_finding, only: [:show,
+                                     :edit,
+                                     :update,
+                                     :edit_bic_sigen_fields,
+                                     :update_bic_sigen_fields]
   before_action :check_if_editable, only: [:edit, :update]
+  before_action :check_if_editable_bic_sigen_fields, only: [:edit_bic_sigen_fields, 
+                                                            :update_bic_sigen_fields]
   before_action :set_title, except: [:destroy]
 
   # * GET /incomplete/findings
@@ -44,6 +50,25 @@ class FindingsController < ApplicationController
     respond_with @finding, location: location unless performed?
   end
 
+  # * GET /incomplete/findings/1/edit_bic_sigen_fields
+  def edit_bic_sigen_fields
+  end
+
+  # * PATCH /incomplete/findings/1/update_bic_sigen_fields
+  def update_bic_sigen_fields
+    @title = t 'findings.edit_bic_sigen_fields.title'
+
+    Finding.transaction do
+      if @finding.update(bic_sigen_fields_params)
+        flash.notice = t 'finding.correctly_updated'
+        redirect_to(edit_bic_sigen_fields_finding_path('complete', @finding))
+      else
+        render action: :edit_bic_sigen_fields
+        raise ActiveRecord::Rollback
+      end
+    end
+  end
+
   private
 
     def finding_params
@@ -65,9 +90,11 @@ class FindingsController < ApplicationController
         :audit_comments, :state, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
         :compliance, :impact_risk, :probability, :compliance_observations,
-        :manual_risk, :nested_user, :skip_work_paper,:use_suggested_impact,
+        :compliance_susceptible_to_sanction, :manual_risk, :nested_user, 
+        :skip_work_paper, :use_suggested_impact,
         :use_suggested_probability, :impact_amount, :probability_amount,
-        :extension, :lock_version,
+        :extension, :risk_justification, :year, :nsisio, :nobs,
+        :lock_version,
         impact: [],
         operational_risk: [],
         internal_control_components: [],
@@ -106,6 +133,10 @@ class FindingsController < ApplicationController
           :user_id, :comment
         ]
       )
+    end
+
+    def bic_sigen_fields_params
+      params.require(:finding).permit(:year, :nsisio, :nobs, :skip_work_paper)
     end
 
     def audited_finding_params
@@ -159,6 +190,15 @@ class FindingsController < ApplicationController
         (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
 
       raise ActiveRecord::RecordNotFound if not_editable
+    end
+
+    def check_if_editable_bic_sigen_fields
+      if %w(bic).exclude?(Current.conclusion_pdf_format)
+        raise ActiveRecord::RecordNotFound
+      elsif @finding.pending? || @finding.repeated? ||
+            (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
+        raise ActiveRecord::RecordNotFound
+      end
     end
 
     def render_index_csv

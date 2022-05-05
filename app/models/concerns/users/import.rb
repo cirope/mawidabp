@@ -28,7 +28,7 @@ module Users::Import
     def pat_file prefix
       options  = { col_sep: ';', headers: true }
 
-      CSV.foreach(extra_users_info_attr(prefix, 'path'), options) do |row|
+      CSV.foreach(extra_users_info_attr(prefix, 'path'), **options) do |row|
         roles  = find_role I18n.t 'role.type_audited'
         header = extra_users_info_headers prefix
         data   = trivial_data_pat header, row
@@ -49,7 +49,7 @@ module Users::Import
       users   = {}
       options = { col_sep: ';' }
 
-      CSV.foreach(extra_users_info_attr(prefix, 'role_path'), options) do |row|
+      CSV.foreach(extra_users_info_attr(prefix, 'role_path'), **options) do |row|
         user_ldap = row[1]&.sub(/.*?uid=(.*?),.*/i, '\1')&.to_s
         username  = user_ldap[/\d+/]
         role      = row[0].strip
@@ -72,6 +72,12 @@ module Users::Import
 
     def log_error error
       Rails.logger.error error
+    end
+
+    def file_log_error error
+      logger = Logger.new "log/import_#{Time.zone.today.to_s :db}.log"
+
+      logger.error "Exception occurred import\n#{error}"
     end
 
     private
@@ -146,6 +152,7 @@ module Users::Import
           error = [:errored, "user: #{user.user}", user.errors.messages].join ' - '
 
           log_error error
+          file_log_error error
         end
 
         { user: user, state: state }

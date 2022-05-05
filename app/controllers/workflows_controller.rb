@@ -159,7 +159,8 @@ class WorkflowsController < ApplicationController
           :id, :task, :start, :end, :order_number, :_destroy,
           resource_utilizations_attributes: [
             :id, :resource_id, :resource_type, :units, :_destroy
-          ]
+          ],
+          file_model_attributes: [:id, :file, :file_cache, :_destroy]
         ]
       )
     end

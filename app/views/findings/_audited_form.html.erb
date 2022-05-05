@@ -36,6 +36,19 @@
           <% end %>
           <%= f.input :audit_recommendations, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 5 : 2 } %>
         <% end %>
+        <% if %w(bic).include? Current.conclusion_pdf_format %>
+          <div class="row">
+            <div class="col-md-4">
+              <%= f.input :year, input_html: { readonly: true } %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :nsisio, input_html: { readonly: true } %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :nobs, input_html: { readonly: true } %>
+            </div>
+          </div>
+        <% end %>
       </div>
       <div class="col-md-6">
         <% if @finding.kind_of?(Weakness) %>
@@ -52,7 +65,7 @@
             <div class="row">
               <div class="col">
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
-                  data: weakness_risk_data_options
+                  data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date)
                 } %>
               </div>
             </div>
@@ -65,9 +78,16 @@
           <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
         <% end %>
         <%= f.label :state, Finding.human_attribute_name(:state) %>
-        <%= finding_status_field(f, disabled: true) %>
+
+        <% options_for_select = if USE_SCOPE_CYCLE
+                                  { data: data_options_for_suggested_follow_up_date }
+                                else
+                                  {}
+                                end %>
+
+        <%= finding_status_field(f, disabled: true, options_html: options_for_select) %>
         <%= f.input :origination_date, as: :date_picker,
-          label: Finding.human_attribute_name(:origination_date), readonly: true %>
+          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: data_options_for_suggested_follow_up_date } %>
         <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, label:
           @finding.class.human_attribute_name(:follow_up_date), readonly: true %>

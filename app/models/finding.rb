@@ -31,6 +31,7 @@ class Finding < ApplicationRecord
   include Findings::FinalReview
   include Findings::FirstFollowUp
   include Findings::FollowUp
+  include Findings::FollowUpLastChanged
   include Findings::FollowUpPdf
   include Findings::ImportantDates
   include Findings::Issues
@@ -54,6 +55,7 @@ class Finding < ApplicationRecord
   include Findings::SortColumns
   include Findings::State
   include Findings::StateDates
+  include Findings::SuggestionAddDaysFollowUpDate
   include Findings::Taggable
   include Findings::Tasks
   include Findings::Unanswered

@@ -113,9 +113,7 @@ module Reviews::Score
     medium_score    = 50
     hundred_percent = 100
 
-    scores = weaknesses.select { |w| w.state_weight > 0 }.group_by do |w|
-      [w.risk_weight, w.state_weight, w.age_weight(date: date)]
-    end
+    scores = score_by_weakness_reviews date
 
     total = scores.sum do |row, weaknesses|
       row.unshift weaknesses.size
@@ -126,7 +124,7 @@ module Reviews::Score
     if total <= medium_score
       self.score = hundred_percent - total
     elsif total <= high_score
-      min = ((hundre_percent - medium_score.next) / 3).to_i
+      min = ((hundred_percent - medium_score.next) / 3).to_i
       max = hundred_percent - medium_score.next
 
       self.score = max - ((total * min) / high_score)
@@ -136,6 +134,24 @@ module Reviews::Score
 
       self.score = max - ((total * min) / high_score.next).to_i
     end
+  end
+
+  def score_by_weakness_reviews date
+    weaknesses_total = []
+
+    if external_reviews.any?
+      external_reviews.each do |er|
+        er.alternative_review.weaknesses.each { |w| weaknesses_total << w }
+      end
+    end
+
+    weaknesses.each { |w| weaknesses_total << w }
+
+    scores = weaknesses_total.select { |w| w.state_weight > 0 }.group_by do |w|
+      [w.risk_weight, w.state_weight, w.age_weight(date: date)]
+    end
+
+    scores
   end
 
   def scored_by_weaknesses?

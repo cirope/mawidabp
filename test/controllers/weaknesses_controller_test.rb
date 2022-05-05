@@ -156,7 +156,9 @@ class WeaknessesControllerTest < ActionController::TestCase
             priority: Weakness.priorities_values.first,
             follow_up_date: 2.days.from_now.to_date,
             business_unit_ids: [business_units(:business_unit_three).id],
-            compliance: 'no',
+            compliance: 'yes',
+            compliance_observations: 'test',
+            compliance_susceptible_to_sanction: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values.first,
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
@@ -164,6 +166,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             probability: Finding.probabilities[:rare],
             extension: false,
             manual_risk: '1',
+            risk_justification: 'Test',
             image_model_attributes: {
               image: Rack::Test::UploadedFile.new(
                 "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
@@ -248,7 +251,10 @@ class WeaknessesControllerTest < ActionController::TestCase
                 comment: 'Test',
                 user_id: users(:administrator).id
               }
-            ]
+            ],
+            year: 'test year',
+            nsisio: 'test nsisio',
+            nobs: 'test nobs'
           }
         }
       end
@@ -290,7 +296,9 @@ class WeaknessesControllerTest < ActionController::TestCase
               risk: Weakness.risks_values.first,
               priority: Weakness.priorities_values.first,
               follow_up_date: '',
-              compliance: 'no',
+              compliance: 'yes',
+              compliance_observations: 'test',
+              compliance_susceptible_to_sanction: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values.first,
               operational_risk: ['internal fraud'],
               impact: ['econimic', 'regulatory'],
               internal_control_components: ['risk_evaluation', 'monitoring'],
@@ -370,7 +378,10 @@ class WeaknessesControllerTest < ActionController::TestCase
                   status: 'pending',
                   due_on: I18n.l(Time.zone.tomorrow)
                 }
-              ]
+              ],
+              year: 'test year',
+              nsisio: 'test nsisio',
+              nobs: 'test nobs'
             }
           }
         end
