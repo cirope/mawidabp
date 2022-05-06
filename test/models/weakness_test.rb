@@ -566,22 +566,6 @@ class WeaknessTest < ActiveSupport::TestCase
     assert @weakness.valid?
   end
 
-  test 'invalid if change sigen field when frozen final review' do
-    conclusion_final_review            = @weakness.review.conclusion_final_review
-    conclusion_final_review.close_date = Time.zone.today - 1.days
-
-    conclusion_final_review.save!
-
-    @weakness.year   = 'year test'
-    @weakness.nsisio = 'nsisio test'
-    @weakness.nobs   = 'nobs test'
-
-    assert @weakness.invalid?
-    assert_error @weakness, :year, :frozen
-    assert_error @weakness, :nsisio, :frozen
-    assert_error @weakness, :nobs, :frozen
-  end
-
   test 'invalid if change sigen field when repeated state' do
     @weakness.state = Finding::STATUS[:repeated]
 
@@ -597,7 +581,7 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :nobs, :frozen
   end
 
-  test 'valid if change sigen field when no frozen final review and no repeated state' do
+  test 'valid if change sigen field when no repeated state' do
     @weakness.year   = 'year test'
     @weakness.nsisio = 'nsisio test'
     @weakness.nobs   = 'nobs test'

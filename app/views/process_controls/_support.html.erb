@@ -1,0 +1,27 @@
+<% control_objective = f.object %>
+
+<div class="row">
+  <label>
+    <%= ControlObjective.human_attribute_name 'support' %>
+  </label>
+</div>
+
+<div class="row">
+  <div class="file-container float-left">
+    <%= link_to_upload f.object, :support %>
+    <% if control_objective.support_cache %>
+      <%= f.input :support_cache, as: :hidden %>
+      <%= f.input :support, as: :hidden, input_html: { value: nil } %>
+    <% else %>
+      <%= f.input :support, label: false %>
+    <% end %>
+  </div>
+  <%= link_to_download_support_file f %>
+  <div class="ml-2">
+    <%= link_to_remove_support_file f %>
+  </div>  
+</div>
+
+
+
+

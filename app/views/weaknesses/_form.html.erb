@@ -1,6 +1,7 @@
 <% readonly = @weakness.final? %>
 <% review = @weakness.review || @weakness.control_objective_item.try(:review) %>
 <% frozen = review.try(:is_frozen?) || @weakness.repeated? %>
+<% bic_sigen_fields_frozen = readonly || @weakness.repeated? || @weakness.repeated_of.present? %>
 <% show_history_changes = @weakness.status_change_history.size > 1 %>
 <% form_options = {
   data: {
@@ -8,17 +9,6 @@
     assignment_confirm_message: t('finding.assignment_confirm_message')
   }
 } %>
-<% if USE_SCOPE_CYCLE
-    form_options[:data] = form_options[:data].merge({ confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
-                                                                       { state: I18n.t('findings.state.being_implemented'),
-                                                                         extension: Finding.human_attribute_name(:extension) }),
-                                                      checkbox_target: '#weakness_extension',
-                                                      target_value_checkbox: false,
-                                                      state_target: Finding::STATUS[:being_implemented],
-                                                      input_with_state: '#weakness_state',
-                                                      condition_to_receive_confirm: first_version_in_being_implementation?(@weakness) })
-   end
-%>
 
 <%= simple_form_for @weakness, form_options do |f| %>
   <% content_for :js_extra do %>
@@ -84,20 +74,20 @@
         <% if %w(bic).include? Current.conclusion_pdf_format %>
           <div class="row">
             <div class="col-md-4">
-              <%= f.input :year, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } }%>
+              <%= f.input :year, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } }%>
             </div>
             <div class="col-md-4">
-              <%= f.input :nsisio, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } } %>
+              <%= f.input :nsisio, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } } %>
             </div>
             <div class="col-md-4">
-              <%= f.input :nobs, input_html: { maxlength: 255, readonly: frozen, data: { bic_sigen_fields: true } } %>
+              <%= f.input :nobs, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } } %>
             </div>
           </div>
         <% end %>
       </div>
       <div class="col-md-6">
         <%= f.input :origination_date, as: :date_picker, input_html: {
-          readonly: (readonly || @weakness.repeated_of), data: data_options_for_suggested_follow_up_date
+          readonly: (readonly || @weakness.repeated_of), data: data_options_for_suggested_follow_up_date('weakness')
         } %>
         <% if %w(bic).include? Current.conclusion_pdf_format %>
           <input type="hidden" id="bic-risk-types" data-bic-risks-types="<%= finding_bic_risks_types(@weakness) %>">
@@ -253,12 +243,13 @@
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : '')) %>
 
-        <% options_for_select = if USE_SCOPE_CYCLE
+        <% options_for_select = if USE_SCOPE_CYCLE && !readonly
                                   {
                                     data:
-                                      { target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
-                                        target_checkbox: '#weakness_extension',
-                                        disabled_and_deny: true }.merge(data_options_for_suggested_follow_up_date)
+                                      { 
+                                        target_values_enable_checkbox: Finding.states_that_allow_extension,
+                                        target_checkbox: '#weakness_extension'
+                                      }.merge(data_options_for_suggested_follow_up_date('weakness'))
                                   }
                                 else
                                   {}
@@ -308,26 +299,7 @@
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
 
         <% if %w(bic pat).include? Current.conclusion_pdf_format %>
-          <% @weakness.build_image_model unless @weakness.image_model %>
-
-          <div class="clearfix">
-            <%= f.simple_fields_for :image_model do |im_f| %>
-              <p class="mb-1"><%= ImageModel.model_name.human %></p>
-
-              <div class="file-container float-left">
-                <%= link_to_upload im_f.object, :image %>
-                <% if im_f.object.image_cache %>
-                  <%= im_f.input :image_cache, as: :hidden %>
-                  <%= im_f.input :image, as: :hidden, input_html: { value: nil } %>
-                <% else %>
-                  <%= im_f.input :image, label: false %>
-                <% end %>
-              </div>
-
-              <%= link_to_download_image im_f %>
-              <%= link_to_remove_has_one_image im_f %>
-            <% end %>
-          </div>
+          <%= render 'image_model', f: f, readonly: readonly %>
         <% end %>
       </div>
     </div>

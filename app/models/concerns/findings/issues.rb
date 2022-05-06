@@ -68,7 +68,7 @@ module Findings::Issues
   end
 
   def issues_percentage
-     impact_amount? ? issues.sum(&:amount) / impact_amount.to_f : 0
+    impact_amount? ? issues&.map(&:amount).compact.sum / impact_amount.to_f : 0
   end
 
   def get_amount_by_impact
@@ -148,7 +148,9 @@ module Findings::Issues
         all_closed  = valid_issues.all? &:close_date
         some_closed = valid_issues.any? &:close_date
 
-        if all_closed
+        if self.state == Finding::STATUS['failure']
+          self.follow_up_date = nil
+        elsif all_closed
           self.state         = Finding::STATUS['implemented_audited']
           self.solution_date = valid_issues.map(&:close_date).last
         elsif some_closed
