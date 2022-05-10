@@ -3,7 +3,6 @@
 <% data_for_submit = data_for_submit @finding %>
 <% review = @finding.review || @finding.control_objective_item.try(:review) %>
 <% bic_sigen_fields_frozen = @finding.repeated? || @finding.repeated_of.present? %>
-<% finding_persisted = Finding.find @finding.id %>
 
 <%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completion_state], @finding),
     :html => {:method => :patch, :id => "edit_finding_#{@finding.id}"}.merge(data_for_submit) do |f| %>
@@ -94,42 +93,42 @@
             <div class="row">
               <div class="col">
                 <%= f.input :state_regulations, collection: weakness_state_regulations, prompt: true,
-                  disabled: true, input_html: { data: { bic_original_value: finding_persisted.state_regulations } } %>
-                <%= f.hidden_field :state_regulations, data: { bic_original_value: finding_persisted.state_regulations, bic_calculate_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.state_regulations_was } } %>
+                <%= f.hidden_field :state_regulations, data: { bic_original_value: @finding.state_regulations_was, bic_calculate_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :degree_compliance, collection: weakness_degree_compliance, prompt: true,
-                  disabled: true, input_html: { data: { bic_original_value: finding_persisted.degree_compliance } } %>
-                <%= f.hidden_field :degree_compliance, data: { bic_original_value: finding_persisted.degree_compliance, bic_calculate_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.degree_compliance_was } } %>
+                <%= f.hidden_field :degree_compliance, data: { bic_original_value: @finding.degree_compliance_was, bic_calculate_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :observation_originated_tests, collection: weakness_observation_origination_tests, prompt: true,
-                  disabled: true, input_html: { data: { bic_original_value: finding_persisted.observation_originated_tests } } %>
-                <%= f.hidden_field :observation_originated_tests, data: { bic_original_value: finding_persisted.observation_originated_tests, bic_calculate_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.observation_originated_tests_was } } %>
+                <%= f.hidden_field :observation_originated_tests, data: { bic_original_value: @finding.observation_originated_tests_was, bic_calculate_risk: true } %>
               </div>
             </div>
             <div class="row">
               <div class="col">
                 <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
-                  disabled: true, input_html: { data: { bic_original_value: finding_persisted.impact_risk } } %>
-                <%= f.hidden_field :impact_risk, data: { bic_original_value: finding_persisted.impact_risk, bic_calculate_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.impact_risk_was } } %>
+                <%= f.hidden_field :impact_risk, data: { bic_original_value: @finding.impact_risk_was, bic_calculate_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :probability, collection: weakness_probabilities, prompt: true,
-                  disabled: true, input_html: { data: { bic_original_value: finding_persisted.probability } } %>
-                <%= f.hidden_field :probability, data: { bic_original_value: finding_persisted.probability, bic_calculate_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.probability_was } } %>
+                <%= f.hidden_field :probability, data: { bic_original_value: @finding.probability_was, bic_calculate_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :sample_deviation, collection: weakness_sample_deviation, prompt: true,
-                  disabled: true, input_html: { data: { bic_original_value: finding_persisted.sample_deviation } } %>
-                <%= f.hidden_field :sample_deviation, data: { bic_original_value: finding_persisted.sample_deviation, bic_calculate_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.sample_deviation_was } } %>
+                <%= f.hidden_field :sample_deviation, data: { bic_original_value: @finding.sample_deviation_was, bic_calculate_risk: true } %>
               </div>
             </div>
             <div class="row">
               <div class="col">
                 <%= f.input :external_repeated, collection: weakness_external_repeated, prompt: true,
-                  disabled: true, input_html: { data: { bic_original_value: finding_persisted.external_repeated } } %>
-                <%= f.hidden_field :external_repeated, data: { bic_original_value: finding_persisted.external_repeated, bic_calculate_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.external_repeated_was } } %>
+                <%= f.hidden_field :external_repeated, data: { bic_original_value: @finding.external_repeated_was, bic_calculate_risk: true } %>
               </div>
             </div>
             <div class="row">
@@ -142,7 +141,7 @@
               </div>
               <div class="col-3 text-right">
                 <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
-                  disabled: finding_persisted.manual_risk,
+                  disabled: @finding.manual_risk_was,
                   data: { toggle_risk_disabled_attr: true, replace_with_original_value_when_disabled: true }
                 } %>
               </div>
