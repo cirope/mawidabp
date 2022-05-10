@@ -802,6 +802,7 @@ es:
     correctly_created: "Informe externo agregado correctamente."
     correctly_updated: "Informe externo actualizado correctamente."
     stale_object_error: "El Informe externo no fue actualizado, intente nuevamente."
+    description_pdf: "COMENTARIOS"
 
   notification:
     index_title: "Listado de notificaciones"

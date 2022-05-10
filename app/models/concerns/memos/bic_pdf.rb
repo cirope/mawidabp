@@ -20,12 +20,14 @@ module Memos::BicPdf
               position: :left, scale: 0.75
 
     pdf.move_down 38
-    pdf.text  '<font name="Helvetica"><color rgb="#008385">' + "#{sprintf('%02d', id)}/#{created_at.year}" + '</color></font>',
-              align: :left,
-              indent_paragraphs: 62,
-              size: 37,
-              inline_format: true,
-              character_spacing: 1
+    pdf.text text_with_style(text: "#{sprintf('%02d', id)}/#{created_at.year}",
+                             font: 'Helvetica',
+                             color: '#008385'),
+             align: :left,
+             indent_paragraphs: 62,
+             size: 37,
+             inline_format: true,
+             character_spacing: 1
 
     pdf.move_down 55
     pdf.image File.join(Rails.root, 'app', 'assets', 'images', 'memo', 'bice_logo.jpg'), 
@@ -49,7 +51,7 @@ module Memos::BicPdf
           border_width: [0, 0, 0, 0]
         },
         {
-          content: '<font name="Helvetica" size="16"><color rgb="#182d34"><b>REQUERIDO POR</b></color></font>     <font name="Helvetica" size="16"><color rgb="#aaaaaa">' + required_by + '</color></font>',
+          content: "#{text_with_style(text: Memo.human_attribute_name('required_by').upcase, font: 'Helvetica', size: '16', color: '#182d34', bold: true)}     #{text_with_style(text: required_by, font: 'Helvetica', size: '16', color: '#aaaaaa')}",
           inline_format: true,
           border_width: [0, 0, 0, 4],
           border_left_color: '008385',
@@ -71,7 +73,7 @@ module Memos::BicPdf
           content: '', border_width: [0, 0, 0, 0]
         },
         {
-          content: '<font name="Helvetica" size="16"><color rgb="#182d34"><b>COMENTARIOS</b></color></font>                      <font name="Helvetica" size="16"><color rgb="#aaaaaa">' + (description || '') + '</color></font>',
+          content: "#{text_with_style(text: I18n.t('memo.description_pdf'), font: 'Helvetica', size: '16', color: '#182d34', bold: true)}                      #{text_with_style(text: (description || ''), font: 'Helvetica', size: '16', color: '#aaaaaa')}",
           inline_format: true,
           border_width: [0, 0, 0, 4],
           border_left_color: '008385',
@@ -82,7 +84,11 @@ module Memos::BicPdf
     ], column_widths: [95, 60, 200, 205]
 
     pdf.move_down 100
-    pdf.text '<font name="Helvetica" size="16"><color rgb="#008385"><b>PROYECTO</b></color></font>', 
+    pdf.text text_with_style(text: Memo.human_attribute_name('plan_item').upcase,
+                             font: 'Helvetica',
+                             size: '16',
+                             color: '#008385',
+                             bold: true),
              inline_format: true,
              indent_paragraphs: 165
 
@@ -93,7 +99,11 @@ module Memos::BicPdf
           content: '', border_width: [0, 0, 0, 0]
         },
         {
-          content: '<font name="Helvetica" size="35"><color rgb="#182d34"><b>' + name + '</b></color></font>',
+          content: text_with_style(text: name,
+                                   font: 'Helvetica',
+                                   size: '35',
+                                   color: '#182d34',
+                                   bold: true),
           inline_format: true,
           border_width: [0, 0, 0, 0]
         },
@@ -105,4 +115,26 @@ module Memos::BicPdf
 
     pdf.custom_save_as pdf_name, Memo.table_name, id
   end
+
+  private
+
+    def text_with_style(text: nil, font: nil, size: nil, color: nil, bold: false)
+      "#{font_open_tag(font, size)}#{text_content(text, color, bold)}</font>"
+    end
+
+    def font_open_tag(font, size)
+      return "<font name='#{font}' size='#{size}'>" if font.present? && size.present?
+      return "<font name='#{font}'>" if font.present?
+      return "<font size='#{size}'>" if size.present?
+
+      '<font>'
+    end
+
+    def text_content(text, color, bold)
+      return "<color rgb='#{color}'><b>#{text}</b></color>" if color.present? && bold
+      return "<color rgb='#{color}'>#{text}</color>" if color.present?
+      return "<b>#{text}</b>" if bold
+
+      text
+    end
 end
