@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 # Clase para probar el modelo "ControlObjective"
@@ -121,5 +123,15 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     else
       assert_equal ControlObjective.visible.count, ControlObjective.count - 1
     end
+  end
+
+  test 'invalid because repeat auditor' do
+    control_objective = control_objectives :organization_security_4_1
+
+    control_objective.auditors << users(:auditor)
+
+    refute control_objective.valid?
+    assert_error control_objective, :control_objective_auditors, :taken
+    assert_error control_objective.control_objective_auditors.last, :user_id, :taken
   end
 end

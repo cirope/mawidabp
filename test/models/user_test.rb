@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
@@ -710,5 +712,32 @@ class UserTest < ActiveSupport::TestCase
     assert_enqueued_emails 1 do
       user.save!
     end
+  end
+
+  test 'import' do
+    Current.organization = organizations(:google)
+    organization         = Current.organization
+
+    skip unless EXTRA_USERS_INFO.has_key? organization.prefix
+
+    assert_difference 'User.count', 2 do
+      User.import organization, 'admin', 'admin123'
+    end
+
+    one_user_file = User.find_by email: 'juan127@cirope.com'
+    two_user_file = User.find_by email: 'pedro127@cirope.com'
+
+    assert_equal one_user_file.manager_id, two_user_file.id
+    assert_equal one_user_file.roles.count, 2
+  end
+
+  test 'should return auditors' do
+    expected = User.includes(organization_roles: :role).where(
+      roles: {
+        role_type: ::Role::TYPES[:auditor]
+      }
+    )
+
+    assert_equal expected, User.auditors
   end
 end

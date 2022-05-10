@@ -11,6 +11,7 @@ class Review < ApplicationRecord
   include Reviews::ControlObjectiveItems
   include Reviews::Counts
   include Reviews::DestroyValidation
+  include Reviews::ExternalReviews
   include Reviews::FileModelReviews
   include Reviews::FindingAssignments
   include Reviews::FindingCode
@@ -48,6 +49,7 @@ class Review < ApplicationRecord
   belongs_to :organization
   has_one :workflow, dependent: :destroy
   has_many :business_unit_scores, through: :control_objective_items
+  has_many :time_consumptions, as: :resource, dependent: :destroy
 
   def long_identification
     "#{identification} - #{plan_item.project}"

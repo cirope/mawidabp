@@ -5,7 +5,7 @@ set :repo_url, 'https://github.com/cirope/mawidabp.git'
 set :format, :pretty
 set :log_level, :info
 
-set :deploy_to, "/var/www/#{fetch(:application)}"
+set :deploy_to, "/MawidaFiles/#{fetch(:application)}"
 set :deploy_via, :remote_cache
 
 set :linked_files, %w{config/application.yml}

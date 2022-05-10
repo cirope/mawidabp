@@ -20,7 +20,7 @@ module Findings::Issues
   }
 
   def issues_amount
-    issues.sum &:amount
+    issues.map(&:amount).sum(&:to_i)
   end
 
   def issues_percentage
@@ -65,6 +65,25 @@ module Findings::Issues
           quantity += 1
         end
       end
+
+      quantity = csv_base quantity if FINDING_REPEATABILITY_FILE.include? current.organization.prefix
+    end
+
+    quantity
+  end
+
+  def csv_base quantity
+    csv_options  = { headers: true }
+    file         = FINDING_REPEATABILITY_FILE[current.organization.prefix]
+    project_name = review.plan_item.project
+    suc_id       = project_name[/\((\d+)\)/, 1]
+
+    CSV.foreach(file, csv_options) do |row|
+      if row['id_ofinal'] == weakness_template.reference && suc_id && row['id_suc'] == suc_id
+        (1..4).each do |idx|
+          quantity += (row["count#{idx}"] == '1' && quantity <= 5) ? 1 : 0
+        end
+      end
     end
 
     quantity
@@ -91,10 +110,10 @@ module Findings::Issues
   def amount_by_impact
     {
       1 => 0,
-      2 => 2084408,
-      3 => 20844081,
-      4 => 208440815,
-      5 => 2084408150
+      2 => 3113515,
+      3 => 31135152,
+      4 => 311351520,
+      5 => 3113515200
     }
   end
 

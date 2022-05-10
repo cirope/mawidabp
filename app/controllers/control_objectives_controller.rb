@@ -1,8 +1,12 @@
+# frozen_string_literal: true
+
 class ControlObjectivesController < ApplicationController
+  include AutoCompleteFor::ControlObjectiveAuditor
+
   respond_to :html
 
   before_action :auth, :check_privileges
-  before_action :set_control_objective, only: [:show ]
+  before_action :set_control_objective, only: [:show]
   before_action :set_title
 
   # * GET /control_objectives

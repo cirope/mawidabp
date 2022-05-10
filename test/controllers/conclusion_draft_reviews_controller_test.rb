@@ -244,6 +244,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'export to rtf conclusion draft review' do
+    skip unless USE_SCOPE_CYCLE
+
     login
 
     conclusion_review = ConclusionDraftReview.find(

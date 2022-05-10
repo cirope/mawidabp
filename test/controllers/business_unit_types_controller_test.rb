@@ -87,6 +87,76 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
     assert_equal 'New business unit type', assigns(:business_unit_type).name
     assert_equal false, assigns(:business_unit_type).external
     assert_not_nil BusinessUnit.find_by_name('New business unit')
+
+    new_business_unit_type = BusinessUnitType.last
+
+    refute new_business_unit_type.without_number
+    assert_nil new_business_unit_type.reviews_for
+    assert_nil new_business_unit_type.detailed_review
+  end
+
+  test 'create business_unit_type with fields GAL' do
+    assert_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
+      login
+      post :create, :params => {
+        :business_unit_type => {
+          :name => 'New business unit type',
+          :business_unit_label => 'New business unit label',
+          :project_label => 'New project label',
+          :review_prefix => 'NBU',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51',
+          :external => '0',
+          :require_tag => '0',
+          :require_counts => '0',
+          :hide_review_logo => '0',
+          :independent_identification => '0',
+          :shared_business_units => '0',
+          :without_number => true,
+          :reviews_for => 'reviews for',
+          :detailed_review => 'detailed review',
+          :business_units_attributes => [
+            {
+              :name => 'New business unit',
+              :business_unit_kind_id => business_unit_kinds(:branch).id
+            }
+          ]
+        }
+      }
+    end
+
+    assert_equal 'New business unit type', assigns(:business_unit_type).name
+    assert_equal false, assigns(:business_unit_type).external
+    assert_not_nil BusinessUnit.find_by_name('New business unit')
+  end
+
+  test 'raise exception when create nil in without_number' do
+    assert_raise do
+      login
+      post :create, :params => {
+        :business_unit_type => {
+          :name => 'New business unit type',
+          :business_unit_label => 'New business unit label',
+          :project_label => 'New project label',
+          :review_prefix => 'NBU',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51',
+          :external => '0',
+          :require_tag => '0',
+          :require_counts => '0',
+          :hide_review_logo => '0',
+          :independent_identification => '0',
+          :shared_business_units => '0',
+          :without_number => nil,
+          :business_units_attributes => [
+            {
+              :name => 'New business unit',
+              :business_unit_kind_id => business_unit_kinds(:branch).id
+            }
+          ]
+        }
+      }
+    end
   end
 
   test 'edit business_unit_type' do
@@ -134,6 +204,88 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
     assert_equal 'Updated business unit type', assigns(:business_unit_type).name
     assert_equal 'Updated business unit one',
       BusinessUnit.find(business_units(:business_unit_one).id).name
+
+      new_business_unit_type = BusinessUnitType.find(business_unit_types(:cycle).id)
+
+    refute new_business_unit_type.without_number
+    assert_nil new_business_unit_type.reviews_for
+    assert_nil new_business_unit_type.detailed_review
+  end
+
+  test 'update business_unit_type with fields GAL' do
+    assert_no_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
+      login
+      patch :update, :params => {
+        :id => business_unit_types(:cycle).id,
+        :business_unit_type => {
+          :name => 'Updated business unit type',
+          :business_unit_label => 'Updated business unit label',
+          :project_label => 'Updated project label',
+          :review_prefix => 'UBU',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51',
+          :external => '0',
+          :require_tag => '0',
+          :require_counts => '0',
+          :hide_review_logo => '0',
+          :independent_identification => '0',
+          :shared_business_units => '0',
+          :without_number => true,
+          :reviews_for => 'reviews for',
+          :detailed_review => 'detailed review',
+          :business_units_attributes => [
+            {
+              :id => business_units(:business_unit_one).id,
+              :name => 'Updated business unit one'
+            },
+            {
+              :id => business_units(:business_unit_two).id,
+              :name => 'Updated business unit two'
+            }
+          ]
+        }
+      }
+    end
+
+    assert_redirected_to business_unit_types_url
+    assert_not_nil assigns(:business_unit_type)
+    assert_equal 'Updated business unit type', assigns(:business_unit_type).name
+    assert_equal 'Updated business unit one',
+      BusinessUnit.find(business_units(:business_unit_one).id).name
+  end
+
+  test 'raise exception when update nil in without_number' do
+    assert_raise do
+      login
+      patch :update, :params => {
+        :id => business_unit_types(:cycle).id,
+        :business_unit_type => {
+          :name => 'Updated business unit type',
+          :business_unit_label => 'Updated business unit label',
+          :project_label => 'Updated project label',
+          :review_prefix => 'UBU',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51',
+          :external => '0',
+          :require_tag => '0',
+          :require_counts => '0',
+          :hide_review_logo => '0',
+          :independent_identification => '0',
+          :shared_business_units => '0',
+          :without_number => nil,
+          :business_units_attributes => [
+            {
+              :id => business_units(:business_unit_one).id,
+              :name => 'Updated business unit one'
+            },
+            {
+              :id => business_units(:business_unit_two).id,
+              :name => 'Updated business unit two'
+            }
+          ]
+        }
+      }
+    end
   end
 
   test 'destroy business_unit_type' do

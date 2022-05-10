@@ -69,7 +69,7 @@ module Reports::ControlObjectiveCounts
       control_objective_items = ControlObjectiveItem.
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
-        includes(:business_unit, :business_unit_type,
+        includes(:business_unit, :business_unit_type, :process_control,
           review: [:plan_item, :conclusion_final_review]
         )
 
@@ -105,6 +105,10 @@ module Reports::ControlObjectiveCounts
         [
           BusinessUnitType.model_name.human,
           control_objective_item.business_unit_type
+        ],
+        [
+          ProcessControl.model_name.human,
+          control_objective_item.process_control
         ],
         [
           ConclusionFinalReview.human_attribute_name('issue_date'),
@@ -156,6 +160,7 @@ module Reports::ControlObjectiveCounts
         PlanItem.human_attribute_name('project'),
         Review.model_name.human,
         BusinessUnitType.model_name.human,
+        ProcessControl.model_name.human,
         ConclusionFinalReview.human_attribute_name('issue_date'),
         ControlObjectiveItem.human_attribute_name('control_objective_text'),
         ControlObjectiveItem.human_attribute_name('auditor_comment'),
@@ -171,6 +176,7 @@ module Reports::ControlObjectiveCounts
           control_objective_item.review.plan_item.project,
           control_objective_item.review.identification,
           control_objective_item.business_unit_type.to_s,
+          control_objective_item.process_control.to_s,
           l(control_objective_item.review.issue_date),
           control_objective_item.control_objective_text.to_s,
           control_objective_item.auditor_comment.to_s,

@@ -12,6 +12,7 @@ class User < ApplicationRecord
   include Users::Defaults
   include Users::DestroyValidation
   include Users::Findings
+  include Users::Import
   include Users::Group
   include Users::Licenses
   include Users::MarkChanges
@@ -30,6 +31,7 @@ class User < ApplicationRecord
   include Users::BaseValidations
   include Users::Validations
   include Users::Tree
+  include Users::Update
 
   trimmed_fields :user, :email, :name, :last_name
 
@@ -37,6 +39,7 @@ class User < ApplicationRecord
   has_many :error_records, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_many :review_user_assignments, dependent: :destroy
+  has_many :time_consumptions, dependent: :destroy
   has_many :reviews, through: :review_user_assignments
   has_many :conclusion_final_reviews, through: :reviews
   has_many :business_units, through: :business_unit_types

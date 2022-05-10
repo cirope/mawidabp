@@ -27,7 +27,7 @@
             value: (@conclusion_final_review.review.score_alt_text if @conclusion_final_review.review&.persisted?),
             readonly: true } %>
         <% end %>
-        <% if %w(default pat).include? Current.conclusion_pdf_format %>
+        <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
           <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
           <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
         <% else %>
@@ -140,6 +140,12 @@
         </div>
         <div class="col-md-6">
           <%= f.input :main_recommendations, input_html: { rows: 4, readonly: readonly } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :exclude_regularized_findings, input_html: { readonly: readonly } %>
         </div>
       </div>
     <% end %>

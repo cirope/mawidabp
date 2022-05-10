@@ -1,6 +1,6 @@
 google_ldap:
   hostname: localhost
-  port: <%= ENV['TRAVIS'] ? 3389 : 389 %>
+  port: <%= ENV['GH_ACTIONS'] ? 3389 : 389 %>
   basedn: ou=people,dc=test,dc=com
   filter: 'CN=*'
   login_mask: "cn=%{user},%{basedn}"
@@ -13,10 +13,12 @@ google_ldap:
   roles_attribute: description
   manager_attribute: manager
   organization: google
+  organizational_unit_attribute:
+  organizational_unit:
 
 alphabet_ldap:
   hostname: localhost
-  port: <%= ENV['TRAVIS'] ? 3389 : 389 %>
+  port: <%= ENV['GH_ACTIONS'] ? 3389 : 389 %>
   basedn: ou=people,dc=alphabet,dc=com
   filter: 'CN=*'
   login_mask: "cn=%{user},%{basedn}"
@@ -29,3 +31,5 @@ alphabet_ldap:
   roles_attribute: description
   manager_attribute: manager
   organization: alphabet
+  organizational_unit_attribute:
+  organizational_unit:
