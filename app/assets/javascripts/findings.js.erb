@@ -169,15 +169,6 @@ jQuery(function ($) {
     }
   })
 
-  $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
-    $('[data-bic-calculate-risk]').attr('disabled', $(this).is(':checked'))
-    $('[data-bic-manual-risk]').attr('disabled', !$(this).is(':checked'))
-
-    if (!$(this).is(':checked')) {
-      bicCalculatedRisk()
-    }
-  })
-
   $(document).on('change', '[data-risk-modifier]', function () {
     var automatic = !$('[name$="[manual_risk]"]').is(':checked')
     var values    = $('[data-risk-modifier]').map(function () {
@@ -372,6 +363,29 @@ jQuery(function ($) {
     }
   })
 
+  $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
+    var manual_risk = $(this).is(':checked')
+    
+    if($(this).data('replaceWithOriginalValueWhenDisabled')){
+      $('[data-bic-original-value]:hidden').each(function (i, e) {
+        manual_risk ? $(e).val('') : $(e).val($(e).data('bicOriginalValue'))
+      })
+
+      $('select[data-bic-original-value]').each(function (i, e) {
+        if(!manual_risk){
+          $(e).val($(e).data('bicOriginalValue'))
+        }
+      })
+    }
+
+    $('[data-bic-field-to-disabled-when-is-manual]').attr('disabled', manual_risk)
+    $('[data-bic-field-to-disabled-when-is-automatic]').attr('disabled', !manual_risk)
+
+    if (!manual_risk) {
+      bicCalculatedRisk()
+    }
+  })
+
   $(document).on('change', '[data-bic-calculate-risk]', function () {
     bicCalculatedRisk()
   })
@@ -381,7 +395,7 @@ jQuery(function ($) {
     var total = 0
     var risk
 
-    $('select[data-bic-calculate-risk]').each(function (i, e) {
+    $('[data-bic-calculate-risk]').each(function (i, e) {
       total += +$(e).val()
     })
 
