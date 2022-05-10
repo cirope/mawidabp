@@ -40,8 +40,11 @@ class WeaknessTemplatesControllerTest < ActionController::TestCase
     assert_difference counts do
       post :create, params: {
         weakness_template: {
+          referece: '321',
+          subreference: '654',
           title: 'New weakness template',
           description: 'New weakness template description',
+          brief: 'New weakness template brief',
           risk: WeaknessTemplate.risks_values.first,
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
@@ -51,7 +54,8 @@ class WeaknessTemplatesControllerTest < ActionController::TestCase
               control_objective_id: control_objectives(:impact_analysis).id
             }
           ],
-          audit_recommendations: 'test'
+          audit_recommendations: 'test',
+          failure: true
         }
       }
     end

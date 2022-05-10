@@ -366,13 +366,13 @@ jQuery(function ($) {
   $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
     var manual_risk = $(this).is(':checked')
     
-    if($(this).data('replaceWithOriginalValueWhenDisabled')){
+    if($(this).data('replaceWithOriginalValueWhenDisabled')) {
       $('[data-bic-original-value]:hidden').each(function (i, e) {
         manual_risk ? $(e).val('') : $(e).val($(e).data('bicOriginalValue'))
       })
 
       $('select[data-bic-original-value]').each(function (i, e) {
-        if(!manual_risk){
+        if(!manual_risk) {
           $(e).val($(e).data('bicOriginalValue'))
         }
       })
@@ -400,8 +400,8 @@ jQuery(function ($) {
     })
 
     $.each(types, function (i, data) {
-      riskValue = data[0]
-      riskId    = data[1]
+      var riskValue = data[0]
+      var riskId    = data[1]
 
       if (total >= riskValue) {
         risk = riskId
