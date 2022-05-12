@@ -454,6 +454,7 @@
     <%= link_to_add_fields(t('finding.add_task'), f, :tasks) %>
   </div>
 
+  <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
   <% if USE_SCOPE_CYCLE %>
     <div class="row">
       <div class="col-md-2">
@@ -464,9 +465,32 @@
       </div>
     </div>
   <% end %>
-
   <div class="row">
-    <%= render 'issues' %>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'customer' %></h5>
+    </div>
+    <div class="col-md-2 d-none d-md-block">
+      <h5 class="h6"><%= Issue.human_attribute_name 'entry' %></h5>
+    </div>
+    <div class="col-md-2 d-none d-md-block">
+      <h5 class="h6"><%= Issue.human_attribute_name 'operation' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'comments' %></h5>
+    </div>
+    <div class="col-md-1">
+      <h5 class="h6"><%= Issue.human_attribute_name 'close_date' %></h5>
+    </div>
+    <div class="col-md-1">
+      <h5 class="h6"><%= Issue.human_attribute_name 'currency' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'amount' %></h5>
+    </div>
+  </div>
+
+  <div id="issues">
+    <%= render 'issues', f: f, readonly: users_readonly %>
   </div>
 
   <h5 class="mt-3">
