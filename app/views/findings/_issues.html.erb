@@ -21,9 +21,3 @@
   data-impact-risks-types="<%= finding_impact_risks_types(@finding) %>"
   data-use-scope-cycle="<%= USE_SCOPE_CYCLE %>">
 </div>
-
-<%= link_to_add_fields(
-  t('finding.add_issue'), f,
-  :issues, nil,
-  { insert_into: '#finding_issues' }
-) unless readonly %>

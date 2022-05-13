@@ -8,32 +8,27 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-2">
-        <%= f.input :customer, label: false, input_html: { autofocus: issue.new_record?, readonly: readonly } %>
+        <%= f.input :customer, label: false, input_html: { autofocus: issue.new_record?, readonly: true } %>
       </div>
       <div class="col-md-2 d-none d-md-block">
-        <%= f.input :entry, label: false, input_html: { readonly: readonly } %>
+        <%= f.input :entry, label: false, input_html: { readonly: true } %>
       </div>
       <div class="col-md-2 d-none d-md-block">
-        <%= f.input :operation, label: false, input_html: { readonly: readonly } %>
+        <%= f.input :operation, label: false, input_html: { readonly: true } %>
       </div>
       <div class="col-md-2">
-        <%= f.input :comments, label: false, input_html: { readonly: readonly, rows: 1 } %>
+        <%= f.input :comments, label: false, input_html: { readonly: true, rows: 1 } %>
       </div>
       <div class="col-md-1">
         <%= f.input :close_date, as: :date_picker, label: false, input_html: { readonly: readonly } %>
       </div>
       <div class="col-md-1">
-        <%= f.input :currency, label: false, input_html: { readonly: readonly } %>
+        <%= f.input :currency, label: false, input_html: { readonly: true } %>
       </div>
       <div class="col-md-2">
         <div class="row">
           <div class="col-10">
-            <%= f.input :amount, label: false, input_html: { readonly: readonly, data: { finding_issue_amount: true} } %>
-          </div>
-          <div class="col-2">
-            <div class="mt-2 text-right">
-              <%= link_to_remove_nested_item(f) unless readonly %>
-            </div>
+            <%= f.input :amount, label: false, input_html: { readonly: true, data: { finding_issue_amount: true} } %>
           </div>
         </div>
       </div>
