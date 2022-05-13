@@ -11,7 +11,7 @@ module Findings::Commitments
     commitments       = repeated_of&.calculate_commitments || {}
     last_checked_date = nil
 
-    follow_up_dates_to_check_against.each do |date|
+    reschedule_strategy.follow_up_dates_to_check_against(self).each do |date|
       if last_checked_date.blank? || date < last_checked_date
         commitment_level = endorsed_commitment_for date
 

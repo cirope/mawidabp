@@ -93,84 +93,56 @@
             <div class="row">
               <div class="col">
                 <%= f.input :state_regulations, collection: weakness_state_regulations, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
-                <%= f.hidden_field :state_regulations, value: nil, disabled: @finding.automatic_risk?,
-                  data: { bic_manual_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.state_regulations_was } } %>
+                <%= f.hidden_field :state_regulations, data: { bic_original_value: @finding.state_regulations_was, bic_calculate_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :degree_compliance, collection: weakness_degree_compliance, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
-                <%= f.hidden_field :degree_compliance, value: nil, disabled: @finding.automatic_risk?,
-                  data: { bic_manual_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.degree_compliance_was } } %>
+                <%= f.hidden_field :degree_compliance, data: { bic_original_value: @finding.degree_compliance_was, bic_calculate_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :observation_originated_tests, collection: weakness_observation_origination_tests, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
-                <%= f.hidden_field :observation_originated_tests, value: nil, disabled: @finding.automatic_risk?,
-                  data: { bic_manual_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.observation_originated_tests_was } } %>
+                <%= f.hidden_field :observation_originated_tests, data: { bic_original_value: @finding.observation_originated_tests_was, bic_calculate_risk: true } %>
               </div>
             </div>
             <div class="row">
               <div class="col">
                 <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
-                <%= f.hidden_field :impact_risk, value: nil, disabled: @finding.automatic_risk?,
-                  data: { bic_manual_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.impact_risk_was } } %>
+                <%= f.hidden_field :impact_risk, data: { bic_original_value: @finding.impact_risk_was, bic_calculate_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :probability, collection: weakness_probabilities, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
-                <%= f.hidden_field :probability, value: nil, disabled: @finding.automatic_risk?,
-                  data: { bic_manual_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.probability_was } } %>
+                <%= f.hidden_field :probability, data: { bic_original_value: @finding.probability_was, bic_calculate_risk: true } %>
               </div>
               <div class="col">
                 <%= f.input :sample_deviation, collection: weakness_sample_deviation, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
-                <%= f.hidden_field :sample_deviation, value: nil, disabled: @finding.automatic_risk?,
-                  data: { bic_manual_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.sample_deviation_was } } %>
+                <%= f.hidden_field :sample_deviation, data: { bic_original_value: @finding.sample_deviation_was, bic_calculate_risk: true } %>
               </div>
             </div>
             <div class="row">
               <div class="col">
                 <%= f.input :external_repeated, collection: weakness_external_repeated, prompt: true,
-                  disabled: true,
-                  input_html: {
-                    data: { bic_calculate_risk: true }
-                  } %>
-                <%= f.hidden_field :external_repeated, value: nil, disabled: @finding.automatic_risk?,
-                  data: { bic_manual_risk: true } %>
+                  disabled: true, input_html: { data: { bic_original_value: @finding.external_repeated_was } } %>
+                <%= f.hidden_field :external_repeated, data: { bic_original_value: @finding.external_repeated_was, bic_calculate_risk: true } %>
               </div>
             </div>
             <div class="row">
               <div class="col-9">
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
-                  data: weakness_risk_data_options
+                  data: weakness_risk_data_options.merge({ bic_field_to_disabled_when_is_automatic: true })
                 } %>
                 <%= f.hidden_field :risk, disabled: !@finding.automatic_risk?,
-                  data: { bic_calculate_risk: true } %>
+                  data: { bic_field_to_disabled_when_is_manual: true } %>
               </div>
               <div class="col-3 text-right">
                 <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
-                  disabled: @finding.manual_risk,
-                  data: { toggle_risk_disabled_attr: true }
+                  disabled: @finding.manual_risk_was,
+                  data: { toggle_risk_disabled_attr: true, replace_with_original_value_when_disabled: true }
                 } %>
               </div>
             </div>
@@ -182,10 +154,10 @@
           <% end %>
 
           <% if %w(bic).include? Current.conclusion_pdf_format %>
-            <%= f.input :risk_justification, disabled: @finding.automatic_risk?,input_html: {
-                data: { bic_manual_risk: true } } %>
+            <%= f.input :risk_justification, disabled: @finding.automatic_risk?, input_html: {
+                data: { bic_field_to_disabled_when_is_automatic: true } } %>
             <%= f.hidden_field :risk_justification, value: nil, disabled: !@finding.automatic_risk?,
-              data: { bic_calculate_risk: true } %>
+              data: { bic_field_to_disabled_when_is_manual: true } %>
           <% end %>
 
           <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
@@ -482,6 +454,7 @@
     <%= link_to_add_fields(t('finding.add_task'), f, :tasks) %>
   </div>
 
+  <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
   <% if USE_SCOPE_CYCLE %>
     <div class="row">
       <div class="col-md-2">
@@ -492,9 +465,32 @@
       </div>
     </div>
   <% end %>
-
   <div class="row">
-    <%= render 'issues' %>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'customer' %></h5>
+    </div>
+    <div class="col-md-2 d-none d-md-block">
+      <h5 class="h6"><%= Issue.human_attribute_name 'entry' %></h5>
+    </div>
+    <div class="col-md-2 d-none d-md-block">
+      <h5 class="h6"><%= Issue.human_attribute_name 'operation' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'comments' %></h5>
+    </div>
+    <div class="col-md-1">
+      <h5 class="h6"><%= Issue.human_attribute_name 'close_date' %></h5>
+    </div>
+    <div class="col-md-1">
+      <h5 class="h6"><%= Issue.human_attribute_name 'currency' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'amount' %></h5>
+    </div>
+  </div>
+
+  <div id="issues">
+    <%= render 'issues', f: f, readonly: users_readonly %>
   </div>
 
   <h5 class="mt-3">

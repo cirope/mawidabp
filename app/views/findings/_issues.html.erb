@@ -1,40 +1,23 @@
-<% if @finding.issues.any? %>
-  <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
-
-  <table class="table table-sm table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= Issue.human_attribute_name 'customer' %></th>
-        <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'entry' %></th>
-        <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'operation' %></th>
-        <th class="d-none d-md-table-cell"><%= Issue.human_attribute_name 'comments'  %></th>
-        <th><%= Issue.human_attribute_name 'close_date' %></th>
-        <th><%= Issue.human_attribute_name 'currency' %></th>
-        <th><%= Issue.human_attribute_name 'amount' %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @finding.issues.each do |issue| %>
-        <tr>
-          <td><%= issue.customer %></td>
-          <td class="d-none d-md-table-cell"><%= issue.entry %></td>
-          <td class="d-none d-md-table-cell"><%= issue.operation %></td>
-          <td class="d-none d-md-table-cell"><%= issue.comments %></td>
-          <td><%= l(issue.close_date, format: :minimal) if issue.close_date %></td>
-          <td><%= issue.currency %></td>
-          <td><%= issue.amount %></td>
-        </tr>
-      <% end %>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><%= number_to_currency @finding.issues_amount %></td>
-      </tr>
-    </tbody>
-  </table>
+<%= f.simple_fields_for :issues do |i_f| %>
+  <%= render 'issue', f: i_f, readonly: readonly %>
 <% end %>
+
+<div id="finding_issues"></div>
+
+<div class="row justify-content-end">
+  <div class="col-2 text-right" data-sum-amount-impact-risks data-current-currency="<%= t 'number.currency.format.unit' %>">
+    <div class="row">
+      <div class="col-10 text-right">
+        <%= number_to_currency @finding.issues_amount %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  data-impact-risks-value="<%= @finding.impact_risk_value %>"
+  data-impact-risks-percentage-value="<%= @finding.impact_risk_percentage %>"
+  data-percentage-impact-risks-types="<%= finding_percentage_impact_risks_types(@finding) %>"
+  data-impact-risks-types="<%= finding_impact_risks_types(@finding) %>"
+  data-use-scope-cycle="<%= USE_SCOPE_CYCLE %>">
+</div>
