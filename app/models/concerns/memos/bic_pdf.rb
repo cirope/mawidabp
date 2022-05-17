@@ -11,13 +11,17 @@ module Memos::BicPdf
                                                     'background.png'),
                               margin: [0, 0]
 
-    pdf.image File.join(Rails.root,
-                        'app',
-                        'assets',
-                        'images',
-                        'memo',
-                        'bice_fidecomiso.jpg'),
-              position: :left, scale: 0.75
+    if Current.organization.prefix == 'bic-fi'
+      pdf.image File.join(Rails.root,
+                          'app',
+                          'assets',
+                          'images',
+                          'memo',
+                          'bice_fidecomiso.jpg'),
+                position: :left, scale: 0.75
+    else
+      pdf.move_down 37
+    end
 
     pdf.move_down 38
     pdf.text text_with_style(text: "#{sprintf('%02d', id)}/#{created_at.year}",
@@ -51,7 +55,7 @@ module Memos::BicPdf
           border_width: [0, 0, 0, 0]
         },
         {
-          content: "#{text_with_style(text: Memo.human_attribute_name('required_by').upcase, font: 'Helvetica', size: '16', color: '#182d34', bold: true)}     #{text_with_style(text: required_by, font: 'Helvetica', size: '16', color: '#aaaaaa')}",
+          content: "#{text_with_style(text: Memo.human_attribute_name('plan_item').upcase, font: 'Helvetica', size: '16', color: '#182d34', bold: true)}             #{text_with_style(text: name, font: 'Helvetica', size: '16', color: '#aaaaaa')}",
           inline_format: true,
           border_width: [0, 0, 0, 4],
           border_left_color: '008385',
@@ -73,18 +77,17 @@ module Memos::BicPdf
           content: '', border_width: [0, 0, 0, 0]
         },
         {
-          content: "#{text_with_style(text: I18n.t('memo.description_pdf'), font: 'Helvetica', size: '16', color: '#182d34', bold: true)}                      #{text_with_style(text: (description || ''), font: 'Helvetica', size: '16', color: '#aaaaaa')}",
+          content: "#{text_with_style(text: Memo.human_attribute_name('required_by').upcase, font: 'Helvetica', size: '16', color: '#182d34', bold: true)}     #{text_with_style(text: required_by, font: 'Helvetica', size: '16', color: '#aaaaaa')}",
           inline_format: true,
           border_width: [0, 0, 0, 4],
           border_left_color: '008385',
-          padding_left: 25,
-          height: 140
+          padding_left: 25
         }
       ]
     ], column_widths: [95, 60, 200, 205]
 
     pdf.move_down 100
-    pdf.text text_with_style(text: Memo.human_attribute_name('plan_item').upcase,
+    pdf.text text_with_style(text: I18n.t('memo.description_pdf'),
                              font: 'Helvetica',
                              size: '16',
                              color: '#008385',
@@ -99,9 +102,9 @@ module Memos::BicPdf
           content: '', border_width: [0, 0, 0, 0]
         },
         {
-          content: text_with_style(text: name,
+          content: text_with_style(text: (description || ''),
                                    font: 'Helvetica',
-                                   size: '35',
+                                   size: '13',
                                    color: '#182d34',
                                    bold: true),
           inline_format: true,
