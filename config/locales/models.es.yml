@@ -112,6 +112,9 @@ es:
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
+      memo:
+        one: 'Informe externo'
+        other: 'Informes externos'
       news:
         one: 'Noticia'
         other: 'Noticias'
@@ -465,6 +468,18 @@ es:
         end: 'Fin'
         start: 'Inicio'
         user_id: 'Usuario'
+      memo:
+        name: 'Nombre'
+        description: 'Descripción'
+        file_model_memos: 'Archivos'
+        period_id: 'Periodo'
+        plan_item_id: 'Proyecto'
+        period: 'Periodo'
+        plan_item: 'Proyecto'
+        business_unit: 'Unidad de negocio'
+        business_unit_type: 'Unidad organizativa'
+        required_by: 'Requerido por'
+        close_date: 'Fecha de cierre'
       news:
         title: 'Título'
         description: 'Descripción'
@@ -834,3 +849,10 @@ es:
           attributes:
             base:
               auditors_limit_reached: 'Limite de auditores alcanzado, por favor actualice su licencia.'
+        memo:
+          attributes:
+            base:
+              file_model_memos_blank: 'Debe tener al menos un archivo'
+              cant_change_fields: 'No puede cambiar ningun campo debido a que supero la fecha de cierre'
+            plan_item_id:
+              used: 'El proyecto ya esta siendo utilizado por otro Informe o Informe externo'

@@ -446,6 +446,15 @@ ActiveRecord::Schema.define(version: 2022_05_11_180233) do
     t.index ["user_id"], name: "index_error_records_on_user_id"
   end
 
+  create_table "file_model_memos", force: :cascade do |t|
+    t.bigint "file_model_id", null: false
+    t.bigint "memo_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_model_id"], name: "index_file_model_memos_on_file_model_id"
+    t.index ["memo_id"], name: "index_file_model_memos_on_memo_id"
+  end
+
   create_table "external_reviews", force: :cascade do |t|
     t.bigint "review_id"
     t.bigint "alternative_review_id"
@@ -705,6 +714,7 @@ ActiveRecord::Schema.define(version: 2022_05_11_180233) do
     t.text "description"
     t.date "close_date"
     t.string "required_by"
+    t.integer "lock_version", default: 0, null: false
     t.integer "period_id", null: false
     t.integer "plan_item_id", null: false
     t.integer "organization_id", null: false

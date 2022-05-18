@@ -247,6 +247,23 @@ es:
       title: 'Detalles del registro de ingreso'
       list: 'Ver registros de ingreso'
 
+  memos:
+    edit:
+      title: 'Editar Informe externo'
+    index:
+      new: 'Nuevo Informe externo'
+      title: 'Listado de Informes externos'
+      empty_html: 'No hay Informes externos, puede crear una con el botón <span class="badge badge-primary">Nuevo memo</span>'
+      empty_search_html: 'No hay Informes externos que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear Informe externo'
+    form:
+      markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+      add_file_model: 'Agregar archivo'
+      download_cover: 'Descargar caratula'
+    show:
+      title: 'Ver Informe externo'
+
   news:
     edit:
       title: 'Editar noticia'
