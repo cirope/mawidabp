@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_25_214624) do
+ActiveRecord::Schema.define(version: 2022_05_11_180233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(version: 2022_04_25_214624) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "business_unit_kind_id"
+    t.integer "lock_version", default: 0
     t.index ["business_unit_kind_id"], name: "index_business_units_on_business_unit_kind_id"
     t.index ["business_unit_type_id"], name: "index_business_units_on_business_unit_type_id"
     t.index ["name"], name: "index_business_units_on_name"

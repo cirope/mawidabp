@@ -107,6 +107,11 @@
     errors:
       can_not_be_destroyed: "La unidad organizativa no puede ser eliminada"
       business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
+
+  business_unit:
+    edit_title: "Modificar unidad de negocio"
+    correctly_updated: "Unidad de negocio actualizada correctamente."
+  
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"
