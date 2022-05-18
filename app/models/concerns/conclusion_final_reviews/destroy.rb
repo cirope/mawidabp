@@ -17,7 +17,7 @@ module ConclusionFinalReviews::Destroy
     end
 
     def has_not_repeated_in_weakness?
-      Finding.where(repeated_of: review.weaknesses).empty?
+      Finding.list.where(repeated_of: review.weaknesses).empty?
     end
 
     def undo_final_findings
