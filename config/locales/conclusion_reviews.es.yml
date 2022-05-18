@@ -131,9 +131,9 @@ es:
         audit_date: "<b>Fecha de Auditoría</b>"
       weaknesses:
         title: "<b>RESUMEN EJECUTIVO</b>"
-        subtitle: "<b>Objetivo</b>"
+        subtitle: "<b>OBJETIVO</b>"
         main_observations: "<b>Observaciones en proceso de regularización</b>"
-        audit_conclusion: "<b>Conclusión General de la Auditoría</b>"
+        audit_conclusion: "<b>CONCLUSIÓN GENERAL DE LA AUDITORÍA</b>"
         highest_responsible: "<b>%{responsible}</b>"
         signature_label: "<b>Gerencia de Auditoría Interna</b>"
         organization: "<b>Nuevo Banco del Chaco S.A.</b>"
@@ -162,7 +162,7 @@ es:
         inadequate: 'Inadecuado'
 
       weaknesses_detected:
-        name: "Observaciones de la presente revisión"
+        name: "OBSERVACIONES DE LA PRESENTE REVISIÓN"
         repeated: "Observaciones de seguimiento"
         title: "<b>Título</b>"
         description: "<b>Descripción</b>"
