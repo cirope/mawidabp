@@ -135,7 +135,7 @@ es:
         main_observations: "<b>Observaciones en proceso de regularización</b>"
         audit_conclusion: "<b>CONCLUSIÓN GENERAL DE LA AUDITORÍA</b>"
         highest_responsible: "<b>%{responsible}</b>"
-        signature_label: "<b>Gerencia de Auditoría Interna</b>"
+        signature_label: "<b>Gerente a/c interino de Auditoría Interna</b>"
         organization: "<b>Nuevo Banco del Chaco S.A.</b>"
         detailed_review: "INFORME DETALLADO"
         introduction_and_scope: "<b>INTRODUCCION Y ALCANCE DEL TRABAJO</b>"
