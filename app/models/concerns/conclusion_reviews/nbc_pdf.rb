@@ -217,21 +217,12 @@ module ConclusionReviews::NbcPdf
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages')
 
-      data = review.review_user_assignments.select(&:audited?).map do |rua|
-               [rua.user.full_name, rua.user.full_name]
-             end
-
-      width_column1 = PDF_FONT_SIZE * 10
-      width_column2 = pdf.bounds.width - width_column1
-
       pdf.move_down PDF_FONT_SIZE
 
-      data.insert 0, [
-        I18n.t('conclusion_review.nbc.weaknesses.full_name'),
-        I18n.t('conclusion_review.nbc.weaknesses.area')
-      ]
+      data = review.review_user_assignments.select(&:audited?).map { |rua| [rua.user.full_name] }
 
-      pdf.table(data, cell_style: { inline_format: true }, column_widths: [width_column1, width_column2]) do
+      data.insert 0, [I18n.t('conclusion_review.nbc.weaknesses.full_name')]
+      pdf.table(data, cell_style: { inline_format: true }, column_widths: [pdf.bounds.width]) do
         row(0).style(
           background_color: 'cccccc',
           align: :center
