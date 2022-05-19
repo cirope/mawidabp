@@ -2,7 +2,7 @@ module ConclusionReviews::NbcPdf
   extend ActiveSupport::Concern
 
   def nbc_pdf organization = nil, *args
-    pdf = Prawn::Document.create_generic_pdf :portrait
+    pdf = Prawn::Document.create_generic_pdf :portrait, margins: [30, 20, 20, 25]
 
     put_nbc_cover_on               pdf, organization
     put_default_watermark_on       pdf
@@ -66,7 +66,7 @@ module ConclusionReviews::NbcPdf
         )
       end
 
-      pdf.move_down (pdf.y - PDF_FONT_SIZE.pt * 10)
+      pdf.move_down (pdf.y - PDF_FONT_SIZE.pt * 8)
       put_nbc_grid pdf
 
       pdf.start_new_page
