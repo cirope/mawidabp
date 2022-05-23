@@ -187,6 +187,7 @@ es:
     synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
+    annual_report_title: "Resumen anual"
     review_score_details_report_title: "Calificaciones de informes detallado"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"

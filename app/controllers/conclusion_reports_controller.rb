@@ -1,4 +1,5 @@
 class ConclusionReportsController < ApplicationController
+  include Reports::AnnualReport
   include Reports::SynthesisReport
   include Reports::ReviewStatsReport
   include Reports::ReviewScoresReport
