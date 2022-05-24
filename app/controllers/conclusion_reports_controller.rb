@@ -76,7 +76,9 @@ class ConclusionReportsController < ApplicationController
         benefits: :read,
         create_benefits: :read,
         auto_complete_for_business_unit: :read,
-        auto_complete_for_process_control: :read
+        auto_complete_for_process_control: :read,
+        annual_report: :read,
+        create_annual_report: :read
       )
     end
 end

@@ -1,3 +1,11 @@
-<%= render partial: 'shared/filter_form',
-  locals: { action: :annual_report, extra_params: {},
-  forms: { year_select: { options: [[2020,2020], [2021,2021]]} } } %>
+<%= simple_form_for :create_annual_report, url: create_annual_report_conclusion_reports_path, html: { method: :post } do |f| %>
+  <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: false %>
+
+
+<hr />
+
+<div>
+  <%= link_to t('label.back'), action: :index %> |
+  <%= f.submit t('label.download'), class: 'btn btn-link' %>
+</div>
+<% end %>
