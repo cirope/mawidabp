@@ -42,10 +42,10 @@ module Reports::AnnualReport
       pdf.move_down PDF_FONT_SIZE * 10
 
       column_data  = [
-        [I18n.t('conclusion_review.nbc.cover.issue_date'), I18n.l(Time.now, format: :long)  ],
+        [I18n.t('conclusion_review.nbc.cover.issue_date'), params[:create_annual_report][:date]],
         [I18n.t('conclusion_review.nbc.cover.to'), I18n.t('conclusion_review.nbc.cover.to_label')],
         [I18n.t('conclusion_review.nbc.cover.from'), I18n.t('conclusion_review.nbc.cover.from_label')],
-        [I18n.t('conclusion_review.nbc.cover.cc'), 'cc' ]
+        [I18n.t('conclusion_review.nbc.cover.cc'), params[:create_annual_report][:cc] ]
       ]
 
       width_column1 = PDF_FONT_SIZE * 7
@@ -72,8 +72,8 @@ module Reports::AnnualReport
     def put_nbc_grid pdf
       column_data = [
         [
-          I18n.t('conclusion_review.nbc.cover.number_review'),
-          'AU - OPE 2021 - 48\nFebrero 2022',
+          '<b>Informe:</b>',
+          params[:create_annual_report][:name],
           I18n.t('conclusion_review.nbc.cover.prepared_by')
         ]
       ]
@@ -91,7 +91,9 @@ module Reports::AnnualReport
 
       pdf.text '<b><u>OBJETIVO</u></b>', inline_format: true
 
-      pdf.text 'El objetivo primario de nuestro informe es calificar el control interno de Nuevo Chaco Bursátil S.A. Las conclusiones a las que se arribaron en este informe derivan de las calificaciones de los distintos ciclos de negocios evaluados durante el periodo finalizado el 31 de Diciembre de 2021, y son válidas a la fecha de nuestra revisión, no abarcando posibles cambios posteriormente efectuados.'
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.text params[:create_annual_report][:objective]
 
       pdf.move_down PDF_FONT_SIZE * 2
 
@@ -99,15 +101,7 @@ module Reports::AnnualReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text 'Con base en los resultados obtenidos de nuestras revisiones realizadas durante el periodo finalizado el 31 de diciembre de 2021, informamos a ustedes que, nuestra calificación general sobre el control interno de la Sociedad es de <b>“Requiere algunas mejoras”,</b><i> ver Cuadro I.</i>', inline_format: true
-
-      pdf.move_down PDF_FONT_SIZE
-
-      pdf.text 'Para la determinación de esta calificación hemos evaluado las conclusiones de nuestras revisiones de los distintos ciclos de negocio de la Sociedad realizadas durante el ejercicio finalizado el 31 de diciembre de 2021.'
-
-      pdf.move_down PDF_FONT_SIZE
-
-      pdf.text 'Por otra parte, se realizó una evaluación de la situación actual del control interno de la entidad, tomando como base, el estado, a fecha del informe, de las observaciones detectadas en el presente ejercicio y las de seguimiento de informes anteriores.'
+      pdf.text params[:create_annual_report][:conclusion]
 
       pdf.move_down PDF_FONT_SIZE * 3
 
@@ -137,7 +131,7 @@ module Reports::AnnualReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text 'Como parte de los procedimientos de revisión de control interno planificados en el marco del plan de Auditoría Interna del Nuevo Banco del Chaco S.A. para el ejercicio que finalizó el 31 de Diciembre de 2021, hemos realizado la calificación del control interno vigente en NCHB, partiendo de las conclusiones obtenidas de las revisiones de los distintos ciclos de negocio de la Entidad a la fecha de realización de las revisiones correspondientes.'
+      pdf.text params[:create_annual_report][:introduction_and_scope]
 
       pdf.move_down PDF_FONT_SIZE
 

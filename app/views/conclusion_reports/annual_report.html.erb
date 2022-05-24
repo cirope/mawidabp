@@ -1,11 +1,63 @@
 <%= simple_form_for :create_annual_report, url: create_annual_report_conclusion_reports_path, html: { method: :post } do |f| %>
   <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: false %>
 
+  <hr />
 
-<hr />
+  <div>
+    <%= link_to t('label.back'), action: :index %> |
+    <%= link_to t('label.download'), '#',
+      data: { toggle: 'modal', target: '#customize_report' } %>
+  </div>
 
-<div>
-  <%= link_to t('label.back'), action: :index %> |
-  <%= f.submit t('label.download'), class: 'btn btn-link' %>
-</div>
+  <% fields_modal = [
+      {
+        :name => :date,
+        :label => 'fecha'
+      },
+      {
+        :name => :cc,
+        :label => 'cc'
+      },
+      {
+        :name => :name,
+        :label => 'nombre'
+      },
+      {
+        :name => :objective,
+        :label => 'objetivo'
+      },
+      {
+        :name => :conclusion,
+        :label => 'conclusion'
+      },
+      {
+        :name => :introduction_and_scope,
+        :label => 'Introduccion y alcance'
+      }
+    ] %>
+
+  <div class="modal fade" id="customize_report" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="customize_report_label">
+              <%= t('reports.customization_titles') %>
+            </h3>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <% fields_modal.each do |field| %>
+              <div class="form-group">
+                <%= f.input field[:name], label: field[:label], as: :text, input_html: { rows: 5 } %>
+              </div>
+            <% end %>
+          </div>
+          <div class="modal-footer">
+            <%= f.submit t('customize_report_form.create'),
+              class: 'btn btn-primary', data: { disable_with: t('reports.generating') } %>
+          </div>
+      </div>
+    </div>
+  </div>
+
 <% end %>
