@@ -136,15 +136,16 @@ module Reviews::ScoreSheetCommon
           coi.effectiveness || 0,
           coi.relevance     || 0,
           coi.exclude_from_score,
-          coi.previous_effectiveness,
+          (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
           coi_options(coi)
         ]
       end
     end
 
-    def coi_options coi
+    def coi_options coi, previous_effectiveness: false
       score_option = ControlObjective.find(coi.control_objective_id).score_type
+      value        = previous_effectiveness ? coi.previous_effectiveness : coi.compliance_score
 
-      ControlObjectiveItem.qualifications.invert[coi.compliance_score] if score_option == 'option'
+      ControlObjectiveItem.qualifications.invert[value] if score_option == 'option'
     end
 end
