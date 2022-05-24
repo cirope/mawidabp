@@ -112,6 +112,9 @@ es:
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
+      memo:
+        one: 'Informe externo'
+        other: 'Informes externos'
       news:
         one: 'Noticia'
         other: 'Noticias'
@@ -465,6 +468,18 @@ es:
         end: 'Fin'
         start: 'Inicio'
         user_id: 'Usuario'
+      memo:
+        name: 'Nombre'
+        description: 'Descripción'
+        file_model_memos: 'Archivos'
+        period_id: 'Periodo'
+        plan_item_id: 'Proyecto'
+        period: 'Periodo'
+        plan_item: 'Proyecto'
+        business_unit: 'Unidad de negocio'
+        business_unit_type: 'Unidad organizativa'
+        required_by: 'Requerido por'
+        close_date: 'Fecha de cierre'
       news:
         title: 'Título'
         description: 'Descripción'
@@ -749,8 +764,10 @@ es:
         image: 'Imagen'
       weakness_template:
         reference: 'Referencia'
+        subreference: 'Subreferencia'
         title: 'Título'
         description: 'Observación'
+        brief: 'Resumen'
         risk: 'Riesgo'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
@@ -758,6 +775,7 @@ es:
         internal_control_components: 'Componentes de CI'
         allow_duplication: 'Permitir título duplicado'
         audit_recommendations: 'Recomendaciones de auditoría'
+        failure: 'Falla'
 
     errors:
       models:
@@ -778,8 +796,8 @@ es:
               must_have_a_manager: 'debe contener un gerente de auditoría'
               reference_auditor_required: 'debe tener un auditor referente'
             extension:
-              must_be_being_implemented: 'Para indicar que es %{extension} debe estar en estado %{state}'
-              had_no_extension_when_being_implemented: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension}'
+              must_have_state_that_allows_extension: 'Para indicar que tiene %{extension} debe estar en estado %{states}'
+              cant_have_extension_when_didnt_have_extension: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension} en los estados %{states}'
             risk_justification:
               present: 'No debe tener justificacion de riesgo'
             compliance_susceptible_to_sanction:
@@ -831,3 +849,10 @@ es:
           attributes:
             base:
               auditors_limit_reached: 'Limite de auditores alcanzado, por favor actualice su licencia.'
+        memo:
+          attributes:
+            base:
+              file_model_memos_blank: 'Debe tener al menos un archivo'
+              cant_change_fields: 'No puede cambiar ningun campo debido a que supero la fecha de cierre'
+            plan_item_id:
+              used: 'El proyecto ya esta siendo utilizado por otro Informe o Informe externo'

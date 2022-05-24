@@ -740,4 +740,113 @@ class UserTest < ActiveSupport::TestCase
 
     assert_equal expected, User.auditors
   end
+
+  test 'should can act as audited when is audited' do
+    assert users(:audited).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is audited and auditor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:audited)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:auditor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is audited and supervisor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:audited)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:supervisor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is audited and manager' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:audited)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:manager_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should can act as audited when is executive manager' do
+    assert users(:plain_manager).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is executive manager and auditor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:plain_manager)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:auditor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is executive manager and supervisor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:plain_manager)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:supervisor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is executive manager and manager' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:plain_manager)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:manager_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should can act as audited when is admin' do
+    assert users(:administrator).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is admin and auditor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:administrator)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:auditor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is admin and supervisor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:administrator)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:supervisor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is admin and manager' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:administrator)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:manager_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is auditor' do
+    refute users(:bare).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is supervisor' do
+    refute users(:supervisor).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is manager' do
+    refute users(:manager).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is committee' do
+    refute users(:committee).can_act_as_audited?
+  end
 end

@@ -48,6 +48,16 @@ current_plan_item_5:
   plan: current_plan
   business_unit: business_unit_three
 
+current_plan_item_6:
+  project: Project 6
+  start: <%= 10.days.ago.to_date.to_s(:db) %>
+  end: <%= 10.days.from_now.to_date.to_s(:db) %>
+  order_number: 6
+  scope: committee
+  risk_exposure: high
+  plan: current_plan
+  business_unit: business_unit_three
+
 current_plan_item_4_without_business_unit:
   project: Project 4
   start: <%= 3.days.from_now.to_date.to_s(:db) %>

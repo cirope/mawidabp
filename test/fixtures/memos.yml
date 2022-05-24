@@ -1,0 +1,7 @@
+first_memo:
+  name: 'First Memo'
+  close_date: <%= 15.days.from_now.to_date.to_s(:db) %>
+  required_by: <%= Memo::REQUIRED_BY_OPTIONS.first %>
+  period: current_period
+  plan_item: current_plan_item_6
+  organization: cirope

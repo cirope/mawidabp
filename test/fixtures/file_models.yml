@@ -13,6 +13,11 @@ document_file:
   file_content_type: 'text/plain'
   file_file_size: 20
 
+second_document_file:
+  file_file_name: 'text2.txt'
+  file_content_type: 'text/plain'
+  file_file_size: 20
+
 text_file_model_review:
   file_file_name: 'text_.txt'
   file_content_type: 'text/plain'

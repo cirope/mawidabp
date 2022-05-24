@@ -620,7 +620,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
     @weakness.probability                  = Finding.frequencies[:low]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     assert @weakness.valid?
   end
@@ -638,7 +638,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:most_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
     @weakness.probability                  = Finding.frequencies[:low]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     refute @weakness.valid?
   end
@@ -691,7 +691,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:high]
     @weakness.probability                  = Finding.frequencies[:high]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     assert @weakness.valid?
   end
@@ -708,7 +708,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:high]
     @weakness.probability                  = Finding.frequencies[:high]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     refute @weakness.valid?
   end
