@@ -32,6 +32,12 @@ module Weaknesses::Validations
               :sample_deviation, :impact_risk,
               :probability, :external_repeated,
               presence: true, if: :bic_require_is_manual_risk_disabled?
+    validates :state_regulations,
+              :degree_compliance,
+              :observation_originated_tests,
+              :sample_deviation, :impact_risk,
+              :probability, :external_repeated,
+              absence: true, if: :bic_require_is_manual_risk_enabled?
     validate  :bic_calculated_risk, if: :bic_require_is_manual_risk_disabled?
   end
 

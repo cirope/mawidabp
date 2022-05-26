@@ -352,6 +352,7 @@ DEPENDENCIES
   rails-controller-testing
   redcarpet
   responders
+  rexml
   ruby-ntlm
   ruby-saml
   rubyzip
