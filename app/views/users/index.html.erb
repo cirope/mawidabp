@@ -38,7 +38,7 @@
 <div>
   <%= paginate @users %>
   <% if current_organization.ldap_config && show_import_from_ldap? %>
-    <% if Current.conclusion_pdf_format == 'gal' %>
+    <% if ENABLE_MANUAL_ADD_USER_WHEN_LDAP_IS_CONFIGURED %>
       <%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %> |
     <% end %>
 
