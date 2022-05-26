@@ -7,6 +7,10 @@ class WeaknessTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    clear_current_attributes
+  end
+
   test 'create' do
     state = if USE_SCOPE_CYCLE
               Finding::STATUS[:incomplete]
@@ -35,8 +39,6 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
-        impact_risk: Finding.impact_risks[:small],
-        probability: Finding.probabilities[:rare],
         manual_risk: true,
         risk_justification: 'Test',
         finding_user_assignments_attributes: {
@@ -92,8 +94,6 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
-        impact_risk: Finding.impact_risks[:small],
-        probability: Finding.probabilities[:rare],
         manual_risk: true,
         risk_justification: 'Test',
         finding_user_assignments_attributes: {
@@ -598,10 +598,31 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :risk_justification, :blank
   end
 
+  test 'invalid when manual risk and have attributes for automatic risks' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.state_regulations            = Finding.state_regulations[:exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:comply]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:most_expected]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+
+    refute @weakness.valid?
+    assert_error @weakness, :impact_risk, :present
+    assert_error @weakness, :probability, :present
+    assert_error @weakness, :state_regulations, :present
+    assert_error @weakness, :degree_compliance, :present
+    assert_error @weakness, :observation_originated_tests, :present
+    assert_error @weakness, :sample_deviation, :present
+    assert_error @weakness, :external_repeated, :present
+  end
+
   test 'invalid when automatic risk and present justification' do
     skip if Current.conclusion_pdf_format != 'bic'
 
-    @weakness.manual_risk = false
+    @weakness.manual_risk        = false
     @weakness.risk_justification = 'Test'
 
     refute @weakness.valid?
