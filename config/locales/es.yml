@@ -107,6 +107,11 @@
     errors:
       can_not_be_destroyed: "El sector no puede ser eliminado"
       business_unit_related: "El ciclo no puede ser eliminado, se encuentra relacionado con al menos un plan de trabajo"
+
+  business_unit:
+    edit_title: "Modificar unidad de negociio"
+    correctly_updated: "Unidad de negocio actualizada correctamente."
+
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"
