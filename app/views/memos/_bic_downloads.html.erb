@@ -1,0 +1,10 @@
+<%= render('shared/downloads',
+  right: true,
+  links: [
+    link_to(
+      t('memos.form.download_cover'), {
+        :action => :export_to_pdf, :id => @memo, :_ts => Time.now.to_i
+      }, :class => 'dropdown-item'
+    )
+  ].compact
+) %>

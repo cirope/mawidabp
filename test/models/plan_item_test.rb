@@ -133,4 +133,47 @@ class PlanItemTest < ActiveSupport::TestCase
     assert units > 0
     assert_equal units, @plan_item.units
   end
+
+  test 'should return blank unused because period not have plan item unused' do
+    assert PlanItem.list_unused((periods :third_period).id).blank?
+  end
+
+  test 'should return blank unused because free plan item dont have business unit' do
+    assert PlanItem.list_unused((periods :current_period).id).blank?
+  end
+
+  test 'should return blank unused because current user dont have business_unit' do
+    Current.user = users :poll
+
+    PlanItem.create!(
+      project: 'free plan item',
+      start: 10.days.ago.to_date.to_s(:db),
+      end: 10.days.from_now.to_date.to_s(:db),
+      order_number: 7,
+      scope: users(:committee),
+      risk_exposure: 'high',
+      plan: plans(:current_plan),
+      business_unit: business_units(:business_unit_three)
+    )
+
+    assert PlanItem.list_unused((periods :current_period).id).blank?
+  end
+
+  test 'should return unused plan item' do
+    new_plan_item = PlanItem.create!(
+      project: 'free plan item',
+      start: 10.days.ago.to_date.to_s(:db),
+      end: 10.days.from_now.to_date.to_s(:db),
+      order_number: 7,
+      scope: users(:committee),
+      risk_exposure: 'high',
+      plan: plans(:current_plan),
+      business_unit: business_units(:business_unit_three)
+    )
+
+    reponse = PlanItem.list_unused((periods :current_period).id)
+
+    assert reponse.present?
+    assert reponse.include?(new_plan_item)
+  end
 end

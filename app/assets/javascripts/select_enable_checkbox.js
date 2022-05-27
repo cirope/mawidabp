@@ -1,25 +1,22 @@
 jQuery(function () {
   $(document).ready(function () {
-    $('[data-target-value-enable-checkbox]').each(function () {
+    $('[data-target-values-enable-checkbox]').each(function () {
       modifyCheckbox($(this))
     })
   })
 
-  $(document).on('change', '[data-target-value-enable-checkbox]', function () {
+  $(document).on('change', '[data-target-values-enable-checkbox]', function () {
     modifyCheckbox($(this))
   })
 
   function modifyCheckbox(element) {
     var $checkBox = $(element.data('targetCheckbox'))
 
-    if (element.find(':selected').val() == element.data('targetValueEnableCheckbox')) {
+    if (element.data('targetValuesEnableCheckbox').includes(parseInt(element.find(':selected').val()))) {
       $checkBox.removeAttr('disabled')
     } else {
       $checkBox.attr('disabled', true)
-
-      if (element.data('disabledAndDeny')) {
-        $checkBox.prop('checked', false)
-      }
+      $checkBox.prop('checked', false)
     }
   }
 })

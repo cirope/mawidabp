@@ -798,6 +798,12 @@ es:
     stale_object_error: "El grupo no fue actualizado, intente nuevamente."
     add_organization: "Agregar organización"
 
+  memo:
+    correctly_created: "Informe externo agregado correctamente."
+    correctly_updated: "Informe externo actualizado correctamente."
+    stale_object_error: "El Informe externo no fue actualizado, intente nuevamente."
+    description_pdf: "COMENTARIOS"
+
   notification:
     index_title: "Listado de notificaciones"
     show_title: "Detalles de la notificación"
@@ -1184,6 +1190,7 @@ es:
       business_unit:
         name: "Nombre"
         business_unit_kind_id: 'Tipo de unidad de negocio'
+        business_unit_type_id: 'Unidad organizativa'
       business_unit_type:
         name: "Nombre"
         business_unit_label: "Etiqueta del ciclo en el informe"

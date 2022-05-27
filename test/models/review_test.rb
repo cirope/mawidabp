@@ -130,7 +130,21 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert review.invalid?
     assert_error review, :identification, :taken
-    assert_error review, :plan_item_id, :taken
+    assert_error review, :plan_item_id, :used
+  end
+
+  test 'invalid because Memo have same plan item' do
+    @review.plan_item = plan_items :current_plan_item_6
+
+    refute @review.valid?
+    assert_error @review, :plan_item_id, :used
+  end
+
+  test 'invalid because another review have same plan item' do
+    @review.plan_item = plan_items :current_plan_item_1
+
+    refute @review.valid?
+    assert_error @review, :plan_item_id, :used
   end
 
   test 'validate unique identification number' do

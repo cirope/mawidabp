@@ -1,0 +1,9 @@
+<%= content_for :form_actions do %>
+  <%= link_to_show @memo %> |
+  <%= link_to_index memos_path %> |
+  <% if Current.conclusion_pdf_format == 'bic' %>
+    <%= render 'bic_downloads' %>
+  <% end %>
+<% end %>
+
+<%= render 'form' %>
