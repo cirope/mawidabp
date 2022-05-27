@@ -1,5 +1,5 @@
 <%= simple_form_for :create_annual_report, url: create_annual_report_conclusion_reports_path, html: { method: :post } do |f| %>
-  <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: false %>
+  <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: false, label: 'Periodo' %>
 
   <hr />
 
@@ -11,28 +11,40 @@
 
   <% fields_modal = [
       {
-        :name => :date,
-        :label => 'fecha'
+        name: :date,
+        label: 'fecha',
+        type: :date_picker
       },
       {
-        :name => :cc,
-        :label => 'cc'
+        name: :cc,
+        label: 'cc',
+        type: :text,
+        rows: 1
+        
       },
       {
-        :name => :name,
-        :label => 'nombre'
+        name: :name,
+        label: 'nombre',
+        type: :text,
+        rows: 1
       },
       {
-        :name => :objective,
-        :label => 'objetivo'
+        name: :objective,
+        label: 'objetivo',
+        type: :text,
+        rows: 5
       },
       {
-        :name => :conclusion,
-        :label => 'conclusion'
+        name: :conclusion,
+        label: 'conclusion',
+        type: :text,
+        rows: 5
       },
       {
-        :name => :introduction_and_scope,
-        :label => 'Introduccion y alcance'
+        name: :introduction_and_scope,
+        label: 'Introduccion y alcance',
+        type: :text,
+        rows: 5
       }
     ] %>
 
@@ -48,7 +60,10 @@
           <div class="modal-body">
             <% fields_modal.each do |field| %>
               <div class="form-group">
-                <%= f.input field[:name], label: field[:label], as: :text, input_html: { rows: 5 } %>
+                <%= f.input field[:name], label: field[:label], 
+                                            as: field[:type], 
+                                            input_html: { value: field[:value], rows: field[:rows] },
+                                            required: false %>
               </div>
             <% end %>
           </div>

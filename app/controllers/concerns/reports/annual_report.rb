@@ -42,7 +42,7 @@ module Reports::AnnualReport
       pdf.move_down PDF_FONT_SIZE * 10
 
       column_data  = [
-        [I18n.t('conclusion_review.nbc.cover.issue_date'), params[:create_annual_report][:date]],
+        [I18n.t('conclusion_review.nbc.cover.issue_date'), I18n.l(Date.parse(params[:create_annual_report][:date]), format: :long)],
         [I18n.t('conclusion_review.nbc.cover.to'), I18n.t('conclusion_review.nbc.cover.to_label')],
         [I18n.t('conclusion_review.nbc.cover.from'), I18n.t('conclusion_review.nbc.cover.from_label')],
         [I18n.t('conclusion_review.nbc.cover.cc'), params[:create_annual_report][:cc] ]
