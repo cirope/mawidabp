@@ -18,7 +18,9 @@ module ConclusionReviews::GalPdf
   private
 
     def put_gal_header_on pdf, organization
-      pdf.add_review_header organization, nil, nil
+      hide_logo = review.business_unit_type.hide_review_logo
+
+      pdf.add_review_header organization, nil, nil, hide_logo: hide_logo
       pdf.add_page_footer
     end
 
@@ -56,9 +58,11 @@ module ConclusionReviews::GalPdf
     end
 
     def put_executive_summary_on pdf, organization
-      title = I18n.t 'conclusion_review.executive_summary.title'
-      project_title = I18n.t 'conclusion_review.executive_summary.project'
-      project = review.plan_item.project
+      title           = I18n.t 'conclusion_review.executive_summary.title'
+      use_alt_project = review.business_unit_type.independent_identification
+      project_label   = use_alt_project ? 'project_alt' : 'project'
+      project_title   = I18n.t "conclusion_review.executive_summary.#{project_label}"
+      project         = review.plan_item.project
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
@@ -77,6 +81,16 @@ module ConclusionReviews::GalPdf
 
       unless show_review_best_practice_comments? organization
         put_other_weaknesses_on  pdf
+      end
+
+      if show_scope_detail?
+        title = I18n.t 'conclusion_review.scope_detail.title'
+
+        pdf.start_new_page
+        pdf.add_title title, (PDF_FONT_SIZE).round, :center
+        pdf.move_down PDF_FONT_SIZE * 2
+
+        put_scope_detail_table_on pdf
       end
     end
 
@@ -217,7 +231,7 @@ module ConclusionReviews::GalPdf
     end
 
     def put_control_objective_items_table_on pdf, brief: false
-      row_data = control_objectives_row_data brief
+      row_data = control_objectives_row_data brief, scope_detail: false
 
       if row_data.present?
         data          = row_data.insert 0, control_objective_column_headers
@@ -234,6 +248,21 @@ module ConclusionReviews::GalPdf
               ]
             )
           end
+        end
+      end
+    end
+
+    def put_scope_detail_table_on pdf
+      row_data = control_objectives_row_data true, scope_detail: true
+
+      if row_data.present?
+        column_widths                              = control_objective_column_widths pdf
+        table_options                              = pdf.default_table_options column_widths
+        table_options[:cell_style][:border_widths] = [0, 0, 1, 0]
+        table_options[:row_colors]                 = ['ffffff']
+
+        pdf.font_size PDF_FONT_SIZE do
+          pdf.table row_data, table_options.merge(header: false)
         end
       end
     end
@@ -430,11 +459,19 @@ module ConclusionReviews::GalPdf
     def put_weakness_details_on pdf, weaknesses, hide: [], show: []
       if weaknesses.any?
         weaknesses.each do |f|
+          @__tmp_review_code ||= "#{f.prefix}#{'%.3d' % 0}"
+          @__tmp_review_code   = @__tmp_review_code.next
+
           coi = f.control_objective_item
 
           if show.include? 'control_objective_title'
             put_control_objective_title_on pdf, coi
           end
+
+          def f.tmp_review_code=(code); @tmp_review_code = code; end
+          def f.tmp_review_code; @tmp_review_code; end
+
+          f.tmp_review_code = @__tmp_review_code
 
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(f, hide: hide, show: show),
@@ -515,6 +552,9 @@ module ConclusionReviews::GalPdf
     end
 
     def put_short_weakness_on pdf, weakness, show_risk: false
+      @__fake_review_code ||= "#{weakness.prefix}#{'%.3d' % 0}"
+      @__fake_review_code = @__fake_review_code.next
+
       show_origination_date =
         weakness.repeated_ancestors.present? &&
         weakness.origination_date.present?
@@ -534,7 +574,7 @@ module ConclusionReviews::GalPdf
         Weakness.human_attribute_name('origination_date'), origination_date
       ].join(': ')
       text = [
-        weakness.review_code,
+        @__fake_review_code,
         weakness.title,
         state_text,
         (risk_text if show_risk),
@@ -547,18 +587,18 @@ module ConclusionReviews::GalPdf
     end
 
     def main_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code
+      weaknesses.not_revoked.with_high_risk.sort_by_code
     end
 
     def other_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
+      weaknesses.not_revoked.with_other_risk.sort_by_code
     end
 
     def other_not_assumed_risk_weaknesses
       risks      = [Finding.risks[:medium], Finding.risks[:low]]
       priorities = [Finding.priorities[:low]]
 
-      weaknesses.not_revoked.not_assumed_risk.where(risk: risks, priority: priorities).sort_by_code
+      weaknesses.not_revoked.where(risk: risks, priority: priorities).sort_by_code
     end
 
     def assumed_risk_weaknesses
@@ -597,14 +637,19 @@ module ConclusionReviews::GalPdf
       row_data
     end
 
-    def control_objectives_row_data brief
+    def control_objectives_row_data brief, scope_detail: false
       count         = 0
       row_data      = []
       image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.sort.each do |coi|
-          text  = coi.control_objective_text
+          text  = if scope_detail
+                    coi.control_objective_text.lines.first.upcase
+                  else
+                    coi.control_objective_text
+                  end
+
           image = CONCLUSION_SCOPE_IMAGES[coi.auditor_comment] ||
             'scope_not_apply.png'
 
@@ -785,5 +830,12 @@ module ConclusionReviews::GalPdf
 
     def show_tests? organization
       !review.show_counts? organization.prefix
+    end
+
+    def show_scope_detail?
+      !show_review_best_practice_comments?(organization) &&
+        !collapse_control_objectives &&
+        SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START &&
+        review.period.start >= SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START.to_date
     end
 end

@@ -4,7 +4,7 @@
   :forms => {:date_range => true}} %>
 
 <% @periods.each do |period| %>
-  <h2 class="mb-3"><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+  <h2 class="mb-3"><%= "#{t('period.name')}: #{period.inspect}" %></h2>
 
   <% unless @total_cost_data[period].blank? %>
     <table class="table table-sm table-striped table-hover">
@@ -66,7 +66,9 @@
 <div>
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#',
-    data: { toggle: 'modal', target: '#customize_report' } %>
+    data: { toggle: 'modal', target: '#customize_report' } %> |
+  <%= link_to t('label.download_csv'),
+    cost_analysis_conclusion_reports_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 
 <%= render :partial => 'shared/customize_report_form', :locals => {

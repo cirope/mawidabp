@@ -79,7 +79,6 @@ class WorkflowsControllerTest < ActionController::TestCase
 
   test 'create workflow' do
     counts_array = [
-      'FileModel.count',
       'Workflow.count',
       'WorkflowItem.count',
       'ResourceUtilization.material.count',
@@ -87,35 +86,40 @@ class WorkflowsControllerTest < ActionController::TestCase
     ]
 
     assert_difference counts_array do
-      login
-      post :create, :params => {
-        :workflow => {
-          :period_id => periods(:current_period).id,
-          :review_id => reviews(:review_without_conclusion).id,
-          :file_model_attributes => {
-            :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
-          },
-          :workflow_items_attributes => [
-            {
-              :task => 'New task',
-              :start => Date.today,
-              :end => 10.days.from_now.to_date,
-              :order_number => 1,
-              :resource_utilizations_attributes => [
-                {
-                  :resource_id => users(:manager).id,
-                  :resource_type => 'User',
-                  :units => '12.21'
-                }, {
-                  :resource_id => resources(:laptop_resource).id,
-                  :resource_type => 'Resource',
-                  :units => '2'
+      assert_difference 'FileModel.count', 2 do
+        login
+        post :create, :params => {
+          :workflow => {
+            :period_id => periods(:current_period).id,
+            :review_id => reviews(:review_without_conclusion).id,
+            :file_model_attributes => {
+              :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+            },
+            :workflow_items_attributes => [
+              {
+                :task => 'New task',
+                :start => Date.today,
+                :end => 10.days.from_now.to_date,
+                :order_number => 1,
+                :resource_utilizations_attributes => [
+                  {
+                    :resource_id => users(:manager).id,
+                    :resource_type => 'User',
+                    :units => '12.21'
+                  }, {
+                    :resource_id => resources(:laptop_resource).id,
+                    :resource_type => 'Resource',
+                    :units => '2'
+                  }
+                ],
+                file_model_attributes: {
+                  file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
-      }
+      end
     end
   end
 
@@ -147,7 +151,7 @@ class WorkflowsControllerTest < ActionController::TestCase
                   {
                     :id => resource_utilizations(:auditor_for_20_units_with_conclusion_workflow_item_1).id,
                     :resource_id => users(:manager).id,
-                    :units => '12.21'
+                    :units => '7'
                   }
                 ]
               },

@@ -12,13 +12,15 @@ es:
         updated: 'Actualizados:'
 
   common_mailer:
+    header_repĺy:
+      reply_delimiter: '-- PARA AGREGAR UN COMENTARIO RESPONDA ESTE EMAIL SIN MODIFICAR EL ASUNTO --'
     alt_footer:
       warning: "Por favor, **no contestar** el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
       title_html: "Si usted desea acceder a sus observaciones, haga clic en el siguiente enlace e ingrese legajo y contraseña de Windows: %{url}"
     footer:
       email_label: "Correo"
       warning: "Por favor, **no contestar** el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
-      title: "Correo enviado por el sistema 'Mawidabp', cualquier inquietud comunicarse al área de soporte."
+      title: "Correo enviado por el sistema 'GEPLAS', cualquier inquietud comunicarse al área de soporte."
       recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 10 o superior*"
 
   report_mailer:

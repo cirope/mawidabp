@@ -16,9 +16,12 @@
           } %>
         <% end %>
         <% if @review.new_record? %>
-          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true, input_html: {
-            data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
-          } %>
+          <%= f.input :period_id, collection: Period.list_all_with_plans.map { |p| [p.inspect, p.id] },
+            prompt: true,
+            input_html: {
+              data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
+            }
+          %>
         <% else %>
           <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
             input_html: { value: @review.period.inspect, readonly: true } %>
@@ -36,11 +39,19 @@
           input_html: { value: review_business_unit_text(@review), readonly: true } %>
         <%= f.input :audit_type, label: Review.human_attribute_name(:audit_type), input_html: {
           value: review_business_unit_type_text(@review), readonly: true } %>
+
+        <% if Current.conclusion_pdf_format == 'nbc' %>
+          <%= f.input :review_objective, input_html: { rows: 4 } %>
+        <% end %>
       </div>
       <div class="col-md-6">
+        <% if USE_SCOPE_CYCLE %>
+          <%= f.input :scope %>
+        <% end %>
+
         <% unless HIDE_REVIEW_DESCRIPTION %>
           <%= f.input :description, label: Review.human_attribute_name(:description),
-            input_html: { readonly: readonly, rows: 5 } %>
+            input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 4 : 5 } %>
         <% end %>
 
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
@@ -57,7 +68,7 @@
 
             <div class="clearfix">
               <%= f.simple_fields_for :file_model_reviews do |fm_r| %>
-                <%= render 'file_model_review', f: fm_r, readonly: readonly %>
+                <%= render 'file_model_review', f: fm_r, frozen: frozen %>
               <% end %>
 
               <%= link_to_add_fields t('review.add_file_model'), f, :file_model_reviews, 'file_model_review' unless frozen %>
@@ -80,8 +91,30 @@
         <div id="estimated_amount" class="mt-3">
           <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
         </div>
+        <% if Current.conclusion_pdf_format == 'nbc' %>
+          <%= f.input :type_review, collection: type_review, include_blank: t('helpers.select.prompt') %>
+        <% end %>
       </div>
     </div>
+
+    <% if USE_SCOPE_CYCLE %>
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <%= f.input :manual_score, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
+        </div>
+        <% if @review.new_record? || @review.plan_item&.cycle? %>
+          <div class="col-md-6" data-manual-score-alt>
+            <%= f.input :manual_score_alt, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @review.persisted? && @review.plan_item.auxiliar_business_unit_types.any? %>
+        <%= render partial: 'auxiliar_business_unit_types', locals: { plan_item: @review.plan_item } %>
+      <% else %>
+        <div data-target="auxiliar-business-unit-types"></div>
+      <% end %>
+    <% end %>
 
     <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
       <div class="row">
@@ -169,11 +202,23 @@
     </div>
   <% end %>
 
-  <div data-control-objective-items-container>
-    <% if @review.control_objective_items.any? %>
-      <%= render 'control_objective_items', f: f, readonly: readonly, frozen: frozen %>
+  <h4 class="mt-3">
+    <%= t('review.control_objective_items_label') %>
+    <% if @review.persisted? && !readonly %>
+      <span class="float-right small">
+        <%= link_to_excluded_control_objectives %>
+      </span>
     <% end %>
+  </h4>
+
+  <hr />
+
+  <div data-control-objective-items-container>
   </div>
+
+  <% if @review.control_objective_items.any? %>
+    <%= render 'control_objective_items', f: f, readonly: readonly, frozen: frozen %>
+  <% end %>
 
   <% if false # just for this branch %>
     <ul class="nav nav-tabs mt-3">
@@ -329,6 +374,7 @@ jQuery(function() {
       $('#control_objectives').find('fieldset.control_objective[data-dynamic]').remove();
       $('[data-review-user-assignments-container]').html('')
       $('[data-control-objective-items-container]').html('')
+      $('[data-manual-score-alt]').removeClass('d-none')
     }
   });
 

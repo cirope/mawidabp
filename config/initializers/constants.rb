@@ -10,7 +10,7 @@ PRIVATE_PATH = File.join(Rails.root, 'private', File::SEPARATOR).freeze
 # Ruta al directorio temporal
 TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
 # Prefijo de la organización para administrar grupos
-APP_ADMIN_PREFIXES = ['admin', 'www'].freeze
+APP_ADMIN_PREFIXES = ['admin', 'www', 'admin-apmawida-upla0001'].freeze
 # Ruta a los archivos subidos a la aplicación
 APP_FILES_PATH = File.join(PRIVATE_PATH, 'file_models', File::SEPARATOR).freeze
 # Ruta a las imágenes subidas a la aplicación
@@ -86,8 +86,8 @@ SEARCH_ALLOWED_OPERATORS = HashWithIndifferentAccess.new({
     /^\s*[^<>]=\s+/ => '='
 })
 # Adaptador PostgreSQL en uso
-POSTGRESQL_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' rescue nil
 ORACLE_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced' rescue nil
+POSTGRESQL_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' rescue !ORACLE_ADAPTER
 # Limite de filas en reportes para servir en real-time
 SEND_REPORT_EMAIL_AFTER_COUNT = 100
 # Planes de licencias
@@ -97,3 +97,5 @@ LICENSE_PLANS = YAML.load(
 # Redis config
 REDIS_HOST = ENV['REDIS_HOST'] || 'localhost'
 REDIS_PORT = ENV['REDIS_PORT'] || '6379'
+# Tamaño de fuente en los RTF
+RTF_FONT_SIZE = 22

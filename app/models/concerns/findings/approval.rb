@@ -6,7 +6,7 @@ module Findings::Approval
   end
 
   def must_be_approved?
-    return true if revoked? || criteria_mismatch?
+    return true if revoked?
 
     errors = [
       solution_date_error,
@@ -15,6 +15,7 @@ module Findings::Approval
       valid_state_error,
       audited_error,
       auditor_error,
+      audit_recommendation_errors,
       effect_error,
       audit_comments_error,
       task_error
@@ -36,8 +37,6 @@ module Findings::Approval
     def follow_up_date_error
       if (implemented? || being_implemented?) && follow_up_date.blank?
         I18n.t "#{class_name}.errors.without_follow_up_date"
-      elsif assumed_risk? && follow_up_date.present?
-        I18n.t "#{class_name}.errors.with_follow_up_date"
       end
     end
 
@@ -53,10 +52,7 @@ module Findings::Approval
       has_valid_state = implemented_audited? ||
         implemented?                         ||
         being_implemented?                   ||
-        unanswered?                          ||
-        assumed_risk?                        ||
-        criteria_mismatch?                   ||
-        expired?
+        unanswered?
 
       unless has_valid_state
         I18n.t "#{class_name}.errors.not_valid_state"
@@ -75,9 +71,17 @@ module Findings::Approval
       end
     end
 
+    def audit_recommendation_errors
+      if USE_SCOPE_CYCLE && audit_recommendations.blank?
+        I18n.t "#{class_name}.errors.without_audit_recommendations"
+      end
+    end
+
     def effect_error
       if kind_of?(Weakness) && !HIDE_WEAKNESS_EFFECT && effect.blank?
-        I18n.t "#{class_name}.errors.without_effect"
+        if !USE_SCOPE_CYCLE || (USE_SCOPE_CYCLE && risk != RISK_TYPES[:none])
+          I18n.t "#{class_name}.errors.without_effect"
+        end
       end
     end
 

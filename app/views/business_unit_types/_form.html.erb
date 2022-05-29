@@ -41,11 +41,26 @@
         <%= f.input :require_tag %>
       </div>
       <% if Current.conclusion_pdf_format == 'gal' %>
-        <div class="col-md-6">
+        <div class="col-md-3">
           <%= f.input :require_counts %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :hide_review_logo %>
+        </div>
+      <% elsif Current.conclusion_pdf_format == 'pat' %>
+        <div class="col-md-3">
+          <%= f.input :shared_business_units %>
         </div>
       <% end %>
     </div>
+
+    <% if Current.conclusion_pdf_format == 'gal' %>
+      <div class="row">
+        <div class="col-md-3">
+          <%= f.input :independent_identification %>
+        </div>
+      </div>
+    <% end %>
 
     <hr />
 

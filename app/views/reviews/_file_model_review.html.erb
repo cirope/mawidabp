@@ -1,8 +1,8 @@
-<% readonly = readonly %>
-<% id       = f.object.object_id %>
+<% frozen = frozen %>
+<% id     = f.object.object_id %>
 
 <fieldset class="file_model_review" id="<%= id %>">
-  <% unless readonly %>
+  <% unless frozen %>
     <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
       <%= render 'file_model', fm_f: fm_f %>
     <% end %>
@@ -10,7 +10,7 @@
 
   <%= link_to_download f.object %>
 
-  <% unless readonly %>
+  <% unless frozen %>
     <span class="ml-2">
       <%= link_to_remove_nested_item f %>
     </span>

@@ -23,6 +23,13 @@
   <%= simple_format @oportunity.description, class: 'mb-1' %>
 </div>
 
+<% if USE_SCOPE_CYCLE %>
+  <div>
+    <strong><%= Oportunity.human_attribute_name :brief %>:</strong>
+    <%= simple_format @oportunity.brief, class: 'mb-1' %>
+  </div>
+<% end %>
+
 <div>
   <strong><%= Oportunity.human_attribute_name :answer %>:</strong>
   <%= simple_format @oportunity.answer, class: 'mb-1' %>

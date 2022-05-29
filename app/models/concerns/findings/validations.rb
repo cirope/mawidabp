@@ -2,7 +2,7 @@ module Findings::Validations
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :skip_work_paper
+    attr_accessor :skip_work_paper, :can_close_findings
 
     validates :control_objective_item_id, :title, :description, :review_code,
       :organization_id, presence: true
@@ -13,13 +13,24 @@ module Findings::Validations
       pdf_encoding: true
     validates :follow_up_date, :solution_date, :origination_date,
       :first_notification_date, timeliness: { type: :date }, allow_blank: true
+    validates :brief, presence: true, if: :require_brief?
     validate :validate_answer
     validate :validate_state
-    validate :validate_review_code
+    validate :validate_review_code, if: -> { repeated_of.blank? }
     validate :validate_finding_user_assignments
     validate :validate_manager_presence, if: :validate_manager_presence?
     validate :validate_follow_up_date,   if: :check_dates?
     validate :validate_solution_date,    if: :check_dates?
+    validate :extension_enabled,         if: :extension
+    validates :risk_justification, presence: true, if: :bic_require_is_manual_risk_enabled?
+    validates :risk_justification, absence: true, if: :bic_require_is_manual_risk_disabled?
+    validates :state_regulations,
+              :degree_compliance,
+              :observation_originated_tests,
+              :sample_deviation, :impact_risk,
+              :probability, :external_repeated,
+              presence: true, if: :bic_require_is_manual_risk_disabled?
+    validate  :bic_calculated_risk, if: :bic_require_is_manual_risk_disabled?
   end
 
   def is_in_a_final_review?
@@ -28,27 +39,56 @@ module Findings::Validations
 
   def must_have_a_comment?
     has_new_comment = comments.detect { |c| c.new_record? && c.valid? }
-    to_implemented  = implemented? && (was_implemented_audited? || was_expired?)
+    to_implemented  = implemented? && (was_implemented_audited?)
     to_pending      = being_implemented? &&
-      (was_implemented_audited? || was_implemented? || was_assumed_risk? || was_expired?)
+      (was_implemented_audited? || was_implemented?)
 
     (to_pending || to_implemented) && !has_new_comment
   end
+
   private
 
+    def bic_calculated_risk
+      amount = 0
+      amount += state_regulations.to_i
+      amount += degree_compliance.to_i
+      amount += observation_originated_tests.to_i
+      amount += sample_deviation.to_i
+      amount += impact_risk.to_i
+      amount += probability.to_i
+      amount += external_repeated.to_i
+
+      risk_new = bic_risks_types.reverse_each.to_h.detect { |id, value| amount >= value }
+
+      errors.add :risk, :invalid if risk_new.first != risk
+    end
+
+    def bic_require_is_manual_risk_disabled?
+      Current.conclusion_pdf_format == 'bic' && !manual_risk && kind_of?(Weakness)
+    end
+
+    def bic_require_is_manual_risk_enabled?
+      Current.conclusion_pdf_format == 'bic' && manual_risk && kind_of?(Weakness)
+    end
+
     def audit_comments_should_be_present?
-      revoked? || criteria_mismatch?
+      revoked?
     end
 
     def check_dates?
       !incomplete? && !revoked? && !repeated?
     end
 
+    def require_brief?
+      USE_SCOPE_CYCLE
+    end
+
     def validate_follow_up_date
       if kind_of?(Weakness)
-        check_for_blank = being_implemented? ||
-                          implemented?       ||
-                          implemented_audited?
+        check_for_blank = being_implemented?             ||
+                          implemented?                   ||
+                          implemented_audited?           ||
+                          (USE_SCOPE_CYCLE && awaiting?)
 
         errors.add :follow_up_date, :blank         if check_for_blank  && follow_up_date.blank?
         errors.add :follow_up_date, :must_be_blank if !check_for_blank && follow_up_date.present?
@@ -56,10 +96,7 @@ module Findings::Validations
     end
 
     def validate_solution_date
-      check_for_blank = implemented_audited? ||
-                        assumed_risk?        ||
-                        criteria_mismatch?   ||
-                        expired?
+      check_for_blank = implemented_audited?
 
       errors.add :solution_date, :blank         if check_for_blank  && solution_date.blank?
       errors.add :solution_date, :must_be_blank if !check_for_blank && solution_date.present?
@@ -112,7 +149,9 @@ module Findings::Validations
         (new_record? && final) # comes from a final review _clone_
 
       if !skip_validation && state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
-        has_role_to_do_it = Current.user&.supervisor? || Current.user&.manager?
+        has_role_to_do_it = Current.user&.supervisor? ||
+                            Current.user&.manager?    ||
+                            can_close_findings
 
         errors.add :state, :must_be_done_by_proper_role unless has_role_to_do_it
       end
@@ -144,6 +183,10 @@ module Findings::Validations
       if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
         unless finding_user_assignments.any? &:process_owner
           errors.add :finding_user_assignments, :required
+        end
+
+        unless finding_user_assignments.any? &:responsible_auditor
+          errors.add :finding_user_assignments, :reference_auditor_required
         end
       end
 
@@ -180,5 +223,26 @@ module Findings::Validations
       from = should_validate && setting&.updated_at
 
       should_validate && from && (new_record? || created_at >= from)
+    end
+
+    def extension_enabled
+      if !being_implemented?
+        errors.add :extension, :must_be_being_implemented, { extension: Finding.human_attribute_name(:extension),
+                                                             state: I18n.t('findings.state.being_implemented') }
+      elsif persisted? && cant_have_an_extension?
+        errors.add :extension, :had_no_extension_when_being_implemented, { extension: Finding.human_attribute_name(:extension) }
+      end
+    end
+
+    def cant_have_an_extension?
+      not_the_first_version_of_being_implemented? && !extension_was && being_implemented_was?
+    end
+
+    def not_the_first_version_of_being_implemented?
+      had_version_with_being_implemented? || being_implemented_was?
+    end
+
+    def being_implemented_was?
+      state_was == Finding::STATUS[:being_implemented]
     end
 end

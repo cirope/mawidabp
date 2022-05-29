@@ -21,9 +21,15 @@
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
           value: (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review&.persisted?),
           readonly: true } %>
-        <% if Current.conclusion_pdf_format == 'default' %>
+        <% if USE_SCOPE_CYCLE %>
+          <%= f.input :score_alt, label: Review.human_attribute_name(:score_alt), input_html: {
+            value: (@conclusion_draft_review.review.score_alt_text if @conclusion_draft_review.review&.persisted?),
+            readonly: true } %>
+        <% end %>
+        <% if %(default pat nbc).include? Current.conclusion_pdf_format %>
           <%= f.input :issue_date, as: :date_picker %>
         <% end %>
+        <%= f.input :effectiveness_notes, input_html: { rows: 3 } %>
       </div>
       <div class="col-md-6">
         <% if Current.conclusion_pdf_format == 'gal' %>
@@ -47,8 +53,12 @@
           <%= f.input :applied_procedures, input_html: { rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
         <% end %>
 
-        <% if Current.conclusion_pdf_format == 'default' %>
-          <%= f.input :recipients, input_html: { rows: 3 } %>
+        <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
+          <%= f.input :recipients, input_html: { rows: USE_SCOPE_CYCLE ? 2 : 3 } %>
+
+          <% if USE_SCOPE_CYCLE %>
+            <%= f.input :additional_comments, input_html: { rows: 2 } %>
+          <% end %>
         <% else %>
           <%= f.input :issue_date, as: :date_picker %>
         <% end %>
@@ -132,6 +142,12 @@
           <%= f.input :main_recommendations, input_html: { rows: 4 } %>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :exclude_regularized_findings %>
+        </div>
+      </div>
     <% end %>
 
     <% if show_review_best_practice_comments? %>
@@ -176,6 +192,23 @@
       <%= f.input :force_approval, as: :boolean %>
     </div>
   </div>
+
+  <% if USE_SCOPE_CYCLE %>
+    <h4 class="mt-3">
+      <%= Annex.model_name.human count: 0 %>
+    </h4>
+
+    <div id="annexes">
+      <% @conclusion_draft_review.annexes.each do |annex| %>
+        <% annex_child_index = @conclusion_draft_review.annexes.index annex %>
+        <%= f.simple_fields_for :annexes, annex, child_index: annex_child_index do |ann_f| %>
+          <%= render 'annex', f: ann_f %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%= link_to_add_fields t('conclusion_draft_review.add_annex'), f, :annexes, 'annex', { insert_into: "#annexes", association: 'annexes' } %>
+  <% end %>
 
   <hr />
 

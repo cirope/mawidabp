@@ -41,7 +41,7 @@
 
     <p class="mb-1">
       <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
-      <%= l weakness.review.conclusion_final_review.issue_date %>
+      <%= weakness.review.conclusion_final_review ? l(weakness.review.conclusion_final_review.issue_date) : '-' %>
     </p>
 
     <p class="mb-1">
@@ -76,17 +76,17 @@
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= t 'finding.auditors', count: 0 %></span>:
+      <span class="text-muted"><%= t 'finding.by_user.auditors' %></span>:
       <%= weakness.users.select(&:auditor?).map(&:full_name).to_sentence %>
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= t 'finding.responsibles', count: 1 %></span>:
+      <span class="text-muted"><%= t 'finding.by_user.responsibles', count: 1 %></span>:
       <%= weakness.process_owners.map(&:full_name).to_sentence %>
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= t 'finding.audited', count: 0 %></span>:
+      <span class="text-muted"><%= t 'finding.by_user.audited' %></span>:
       <%= weakness.users.select { |u|
         u.can_act_as_audited? && weakness.process_owners.exclude?(u)
       }.map(&:full_name).to_sentence %>

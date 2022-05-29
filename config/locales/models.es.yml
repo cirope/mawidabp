@@ -22,6 +22,15 @@ es:
       achievement:
         one: 'Beneficio / perjuicio estimado'
         other: 'Beneficios / perjuicios estimados'
+      annex:
+        one: 'Anexo'
+        other: 'Anexos'
+      activity:
+        one: 'Actividad'
+        other: 'Actividades'
+      activity_group:
+        one: 'Grupo actividad'
+        other: 'Grupo de actividades'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -49,6 +58,9 @@ es:
       business_unit:
         one: 'Unidad de negocio'
         other: 'Unidades de negocio'
+      business_unit_kind:
+        one: 'Tipo de unidad de negocio'
+        other: 'Tipos de unidad de negocio'
       business_unit_score:
         one: 'Calificación unidad de negocio'
         other: 'Calificaciones de unidades de negocio'
@@ -82,6 +94,9 @@ es:
       image_model:
         one: 'Imagen'
         other: 'Imágenes'
+      issue:
+        one: 'Caso'
+        other: 'Casos'
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
@@ -116,8 +131,8 @@ es:
         one: 'Versión'
         other: 'Versiones'
       period:
-        one: 'Período'
-        other: 'Periodos'
+        one: 'Plan'
+        other: 'Planes'
       permalink:
         one: 'Enlace permanente'
         other: 'Enlaces permanentes'
@@ -169,6 +184,9 @@ es:
       task:
         one: 'Tarea'
         other: 'Tareas'
+      time_consumption:
+        one: 'Actividad'
+        other: 'Actividades'
       user:
         one: 'Usuario'
         other: 'Usuarios'
@@ -187,6 +205,15 @@ es:
         benefit: 'Nombre'
         amount: 'Monto'
         comment: 'Comentario'
+      annex:
+        title: 'Título'
+        description: 'Descripción'
+        image_models: 'Imágenes'
+      activity:
+        name: 'Nombre'
+        require_detail: 'Require detalle'
+      activity_group:
+        name: 'Nombre'
       answer:
         answer: 'Respuesta'
         comments: 'Comentarios respuesta'
@@ -215,6 +242,8 @@ es:
       best_practice_comment:
         auditor_comment: 'Conclusiones del auditor'
         best_practice: 'Buena práctica'
+      business_unit_kind:
+        name: 'Nombre'
       business_unit_type_users:
         business_unit_type_id: "Unidad organizativa"
         user_id: "Usuario"
@@ -270,10 +299,11 @@ es:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
         description: 'Observación / Oportunidad'
+        brief: 'Resumen'
         type: 'Tipo'
         repeated_of_id: 'Reiterada de'
         review_code: 'Código'
-        audit_recommendations: 'Recomendaciones de auditoría'
+        audit_recommendations: 'Recomendaciones de UPLA'
         answer: 'Respuesta/Acciones correctivas'
         current_situation: 'Situación actual'
         current_situation_verified: 'Situación actual verificada'
@@ -299,7 +329,21 @@ es:
         reschedule_count: 'Cantidad de reprogramaciones'
         implemented_at: 'Fecha de cambio a "Implementada"'
         closed_at: 'Fecha del último cambio de estado'
+        probability: 'Probabilidad'
+        impact_risk: 'Impacto'
+        manual_risk: 'Manual'
+        use_suggested_impact: 'Impacto sugerido'
+        use_suggested_probability: 'Probabilidad sugerida'
+        impact_amount: 'Monto universo'
+        probability_amount: 'Universo en cantidad de casos'
         organization: 'Organización'
+        frequency: 'Frecuencia'
+        state_regulations: 'Normativa Estado'
+        degree_compliance: 'Grado Cumpliento Normativa'
+        observation_originated_tests: 'Originada en prueba de'
+        sample_deviation: 'Desvio de la muestra'
+        external_repeated: 'Reiterada externa'
+        risk_justification: 'Justificar riesgo'
       finding/achievements:
         one: 'Beneficio estimado'
         amount: 'Monto'
@@ -361,6 +405,14 @@ es:
         uploaded_data: 'Imagen'
         content_type: 'Imagen (tipo)'
         size: 'Imagen (tamaño)'
+      issue:
+        customer: 'Cliente'
+        entry: 'Rubro'
+        operation: 'Operación'
+        currency: 'Moneda'
+        amount: 'Monto'
+        comments: 'Comentarios'
+        close_date: 'Fecha de regularización'
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'
@@ -374,6 +426,7 @@ es:
         last_name_attribute: 'Atributo con el apellido'
         email_attribute: 'Atributo con el correo electrónico'
         function_attribute: 'Atributo con el cargo'
+        office_attribute: 'Atributo con el departamento'
         roles_attribute: 'Atributo con los perfiles'
         manager_attribute: 'Atributo con el superior'
         tls: 'Versión TLS'
@@ -382,6 +435,8 @@ es:
         test_password: 'Contraseña'
         user: 'Usuario de servicio'
         password: 'Contraseña de servicio'
+        organizational_unit_attribute: "Unidad organizacional (OU)"
+        organizational_unit: "Unidad organizacional por defecto (OU)"
       license:
         paid_until: 'Pagada hasta'
         auditors_limit: 'Limite de usuarios auditores'
@@ -403,7 +458,7 @@ es:
         end_date: 'Fecha estimada de cierre'
         objective: 'Objetivo de la tarea'
         program: 'Programa de trabajo'
-        scope: 'Alcance de la tarea'
+        scope: 'Comentarios UPLA'
         suggestions: 'Sugerencias e inquietudes'
         comments: 'Comentarios adicionales'
         review: 'Informe'
@@ -414,6 +469,7 @@ es:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
         description: 'Oportunidad de mejora'
+        brief: 'Resumen'
         review_code: 'Código'
         answer: 'Respuesta/Acciones correctivas'
         user_ids: 'Usuario'
@@ -430,6 +486,7 @@ es:
         corporate: 'Corporativa'
         image_model: 'Imagen'
         co_brand_image_model: 'Imagen secundaria'
+        saml_provider: 'Proveedor SAML'
       organization/image_model:
         image_file_name: 'Isologotipo (nombre de archivo)'
         image_content_type: 'Isologotipo (tipo de archivo)'
@@ -458,11 +515,18 @@ es:
         description: 'Descripción'
         status: 'Estado'
         due_on: 'Fecha de finalización'
+      time_consumption:
+        date: 'Fecha'
+        activity: 'Actividad'
+        resource_id: 'Recurso'
+        amount: 'Tiempo en horas'
+        detail: 'Detalle'
       user:
         email: 'Correo'
         enable: 'Habilitado'
         failed_attempts: 'Intentos fallidos'
         function: 'Cargo'
+        office: 'Departamento'
         hidden: 'Oculto'
         language: 'Lenguaje'
         last_access: 'Último acceso'
@@ -501,7 +565,7 @@ es:
         start: 'Proyecto (inicio)'
         end: 'Proyecto (fin)'
         order_number: 'Proyecto (orden)'
-        scope: 'Proyecto (Alcance auditoría)'
+        scope: 'Proyecto (Alcance UPLA)'
         risk_exposure: 'Proyecto (exposición al riesgo)'
         business_unit_id: 'Proyecto (unidad de negocio)'
         status: 'Proyecto (estado)'
@@ -517,7 +581,7 @@ es:
         start: 'Inicio'
         end: 'Fin'
         order_number: 'Orden'
-        scope: 'Alcance auditoría'
+        scope: 'Alcance UPLA'
         risk_exposure: 'Exposición al riesgo'
         business_unit_id: 'Unidad de negocio'
         resources: 'Recursos'
@@ -535,7 +599,7 @@ es:
       poll:
         comments: 'Comentarios'
         send_date: 'Fecha envío'
-        answer_date: 'Fecha contestación'
+        answer_date: 'Fecha respuesta'
         answered: 'Contestada'
         questionnaire: 'Cuestionario'
         user: 'Usuario'
@@ -625,6 +689,7 @@ es:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
         description: 'Observación'
+        brief: 'Resumen'
         review_code: 'Código'
         audit_recommendations: 'Recomendaciones UPLA'
         answer: 'Respuesta/Acciones correctivas'
@@ -648,14 +713,20 @@ es:
         work_papers: 'Papeles de trabajo'
         implemented_at: 'Fecha de cambio a "Implementada"'
         closed_at: 'Fecha del último cambio de estado'
+        probability: 'Probabilidad ocurrencia'
+        impact_risk: 'Impacto'
+        manual_risk: 'Manual'
+        extension: 'Días de gracia'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
+        reference: 'Referencia'
         title: 'Título'
         description: 'Observación'
         risk: 'Riesgo'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
+        notes: 'Notas'
         internal_control_components: 'Componentes de CI'
         allow_duplication: 'Permitir título duplicado'
 
@@ -673,15 +744,22 @@ es:
               must_have_a_work_paper: 'debe tener asociado al menos un papel de trabajo'
               must_be_done_by_proper_role: 'solo puede ser cambiado por un usuario supervisor o gerente'
             finding_user_assignments:
-              invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
+              invalid: 'debe contener como minimo un analista, un jefe regional y un responsable sucursal/zonal'
               required: 'debe tener un auditado responsable'
-              must_have_a_manager: 'debe contener un gerente de auditoría'
+              must_have_a_manager: 'debe contener un gerente de UPLA'
+            extension:
+              must_be_being_implemented: 'Para indicar que es %{extension} debe estar en estado %{state}'
+              had_no_extension_when_being_implemented: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension}'
+              reference_auditor_required: 'debe tener un auditor referente'
+            risk_justification:
+              present: 'No debe tener justificacion de riesgo'
         finding_user_assignment:
           attributes:
             user:
               required: 'no puede estar en blanco'
             process_owner:
               invalid: 'solo puede ser asignado a usuarios de tipo auditado'
+              taken: 'solo puede haber uno'
         ldap_config:
           attributes:
             user:

@@ -2,29 +2,30 @@ namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
     ActiveRecord::Base.transaction do
-      update_organization_settings        # 2017-03-15
-      add_new_answer_options              # 2017-06-29
-      add_best_practice_privilege         # 2018-01-31
-      add_control_objective_privilege     # 2018-01-31
-      add_task_codes                      # 2018-07-24
-      mark_tasks_as_finished              # 2019-01-04
-      update_finding_first_follow_up_date # 2019-01-07
-      reset_notification_level            # 2019-03-06
-      update_finding_reschedule_count     # 2019-07-19
-      complete_main_recommendations       # 2019-07-23
-      update_tag_style                    # 2019-09-26
-      update_tag_icons                    # 2019-09-30
-      update_finding_state_dates          # 2020-01-16
-      update_finding_parent_ids           # 2020-01-22
-      collapse_extended_risks             # 2020-02-04
-      remove_finding_awaiting_state       # 2020-02-05
-      add_repeated_findings_privilege     # 2020-02-07
-      update_latest_on_findings           # 2020-02-08
-      update_review_scopes                # 2020-02-20
-      fix_final_latest_findings           # 2020-03-13
-      fix_email_organization              # 2020-04-24
-      add_follow_up_audited_privilege     # 2020-05-08
-      add_file_model_review               # 2020-07-20
+      update_organization_settings               # 2017-03-15 last 2021-08-09
+      add_new_answer_options                     # 2017-06-29
+      add_task_codes                             # 2018-07-24
+      mark_tasks_as_finished                     # 2019-01-04
+      update_finding_first_follow_up_date        # 2019-01-07
+      reset_notification_level                   # 2019-03-06
+      update_finding_reschedule_count            # 2019-07-19
+      complete_main_recommendations              # 2019-07-23
+      update_tag_style                           # 2019-09-26
+      update_tag_icons                           # 2019-09-30
+      update_finding_state_dates                 # 2020-01-16
+      update_finding_parent_ids                  # 2020-01-22
+      collapse_extended_risks                    # 2020-02-04
+      remove_finding_awaiting_state              # 2020-02-05
+      add_repeated_findings_privilege            # 2020-02-07
+      update_latest_on_findings                  # 2020-02-08
+      update_review_scopes                       # 2020-02-20
+      fix_final_latest_findings                  # 2020-03-13
+      fix_email_organization                     # 2020-04-24
+      add_follow_up_audited_privilege            # 2020-05-08
+      add_file_model_review                      # 2020-07-20
+      remove_auditor_junior_role                 # 2020-11-04
+      add_commitment_data_on_findings            # 2020-12-01
+      update_finding_follow_up_date_last_changed # 2021-12-22
     end
   end
 end
@@ -87,6 +88,30 @@ private
                            description: I18n.t('settings.hide_obsolete_best_practices')
       end
     end
+
+    if set_hours_of_work_per_day? # 2021-04-30
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'hours_of_work_per_day',
+                           value:       DEFAULT_SETTINGS[:hours_of_work_per_day][:value],
+                           description: I18n.t('settings.hours_of_work_per_day')
+      end
+    end
+
+    if set_conclusion_review_receiver? # 2021-08-09
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'conclusion_review_receiver',
+                           value:       DEFAULT_SETTINGS[:conclusion_review_receiver][:value],
+                           description: I18n.t('settings.conclusion_review_receiver')
+      end
+    end
+  end
+
+  def set_conclusion_review_receiver?
+    USE_SCOPE_CYCLE && Setting.where(name: 'conclusion_review_receiver').empty?
+  end
+
+  def set_hours_of_work_per_day?
+    Setting.where(name: 'hours_of_work_per_day').empty?
   end
 
   def add_hide_obsolete_best_practices?
@@ -127,38 +152,6 @@ private
 
   def add_new_answer_options?
     AnswerOption.where(option: 'not_apply').empty?
-  end
-
-  def add_best_practice_privilege
-    if add_best_practice_privilege?
-      Privilege.where(module: 'administration_best_practices').find_each do |p|
-        attrs = p.attributes.
-          except('id', 'module', 'created_at', 'updated_at').
-          merge(module: 'administration_best_practices_best_practices')
-
-        Privilege.create! attrs
-      end
-    end
-  end
-
-  def add_best_practice_privilege?
-    Privilege.where(module: 'administration_best_practices_best_practices').empty?
-  end
-
-  def add_control_objective_privilege
-    if add_control_objective_privilege?
-      Privilege.where(module: 'administration_best_practices_best_practices').find_each do |p|
-        attrs = p.attributes.
-          except('id', 'module', 'created_at', 'updated_at').
-          merge(module: 'administration_best_practices_control_objectives')
-
-        Privilege.create! attrs
-      end
-    end
-  end
-
-  def add_control_objective_privilege?
-    Privilege.where(module: 'administration_best_practices_control_objectives').empty?
   end
 
   def add_task_codes
@@ -578,4 +571,47 @@ private
 
   def migrate_file_model_review?
     FileModelReview.count == 0
+  end
+
+  def remove_auditor_junior_role
+    if remove_auditor_junior_role?
+      Role.where(role_type: 4).update_all role_type: 3
+    end
+  end
+
+  def remove_auditor_junior_role?
+    Role.where(role_type: 4).any?
+  end
+
+  def add_commitment_data_on_findings
+    if add_commitment_data_on_findings?
+      Finding.where.not(reschedule_count: 0).where(commitments: nil).find_each do |finding|
+        commitments = finding.calculate_commitments
+
+        finding.update_column :commitments, commitments if commitments.any?
+      end
+    end
+  end
+
+  def add_commitment_data_on_findings?
+    Endorsement.any? && Finding.where.not(reschedule_count: 0).where(commitments: nil).all?
+  end
+
+  def update_finding_follow_up_date_last_changed
+    if update_finding_follow_up_date_last_changed?
+      findings = Finding
+                 .where(follow_up_date_last_changed: nil)
+
+      findings.each do |finding|
+        follow_up_date_last_changed = finding.follow_up_date_last_changed_on_versions
+
+        finding.update_column :follow_up_date_last_changed, follow_up_date_last_changed
+      end
+    end
+  end
+
+  def update_finding_follow_up_date_last_changed?
+    Finding
+      .where(follow_up_date_last_changed: nil)
+      .where.not(follow_up_date: nil).exists?
   end

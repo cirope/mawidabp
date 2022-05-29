@@ -19,6 +19,10 @@
         <div class="list-group">
           <%= link_to t('execution_reports.weaknesses_report.title'),
             { action: :weaknesses_report, execution: true }, class: 'list-group-item list-group-item-action' %>
+          <% if Current.conclusion_pdf_format == 'gal' %>
+            <%= link_to t('execution_reports.weaknesses_current_situation_title'),
+              { action: :weaknesses_current_situation, controller_name: 'execution', final: false, execution: true }, class: 'list-group-item list-group-item-action' %>
+          <% end %>
         </div>
       </div>
     </div>

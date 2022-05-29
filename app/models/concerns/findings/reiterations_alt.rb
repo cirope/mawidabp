@@ -22,7 +22,7 @@ module Findings::ReiterationsAlt
     self.undoing_reiteration = true
 
     if final_review_created_at.blank? && rescheduled?
-      update_column :reschedule_count, 0
+      update_columns reschedule_count: 0, commitments: nil
     end
 
     repeated_of.update_column :state, previous_repeated_of_state

@@ -15,4 +15,8 @@ class BestPractice < ApplicationRecord
 
   belongs_to :group
   belongs_to :organization
+
+  def to_s
+    name
+  end
 end

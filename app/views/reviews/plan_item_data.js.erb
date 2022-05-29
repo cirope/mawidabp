@@ -10,8 +10,15 @@
     $('#review_scope').val('<%= @plan_item.scope %>')
     $('#review_risk_exposure').val('<%= @plan_item.risk_exposure %>')
     $('#review_business_unit').val('<%= @plan_item.business_unit&.name %>')
+    $('#review_description').val('<%= j @plan_item.best_practices.map(&:description).join("\n\n") %>')
     $('#review_audit_type').val('<%= @plan_item.business_unit&.business_unit_type&.name %>')
     $('[data-review-user-assignments-container]').html('')
+
+    <% if USE_SCOPE_CYCLE && @plan_item.sustantive? %>
+      $('[data-manual-score-alt]').addClass('d-none')
+    <% elsif USE_SCOPE_CYCLE %>
+      $('[data-manual-score-alt]').removeClass('d-none')
+    <% end %>
 
     <%= simple_fields_for @review do |f| %>
       $('[data-control-objective-items-container]').html(
@@ -65,6 +72,11 @@
       Helper.hideLoading($element)
       $('#estimated_amount').effect('highlight', {}, 2000)
     })
+
+    <% if @plan_item.auxiliar_business_unit_types.any? %>
+      $('[data-target="auxiliar-business-unit-types"]').html('<%= j render('auxiliar_business_unit_types', format: :html, plan_item: @plan_item) %>')
+    <% end %>
+
   <% else %>
     $('#link_to_suggested_findings').attr('href', '#')
     $('#link_to_suggested_findings').addClass('link_without_action')

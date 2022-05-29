@@ -6,13 +6,16 @@ es:
       organization:
         management: 'Gestión'
         business_units: 'Unidades organizativas'
+        business_unit_kind: 'Tipos de unidad de negocio'
       security_title: 'Seguridad'
       security:
         reports: 'Reportes de seguridad'
         users: 'Usuarios'
         roles: 'Perfiles y Privilegios'
       best_practices_title: 'Buenas prácticas'
-      best_practices: 'Buenas Prácticas'
+      best_practices:
+        best_practices: 'Gestion'
+        control_objectives: 'Objetivos de control'
       settings: 'Configuraciones'
       weakness_templates: 'Plantillas de observaciones'
       risk_assessment_templates: 'Plantillas evaluación de riesgo'
@@ -21,6 +24,7 @@ es:
       news: 'Noticias'
       benefits: 'Beneficios / Perjuicios'
       e_mails: 'Correos'
+      activity_groups: 'Actividades'
       questionnaires_title: 'Cuestionarios'
       questionnaires:
         definition: 'Definición'
@@ -35,7 +39,8 @@ es:
     execution_title: 'Ejecución'
     execution:
       reviews: 'Informes'
-      workflows: 'Programas de trabajo'
+      workflows: 'Presupuestos'
+      time_summary: 'Resumen horario'
       control_objectives: 'Objetivos de control'
       weaknesses: 'Observaciones'
       oportunities: 'Oportunidades de mejora'
@@ -62,5 +67,5 @@ es:
       reports_title: 'Reportes'
       reports:
         audited: 'Generales'
-        audit: 'Auditoría'
+        audit: 'UPLA'
     help_title: 'Ayuda'

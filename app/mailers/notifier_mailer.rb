@@ -1,9 +1,7 @@
-class NotifierMailer < ActionMailer::Base
+class NotifierMailer < ApplicationMailer
   include ActionView::Helpers::TextHelper
 
   helper :application, :markdown, :notifier
-
-  default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
 
   def pending_poll_email(poll)
     @poll = poll
@@ -41,19 +39,6 @@ class NotifierMailer < ActionMailer::Base
          )
   end
 
-  def notify_new_findings(user)
-    findings = user.findings.recently_notified
-
-    @user = user
-    @grouped_findings = findings.group_by(&:organization)
-    @notification = Notification.create(user: user, findings: findings)
-    prefixes = @grouped_findings.keys.map { |o| "[#{o.prefix}]" }.join(' ')
-    prefixes << ' ' unless prefixes.blank?
-
-    mail to: [user.email],
-         subject: prefixes.upcase + t('notifier.notify_new_findings.title')
-  end
-
   def notify_new_finding(user, finding)
     @user, @finding = user, finding
     prefix = "[#{finding.organization.prefix}] "
@@ -62,15 +47,18 @@ class NotifierMailer < ActionMailer::Base
       @notification = Notification.create(user: user, findings: [finding])
     end
 
-    mail to: [user.email],
-         subject: prefix.upcase + t('notifier.notify_new_finding.title')
+    mail to: users_to_notify_for(user).map(&:email),
+         subject: prefix.upcase + t(
+           'notifier.notify_new_finding.title',
+           finding_id: finding.id
+        )
   end
 
   def findings_brief(user, findings)
     @user, @findings = user, findings
     prefix = "[#{findings.first.organization.prefix}] "
 
-    mail to: [user.email],
+    mail to: users_to_notify_for(user).map(&:email),
          subject: prefix.upcase + t('notifier.findings_brief.title')
   end
 
@@ -78,11 +66,19 @@ class NotifierMailer < ActionMailer::Base
     @finding_answer = finding_answer
     prefix = "[#{finding_answer.finding.organization.prefix}] "
 
-    mail to: Array(users).map(&:email),
+    mail to: users_to_notify_for(users).map(&:email),
          subject: prefix.upcase + t(
            'notifier.notify_new_finding_answer.title',
-           review: finding_answer.finding.review.to_s
+           review:     finding_answer.finding.review,
+           finding_id: finding_answer.finding.id
          )
+  end
+
+  def notify_action_not_found(email, answer)
+    @answer = answer
+
+    mail to: email,
+         subject: t('notifier.notify_action_not_found.title')
   end
 
   def stale_notification(user)
@@ -93,39 +89,41 @@ class NotifierMailer < ActionMailer::Base
     prefixes = organizations.map {|o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: [user.email],
+    mail to: users_to_notify_for(user).map(&:email),
          subject: prefixes.upcase + t('notifier.notification.pending')
   end
 
-  def unanswered_findings_notification(user, findings)
-    filtered_findings = findings.select {|f| f.users.any? {|u| u.id == user.id}}
+  def unanswered_finding_notification(user, finding)
+    prefix   = "[#{finding.organization.prefix}] "
+    @finding = finding
 
-    unless filtered_findings.empty?
-      @grouped_findings = filtered_findings.group_by(&:organization)
-      prefixes = @grouped_findings.keys.map {|o| "[#{o.prefix}]" }.join(' ')
-      prefixes << ' ' unless prefixes.blank?
-
-      mail to: [user.email],
-           subject: prefixes.upcase + t('notifier.unanswered_findings.title')
-    else
-      raise 'Findings and user mismatch'
-    end
+    mail to: users_to_notify_for(user).map(&:email),
+           subject: prefix.upcase + t(
+             'notifier.unanswered_finding.subject',
+             finding_id: finding.id
+           )
   end
 
   def unanswered_finding_to_manager_notification(finding, users, level)
     @finding, @level = finding, level
     prefix = "[#{finding.organization.prefix}] ".upcase
 
-    mail to: users.map(&:email),
-         subject: prefix + t('notifier.unanswered_finding_to_manager.title')
+    mail to: users_to_notify_for(users).map(&:email),
+         subject: prefix + t(
+           'notifier.unanswered_finding_to_manager.subject',
+           finding_id: finding.id
+         )
   end
 
   def expired_finding_to_manager_notification(finding, users, level)
     @finding, @level = finding, level
     prefix = "[#{finding.organization.prefix}] ".upcase
 
-    mail to: users.map(&:email),
-         subject: prefix + t('notifier.expired_finding_to_manager.title')
+    mail to: users_to_notify_for(users).map(&:email),
+         subject: prefix + t(
+           'notifier.expired_finding_to_manager.subject',
+           finding_id: finding.id
+         )
   end
 
   def reassigned_findings_notification(new_users, old_users, findings, notify = true)
@@ -138,7 +136,7 @@ class NotifierMailer < ActionMailer::Base
     prefixes = @grouped_findings.keys.map {|o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: [new_users, old_users].flatten.compact.map(&:email),
+    mail to: users_to_notify_for([new_users, old_users].flatten.compact).map(&:email),
          subject: prefixes.upcase + t(
            'notifier.reassigned_findings.title',
            count: findings_array.size
@@ -168,7 +166,7 @@ class NotifierMailer < ActionMailer::Base
     prefixes = organizations.uniq.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: Array(users).map(&:email),
+    mail to: users_to_notify_for(users).map(&:email),
          subject: prefixes.upcase + t('notifier.changes_notification.title')
   end
 
@@ -231,7 +229,8 @@ class NotifierMailer < ActionMailer::Base
         File.read(conclusion_review.review.absolute_global_score_sheet_path)
     end
 
-    mail(to: [user.email], subject: truncate(prefix.upcase + title, length: 990))
+    mail to: users_to_notify_for(user).map(&:email),
+         subject: truncate(prefix.upcase + title, length: 990)
   end
 
   def findings_expiration_warning(user, findings)
@@ -240,7 +239,7 @@ class NotifierMailer < ActionMailer::Base
 
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: [user.email],
+    mail to: users_to_notify_for(user).map(&:email),
          subject: prefixes.upcase + t('notifier.findings_expiration_warning.title')
   end
 
@@ -250,7 +249,7 @@ class NotifierMailer < ActionMailer::Base
 
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: [user.email],
+    mail to: users_to_notify_for(user).map(&:email),
          subject: prefixes.upcase + t('notifier.findings_expired_warning.title')
   end
 
@@ -260,7 +259,7 @@ class NotifierMailer < ActionMailer::Base
 
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: [user.email],
+    mail to: users_to_notify_for(user).map(&:email),
          subject: prefixes.upcase + t('notifier.findings_unanswered_warning.title')
   end
 
@@ -270,7 +269,7 @@ class NotifierMailer < ActionMailer::Base
 
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: [user.email],
+    mail to: users_to_notify_for(user).map(&:email),
          subject: prefixes.upcase + t('notifier.tasks_expiration_warning.title')
   end
 
@@ -280,7 +279,7 @@ class NotifierMailer < ActionMailer::Base
 
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: [user.email],
+    mail to: users_to_notify_for(user).map(&:email),
          subject: prefixes.upcase + t('notifier.tasks_expired_warning.title')
   end
 
@@ -290,7 +289,7 @@ class NotifierMailer < ActionMailer::Base
 
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: [user.email],
+    mail to: users_to_notify_for(user).map(&:email),
          subject: "#{prefixes.upcase} #{t 'notifier.conclusion_final_review_close_date_warning.title'}"
   end
 
@@ -319,7 +318,7 @@ class NotifierMailer < ActionMailer::Base
     @finding_answer = @endorsement.finding_answer
     prefix          = @organization.prefix.upcase
 
-    mail to: @user.email,
+    mail to: users_to_notify_for(@user).map(&:email),
          subject: "[#{prefix}] #{t 'notifier.new_endorsement.title'}"
   end
 
@@ -334,7 +333,29 @@ class NotifierMailer < ActionMailer::Base
     prefix          = @organization.prefix.upcase
     users           = @finding.users - [@user]
 
-    mail to: users.map(&:email),
+    mail to: users_to_notify_for(users).map(&:email),
          subject: "[#{prefix}] #{t 'notifier.endorsement_update.title'}"
   end
+
+  def notify_new_oportunity(users, oportunity)
+    @oportunity = oportunity
+    prefix      = "[#{@oportunity.organization.prefix}]"
+
+    mail to: users_to_notify_for(users).map(&:email),
+         subject: prefix.upcase + t('notifier.notify_new_oportunity.title')
+  end
+
+  private
+
+    def users_to_notify_for(users)
+      extra_users = []
+
+      Array(users).each do |user|
+        user.related_user_relations.includes(:related_user).where(notify: true).each do |rur|
+          extra_users << rur.related_user
+        end
+      end
+
+      Array(users).concat(extra_users)
+    end
 end

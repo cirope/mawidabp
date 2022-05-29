@@ -98,6 +98,9 @@ module Reports::WeaknessesReport
 
       if report_params[:finding_status].present?
         weaknesses = weaknesses.where state: report_params[:finding_status].to_i
+      else
+        states     = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).values
+        weaknesses = weaknesses.where state: states
       end
 
       if report_params[:finding_current_situation_verified].present?
@@ -139,6 +142,10 @@ module Reports::WeaknessesReport
           condition  = "#{Weakness.qcn date_field} #{operator} #{mask}"
           weaknesses = weaknesses.where condition, *[date, date_until].compact
         end
+      end
+
+      if report_params[:show_latest].present?
+        weaknesses = weaknesses.latest if report_params[:show_latest] == '1'
       end
 
       if params[:execution].blank?

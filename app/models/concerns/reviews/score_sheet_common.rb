@@ -69,12 +69,16 @@ module Reviews::ScoreSheetCommon
       pdf.add_title title
     end
 
-    def process_control_row_data process_control, effectiveness, exclude, global: false
+    def process_control_row_data process_control, effectiveness, exclude, global: false, effectiveness_text: nil
       [
         "#{ProcessControl.model_name.human}: #{process_control}",
         ('' unless global),
-        exclude ? '-' : "#{effectiveness.round}%**"
+        exclude ? '-' : "#{effectiveness.round}%"
       ].compact
+    end
+
+    def effectiveness_format effectiveness_text
+      effectiveness_text ? I18n.t("qualification_types.#{effectiveness_text}") : "#{effectiveness.round}%**"
     end
 
     def control_objective_effectiveness_for control_objective_item_data
@@ -131,8 +135,17 @@ module Reviews::ScoreSheetCommon
           coi.to_s,
           coi.effectiveness || 0,
           coi.relevance     || 0,
-          coi.exclude_from_score
+          coi.exclude_from_score,
+          (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
+          coi_options(coi)
         ]
       end
+    end
+
+    def coi_options coi, previous_effectiveness: false
+      score_option = ControlObjective.find(coi.control_objective_id).score_type
+      value        = previous_effectiveness ? coi.previous_effectiveness : coi.compliance_score
+
+      ControlObjectiveItem.qualifications.invert[value] if score_option == 'option'
     end
 end

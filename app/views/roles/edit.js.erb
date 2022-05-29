@@ -1,0 +1,7 @@
++function () {
+  <%= simple_fields_for @role do |f| %>
+    $('[data-menu-items]').html(
+      '<%= j render('menu_items', f: f) %>'
+    )
+  <% end %>
+}()

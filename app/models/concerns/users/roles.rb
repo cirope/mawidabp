@@ -65,17 +65,16 @@ module Users::Roles
     end
   end
 
-  def auditor?
-    auditor_junior? || auditor_senior?
-  end
-
-  def auditor_on? organization_id
-    auditor_junior_on?(organization_id) || auditor_senior_on?(organization_id)
-  end
-
   def can_act_as_audited?
-    (audited? || executive_manager? || admin?) &&
-      !(auditor? || supervisor? || manager?)
+    USE_SCOPE_CYCLE ? roles_audited? : (roles_audited? && !roles_auditors?)
+  end
+
+  def roles_audited?
+    audited? || executive_manager? || admin?
+  end
+
+  def roles_auditors?
+    auditor? || supervisor? || manager?
   end
 
   def can_act_as_audited_on? organization_id
@@ -92,6 +91,21 @@ module Users::Roles
 
   def roles_has_changed?
     roles_changed || organization_roles.any?(&:changed?)
+  end
+
+  def parent_root
+    root unless root == self
+  end
+
+  def parent_intermediates
+    result       = []
+    intermediate = self.parent
+
+    while intermediate&.parent && intermediate.parent != root do
+      result << (intermediate = intermediate.parent)
+    end
+
+    result
   end
 
   module ClassMethods

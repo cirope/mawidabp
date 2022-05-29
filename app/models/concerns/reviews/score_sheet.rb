@@ -30,28 +30,28 @@ module Reviews::ScoreSheet
     "#{I18n.t 'review.score_sheet_filename'}-#{sanitized_identification}.pdf"
   end
 
-  private
+  def put_control_objective_table_on pdf
+    row_data = control_objectives_row_data
 
-    def put_control_objective_table_on pdf
-      row_data = control_objectives_row_data
+    if row_data.size > 1
+      data          = row_data.insert 0, control_objective_column_headers
+      table_options = pdf.default_table_options control_objective_column_widths(pdf)
 
-      if row_data.size > 1
-        data          = row_data.insert 0, control_objective_column_headers
-        table_options = pdf.default_table_options control_objective_column_widths(pdf)
-
-        pdf.font_size (PDF_FONT_SIZE * 0.75).round do
-          pdf.table data, table_options do
-            row(0).style(
-              background_color: 'cccccc',
-              padding: [
-                (PDF_FONT_SIZE * 0.5).round,
-                (PDF_FONT_SIZE * 0.3).round
-              ]
-            )
-          end
+      pdf.font_size (PDF_FONT_SIZE * 0.75).round do
+        pdf.table data, table_options do
+          row(0).style(
+            background_color: 'cccccc',
+            padding: [
+              (PDF_FONT_SIZE * 0.5).round,
+              (PDF_FONT_SIZE * 0.3).round
+            ]
+          )
         end
       end
     end
+  end
+
+  private
 
     def put_weaknesses_on pdf
       row_data = weaknesses_row_data
@@ -105,16 +105,23 @@ module Reviews::ScoreSheet
       process_controls = collect_process_controls
 
       process_controls.each do |process_control, coi_data|
-        effectiveness = control_objective_effectiveness_for coi_data
-        exclude       = coi_data.all? { |e| e[3] }
-        row           =
-          process_control_row_data(process_control, effectiveness, exclude)
+        effectiveness      = control_objective_effectiveness_for coi_data
+        effectiveness_text = effectiveness_text coi_data
+        exclude            = coi_data.all? { |e| e[3] }
+        row                = process_control_row_data(
+                               process_control, effectiveness,
+                               exclude, effectiveness_text: effectiveness_text
+                             )
 
         row_data << row
         row_data += control_objective_row_data coi_data
       end
 
       row_data
+    end
+
+    def effectiveness_text coi_data
+      coi_data.first[5]
     end
 
     def initial_control_objective_row_data
@@ -129,18 +136,26 @@ module Reviews::ScoreSheet
       pad = Prawn::Text::NBSP * 4
 
       control_objective_item_data.map do |coi|
-        [
-          "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[0]}</i>",
-          coi[3] ? '-' : "<i>#{coi[2]}</i>",
-          coi[3] ? '-' : "<i>#{coi[1].round}%</i>"
-        ]
+        if coi[5]
+          [
+            "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[0]}</i>",
+            coi[3] ? '-' : coi[4] ? "<i>#{effectiveness_format coi[4]}</i>" : '',
+            coi[3] ? '-' : "<i>#{effectiveness_format coi[5]}</i>"
+          ]
+        else
+          [
+            "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[0]}</i>",
+            coi[3] ? '-' : coi[4] ? "<i>#{coi[4]}%</i>" : '',
+            coi[3] ? '-' : "<i>#{coi[1].round}%</i>"
+          ]
+        end
       end
     end
 
     def control_objective_column_headers
       [
         '',
-        I18n.t('review.control_objectives_relevance'),
+        I18n.t('review.control_objectives_previous_effectiveness'),
         I18n.t('review.control_objectives_effectiveness')
       ]
     end

@@ -58,6 +58,7 @@ module Reports::TaggedFindingsReport
 
     def filter_tagged_findings_report_by_status scope, report_params
       states = report_params[:finding_status]&.reject(&:blank?) || []
+      states = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).values if states.empty?
 
       return scope if states.empty?
 
@@ -151,14 +152,14 @@ module Reports::TaggedFindingsReport
 
     def tagged_findings_column_order
       @tagged_findings_columns_order ||= {
-        Organization.model_name.human               => 10,
-        Review.model_name.human                     => 9,
-        BusinessUnitType.model_name.human           => 14,
-        Finding.human_attribute_name('review_code') => 7,
-        Finding.human_attribute_name('title')       => 30,
-        Finding.human_attribute_name('state')       => 13,
-        t('finding.auditors', count: 0)             => 10,
-        Tag.model_name.human(count: 0)              => 8
+        Organization.model_name.human                                   => 10,
+        Review.model_name.human                                         => 9,
+        BusinessUnitType.model_name.human                               => 14,
+        Finding.human_attribute_name('review_code')                     => 7,
+        Finding.human_attribute_name('title')                           => 30,
+        Finding.human_attribute_name('state')                           => 13,
+        t('follow_up_committee_report.tagged_findings_report.auditors') => 10,
+        Tag.model_name.human(count: 0)                                  => 8
       }
     end
 

@@ -1,5 +1,6 @@
 class PlansController < ApplicationController
   include AutoCompleteFor::BusinessUnit
+  include AutoCompleteFor::BusinessUnitType
   include AutoCompleteFor::Tagging
 
   respond_to :html, :js
@@ -23,6 +24,7 @@ class PlansController < ApplicationController
       format.html
       format.js
       format.pdf  { redirect_to plan_pdf_path }
+      format.csv  { plan_csv_path }
     end
   end
 
@@ -79,6 +81,9 @@ class PlansController < ApplicationController
           ],
           taggings_attributes: [
             :id, :tag_id, :_destroy
+          ],
+          auxiliar_business_unit_types_attributes: [
+            :id, :business_unit_type_id, :_destroy
           ]
         ]
       )
@@ -109,6 +114,10 @@ class PlansController < ApplicationController
         business_unit_type: @business_unit_type
 
       @plan.relative_pdf_path
+    end
+
+    def plan_csv_path
+      render csv: @plan.to_csv(business_unit_type: @business_unit_type), filename: @plan.csv_filename
     end
 
     def load_privileges

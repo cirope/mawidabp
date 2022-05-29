@@ -89,4 +89,81 @@ module WeaknessesHelper
     control_objective &&
       WeaknessTemplate.list.by_control_objective(control_objective)
   end
+
+  def weakness_risk_data_options
+    if SHOW_CONDENSED_PRIORITIES
+      { toggle_priority: Finding.risks[:medium], toggle_compliance: Finding.risks[:low] }
+    elsif USE_SCOPE_CYCLE
+      { copy_priority: true }
+    else
+      {}
+    end
+  end
+
+  def weakness_impact_risks
+    if USE_SCOPE_CYCLE
+      Finding.impact_risks.map do |key, value|
+        [t("impact_risk_types.#{key}"), value]
+      end
+    else
+      Finding.impact_risks_bic.map do |key, value|
+        [t("bic_impact_risk_types.#{key}"), value]
+      end
+    end
+  end
+
+  def weakness_probabilities
+    if USE_SCOPE_CYCLE
+      Finding.probabilities.map do |key, value|
+        [t("probability_types.#{key}"), value]
+      end
+    else
+      Finding.frequencies.map do |key, value|
+        [t("frequencies_types.#{key}"), value]
+      end
+    end
+  end
+
+  def weakness_state_regulations
+    Finding.state_regulations.map do |key, value|
+      [t("state_regulations_types.#{key}"), value]
+    end
+  end
+
+
+  def weakness_degree_compliance
+    Finding.degree_compliance.map do |key, value|
+      [t("degree_compliance_types.#{key}"), value]
+    end
+  end
+
+  def weakness_observation_origination_tests
+    Finding.observation_origination_tests.map do |key, value|
+      [t("observation_originated_tests_types.#{key}"), value]
+    end
+  end
+
+  def weakness_sample_deviation
+    Finding.sample_deviation.map do |key, value|
+      [t("sample_deviation_types.#{key}"), value]
+    end
+  end
+
+  def weakness_external_repeated
+    Finding.external_repeated.map do |key, value|
+      [t("external_repeated_types.#{key}"), value]
+    end
+  end
+
+  def suggested_type_risks
+    Finding::SUGGESTED_IMPACT_RISK_TYPES.map do |key, value|
+      [t("suggested_type_risks.#{key}"), value]
+    end
+  end
+
+  def suggested_type_probabilities
+    Finding::SUGGESTED_PROBABILITIES_TYPES.map do |key, value|
+      [t("suggested_type_probabilities.#{key}"), value]
+    end
+  end
 end

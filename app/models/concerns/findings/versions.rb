@@ -36,4 +36,8 @@ module Findings::Versions
   def final_review_created_at
     control_objective_item.try(:review).try(:conclusion_final_review).try :created_at
   end
+
+  def had_version_with_being_implemented?
+    versions.any? { |v| v.reify&.being_implemented? }
+  end
 end

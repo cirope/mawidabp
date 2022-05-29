@@ -8,15 +8,22 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'create' do
+    state = if USE_SCOPE_CYCLE
+              Finding::STATUS[:incomplete]
+            else
+              Finding::STATUS[:notify]
+            end
+
     assert_difference 'Weakness.count' do
       weakness = Weakness.list.create!(
         control_objective_item: control_objective_items(:impact_analysis_item_editable),
         title: 'Title',
         review_code: 'O020',
         description: 'New description',
+        brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
-        state: Finding::STATUS[:notify],
+        state: state,
         solution_date: nil,
         origination_date: 1.day.ago.to_date,
         audit_recommendations: 'New proposed action',
@@ -28,12 +35,16 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
+        impact_risk: Finding.impact_risks[:small],
+        probability: Finding.probabilities[:rare],
+        manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
@@ -54,15 +65,22 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'control objective from final review can not be used to create new weakness' do
+    state = if USE_SCOPE_CYCLE
+              Finding::STATUS[:incomplete]
+            else
+              Finding::STATUS[:notify]
+            end
+
     assert_no_difference 'Weakness.count' do
       weakness = Weakness.list.create(
         control_objective_item: control_objective_items(:impact_analysis_item),
         title: 'Title',
         review_code: 'O020',
         description: 'New description',
+        brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
-        state: Finding::STATUS[:notify],
+        state: state,
         solution_date: nil,
         origination_date: 1.day.ago.to_date,
         audit_recommendations: 'New proposed action',
@@ -74,12 +92,16 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
+        impact_risk: Finding.impact_risks[:small],
+        probability: Finding.probabilities[:rare],
+        manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
@@ -121,6 +143,9 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.impact = []
     @weakness.internal_control_components = []
     @weakness.tag_ids = []
+    @weakness.impact_risk = nil
+    @weakness.probability = nil
+    @weakness.manual_risk = false
 
     if WEAKNESS_TAG_VALIDATION_START
       @weakness.created_at = WEAKNESS_TAG_VALIDATION_START
@@ -145,6 +170,11 @@ class WeaknessTest < ActiveSupport::TestCase
 
     if WEAKNESS_TAG_VALIDATION_START
       assert_error @weakness, :tag_ids, :blank
+    end
+
+    if USE_SCOPE_CYCLE
+      assert_error @weakness, :impact_risk, :blank
+      assert_error @weakness, :probability, :blank
     end
   end
 
@@ -346,7 +376,7 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'must be approved on required attributes' do
-    error_messages = if HIDE_WEAKNESS_EFFECT
+    error_messages = if HIDE_WEAKNESS_EFFECT || USE_SCOPE_CYCLE
                        [I18n.t('weakness.errors.without_audit_comments')]
                      else
                        [

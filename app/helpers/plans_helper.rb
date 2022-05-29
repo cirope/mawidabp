@@ -49,7 +49,8 @@ module PlansHelper
       params[:business_unit_type].to_i : nil
 
     @plan.plan_items.select do |pi|
-      pi.business_unit&.business_unit_type_id == business_unit_type
+      pi.business_unit&.business_unit_type_id == business_unit_type ||
+        pi.auxiliar_business_unit_types.any? { |auxbu| auxbu.business_unit_type_id == business_unit_type }
     end.sort
   end
 
@@ -58,6 +59,17 @@ module PlansHelper
 
     BusinessUnitType.allowed_business_unit_types.map do |but|
       [but, Array(grouped_plan_items[but])]
+    end
+  end
+
+  def count_plan_items_for_allowed_business_unit_types
+    BusinessUnitType.allowed_business_unit_types.map do |but|
+      count = @plan.plan_items.select do |pi|
+        pi.business_unit&.business_unit_type_id == but.try(:id) ||
+          pi.auxiliar_business_unit_types.any? { |auxbu| auxbu.business_unit_type_id == but.try(:id) }
+      end.count
+
+      [but, count]
     end
   end
 
@@ -115,6 +127,11 @@ module PlansHelper
         t('plans.download_detailed_plan'),
         [@plan, include_details: 1, _ts: Time.now.to_i, format: :pdf],
         class: 'dropdown-item'
+      ),
+      link_to(
+        t('plans.download_business_unit_type_plan_csv'),
+        [@plan, include_details: 1, _ts: Time.now.to_i, format: :csv],
+        class: 'dropdown-item'
       )
     ]
 
@@ -145,7 +162,16 @@ module PlansHelper
           t('plans.download_detailed_business_unit_type_plan', business_unit_type: @business_unit_type.name),
           [@plan, include_details: 1, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :pdf],
           class: 'dropdown-item'
+        ),
+        link_to(
+          t('plans.download_detailed_business_unit_type_plan_csv', business_unit_type: @business_unit_type.name),
+          [@plan, include_details: 1, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :csv],
+          class: 'dropdown-item'
         )
       ]
+    end
+
+    def count_plan_items_for_business_unit_types
+      @plan
     end
 end

@@ -6,14 +6,15 @@
   </div>
 
   <%= simple_form_for @organization do |f| %>
-    <div class="card-body">
+    <div class="card-body bg-light">
       <div class="row">
         <div class="col-md-6">
           <%= f.input :name, autofocus: true %>
           <%= f.input :prefix unless @organization.persisted? %>
+          <%= f.input :saml_provider, collection: [['Azure', 'azure']], prompt: true %>
         </div>
         <div class="col-md-6">
-          <%= f.input :description, input_html: { rows: 5 } %>
+          <%= f.input :description, input_html: { rows: @organization.persisted? ? 5 : 8 } %>
         </div>
       </div>
 

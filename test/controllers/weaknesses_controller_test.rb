@@ -136,7 +136,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
 
     assert_difference counts_array do
-      assert_difference 'Tagging.count', 2 do
+      assert_difference ['Issue.count', 'Tagging.count'], 2 do
         post :create, params: {
           weakness: {
             control_objective_item_id:
@@ -144,6 +144,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             review_code: 'O020',
             title: 'Title',
             description: 'New description',
+            brief: 'New brief',
             answer: 'New answer',
             audit_comments: 'New audit comments',
             state: Finding::STATUS[:being_implemented],
@@ -159,6 +160,11 @@ class WeaknessesControllerTest < ActionController::TestCase
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
+            impact_risk: Finding.impact_risks[:small],
+            probability: Finding.probabilities[:rare],
+            extension: false,
+            manual_risk: '1',
+            risk_justification: 'Test',
             image_model_attributes: {
               image: Rack::Test::UploadedFile.new(
                 "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
@@ -170,7 +176,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               }, {
                 user_id: users(:audited).id, process_owner: '1'
               }, {
-                user_id: users(:auditor).id, process_owner: ''
+                user_id: users(:auditor).id, process_owner: '', responsible_auditor: true
               }, {
                 user_id: users(:manager).id, process_owner: ''
               }, {
@@ -210,6 +216,26 @@ class WeaknessesControllerTest < ActionController::TestCase
                 related_finding_id: findings(:unanswered_weakness).id
               }
             ],
+            issues_attributes: [
+              {
+                customer: '01',
+                entry: '01',
+                operation: '01',
+                currency: 'ARS',
+                amount: '10.0',
+                comments: 'Some issue',
+                close_date: I18n.l(Time.zone.tomorrow)
+              },
+              {
+                customer: '02',
+                entry: '02',
+                operation: '02',
+                currency: 'ARS',
+                amount: '20.0',
+                comments: 'Some other issue',
+                close_date: ''
+              }
+            ],
             tasks_attributes: [
               {
                 code: '01',
@@ -241,92 +267,114 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'update weakness' do
-    counts_array = [
-      'WorkPaper.count',
-      'FindingRelation.count',
-      'Task.count'
-    ]
+    counts_array = ['WorkPaper.count', 'FindingRelation.count', 'Task.count']
 
     login
     assert_no_difference 'Weakness.count' do
-      assert_difference counts_array do
-        patch :update, params: {
-          id: findings(:unanswered_weakness).id,
-          weakness: {
-            control_objective_item_id:
-              control_objective_items(:impact_analysis_item).id,
-            review_code: 'O020',
-            title: 'Title',
-            description: 'Updated description',
-            answer: 'Updated answer',
-            audit_comments: 'Updated audit comments',
-            state: Finding::STATUS[:unanswered],
-            origination_date: 1.day.ago.to_date.to_s(:db),
-            solution_date: '',
-            audit_recommendations: 'Updated proposed action',
-            effect: 'Updated effect',
-            risk: Weakness.risks_values.first,
-            priority: Weakness.priorities_values.first,
-            follow_up_date: '',
-            compliance: 'no',
-            operational_risk: ['internal fraud'],
-            impact: ['econimic', 'regulatory'],
-            internal_control_components: ['risk_evaluation', 'monitoring'],
-            finding_user_assignments_attributes: [
-              {
-                id: finding_user_assignments(:unanswered_weakness_bare).id,
-                user_id: users(:bare).id,
-                process_owner: ''
-              }, {
-                id: finding_user_assignments(:unanswered_weakness_audited).id,
-                user_id: users(:audited).id,
-                process_owner: '1'
-              }, {
-                id: finding_user_assignments(:unanswered_weakness_auditor).id,
-                user_id: users(:auditor).id,
-                process_owner: ''
-              }, {
-                id: finding_user_assignments(:unanswered_weakness_manager).id,
-                user_id: users(:manager).id,
-                process_owner: ''
-              }, {
-                id: finding_user_assignments(:unanswered_weakness_supervisor).id,
-                user_id: users(:supervisor).id,
-                process_owner: ''
-              }, {
-                id: finding_user_assignments(:unanswered_weakness_administrator).id,
-                user_id: users(:administrator).id,
-                process_owner: ''
-              }
-            ],
-            work_papers_attributes: [
-              {
-                name: 'New workpaper name',
-                code: 'PTO 20',
-                number_of_pages: '10',
-                description: 'New workpaper description',
-                file_model_attributes: {
-                  file: Rack::Test::UploadedFile.new(
-                    TEST_FILE_FULL_PATH, 'text/plain')
+      assert_difference 'Issue.count', 2 do
+        assert_difference counts_array do
+          patch :update, params: {
+            id: findings(:unanswered_weakness).id,
+            weakness: {
+              control_objective_item_id:
+                control_objective_items(:impact_analysis_item).id,
+              review_code: 'O020',
+              title: 'Title',
+              description: 'Updated description',
+              answer: 'Updated answer',
+              audit_comments: 'Updated audit comments',
+              state: Finding::STATUS[:unanswered],
+              origination_date: 1.day.ago.to_date.to_s(:db),
+              solution_date: '',
+              audit_recommendations: 'Updated proposed action',
+              effect: 'Updated effect',
+              risk: Weakness.risks_values.first,
+              priority: Weakness.priorities_values.first,
+              follow_up_date: '',
+              compliance: 'no',
+              operational_risk: ['internal fraud'],
+              impact: ['econimic', 'regulatory'],
+              internal_control_components: ['risk_evaluation', 'monitoring'],
+              impact_risk: Finding.impact_risks[:small],
+              probability: Finding.probabilities[:rare],
+              extension: false,
+              manual_risk: '1',
+              finding_user_assignments_attributes: [
+                {
+                  id: finding_user_assignments(:unanswered_weakness_bare).id,
+                  user_id: users(:bare).id,
+                  process_owner: ''
+                }, {
+                  id: finding_user_assignments(:unanswered_weakness_audited).id,
+                  user_id: users(:audited).id,
+                  process_owner: '1'
+                }, {
+                  id: finding_user_assignments(:unanswered_weakness_auditor).id,
+                  user_id: users(:auditor).id,
+                  process_owner: ''
+                }, {
+                  id: finding_user_assignments(:unanswered_weakness_manager).id,
+                  user_id: users(:manager).id,
+                  process_owner: ''
+                }, {
+                  id: finding_user_assignments(:unanswered_weakness_supervisor).id,
+                  user_id: users(:supervisor).id,
+                  process_owner: ''
+                }, {
+                  id: finding_user_assignments(:unanswered_weakness_administrator).id,
+                  user_id: users(:administrator).id,
+                  process_owner: ''
                 }
-              }
-            ],
-            finding_relations_attributes: [
-              {
-                description: 'Duplicated',
-                related_finding_id: findings(:unanswered_weakness).id
-              }
-            ],
-            tasks_attributes: [
-              {
-                code: '01',
-                description: 'New task',
-                status: 'pending',
-                due_on: I18n.l(Time.zone.tomorrow)
-              }
-            ]
+              ],
+              work_papers_attributes: [
+                {
+                  name: 'New workpaper name',
+                  code: 'PTO 20',
+                  number_of_pages: '10',
+                  description: 'New workpaper description',
+                  file_model_attributes: {
+                    file: Rack::Test::UploadedFile.new(
+                      TEST_FILE_FULL_PATH, 'text/plain')
+                  }
+                }
+              ],
+              finding_relations_attributes: [
+                {
+                  description: 'Duplicated',
+                  related_finding_id: findings(:unanswered_weakness).id
+                }
+              ],
+              issues_attributes: [
+                {
+                  customer: '01',
+                  entry: '01',
+                  operation: '01',
+                  currency: 'ARS',
+                  amount: '10.0',
+                  comments: 'Some issue',
+                  close_date: I18n.l(Time.zone.tomorrow)
+                },
+                {
+                  customer: '02',
+                  entry: '02',
+                  operation: '02',
+                  currency: 'ARS',
+                  amount: '20.0',
+                  comments: 'Some other issue',
+                  close_date: ''
+                }
+              ],
+              tasks_attributes: [
+                {
+                  code: '01',
+                  description: 'New task',
+                  status: 'pending',
+                  due_on: I18n.l(Time.zone.tomorrow)
+                }
+              ]
+            }
           }
-        }
+        end
       end
     end
 

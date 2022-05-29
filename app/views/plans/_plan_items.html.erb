@@ -2,10 +2,14 @@
   <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES ? 2 : 3 %> offset-md-1">
     <h5 class="h6"><%= BusinessUnit.model_name.human %></h5>
   </div>
-  <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES ? 2 : 4 %>">
+  <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES || USE_SCOPE_CYCLE ? 2 : 4 %>">
     <h5 class="h6"><%= PlanItem.human_attribute_name 'project' %></h5>
   </div>
-  <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+  <% if USE_SCOPE_CYCLE %>
+    <div class="col-md-2">
+      <h5 class="h6"><%= PlanItem.human_attribute_name 'scope' %></h5>
+    </div>
+  <% elsif SHOW_REVIEW_EXTRA_ATTRIBUTES %>
     <div class="col-md-2">
       <h5 class="h6"><%= PlanItem.human_attribute_name 'scope' %></h5>
     </div>

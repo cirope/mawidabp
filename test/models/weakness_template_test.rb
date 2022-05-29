@@ -19,9 +19,10 @@ class WeaknessTemplateTest < ActiveSupport::TestCase
 
     assert weakness_template.invalid?
     assert_error weakness_template, :title, :taken
+    assert_error weakness_template, :reference, :taken
   end
 
-  test 'allow title duplication' do
+  test 'allow title and reference duplication' do
     weakness_template = @weakness_template.dup
 
     weakness_template.allow_duplication = '1'

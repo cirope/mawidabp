@@ -6,6 +6,8 @@ class BusinessUnitTypesController < ApplicationController
   before_action :auth, :check_privileges
   before_action :set_business_unit_type, only: [:show, :edit, :update, :destroy]
 
+  include AutoCompleteFor::Tagging
+
   # Lista los tipos de unidades de negocio
   #
   # * GET /business_unit_types
@@ -109,8 +111,17 @@ class BusinessUnitTypesController < ApplicationController
     def business_unit_type_params
       params.require(:business_unit_type).permit(
         :name, :business_unit_label, :project_label, :review_prefix, :sectors,
-        :recipients, :external, :require_tag, :require_counts, :lock_version,
-        business_units_attributes: [:id, :name, :_destroy]
+        :recipients, :external, :require_tag, :require_counts,
+        :hide_review_logo, :independent_identification, :shared_business_units,
+        :lock_version,
+        business_units_attributes: [
+          :id, :name, :business_unit_kind_id, :_destroy,
+          taggings_attributes: [:id, :tag_id, :_destroy]
+        ]
       )
+    end
+
+    def load_privileges
+      @action_privileges.update auto_complete_for_tagging: :read
     end
 end
