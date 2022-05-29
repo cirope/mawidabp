@@ -21,7 +21,7 @@ es:
     not_rated: 'Nulo'
     low: 'Bajo'
     moderate_low: 'Moderado/bajo'
-    moderate: 'Moderado'
+    moderate: 'Medio'
     high: 'Alto'
     critical: 'Crítico'
     # Short relevance
