@@ -44,13 +44,7 @@ APP_AUDITED_MENU_ITEMS = [
             url: { controller: '/follow_up_audited' }
           )
         ]
-      ),
-      (MenuItem.new(
-        :memos,
-        order: 9,
-        controllers: :memos,
-        url: { controller: '/memos' }
-      ) if SHOW_MEMOS)
+      )
     ].compact
   )
 ].freeze
