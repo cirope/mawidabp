@@ -1,4 +1,4 @@
-FROM centos/ruby-27-centos7
+FROM registry.redhat.io/ubi7/ruby-27:latest
 
 ENV APP_ROOT /opt/app
 
@@ -22,7 +22,7 @@ RUN curl -sL https://rpm.nodesource.com/setup_10.x | bash -
 
 RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby25-rh-candidate_x86_64_os_.skip_if_unavailable=true
 
-RUN yum install -y centos-release-scl-rh
+#RUN yum install -y centos-release-scl-rh
 
 RUN yum -y clean all --enablerepo='*'
 
