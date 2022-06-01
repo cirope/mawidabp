@@ -56,7 +56,7 @@ PLAN_ITEM_REVIEW_CONCLUDED_ON: 'created_at'
 REQUIRED_BY_OPTIONS_MEMO: '[]'
 REVIEW_SCORES: '{}' # In JSON and must be sorted by date in descending order
 RISK_WEIGHTS: '{}'
-SCORE_BY_WEAKNESS: '{}' # In JSON
+SCORE_BY_WEAKNESS: '{"adequate": 98, "require_some_improvements": 85, "require_improvements": 50, "require_lots_of_improvements": 32.66, "inadequate": 0}' # In JSON
 SHOW_ALTERNATIVE_QUESTIONNAIRES: 'false'
 SHOW_ASSUMED_RISK_AS_REVIEW_PENDING: 'false'
 SHOW_CONCLUSION_ALTERNATIVE_PDF: '{"cirope": "nbc"}' # In JSON

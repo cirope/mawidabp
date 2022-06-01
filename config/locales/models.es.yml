@@ -16,6 +16,14 @@ es:
         name: 'Nombre'
         organization_name: 'Nombre de la organización'
         user: 'Nombre de usuario'
+      nbc_annual_report_form:
+        period_id: 'Periodo'
+        date: 'Fecha'
+        cc: 'CC'
+        name: 'Nombre'
+        objective: 'Objetivo'
+        conclusion: 'Conclusion'
+        introduction_and_scope: 'Introduccion y Alcance'
 
   activerecord:
     models:

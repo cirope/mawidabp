@@ -39,6 +39,8 @@ gem 'net-smtp', require: false
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
+gem 'reform-rails'
+
 gem 'ruby-saml'
 
 gem 'sassc'

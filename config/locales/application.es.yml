@@ -187,8 +187,8 @@ es:
     synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
-    annual_report_title: "Resumen anual"
     review_score_details_report_title: "Calificaciones de informes detallado"
+    nbc_annual_report_title: "Resumen anual"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -279,8 +279,40 @@ es:
         highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
         digitalized: "Digitalización"
-    annual_report:
+    nbc_annual_report:
       pdf_name: "resumen_anual_%{from_date}_al_%{to_date}.pdf"
+      front_page:
+        first_title: 'Calificación del Control Interno de'
+        second_title: 'Nuevo Chaco Bursátil S.A.'
+        footer_title: '<b>Informe:</b>'
+      executive_summary:
+        title: '<b><u>RESUMEN EJECUTIVO</u></b>'
+        objective_title: '<b><u>OBJETIVO</u></b>'
+        general_conclusion_title: '<b><u>CONCLUSIÓN GENERAL</u></b>'
+        first_footer: '<b>AUS. Alejandro Camnasio</b>'
+        second_footer: '<b>A/C int. Gerencia de Auditoria Interna</b>'
+        third_footer: '<b>Nuevo Banco del Chaco S.A.</b>'
+      detailed_report:
+        title: '<b><u>INFORME DETALLADO</u></b>'
+        introduction_and_scope_title: '<b><u>INTRODUCCION Y ALCANCE DEL TRABAJO REALIZADO</u></b>'
+        classification_methodology: 'La metodología de calificación de ciclos utilizada en el período 2019 fue aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, la cual exponemos a continuación:'
+        classification_title: '<i><b>Cuadro I: Calificación del Control Interno del NCHB S.A. – Año 2021</b></i>'
+        conclusions_title: '<u><b>CONCLUSIONES</b></u>'
+        conclusions_body: 'Partiendo del Cuadro I <i>“Calificación del Control Interno del NCHB S.A.”</i>, se observa que la calificación del control interno de la Entidad, de acuerdo a los parámetros utilizados, es <b>“%{calification}”.</b>'
+      cycle_qualification:
+        header_number: '<b>N°</b>'
+        header_qualification: '<b>Calificación</b>'
+        header_weight: '<b>Ponderador</b>'
+        header_high_risk_observations: '<b>Cantidad de Observaciones de Riesgo Alto</b>'
+      internal_control_qualification:
+        header_cycle: '<b>Ciclo</b>'
+        header_count_findings: '<b>Cantidad de Observaciones</b>'
+        header_weight: '<b>Ponderador a fecha de los Informes</b>'
+        header_qualification: '<b>Calificación</b>'
+        count_weight: '<b>Total ponderación</b>'
+        count_cycles: '<b>Cantidad de ciclos</b>'
+        final_weight: '<b>Ponderación</b>'
+        final_qualification: '<b>Calificación Control Interno</b>'
     synthesis_report:
       pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
