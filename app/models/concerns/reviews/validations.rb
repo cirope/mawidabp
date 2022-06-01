@@ -99,9 +99,7 @@ module Reviews::Validations
     def validate_identification_number_uniqueness
       suffix     = identification.to_s.split('-').last
       use_prefix = business_unit_type&.independent_identification
-      pattern    = unless use_prefix
-                     "%#{suffix}"
-                  end
+      pattern    = "%#{suffix}" unless use_prefix
 
       conditions = [
         "#{Review.quoted_table_name}.#{Review.qcn 'organization_id'} = :organization_id",
