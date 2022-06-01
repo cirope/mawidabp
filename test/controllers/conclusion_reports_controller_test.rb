@@ -1391,65 +1391,46 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'control_objective_counts', 0)
   end
 
-  # agrego
+  test 'nbc annual report report' do
+    set_organization
 
-  test 'synthesis report' do
+    skip unless Current.conclusion_pdf_format == 'nbc'
+
     login
 
-    get :synthesis_report, :params => { :controller_name => 'conclusion' }
+    get :nbc_annual_report
     assert_response :success
-    assert_template 'conclusion_reports/synthesis_report'
+    assert_template 'conclusion_reports/nbc_annual_report'
+  end
+
+  test 'create nbc annual report report' do
+    set_organization
+
+    skip unless Current.conclusion_pdf_format == 'nbc'
+
+    login
+
+    period = periods(:current_period)
 
     assert_nothing_raised do
-      get :synthesis_report, :params => {
-        :synthesis_report => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
-        },
-        :controller_name => 'conclusion'
+      post :create_nbc_annual_report, params: {
+        nbc_annual_report: {
+          period_id: period.id,
+          date: Date.today.to_s,
+          cc: 'cc',
+          name: 'name',
+          objective: 'objective',
+          conclusion: 'conclusion',
+          introduction_and_scope: 'introduction and scope'
+        }
       }
     end
-
-    assert_response :success
-    assert_template 'conclusion_reports/synthesis_report'
-  end
-
-  test 'filtered synthesis report' do
-    login
-    get :synthesis_report, :params => {
-      :synthesis_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one',
-        :scope => 'committee'
-      },
-      :controller_name => 'conclusion'
-    }
-
-    assert_response :success
-    assert_not_nil assigns(:filters)
-    assert_equal 3, assigns(:filters).count
-    assert_template 'conclusion_reports/synthesis_report'
-  end
-
-  test 'create synthesis report' do
-    login
-
-    post :create_synthesis_report, :params => {
-      :synthesis_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
-      },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion'
-    }
-
+    
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_committee_report.synthesis_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'synthesis_report', 0)
+      I18n.t('conclusion_committee_report.nbc_annual_report.pdf_name',
+        from_date: period.start,
+        to_date: period.end),
+        'nbc_annual_report', 
+        0)
   end
 end

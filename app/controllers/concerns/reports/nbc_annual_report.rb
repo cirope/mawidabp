@@ -17,8 +17,8 @@ module Reports::NbcAnnualReport
       put_executive_summary pdf
       put_detailed_report   pdf
 
-      save_pdf(pdf, @controller, period.start, period.end, 'annual_report')
-      redirect_to_pdf(@controller, period.start, period.end, 'annual_report')
+      save_pdf(pdf, @controller, period.start, period.end, 'nbc_annual_report')
+      redirect_to_pdf(@controller, period.start, period.end, 'nbc_annual_report')
     else
       render action: :nbc_annual_report
     end
@@ -402,18 +402,18 @@ module Reports::NbcAnnualReport
     end
 
     def results_internal_qualification
-      Finding.left_joins(control_objective_item: { review: { plan_item: { plan: :period } } })
-             .includes(:business_unit_type)
-             .where(control_objective_items: { reviews: { plan_items: { plans: { periods: @form.period } } } }, 
-                    state: Finding::STATUS[:being_implemented])
-             .group_by(&:business_unit_type)
-             .map do |g|
-               {
-                 name: g.first.name,
-                 count: g.second.count,
-                 total_weight: g.second.sum { |f| f.risk_weight + f.state_weight + f.age_weight }
-               }
-             end
+      Weakness.left_joins(control_objective_item: { review: { plan_item: { plan: :period } } })
+              .includes(:business_unit_type)
+              .where(control_objective_items: { reviews: { plan_items: { plans: { periods: @form.period } } } }, 
+                     state: Finding::STATUS[:being_implemented])
+              .group_by(&:business_unit_type)
+              .map do |g|
+                {
+                  name: g.first.name,
+                  count: g.second.count,
+                  total_weight: g.second.sum { |f| f.risk_weight + f.state_weight + f.age_weight }
+                }
+              end
     end
 
     def calculate_qualification total_weight
