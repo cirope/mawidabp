@@ -97,11 +97,11 @@ module Reviews::Validations
     end
 
     def validate_identification_number_uniqueness
-      suffix  = identification.to_s.split('-').last
-      pattern = unless business_unit_type&.independent_identification
-                  "%#{suffix}"
-                end
-
+      suffix     = identification.to_s.split('-').last
+      use_prefix = business_unit_type&.independent_identification
+      pattern    = unless use_prefix
+                     "%#{suffix}"
+                  end
 
       conditions = [
         "#{Review.quoted_table_name}.#{Review.qcn 'organization_id'} = :organization_id",
@@ -109,10 +109,12 @@ module Reviews::Validations
       ].join(' AND ')
 
       if suffix.present?
-        is_taken = Review.unscoped.where(
+        is_taken = Review.joins(:business_unit_type).where(
           conditions,
           organization_id: organization_id,
           identification: pattern
+        ).where(
+          business_unit_types: { independent_identification: use_prefix }
         ).any?
 
         errors.add :identification, :taken if is_taken
