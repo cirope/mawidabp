@@ -12,7 +12,7 @@ Rails.application.configure do
     domain:               ENV['SMTP_DOMAIN'].presence,
     user_name:            ENV['SMTP_USER_NAME'].presence,
     password:             ENV['SMTP_PASSWORD'].presence,
-    authentication:       ENV['SMTP_AUTHENTICATION'].presence&.to_sym
+    authentication:       ENV['SMTP_AUTHENTICATION'].presence&.to_sym,
     openssl_verify_mode:  OpenSSL::SSL::VERIFY_NONE
   }
 end
