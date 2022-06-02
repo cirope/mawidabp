@@ -24,13 +24,31 @@
         }, readonly: true %>
         <div class="row">
           <div class="col-md-4">
-            <%= f.input :year, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } }%>
+            <%= f.input :year, 
+                        input_html: 
+                        { 
+                          maxlength: 4,
+                          readonly: bic_sigen_fields_frozen, 
+                          data: { bic_sigen_fields: true, input_text_only_accept_numerics: true } 
+                        }%>
           </div>
           <div class="col-md-4">
-            <%= f.input :nsisio, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } } %>
+            <%= f.input :nsisio, 
+                        input_html: 
+                        { 
+                          maxlength: 4,
+                          readonly: bic_sigen_fields_frozen, 
+                          data: { bic_sigen_fields: true, input_text_only_accept_numerics: true } 
+                        } %>
           </div>
           <div class="col-md-4">
-            <%= f.input :nobs, input_html: { maxlength: 255, readonly: bic_sigen_fields_frozen, data: { bic_sigen_fields: true } } %>
+            <%= f.input :nobs, 
+                        input_html: 
+                        { 
+                          maxlength: 4,
+                          readonly: bic_sigen_fields_frozen, 
+                          data: { bic_sigen_fields: true, input_text_only_accept_numerics: true } 
+                        } %>
           </div>
         </div>
       </div>
