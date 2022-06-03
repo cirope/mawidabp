@@ -107,6 +107,11 @@
     errors:
       can_not_be_destroyed: "La unidad organizativa no puede ser eliminada"
       business_unit_related: "El proceso crítico no puede ser eliminado, se encuentra relacionado con al menos un plan de trabajo"
+
+  business_unit:
+    edit_title: "Modificar Proceso Crítico"
+    correctly_updated: "Proceso Crítico actualizada correctamente."
+
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"

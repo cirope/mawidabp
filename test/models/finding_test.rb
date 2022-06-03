@@ -38,8 +38,6 @@ class FindingTest < ActiveSupport::TestCase
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
-          impact_risk: Finding.impact_risks[:small],
-          probability: Finding.probabilities[:rare],
           manual_risk: true,
           risk_justification: 'Test',
           finding_user_assignments_attributes: {
@@ -93,8 +91,6 @@ class FindingTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
-        impact_risk: Finding.impact_risks[:small],
-        probability: Finding.probabilities[:rare],
         manual_risk: true,
         risk_justification: 'Test',
         finding_user_assignments_attributes: {
