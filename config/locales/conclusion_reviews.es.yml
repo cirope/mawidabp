@@ -131,16 +131,15 @@ es:
         audit_date: "<b>Fecha de Auditoría</b>"
       weaknesses:
         title: "<b>RESUMEN EJECUTIVO</b>"
-        subtitle: "<b>Objetivo</b>"
+        subtitle: "<b>OBJETIVO</b>"
         main_observations: "<b>Observaciones en proceso de regularización</b>"
-        audit_conclusion: "<b>Conclusión General de la Auditoría</b>"
+        audit_conclusion: "<b>CONCLUSIÓN GENERAL DE LA AUDITORÍA</b>"
         highest_responsible: "<b>%{responsible}</b>"
-        signature_label: "<b>Gerencia de Auditoría Interna</b>"
+        signature_label: "<b>Gerente a/c interino de Auditoría Interna</b>"
         organization: "<b>Nuevo Banco del Chaco S.A.</b>"
         detailed_review: "INFORME DETALLADO"
         introduction_and_scope: "<b>INTRODUCCION Y ALCANCE DEL TRABAJO</b>"
-        full_name: "<b>Nombre y Apellido</b>"
-        area: "<b>Área</b>"
+        full_name: "<b>Responsables/s del Proceso</b>"
         responsible_name: "<b>Nombre del Responsable de Regularización</b>"
         follow_up_date: "<b>Fecha Estimada de Regularización</b>"
         messages: "Los procedimientos incluyeron la realización de consultas, la inspección de documentación y observación de las actividades y operaciones. Los funcionarios entrevistados fueron:"
@@ -163,7 +162,7 @@ es:
         inadequate: 'Inadecuado'
 
       weaknesses_detected:
-        name: "Observaciones de la presente revisión"
+        name: "OBSERVACIONES DE LA PRESENTE REVISIÓN"
         repeated: "Observaciones de seguimiento"
         title: "<b>Título</b>"
         description: "<b>Descripción</b>"

@@ -15,7 +15,6 @@ module Reviews::Validations
     }, unless: -> { SHOW_REVIEW_AUTOMATIC_IDENTIFICATION }
     validates :identification, :description, :survey, :scope, :risk_exposure,
       :include_sox, pdf_encoding: true
-    validates :plan_item_id, uniqueness: { case_sensitive: false }
     validates :score_type, inclusion: {
       in: %w(effectiveness manual none weaknesses splitted_effectiveness weaknesses_alt)
     }, allow_blank: true, allow_nil: true
@@ -39,6 +38,7 @@ module Reviews::Validations
     validate :validate_required_tags, if: :validate_extra_attributes?
     validate :validate_identification_number_uniqueness,
       on: :create, if: -> { SHOW_REVIEW_AUTOMATIC_IDENTIFICATION }
+    validate :plan_item_is_not_used
   end
 
   private
@@ -97,11 +97,9 @@ module Reviews::Validations
     end
 
     def validate_identification_number_uniqueness
-      suffix  = identification.to_s.split('-').last
-      pattern = unless business_unit_type&.independent_identification
-                  "%#{suffix}"
-                end
-
+      suffix     = identification.to_s.split('-').last
+      use_prefix = business_unit_type&.independent_identification
+      pattern    = "%#{suffix}" unless use_prefix
 
       conditions = [
         "#{Review.quoted_table_name}.#{Review.qcn 'organization_id'} = :organization_id",
@@ -109,10 +107,12 @@ module Reviews::Validations
       ].join(' AND ')
 
       if suffix.present?
-        is_taken = Review.unscoped.where(
+        is_taken = Review.joins(:business_unit_type).where(
           conditions,
           organization_id: organization_id,
           identification: pattern
+        ).where(
+          business_unit_types: { independent_identification: use_prefix }
         ).any?
 
         errors.add :identification, :taken if is_taken
@@ -134,5 +134,21 @@ module Reviews::Validations
       end
 
       required_roles
+    end
+
+    def plan_item_is_not_used
+      errors.add(:plan_item_id, :used) if plan_item.present? && plan_item_used?
+    end
+
+    def plan_item_used?
+      plan_item_used_by_review? || Memo.list.exists?(plan_item_id: plan_item.id)
+    end
+
+    def plan_item_used_by_review?
+      if new_record?
+        Review.list.exists?(plan_item_id: plan_item.id)
+      else
+        Review.list.where.not(id: id).exists?(plan_item_id: plan_item.id)
+      end
     end
 end
