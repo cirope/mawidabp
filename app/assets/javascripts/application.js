@@ -24,6 +24,7 @@
 //= require autocomplete
 //= require best_practices
 //= require checkbox
+//= require checkbox_enable_disable_inputs
 //= require closing_interviews
 //= require common
 //= require conclusion_draft_reviews

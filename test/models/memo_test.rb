@@ -2,6 +2,8 @@ require 'test_helper'
 
 class MemoTest < ActiveSupport::TestCase
   setup do
+    skip unless SHOW_MEMOS
+
     @memo = memos :first_memo
 
     set_organization
@@ -15,21 +17,33 @@ class MemoTest < ActiveSupport::TestCase
   end
 
   test 'invalid because blank required by' do
-    skip unless Memo::REQUIRED_BY_OPTIONS.present?
-
     @memo.required_by = nil
+
+    refute @memo.valid?
+    assert_error @memo, :required_by, :inclusion
+    assert_error @memo, :required_by, :blank
+  end
+
+  test 'invalid because not included required by' do
+    @memo.required_by = 'test'
 
     refute @memo.valid?
     assert_error @memo, :required_by, :inclusion
   end
 
-  test 'invalid because not included required by' do
-    skip unless Memo::REQUIRED_BY_OPTIONS.present?
-
-    @memo.required_by = 'test'
+  test 'invalid because required by text blank' do
+    @memo.manual_required_by = '1'
+    @memo.required_by_text = ''
 
     refute @memo.valid?
-    assert_error @memo, :required_by, :inclusion
+    assert_error @memo, :required_by, :blank
+  end
+
+  test 'valid because required by text complete' do
+    @memo.manual_required_by = '1'
+    @memo.required_by_text = 'test required by'
+
+    assert @memo.valid?
   end
 
   test 'invalid because delete all file model memos' do

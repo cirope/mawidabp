@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class MemosHelperTest < ActionView::TestCase
+  setup do
+    skip unless SHOW_MEMOS
+  end
+
   test 'Should return group by business_unit in plan item unused' do
     business_unit                      = business_units :business_unit_three
     plan_item_without_id               = plan_items :current_plan_item_4_without_business_unit
@@ -46,5 +50,27 @@ class MemosHelperTest < ActionView::TestCase
     end
 
     assert_equal expected, required_by_options
+  end
+
+  test 'Should return false manual required by checked when blank required by' do
+    refute manual_required_by_checked('')
+  end
+
+  test 'Should return false manual required by checked when include in options' do
+    refute manual_required_by_checked(Memo::REQUIRED_BY_OPTIONS.first)
+  end
+
+  test 'Should return true manual required by checked' do
+    assert manual_required_by_checked('test required by')
+  end
+
+  test 'Should return required by text value' do
+    required_by_text = 'test required by'
+
+    assert_equal required_by_text, required_by_text_value(required_by_text)
+  end
+
+  test 'Should return blank required by text value' do
+    assert_equal '', required_by_text_value(Memo::REQUIRED_BY_OPTIONS.first)
   end
 end

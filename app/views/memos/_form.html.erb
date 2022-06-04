@@ -39,13 +39,28 @@
     <%= f.input :description, input_html: { readonly: readonly } %>
 
     <div class="row">
-      <div class="col-sm-3">
-        <%= f.input :required_by, collection: required_by_options, 
-                                  prompt: true, 
-                                  required: true, 
-                                  input_html: { disabled: readonly } 
+      <div class="col-sm-6">
+        <%= f.input :required_by,
+                    include_blank: t('helpers.select.prompt'),
+                    collection: required_by_options,
+                    input_html: { disabled: readonly,
+                                  data: { input_to_disable: true } } 
         %>
+        <%= f.input :manual_required_by,
+                    as: :boolean,
+                    input_html: { disabled: readonly,
+                                  checked: manual_required_by_checked(f.object.required_by),
+                                  data: { checkbox_enable_disable_inputs: !readonly } } 
+        %>
+        <%= f.input :required_by_text,
+                    label: false,
+                    input_html: { disabled: readonly,
+                                  value: required_by_text_value(f.object.required_by),
+                                  data: { input_to_enable: true } } %>
       </div>
+    </div>
+
+    <div class="row">
       <div class="col-sm-3">
         <%= f.input :close_date, as: :date_picker, required: true, input_html: { readonly: readonly } %>
       </div>

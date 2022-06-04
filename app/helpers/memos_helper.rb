@@ -38,4 +38,12 @@ module MemosHelper
       [option, option]
     end
   end
+
+  def manual_required_by_checked required_by
+    required_by.present? ? Memo::REQUIRED_BY_OPTIONS.exclude?(required_by) : false
+  end
+
+  def required_by_text_value required_by
+    Memo::REQUIRED_BY_OPTIONS.exclude?(required_by) ? required_by : ''
+  end
 end

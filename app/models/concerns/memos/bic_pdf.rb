@@ -59,7 +59,8 @@ module Memos::BicPdf
           inline_format: true,
           border_width: [0, 0, 0, 4],
           border_left_color: '008385',
-          padding_left: 25
+          padding_left: 25,
+          height: 105
         }
       ]
     ], column_widths: [95, 60, 200, 205]
@@ -81,7 +82,8 @@ module Memos::BicPdf
           inline_format: true,
           border_width: [0, 0, 0, 4],
           border_left_color: '008385',
-          padding_left: 25
+          padding_left: 25,
+          height: 105
         }
       ]
     ], column_widths: [95, 60, 200, 205]

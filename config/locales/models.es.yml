@@ -480,6 +480,7 @@ es:
         business_unit_type: 'Unidad organizativa'
         required_by: 'Requerido por'
         close_date: 'Fecha de cierre'
+        manual_required_by: 'Manual'
       news:
         title: 'Título'
         description: 'Descripción'

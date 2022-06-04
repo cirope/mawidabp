@@ -12,4 +12,6 @@ class Memo < ApplicationRecord
 
   belongs_to :period
   belongs_to :organization
+
+  attr_accessor :manual_required_by, :required_by_text
 end
