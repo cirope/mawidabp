@@ -49,13 +49,11 @@
         <%= f.input :manual_required_by,
                     as: :boolean,
                     input_html: { disabled: readonly,
-                                  checked: manual_required_by_checked(f.object.required_by),
                                   data: { checkbox_enable_disable_inputs: !readonly } } 
         %>
         <%= f.input :required_by_text,
                     label: false,
                     input_html: { disabled: readonly,
-                                  value: required_by_text_value(f.object.required_by),
                                   data: { input_to_enable: true } } %>
       </div>
     </div>

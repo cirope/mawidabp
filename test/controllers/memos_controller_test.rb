@@ -28,7 +28,7 @@ class MemosControllerTest < ActionController::TestCase
           plan_item_id: plan_items(:current_plan_item_4_without_business_unit).id,
           name: 'Second Memo',
           description: 'description',
-          required_by: Memo::REQUIRED_BY_OPTIONS.first,
+          required_by: '',
           manual_required_by: '1',
           required_by_text: 'test required by',
           close_date: 15.days.from_now.to_date.to_s(:db),
@@ -61,7 +61,7 @@ class MemosControllerTest < ActionController::TestCase
       memo: {
         name: 'Memo updated',
         description: 'description updated',
-        required_by: Memo::REQUIRED_BY_OPTIONS.second,
+        required_by: '',
         manual_required_by: '1',
         required_by_text: 'test required by',
         close_date: 17.days.from_now.to_date.to_s(:db),

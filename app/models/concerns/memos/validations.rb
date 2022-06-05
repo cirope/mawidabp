@@ -2,9 +2,10 @@ module Memos::Validations
   extend ActiveSupport::Concern
 
   included do
-    before_validation :set_required_by
+    before_save :set_required_by
 
-    validates :name, :close_date, :required_by, presence: true
+    validates :name, :close_date, presence: true
+    validates :required_by_text, presence: true, if: :manual_required_by?
     validates :required_by, inclusion: { in: Memo::REQUIRED_BY_OPTIONS },
                             if: :not_manual_required_by?
     validate :has_file_model_memos
@@ -23,7 +24,7 @@ module Memos::Validations
     end
 
     def manual_required_by?
-      manual_required_by == '1'
+      ['1', true].include? manual_required_by
     end
 
     def has_file_model_memos

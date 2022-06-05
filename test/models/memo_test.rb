@@ -2,11 +2,30 @@ require 'test_helper'
 
 class MemoTest < ActiveSupport::TestCase
   setup do
-    skip unless SHOW_MEMOS
-
     @memo = memos :first_memo
 
     set_organization
+  end
+
+  test 'initialize with required by text' do
+    assert @memo.required_by.blank?
+    assert @memo.required_by_text.present?
+    assert @memo.manual_required_by
+  end
+
+  test 'initialize with required by' do
+    skip unless Memo::REQUIRED_BY_OPTIONS.present?
+
+    @memo.manual_required_by = false
+    @memo.required_by        = Memo::REQUIRED_BY_OPTIONS.first
+    @memo.required_by_text   = nil
+
+    @memo.save!
+    @memo.reload
+
+    assert @memo.required_by.present?
+    assert @memo.required_by_text.blank?
+    refute @memo.manual_required_by
   end
 
   test 'invalid because blank name' do
@@ -16,32 +35,51 @@ class MemoTest < ActiveSupport::TestCase
     assert_error @memo, :name, :blank
   end
 
-  test 'invalid because blank required by' do
-    @memo.required_by = nil
-
-    refute @memo.valid?
-    assert_error @memo, :required_by, :inclusion
-    assert_error @memo, :required_by, :blank
-  end
-
-  test 'invalid because not included required by' do
-    @memo.required_by = 'test'
-
-    refute @memo.valid?
-    assert_error @memo, :required_by, :inclusion
-  end
-
-  test 'invalid because required by text blank' do
-    @memo.manual_required_by = '1'
+  test 'invalid because blank required by text' do
     @memo.required_by_text = ''
 
     refute @memo.valid?
-    assert_error @memo, :required_by, :blank
+    assert_error @memo, :required_by_text, :blank
+
+    @memo.reload
+
+    @memo.required_by_text = ''
+    @memo.manual_required_by = '1'
+
+    refute @memo.valid?
+    assert_error @memo, :required_by_text, :blank
   end
 
-  test 'valid because required by text complete' do
-    @memo.manual_required_by = '1'
-    @memo.required_by_text = 'test required by'
+  test 'invalid because not included required by' do
+    @memo.required_by = ''
+    @memo.manual_required_by = false
+
+    refute @memo.valid?
+    assert_error @memo, :required_by, :inclusion
+
+    @memo.reload
+
+    @memo.required_by = ''
+    @memo.manual_required_by = '0'
+
+    refute @memo.valid?
+    assert_error @memo, :required_by, :inclusion
+  end
+
+  test 'valid because required by included' do
+    skip unless Memo::REQUIRED_BY_OPTIONS.present?
+
+    @memo.manual_required_by = false
+    @memo.required_by        = Memo::REQUIRED_BY_OPTIONS.first
+    @memo.required_by_text   = nil
+
+    assert @memo.valid?
+
+    @memo.reload
+
+    @memo.manual_required_by = '0'
+    @memo.required_by        = Memo::REQUIRED_BY_OPTIONS.first
+    @memo.required_by_text   = nil
 
     assert @memo.valid?
   end
@@ -81,7 +119,9 @@ class MemoTest < ActiveSupport::TestCase
     memo = Memo.create!(
       name: 'Second memo',
       close_date: 15.days.from_now.to_date.to_s(:db),
-      required_by: Memo::REQUIRED_BY_OPTIONS.first,
+      required_by: '',
+      required_by_text: 'required by test',
+      manual_required_by: true,
       period: periods(:current_period),
       organization: organizations(:cirope),
       plan_item: plan_items(:current_plan_item_4_without_business_unit),
