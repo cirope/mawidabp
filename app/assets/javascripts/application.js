@@ -6,7 +6,7 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
-//= require jquery
+//= require jquery3
 //= require jquery_ujs
 //= require jquery-ui/effects/effect-highlight
 //= require jquery-ui/widgets/autocomplete
@@ -42,6 +42,7 @@
 //= require form_modification
 //= require form_submit
 //= require hide
+//= require input_text_only_accept_numerics
 //= require licenses
 //= require memos
 //= require needs_confirm_form
