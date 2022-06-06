@@ -655,6 +655,7 @@ es:
         user: "Usuario"
         business_unit_types: "Unidades organizativas"
         detail: "Detalle"
+        organization: "Organización"
 
   users:
     index:

@@ -161,6 +161,7 @@ class TimeSummaryController < ApplicationController
         t('time_summary.downloads.csv.quantity_hours_per_day'),
         t('time_summary.downloads.csv.business_unit_types'),
         t('time_summary.downloads.csv.detail'),
+        t('time_summary.downloads.csv.organization')
       ]
     end
 
@@ -180,7 +181,8 @@ class TimeSummaryController < ApplicationController
               tc.resource.to_s,
               helpers.number_with_precision(tc.amount, precision: 1),
               (tc.resource.plan_item.business_unit.business_unit_type.name if tc.review?).to_s,
-              tc.detail
+              tc.detail,
+              (tc.resource&.organization&.name if tc.review?).to_s
             ]
 
             time_consumptions[tc.date] ||= []
