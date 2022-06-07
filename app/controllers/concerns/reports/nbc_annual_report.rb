@@ -7,15 +7,17 @@ module Reports::NbcAnnualReport
 
   def create_nbc_annual_report
     @form = NbcAnnualReportForm.new(new_annual_report)
-    if @form.validate(params[:nbc_annual_report])
-      @controller = 'conclusion'
-      period      = @form.period
-      pdf         = Prawn::Document.create_generic_pdf :portrait,
-                                                       margins: [30, 20, 20, 25]
 
-      put_nbc_cover_on      pdf, Current.organization
+    if @form.validate(params[:nbc_annual_report])
+      @controller  = 'conclusion'
+      period       = @form.period
+      organization = Current.organization
+      pdf          = Prawn::Document.create_generic_pdf :portrait,
+                                                        margins: [30, 20, 20, 25]
+
+      put_nbc_cover_on      pdf, organization
       put_executive_summary pdf
-      put_detailed_report   pdf
+      put_detailed_report   pdf, period
 
       save_pdf(pdf, @controller, period.start, period.end, 'nbc_annual_report')
       redirect_to_pdf(@controller, period.start, period.end, 'nbc_annual_report')
@@ -48,7 +50,7 @@ module Reports::NbcAnnualReport
       text_title  = [
         I18n.t('conclusion_review.nbc.cover.title'),
         I18n.t('conclusion_committee_report.nbc_annual_report.front_page.first_title'),
-        I18n.t('conclusion_committee_report.nbc_annual_report.front_page.second_title')
+        organization
       ].join "\n"
 
       pdf.bounding_box(coordinates, width: width, height: 150) do
@@ -150,7 +152,7 @@ module Reports::NbcAnnualReport
       pdf.start_new_page
     end
 
-    def put_detailed_report pdf
+    def put_detailed_report pdf, period
       pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.title'),
                align: :center,
                inline_format: true
@@ -174,7 +176,8 @@ module Reports::NbcAnnualReport
 
       pdf.move_down PDF_FONT_SIZE * 3
 
-      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.classification_title'),
+      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.classification_title',
+                      period: period.name),
                inline_format: true
 
       pdf.move_down PDF_FONT_SIZE * 2
@@ -402,7 +405,8 @@ module Reports::NbcAnnualReport
     end
 
     def results_internal_qualification
-      Weakness.left_joins(control_objective_item: { review: { plan_item: { plan: :period } } })
+      Weakness.list
+              .left_joins(control_objective_item: { review: { plan_item: { plan: :period } } })
               .includes(:business_unit_type)
               .where(control_objective_items: { reviews: { plan_items: { plans: { periods: @form.period } } } }, 
                      state: Finding::STATUS[:being_implemented])
