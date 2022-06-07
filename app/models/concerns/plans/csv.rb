@@ -33,7 +33,10 @@ module Plans::Csv
         PlanItem.human_attribute_name(:end),
         PlanItem.human_attribute_name(:human_resource_units),
         PlanItem.human_attribute_name(:material_resource_units),
-        PlanItem.human_attribute_name(:total_resource_units)
+        PlanItem.human_attribute_name(:total_resource_units),
+        (Review.human_attribute_name(:score) if Current.conclusion_pdf_format == 'bic'),
+        (I18n.t('plans.csv.number_observations_per_risk') if Current.conclusion_pdf_format == 'bic'),
+        (ConclusionDraftReview.human_attribute_name(:issue_date) if Current.conclusion_pdf_format == 'bic')
       ].compact
     end
 
@@ -65,9 +68,35 @@ module Plans::Csv
             I18n.l(plan_item.end, format: :default),
             '%.2f' % plan_item.human_units,
             '%.2f' % plan_item.material_units,
-            '%.2f' % plan_item.units
+            '%.2f' % plan_item.units,
+            (score_plan_item(plan_item) if Current.conclusion_pdf_format == 'bic'),
+            (number_observations_per_risk(plan_item) if Current.conclusion_pdf_format == 'bic'),
+            (plan_item_issue_date(plan_item) if Current.conclusion_pdf_format == 'bic')
           ].compact
         end
       end
+    end
+
+    def score_plan_item plan_item
+      plan_item.review ? "#{plan_item.review.score}%" : '-'
+    end
+
+    def plan_item_issue_date plan_item
+      if plan_item.review&.conclusion_final_review
+        I18n.l(plan_item.review.conclusion_final_review.issue_date, format: :minimal)
+      else
+        '-'
+      end
+    end
+
+    def number_observations_per_risk plan_item
+      results = RISK_TYPES.each_with_object({}) { |risk, hsh| hsh[risk.second] = 0 }
+
+      if plan_item.review
+        results = results.merge(plan_item.review.weaknesses.group(:risk).count)
+      end
+
+      results.map { |k, v| "#{I18n.t("risk_types.#{RISK_TYPES.key(k)}")}: #{v}" }
+             .join(';')
     end
 end
