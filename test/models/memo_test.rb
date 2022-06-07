@@ -43,7 +43,7 @@ class MemoTest < ActiveSupport::TestCase
 
     @memo.reload
 
-    @memo.required_by_text = ''
+    @memo.required_by_text   = ''
     @memo.manual_required_by = '1'
 
     refute @memo.valid?
@@ -51,7 +51,7 @@ class MemoTest < ActiveSupport::TestCase
   end
 
   test 'invalid because not included required by' do
-    @memo.required_by = ''
+    @memo.required_by        = ''
     @memo.manual_required_by = false
 
     refute @memo.valid?
@@ -59,7 +59,7 @@ class MemoTest < ActiveSupport::TestCase
 
     @memo.reload
 
-    @memo.required_by = ''
+    @memo.required_by        = ''
     @memo.manual_required_by = '0'
 
     refute @memo.valid?
