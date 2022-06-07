@@ -91,18 +91,20 @@ module ConclusionReviews::NbcPdf
       title_options = [(PDF_FONT_SIZE * 1.5).round, :center, false]
 
       pdf.add_title I18n.t('conclusion_review.nbc.weaknesses.title'), *title_options
+
+      pdf.move_down PDF_FONT_SIZE * 2
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.subtitle'), inline_format: true
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text review.review_objective, align: :justify, inline_format: true
-
-      pdf.start_new_page
     end
 
     def put_nbc_weaknesses_on pdf
       if weaknesses.select(&:being_implemented?).any?
+        pdf.move_down PDF_FONT_SIZE * 2
         pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
 
+        pdf.move_down PDF_FONT_SIZE
         weaknesses.each do |weakness|
           pdf.text "• #{weakness.title}" if weakness.being_implemented?
         end
