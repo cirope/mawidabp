@@ -249,6 +249,7 @@ module ConclusionReviews::NbcPdf
       end
 
       if weaknesses.where(repeated_of_id: nil).any?
+        pdf.start_new_page
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.name'), *title_options
       end
 
