@@ -142,7 +142,7 @@ es:
         full_name: "<b>Responsables/s del Proceso</b>"
         responsible_name: "<b>Nombre del Responsable de Regularización</b>"
         follow_up_date: "<b>Fecha Estimada de Regularización</b>"
-        messages: "Los procedimientos incluyeron la realización de consultas, la inspección de documentación y observación de las actividades y operaciones. Los funcionarios entrevistados fueron:"
+        messages: "Los procedimientos llevados a cabo incluyeron tareas de consulta, evaluación de documentación y observación de actividades y operaciones realizadas durante la revisión.\n\nLos funcionarios entrevistados fueron:"
       scores:
         cycle: '<b>CALIFICACION DE CICLO</b>'
         description: 'De acuerdo con la metodología de calificación de ciclos aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, a continuación, exponemos la calificación correspondiente: '
