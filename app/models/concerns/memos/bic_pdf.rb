@@ -59,7 +59,8 @@ module Memos::BicPdf
           inline_format: true,
           border_width: [0, 0, 0, 4],
           border_left_color: '008385',
-          padding_left: 25
+          padding_left: 25,
+          height: 105
         }
       ]
     ], column_widths: [95, 60, 200, 205]
@@ -77,11 +78,12 @@ module Memos::BicPdf
           content: '', border_width: [0, 0, 0, 0]
         },
         {
-          content: "#{text_with_style(text: Memo.human_attribute_name('required_by').upcase, font: 'Helvetica', size: '16', color: '#182d34', bold: true)}     #{text_with_style(text: required_by, font: 'Helvetica', size: '16', color: '#aaaaaa')}",
+          content: "#{text_with_style(text: Memo.human_attribute_name('required_by').upcase, font: 'Helvetica', size: '16', color: '#182d34', bold: true)}     #{text_with_style(text: (manual_required_by ? required_by_text : required_by), font: 'Helvetica', size: '16', color: '#aaaaaa')}",
           inline_format: true,
           border_width: [0, 0, 0, 4],
           border_left_color: '008385',
-          padding_left: 25
+          padding_left: 25,
+          height: 105
         }
       ]
     ], column_widths: [95, 60, 200, 205]
