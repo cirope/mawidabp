@@ -4,9 +4,9 @@ default: &default
   host: <%= ENV['DB_HOST'] || 'localhost' %>
   port: 5432
   pool: 5
-  username: <%= ENV['TRAVIS'] ? 'postgres' : ENV['DB_USER'] || 'mawidabp' %>
-  password: <%= if ENV['TRAVIS']
-                  ''
+  username: <%= ENV['GH_ACTIONS'] ? 'postgres' : ENV['DB_USER'] || 'mawidabp' %>
+  password: <%= if ENV['GH_ACTIONS']
+                  'postgres'
                 elsif ENV['ENCRYPTED_DB_PASSWORD']
                   ActiveSupport::MessageEncryptor.new(
                     Rails.application.secrets.secret_key_base[0..31],

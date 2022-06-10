@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_20_144217) do
+ActiveRecord::Schema.define(version: 2022_05_11_180233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(version: 2022_04_20_144217) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "business_unit_kind_id"
+    t.integer "lock_version", default: 0
     t.index ["business_unit_kind_id"], name: "index_business_units_on_business_unit_kind_id"
     t.index ["business_unit_type_id"], name: "index_business_units_on_business_unit_type_id"
     t.index ["name"], name: "index_business_units_on_name"
@@ -443,6 +444,15 @@ ActiveRecord::Schema.define(version: 2022_04_20_144217) do
     t.index ["created_at"], name: "index_error_records_on_created_at"
     t.index ["organization_id"], name: "index_error_records_on_organization_id"
     t.index ["user_id"], name: "index_error_records_on_user_id"
+  end
+
+  create_table "file_model_memos", force: :cascade do |t|
+    t.bigint "file_model_id", null: false
+    t.bigint "memo_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_model_id"], name: "index_file_model_memos_on_file_model_id"
+    t.index ["memo_id"], name: "index_file_model_memos_on_memo_id"
   end
 
   create_table "external_reviews", force: :cascade do |t|
@@ -704,6 +714,7 @@ ActiveRecord::Schema.define(version: 2022_04_20_144217) do
     t.text "description"
     t.date "close_date"
     t.string "required_by"
+    t.integer "lock_version", default: 0, null: false
     t.integer "period_id", null: false
     t.integer "plan_item_id", null: false
     t.integer "organization_id", null: false
@@ -1274,6 +1285,9 @@ ActiveRecord::Schema.define(version: 2022_04_20_144217) do
     t.string "reference"
     t.text "notes"
     t.text "audit_recommendations"
+    t.text "brief"
+    t.string "subreference"
+    t.boolean "failure", default: false, null: false
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
     t.index ["reference"], name: "index_weakness_templates_on_reference"
   end

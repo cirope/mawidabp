@@ -238,7 +238,9 @@
   </table>
 <% end %>
 
-<%= render 'issues' %>
+<h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
+
+<%= render 'findings/read_only_issues' %>
 
 <h5 class="my-3">
   <%= t('finding.finding_answers') %>
