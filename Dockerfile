@@ -73,8 +73,9 @@ COPY . $APP_ROOT
 COPY config/application.bh.yml $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
-RUN bundle exec rake help:install        && \
-    bundle exec rake help:generate
+RUN bundle exec rake help:install
+RUN rm -rf config/jekyll/_site
+RUN bundle exec rake help:generate
 
 RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
 RUN chmod +x scripts/migrate.sh scripts/wait.sh
