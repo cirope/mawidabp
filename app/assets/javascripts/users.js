@@ -13,7 +13,7 @@ jQuery(function ($) {
     $(document).on('change', '[data-update-role]', function () {
       var $element = $(this)
       var role     = $($element.data('updateRole'))
-      debugger;
+
       if ($element.val()) {
         Helper.showLoading($element)
 
