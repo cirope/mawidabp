@@ -194,6 +194,9 @@ class ConclusionDraftReviewsController < ApplicationController
           export_options[:brief] = '1'
         elsif review_type == 'without_score'
           export_options[:hide_score] = '1'
+        elsif review_type == 'expanded'
+          export_options[:expanded]   = '1'
+          export_options[:hide_score] = '1'
         end
       end
 
