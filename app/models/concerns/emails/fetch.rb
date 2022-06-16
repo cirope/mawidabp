@@ -16,11 +16,11 @@ module Emails::Fetch
       end
     end
 
-    private
+    def email_method?
+      ENV['EMAIL_METHOD']
+    end
 
-      def email_method?
-        ENV['EMAIL_METHOD']
-      end
+    private
 
       def config
         Mail.defaults do
