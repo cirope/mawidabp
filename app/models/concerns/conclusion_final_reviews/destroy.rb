@@ -2,17 +2,22 @@ module ConclusionFinalReviews::Destroy
   extend ActiveSupport::Concern
 
   included do
-    before_destroy :check_if_can_be_destroyed, :undo_final_findings
+    before_destroy :check_if_can_be_destroyed, :undo_final_findings, prepend: true
   end
 
   def can_be_destroyed?
-    ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+    ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION &&
+      has_not_repeated_in_weakness?
   end
 
   private
 
     def check_if_can_be_destroyed
       throw :abort unless can_be_destroyed?
+    end
+
+    def has_not_repeated_in_weakness?
+      review.weaknesses.none?(&:repeated?)
     end
 
     def undo_final_findings
