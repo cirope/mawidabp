@@ -14,9 +14,10 @@ class Findings::RescheduleStrategies::GeneralStrategy < Findings::RescheduleStra
   end
 
   def follow_up_dates_to_check_against finding
-    follow_up_dates = [finding.follow_up_date, finding.follow_up_date_was].compact
-                                                                          .sort
-                                                                          .reverse
+    follow_up_dates = [
+      finding.follow_up_date,
+      finding.follow_up_date_was
+    ].compact.sort.reverse
 
     finding.versions_after_final_review.reverse.each do |v|
       prev = v.reify dup: true
