@@ -479,7 +479,9 @@ es:
         business_unit: 'Unidad de negocio'
         business_unit_type: 'Unidad organizativa'
         required_by: 'Requerido por'
+        required_by_text: 'Requerido por'
         close_date: 'Fecha de cierre'
+        manual_required_by: 'Manual'
       news:
         title: 'Título'
         description: 'Descripción'

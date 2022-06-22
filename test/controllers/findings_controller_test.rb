@@ -377,7 +377,7 @@ class FindingsControllerTest < ActionController::TestCase
               degree_compliance: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.degree_compliance[:fails] : '',
               observation_originated_tests: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.observation_origination_tests[:design] : '',
               sample_deviation: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.sample_deviation[:most_expected] : '',
-              external_repeated: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.external_repeated[:repeated] : '',
+              external_repeated: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.external_repeated[:repeated_without_action_plan] : '',
               business_unit_ids: [business_units(:business_unit_three).id],
               risk_justification: '',
               finding_user_assignments_attributes: [
@@ -962,9 +962,9 @@ class FindingsControllerTest < ActionController::TestCase
         completion_state: 'complete',
         id: finding.id,
         finding: {
-          year: 'test year',
-          nsisio: 'nsisio test',
-          nobs: 'nobs test',
+          year: '2022',
+          nsisio: '1234',
+          nobs: '9876',
           skip_work_paper: '1'
         }
       }
@@ -983,9 +983,9 @@ class FindingsControllerTest < ActionController::TestCase
         completion_state: 'complete',
         id: findings(:being_implemented_weakness).id,
         finding: {
-          year: 'test year',
-          nsisio: 'nsisio test',
-          nobs: 'nobs test',
+          year: '2022',
+          nsisio: '1234',
+          nobs: '9876',
           skip_work_paper: '1'
         }
       }
@@ -1008,9 +1008,9 @@ class FindingsControllerTest < ActionController::TestCase
         completion_state: 'complete',
         id: finding.id,
         finding: {
-          year: 'test year',
-          nsisio: 'nsisio test',
-          nobs: 'nobs test',
+          year: '2022',
+          nsisio: '1234',
+          nobs: '9876',
           skip_work_paper: '1'
         }
       }
@@ -1039,9 +1039,9 @@ class FindingsControllerTest < ActionController::TestCase
         completion_state: 'complete',
         id: finding.id,
         finding: {
-          year: 'test year',
-          nsisio: 'nsisio test',
-          nobs: 'nobs test',
+          year: '2022',
+          nsisio: '1234',
+          nobs: '9876',
           skip_work_paper: '1'
         }
       }
@@ -1065,9 +1065,9 @@ class FindingsControllerTest < ActionController::TestCase
       completion_state: 'complete',
       id: finding.id,
       finding: {
-        year: 'test year',
-        nsisio: 'nsisio test',
-        nobs: 'nobs test'
+        year: '2022',
+        nsisio: '1234',
+        nobs: '9876'
       }
     }
 
@@ -1076,9 +1076,9 @@ class FindingsControllerTest < ActionController::TestCase
 
     finding.reload
 
-    assert_not_equal 'test year', finding.year
-    assert_not_equal 'nsisio test', finding.nsisio
-    assert_not_equal 'nobs test', finding.nobs
+    assert_not_equal '2022', finding.year
+    assert_not_equal '1234', finding.nsisio
+    assert_not_equal '9876', finding.nobs
   end
 
   test 'assert response update bic sigen fields' do
@@ -1099,9 +1099,9 @@ class FindingsControllerTest < ActionController::TestCase
         completion_state: 'complete',
         id: finding.id,
         finding: {
-          year: 'test year',
-          nsisio: 'nsisio test',
-          nobs: 'nobs test',
+          year: '2022',
+          nsisio: '1234',
+          nobs: '9876',
           skip_work_paper: '1'
         }
       }
@@ -1113,9 +1113,9 @@ class FindingsControllerTest < ActionController::TestCase
 
     finding.reload
 
-    assert_equal 'test year', finding.year
-    assert_equal 'nsisio test', finding.nsisio
-    assert_equal 'nobs test', finding.nobs
+    assert_equal '2022', finding.year
+    assert_equal '1234', finding.nsisio
+    assert_equal '9876', finding.nobs
   end
 
   private

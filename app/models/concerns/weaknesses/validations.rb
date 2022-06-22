@@ -23,6 +23,9 @@ module Weaknesses::Validations
     validates :compliance_susceptible_to_sanction,
               inclusion: { in: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values },
               if: :compliance_require_observations?
+    validates :year, :nsisio, :nobs, length: { maximum: 4 },
+                                     numericality: { only_integer: true },
+                                     allow_blank: true
     validate :bic_sigen_fields_cannot_modified
     validates :risk_justification, presence: true, if: :bic_require_is_manual_risk_enabled?
     validates :risk_justification, absence: true, if: :bic_require_is_manual_risk_disabled?

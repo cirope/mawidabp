@@ -17,7 +17,7 @@ namespace :db do
       update_finding_state_dates                 # 2020-01-16
       update_finding_parent_ids                  # 2020-01-22
       collapse_extended_risks                    # 2020-02-04
-      remove_finding_awaiting_state              # 2020-02-05
+      #remove_finding_awaiting_state             # 2020-02-05
       add_repeated_findings_privilege            # 2020-02-07
       update_latest_on_findings                  # 2020-02-08
       update_review_scopes                       # 2020-02-20

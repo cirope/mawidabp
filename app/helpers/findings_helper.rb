@@ -302,9 +302,7 @@ module FindingsHelper
       {
         data: {
           confirm_message: I18n.t('findings.form.confirm_finding_without_extension',
-                                  {
-                                    extension: Finding.human_attribute_name(:extension)
-                                  }),
+                                  extension: Finding.human_attribute_name(:extension)),
           checkbox_target: '#finding_extension',
           target_value_checkbox: false,
           states_target: Finding.states_that_allow_extension,

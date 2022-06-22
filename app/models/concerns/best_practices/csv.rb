@@ -57,8 +57,8 @@ module BestPractices::Csv
             I18n.t(control_objective.obsolete ? 'label.yes' : 'label.no'),
             (control_objective.audit_sector.to_s if show_gal_columns?),
             (date_charge_format(control_objective) if show_gal_columns?),
-            (control_objective&.control_objective_auditors.map { |u| u.user.full_name }.join(' - ') if show_gal_columns?),
-            (control_objective&.taggings.map(&:tag).to_sentence if show_gal_columns?),
+            (control_objective&.control_objective_auditors.map { |u| u.user.full_name }.join(' ; ') if show_gal_columns?),
+            (control_objective&.taggings.map(&:tag).join(' ; ') if show_gal_columns?),
             (control_objective&.affected_sector&.name if show_gal_columns?)
           ].compact
         end
