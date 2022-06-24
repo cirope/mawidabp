@@ -16,7 +16,7 @@ module Reports::NbcAnnualReport
                                                         margins: [30, 20, 20, 25]
 
       put_nbc_cover_on      pdf, organization
-      put_executive_summary pdf
+      put_executive_summary pdf, organization
       put_detailed_report   pdf, period
 
       save_pdf(pdf, @controller, period.start, period.end, 'nbc_annual_report')
@@ -107,7 +107,7 @@ module Reports::NbcAnnualReport
                 column_widths: w_c)
     end
 
-    def put_executive_summary pdf
+    def put_executive_summary pdf, organization
       pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.executive_summary.title'),
                align: :center,
                inline_format: true
@@ -146,8 +146,7 @@ module Reports::NbcAnnualReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.executive_summary.third_footer'),
-               inline_format: true
+      pdf.text "<b>#{organization}</b>", inline_format: true
 
       pdf.start_new_page
     end
@@ -168,7 +167,8 @@ module Reports::NbcAnnualReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.classification_methodology')
+      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.classification_methodology'),
+               align: :justify
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -401,7 +401,8 @@ module Reports::NbcAnnualReport
 
       pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.conclusions_body',
                       calification: annual_qualification),
-               inline_format: true
+               inline_format: true,
+               align: :justify
     end
 
     def results_internal_qualification

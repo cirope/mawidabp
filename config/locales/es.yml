@@ -341,7 +341,6 @@
         general_conclusion_title: '<b><u>CONCLUSIÓN GENERAL</u></b>'
         first_footer: '<b>AUS. Alejandro Camnasio</b>'
         second_footer: '<b>A/C int. Gerencia de Auditoria Interna</b>'
-        third_footer: '<b>Nuevo Banco del Chaco S.A.</b>'
       detailed_report:
         title: '<b><u>INFORME DETALLADO</u></b>'
         introduction_and_scope_title: '<b><u>INTRODUCCION Y ALCANCE DEL TRABAJO REALIZADO</u></b>'
