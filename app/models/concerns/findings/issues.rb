@@ -10,25 +10,27 @@ module Findings::Issues
   end
 
   SUGGESTED_IMPACT_RISK_TYPES = {
-    absolute_value: 1,
+    absolute_value:     1,
     representativeness: 2
   }
 
   SUGGESTED_PROBABILITIES_TYPES = {
-    repeatability: 1,
+    repeatability:      1,
     representativeness: 2
   }
 
   module ClassMethods
     def probability_risk_previous review, weakness_template = nil
-      quantity = 0
+      quantity                 = 0
+      review_previous_quantity = 0
 
       if weakness_template
         quantity       = 1
         current_review = review
 
-        4.times do
-          current_review = current_review&.previous
+        while current_review && review_previous_quantity <= 4
+          review_previous_quantity += 1
+          current_review            = current_review&.previous
 
           if review && previous_weakness_by_template?(current_review, weakness_template)
             quantity += 1
@@ -59,7 +61,9 @@ module Findings::Issues
     end
 
     def previous_weakness_by_template? review, weakness_template
-      Array(review&.weaknesses).map(&:weakness_template_id).include? weakness_template.id
+      Array(review&.weaknesses).map do |w|
+        w&.weakness_template&.reference == weakness_template.reference
+      end
     end
   end
 
