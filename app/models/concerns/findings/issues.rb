@@ -32,7 +32,7 @@ module Findings::Issues
           review_previous_quantity += 1
           current_review            = current_review&.previous
 
-          if review && previous_weakness_by_template?(current_review, weakness_template)
+          if review && previous_weakness_by_template?(current_review, weakness_template).size > 0
             quantity += 1
           end
         end
@@ -63,7 +63,7 @@ module Findings::Issues
     end
 
     def previous_weakness_by_template? review, weakness_template
-      Array(review&.weaknesses).map do |w|
+      Array(review&.weaknesses).select do |w|
         w&.weakness_template&.reference == weakness_template.reference
       end
     end
