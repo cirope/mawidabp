@@ -32,41 +32,45 @@ module Findings::Issues
           review_previous_quantity += 1
           current_review            = current_review&.previous
 
-          if review && previous_weakness_by_template?(current_review, weakness_template).size > 0
+          if current_review && weakness_by_template?(current_review, weakness_template)
             quantity += 1
           end
         end
 
         if FINDING_REPEATABILITY_FILE.include? review.organization.prefix
-          quantity = csv_base quantity, weakness_template, review
+          quantity = repeatability_csv_base quantity, weakness_template, review
         end
       end
 
       quantity
     end
 
-    def csv_base quantity, weakness_template, review
-      csv_options  = { headers: true }
-      file         = FINDING_REPEATABILITY_FILE[review.organization.prefix]
-      project_name = review.plan_item.project
-      suc_id       = project_name[/\((\d+)\)/, 1]
+    def weakness_by_template? review, weakness_template
+      review&.weaknesses&.
+        includes(:weakness_template)&.
+        where(weakness_templates: {
+          reference: weakness_template.reference
+        }).present?
+    end
 
-      CSV.foreach(file, csv_options) do |row|
-        if row['id_ofinal'] == weakness_template.reference && suc_id && row['id_suc'] == suc_id
-          (1..4).each do |idx|
-            quantity += (row["count#{idx}"] == '1' && quantity <= 5) ? 1 : 0
+    private
+
+      def repeatability_csv_base quantity, weakness_template, review
+        csv_options  = { headers: true }
+        file         = FINDING_REPEATABILITY_FILE[review.organization.prefix]
+        project_name = review.plan_item.project
+        suc_id       = project_name[/\((\d+)\)/, 1]
+
+        CSV.foreach(file, csv_options) do |row|
+          if row['id_ofinal'] == weakness_template.reference && suc_id && row['id_suc'] == suc_id
+            (1..4).each do |idx|
+              quantity += (row["count#{idx}"] == '1' && quantity <= 5) ? 1 : 0
+            end
           end
         end
-      end
 
-      quantity
-    end
-
-    def previous_weakness_by_template? review, weakness_template
-      Array(review&.weaknesses).select do |w|
-        w&.weakness_template&.reference == weakness_template.reference
+        quantity
       end
-    end
   end
 
   def issues_amount
