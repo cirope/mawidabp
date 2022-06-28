@@ -7,6 +7,10 @@ class WeaknessTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    clear_current_attributes
+  end
+
   test 'create' do
     state = if USE_SCOPE_CYCLE
               Finding::STATUS[:incomplete]
@@ -35,8 +39,6 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
-        impact_risk: Finding.impact_risks[:small],
-        probability: Finding.probabilities[:rare],
         manual_risk: true,
         risk_justification: 'Test',
         finding_user_assignments_attributes: {
@@ -92,8 +94,6 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
-        impact_risk: Finding.impact_risks[:small],
-        probability: Finding.probabilities[:rare],
         manual_risk: true,
         risk_justification: 'Test',
         finding_user_assignments_attributes: {
@@ -531,17 +531,39 @@ class WeaknessTest < ActiveSupport::TestCase
     assert @weakness.valid?
   end
 
+  test 'invalid when sigen fields are not numbers and superate max lenght' do
+    @weakness.year        = '2022a'
+    @weakness.nsisio      = '12a34'
+    @weakness.nobs        = 'a9876'
+
+    assert @weakness.invalid?
+    assert_error @weakness, :year, :not_a_number
+    assert_error @weakness, :nsisio, :not_a_number
+    assert_error @weakness, :nobs, :not_a_number
+    assert_error @weakness, :year, :too_long, count: 4
+    assert_error @weakness, :nsisio, :too_long, count: 4
+    assert_error @weakness, :nobs, :too_long, count: 4
+  end
+
+  test 'valid if change sigen field when no repeated state' do
+    @weakness.year   = '2022'
+    @weakness.nsisio = '1234'
+    @weakness.nobs   = '9876'
+
+    assert @weakness.valid?
+  end
+
   test 'invalid if not same sigen fields from repeated of' do
     repeated_of        = findings :being_implemented_weakness
-    repeated_of.year   = 'year test'
-    repeated_of.nsisio = 'nsisio test'
-    repeated_of.nobs   = 'nobs test'
+    repeated_of.year   = '2022'
+    repeated_of.nsisio = '1234'
+    repeated_of.nobs   = '9876'
 
     repeated_of.save!
 
-    @weakness.year        = 'test year'
-    @weakness.nsisio      = 'test nsisio'
-    @weakness.nobs        = 'test nobs'
+    @weakness.year        = '2021'
+    @weakness.nsisio      = '1233'
+    @weakness.nobs        = '9877'
     @weakness.repeated_of = repeated_of
 
     assert @weakness.invalid?
@@ -552,15 +574,15 @@ class WeaknessTest < ActiveSupport::TestCase
 
   test 'valid if same sigen fields from repeated of' do
     repeated_of        = findings :being_implemented_weakness
-    repeated_of.year   = 'year test'
-    repeated_of.nsisio = 'nsisio test'
-    repeated_of.nobs   = 'nobs test'
+    repeated_of.year   = '2022'
+    repeated_of.nsisio = '1234'
+    repeated_of.nobs   = '9876'
 
     repeated_of.save!
 
-    @weakness.year        = 'year test'
-    @weakness.nsisio      = 'nsisio test'
-    @weakness.nobs        = 'nobs test'
+    @weakness.year        = '2022'
+    @weakness.nsisio      = '1234'
+    @weakness.nobs        = '9876'
     @weakness.repeated_of = repeated_of
 
     assert @weakness.valid?
@@ -571,22 +593,14 @@ class WeaknessTest < ActiveSupport::TestCase
 
     @weakness.save!
 
-    @weakness.year   = 'year test'
-    @weakness.nsisio = 'nsisio test'
-    @weakness.nobs   = 'nobs test'
+    @weakness.year   = '2022'
+    @weakness.nsisio = '1234'
+    @weakness.nobs   = '9876'
 
     assert @weakness.invalid?
     assert_error @weakness, :year, :frozen
     assert_error @weakness, :nsisio, :frozen
     assert_error @weakness, :nobs, :frozen
-  end
-
-  test 'valid if change sigen field when no repeated state' do
-    @weakness.year   = 'year test'
-    @weakness.nsisio = 'nsisio test'
-    @weakness.nobs   = 'nobs test'
-
-    assert @weakness.valid?
   end
 
   test 'invalid when manual risk and blank justification' do
@@ -598,10 +612,31 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :risk_justification, :blank
   end
 
+  test 'invalid when manual risk and have attributes for automatic risks' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.state_regulations            = Finding.state_regulations[:exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:comply]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:most_expected]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
+
+    refute @weakness.valid?
+    assert_error @weakness, :impact_risk, :present
+    assert_error @weakness, :probability, :present
+    assert_error @weakness, :state_regulations, :present
+    assert_error @weakness, :degree_compliance, :present
+    assert_error @weakness, :observation_originated_tests, :present
+    assert_error @weakness, :sample_deviation, :present
+    assert_error @weakness, :external_repeated, :present
+  end
+
   test 'invalid when automatic risk and present justification' do
     skip if Current.conclusion_pdf_format != 'bic'
 
-    @weakness.manual_risk = false
+    @weakness.manual_risk        = false
     @weakness.risk_justification = 'Test'
 
     refute @weakness.valid?
@@ -620,7 +655,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
     @weakness.probability                  = Finding.frequencies[:low]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     assert @weakness.valid?
   end
@@ -638,7 +673,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:most_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
     @weakness.probability                  = Finding.frequencies[:low]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     refute @weakness.valid?
   end
@@ -691,7 +726,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:high]
     @weakness.probability                  = Finding.frequencies[:high]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     assert @weakness.valid?
   end
@@ -708,7 +743,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:high]
     @weakness.probability                  = Finding.frequencies[:high]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     refute @weakness.valid?
   end

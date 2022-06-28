@@ -66,7 +66,9 @@ Rails.application.routes.draw do
 
   resources :e_mails, only: [:index, :show]
 
-  resources :business_unit_types
+  resources :business_unit_types do
+    resources :business_units, only: [:edit, :update], controller: 'business_unit_types/business_units'
+  end
   resources :business_unit_kinds
 
   resources :groups
@@ -502,6 +504,16 @@ Rails.application.routes.draw do
     resource :blocked, only: :show, controller: 'licenses/blocked'
     resource :check, only: :create, controller: 'licenses/check'
     resource :authorizations, only: [:new, :create], controller: 'licenses/authorizations'
+  end
+
+  resources :memos, except: [:destroy] do
+    collection do
+      get :plan_item_refresh
+    end
+
+    member do
+      get :export_to_pdf
+    end
   end
 
   root 'sessions#new'
