@@ -37,7 +37,9 @@ module Findings::Issues
           end
         end
 
-        quantity = csv_base quantity, weakness_template, review if FINDING_REPEATABILITY_FILE.include? review.organization.prefix
+        if FINDING_REPEATABILITY_FILE.include? review.organization.prefix
+          quantity = csv_base quantity, weakness_template, review
+        end
       end
 
       quantity
