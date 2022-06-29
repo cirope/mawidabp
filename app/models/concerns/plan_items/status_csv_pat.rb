@@ -20,7 +20,7 @@ module PlanItems::StatusCsvPat
   end
 
   def in_progress_no_delayed?
-    review && self.start = review.created_at
+    review && self.start == review.created_at
   end
 
   def delayed? on: Time.zone.today
