@@ -23,7 +23,7 @@ module PlanItems::StatusCsvPat
     review && self.start == review.created_at
   end
 
-  def delayed? on: Time.zone.today
+  def delayed_pat? on: Time.zone.today
     review.nil? && self.start > on
   end
 
