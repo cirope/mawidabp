@@ -56,13 +56,16 @@ module Findings::Issues
     private
 
       def repeatability_csv_base quantity, weakness_template, review
-        csv_options  = { headers: true }
-        file         = FINDING_REPEATABILITY_FILE[review.organization.prefix]
-        project_name = review.plan_item.project
-        suc_id       = project_name[/\((\d+)\)/, 1]
+        csv_options   = { headers: true }
+        file          = FINDING_REPEATABILITY_FILE[review.organization.prefix]
+        project_name  = review.plan_item.project
+        subsidiary_id = project_name[/\((\d+)\)/, 1]
 
         CSV.foreach(file, csv_options) do |row|
-          if row['id_ofinal'] == weakness_template.reference && suc_id && row['id_suc'] == suc_id
+          reference_file     = row['id_ofinal']
+          subsidiary_file_id = row['id_suc']
+
+          if reference_file == weakness_template.reference && suc_id && subsidiary_file_id == subsidiary_id
             (1..4).each do |idx|
               quantity += (row["count#{idx}"] == '1' && quantity <= 5) ? 1 : 0
             end
