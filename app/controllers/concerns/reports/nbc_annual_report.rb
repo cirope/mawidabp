@@ -128,7 +128,7 @@ module Reports::NbcAnnualReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text @form.objective
+      pdf.text @form.conclusion
 
       pdf.move_down PDF_FONT_SIZE * 3
 
