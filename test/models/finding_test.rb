@@ -1574,13 +1574,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'probability risk previuos' do
     Current.organization = organizations :cirope
     Current.user         = users :auditor
-
-    repeatability_in_file =
-      if FINDING_REPEATABILITY_FILE.include? Current.organization.prefix
-        1
-      else
-        0
-      end
+    repeatability_in_file = 1
 
     assert_equal Finding.probability_risk_previous(@finding.review), 0
 
@@ -1588,9 +1582,9 @@ class FindingTest < ActiveSupport::TestCase
 
     assert @finding.valid?
 
-    probability_risk_previous_amount = Finding.probability_risk_previous @finding.review, @finding.weakness_template
+    probability_risk_previous_amount = Finding.list.probability_risk_previous @finding.review, @finding.weakness_template
 
-    assert_equal probability_risk_previous_amount, repeatability_in_file + 1
+    assert_equal probability_risk_previous_amount, repeatability_in_file
 
     weakness_previous = @finding.review.previous.weaknesses.first
 
@@ -1598,7 +1592,7 @@ class FindingTest < ActiveSupport::TestCase
 
     probability_risk_previous_amount = Finding.probability_risk_previous @finding.review, @finding.weakness_template
 
-    assert_equal probability_risk_previous_amount, repeatability_in_file + 2
+    assert_equal probability_risk_previous_amount, repeatability_in_file + 1
 
   ensure
     Current.organization = nil
@@ -1705,7 +1699,7 @@ class FindingTest < ActiveSupport::TestCase
 
     refute finding.valid?
     assert_error finding,
-                 :extension, 
+                 :extension,
                  :must_have_state_that_allows_extension,
                  extension: Finding.human_attribute_name(:extension),
                  states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
