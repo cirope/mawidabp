@@ -1,4 +1,6 @@
-<p style="font-size: .8em"><%= t 'common_mailer.header_repĺy.reply_delimiter' %></p>
+<% if EMail.email_method?%>
+  <p style="font-size: .8em"><%= t 'common_mailer.header_repĺy.reply_delimiter' %></p>
+<% end %>
 
 <% finding = @finding_answer.finding %>
 <% organization = finding.review.organization %>
