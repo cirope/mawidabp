@@ -46,11 +46,9 @@ module Findings::Issues
     end
 
     def weakness_by_template? review, weakness_template
-      review&.weaknesses&.
-        includes(:weakness_template)&.
-        where(weakness_templates: {
-          reference: weakness_template.reference
-        }).present?
+      wt_ids = WeaknessTemplate.list.where(reference: weakness_template.reference).ids
+
+      review.weaknesses&.where(weakness_template_id: wt_ids).present?
     end
 
     private
