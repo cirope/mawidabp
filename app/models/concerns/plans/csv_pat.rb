@@ -2,7 +2,6 @@ module Plans::CsvPat
   extend ActiveSupport::Concern
 
   def to_csv_prs business_unit_type: nil
-
     options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
     csv_str = CSV.generate(**options) do |csv|
@@ -49,7 +48,6 @@ module Plans::CsvPat
     end
 
     def put_csv_rows_on_prs csv, business_unit_type, totals_row_data
-
       plan_items             = Array(grouped_plan_items[business_unit_type]).sort
       completed              = []
       completed_early        = []
