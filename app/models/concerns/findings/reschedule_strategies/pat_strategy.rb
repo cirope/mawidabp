@@ -27,7 +27,7 @@ class Findings::RescheduleStrategies::PatStrategy < Findings::RescheduleStrategi
     finding.versions_after_final_review.reverse.each do |v|
       prev = v.reify dup: true
 
-      if Finding.states_that_allow_extension.include?(prev&.state) && !prev&.extension
+      if Finding.states_that_allow_extension.include?(prev&.state) && !prev&.extension && prev&.follow_up_date
         follow_up_dates << prev.follow_up_date
       end
     end

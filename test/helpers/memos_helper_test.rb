@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class MemosHelperTest < ActionView::TestCase
+  setup do
+    skip unless SHOW_MEMOS
+  end
+
   test 'Should return group by business_unit in plan item unused' do
     business_unit                      = business_units :business_unit_three
     plan_item_without_id               = plan_items :current_plan_item_4_without_business_unit

@@ -1,0 +1,52 @@
+<%= simple_form_for @form, url: create_nbc_annual_report_conclusion_reports_path, html: { method: :post } do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
+  <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, 
+                          prompt: false %>
+
+  <hr />
+
+  <div>
+    <%= link_to t('label.back'), action: :index %> |
+    <%= link_to t('label.download'), '#',
+      data: { toggle: 'modal', target: '#customize_report' } %>
+  </div>
+
+  <div class="modal fade" id="customize_report" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="customize_report_label">
+              <%= t('reports.customization_titles') %>
+            </h3>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <%= f.input :date, as: :date_picker %>
+            </div>
+            <div class="form-group">
+              <%= f.input :cc %>
+            </div>
+            <div class="form-group">
+              <%= f.input :name %>
+            </div>
+            <div class="form-group">
+              <%= f.input :objective, as: :text, input_html: { rows: 5 } %>
+            </div>
+            <div class="form-group">
+              <%= f.input :conclusion, as: :text, input_html: { rows: 5 } %>
+            </div>
+            <div class="form-group">
+              <%= f.input :introduction_and_scope, as: :text, input_html: { rows: 5 } %>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <%= f.submit t('customize_report_form.create'),
+              class: 'btn btn-primary', data: { disable_with: t('reports.generating') } %>
+          </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>

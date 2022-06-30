@@ -91,18 +91,20 @@ module ConclusionReviews::NbcPdf
       title_options = [(PDF_FONT_SIZE * 1.5).round, :center, false]
 
       pdf.add_title I18n.t('conclusion_review.nbc.weaknesses.title'), *title_options
+
+      pdf.move_down PDF_FONT_SIZE * 2
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.subtitle'), inline_format: true
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text review.review_objective, align: :justify, inline_format: true
-
-      pdf.start_new_page
     end
 
     def put_nbc_weaknesses_on pdf
       if weaknesses.select(&:being_implemented?).any?
+        pdf.move_down PDF_FONT_SIZE * 2
         pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
 
+        pdf.move_down PDF_FONT_SIZE
         weaknesses.each do |weakness|
           pdf.text "• #{weakness.title}" if weakness.being_implemented?
         end
@@ -215,7 +217,7 @@ module ConclusionReviews::NbcPdf
       pdf.text applied_procedures, align: :justify, inline_format: true
 
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages')
+      pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages'), align: :justify
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -234,7 +236,7 @@ module ConclusionReviews::NbcPdf
       repeated      = weaknesses.not_revoked.where.not repeated_of_id: nil
       title_options = [(PDF_FONT_SIZE).round, :center, false]
 
-      pdf.start_new_page if repeated.any? || weaknesses.where(repeated_of_id: nil).any?
+      pdf.start_new_page if repeated.any? || weaknesses.not_revoked.where(repeated_of_id: nil).any?
 
       if repeated.any?
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.repeated'), *title_options
@@ -246,14 +248,15 @@ module ConclusionReviews::NbcPdf
         end
       end
 
-      if weaknesses.where(repeated_of_id: nil).any?
+      if weaknesses.not_revoked.where(repeated_of_id: nil).any?
+        pdf.start_new_page
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.name'), *title_options
       end
 
-      weaknesses.where(repeated_of_id: nil).each_with_index do |weakness, idx|
+      weaknesses.not_revoked.where(repeated_of_id: nil).each_with_index do |weakness, idx|
         weakness_partial pdf, weakness
 
-        pdf.start_new_page if idx < weaknesses.where(repeated_of_id: nil).size - 1
+        pdf.start_new_page if idx < weaknesses.not_revoked.where(repeated_of_id: nil).size - 1
       end
     end
 

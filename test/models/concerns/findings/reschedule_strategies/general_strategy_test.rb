@@ -33,12 +33,15 @@ class Findings::RescheduleStrategies::GeneralStrategyTest < ActiveSupport::TestC
     version_3_with_being_implemented =
       versions :second_finding_being_implemented_weakness_with_extension_after_final_review
     version_4_with_being_implemented =
+      versions :finding_being_implemented_without_follow_update_weakness_without_extension_after_final_review
+    version_5_with_being_implemented =
       versions :finding_being_implemented_weakness_without_extension_after_final_review
 
     version_1_with_being_implemented.destroy!
     version_2_with_being_implemented.destroy!
     version_3_with_being_implemented.destroy!
     version_4_with_being_implemented.destroy!
+    version_5_with_being_implemented.destroy!
 
     assert_nil strategy.last_version_for_reschedule(finding)
   end
@@ -68,7 +71,10 @@ class Findings::RescheduleStrategies::GeneralStrategyTest < ActiveSupport::TestC
 
     finding.versions_after_final_review.reverse.each do |v|
       prev = v.reify dup: true
-      expected << prev.follow_up_date if prev&.being_implemented?
+
+      if prev&.being_implemented? && prev&.follow_up_date
+        expected << prev.follow_up_date
+      end
     end
 
     expected << finding.repeated_of.follow_up_date

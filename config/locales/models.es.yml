@@ -16,6 +16,14 @@ es:
         name: 'Nombre'
         organization_name: 'Nombre de la organización'
         user: 'Nombre de usuario'
+      nbc_annual_report_form:
+        period_id: 'Periodo'
+        date: 'Fecha'
+        cc: 'CC'
+        name: 'Nombre'
+        objective: 'Objetivo'
+        conclusion: 'Conclusion'
+        introduction_and_scope: 'Introduccion y Alcance'
 
   activerecord:
     models:
@@ -482,7 +490,9 @@ es:
         business_unit: 'Unidad de negocio'
         business_unit_type: 'Unidad organizativa'
         required_by: 'Requerido por'
+        required_by_text: 'Requerido por'
         close_date: 'Fecha de cierre'
+        manual_required_by: 'Manual'
       news:
         title: 'Título'
         description: 'Descripción'

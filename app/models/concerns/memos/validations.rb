@@ -2,15 +2,30 @@ module Memos::Validations
   extend ActiveSupport::Concern
 
   included do
+    before_save :set_required_by
+
     validates :name, :close_date, presence: true
+    validates :required_by_text, presence: true, if: :manual_required_by?
     validates :required_by, inclusion: { in: Memo::REQUIRED_BY_OPTIONS },
-                            if: :required_by_present?
+                            if: :not_manual_required_by?
     validate :has_file_model_memos
     validate :plan_item_is_not_used
     validate :cant_change_fields
   end
 
   private
+
+    def set_required_by
+      self.required_by = required_by_text if manual_required_by?
+    end
+
+    def not_manual_required_by?
+      !manual_required_by?
+    end
+
+    def manual_required_by?
+      ['1', true].include? manual_required_by
+    end
 
     def has_file_model_memos
       if file_model_memos.reject(&:marked_for_destruction?).blank?
@@ -46,9 +61,5 @@ module Memos::Validations
       file_model_memos.any? do |fm_m|
         fm_m.file_model.changed? || fm_m.new_record? || fm_m.marked_for_destruction? 
       end
-    end
-
-    def required_by_present?
-      Memo::REQUIRED_BY_OPTIONS.present?
     end
 end
