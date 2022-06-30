@@ -7,6 +7,7 @@ class SamlSessionsController < ApplicationController
 
   def new
     if @saml_config
+      byebug
       saml_request = OneLogin::RubySaml::Authrequest.new
       action = saml_request.create @saml_config
 
@@ -23,6 +24,7 @@ class SamlSessionsController < ApplicationController
   end
 
   def create
+    byebug
     auth = Authentication.new params, request, session, current_organization, false
 
     if auth.authenticated?
