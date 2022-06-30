@@ -236,7 +236,7 @@ module ConclusionReviews::NbcPdf
       repeated      = weaknesses.not_revoked.where.not repeated_of_id: nil
       title_options = [(PDF_FONT_SIZE).round, :center, false]
 
-      pdf.start_new_page if repeated.any? || weaknesses.where(repeated_of_id: nil).any?
+      pdf.start_new_page if repeated.any? || weaknesses.not_revoked.where(repeated_of_id: nil).any?
 
       if repeated.any?
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.repeated'), *title_options
@@ -248,15 +248,15 @@ module ConclusionReviews::NbcPdf
         end
       end
 
-      if weaknesses.where(repeated_of_id: nil).any?
+      if weaknesses.not_revoked.where(repeated_of_id: nil).any?
         pdf.start_new_page
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.name'), *title_options
       end
 
-      weaknesses.where(repeated_of_id: nil).each_with_index do |weakness, idx|
+      weaknesses.not_revoked.where(repeated_of_id: nil).each_with_index do |weakness, idx|
         weakness_partial pdf, weakness
 
-        pdf.start_new_page if idx < weaknesses.where(repeated_of_id: nil).size - 1
+        pdf.start_new_page if idx < weaknesses.not_revoked.where(repeated_of_id: nil).size - 1
       end
     end
 
