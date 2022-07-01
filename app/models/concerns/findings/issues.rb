@@ -30,7 +30,8 @@ module Findings::Issues
 
         while current_review && review_previous_quantity <= 4
           review_previous_quantity += 1
-          current_review            = current_review&.previous
+          previous_review           = current_review.previous
+          current_review            = previous_review.subsidiary == current_review.subsidiary ? previous_review : nil
 
           if current_review && weakness_by_template?(current_review, weakness_template)
             quantity += 1
@@ -54,16 +55,15 @@ module Findings::Issues
     private
 
       def repeatability_csv_base quantity, weakness_template, review
-        csv_options   = { headers: true }
-        file          = FINDING_REPEATABILITY_FILE[review.organization.prefix]
-        project_name  = review.plan_item.project
-        subsidiary_id = project_name[/\((\d+)\)/, 1]
+        csv_options          = { headers: true }
+        file                 = FINDING_REPEATABILITY_FILE[review.organization.prefix]
+        subsidiary_indentity = review.subsidiary.identity
 
         CSV.foreach(file, csv_options) do |row|
           reference_file     = row['id_ofinal']
           subsidiary_file_id = row['id_suc']
 
-          if reference_file == weakness_template.reference && subsidiary_file_id == subsidiary_id
+          if reference_file == weakness_template.reference && subsidiary_file_id == subsidiary_indentity
             (1..4).each do |idx|
               quantity += (row["count#{idx}"] == '1' && quantity <= 5) ? 1 : 0
             end
