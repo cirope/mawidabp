@@ -43,6 +43,24 @@
     <strong><%= Weakness.human_attribute_name :audit_recommendations %></strong>:
     <%= simple_format @finding.audit_recommendations, class: 'mb-1' %>
   </div>
+
+  <% if %w(bic).include? Current.conclusion_pdf_format %>
+    <div>
+      <strong><%= Weakness.human_attribute_name :year %>:</strong>
+      <%= @finding.year.to_s %>
+    </div>
+
+    <div>
+      <strong><%= Weakness.human_attribute_name :nsisio %>:</strong>
+      <%= @finding.nsisio.to_s %>
+    </div>
+
+    <div>
+      <strong><%= Weakness.human_attribute_name :nobs %>:</strong>
+      <%= @finding.nobs.to_s %>
+    </div>
+  <% end %>
+
   <p class="mb-1">
     <strong><%= Weakness.human_attribute_name :risk %></strong>:
     <%= @finding.risk_text %>
