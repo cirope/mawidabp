@@ -4,15 +4,7 @@ module Subsidiaries::Validation
   extend ActiveSupport::Concern
 
   included do
-    validates :name, :identity, presence: true
-    validate :identity_only_numerics
+    validates :name, presence: true
+    validates :identity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   end
-
-  private
-
-    def identity_only_numerics
-      if identity.present? && identity.scan(/\D/).present?
-        errors.add(:identity, :only_numerics)
-      end
-    end
 end
