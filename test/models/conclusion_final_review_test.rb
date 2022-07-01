@@ -165,6 +165,48 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     end
   end
 
+  test 'can not be destroyed' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+
+    another_weakness = findings :unconfirmed_for_notification_weakness
+    weakness         = @conclusion_review.review.weaknesses.first
+
+    FindingReviewAssignment.create!(finding: weakness, review: another_weakness.review)
+
+    another_weakness.repeated_of = @conclusion_review.review.weaknesses.first
+
+    another_weakness.save!
+
+    refute @conclusion_review.can_be_destroyed?
+  end
+
+  test 'can be destroyed' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+
+    assert @conclusion_review.can_be_destroyed?
+  end
+
+  test 'not destroy when has repeated in weakness' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+
+    another_weakness = findings :unconfirmed_for_notification_weakness
+    weakness         = @conclusion_review.review.weaknesses.first
+
+    FindingReviewAssignment.create!(finding: weakness, review: another_weakness.review)
+
+    another_weakness.repeated_of = @conclusion_review.review.weaknesses.first
+
+    another_weakness.save!
+
+    weakness.update_column :final, true
+
+    assert_no_difference 'ConclusionFinalReview.count' do
+      assert_no_difference 'Finding.finals(true).count' do
+        @conclusion_review.destroy
+      end
+    end
+  end
+
   test 'allow destruction' do
     skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
 

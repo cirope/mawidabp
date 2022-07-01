@@ -35,10 +35,13 @@ class Findings::RescheduleStrategies::PatStrategyTest < ActiveSupport::TestCase
 
     version_awaiting_without_extension =
       versions :finding_being_implemented_weakness_without_extension_and_awaiting_after_final_review
+    version_being_implemented_without_extension_and_follow_up_date =
+      versions :finding_being_implemented_without_follow_update_weakness_without_extension_after_final_review
     version_being_implemented_without_extension =
       versions :finding_being_implemented_weakness_without_extension_after_final_review
 
     version_awaiting_without_extension.destroy!
+    version_being_implemented_without_extension_and_follow_up_date.destroy!
     version_being_implemented_without_extension.destroy!
 
     assert_nil strategy.last_version_for_reschedule(finding)
@@ -72,7 +75,7 @@ class Findings::RescheduleStrategies::PatStrategyTest < ActiveSupport::TestCase
     finding.versions_after_final_review.reverse.each do |v|
       prev = v.reify dup: true
 
-      if Finding.states_that_allow_extension.include?(prev&.state) && !prev&.extension
+      if Finding.states_that_allow_extension.include?(prev&.state) && !prev&.extension && prev&.follow_up_date
         expected << prev.follow_up_date
       end
     end
