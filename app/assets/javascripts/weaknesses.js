@@ -9,6 +9,10 @@ $(document).on('change', '[data-mark-impact-as]', function () {
 
     $('[data-compliance-observations]').removeAttr('hidden')
   } else {
+    if (impact) {
+      $('[id$=_impact_' + impact.toLowerCase() + ']').prop('checked', false)
+    }
+
     $('[data-compliance-observations]').prop('hidden', true)
     $('[data-compliance-observations-text]').val('')
     $('[data-compliance-susceptible-to-sanction]').val(null)
@@ -32,8 +36,9 @@ $(document).on('change', '#weakness_weakness_template', function () {
 })
 
 $(document).on('change', '[data-weakness-template-changed-url]', function () {
-  var id  = $(this).val()
-  var url = $(this).data('weaknessTemplateChangedUrl')
+  var id                     = $(this).val()
+  var url                    = $(this).data('weaknessTemplateChangedUrl')
+  var controlObjectiveItemId = $(this).data('controlObjectiveItemId')
 
   $('#weakness_weakness_template').prop('disabled', true)
   $('#weakness_weakness_template_from_control_objective').prop('disabled', true)
@@ -41,7 +46,7 @@ $(document).on('change', '[data-weakness-template-changed-url]', function () {
   $.ajax({
     url: url,
     dataType: 'script',
-    data: { id: id }
+    data: { id: id, control_objective_item_id: controlObjectiveItemId }
   }).always(function () {
     $('#weakness_weakness_template').prop('disabled', false)
     $('#weakness_weakness_template_from_control_objective').prop('disabled', false)

@@ -110,6 +110,18 @@ finding_being_implemented_weakness_without_extension_and_awaiting_after_final_re
   important: true
   created_at: <%= (2.days.ago.to_date + 1.days + 4.hour).to_s(:db) %>
 
+finding_being_implemented_without_follow_update_weakness_without_extension_after_final_review:
+  item_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness) %>
+  item_type: Finding
+  event: update
+  whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
+  organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
+  object: { extension: false, 
+            follow_up_date: nil,
+            state: <%= Finding::STATUS[:being_implemented] %> }
+  important: true
+  created_at: <%= (2.days.ago.to_date + 1.days + 5.hour).to_s(:db) %>
+
 finding_being_implemented_weakness_without_extension_after_final_review:
   item_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness) %>
   item_type: Finding
