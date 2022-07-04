@@ -63,7 +63,7 @@ module Findings::Issues
           reference_file     = row['id_ofinal']
           subsidiary_file_id = row['id_suc']
 
-          if reference_file == weakness_template.reference && subsidiary_file_id == subsidiary_indentity
+          if reference_file == weakness_template.reference && subsidiary_file_id == subsidiary_identity
             (1..4).each do |idx|
               quantity += (row["count#{idx}"] == '1' && quantity <= 5) ? 1 : 0
             end
