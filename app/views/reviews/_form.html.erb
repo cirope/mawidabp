@@ -42,9 +42,9 @@
 
         <% if USE_SCOPE_CYCLE %>
           <%= f.input :subsidiary_id, 
-                      collection: Subsidiary.list.map { |s| [s.to_s, s.id] },
+                      collection: subsidiaries_options,
                       include_blank: true,
-                      input_html: { readonly: !@review.new_record? }
+                      input_html: { readonly: @review.weaknesses.any? }
           %>
         <% end %>
 

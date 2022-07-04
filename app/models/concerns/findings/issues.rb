@@ -31,7 +31,7 @@ module Findings::Issues
         while current_review && review_previous_quantity <= 4
           review_previous_quantity += 1
           previous_review           = current_review.previous
-          current_review            = previous_review.subsidiary == current_review.subsidiary ? previous_review : nil
+          current_review            = previous_review&.subsidiary == current_review.subsidiary ? previous_review : nil
 
           if current_review && weakness_by_template?(current_review, weakness_template)
             quantity += 1
