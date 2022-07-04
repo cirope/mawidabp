@@ -32,6 +32,7 @@ class Review < ApplicationRecord
   include Reviews::ScoreSheetGlobal
   include Reviews::Search
   include Reviews::SortColumns
+  include Reviews::Subsidiary
   include Reviews::SurveyPdf
   include Reviews::TypeReview
   include Reviews::UpdateCallbacks
