@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_11_180233) do
+ActiveRecord::Schema.define(version: 2022_06_30_172417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1055,11 +1055,13 @@ ActiveRecord::Schema.define(version: 2022_05_11_180233) do
     t.decimal "manual_score_alt", precision: 6, scale: 2
     t.text "review_objective"
     t.integer "type_review"
+    t.bigint "subsidiary_id"
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "index_reviews_on_identification"
     t.index ["organization_id"], name: "index_reviews_on_organization_id"
     t.index ["period_id"], name: "index_reviews_on_period_id"
     t.index ["plan_item_id"], name: "index_reviews_on_plan_item_id"
+    t.index ["subsidiary_id"], name: "index_reviews_on_subsidiary_id"
   end
 
   create_table "risk_assessment_items", force: :cascade do |t|
@@ -1160,6 +1162,15 @@ ActiveRecord::Schema.define(version: 2022_05_11_180233) do
     t.index ["name", "organization_id"], name: "index_settings_on_name_and_organization_id", unique: true
     t.index ["name"], name: "index_settings_on_name"
     t.index ["organization_id"], name: "index_settings_on_organization_id"
+  end
+
+  create_table "subsidiaries", force: :cascade do |t|
+    t.string "name"
+    t.string "identity"
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_subsidiaries_on_organization_id"
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -1454,6 +1465,7 @@ ActiveRecord::Schema.define(version: 2022_05_11_180233) do
   add_foreign_key "reviews", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "reviews", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "reviews", "plan_items", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "reviews", "subsidiaries", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_items", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_items", "process_controls", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_items", "risk_assessments", on_update: :restrict, on_delete: :restrict
@@ -1470,6 +1482,7 @@ ActiveRecord::Schema.define(version: 2022_05_11_180233) do
   add_foreign_key "roles", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "sectors", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "settings", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "subsidiaries", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "taggings", "tags", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict

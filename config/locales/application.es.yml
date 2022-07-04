@@ -1442,6 +1442,8 @@ es:
         taggings: "Etiquetas"
         review_objective: "Objectivo del informe"
         type_review: "Tipo de informe"
+        subsidiary_id: "Sucursal"
+        subsidiary: "Sucursal"
       review/external_reviews:
         alternative_review: 'Informe externo'
         alternative_review_id: 'Informe externo'

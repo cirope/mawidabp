@@ -734,6 +734,9 @@ es:
       risk_weight:
         value: 'Valor'
         weight: 'Ponderador'
+      subsidiary:
+        name: 'Nombre'
+        identity: 'Identificacion'
       weakness:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -866,3 +869,7 @@ es:
               cant_change_fields: 'No puede cambiar ningun campo debido a que supero la fecha de cierre'
             plan_item_id:
               used: 'El proyecto ya esta siendo utilizado por otro Informe o Informe externo'
+        subsidiary:
+          attributes:
+            identity:
+              only_numerics: 'solo puede contener valores numericos'
