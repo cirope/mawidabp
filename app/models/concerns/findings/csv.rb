@@ -83,7 +83,7 @@ module Findings::Csv
 
     def has_previous_review_label
       if weakness_template_id
-        previous_weakness = Finding.list.previous_weakness_by_template? review&.previous, weakness_template
+        previous_weakness = Finding.list.weakness_by_template? review.previous, weakness_template
 
         I18n.t "label.#{previous_weakness ? 'yes' : 'no'}"
       else

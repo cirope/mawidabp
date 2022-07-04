@@ -172,7 +172,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             degree_compliance: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.degree_compliance[:fails] : '',
             observation_originated_tests: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.observation_origination_tests[:design] : '',
             sample_deviation: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.sample_deviation[:most_expected] : '',
-            external_repeated: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.external_repeated[:repeated] : '',
+            external_repeated: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.external_repeated[:repeated_without_action_plan] : '',
             risk_justification: '',
             image_model_attributes: {
               image: Rack::Test::UploadedFile.new(
@@ -259,9 +259,9 @@ class WeaknessesControllerTest < ActionController::TestCase
                 user_id: users(:administrator).id
               }
             ],
-            year: 'test year',
-            nsisio: 'test nsisio',
-            nobs: 'test nobs'
+            year: '2022',
+            nsisio: '1234',
+            nobs: '9876'
           }
         }
       end
@@ -325,7 +325,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               degree_compliance: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.degree_compliance[:fails] : '',
               observation_originated_tests: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.observation_origination_tests[:design] : '',
               sample_deviation: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.sample_deviation[:most_expected] : '',
-              external_repeated: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.external_repeated[:repeated] : '',
+              external_repeated: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.external_repeated[:repeated_without_action_plan] : '',
               risk_justification: '',
               finding_user_assignments_attributes: [
                 {
@@ -400,9 +400,9 @@ class WeaknessesControllerTest < ActionController::TestCase
                   due_on: I18n.l(Time.zone.tomorrow)
                 }
               ],
-              year: 'test year',
-              nsisio: 'test nsisio',
-              nobs: 'test nobs'
+              year: '2022',
+              nsisio: '1234',
+              nobs: '9876'
             }
           }
         end

@@ -23,6 +23,13 @@
   <%= review_business_unit_type_text(@review) %>
 </p>
 
+<% if USE_SCOPE_CYCLE %>
+  <p class="mb-1">
+    <strong><%= Review.human_attribute_name :subsidiary %>:</strong>
+    <%= @review.subsidiary.to_s %>
+  </p>
+<% end %>
+
 <div class="mb-1">
   <%= show_readonly_review_survey(@review) %>
 </div>

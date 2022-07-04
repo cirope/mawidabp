@@ -9,6 +9,10 @@ $(document).on('change', '[data-mark-impact-as]', function () {
 
     $('[data-compliance-observations]').removeAttr('hidden')
   } else {
+    if (impact) {
+      $('[id$=_impact_' + impact.toLowerCase() + ']').prop('checked', false)
+    }
+
     $('[data-compliance-observations]').prop('hidden', true)
     $('[data-compliance-observations-text]').val('')
     $('[data-compliance-susceptible-to-sanction]').val(null)

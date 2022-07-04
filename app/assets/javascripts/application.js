@@ -24,6 +24,7 @@
 //= require autocomplete
 //= require best_practices
 //= require checkbox
+//= require checkbox_enable_disable_inputs
 //= require closing_interviews
 //= require common
 //= require conclusion_draft_reviews
@@ -42,6 +43,7 @@
 //= require form_modification
 //= require form_submit
 //= require hide
+//= require input_text_only_accept_numerics
 //= require licenses
 //= require memos
 //= require needs_confirm_form

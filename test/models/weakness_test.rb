@@ -531,60 +531,24 @@ class WeaknessTest < ActiveSupport::TestCase
     assert @weakness.valid?
   end
 
-  test 'invalid if not same sigen fields from repeated of' do
-    repeated_of        = findings :being_implemented_weakness
-    repeated_of.year   = 'year test'
-    repeated_of.nsisio = 'nsisio test'
-    repeated_of.nobs   = 'nobs test'
-
-    repeated_of.save!
-
-    @weakness.year        = 'test year'
-    @weakness.nsisio      = 'test nsisio'
-    @weakness.nobs        = 'test nobs'
-    @weakness.repeated_of = repeated_of
+  test 'invalid when sigen fields are not numbers and superate max lenght' do
+    @weakness.year        = '2022a'
+    @weakness.nsisio      = '12a34'
+    @weakness.nobs        = 'a9876'
 
     assert @weakness.invalid?
-    assert_error @weakness, :year, :different_from_repeated_of
-    assert_error @weakness, :nsisio, :different_from_repeated_of
-    assert_error @weakness, :nobs, :different_from_repeated_of
-  end
-
-  test 'valid if same sigen fields from repeated of' do
-    repeated_of        = findings :being_implemented_weakness
-    repeated_of.year   = 'year test'
-    repeated_of.nsisio = 'nsisio test'
-    repeated_of.nobs   = 'nobs test'
-
-    repeated_of.save!
-
-    @weakness.year        = 'year test'
-    @weakness.nsisio      = 'nsisio test'
-    @weakness.nobs        = 'nobs test'
-    @weakness.repeated_of = repeated_of
-
-    assert @weakness.valid?
-  end
-
-  test 'invalid if change sigen field when repeated state' do
-    @weakness.state = Finding::STATUS[:repeated]
-
-    @weakness.save!
-
-    @weakness.year   = 'year test'
-    @weakness.nsisio = 'nsisio test'
-    @weakness.nobs   = 'nobs test'
-
-    assert @weakness.invalid?
-    assert_error @weakness, :year, :frozen
-    assert_error @weakness, :nsisio, :frozen
-    assert_error @weakness, :nobs, :frozen
+    assert_error @weakness, :year, :not_a_number
+    assert_error @weakness, :nsisio, :not_a_number
+    assert_error @weakness, :nobs, :not_a_number
+    assert_error @weakness, :year, :too_long, count: 4
+    assert_error @weakness, :nsisio, :too_long, count: 4
+    assert_error @weakness, :nobs, :too_long, count: 4
   end
 
   test 'valid if change sigen field when no repeated state' do
-    @weakness.year   = 'year test'
-    @weakness.nsisio = 'nsisio test'
-    @weakness.nobs   = 'nobs test'
+    @weakness.year   = '2022'
+    @weakness.nsisio = '1234'
+    @weakness.nobs   = '9876'
 
     assert @weakness.valid?
   end
@@ -607,7 +571,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.degree_compliance            = Finding.degree_compliance[:comply]
     @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
     @weakness.sample_deviation             = Finding.sample_deviation[:most_expected]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     refute @weakness.valid?
     assert_error @weakness, :impact_risk, :present

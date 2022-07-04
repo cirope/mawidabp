@@ -23,7 +23,9 @@ module Weaknesses::Validations
     validates :compliance_susceptible_to_sanction,
               inclusion: { in: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values },
               if: :compliance_require_observations?
-    validate :bic_sigen_fields_cannot_modified
+    validates :year, :nsisio, :nobs, length: { maximum: 4 },
+                                     numericality: { only_integer: true },
+                                     allow_blank: true
     validates :risk_justification, presence: true, if: :bic_require_is_manual_risk_enabled?
     validates :risk_justification, absence: true, if: :bic_require_is_manual_risk_disabled?
     validates :state_regulations,
@@ -86,16 +88,6 @@ module Weaknesses::Validations
       self.operational_risk = Array(operational_risk).reject &:blank?
       self.internal_control_components =
         Array(internal_control_components).reject &:blank?
-    end
-
-    def bic_sigen_fields_cannot_modified
-      if repeated_of.present?
-        %i[year nsisio nobs].each do |attr|
-          errors.add attr, :different_from_repeated_of if self[attr] != repeated_of[attr]
-        end
-      elsif repeated?
-        %i[year nsisio nobs].each { |attr| errors.add attr, :frozen if send("#{attr}_changed?") }
-      end
     end
 
     def bic_require_is_manual_risk_disabled?

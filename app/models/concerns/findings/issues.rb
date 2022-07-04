@@ -10,57 +10,68 @@ module Findings::Issues
   end
 
   SUGGESTED_IMPACT_RISK_TYPES = {
-    absolute_value: 1,
+    absolute_value:     1,
     representativeness: 2
   }
 
   SUGGESTED_PROBABILITIES_TYPES = {
-    repeatability: 1,
+    repeatability:      1,
     representativeness: 2
   }
 
   module ClassMethods
     def probability_risk_previous review, weakness_template = nil
-      quantity = 0
+      quantity                 = 0
+      review_previous_quantity = 0
 
       if weakness_template
         quantity       = 1
         current_review = review
 
-        4.times do
-          current_review = current_review&.previous
+        while current_review && review_previous_quantity <= 4
+          review_previous_quantity += 1
+          previous_review           = current_review.previous
+          current_review            = previous_review&.subsidiary == current_review.subsidiary ? previous_review : nil
 
-          if review && previous_weakness_by_template?(current_review, weakness_template)
+          if current_review && weakness_by_template?(current_review, weakness_template)
             quantity += 1
           end
         end
 
-        quantity = csv_base quantity, weakness_template, review if FINDING_REPEATABILITY_FILE.include? review.organization.prefix
-      end
-
-      quantity
-    end
-
-    def csv_base quantity, weakness_template, review
-      csv_options  = { headers: true }
-      file         = FINDING_REPEATABILITY_FILE[review.organization.prefix]
-      project_name = review.plan_item.project
-      suc_id       = project_name[/\((\d+)\)/, 1]
-
-      CSV.foreach(file, csv_options) do |row|
-        if row['id_ofinal'] == weakness_template.reference && suc_id && row['id_suc'] == suc_id
-          (1..4).each do |idx|
-            quantity += (row["count#{idx}"] == '1' && quantity <= 5) ? 1 : 0
-          end
+        if FINDING_REPEATABILITY_FILE.include? review.organization.prefix
+          quantity = repeatability_csv_base quantity, weakness_template, review
         end
       end
 
       quantity
     end
 
-    def previous_weakness_by_template? review, weakness_template
-      Array(review&.weaknesses).map(&:weakness_template_id).include? weakness_template.id
+    def weakness_by_template? review, weakness_template
+      wt_ids = WeaknessTemplate.list.where(reference: weakness_template.reference).ids
+
+      review.weaknesses&.where(weakness_template_id: wt_ids).present?
     end
+
+    private
+
+      def repeatability_csv_base quantity, weakness_template, review
+        csv_options          = { headers: true }
+        file                 = FINDING_REPEATABILITY_FILE[review.organization.prefix]
+        subsidiary_identity = review.subsidiary.identity
+
+        CSV.foreach(file, csv_options) do |row|
+          reference_file     = row['id_ofinal']
+          subsidiary_file_id = row['id_suc']
+
+          if reference_file == weakness_template.reference && subsidiary_file_id == subsidiary_identity
+            (1..4).each do |idx|
+              quantity += (row["count#{idx}"] == '1' && quantity <= 5) ? 1 : 0
+            end
+          end
+        end
+
+        quantity
+      end
   end
 
   def issues_amount
