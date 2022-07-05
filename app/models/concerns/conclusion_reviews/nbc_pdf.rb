@@ -117,7 +117,7 @@ module ConclusionReviews::NbcPdf
       if review[:type_review] == Review::TYPES_REVIEW[:operational_audit]
         pdf.text I18n.t('conclusion_review.nbc.scores.cycle'), inline_format: true
         pdf.move_down PDF_FONT_SIZE
-        pdf.text I18n.t('conclusion_review.nbc.scores.description')
+        pdf.text I18n.t('conclusion_review.nbc.scores.description'), align: :justify
 
         data       = [nbc_header_scores]
         sum_weight = 0
@@ -153,7 +153,7 @@ module ConclusionReviews::NbcPdf
           end
 
           pdf.move_down PDF_FONT_SIZE
-          pdf.text I18n.t('conclusion_review.nbc.scores.legend_score')
+          pdf.text I18n.t('conclusion_review.nbc.scores.legend_score'), align: :justify
         end
       end
     end
@@ -217,7 +217,7 @@ module ConclusionReviews::NbcPdf
       pdf.text applied_procedures, align: :justify, inline_format: true
 
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages')
+      pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages'), align: :justify
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -269,7 +269,7 @@ module ConclusionReviews::NbcPdf
       pdf.move_down PDF_FONT_SIZE
       put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.description')
       pdf.move_down PDF_FONT_SIZE
-      pdf.text weakness.description
+      pdf.text weakness.description, align: :justify
 
       pdf.move_down PDF_FONT_SIZE
       nbc_risk_date_origination_header weakness, pdf
@@ -277,12 +277,12 @@ module ConclusionReviews::NbcPdf
       pdf.move_down PDF_FONT_SIZE
       put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.audit_recommendations')
       pdf.move_down PDF_FONT_SIZE
-      pdf.text weakness.audit_recommendations
+      pdf.text weakness.audit_recommendations, align: :justify
 
       pdf.move_down PDF_FONT_SIZE
       put_nbc_table_for_weakness_detected pdf, I18n.t('conclusion_review.nbc.weaknesses_detected.audit_comments')
       pdf.move_down PDF_FONT_SIZE
-      pdf.text nbc_audit_answer_last weakness.answer
+      pdf.text nbc_audit_answer_last(weakness.answer), align: :justify
 
       pdf.move_down PDF_FONT_SIZE
       nbc_responsible_and_follow_up_date weakness, pdf
