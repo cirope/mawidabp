@@ -49,7 +49,7 @@ module Findings::Issues
     def weakness_by_template? review, weakness_template
       wt_ids = WeaknessTemplate.list.where(reference: weakness_template.reference).ids
 
-      review.weaknesses&.where(weakness_template_id: wt_ids).present?
+      review&.weaknesses&.where(weakness_template_id: wt_ids).present?
     end
 
     private
