@@ -411,7 +411,7 @@ es:
       number_observations_per_risk: 'Cantidad observaciones por riesgo'
     csv_prs_pat:
       csv_name: 'grado_avance_estados_%{current_date}.csv'
-      business_unit: 'Unidad organizativa'
+      business_unit: 'Sector'
       totals: 'Totales'
       total_plan_items: 'Total de Trabajos Planificados'
     calendar:
