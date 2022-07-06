@@ -406,11 +406,30 @@ module Reports::NbcAnnualReport
     end
 
     def results_internal_qualification
+      business_units_without_open_in_annual_report = BusinessUnit.where(open_in_annual_report: false)
+
+      external_reviews_ids = ExternalReview.joins(:alternative_review)
+                                           .where(alternative_review: { organization: Current.organization })
+                                           .map(&:alternative_review_id)
+
+      weaknesses = Weakness.list
+                           .left_joins(control_objective_item: { review: { plan_item: { plan: :period } } })
+                           .where(control_objective_items: { reviews: { type_review: 1, plan_items: { plans: { periods: Period.first } } } },
+                                  state: Finding::STATUS[:being_implemented])
+                           .or(Weakness.where(id: external_reviews_ids))
+
+      
+
+
+
+
+
       Weakness.list
               .left_joins(control_objective_item: { review: { plan_item: { plan: :period } } })
               .includes(:business_unit_type)
-              .where(control_objective_items: { reviews: { plan_items: { plans: { periods: @form.period } } } }, 
+              .where(control_objective_items: { reviews: { type_review: 1, plan_items: { plans: { periods: @form.period } } } }, 
                      state: Finding::STATUS[:being_implemented])
+              .or(control_objective_items: { reviews: external_reviews_ids })
               .group_by(&:business_unit_type)
               .map do |g|
                 {
