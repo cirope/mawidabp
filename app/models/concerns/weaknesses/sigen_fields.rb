@@ -8,13 +8,13 @@ module Weaknesses::SigenFields
   private
 
     def update_sigen_fields_in_repeated_of
-      unless update_sigen_fields_in_repeated_of?
-        Rails.logger.warn('no se pudo actualizar los campos sigen')
+      if %w(bic).include?(Current.conclusion_pdf_format) && repeated_of
+        unless repeated_of.update(year: year, nsisio: nsisio, nobs: nobs)
+          Rails.logger.warn I18n.t('weakness.errors.cannot_update_sigen_fields_in_repeated_of', 
+                                   id: repeated_of_id,
+                                   messages: repeated_of.errors.full_messages)
+          repeated_of.reload
+        end
       end
-    end
-
-    def update_sigen_fields_in_repeated_of?
-      %w(bic).include?(Current.conclusion_pdf_format) &&
-        repeated_of&.update(year: year, nsisio: nsisio, nobs: nobs)
     end
 end

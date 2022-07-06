@@ -698,6 +698,48 @@ class WeaknessTest < ActiveSupport::TestCase
     refute @weakness.valid?
   end
 
+  test 'update sigen fields in repeated of when is valid' do
+    skip unless Current.conclusion_pdf_format == 'bic'
+
+    review      = reviews :current_review
+    repeated_of = findings :being_implemented_weakness_on_final
+
+    review.finding_review_assignments << FindingReviewAssignment.new(review: review, 
+                                                                     finding: repeated_of)
+
+    @weakness.repeated_of = repeated_of
+
+    @weakness.update!(year: '2022', nsisio: '1234', nobs: '4321')
+
+    assert_equal repeated_of.year, @weakness.year
+    assert_equal repeated_of.nsisio, @weakness.nsisio
+    assert_equal repeated_of.nobs, @weakness.nobs
+  end
+
+  test 'not update sigen fields in repeated of when is invalid' do
+    skip unless Current.conclusion_pdf_format == 'bic'
+
+    review      = reviews :current_review
+    repeated_of = findings :being_implemented_weakness_on_final
+
+    review.finding_review_assignments << FindingReviewAssignment.new(review: review, 
+                                                                     finding: repeated_of)
+
+    repeated_of.update_attribute('risk_justification', nil)
+
+    @weakness.repeated_of = repeated_of
+
+    @weakness.update!(year: '2022', nsisio: '1234', nobs: '4321')
+
+    refute repeated_of.valid?
+    assert_equal @weakness.year, '2022'
+    assert_equal @weakness.nsisio, '1234'
+    assert_equal @weakness.nobs, '4321'
+    assert_not_equal repeated_of.year, @weakness.year
+    assert_not_equal repeated_of.nsisio, @weakness.nsisio
+    assert_not_equal repeated_of.nobs, @weakness.nobs
+  end
+
   private
 
     def create_conclusion_final_review_for weakness
