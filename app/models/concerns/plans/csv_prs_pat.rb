@@ -49,42 +49,41 @@ module Plans::CsvPrsPat
 
     def put_csv_rows_on_prs csv, business_unit_type, totals_row_data
       plan_items             = Array(grouped_plan_items[business_unit_type]).sort
-      completed              = []
-      completed_early        = []
-      in_early_progress      = []
-      not_started_no_delayed = []
-      in_progress_no_delayed = []
-      delayed_pat            = []
-      overdue                = []
+      completed              = 0
+      completed_early        = 0
+      in_early_progress      = 0
+      not_started_no_delayed = 0
+      in_progress_no_delayed = 0
+      delayed_pat            = 0
+      overdue                = 0
 
       if plan_items.present?
         plan_items.each do |plan_item|
-          case
-          when plan_item.completed?
-            completed << plan_item.id
-          when plan_item.completed_early?
-            completed_early << plan_item.id
-          when plan_item.in_early_progress?
-            in_early_progress << plan_item.id
-          when plan_item.not_started_no_delayed?
-            not_started_no_delayed << plan_item.id
-          when plan_item.in_progress_no_delayed?
-            in_progress_no_delayed << plan_item.id
-          when plan_item.delayed_pat?
-            delayed_pat << plan_item.id
-          when plan_item.overdue?
-            overdue << plan_item.id
+          if plan_item.completed_early?
+            completed_early += 1
+          elsif plan_item.completed?
+            completed += 1
+          elsif plan_item.in_early_progress?
+            in_early_progress += 1
+          elsif plan_item.in_progress_no_delayed?
+            in_progress_no_delayed += 1
+          elsif plan_item.overdue?
+            overdue += 1
+          elsif plan_item.not_started_no_delayed?
+            not_started_no_delayed += 1
+          elsif plan_item.delayed_pat?
+            delayed_pat += 1
           end
         end
 
         values = [
-          completed.count,
-          completed_early.count,
-          in_early_progress.count,
-          not_started_no_delayed.count,
-          in_progress_no_delayed.count,
-          delayed_pat.count,
-          overdue.count
+          completed,
+          completed_early,
+          in_early_progress,
+          not_started_no_delayed,
+          in_progress_no_delayed,
+          delayed_pat,
+          overdue
         ]
 
         totals_row_data <<  values
