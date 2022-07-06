@@ -439,7 +439,7 @@ es:
     business_unit_type_plan_items:
       associate_control_objective: 'Asociar objetivo de control'
       associate_best_practice: 'Asociar buena práctica'
-    download_progress_report_with_statuses_pat: 'Descargar grado de avance'
+    download_progress_report_with_statuses_pat: 'Descargar grado de avance con estados de trabajos'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
     download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
