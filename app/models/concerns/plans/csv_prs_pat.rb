@@ -1,4 +1,4 @@
-module Plans::CsvPat
+module Plans::CsvPrsPat
   extend ActiveSupport::Concern
 
   def to_csv_prs business_unit_type: nil
