@@ -279,16 +279,19 @@ module ConclusionReviews::PatPdf
         pdf.text Weakness.model_name.human(count: 0).upcase, align: :center, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        #put_pat_previous_weaknesses_on  pdf
-        put_pat_weaknesses_on           pdf
         put_pat_weaknesses_follow_up_on pdf
+        put_pat_weaknesses_on           pdf
+        put_pat_weaknesses_external_on  pdf
       end
     end
 
-    def put_pat_previous_weaknesses_on pdf
-      previous = review.previous
+    def put_pat_weaknesses_external_on pdf
+    end
 
-      if previous&.weaknesses&.with_pending_status&.any?
+    def put_pat_previous_weaknesses_on pdf
+      previous = review.finding_review_assignments&.map(&:finding)
+
+      if previous.any?
         previous_title = I18n.t(
           'conclusion_review.pat.weaknesses.previous_title',
           prefix: "#{@_next_prefix}."
@@ -297,7 +300,7 @@ module ConclusionReviews::PatPdf
         pdf.text previous_title, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        previous.weaknesses.sort_by_code.each do |weakness|
+        previous.each do |weakness|
           put_pat_previous_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -333,7 +336,7 @@ module ConclusionReviews::PatPdf
     def put_pat_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked.where.not risk: Finding.risks[:none]
+      filtered   = weaknesses.not_revoked
 
       if filtered.any?
         i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
@@ -370,13 +373,13 @@ module ConclusionReviews::PatPdf
       if weakness.effect.present?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.effect'), style: :bold
-        pdf.text weakness.effect
+        pdf.text weakness.effect, align: :justify
       end
 
       if weakness.audit_recommendations.present?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.audit_recommendations'), style: :bold
-        pdf.text weakness.audit_recommendations
+        pdf.text weakness.audit_recommendations, align: :justify
       end
 
       pdf.move_down PDF_FONT_SIZE
@@ -385,7 +388,7 @@ module ConclusionReviews::PatPdf
       if weakness.answer.present?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.answer'), style: :bold
-        pdf.text weakness.answer
+        pdf.text weakness.answer, align: :justify
       end
 
       if weakness.implemented_audited? || weakness.failure?
@@ -436,14 +439,13 @@ module ConclusionReviews::PatPdf
         pdf.text issue_line, align: :justify, size: PDF_FONT_SIZE * 0.8
       end
     end
-
+    #Punto A
     def put_pat_weaknesses_follow_up_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked.where risk: Finding.risks[:none]
       assigned   = review.assigned_weaknesses
 
-      if filtered.any? || assigned.any?
+      if assigned.any?
         pdf.text I18n.t(
           'conclusion_review.pat.weaknesses.follow_up',
           prefix: "#{@_next_prefix}.",
@@ -451,11 +453,6 @@ module ConclusionReviews::PatPdf
         ), style: :bold
 
         pdf.move_down PDF_FONT_SIZE * 2
-
-        filtered.sort_by_code.each do |weakness|
-          put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
-          pdf.move_down PDF_FONT_SIZE * 2
-        end
 
         assigned.sort_by_code.each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
@@ -476,7 +473,7 @@ module ConclusionReviews::PatPdf
       if weakness.current_situation.present?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.current_situation'), style: :bold
-        pdf.text weakness.current_situation
+        pdf.text weakness.current_situation, align: :justify
       end
 
       if weakness.implemented_audited? || weakness.failure?
@@ -538,7 +535,7 @@ module ConclusionReviews::PatPdf
 
         pdf.text Annex.model_name.human(count: 0).upcase, align: :center, style: :bold
 
-        annexes.each do |annex|
+        annexes.each_with_index do |annex, idx|
           pdf.move_down PDF_FONT_SIZE * 2
           pdf.text annex.title, style: :bold
 
@@ -556,6 +553,8 @@ module ConclusionReviews::PatPdf
                 fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
             end
           end
+
+          pdf.start_new_page if idx < annexes.size - 1
         end
       end
     end
