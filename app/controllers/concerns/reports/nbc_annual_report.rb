@@ -251,7 +251,7 @@ module Reports::NbcAnnualReport
     end
 
     def put_internal_control_qualification_and_conclusion pdf
-      total_findings = 0
+      total_cycles = 0
       total_weight   = 0
       table          = []
 
@@ -293,7 +293,7 @@ module Reports::NbcAnnualReport
       results = results_internal_qualification
 
       results.each do |item|
-        total_findings += item[:count]
+        total_cycles += 1
         total_weight   += item[:total_weight]
 
         table << [
@@ -341,7 +341,7 @@ module Reports::NbcAnnualReport
         { content: '', background_color: '8DB4E2', border_width: [1, 0, 1, 0] },
         { content: '', background_color: '8DB4E2', border_width: [1, 1, 1, 0] },
         {
-          content: "<b>#{total_findings}</b>",
+          content: "<b>#{total_cycles}</b>",
           size: 8,
           inline_format: true,
           align: :center,
@@ -349,7 +349,7 @@ module Reports::NbcAnnualReport
         }
       ]
 
-      annual_weight        = total_weight / total_findings
+      annual_weight        = total_weight / total_cycles
       annual_qualification = calculate_qualification annual_weight
 
       table << [
@@ -406,9 +406,10 @@ module Reports::NbcAnnualReport
     end
 
     def results_internal_qualification
-      ######## agrupado para business_unit
+      ######## grouped by business_unit
 
-      business_unit_types_with_open_in_annual_report = BusinessUnitType.where(open_in_annual_report: true)
+      business_unit_types_with_grouped_by_business_unit_annual_report =
+        BusinessUnitType.where(grouped_by_business_unit_annual_report: true)
 
       weakness_in_external_review_for_business_units =
         Weakness.list
@@ -423,7 +424,7 @@ module Reports::NbcAnnualReport
                                               {
                                                 business_units:
                                                 {
-                                                  business_unit_types: business_unit_types_with_open_in_annual_report
+                                                  business_unit_types: business_unit_types_with_grouped_by_business_unit_annual_report
                                                 },
                                                 plans:
                                                 {
@@ -449,7 +450,7 @@ module Reports::NbcAnnualReport
                       {
                         business_units:
                         {
-                          business_unit_types: business_unit_types_with_open_in_annual_report
+                          business_unit_types: business_unit_types_with_grouped_by_business_unit_annual_report
                         },
                         plans:
                         {
@@ -465,7 +466,7 @@ module Reports::NbcAnnualReport
 
       initial_weaknesses_group_by_business_unit = {}
 
-      business_unit_types_with_open_in_annual_report.each do |but|
+      business_unit_types_with_grouped_by_business_unit_annual_report.each do |but|
         but.business_units.each do |bu|
           initial_weaknesses_group_by_business_unit[bu] = []
         end
@@ -481,9 +482,10 @@ module Reports::NbcAnnualReport
         }
       end
 
-      ######## agrupado para business_unit_types
+      ######## grouped by business_unit_type
 
-      business_unit_types_without_open_in_annual_report = BusinessUnitType.where(open_in_annual_report: false)
+      business_unit_types_without_grouped_by_business_unit_annual_report =
+        BusinessUnitType.where(grouped_by_business_unit_annual_report: false)
 
       weakness_in_external_review_for_business_unit_types =
         Weakness.list
@@ -498,7 +500,7 @@ module Reports::NbcAnnualReport
                                               {
                                                 business_units:
                                                 {
-                                                  business_unit_types: business_unit_types_without_open_in_annual_report
+                                                  business_unit_types: business_unit_types_without_grouped_by_business_unit_annual_report
                                                 },
                                                 plans:
                                                 {
@@ -524,7 +526,7 @@ module Reports::NbcAnnualReport
                       {
                         business_units:
                         {
-                          business_unit_types: business_unit_types_without_open_in_annual_report
+                          business_unit_types: business_unit_types_without_grouped_by_business_unit_annual_report
                         },
                         plans:
                         {
@@ -540,7 +542,7 @@ module Reports::NbcAnnualReport
 
       initial_weaknesses_group_by_business_unit_types = {}
 
-      business_unit_types_without_open_in_annual_report.each do |but|
+      business_unit_types_without_grouped_by_business_unit_annual_report.each do |but|
         initial_weaknesses_group_by_business_unit_types[but] = []
       end
 
@@ -554,14 +556,14 @@ module Reports::NbcAnnualReport
         }
       end
 
-      ######### union final de arrays
+      ######### final union
 
       array_for_business_unit + array_for_business_unit_type
     end
 
     def calculate_weight_for_business_unit_type weaknesses
       if weaknesses.present?
-        weaknesses.sum { |w| w.risk_weight + w.state_weight + w.age_weight } / weaknesses.count
+        (weaknesses.sum { |w| w.risk_weight + w.state_weight + w.age_weight } / weaknesses.count.to_f).round
       else
         0
       end

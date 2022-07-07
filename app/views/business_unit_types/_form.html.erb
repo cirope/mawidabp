@@ -51,6 +51,10 @@
         <div class="col-md-3">
           <%= f.input :shared_business_units %>
         </div>
+      <% elsif Current.conclusion_pdf_format == 'nbc' %>
+        <div class="col-md-6">
+          <%= f.input :grouped_by_business_unit_annual_report %>
+        </div>
       <% end %>
     </div>
 
