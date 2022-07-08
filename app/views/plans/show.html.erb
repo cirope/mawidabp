@@ -26,6 +26,12 @@
         [@plan, prs: 1,  _ts: Time.now.to_i, format: :csv],
         class: 'dropdown-item'
       ) : nil,
+      Current.conclusion_pdf_format == 'pat' ?
+      link_to(
+        t('plans.download_progress_report_in_hours_of_work_pat'),
+        [@plan, prh: 1,  _ts: Time.now.to_i, format: :csv],
+        class: 'dropdown-item'
+      ) : nil,
       link_to(
         t('plans.download_global_plan'),
         [@plan, _ts: Time.now.to_i, format: :pdf],
