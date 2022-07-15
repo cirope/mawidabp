@@ -137,10 +137,10 @@ expired:
 <% ::PLAIN_PASSWORDS[:disabled] = 'diasabled123' %>
 <% salt = Digest::SHA512.hexdigest("disabled#{rand}") %>
 disabled:
-  name: Diasabled
+  name: Disabled
   last_name: Disabled
   language: es
-  email: diasabled@diasabled.com
+  email: disabled@diasabled.com
   function: Disabled function
   office: Disabled office
   user: disabled
