@@ -400,6 +400,7 @@ es:
     csv:
       title: 'Plan de auditoría'
       csv_name: 'plan_periodo_%{period}.csv'
+      number_observations_per_risk: 'Cantidad observaciones por riesgo'
     calendar:
       show:
         title: 'Cronograma'

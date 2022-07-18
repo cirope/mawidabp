@@ -229,6 +229,13 @@ Rails.application.routes.draw do
       to: "follow_up_audit##{action}"
   end
 
+  get 'conclusion_reports/nbc_annual_report',
+    as: 'nbc_annual_report_conclusion_reports',
+    to: 'conclusion_reports#nbc_annual_report'
+  post 'conclusion_reports/create_nbc_annual_report',
+    as: 'create_nbc_annual_report_conclusion_reports',
+    to: 'conclusion_reports#create_nbc_annual_report'
+
   get 'conclusion_reports/cost_analysis',
     as: 'cost_analysis_conclusion_reports',
     to: 'conclusion_reports#cost_analysis'
