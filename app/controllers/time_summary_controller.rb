@@ -182,7 +182,7 @@ class TimeSummaryController < ApplicationController
               helpers.number_with_precision(tc.amount, precision: 1),
               (tc.resource.plan_item.business_unit.business_unit_type.name if tc.review?).to_s,
               tc.detail,
-              (tc.resource.organization.name if tc.review?).to_s
+              organization_name_by_resource(tc)
             ]
 
             time_consumptions[tc.date] ||= []
@@ -211,5 +211,13 @@ class TimeSummaryController < ApplicationController
 
     def filename
       [@user.name, @user.last_name].join '_'
+    end
+
+    def organization_name_by_resource tc
+      if tc.review?
+        tc.resource.organization.name
+      else
+        tc.resource.activity_group.organization.name
+      end
     end
 end
