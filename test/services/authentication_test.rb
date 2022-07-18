@@ -160,13 +160,12 @@ class AuthenticationTest < ActionController::TestCase
   #authentication with saml
 
   test 'should create user with roles and redirect to welcome - saml authentication' do
-    @organization = organizations :cirope
+    @organization               = organizations :cirope
     @organization.saml_provider = 'azure'
 
     @organization.save!
 
     Current.group = @organization.group
-
     response_stub =
       OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
 
@@ -186,7 +185,7 @@ class AuthenticationTest < ActionController::TestCase
 
     IdpSettingsAdapter.stub :saml_settings, response_stub do
       OneLogin::RubySaml::Response.stub :new, mock do
-        assert_difference ['User.count', 'OrganizationRole.count'], 1 do
+        assert_difference ['User.count', 'OrganizationRole.count'] do
           assert_valid_authentication
 
           last_user = User.last
@@ -205,7 +204,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should create user with default roles and redirect to welcome - saml authentication' do
     skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.present?
 
-    @organization = organizations :cirope
+    @organization               = organizations :cirope
     @organization.saml_provider = 'azure'
 
     @organization.save!
@@ -266,7 +265,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should not create user when dont have DEFAULT_SAML_ROLES - saml authentication' do
     skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.blank?
 
-    @organization = organizations :cirope
+    @organization               = organizations :cirope
     @organization.saml_provider = 'azure'
 
     @organization.save!
@@ -299,7 +298,7 @@ class AuthenticationTest < ActionController::TestCase
 
   #same in update
   test 'should raise exception when have blank attribute in response - saml authentication' do
-    @organization = organizations :cirope
+    @organization               = organizations :cirope
     @organization.saml_provider = 'azure'
 
     @organization.save!
@@ -332,7 +331,7 @@ class AuthenticationTest < ActionController::TestCase
 
   #same in update
   test 'should not create user when saml_response is invalid - saml authentication' do
-    @organization = organizations :cirope
+    @organization               = organizations :cirope
     @organization.saml_provider = 'azure'
 
     @organization.save!
@@ -364,7 +363,7 @@ class AuthenticationTest < ActionController::TestCase
   end
 
   test 'should update user with roles and redirect to welcome - saml authentication' do
-    @organization = organizations :cirope
+    @organization               = organizations :cirope
     @organization.saml_provider = 'azure'
 
     @organization.save!
@@ -405,7 +404,7 @@ class AuthenticationTest < ActionController::TestCase
   end
 
   test 'should update user with roles and redirect to poll - saml authentication' do
-    @organization = organizations :cirope
+    @organization               = organizations :cirope
     @organization.saml_provider = 'azure'
 
     @organization.save!
@@ -452,7 +451,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should update user with default roles and redirect to welcome - saml authentication' do
     skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.present?
 
-    @organization = organizations :cirope
+    @organization               = organizations :cirope
     @organization.saml_provider = 'azure'
 
     @organization.save!
@@ -513,7 +512,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should update user with default roles and redirect to poll - saml authentication' do
     skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.present?
 
-    @organization = organizations :cirope
+    @organization               = organizations :cirope
     @organization.saml_provider = 'azure'
 
     @organization.save!
@@ -578,7 +577,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should not update user because dont have roles and redirect to login - saml authentication' do
     skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.blank?
 
-    @organization = organizations :cirope
+    @organization               = organizations :cirope
     @organization.saml_provider = 'azure'
 
     @organization.save!

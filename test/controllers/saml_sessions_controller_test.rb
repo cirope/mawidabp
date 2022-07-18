@@ -11,7 +11,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
   end
 
   test 'should redirect to login azure' do
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -35,7 +35,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
   end
 
   test 'should get metadata' do
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -53,7 +53,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
   end
 
   test 'should create user with roles and redirect to welcome' do
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -62,7 +62,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
 
     response_stub =
       OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
-
+    
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
@@ -79,7 +79,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
 
     IdpSettingsAdapter.stub :saml_settings, response_stub do
       OneLogin::RubySaml::Response.stub :new, mock do
-        assert_difference ['User.count', 'OrganizationRole.count', 'LoginRecord.count'], 1 do
+        assert_difference ['User.count', 'OrganizationRole.count', 'LoginRecord.count'] do
           post :create
 
           last_user = User.last
@@ -100,7 +100,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
   test 'should create user with default roles and redirect to welcome' do
     skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.present?
 
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -137,7 +137,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
 
     IdpSettingsAdapter.stub :saml_settings, response_stub do
       OneLogin::RubySaml::Response.stub :new, mock do
-        assert_difference ['User.count', 'LoginRecord.count'], 1 do
+        assert_difference ['User.count', 'LoginRecord.count'] do
           assert_difference 'OrganizationRole.count', default_roles.count do
             post :create
 
@@ -163,7 +163,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
   test 'should not create user when dont have DEFAULT_SAML_ROLES' do
     skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.blank?
 
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -190,7 +190,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
     IdpSettingsAdapter.stub :saml_settings, response_stub do
       OneLogin::RubySaml::Response.stub :new, mock do
         assert_no_difference ['User.count', 'OrganizationRole.count', 'LoginRecord.count'] do
-          assert_difference ['ErrorRecord.count'], 1 do
+          assert_difference ['ErrorRecord.count'] do
             post :create
 
             assert_equal flash[:alert], I18n.t('message.invalid_user_or_password')
@@ -203,7 +203,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
 
   #same in update
   test 'should raise exception when have blank attribute in response' do
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -238,7 +238,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
 
   #same in update
   test 'should not create user when saml_response is invalid' do
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -265,7 +265,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
     IdpSettingsAdapter.stub :saml_settings, response_stub do
       OneLogin::RubySaml::Response.stub :new, mock do
         assert_no_difference ['User.count', 'OrganizationRole.count', 'LoginRecord.count'] do
-          assert_difference ['ErrorRecord.count'], 1 do
+          assert_difference ['ErrorRecord.count'] do
             post :create
 
             assert_equal flash[:alert], I18n.t('message.invalid_user_or_password')
@@ -277,7 +277,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
   end
 
   test 'should update user with roles and redirect to welcome' do
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -324,7 +324,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
   end
 
   test 'should update user with roles and redirect to poll' do
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -378,7 +378,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
   test 'should update user with default roles and redirect to welcome' do
     skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.present?
 
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -445,7 +445,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
   test 'should update user with default roles and redirect to poll' do
     skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.present?
 
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
@@ -517,7 +517,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
   test 'should not update user because dont have roles and redirect to login' do
     skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.blank?
 
-    organization = organizations :cirope
+    organization               = organizations :cirope
     organization.saml_provider = 'azure'
 
     organization.save!
