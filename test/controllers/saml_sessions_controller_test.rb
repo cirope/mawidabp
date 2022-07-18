@@ -6,7 +6,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
     IdpSettingsAdapter.stub :saml_settings, nil do
       get :new
 
-      assert_redirected_to login_path
+      assert_redirected_to login_url
     end
   end
 
@@ -91,7 +91,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
           assert last_user.enable
           assert_equal last_user.organization_roles.first.role, roles(:supervisor_role)
           assert flash[:notice].blank?
-          assert_redirected_to welcome_path
+          assert_redirected_to welcome_url
         end
       end
     end
@@ -110,14 +110,12 @@ class SamlSessionsControllerTest < ActionController::TestCase
     DEFAULT_SAML_ROLES.each do |role_name|
       new_role = Role.new name: role_name,
                           organization: organization
-      
+
       new_role.inject_auth_privileges(Hash.new(Hash.new(true)))
 
       new_role.save!
     end
 
-    
-    
     response_stub =
       OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
 
@@ -155,7 +153,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
 
             assert_equal default_roles, new_user_roles
             assert flash[:notice].blank?
-            assert_redirected_to welcome_path
+            assert_redirected_to welcome_url
           end
         end
       end
@@ -196,7 +194,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
             post :create
 
             assert_equal flash[:alert], I18n.t('message.invalid_user_or_password')
-            assert_redirected_to login_path(saml_error: true)
+            assert_redirected_to login_url(saml_error: true)
           end
         end
       end
@@ -271,7 +269,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
             post :create
 
             assert_equal flash[:alert], I18n.t('message.invalid_user_or_password')
-            assert_redirected_to login_path(saml_error: true)
+            assert_redirected_to login_url(saml_error: true)
           end
         end
       end
@@ -318,7 +316,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
             assert user_to_update.enable
             assert_equal user_to_update.organization_roles.first.role, roles(:supervisor_role)
             assert flash[:notice].blank?
-            assert_redirected_to welcome_path
+            assert_redirected_to welcome_url
           end
         end
       end
@@ -366,11 +364,11 @@ class SamlSessionsControllerTest < ActionController::TestCase
             assert_equal user_to_update.last_name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first
             assert user_to_update.enable
             assert_equal user_to_update.organization_roles.first.role, roles(:supervisor_role)
-            assert_equal flash[:notice], I18n.t('polls.has_unanswered',count: user_to_update.list_unanswered_polls.count)
+            assert_equal flash[:notice], I18n.t('polls.has_unanswered', count: user_to_update.list_unanswered_polls.count)
 
             poll = user_to_update.list_unanswered_polls.first
 
-            assert_redirected_to edit_poll_path(poll, token: poll.access_token)
+            assert_redirected_to edit_poll_url(poll, token: poll.access_token)
           end
         end
       end
@@ -390,7 +388,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
     DEFAULT_SAML_ROLES.each do |role_name|
       new_role = Role.new name: role_name,
                           organization: organization
-      
+
       new_role.inject_auth_privileges(Hash.new(Hash.new(true)))
 
       new_role.save!
@@ -436,7 +434,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
 
               assert_equal default_roles, new_user_roles
               assert flash[:notice].blank?
-              assert_redirected_to welcome_path
+              assert_redirected_to welcome_url
             end
           end
         end
@@ -508,7 +506,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
 
               poll = user_to_update.list_unanswered_polls.first
 
-              assert_redirected_to edit_poll_path(poll, token: poll.access_token)
+              assert_redirected_to edit_poll_url(poll, token: poll.access_token)
             end
           end
         end
@@ -555,7 +553,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
               post :create
 
               assert_equal flash[:alert], I18n.t('message.invalid_user_or_password')
-              assert_redirected_to login_path(saml_error: true)
+              assert_redirected_to login_url(saml_error: true)
             end
           end
         end
