@@ -639,6 +639,8 @@ es:
       title: 'Nueva actividad'
     form:
       add_business_unit_type: 'Agregar unidad organizativa'
+      activity: 'Actividad'
+      review: 'Informe'
     auxiliar_business_unit_types:
       title: 'Unidades organizativas auxiliares'
       activity: 'Actividad'
@@ -656,6 +658,7 @@ es:
         user: "Usuario"
         business_unit_types: "Unidades organizativas"
         detail: "Detalle"
+        organization: "Organización"
 
   users:
     index:
