@@ -111,7 +111,7 @@
   business_unit:
     edit_title: "Modificar unidad de negocio"
     correctly_updated: "Unidad de negocio actualizada correctamente."
-  
+
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"
@@ -1286,12 +1286,10 @@
       title: "Debilidad vencida"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación de la siguiente debilidad"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
-    unanswered_findings:
+    unanswered_finding:
+      subject: "Notificación de cambio a hallazgo [#%{finding_id}]"
       title: "Notificación de cambios"
-      the_following_findings_are_now_unanswered:
-        one: "La siguiente debilidad ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
-        other: "Las siguientes debilidades han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
-      subject: "Notificación de cambio"
+      the_following_finding_are_now_unanswered: "El siguiente hallazgo ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
