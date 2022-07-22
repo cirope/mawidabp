@@ -317,4 +317,47 @@ class OportunityTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test 'invalid because not same draft review code parent' do
+    parent                   = findings(:confirmed_oportunity_on_draft)
+    parent.draft_review_code = 'test code'
+    @oportunity.parent       = parent
+    @oportunity.final        = true
+
+    refute @oportunity.valid?
+    assert_error @oportunity, :draft_review_code, :not_same_draft_review_code_parent
+  end
+
+  test 'valid because same draft review code parent' do
+    parent                        = findings(:confirmed_oportunity_on_draft)
+    parent.draft_review_code      = 'test code'
+    @oportunity.parent            = parent
+    @oportunity.final             = true
+    @oportunity.draft_review_code = 'test code'
+
+    assert @oportunity.valid?
+  end
+
+  test 'invalid because not same draft review code children' do
+    children                   = findings(:confirmed_oportunity_on_draft)
+    children.final             = true
+    children.draft_review_code = 'test code'
+
+    @oportunity.children << children
+
+    refute @oportunity.valid?
+    assert_error @oportunity, :draft_review_code, :not_same_draft_review_code_children
+  end
+
+  test 'valid because same draft review code children' do
+    children                   = findings(:confirmed_oportunity_on_draft)
+    children.final             = true
+    children.draft_review_code = 'test code'
+
+    @oportunity.children << children
+
+    @oportunity.draft_review_code = 'test code'
+
+    assert @oportunity.valid?
+  end
 end
