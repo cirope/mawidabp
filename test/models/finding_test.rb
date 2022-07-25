@@ -1730,7 +1730,7 @@ class FindingTest < ActiveSupport::TestCase
     Finding.receive_mail(new_email_mgraph('id test', 'nouser@nouser.com', "[##{finding.id}]", body))
 
     assert_enqueued_emails 1
-    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [['nouser@nouser.com'], "Reply "]
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [['nouser@nouser.com'], 'Reply ']
   ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
     ENV['EMAIL_METHOD']      = old_email_method
@@ -1749,7 +1749,7 @@ class FindingTest < ActiveSupport::TestCase
     Finding.receive_mail(new_email_mgraph('id test', audited.email, "[##{finding.id}]", body))
 
     assert_enqueued_emails 1
-    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[audited.email], "Reply "]
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[audited.email], 'Reply ']
   ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
     ENV['EMAIL_METHOD']      = old_email_method
