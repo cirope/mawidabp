@@ -3,9 +3,10 @@ require 'minitest/mock'
 
 class AuthenticationTest < ActionController::TestCase
   setup do
-    @user = users :administrator
-    @organization = organizations :cirope
-    @params = { user: @user.user, password: 'admin123' }
+    @user                = users :administrator
+    @organization        = organizations :cirope
+    @params              = { user: @user.user, password: 'admin123' }
+    @external_saml_url   = 'https://login.saml/saml2'
     Current.organization = @organization
   end
 
@@ -167,18 +168,16 @@ class AuthenticationTest < ActionController::TestCase
 
     Current.group = @organization.group
     response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
 
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
 
-    hash_attributes = {
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => 'new_user@azure.com',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => 'new_user_name',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => 'new_user_surname',
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => ['SUPERVISOR']
-    }
+    hash_attributes = get_hash_attributes name:      'new_user@azure.com',
+                                          givenname: 'new_user_name',
+                                          surname:   'new_user_surname',
+                                          groups:    ['SUPERVISOR']
 
     mock.expect :attributes, hash_attributes
     mock.expect :is_valid?, true
@@ -221,18 +220,16 @@ class AuthenticationTest < ActionController::TestCase
     end
 
     response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
 
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
 
-    hash_attributes = {
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => 'new_user@azure.com',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => 'new_user_name',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => 'new_user_surname',
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => []
-    }
+    hash_attributes = get_hash_attributes name:      'new_user@azure.com',
+                                          givenname: 'new_user_name',
+                                          surname:   'new_user_surname',
+                                          groups:    []
 
     mock.expect :attributes, hash_attributes
     mock.expect :is_valid?, true
@@ -271,18 +268,16 @@ class AuthenticationTest < ActionController::TestCase
     @organization.save!
 
     response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
 
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
 
-    hash_attributes = {
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => 'new_user@azure.com',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => 'new_user_name',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => 'new_user_surname',
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => []
-    }
+    hash_attributes = get_hash_attributes name:      'new_user@azure.com',
+                                          givenname: 'new_user_name',
+                                          surname:   'new_user_surname',
+                                          groups:    []
 
     mock.expect :attributes, hash_attributes
     mock.expect :is_valid?, true
@@ -304,18 +299,16 @@ class AuthenticationTest < ActionController::TestCase
     @organization.save!
 
     response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
 
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
 
-    hash_attributes = {
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => '',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => 'new_user_name',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => 'new_user_surname',
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => ['SUPERVISOR']
-    }
+    hash_attributes = get_hash_attributes name:      '',
+                                          givenname: 'new_user_name',
+                                          surname:   'new_user_surname',
+                                          groups:    ['SUPERVISOR']
 
     mock.expect :attributes, hash_attributes
     mock.expect :is_valid?, true
@@ -337,18 +330,16 @@ class AuthenticationTest < ActionController::TestCase
     @organization.save!
 
     response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
 
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
 
-    hash_attributes = {
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => 'new_user@azure.com',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => 'new_user_name',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => 'new_user_surname',
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => []
-    }
+    hash_attributes = get_hash_attributes name:      'new_user@azure.com',
+                                          givenname: 'new_user_name',
+                                          surname:   'new_user_surname',
+                                          groups:    []
 
     mock.expect :attributes, hash_attributes
     mock.expect :is_valid?, false
@@ -369,20 +360,17 @@ class AuthenticationTest < ActionController::TestCase
     @organization.save!
 
     response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
 
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
 
-    user_to_update = users :disabled
-
-    hash_attributes = {
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => user_to_update.email,
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => 'updated_name',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => 'updated_surname',
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => ['SUPERVISOR']
-    }
+    user_to_update  = users :disabled
+    hash_attributes = get_hash_attributes name:      user_to_update.email,
+                                          givenname: 'updated_name',
+                                          surname:   'updated_surname',
+                                          groups:    ['SUPERVISOR']
 
     mock.expect :attributes, hash_attributes
     mock.expect :is_valid?, true
@@ -410,20 +398,17 @@ class AuthenticationTest < ActionController::TestCase
     @organization.save!
 
     response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
 
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
 
-    user_to_update = users :poll
-
-    hash_attributes = {
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => "#{user_to_update.user}@test.com",
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => 'updated_name',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => 'updated_surname',
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => ['SUPERVISOR']
-    }
+    user_to_update  = users :poll
+    hash_attributes = get_hash_attributes name:      "#{user_to_update.user}@test.com",
+                                          givenname: 'updated_name',
+                                          surname:   'updated_surname',
+                                          groups:    ['SUPERVISOR']
 
     mock.expect :attributes, hash_attributes
     mock.expect :is_valid?, true
@@ -466,7 +451,7 @@ class AuthenticationTest < ActionController::TestCase
     end
 
     response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
 
     mock = Minitest::Mock.new
 
@@ -476,14 +461,11 @@ class AuthenticationTest < ActionController::TestCase
 
     organization_roles(:admin_role_for_disabled_in_cirope).destroy!
 
-    default_roles = Role.where(organization: @organization, name: DEFAULT_SAML_ROLES).sort_by(&:id).to_a
-
-    hash_attributes = {
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => user_to_update.email,
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => 'updated_name',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => 'updated_surname',
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => []
-    }
+    default_roles   = Role.where(organization: @organization, name: DEFAULT_SAML_ROLES).sort_by(&:id).to_a
+    hash_attributes = get_hash_attributes name:      user_to_update.email,
+                                          givenname: 'updated_name',
+                                          surname:   'updated_surname',
+                                          groups:    []
 
     mock.expect :attributes, hash_attributes
     mock.expect :is_valid?, true
@@ -527,7 +509,7 @@ class AuthenticationTest < ActionController::TestCase
     end
 
     response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
 
     mock = Minitest::Mock.new
 
@@ -537,14 +519,11 @@ class AuthenticationTest < ActionController::TestCase
 
     organization_roles(:auditor_role_for_poll_in_cirope).destroy!
 
-    default_roles = Role.where(organization: @organization, name: DEFAULT_SAML_ROLES).sort_by(&:id).to_a
-
-    hash_attributes = {
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => "#{user_to_update.user}@test.com",
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => 'updated_name',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => 'updated_surname',
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => []
-    }
+    default_roles   = Role.where(organization: @organization, name: DEFAULT_SAML_ROLES).sort_by(&:id).to_a
+    hash_attributes = get_hash_attributes name:      "#{user_to_update.user}@test.com",
+                                          givenname: 'updated_name',
+                                          surname:   'updated_surname',
+                                          groups:    []
 
     mock.expect :attributes, hash_attributes
     mock.expect :is_valid?, true
@@ -583,22 +562,18 @@ class AuthenticationTest < ActionController::TestCase
     @organization.save!
 
     response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: 'https://login.saml/saml2' })
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
 
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
 
-    user_to_update = users :administrator
-
+    user_to_update   = users :administrator
     roles_to_destroy = user_to_update.organization_roles.where(organization: @organization).count
-
-    hash_attributes = {
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => "#{user_to_update.user}@test.com",
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => 'updated_name',
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => 'updated_surname',
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => []
-    }
+    hash_attributes  = get_hash_attributes name:      "#{user_to_update.user}@test.com",
+                                           givenname: 'updated_name',
+                                           surname:   'updated_surname',
+                                           groups:    []
 
     mock.expect :attributes, hash_attributes
     mock.expect :is_valid?, true
@@ -649,5 +624,14 @@ class AuthenticationTest < ActionController::TestCase
     def error_record error_type
       ErrorRecord.where(user: @user, error: ErrorRecord::ERRORS[error_type]).
         order('created_at DESC').first
+    end
+
+    def get_hash_attributes name: nil, givenname: nil, surname: nil, groups: []
+      {
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => name,
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => givenname,
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => surname,
+        'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => groups
+      }
     end
 end
