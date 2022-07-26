@@ -3,7 +3,7 @@ module PlanItems::StatusCsvPat
 
   def completed_early? on: Time.zone.today
     conclusion_final_review &&
-      conclusion_final_review.issue_date < self.end && self.end > on
+      conclusion_final_review.issue_date < self.end && self.end >= on
   end
 
   def completed?
@@ -27,6 +27,6 @@ module PlanItems::StatusCsvPat
   end
 
   def delayed_pat? on: Time.zone.today
-    self.start <= on && self.end > on
+    self.start <= on && self.end >= on
   end
 end
