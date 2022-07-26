@@ -254,7 +254,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert @conclusion_review.save
     end
 
-    findings_final = Weakness.left_joins(:control_objective_item)
+    findings_final = Weakness.list
+                             .left_joins(:control_objective_item)
                              .where(control_objective_items: { review_id: review.id }, final: true)
                              .where.not(state: Finding::STATUS[:revoked])
                              .order(:order_number, :id)
@@ -408,8 +409,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba la inclusión de observaciones anuladas en ejecución
   test 'revoked weaknesses' do
-    review            = reviews :review_approved_with_conclusion
-    weakness          = findings :being_implemented_weakness_on_approved_draft
+    review   = reviews :review_approved_with_conclusion
+    weakness = findings :being_implemented_weakness_on_approved_draft
 
     assert weakness.update_attribute :state, 7
 
