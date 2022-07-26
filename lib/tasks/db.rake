@@ -28,6 +28,7 @@ namespace :db do
       remove_auditor_junior_role                 # 2020-11-04
       add_commitment_data_on_findings            # 2020-12-01
       update_finding_follow_up_date_last_changed # 2021-12-22
+      update_draft_review_code                   # 2022-07-20
     end
   end
 end
@@ -648,4 +649,36 @@ private
     Finding
       .where(follow_up_date_last_changed: nil)
       .where.not(follow_up_date: nil).exists?
+  end
+
+  def update_draft_review_code
+    if update_draft_review_code?
+      final_findings_without_draft_review_code =
+        Finding.where final: true, draft_review_code: nil
+
+      not_revoked_findings =
+        final_findings_without_draft_review_code.where.not state: Finding::STATUS[:revoked]
+
+      revoked_findings =
+        final_findings_without_draft_review_code.where state: Finding::STATUS[:revoked]
+
+      not_revoked_findings.each do |n_r_f|
+        parent_finding    = n_r_f.parent
+        draft_review_code = parent_finding.versions_after_final_review.first.object['review_code']
+
+        n_r_f.update_column :draft_review_code, draft_review_code
+
+        parent_finding.update_column :draft_review_code, draft_review_code
+      end
+
+      revoked_findings.each do |r_f|
+        draft_review_code = r_f.versions_after_final_review.first.object['review_code']
+
+        r_f.update_column :draft_review_code, draft_review_code
+      end
+    end
+  end
+
+  def update_draft_review_code?
+    Finding.where(final: true, draft_review_code: nil).exists?
   end

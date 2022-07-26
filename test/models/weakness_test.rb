@@ -698,6 +698,49 @@ class WeaknessTest < ActiveSupport::TestCase
     refute @weakness.valid?
   end
 
+  test 'invalid because not same draft review code parent' do
+    parent                   = findings(:being_implemented_weakness)
+    parent.draft_review_code = 'test code'
+    @weakness.parent         = parent
+    @weakness.final          = true
+
+    refute @weakness.valid?
+    assert_error @weakness, :draft_review_code, :not_same_draft_review_code_parent
+  end
+
+  test 'valid because same draft review code parent' do
+    parent                      = findings(:being_implemented_weakness)
+    parent.draft_review_code    = 'test code'
+    @weakness.parent            = parent
+    @weakness.final             = true
+    @weakness.draft_review_code = 'test code'
+
+    assert @weakness.valid?
+  end
+
+  test 'invalid because not same draft review code children' do
+    children                   = findings(:being_implemented_weakness)
+    children.final             = true
+    children.draft_review_code = 'test code'
+
+    @weakness.children << children
+
+    refute @weakness.valid?
+    assert_error @weakness, :draft_review_code, :not_same_draft_review_code_children
+  end
+
+  test 'valid because same draft review code children' do
+    children                   = findings(:being_implemented_weakness)
+    children.final             = true
+    children.draft_review_code = 'test code'
+
+    @weakness.children << children
+
+    @weakness.draft_review_code = 'test code'
+
+    assert @weakness.valid?
+  end
+
   private
 
     def create_conclusion_final_review_for weakness
