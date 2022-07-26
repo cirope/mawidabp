@@ -252,8 +252,8 @@ module Reports::NbcAnnualReport
 
     def put_internal_control_qualification_and_conclusion pdf
       total_cycles = 0
-      total_weight   = 0
-      table          = []
+      total_weight = 0
+      table        = []
 
       table << [
         {
@@ -294,7 +294,7 @@ module Reports::NbcAnnualReport
 
       results.each do |item|
         total_cycles += 1
-        total_weight   += item[:total_weight]
+        total_weight += item[:total_weight]
 
         table << [
           { content: item[:name], size: 8 },
@@ -407,9 +407,9 @@ module Reports::NbcAnnualReport
 
     def results_internal_qualification
       ######## grouped by business_unit
-
       business_unit_types_with_grouped_by_business_unit_annual_report =
-        BusinessUnitType.where(grouped_by_business_unit_annual_report: true)
+        BusinessUnitType.list
+                        .where(grouped_by_business_unit_annual_report: true)
 
       weakness_in_external_review_for_business_units =
         Weakness.list
@@ -483,9 +483,9 @@ module Reports::NbcAnnualReport
       end
 
       ######## grouped by business_unit_type
-
       business_unit_types_without_grouped_by_business_unit_annual_report =
-        BusinessUnitType.where(grouped_by_business_unit_annual_report: false)
+        BusinessUnitType.list
+                        .where(grouped_by_business_unit_annual_report: false)
 
       weakness_in_external_review_for_business_unit_types =
         Weakness.list
@@ -557,7 +557,6 @@ module Reports::NbcAnnualReport
       end
 
       ######### final union
-
       array_for_business_unit + array_for_business_unit_type
     end
 
