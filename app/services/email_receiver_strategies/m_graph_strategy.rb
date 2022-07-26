@@ -95,7 +95,7 @@ class EmailReceiverStrategies::MGraphStrategy < EmailReceiverStrategies::EmailRe
     def request_headers_patch
       {
         'Authorization' => "Bearer #{token}",
-        'Content-Type' => 'application/json'
+        'Content-Type'  => 'application/json'
       }
     end
 
