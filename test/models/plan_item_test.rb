@@ -229,4 +229,25 @@ class PlanItemTest < ActiveSupport::TestCase
     assert_nil plan_item_6.review
     assert plan_item_6.delayed_pat?
   end
+
+  test 'progress' do
+    plan_item_2 = plan_items :current_plan_item_2
+
+    assert plan_item_2.valid?
+    assert plan_item_2.review
+    assert_equal plan_item_2.progress.to_i, plan_item_2.human_units_consumed.to_i
+
+    plan_item_2.resource_utilizations[0].units = 6
+
+    assert plan_item_2.valid?
+    assert plan_item_2.review
+    assert_equal plan_item_2.progress.to_i, plan_item_2.human_units.to_i
+
+    plan_item_6 = plan_items :current_plan_item_6
+
+    assert plan_item_6.valid?
+    assert_nil plan_item_6.review
+    assert_equal plan_item_6.progress.to_i, plan_item_6.human_units_consumed.to_i
+    assert_equal @plan_item.progress.to_i, @plan_item.human_units.to_i
+  end
 end

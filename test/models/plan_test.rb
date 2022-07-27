@@ -187,4 +187,23 @@ class PlanTest < ActiveSupport::TestCase
       assert_equal row_t[1..row_t.length - 2].map(&:to_i).sum, row_t.last.to_i
     end
   end
+
+  test 'totals in progress report by hours' do
+    csv = @plan.to_csv_prh(business_unit_type: @business_unit_type)
+    rows = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
+
+    rows.transpose.each do |row_t|
+      assert_equal row_t[1..row_t.length - 3].map(&:to_i).sum, row_t.last.to_i
+    end
+  end
+
+  test 'percentages in progress report by status' do
+    csv = @plan.to_csv_prh(business_unit_type: @business_unit_type)
+    rows = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
+
+    rows.each do |row|
+      percentage = row[1].to_i == 0 ? 0.0 : (row[2].to_f * 100 / row[1].to_f).round(2)
+      assert_equal percentage, row.last.to_f
+    end
+  end
 end
