@@ -28,7 +28,7 @@ namespace :db do
       remove_auditor_junior_role                 # 2020-11-04
       add_commitment_data_on_findings            # 2020-12-01
       update_finding_follow_up_date_last_changed # 2021-12-22
-      update_draft_review_code                   # 2022-07-20
+      #update_draft_review_code                   # 2022-07-20
     end
   end
 end
