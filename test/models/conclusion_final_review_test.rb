@@ -229,8 +229,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     control_objective_items(:impact_analysis_item).update! order_number: 1
     findings(:notify_oportunity).update! state: 7
 
-    Current.user = users :supervisor
-    review       = reviews :current_review
+    review = reviews :current_review
 
     assert_difference 'ConclusionFinalReview.count' do
       @conclusion_review = ConclusionFinalReview.list.new(
@@ -254,8 +253,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert @conclusion_review.save
     end
 
-    findings_final = Weakness.list
-                             .left_joins(:control_objective_item)
+    findings_final = Weakness.left_joins(:control_objective_item)
                              .where(control_objective_items: { review_id: review.id }, final: true)
                              .where.not(state: Finding::STATUS[:revoked])
                              .order(:order_number, :id)

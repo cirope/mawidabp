@@ -653,32 +653,60 @@ private
 
   def update_draft_review_code
     if update_draft_review_code?
-      final_findings_without_draft_review_code =
-        Finding.where final: true, draft_review_code: nil
+      Organization.all.each do |org|
+        if USE_GLOBAL_WEAKNESS_REVIEW_CODE.include? org.prefix
 
-      not_revoked_findings =
-        final_findings_without_draft_review_code.where.not state: Finding::STATUS[:revoked]
+          Weakness.where(organization_id: org.id, parent_id: nil).each do |w|
+            w.versions.each do |version|
+              next if version.object_changes.blank?
 
-      revoked_findings =
-        final_findings_without_draft_review_code.where state: Finding::STATUS[:revoked]
+              if version_was_in_a_final_review? version
+                finding_and_children_update_draft_review_code w, version.object.dig('review_code')
 
-      not_revoked_findings.each do |n_r_f|
-        parent_finding    = n_r_f.parent
-        draft_review_code = parent_finding.versions_after_final_review.first.object['review_code']
+                break
+              end
+            end
+          end
 
-        n_r_f.update_column :draft_review_code, draft_review_code
+          Oportunity.where(organization_id: org.id, parent_id: nil).each do |o|
+            if o.review.has_final_review?
+              finding_and_children_update_draft_review_code o, o.review_code
 
-        parent_finding.update_column :draft_review_code, draft_review_code
-      end
+              next
+            end
 
-      revoked_findings.each do |r_f|
-        draft_review_code = r_f.versions_after_final_review.first.object['review_code']
+            o.versions.each do |version|
+              next if ver.object_changes.blank?
 
-        r_f.update_column :draft_review_code, draft_review_code
+              if version_was_in_a_final_review? version
+                o.update_column :draft_review_code, version.object.dig('review_code')
+
+                break
+              end
+            end
+          end
+        else
+          Finding.where(organization_id: org.id).each do |f|
+            f.update_column :draft_review_code, f.review_code if f.review.has_final_review?
+          end
+        end
       end
     end
   end
 
+  def version_was_in_a_final_review? version
+    version.object_changes.dig('final')&.second == true ||
+      version.object_changes.dig('review_code')&.second&.size == 8
+  end
+
+  def finding_and_children_update_draft_review_code finding, new_draft_review_code
+    finding.update_column :draft_review_code, new_draft_review_code
+
+    if finding.children.present?
+      finding.children.take.update_column :draft_review_code, new_draft_review_code
+    end
+  end
+
   def update_draft_review_code?
-    Finding.where(final: true, draft_review_code: nil).exists?
+    Finding.where.not(draft_review_code: nil).blank?
   end
