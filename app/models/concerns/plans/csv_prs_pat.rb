@@ -48,45 +48,25 @@ module Plans::CsvPrsPat
     end
 
     def put_csv_rows_on_prs csv, business_unit_type, totals_row_data
-      plan_items             = Array(grouped_plan_items[business_unit_type]).sort
-      completed              = 0
-      completed_early        = 0
-      in_early_progress      = 0
-      not_started_no_delayed = 0
-      in_progress_no_delayed = 0
-      delayed_pat            = 0
-      overdue                = 0
+      plan_items = Array(grouped_plan_items[business_unit_type]).sort
+      pi_status  = Hash.new(0)
 
       if plan_items.present?
         plan_items.each do |plan_item|
-          if plan_item.completed_early?
-            completed_early += 1
-          elsif plan_item.completed?
-            completed += 1
-          elsif plan_item.in_early_progress?
-            in_early_progress += 1
-          elsif plan_item.in_progress_no_delayed?
-            in_progress_no_delayed += 1
-          elsif plan_item.overdue?
-            overdue += 1
-          elsif plan_item.not_started_no_delayed?
-            not_started_no_delayed += 1
-          elsif plan_item.delayed_pat?
-            delayed_pat += 1
-          end
+          pi_status[plan_item.check_status.to_sym] += 1
         end
 
         values = [
-          completed,
-          completed_early,
-          in_early_progress,
-          not_started_no_delayed,
-          in_progress_no_delayed,
-          delayed_pat,
-          overdue
+          pi_status[:completed],
+          pi_status[:completed_early],
+          pi_status[:in_early_progres],
+          pi_status[:not_started_no_delayed],
+          pi_status[:in_progress_no_delayed],
+          pi_status[:delayed_pat],
+          pi_status[:overdue]
         ]
 
-        totals_row_data <<  values
+        totals_row_data << values
 
         values.push values.sum
         values.unshift(business_unit_type&.name || '')
