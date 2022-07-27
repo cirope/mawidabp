@@ -45,35 +45,38 @@ module Plans::CsvPrhPat
     def put_csv_rows_on_prh csv, business_unit_type, totals_row_data
       plan_items     = Array(grouped_plan_items[business_unit_type]).sort
       budgeted_hours = []
-      progress       = []
+      progress_hours = []
 
       if plan_items.present?
         plan_items.each do |plan_item|
-
+          progress_hours << plan_item.progress.to_i
           budgeted_hours << plan_item.human_units.to_i
-          progress << plan_item.review&.time_consumptions&.sum(&:amount).to_i
-
         end
 
-        percentage = budgeted_hours.sum == 0 ? 0.0 : (progress.sum.to_f * 100 / budgeted_hours.sum.to_f).round(2)
+        percentage = budgeted_hours.sum == 0 ? 0.0 : (progress_hours.sum.to_f * 100 / budgeted_hours.sum.to_f).round(2)
+
         values = [
           business_unit_type&.name || '',
           budgeted_hours.sum,
-          progress.sum,
+          progress_hours.sum,
           percentage,
         ]
 
-        totals_row_data <<  values
+        totals_row_data << values
         csv << values
       end
     end
 
     def put_totals_row_prh csv, totals_row_data
+      total_budgeted = totals_row_data.transpose[1].sum
+      total_progress = totals_row_data.transpose[2].sum
+      percentage = total_budgeted == 0 ? 0.0 : (total_progress.to_f * 100 / total_budgeted.to_f).round(2)
+
       totals_row = [
         I18n.t('plans.csv_prh_pat.total_hours'),
-        totals_row_data.transpose[1].sum,
-        totals_row_data.transpose[2].sum,
-        totals_row_data.transpose[3].sum
+        total_budgeted,
+        total_progress,
+        percentage
       ]
 
       csv << totals_row
