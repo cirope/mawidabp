@@ -23,7 +23,7 @@
       Current.conclusion_pdf_format == 'pat' ?
       link_to(
         t('plans.download_progress_report_with_statuses_pat'),
-        [@plan, prs: 1,  _ts: Time.now.to_i, format: :csv],
+        [@plan, prs: 1, _ts: Time.now.to_i, format: :csv],
         class: 'dropdown-item'
       ) : nil,
       Current.conclusion_pdf_format == 'pat' ?
