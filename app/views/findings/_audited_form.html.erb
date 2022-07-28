@@ -70,7 +70,7 @@
               </div>
             </div>
           <% else %>
-            <%= f.input :risk, collection: risks, prompt: true, input_html: {
+            <%= f.input :risk, collection: risks, prompt: true, disabled: true, input_html: {
               autofocus: true,
               data: weakness_risk_data_options
             } %>
