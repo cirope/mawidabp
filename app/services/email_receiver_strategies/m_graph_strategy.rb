@@ -75,7 +75,7 @@ class EmailReceiverStrategies::MGraphStrategy < EmailReceiverStrategies::EmailRe
       token_request = Net::HTTP::Post.new uri, request_headers
 
       token_request.set_form_data grant_type: 'client_credentials', scope: 'https://graph.microsoft.com/.default'
-      token_request.basic_auth *Rails.application.credentials.mgraph.values_at(:client_id, :client_secret)
+      token_request.basic_auth *ENV['EMAIL_CLIENT_ID'], ENV['EMAIL_CLIENT_SECRET']
 
       Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
         http.request token_request
