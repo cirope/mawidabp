@@ -137,8 +137,8 @@ class ConclusionFinalReview < ConclusionReview
       revoked_findings = self.review.weaknesses.revoked + self.review.oportunities.revoked
 
       revoked_findings.each do |rf|
-        rf.final             = true
-        rf.draft_review_code = rf.review_code
+        rf.final               = true
+        rf.draft_review_code ||= rf.review_code
 
         rf.save! validate: false
       end
