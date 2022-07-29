@@ -815,6 +815,9 @@ es:
               present: 'No debe tener justificacion de riesgo'
             compliance_susceptible_to_sanction:
               inclusion: 'debe ser uno de la lista'
+            draft_review_code:
+              not_same_draft_review_code_parent: 'No tiene el mismo review code borrador que su finding original'
+              not_same_draft_review_code_children: 'No tiene el mismo review code borrador que su finding final'
         finding_user_assignment:
           attributes:
             user:
