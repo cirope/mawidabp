@@ -22,13 +22,13 @@ module Plans::CsvPrsPat
     def csv_headers_prs
       [
         I18n.t('plans.csv_prs_pat.business_unit'),
-        I18n.t('plans.item_status_csv_pat.completed'),
-        I18n.t('plans.item_status_csv_pat.completed_early'),
-        I18n.t('plans.item_status_csv_pat.in_early_progress'),
-        I18n.t('plans.item_status_csv_pat.not_started_no_delayed'),
-        I18n.t('plans.item_status_csv_pat.in_progress_no_delayed'),
-        I18n.t('plans.item_status_csv_pat.delayed_pat'),
-        I18n.t('plans.item_status_csv_pat.overdue'),
+        I18n.t('plans.item_status_csv_pat.completed.long'),
+        I18n.t('plans.item_status_csv_pat.completed_early.long'),
+        I18n.t('plans.item_status_csv_pat.in_early_progress.long'),
+        I18n.t('plans.item_status_csv_pat.not_started_no_delayed.long'),
+        I18n.t('plans.item_status_csv_pat.in_progress_no_delayed.long'),
+        I18n.t('plans.item_status_csv_pat.delayed_pat.long'),
+        I18n.t('plans.item_status_csv_pat.overdue.long'),
         I18n.t('plans.csv_prs_pat.totals')
       ]
     end

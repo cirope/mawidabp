@@ -1,6 +1,13 @@
 module PlanItems::StatusCsvPat
   extend ActiveSupport::Concern
 
+  def status_text_pat long: true
+    i18n_prefix = 'plans.item_status_csv_pat'
+    size        = long ? 'long' : 'short'
+
+    I18n.t "#{i18n_prefix}.#{check_status}.#{size}"
+  end
+
   def check_status
     if completed_early?
       'completed_early'
