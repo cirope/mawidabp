@@ -1,7 +1,6 @@
 <% readonly = @weakness.final? %>
 <% review = @weakness.review || @weakness.control_objective_item.try(:review) %>
 <% frozen = review.try(:is_frozen?) || @weakness.repeated? %>
-<% bic_sigen_fields_frozen = readonly || @weakness.repeated? || @weakness.repeated_of.present? %>
 <% show_history_changes = @weakness.status_change_history.size > 1 %>
 <% form_options = {
   data: {
@@ -78,8 +77,8 @@
                           input_html: 
                           { 
                             maxlength: 4,
-                            readonly: bic_sigen_fields_frozen, 
-                            data: { bic_sigen_fields: true, input_text_only_accept_numerics: true } 
+                            readonly: readonly, 
+                            data: { input_text_only_accept_numerics: true } 
                           } %>
             </div>
             <div class="col-md-4">
@@ -87,8 +86,8 @@
                           input_html: 
                           { 
                             maxlength: 4,
-                            readonly: bic_sigen_fields_frozen, 
-                            data: { bic_sigen_fields: true, input_text_only_accept_numerics: true } 
+                            readonly: readonly, 
+                            data: { input_text_only_accept_numerics: true } 
                           } %>
             </div>
             <div class="col-md-4">
@@ -96,8 +95,8 @@
                           input_html: 
                           { 
                             maxlength: 4,
-                            readonly: bic_sigen_fields_frozen, 
-                            data: { bic_sigen_fields: true, input_text_only_accept_numerics: true } 
+                            readonly: readonly, 
+                            data: { input_text_only_accept_numerics: true } 
                           } %>
             </div>
           </div>
@@ -344,14 +343,14 @@
       </div>
       <div class="row" data-compliance-observations <%= 'hidden' unless @weakness.compliance == 'yes' %>>
         <div class="col-md-6">
-          <%= f.input :compliance_observations, input_html: { 
-            data: { compliance_observations_text: true } 
+          <%= f.input :compliance_observations, input_html: {
+            data: { compliance_observations_text: true }
             } %>
         </div>
         <div class="col-md-2">
           <%= f.input :compliance_susceptible_to_sanction, collection: weakness_compliance_susceptible_to_sanction_options,
                                                            include_blank: t('helpers.select.prompt'),
-                                                           input_html: { 
+                                                           input_html: {
                                                              data: { compliance_susceptible_to_sanction: true }
                                                            } %>
         </div>
@@ -583,7 +582,7 @@
         <%= f.input :probability_amount,
           input_html: {
             data: {
-              probability_previous_amount: @weakness.probability_risk_previous,
+              probability_previous_amount: Finding.list.probability_risk_previous(@weakness.review, @weakness.weakness_template),
               probability_representativeness_amount: @weakness.probability_risks_representativeness,
               probability_risks_types: finding_percentage_impact_risks_types(@weakness),
               probability_amount: true

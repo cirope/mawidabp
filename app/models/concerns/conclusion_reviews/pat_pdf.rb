@@ -322,7 +322,7 @@ module ConclusionReviews::PatPdf
       if weakness.implemented_audited? || weakness.failure?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
-        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.key(weakness.state)}")
       elsif weakness.follow_up_date
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
@@ -391,7 +391,7 @@ module ConclusionReviews::PatPdf
       if weakness.implemented_audited? || weakness.failure?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
-        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.key(weakness.state)}")
       elsif weakness.follow_up_date
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
@@ -482,7 +482,7 @@ module ConclusionReviews::PatPdf
       if weakness.implemented_audited? || weakness.failure?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
-        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+        pdf.text I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.key(weakness.state)}")
       elsif weakness.follow_up_date
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold

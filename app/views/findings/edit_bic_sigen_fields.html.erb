@@ -1,5 +1,3 @@
-<% bic_sigen_fields_frozen = @finding.repeated? || @finding.repeated_of.present? %>
-
 <%= simple_form_for @finding, as: :finding, url: update_bic_sigen_fields_finding_path('complete', @finding),
     html: { method: :patch, id: "edit_bic_sigen_fields_#{@finding.id}" } do |f| %>
 
@@ -28,8 +26,7 @@
                         input_html: 
                         { 
                           maxlength: 4,
-                          readonly: bic_sigen_fields_frozen, 
-                          data: { bic_sigen_fields: true, input_text_only_accept_numerics: true } 
+                          data: { input_text_only_accept_numerics: true } 
                         } %>
           </div>
           <div class="col-md-4">
@@ -37,8 +34,7 @@
                         input_html: 
                         { 
                           maxlength: 4,
-                          readonly: bic_sigen_fields_frozen, 
-                          data: { bic_sigen_fields: true, input_text_only_accept_numerics: true } 
+                          data: { input_text_only_accept_numerics: true } 
                         } %>
           </div>
           <div class="col-md-4">
@@ -46,8 +42,7 @@
                         input_html: 
                         { 
                           maxlength: 4,
-                          readonly: bic_sigen_fields_frozen, 
-                          data: { bic_sigen_fields: true, input_text_only_accept_numerics: true } 
+                          data: { input_text_only_accept_numerics: true } 
                         } %>
           </div>
         </div>

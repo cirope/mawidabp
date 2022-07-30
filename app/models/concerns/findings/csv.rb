@@ -25,6 +25,7 @@ module Findings::Csv
       full_state_text,
       try(:risk_text) || '',
       (respond_to?(:risk_text) ? priority_text : '' unless USE_SCOPE_CYCLE),
+      effect,
       auditeds_as_process_owner.join('; '),
       audited_users.join('; '),
       auditor_users.join('; '),
@@ -83,7 +84,9 @@ module Findings::Csv
 
     def has_previous_review_label
       if weakness_template_id
-        I18n.t "label.#{(previous_weakness_by_template? review&.previous) ? 'yes' : 'no'}"
+        previous_weakness = Finding.list.weakness_by_template? review.previous, weakness_template
+
+        I18n.t "label.#{previous_weakness ? 'yes' : 'no'}"
       else
         I18n.t "label.no"
       end
@@ -357,6 +360,7 @@ module Findings::Csv
           I18n.t('finding.state_full'),
           Weakness.human_attribute_name('risk'),
           (Weakness.human_attribute_name('priority') unless USE_SCOPE_CYCLE),
+          Weakness.human_attribute_name('effect'),
           FindingUserAssignment.human_attribute_name('process_owner'),
           I18n.t('finding.audited', count: 0),
           I18n.t('finding.auditors', count: 0),

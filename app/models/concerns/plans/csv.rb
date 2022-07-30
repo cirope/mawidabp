@@ -61,7 +61,7 @@ module Plans::Csv
         plan_items.each do |plan_item|
           array_to_csv = [
             plan_item.order_number,
-            Current.conclusion_pdf_format == 'pat' ? plan_item.status_text_pat(long: false) : plan_item.status_text(long: false),
+            Current.conclusion_pdf_format == 'pat' ? plan_item.status_text_pat(long: false).to_s : plan_item.status_text(long: false).to_s,
             business_unit_type&.name || '',
             plan_item.business_unit&.name || '',
             plan_item.project.to_s,

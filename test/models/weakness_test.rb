@@ -553,56 +553,6 @@ class WeaknessTest < ActiveSupport::TestCase
     assert @weakness.valid?
   end
 
-  test 'invalid if not same sigen fields from repeated of' do
-    repeated_of        = findings :being_implemented_weakness
-    repeated_of.year   = '2022'
-    repeated_of.nsisio = '1234'
-    repeated_of.nobs   = '9876'
-
-    repeated_of.save!
-
-    @weakness.year        = '2021'
-    @weakness.nsisio      = '1233'
-    @weakness.nobs        = '9877'
-    @weakness.repeated_of = repeated_of
-
-    assert @weakness.invalid?
-    assert_error @weakness, :year, :different_from_repeated_of
-    assert_error @weakness, :nsisio, :different_from_repeated_of
-    assert_error @weakness, :nobs, :different_from_repeated_of
-  end
-
-  test 'valid if same sigen fields from repeated of' do
-    repeated_of        = findings :being_implemented_weakness
-    repeated_of.year   = '2022'
-    repeated_of.nsisio = '1234'
-    repeated_of.nobs   = '9876'
-
-    repeated_of.save!
-
-    @weakness.year        = '2022'
-    @weakness.nsisio      = '1234'
-    @weakness.nobs        = '9876'
-    @weakness.repeated_of = repeated_of
-
-    assert @weakness.valid?
-  end
-
-  test 'invalid if change sigen field when repeated state' do
-    @weakness.state = Finding::STATUS[:repeated]
-
-    @weakness.save!
-
-    @weakness.year   = '2022'
-    @weakness.nsisio = '1234'
-    @weakness.nobs   = '9876'
-
-    assert @weakness.invalid?
-    assert_error @weakness, :year, :frozen
-    assert_error @weakness, :nsisio, :frozen
-    assert_error @weakness, :nobs, :frozen
-  end
-
   test 'invalid when manual risk and blank justification' do
     skip if Current.conclusion_pdf_format != 'bic'
 
@@ -746,6 +696,49 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     refute @weakness.valid?
+  end
+
+  test 'invalid because not same draft review code parent' do
+    parent                   = findings(:being_implemented_weakness)
+    parent.draft_review_code = 'test code'
+    @weakness.parent         = parent
+    @weakness.final          = true
+
+    refute @weakness.valid?
+    assert_error @weakness, :draft_review_code, :not_same_draft_review_code_parent
+  end
+
+  test 'valid because same draft review code parent' do
+    parent                      = findings(:being_implemented_weakness)
+    parent.draft_review_code    = 'test code'
+    @weakness.parent            = parent
+    @weakness.final             = true
+    @weakness.draft_review_code = 'test code'
+
+    assert @weakness.valid?
+  end
+
+  test 'invalid because not same draft review code children' do
+    children                   = findings(:being_implemented_weakness)
+    children.final             = true
+    children.draft_review_code = 'test code'
+
+    @weakness.children << children
+
+    refute @weakness.valid?
+    assert_error @weakness, :draft_review_code, :not_same_draft_review_code_children
+  end
+
+  test 'valid because same draft review code children' do
+    children                   = findings(:being_implemented_weakness)
+    children.final             = true
+    children.draft_review_code = 'test code'
+
+    @weakness.children << children
+
+    @weakness.draft_review_code = 'test code'
+
+    assert @weakness.valid?
   end
 
   private
