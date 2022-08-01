@@ -286,6 +286,30 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_weaknesses_external_on pdf
+      use_finals = kind_of? ConclusionFinalReview
+      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+      filtered   = weaknesses.not_revoked.order(sort_weaknesses_by).reject do |w|
+                     w.business_unit_type.external == false
+                   end
+
+      if filtered.any?
+        i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
+
+        pdf.text I18n.t(
+          'conclusion_review.pat.weaknesses.external',
+          prefix: "#{@_next_prefix}.",
+          year: review.period.name
+        ), style: :bold
+
+        pdf.move_down PDF_FONT_SIZE * 2
+
+        filtered.each do |weakness|
+          put_pat_weakness_on pdf, weakness, (@_next_index += 1)
+          pdf.move_down PDF_FONT_SIZE * 2
+        end
+
+        @_next_prefix = @_next_prefix.next
+      end
     end
 
     def put_pat_previous_weaknesses_on pdf
@@ -336,7 +360,9 @@ module ConclusionReviews::PatPdf
     def put_pat_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked
+      filtered   = weaknesses.not_revoked.order(sort_weaknesses_by).select do |w|
+                     w.business_unit_type.external == false
+                   end
 
       if filtered.any?
         i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
@@ -349,7 +375,7 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        filtered.sort_by_code.each do |weakness|
+        filtered.each do |weakness|
           put_pat_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -439,7 +465,7 @@ module ConclusionReviews::PatPdf
         pdf.text issue_line, align: :justify, size: PDF_FONT_SIZE * 0.8
       end
     end
-    #Punto A
+
     def put_pat_weaknesses_follow_up_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
@@ -454,7 +480,9 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        assigned.sort_by_code.each do |weakness|
+        sort_weaknesses = use_finals ? :draft_review_code : :review_code
+
+        assigned.order(sort_weaknesses_by).each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -557,5 +585,10 @@ module ConclusionReviews::PatPdf
           pdf.start_new_page if idx < annexes.size - 1
         end
       end
+    end
+
+    def sort_weaknesses_by
+      use_finals = kind_of? ConclusionFinalReview
+      use_finals ? :draft_review_code : :review_code
     end
 end
