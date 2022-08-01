@@ -80,7 +80,7 @@ APP_AUDITOR_MENU_ITEMS = [
             controllers: :business_unit_kinds,
             url: { controller: '/business_unit_kinds' }
           ) if !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-                    HIDE_FINDING_CRITERIA_MISMATCH)
+                    HIDE_FINDING_CRITERIA_MISMATCH && !USE_SCOPE_CYCLE)
         ].compact
       ),
       MenuItem.new(
