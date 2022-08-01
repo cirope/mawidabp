@@ -480,8 +480,6 @@ module ConclusionReviews::PatPdf
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        sort_weaknesses = use_finals ? :draft_review_code : :review_code
-
         assigned.order(sort_weaknesses_by).each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
