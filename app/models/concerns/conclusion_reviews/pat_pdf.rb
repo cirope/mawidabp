@@ -287,9 +287,9 @@ module ConclusionReviews::PatPdf
 
     def put_pat_weaknesses_external_on pdf
       use_finals = kind_of? ConclusionFinalReview
-      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked.order(sort_weaknesses_by).reject do |w|
-                     w.business_unit_type.external == false
+      assigned   = review.assigned_weaknesses
+      filtered   = assigned.not_revoked.order(sort_weaknesses_by).select do |w|
+                     w.business_unit_type.external == true
                    end
 
       if filtered.any?
@@ -360,9 +360,7 @@ module ConclusionReviews::PatPdf
     def put_pat_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked.order(sort_weaknesses_by).select do |w|
-                     w.business_unit_type.external == false
-                   end
+      filtered   = weaknesses.not_revoked
 
       if filtered.any?
         i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
@@ -468,19 +466,21 @@ module ConclusionReviews::PatPdf
 
     def put_pat_weaknesses_follow_up_on pdf
       use_finals = kind_of? ConclusionFinalReview
-      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
       assigned   = review.assigned_weaknesses
+      filtered   = assigned.not_revoked.order(sort_weaknesses_by).select do |w|
+                     w.business_unit_type.external == false
+                   end
 
-      if assigned.any?
-        pdf.text I18n.t(
-          'conclusion_review.pat.weaknesses.follow_up',
-          prefix: "#{@_next_prefix}.",
-          year: review.period.name
-        ), style: :bold
+      if filtered.any?
+        previous_title = I18n.t(
+          'conclusion_review.pat.weaknesses.previous_title',
+          prefix: "#{@_next_prefix}."
+        )
 
+        pdf.text previous_title, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        assigned.order(sort_weaknesses_by).each do |weakness|
+        filtered.each do |weakness|
           put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
@@ -517,8 +517,7 @@ module ConclusionReviews::PatPdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
-      weaknesses.not_revoked.any? #||
-        #(review.plan_item.sustantive? && review.previous&.weaknesses&.with_pending_status&.any?)
+      weaknesses.not_revoked.any? || review.assigned_weaknesses.any?
     end
 
     def put_pat_workflow_on pdf
