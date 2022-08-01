@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_19_152716) do
+ActiveRecord::Schema.define(version: 2022_08_01_181957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1238,7 +1238,7 @@ ActiveRecord::Schema.define(version: 2022_07_19_152716) do
     t.string "last_name", limit: 100
     t.string "language", limit: 10
     t.string "email", limit: 100
-    t.string "user", limit: 30
+    t.string "user", limit: 255
     t.string "function"
     t.string "password", limit: 128
     t.string "salt"
