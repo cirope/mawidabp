@@ -195,10 +195,10 @@ class UserTest < ActiveSupport::TestCase
     assert @user.invalid?
     assert_error @user, :user, :too_short, count: 3
 
-    @user.user = 'abcd' * 10
+    @user.user = 'abcde' * 52
     @user.name = 'abcde' * 21
     @user.last_name = 'abcde' * 21
-    @user.email = "#{'abcde' * 21}@email.com"
+    @user.email = "#{'abcde' * 52}@email.com"
     @user.password = 'aB1d_' * 26
     @user.function = 'abcde' * 52
     @user.office = 'abcde' * 52
