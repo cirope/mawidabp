@@ -127,7 +127,7 @@ module Reviews::ScoreSheet
     def initial_control_objective_row_data
       [
         "<b>#{Review.model_name.human}</b> ",
-        '',
+        (previous&.score ? "<b>#{previous&.score}%</b>" : ''),
         "<b>#{score}%</b>*"
       ]
     end
