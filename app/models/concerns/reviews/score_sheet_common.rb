@@ -71,10 +71,21 @@ module Reviews::ScoreSheetCommon
 
     def process_control_row_data process_control, effectiveness, exclude, global: false, effectiveness_text: nil
       [
-        "#{ProcessControl.model_name.human}: #{process_control}",
-        ('' unless global),
+        "#{ProcessControl.model_name.human}: #{process_control.name}",
+        (process_control_previous unless global),
         exclude ? '-' : "#{effectiveness.round}%"
       ].compact
+    end
+
+    def process_control_previous
+     pc                     =  collect_process_controls previous: true
+     effectiveness_previous = nil
+
+     pc.each do |process_control, coi_data|
+        effectiveness_previous = control_objective_effectiveness_for coi_data
+     end
+byebug
+     effectiveness_previous
     end
 
     def effectiveness_format effectiveness_text
@@ -128,16 +139,18 @@ module Reviews::ScoreSheetCommon
       pdf.add_review_signatures_table users
     end
 
-    def collect_process_controls
-      control_objective_items.each_with_object({}) do |coi, process_controls|
-        process_controls[coi.process_control.name] ||= []
-        process_controls[coi.process_control.name] << [
+    def collect_process_controls review_previous = false
+      cois = review_previous ? previous.control_objective_items : control_objective_items
+
+      cois.each_with_object({}) do |coi, process_controls|
+        process_controls[coi.process_control] ||= []
+        process_controls[coi.process_control] << [
           coi.to_s,
           coi.effectiveness || 0,
           coi.relevance     || 0,
           coi.exclude_from_score,
           (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
-          coi_options(coi)
+          coi_options(coi),
         ]
       end
     end
