@@ -1198,6 +1198,17 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'process_control_stats', 0)
   end
 
+  test 'process control stats report as CSV' do
+    login
+
+    assert_nothing_raised do
+      get :process_control_stats_csv, format: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'weaknesses graphs for user' do
     login
 
@@ -1378,5 +1389,48 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_counts', 0)
+  end
+
+  test 'nbc annual report report' do
+    set_organization
+
+    skip unless Current.conclusion_pdf_format == 'nbc'
+
+    login
+
+    get :nbc_annual_report
+    assert_response :success
+    assert_template 'conclusion_reports/nbc_annual_report'
+  end
+
+  test 'create nbc annual report report' do
+    set_organization
+
+    skip unless Current.conclusion_pdf_format == 'nbc'
+
+    login
+
+    period = periods(:current_period)
+
+    assert_nothing_raised do
+      post :create_nbc_annual_report, params: {
+        nbc_annual_report: {
+          period_id: period.id,
+          date: Date.today.to_s,
+          cc: 'cc',
+          name: 'name',
+          objective: 'objective',
+          conclusion: 'conclusion',
+          introduction_and_scope: 'introduction and scope'
+        }
+      }
+    end
+    
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.nbc_annual_report.pdf_name',
+        from_date: period.start,
+        to_date: period.end),
+        'nbc_annual_report', 
+        0)
   end
 end

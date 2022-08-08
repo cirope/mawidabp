@@ -31,6 +31,7 @@ being_implemented_weakness:
   notification_level: 0
   organization: cirope
   extension: false
+  risk_justification: 'Test'
 
 unconfirmed_for_notification_weakness:
   type: Weakness
@@ -62,6 +63,7 @@ unconfirmed_for_notification_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
+  risk_justification: 'Test'
 
 <% (1..4).each do |level| %>
 
@@ -95,6 +97,7 @@ unanswered_for_level_<%= level %>_notification:
   manual_risk: true
   notification_level: <%= level - 1 %>
   organization: cirope
+  risk_justification: 'Test'
 
 <% end %>
 
@@ -128,6 +131,7 @@ incomplete_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
+  risk_justification: 'Test'
 
 other_unconfirmed_for_notification_weakness:
   type: Weakness
@@ -159,6 +163,7 @@ other_unconfirmed_for_notification_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
+  risk_justification: 'Test'
 
 notify_oportunity:
   type: Oportunity
@@ -227,6 +232,7 @@ being_implemented_weakness_on_draft:
   manual_risk: true
   notification_level: 0
   organization: cirope
+  risk_justification: 'Test'
 
 unanswered_weakness:
   type: Weakness
@@ -257,6 +263,7 @@ unanswered_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
+  risk_justification: 'Test'
 
 unconfirmed_weakness:
   type: Weakness
@@ -287,6 +294,7 @@ unconfirmed_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
+  risk_justification: 'Test'
 
 unconfirmed_oportunity:
   type: Oportunity
@@ -376,6 +384,7 @@ being_implemented_weakness_on_final:
   manual_risk: true
   notification_level: 0
   organization: cirope
+  risk_justification: 'Test'
 
 being_implemented_weakness_on_approved_draft:
   type: Weakness
@@ -406,3 +415,4 @@ being_implemented_weakness_on_approved_draft:
   manual_risk: true
   notification_level: 0
   organization: cirope
+  risk_justification: 'Test'

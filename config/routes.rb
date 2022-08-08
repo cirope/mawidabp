@@ -66,7 +66,9 @@ Rails.application.routes.draw do
 
   resources :e_mails, only: [:index, :show]
 
-  resources :business_unit_types
+  resources :business_unit_types do
+    resources :business_units, only: [:edit, :update], controller: 'business_unit_types/business_units'
+  end
   resources :business_unit_kinds
 
   resources :groups
@@ -188,6 +190,10 @@ Rails.application.routes.draw do
       to: "follow_up_audit##{action}"
   end
 
+  get 'conclusion_reports/process_control_stats_csv', 
+    as: 'process_control_stats_csv_conclusion_reports', 
+    to: 'conclusion_reports#process_control_stats_csv'
+
   [
     'create_synthesis_report',
     'create_review_stats_report',
@@ -222,6 +228,13 @@ Rails.application.routes.draw do
       as: "#{action}_follow_up_audit",
       to: "follow_up_audit##{action}"
   end
+
+  get 'conclusion_reports/nbc_annual_report',
+    as: 'nbc_annual_report_conclusion_reports',
+    to: 'conclusion_reports#nbc_annual_report'
+  post 'conclusion_reports/create_nbc_annual_report',
+    as: 'create_nbc_annual_report_conclusion_reports',
+    to: 'conclusion_reports#create_nbc_annual_report'
 
   get 'conclusion_reports/cost_analysis',
     as: 'cost_analysis_conclusion_reports',
@@ -266,6 +279,9 @@ Rails.application.routes.draw do
       resources :work_papers, only: [:create], controller: 'findings/work_papers'
 
       get :follow_up_pdf, on: :member, to: 'findings/follow_up_pdf#show'
+
+      get :edit_bic_sigen_fields, on: :member
+      patch :update_bic_sigen_fields, on: :member
 
       collection do
         get :export_to_pdf
@@ -428,7 +444,11 @@ Rails.application.routes.draw do
 
   resources :resource_classes
 
-  resources :control_objectives, only: [:index, :show]
+  resources :control_objectives, only: [:index, :show] do
+    collection do
+      get :auto_complete_for_control_objective_auditor
+    end
+  end
 
   resources :best_practices do
     resources :process_controls, only: [:new, :edit]
@@ -491,6 +511,16 @@ Rails.application.routes.draw do
     resource :blocked, only: :show, controller: 'licenses/blocked'
     resource :check, only: :create, controller: 'licenses/check'
     resource :authorizations, only: [:new, :create], controller: 'licenses/authorizations'
+  end
+
+  resources :memos, except: [:destroy] do
+    collection do
+      get :plan_item_refresh
+    end
+
+    member do
+      get :export_to_pdf
+    end
   end
 
   root 'sessions#new'

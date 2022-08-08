@@ -6,18 +6,40 @@
   <strong><%= WeaknessTemplate.human_attribute_name 'reference' %></strong>:
   <%= @weakness_template.reference %>
 </p>
+<% if USE_SCOPE_CYCLE %>
+  <p class="mb-1">
+    <strong><%= WeaknessTemplate.human_attribute_name 'subreference' %></strong>:
+    <%= @weakness_template.subreference %>
+  </p>
+<% end %>
 <p class="mb-1">
   <strong><%= WeaknessTemplate.human_attribute_name 'description' %></strong>:
   <%= simple_format @weakness_template.description, class: 'mb-1' %>
 </p>
+<% if USE_SCOPE_CYCLE %>
+  <p class="mb-1">
+    <strong><%= WeaknessTemplate.human_attribute_name 'brief' %></strong>:
+    <%= simple_format @weakness_template.brief, class: 'mb-1' %>
+  </p>
+<% end %>
 <p class="mb-1">
   <strong><%= WeaknessTemplate.human_attribute_name 'notes' %></strong>:
   <%= simple_format @weakness_template.notes, class: 'mb-1' %>
 </p>
 <p class="mb-1">
+  <strong><%= WeaknessTemplate.human_attribute_name 'audit_recommendations' %></strong>:
+  <%= simple_format @weakness_template.audit_recommendations, class: 'mb-1' %>
+</p>
+<p class="mb-1">
   <strong><%= WeaknessTemplate.human_attribute_name 'risk' %></strong>:
   <%= @weakness_template.risk_text %>
 </p>
+<% if USE_SCOPE_CYCLE %>
+  <p class="mb-1">
+    <strong><%= WeaknessTemplate.human_attribute_name 'failure' %></strong>:
+    <%= t @weakness_template.failure ? 'label.yes' : 'label.no' %>
+  </p>
+<% end %>
 <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
   <p class="mb-1">
     <strong><%= WeaknessTemplate.human_attribute_name 'impact' %></strong>:

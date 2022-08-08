@@ -172,7 +172,7 @@ module Findings::WeaknessReportPdf
 
       labels.each do |filter_name, filter_label|
         if report_params[filter_name].present?
-          operator = report_params["#{filter_name}_operator"] || '='
+          operator = report_params["#{filter_name}_operator"]&.sub('<', '&lt;') || '='
           value = if value_filter_names.include? filter_name
                     weaknesses_report_value_to_label report_params, filter_name
                   elsif operator == 'between'

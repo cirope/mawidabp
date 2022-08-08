@@ -1,6 +1,7 @@
 <% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? || @finding.expired? %>
 <% show_history_changes = show_follow_up_timestamps? && @finding.status_change_history.size > 1 %>
 <% data_for_submit = data_for_submit @finding %>
+<% review = @finding.review || @finding.control_objective_item.try(:review) %>
 
 <%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completion_state], @finding),
     :html => {:method => :patch, :id => "edit_finding_#{@finding.id}"}.merge(data_for_submit) do |f| %>
@@ -52,6 +53,34 @@
           <% end %>
           <%= f.input :audit_recommendations, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 4 : 2 } %>
         <% end %>
+        <% if %w(bic).include? Current.conclusion_pdf_format %>
+          <div class="row">
+            <div class="col-md-4">
+              <%= f.input :year, 
+                          input_html: 
+                          { 
+                            maxlength: 4,
+                            data: { input_text_only_accept_numerics: true } 
+                          } %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :nsisio, 
+                          input_html: 
+                          { 
+                            maxlength: 4,
+                            data: { input_text_only_accept_numerics: true } 
+                          } %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :nobs, 
+                          input_html: 
+                          { 
+                            maxlength: 4,
+                            data: { input_text_only_accept_numerics: true } 
+                          } %>
+            </div>
+          </div>
+        <% end %>
       </div>
       <div class="col-md-6">
         <% if @finding.kind_of?(Weakness) %>
@@ -68,7 +97,66 @@
             <div class="row">
               <div class="col">
                 <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
-                  data: weakness_risk_data_options
+                  data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date('finding'))
+                } %>
+              </div>
+            </div>
+
+          <% elsif %w(bic).include? Current.conclusion_pdf_format %>
+            <input type="hidden" id="bic-risk-types" data-bic-risks-types="<%= finding_bic_risks_types(@finding) %>">
+            <div class="row">
+              <div class="col">
+                <%= f.input :state_regulations, collection: weakness_state_regulations, prompt: true,
+                  disabled: true, input_html: { data: { bic_original_value: @finding.state_regulations_was } } %>
+                <%= f.hidden_field :state_regulations, data: { bic_original_value: @finding.state_regulations_was, bic_calculate_risk: true } %>
+              </div>
+              <div class="col">
+                <%= f.input :degree_compliance, collection: weakness_degree_compliance, prompt: true,
+                  disabled: true, input_html: { data: { bic_original_value: @finding.degree_compliance_was } } %>
+                <%= f.hidden_field :degree_compliance, data: { bic_original_value: @finding.degree_compliance_was, bic_calculate_risk: true } %>
+              </div>
+              <div class="col">
+                <%= f.input :observation_originated_tests, collection: weakness_observation_origination_tests, prompt: true,
+                  disabled: true, input_html: { data: { bic_original_value: @finding.observation_originated_tests_was } } %>
+                <%= f.hidden_field :observation_originated_tests, data: { bic_original_value: @finding.observation_originated_tests_was, bic_calculate_risk: true } %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
+                  disabled: true, input_html: { data: { bic_original_value: @finding.impact_risk_was } } %>
+                <%= f.hidden_field :impact_risk, data: { bic_original_value: @finding.impact_risk_was, bic_calculate_risk: true } %>
+              </div>
+              <div class="col">
+                <%= f.input :probability, collection: weakness_probabilities, prompt: true,
+                  disabled: true, input_html: { data: { bic_original_value: @finding.probability_was } } %>
+                <%= f.hidden_field :probability, data: { bic_original_value: @finding.probability_was, bic_calculate_risk: true } %>
+              </div>
+              <div class="col">
+                <%= f.input :sample_deviation, collection: weakness_sample_deviation, prompt: true,
+                  disabled: true, input_html: { data: { bic_original_value: @finding.sample_deviation_was } } %>
+                <%= f.hidden_field :sample_deviation, data: { bic_original_value: @finding.sample_deviation_was, bic_calculate_risk: true } %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <%= f.input :external_repeated, collection: weakness_external_repeated, prompt: true,
+                  disabled: true, input_html: { data: { bic_original_value: @finding.external_repeated_was } } %>
+                <%= f.hidden_field :external_repeated, data: { bic_original_value: @finding.external_repeated_was, bic_calculate_risk: true } %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-9">
+                <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
+                  data: weakness_risk_data_options.merge({ bic_field_to_disabled_when_is_automatic: true })
+                } %>
+                <%= f.hidden_field :risk, disabled: !@finding.automatic_risk?,
+                  data: { bic_field_to_disabled_when_is_manual: true } %>
+              </div>
+              <div class="col-3 text-right">
+                <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
+                  disabled: @finding.manual_risk_was,
+                  data: { toggle_risk_disabled_attr: true, replace_with_original_value_when_disabled: true }
                 } %>
               </div>
             </div>
@@ -77,6 +165,13 @@
               autofocus: true,
               data: weakness_risk_data_options
             } %>
+          <% end %>
+
+          <% if %w(bic).include? Current.conclusion_pdf_format %>
+            <%= f.input :risk_justification, disabled: @finding.automatic_risk?, input_html: {
+                data: { bic_field_to_disabled_when_is_automatic: true } } %>
+            <%= f.hidden_field :risk_justification, value: nil, disabled: !@finding.automatic_risk?,
+              data: { bic_field_to_disabled_when_is_manual: true } %>
           <% end %>
 
           <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
@@ -90,17 +185,15 @@
         <% options_for_select = if USE_SCOPE_CYCLE
                                   {
                                     data:
-                                      { target_value_change_label: Finding::STATUS[:implemented_audited],
-                                        suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
-                                        target_input_with_label: '#weakness_follow_up_date',
-                                        target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
-                                        target_checkbox: '#finding_extension',
-                                        disabled_and_deny: true }
+                                      { 
+                                        target_values_enable_checkbox: extension_enabled?(f.object) ? Finding.states_that_allow_extension : [],
+                                        target_checkbox: '#finding_extension'
+                                      }.merge(data_options_for_suggested_follow_up_date('finding'))
                                   }
                                 else
                                   {}
                                 end %>
-        <%= finding_status_field(f, disabled: @finding.issues.any?, options_html: options_for_select) %>
+        <%= finding_status_field(f, disabled: finding_has_issues?(@finding), options_html: options_for_select) %>
 
         <% if show_skip_work_paper_for @finding %>
           <%= f.input :skip_work_paper, as: :boolean %>
@@ -118,7 +211,7 @@
           <% end %>
         <% end %>
         <%= f.input :origination_date, as: :date_picker,
-          label: Finding.human_attribute_name(:origination_date), readonly: true %>
+          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: data_options_for_suggested_follow_up_date('finding') } %>
         <%= f.input :answer, input_html: { rows: finding_answer_rows } %>
         <div class="row">
           <div class="col-<%= USE_SCOPE_CYCLE ? 9 : 12 %>">
@@ -154,11 +247,20 @@
                                      }
                                    } %>
           <%= f.input :compliance, as: :hidden, input_html: { id: 'finding_hidden_compliance' } %>
-          <div data-compliance-observations <%= 'hidden' unless @finding.compliance == 'yes' %>>
+        </div>
+      </div>
+      <div class="row" data-compliance-observations <%= 'hidden' unless @finding.compliance == 'yes' %>>
+        <div class="col-md-6">
             <%= f.input :compliance_observations, input_html: {
               data: { compliance_observations_text: true }
             } %>
-          </div>
+        </div>
+        <div class="col-md-2">
+          <%= f.input :compliance_susceptible_to_sanction, collection: weakness_compliance_susceptible_to_sanction_options,
+                                                include_blank: t('helpers.select.prompt'),
+                                                input_html: { 
+                                                  data: { compliance_susceptible_to_sanction: true }
+                                                } %>
         </div>
       </div>
       <div class="row">
@@ -377,9 +479,32 @@
       </div>
     </div>
   <% end %>
-
   <div class="row">
-    <%= render 'issues' %>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'customer' %></h5>
+    </div>
+    <div class="col-md-2 d-none d-md-block">
+      <h5 class="h6"><%= Issue.human_attribute_name 'entry' %></h5>
+    </div>
+    <div class="col-md-2 d-none d-md-block">
+      <h5 class="h6"><%= Issue.human_attribute_name 'operation' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'comments' %></h5>
+    </div>
+    <div class="col-md-1">
+      <h5 class="h6"><%= Issue.human_attribute_name 'close_date' %></h5>
+    </div>
+    <div class="col-md-1">
+      <h5 class="h6"><%= Issue.human_attribute_name 'currency' %></h5>
+    </div>
+    <div class="col-md-2">
+      <h5 class="h6"><%= Issue.human_attribute_name 'amount' %></h5>
+    </div>
+  </div>
+
+  <div id="issues">
+    <%= render 'issues', f: f, readonly: users_readonly %>
   </div>
 
   <h5 class="mt-3">

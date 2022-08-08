@@ -16,6 +16,14 @@ es:
         name: 'Nombre'
         organization_name: 'Nombre de la organización'
         user: 'Nombre de usuario'
+      nbc_annual_report_form:
+        period_id: 'Periodo'
+        date: 'Fecha'
+        cc: 'CC'
+        name: 'Nombre'
+        objective: 'Objetivo'
+        conclusion: 'Conclusion'
+        introduction_and_scope: 'Introduccion y Alcance'
 
   activerecord:
     models:
@@ -76,6 +84,9 @@ es:
       control_objective:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
+      control_objective_auditor:
+        one: 'Auditor a cargo'
+        other: 'Auditores a cargo'
       document:
         one: 'Documento'
         other: 'Documentos'
@@ -88,6 +99,9 @@ es:
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
+      external_review:
+        one: 'Informe Externo'
+        other: 'Informes Externos'
       finding:
         one: 'Hallazgo'
         other: 'Hallazgos'
@@ -106,6 +120,9 @@ es:
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
+      memo:
+        one: 'Informe externo'
+        other: 'Informes externos'
       news:
         one: 'Noticia'
         other: 'Noticias'
@@ -220,6 +237,8 @@ es:
         question: 'Pregunta'
       answers:
         answer_option: 'Opción'
+      auxiliar_business_unit_type:
+        business_unit_type_id: 'Unidad organizativa auxiliar'
       benefit:
         name: 'Nombre'
         kind: 'Tipo'
@@ -276,6 +295,10 @@ es:
         support: 'Soporte'
         score_type: 'Tipo de calificación'
         control_objective_id: 'Objetivo de control'
+        audit_sector: 'Sector de Auditoría'
+        date_charge: 'Fecha de alta'
+        affected_sector_id: 'Sector del banco afectado al alerta'
+        control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
       document:
@@ -295,6 +318,10 @@ es:
         data: 'Datos'
         error: 'Error'
         user_id: 'Usuario'
+      external_review:
+        review: 'Informe'
+        review_id: 'Informe'
+        alternative_review_id: 'Informe externo'
       finding:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -337,6 +364,16 @@ es:
         impact_amount: 'Monto universo'
         probability_amount: 'Universo en cantidad de casos'
         organization: 'Organización'
+        frequency: 'Frecuencia'
+        state_regulations: 'Normativa Estado'
+        degree_compliance: 'Grado Cumpliento Normativa'
+        observation_originated_tests: 'Originada en prueba de'
+        sample_deviation: 'Desvio de la muestra'
+        external_repeated: 'Reiterada externa'
+        risk_justification: 'Justificar riesgo'
+        year: 'Año'
+        nsisio: 'N_SISAC'
+        nobs: 'N_Obs'
       finding/achievements:
         one: 'Beneficio estimado'
         amount: 'Monto'
@@ -439,6 +476,20 @@ es:
         end: 'Fin'
         start: 'Inicio'
         user_id: 'Usuario'
+      memo:
+        name: 'Nombre'
+        description: 'Descripción'
+        file_model_memos: 'Archivos'
+        period_id: 'Periodo'
+        plan_item_id: 'Proyecto'
+        period: 'Periodo'
+        plan_item: 'Proyecto'
+        business_unit: 'Unidad de negocio'
+        business_unit_type: 'Unidad organizativa'
+        required_by: 'Requerido por'
+        required_by_text: 'Requerido por'
+        close_date: 'Fecha de cierre'
+        manual_required_by: 'Manual'
       news:
         title: 'Título'
         description: 'Descripción'
@@ -562,6 +613,7 @@ es:
         risk_exposure: 'Proyecto (exposición al riesgo)'
         business_unit_id: 'Proyecto (unidad de negocio)'
         status: 'Proyecto (estado)'
+        auxiliar_business_unit_types: 'Unidades organizativas auxiliares'
       plan/plan_items/resource_utilizations:
         one: 'Recurso'
         other: 'Recursos'
@@ -606,6 +658,10 @@ es:
         order: 'Orden'
         control_objectives: 'Objetivos de control'
         obsolete: 'Obsoleto'
+      process_controls/control_objectives:
+        control_objective_auditors: 'Auditor a cargo'
+      process_controls/control_objectives/control_objective_auditors:
+        user_id: 'Auditor a cargo'
       question:
         sort_order: 'Orden'
         question: 'Pregunta'
@@ -678,6 +734,9 @@ es:
       risk_weight:
         value: 'Valor'
         weight: 'Ponderador'
+      subsidiary:
+        name: 'Nombre'
+        identity: 'Identificacion'
       weakness:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -698,6 +757,7 @@ es:
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
         compliance_observations: 'Norma que impacta'
+        compliance_susceptible_to_sanction: 'Suceptible a sanción'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
@@ -706,22 +766,29 @@ es:
         work_papers: 'Papeles de trabajo'
         implemented_at: 'Fecha de cambio a "Implementada"'
         closed_at: 'Fecha del último cambio de estado'
-        probability: 'Probabilidad'
+        probability: 'Probabilidad ocurrencia'
         impact_risk: 'Impacto'
         manual_risk: 'Manual'
         extension: 'Días de gracia'
+        year: 'Año'
+        nsisio: 'N_SISAC'
+        nobs: 'N_Obs'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
         reference: 'Referencia'
+        subreference: 'Subreferencia'
         title: 'Título'
         description: 'Observación'
+        brief: 'Resumen'
         risk: 'Riesgo'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         notes: 'Notas'
         internal_control_components: 'Componentes de CI'
         allow_duplication: 'Permitir título duplicado'
+        audit_recommendations: 'Recomendaciones de auditoría'
+        failure: 'Falla'
 
     errors:
       models:
@@ -740,10 +807,17 @@ es:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
               required: 'debe tener un auditado responsable'
               must_have_a_manager: 'debe contener un gerente de auditoría'
-            extension:
-              must_be_being_implemented: 'Para indicar que es %{extension} debe estar en estado %{state}'
-              had_no_extension_when_being_implemented: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension}'
               reference_auditor_required: 'debe tener un auditor referente'
+            extension:
+              must_have_state_that_allows_extension: 'Para indicar que tiene %{extension} debe estar en estado %{states}'
+              cant_have_extension_when_didnt_have_extension: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension} en los estados %{states}'
+            risk_justification:
+              present: 'No debe tener justificacion de riesgo'
+            compliance_susceptible_to_sanction:
+              inclusion: 'debe ser uno de la lista'
+            draft_review_code:
+              not_same_draft_review_code_parent: 'No tiene el mismo review code borrador que su finding original'
+              not_same_draft_review_code_children: 'No tiene el mismo review code borrador que su finding final'
         finding_user_assignment:
           attributes:
             user:
@@ -773,6 +847,8 @@ es:
               locked: 'no pueden ser eliminados, ya se utilizaron en al menos un informe'
         plan_item:
           attributes:
+            auxiliar_business_unit_types:
+              taken: 'repetidas'
             start:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
@@ -789,3 +865,14 @@ es:
           attributes:
             base:
               auditors_limit_reached: 'Limite de auditores alcanzado, por favor actualice su licencia.'
+        memo:
+          attributes:
+            base:
+              file_model_memos_blank: 'Debe tener al menos un archivo'
+              cant_change_fields: 'No puede cambiar ningun campo debido a que supero la fecha de cierre'
+            plan_item_id:
+              used: 'El proyecto ya esta siendo utilizado por otro Informe o Informe externo'
+        subsidiary:
+          attributes:
+            identity:
+              only_numerics: 'solo puede contener valores numericos'

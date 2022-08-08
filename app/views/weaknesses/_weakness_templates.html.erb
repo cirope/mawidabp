@@ -29,7 +29,8 @@
       <%= f.input :weakness_template_id, as: :hidden, input_html: {
         id: 'weakness_template_id',
         data: {
-          weakness_template_changed_url: weakness_template_changed_weaknesses_path
+          weakness_template_changed_url: weakness_template_changed_weaknesses_path,
+          control_objective_item_id: f.object.control_objective_item_id
         }
       } %>
     </div>

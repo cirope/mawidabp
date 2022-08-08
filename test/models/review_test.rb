@@ -130,7 +130,21 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert review.invalid?
     assert_error review, :identification, :taken
-    assert_error review, :plan_item_id, :taken
+    assert_error review, :plan_item_id, :used
+  end
+
+  test 'invalid because Memo have same plan item' do
+    @review.plan_item = plan_items :current_plan_item_6
+
+    refute @review.valid?
+    assert_error @review, :plan_item_id, :used
+  end
+
+  test 'invalid because another review have same plan item' do
+    @review.plan_item = plan_items :current_plan_item_1
+
+    refute @review.valid?
+    assert_error @review, :plan_item_id, :used
   end
 
   test 'validate unique identification number' do
@@ -285,7 +299,7 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'review score by weaknesses' do
-    skip if score_type != :weaknesses
+    skip if USE_SCOPE_CYCLE || score_type != :weaknesses
 
     # With two low risk and not repeated weaknesses
     assert_equal :require_some_improvements, @review.score_array.first
@@ -337,7 +351,7 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item.update! scope: scope.first
 
     # With two low risk on design
-    assert_equal :improve, @review.score_array.first
+    assert_equal :regular, @review.score_array.first
     assert_equal 50, @review.score
     assert_equal 75, @review.score_alt
     assert_equal 'splitted_effectiveness', @review.score_type

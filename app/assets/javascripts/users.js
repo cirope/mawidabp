@@ -22,7 +22,7 @@ jQuery(function ($) {
           format: 'json'
         }, function (data) {
           HTMLUtil.updateOptions(role, HTMLUtil.optionsFromArray(data))
-        }).complete(function () {
+        }).done(function () {
           role.val('')
           Helper.hideLoading($element)
         })

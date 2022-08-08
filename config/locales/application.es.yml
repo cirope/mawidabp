@@ -125,6 +125,7 @@ es:
     download_work_papers: "Descargar papeles de trabajo"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
+    download_expanded: "Descargar ampliado"
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
@@ -187,6 +188,7 @@ es:
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
     review_score_details_report_title: "Calificaciones de informes detallado"
+    nbc_annual_report_title: "Resumen anual"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -277,6 +279,38 @@ es:
         highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
         digitalized: "Digitalización"
+    nbc_annual_report:
+      pdf_name: "resumen_anual_%{from_date}_al_%{to_date}.pdf"
+      front_page:
+        first_title: 'Calificación del Control Interno de'
+        footer_title: '<b>Informe:</b>'
+      executive_summary:
+        title: '<b><u>RESUMEN EJECUTIVO</u></b>'
+        objective_title: '<b><u>OBJETIVO</u></b>'
+        general_conclusion_title: '<b><u>CONCLUSIÓN GENERAL</u></b>'
+        first_footer: '<b>AUS. Alejandro Camnasio</b>'
+        second_footer: '<b>A/C int. Gerencia de Auditoria Interna</b>'
+      detailed_report:
+        title: '<b><u>INFORME DETALLADO</u></b>'
+        introduction_and_scope_title: '<b><u>INTRODUCCION Y ALCANCE DEL TRABAJO REALIZADO</u></b>'
+        classification_methodology: 'La metodología de calificación de ciclos utilizada en el período 2019 fue aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, la cual exponemos a continuación:'
+        classification_title: '<i><b>Cuadro I: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        conclusions_title: '<u><b>CONCLUSIONES</b></u>'
+        conclusions_body: 'Partiendo del Cuadro I <i>“Calificación del Control Interno del NCHB S.A.”</i>, se observa que la calificación del control interno de la Entidad, de acuerdo a los parámetros utilizados, es <b>“%{calification}”.</b>'
+      cycle_qualification:
+        header_number: '<b>N°</b>'
+        header_qualification: '<b>Calificación</b>'
+        header_weight: '<b>Ponderador</b>'
+        header_high_risk_observations: '<b>Cantidad de Observaciones de Riesgo Alto</b>'
+      internal_control_qualification:
+        header_cycle: '<b>Ciclo</b>'
+        header_count_findings: '<b>Cantidad de Observaciones</b>'
+        header_weight: '<b>Ponderador a fecha de los Informes</b>'
+        header_qualification: '<b>Calificación</b>'
+        count_weight: '<b>Total ponderación</b>'
+        count_cycles: '<b>Cantidad de ciclos</b>'
+        final_weight: '<b>Ponderación</b>'
+        final_qualification: '<b>Calificación Control Interno</b>'
     synthesis_report:
       pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -356,6 +390,7 @@ es:
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
+    download_expanded: "Descargar ampliado"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"
@@ -363,6 +398,7 @@ es:
       normal: "Informe completo"
       brief: "Informe resumido"
       without_score: "Informe sin calificación"
+      expanded: "Informe ampliado"
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:
@@ -795,6 +831,12 @@ es:
     stale_object_error: "El grupo no fue actualizado, intente nuevamente."
     add_organization: "Agregar organización"
 
+  memo:
+    correctly_created: "Informe externo agregado correctamente."
+    correctly_updated: "Informe externo actualizado correctamente."
+    stale_object_error: "El Informe externo no fue actualizado, intente nuevamente."
+    description_pdf: "COMENTARIOS"
+
   notification:
     index_title: "Listado de notificaciones"
     show_title: "Detalles de la notificación"
@@ -1181,6 +1223,7 @@ es:
       business_unit:
         name: "Nombre"
         business_unit_kind_id: 'Tipo de unidad de negocio'
+        business_unit_type_id: 'Unidad organizativa'
       business_unit_type:
         name: "Nombre"
         business_unit_label: "Etiqueta de la unidad de negocio en el informe"
@@ -1194,6 +1237,10 @@ es:
         hide_review_logo: "Ocultar logo en informes"
         independent_identification: "Numeración independiente"
         shared_business_units: "Unidades de negocio compartidas"
+        without_number: "Sin número"
+        reviews_for: "Informes para"
+        detailed_review: "Informe detallado"
+        grouped_by_business_unit_annual_report: "Agrupado por unidad de negocio en reporte anual"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
@@ -1396,6 +1443,11 @@ es:
         taggings: "Etiquetas"
         review_objective: "Objectivo del informe"
         type_review: "Tipo de informe"
+        subsidiary_id: "Sucursal"
+        subsidiary: "Sucursal"
+      review/external_reviews:
+        alternative_review: 'Informe externo'
+        alternative_review_id: 'Informe externo'
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"

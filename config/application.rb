@@ -20,14 +20,14 @@ module MawidaBP
     end
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
 
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{config.root}/lib)
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake time:zones:all" for a time zone names list. Default is UTC.
-    config.time_zone = ENV['TRAVIS'] ? 'UTC' : 'Buenos Aires'
+    config.time_zone = ENV['GH_ACTIONS'] ? 'UTC' : 'Buenos Aires'
 
     # Be sure to have the adapter's gem in your Gemfile
     # and follow the adapter's specific installation
@@ -44,6 +44,6 @@ module MawidaBP
 
     # Just needed for SAML + Azure AD
     config.middleware.use ActionDispatch::Cookies # Required for all session management
-    config.middleware.use ActionDispatch::Session::CookieStore #, config.session_options
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_mbp_session', domain: ".#{ENV['APP_HOST'].sub /:.*/, ''}", same_site: :strict
   end
 end

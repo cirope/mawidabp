@@ -38,9 +38,8 @@ class FindingTest < ActiveSupport::TestCase
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
-          impact_risk: Finding.impact_risks[:small],
-          probability: Finding.probabilities[:rare],
           manual_risk: true,
+          risk_justification: 'Test',
           finding_user_assignments_attributes: {
             new_1: {
               user_id: users(:audited).id, process_owner: true
@@ -92,9 +91,8 @@ class FindingTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
-        impact_risk: Finding.impact_risks[:small],
-        probability: Finding.probabilities[:rare],
         manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -951,7 +949,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.reload.repeated_of
     assert finding.rescheduled?
 
-    count_reschedule = USE_SCOPE_CYCLE ? 2 : 3 
+    count_reschedule = USE_SCOPE_CYCLE ? 3 : 4
 
     assert_equal count_reschedule, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
@@ -1497,15 +1495,23 @@ class FindingTest < ActiveSupport::TestCase
     assert_nil without_message
   end
 
-  test 'automatic risk' do
-    @finding.risk        = Finding.risks[:low]
-    @finding.probability = Finding.probabilities[:almost_certain]
-    @finding.impact_risk = Finding.impact_risks[:critical]
+  test 'check auto risk when change to automatic' do
+    skip unless USE_SCOPE_CYCLE
+
+    @finding.risk = Finding.risks[:high]
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:high], @finding.risk
+
+    @finding.manual_risk = false
+    @finding.probability        = Finding.probabilities[:rare]
+    @finding.impact_risk        = Finding.impact_risks[:moderate]
 
     assert @finding.valid?
     assert_equal Finding.risks[:low], @finding.risk
 
-    @finding.manual_risk = false
+    @finding.probability        = Finding.probabilities[:almost_certain]
+    @finding.impact_risk        = Finding.impact_risks[:critical]
 
     assert @finding.valid?
     assert_equal Finding.risks[:high], @finding.risk
@@ -1568,115 +1574,229 @@ class FindingTest < ActiveSupport::TestCase
   test 'probability risk previuos' do
     Current.organization = organizations :cirope
     Current.user         = users :auditor
+    repeatability_in_file = 1
 
-    repeatability_in_file =
-      if FINDING_REPEATABILITY_FILE.include? Current.organization.prefix
-        1
-      else
-        0
-      end
-
-    assert_equal @finding.probability_risk_previous, 0
+    assert_equal Finding.probability_risk_previous(@finding.review), 0
 
     @finding.weakness_template = weakness_templates :security
 
     assert @finding.valid?
 
-    assert_equal @finding.probability_risk_previous, repeatability_in_file + 1
+    probability_risk_previous_amount = Finding.list.probability_risk_previous @finding.review, @finding.weakness_template
+
+    assert_equal probability_risk_previous_amount, repeatability_in_file
 
     weakness_previous = @finding.review.previous.weaknesses.first
 
     weakness_previous.update_column :weakness_template_id, weakness_templates(:security).id
 
-    assert_equal @finding.probability_risk_previous, repeatability_in_file + 2
+    probability_risk_previous_amount = Finding.probability_risk_previous @finding.review, @finding.weakness_template
+
+    assert_equal probability_risk_previous_amount, repeatability_in_file + 1
+
   ensure
     Current.organization = nil
     Current.user         = nil
   end
 
-  test 'notify action not found when subject have no finding_id' do
+  test 'notify action not found when subject have no finding_id - pop3' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
 
     supervisor = users :supervisor
     body       = 'Reply On Tuesday wrote: Another reply'
 
-    Finding.receive_mail(new_email(supervisor.email, 'subject without id', body))
+    Finding.receive_mail(new_email_pop3(supervisor.email, 'subject without id', body))
 
     assert_enqueued_emails 1
     assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[supervisor.email], "Reply "]
-
+  ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
   end
 
-  test 'notify action not found when email does not belong to any user' do
+  test 'notify action not found when email does not belong to any user - pop3' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
 
     finding = findings :confirmed_oportunity
 
     body = 'Reply On Tuesday wrote: Another reply'
 
-    Finding.receive_mail(new_email('nouser@nouser.com', "[##{finding.id}]", body))
+    Finding.receive_mail(new_email_pop3('nouser@nouser.com', "[##{finding.id}]", body))
 
     assert_enqueued_emails 1
     assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [['nouser@nouser.com'], "Reply "]
-
+  ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
   end
 
-  test 'notify action not found when auditee is not related' do
+  test 'notify action not found when auditee is not related - pop3' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
 
     finding = findings :confirmed_oportunity
     audited = users :audited_second
     body    = 'Reply On Tuesday wrote: Another reply'
 
-    Finding.receive_mail(new_email(audited.email, "[##{finding.id}]", body))
+    Finding.receive_mail(new_email_pop3(audited.email, "[##{finding.id}]", body))
 
     assert_enqueued_emails 1
     assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[audited.email], "Reply "]
-
+  ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
   end
 
-  test 'add finding answer when auditee is related' do
+  test 'add finding answer when auditee is related - pop3' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
 
     finding = findings :confirmed_oportunity
     audited = users :audited
     body    = 'Reply On Tuesday wrote: Another reply'
 
     assert_difference 'finding.finding_answers.count' do
-      Finding.receive_mail(new_email(audited.email, "[##{finding.id}]", body))
+      Finding.receive_mail(new_email_pop3(audited.email, "[##{finding.id}]", body))
     end
 
     assert_equal finding.finding_answers.last.user, audited
     assert_equal finding.finding_answers.last.answer, 'Reply '
     assert finding.finding_answers.last.imported
-
+  ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
   end
 
-  test 'add finding answer to finding as supervisor' do
+  test 'add finding answer to finding as supervisor - pop3' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
 
     finding    = findings :confirmed_oportunity
     supervisor = users :supervisor
     body       = 'Reply On Tuesday wrote: Another reply'
 
     assert_difference 'finding.finding_answers.count' do
-      Finding.receive_mail(new_email(supervisor.email, "[##{finding.id}]", body))
+      Finding.receive_mail(new_email_pop3(supervisor.email, "[##{finding.id}]", body))
     end
 
     assert_equal finding.finding_answers.last.user, supervisor
     assert_equal finding.finding_answers.last.answer, 'Reply '
     assert finding.finding_answers.last.imported
-
+  ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when subject have no finding_id - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_mgraph('id test', supervisor.email, 'subject without id', body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[supervisor.email], "Reply "]
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when email does not belong to any user - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding = findings :confirmed_oportunity
+
+    body = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_mgraph('id test', 'nouser@nouser.com', "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [['nouser@nouser.com'], 'Reply ']
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when auditee is not related - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited_second
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_mgraph('id test', audited.email, "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[audited.email], 'Reply ']
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'add finding answer when auditee is related - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email_mgraph('id test', audited.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, audited
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'add finding answer to finding as supervisor - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding    = findings :confirmed_oportunity
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email_mgraph('id test', supervisor.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, supervisor
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
   end
 
   test 'valid with same review code when repeated' do
@@ -1686,113 +1806,139 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.valid?
   end
 
-  test 'should not extension' do
+  test 'should be invalid because has extension when has state excluded from states allowed' do
     skip unless USE_SCOPE_CYCLE
 
-    finding = findings :being_implemented_weakness
-
-    assert finding.not_extension?
-  end
-
-  test 'should extension' do
-    skip unless USE_SCOPE_CYCLE
-
-    finding = findings :being_implemented_weakness
-
-    finding.update_attribute('extension', true)
-
-    refute finding.not_extension?
-  end
-
-  test 'should not extension was' do
-    skip unless USE_SCOPE_CYCLE
-
-    finding = findings :being_implemented_weakness
-
-    finding.extension = true
-
-    assert finding.not_extension_was?
-  end
-
-  test 'should extension was' do
-    skip unless USE_SCOPE_CYCLE
-
-    finding = findings :being_implemented_weakness
-
-    finding.update_attribute('extension', true)
-    
-    finding.extension = false
-
-    refute finding.not_extension_was?
-  end
-
-  test 'should be invalid because has extension when it no being implementation' do
     finding           = findings :incomplete_weakness
     finding.extension = true
 
     refute finding.valid?
+    assert_error finding,
+                 :extension,
+                 :must_have_state_that_allows_extension,
+                 extension: Finding.human_attribute_name(:extension),
+                 states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
   end
 
-  test 'should be invalid because the last version had not extension' do
-    finding = findings :being_implemented_weakness
+  test 'should be invalid when is being implemented and has final review but extension_was is false' do
+    skip unless USE_SCOPE_CYCLE
 
+    finding           = findings :being_implemented_weakness
     finding.extension = true
 
     refute finding.valid?
+    assert_error finding,
+                 :extension,
+                 :cant_have_extension_when_didnt_have_extension,
+                 extension: Finding.human_attribute_name(:extension),
+                 states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
   end
 
-  test 'should be valid because is the first version in being implemented' do
+  test 'should be invalid when is awaiting and has final review but extension_was is false' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+    finding.state = Finding::STATUS[:awaiting]
+    finding.extension = true
+
+    refute finding.valid?
+    assert_error finding,
+                 :extension,
+                 :cant_have_extension_when_didnt_have_extension,
+                 extension: Finding.human_attribute_name(:extension),
+                 states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
+  end
+
+  test 'should be valid when is being implemented and has final review and extension_was is true' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_attribute :extension, true
+
+    finding.extension = true
+
+    assert finding.valid?
+  end
+
+  test 'should be valid when is awaiting and has final review and extension_was is true' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_attribute :extension, true
+
+    finding.state     = Finding::STATUS[:awaiting]
+    finding.extension = true
+
+    assert finding.valid?
+  end
+
+  test 'should be valid when is being implemented and dont has final review' do
+    skip unless USE_SCOPE_CYCLE
+
     finding = findings :incomplete_weakness
 
-    finding.extension      = true
+    finding.update_attribute :extension, true
+
     finding.state          = Finding::STATUS[:being_implemented]
-    finding.follow_up_date = FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
+    finding.follow_up_date = Date.today.to_date.to_s(:db)
+    finding.extension      = true
 
     assert finding.valid?
   end
 
-  test 'should be valid because had versions with extension' do
-    finding = findings :being_implemented_weakness
+  test 'should be valid when is awaiting and dont has final review' do
+    skip unless USE_SCOPE_CYCLE
 
-    finding.versions.each do |v|
-      if v.object['state'] == Finding::STATUS[:being_implemented]
-        v.object['extension'] = true
-      end
-    end
+    finding = findings :incomplete_weakness
 
-    finding.extension = true
-    finding.save(validate: false)
+    finding.update_attribute :extension, true
 
-    finding.extension = true
+    finding.state          = Finding::STATUS[:awaiting]
+    finding.follow_up_date = Date.today.to_date.to_s(:db)
+    finding.extension      = true
 
     assert finding.valid?
   end
 
-  test 'should return reschedule' do
+  test 'calculate reschedule' do
     finding = findings :being_implemented_weakness
 
-    reschedules = finding.calculate_reschedule_count
+    expected_reschedules = USE_SCOPE_CYCLE ? 2 : 3
 
-    assert reschedules.positive?
+    assert_equal expected_reschedules, finding.calculate_reschedule_count
 
-    finding.extension      = false
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
 
-    assert_equal reschedules + 1, finding.calculate_reschedule_count
+    assert_equal expected_reschedules + 1, finding.calculate_reschedule_count
 
     finding.save!
 
-    finding.extension      = false
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 1.days).to_s(:db)
 
-    assert_equal reschedules + 1, finding.calculate_reschedule_count
+    assert_equal expected_reschedules + 1, finding.calculate_reschedule_count
 
     finding.save!
 
-    finding.extension      = false
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 4.days).to_s(:db)
 
-    assert_equal reschedules + 2, finding.calculate_reschedule_count
+    assert_equal expected_reschedules + 2, finding.calculate_reschedule_count
+
+    if USE_SCOPE_CYCLE
+      finding.save!
+
+      finding.state = Finding::STATUS[:awaiting]
+      finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 6.days).to_s(:db)
+
+      assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
+
+      finding.save!
+
+      finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 5.days).to_s(:db)
+
+      assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
+    end
   end
 
   test 'should return not reschedule' do
@@ -1807,7 +1953,7 @@ class FindingTest < ActiveSupport::TestCase
 
       v.save
     end
-    
+
     finding.extension      = false
     finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
     reschedules            = finding.calculate_reschedule_count
@@ -1820,43 +1966,115 @@ class FindingTest < ActiveSupport::TestCase
     assert reschedules.zero?
   end
 
-  test 'should return not reschedule because versions and extension had extension' do
-    skip unless USE_SCOPE_CYCLE
+  test 'store follow_up_date_last_changed when change' do
+    finding                = findings :being_implemented_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
 
-    finding = findings :being_implemented_weakness
+    finding.save!
 
-    finding.versions.each do |v|
-      v.object['extension'] = true
-      v.save
-    end
-
-    reschedules = finding.calculate_reschedule_count
-
-    assert reschedules.zero?
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
   end
 
-  test 'should return had version with being implemented' do
-    finding = findings :being_implemented_weakness
+  test 'store follow_up_date_last_changed when change to nil' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
 
-    assert finding.had_version_with_being_implemented?
+    finding.save!
+
+    finding.follow_up_date = nil
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
   end
 
-  test 'should return not had version with being implemented' do
+  test 'store follow_up_date_last_changed when change from nil' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
+  end
+
+  test 'should return follow_up_date_last_changed when in last version change follow_up_date' do
     finding = findings :being_implemented_weakness
 
-    finding.versions.each do |v|
-      if v.object['state'] == Finding::STATUS[:being_implemented]
-        v.object['state'] = Finding::STATUS[:incomplete]
-        v.save
-      end
-    end
+    follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
 
-    refute finding.had_version_with_being_implemented?
+    assert_equal follow_up_date_last_changed_on_versions, I18n.l(finding.updated_at, format: :minimal)
+  end
+
+  test 'should return created_at when dont have changes from creation in follow_up_date' do
+    finding = findings :being_implemented_weakness_on_draft
+
+    finding.description = 'test'
+
+    finding.save!
+
+    follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
+
+    assert_equal follow_up_date_last_changed_on_versions, I18n.l(finding.created_at, format: :minimal)
+  end
+
+  test 'should return nil when never have follow_up_date' do
+    finding = findings :unconfirmed_for_notification_weakness
+
+    finding.description = 'test'
+
+    finding.save!
+
+    assert_nil finding.follow_up_date_last_changed_on_versions
+  end
+
+  test 'should return follow_up_date_last_changed when in past didnt have' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(finding.updated_at, format: :minimal)
+  end
+
+  test 'should return follow_up_date when dont have follow_up_date but in past have' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    follow_up_date_last_changed_expected = finding.updated_at
+    finding.follow_up_date               = nil
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(follow_up_date_last_changed_expected, format: :minimal)
+  end
+
+  test 'should return suggestion to add days follow up date depending on the risk' do
+    expected = {
+      0 => 180,
+      1 => 365,
+      2 => 270,
+      3 => 180
+    }
+
+    assert_equal Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk,
+                 expected
+  end
+
+  test 'should return states that suggest follow up date' do
+    assert_equal Finding.states_that_suggest_follow_up_date,
+                 [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
+  end
+
+  test 'should return states that allow extension' do
+    assert_equal Finding.states_that_allow_extension,
+                 [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
   end
 
   private
 
-    def new_email from, subject, body
+    def new_email_pop3 from, subject, body
       mail = create_mail from, subject
 
       mail.text_part = Mail::Part.new do
@@ -1877,6 +2095,13 @@ class FindingTest < ActiveSupport::TestCase
         to      'support@postman.com'
         subject subject
       end
+    end
+
+    def new_email_mgraph id, from, subject, body
+      OpenStruct.new id: id,
+                     subject: subject,
+                     from: [from],
+                     body: body
     end
 
     def review_codes_on_findings_by_user method

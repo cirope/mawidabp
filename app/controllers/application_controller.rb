@@ -172,13 +172,6 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    # Redirige la navegación a la página por defecto
-    # _message_:: Mensaje que se mostrará luego de la redirección
-    def redirect_to_index(message = nil, type = :notice) #:doc:
-      flash[type] = message if message
-      redirect_to :action => :index
-    end
-
     # Redirige la navegación a la página de autenticación
     # _message_:: Mensaje que se mostrará luego de la redirección
     def redirect_to_login(message = nil, type = :notice, params = nil) #:doc:

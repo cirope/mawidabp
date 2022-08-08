@@ -2,31 +2,33 @@ namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
     ActiveRecord::Base.transaction do
-      update_organization_settings        # 2017-03-15 last 2021-08-09
-      add_new_answer_options              # 2017-06-29
-      add_best_practice_privilege         # 2018-01-31
-      add_control_objective_privilege     # 2018-01-31
-      add_task_codes                      # 2018-07-24
-      mark_tasks_as_finished              # 2019-01-04
-      update_finding_first_follow_up_date # 2019-01-07
-      reset_notification_level            # 2019-03-06
-      update_finding_reschedule_count     # 2019-07-19
-      complete_main_recommendations       # 2019-07-23
-      update_tag_style                    # 2019-09-26
-      update_tag_icons                    # 2019-09-30
-      update_finding_state_dates          # 2020-01-16
-      update_finding_parent_ids           # 2020-01-22
-      collapse_extended_risks             # 2020-02-04
-      remove_finding_awaiting_state       # 2020-02-05
-      add_repeated_findings_privilege     # 2020-02-07
-      update_latest_on_findings           # 2020-02-08
-      update_review_scopes                # 2020-02-20
-      fix_final_latest_findings           # 2020-03-13
-      fix_email_organization              # 2020-04-24
-      add_follow_up_audited_privilege     # 2020-05-08
-      add_file_model_review               # 2020-07-20
-      remove_auditor_junior_role          # 2020-11-04
-      add_commitment_data_on_findings     # 2020-12-01
+      update_organization_settings               # 2017-03-15 last 2021-08-09
+      add_new_answer_options                     # 2017-06-29
+      add_best_practice_privilege                # 2018-01-31
+      add_control_objective_privilege            # 2018-01-31
+      add_task_codes                             # 2018-07-24
+      mark_tasks_as_finished                     # 2019-01-04
+      update_finding_first_follow_up_date        # 2019-01-07
+      reset_notification_level                   # 2019-03-06
+      update_finding_reschedule_count            # 2019-07-19
+      complete_main_recommendations              # 2019-07-23
+      update_tag_style                           # 2019-09-26
+      update_tag_icons                           # 2019-09-30
+      update_finding_state_dates                 # 2020-01-16
+      update_finding_parent_ids                  # 2020-01-22
+      collapse_extended_risks                    # 2020-02-04
+      #remove_finding_awaiting_state             # 2020-02-05
+      add_repeated_findings_privilege            # 2020-02-07
+      update_latest_on_findings                  # 2020-02-08
+      update_review_scopes                       # 2020-02-20
+      fix_final_latest_findings                  # 2020-03-13
+      fix_email_organization                     # 2020-04-24
+      add_follow_up_audited_privilege            # 2020-05-08
+      add_file_model_review                      # 2020-07-20
+      remove_auditor_junior_role                 # 2020-11-04
+      add_commitment_data_on_findings            # 2020-12-01
+      update_finding_follow_up_date_last_changed # 2021-12-22
+      update_draft_review_code                   # 2022-07-20
     end
   end
 end
@@ -628,4 +630,83 @@ private
 
   def add_commitment_data_on_findings?
     Endorsement.any? && Finding.where.not(reschedule_count: 0).where(commitments: nil).all?
+  end
+
+  def update_finding_follow_up_date_last_changed
+    if update_finding_follow_up_date_last_changed?
+      findings = Finding
+                 .where(follow_up_date_last_changed: nil)
+
+      findings.each do |finding|
+        follow_up_date_last_changed = finding.follow_up_date_last_changed_on_versions
+
+        finding.update_column :follow_up_date_last_changed, follow_up_date_last_changed
+      end
+    end
+  end
+
+  def update_finding_follow_up_date_last_changed?
+    Finding
+      .where(follow_up_date_last_changed: nil)
+      .where.not(follow_up_date: nil).exists?
+  end
+
+  def update_draft_review_code
+    if update_draft_review_code?
+      Organization.all.each do |org|
+        if USE_GLOBAL_WEAKNESS_REVIEW_CODE.include? org.prefix
+
+          Weakness.where(organization_id: org.id, parent_id: nil).each do |w|
+            w.versions.each do |version|
+              next if version.object_changes.blank?
+
+              if version_was_in_a_final_review? version
+                finding_and_children_update_draft_review_code w, version.object.dig('review_code')
+
+                break
+              end
+            end
+          end
+
+          Oportunity.where(organization_id: org.id, parent_id: nil).each do |o|
+            if o.review.has_final_review?
+              finding_and_children_update_draft_review_code o, o.review_code
+
+              next
+            end
+
+            o.versions.each do |version|
+              next if ver.object_changes.blank?
+
+              if version_was_in_a_final_review? version
+                o.update_column :draft_review_code, version.object.dig('review_code')
+
+                break
+              end
+            end
+          end
+        else
+          Finding.where(organization_id: org.id).each do |f|
+            f.update_column :draft_review_code, f.review_code if f.review.has_final_review?
+          end
+        end
+      end
+    end
+  end
+
+  def version_was_in_a_final_review? version
+    version.object_changes.dig('final')&.second == true ||
+      version.object_changes.dig('review_code')&.second&.size == 8
+  end
+
+  def finding_and_children_update_draft_review_code finding, new_draft_review_code
+    finding.update_column :draft_review_code, new_draft_review_code
+
+    if finding.children.present?
+      finding.children.take.update_column :draft_review_code, new_draft_review_code
+    end
+  end
+
+  def update_draft_review_code?
+    Finding.where.not(draft_review_code: nil).blank?
   end

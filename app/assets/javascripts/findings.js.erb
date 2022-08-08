@@ -18,7 +18,10 @@ jQuery(function ($) {
       'priority',
       'answer',
       'audit_comments',
-      'compliance'
+      'compliance',
+      'year',
+      'nsisio',
+      'nobs'
     ]
 
     if (repeatedId) {
@@ -64,9 +67,13 @@ jQuery(function ($) {
   $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".task"]', disableFollowUpDate)
 
   var disableState = function () {
-    var hasVisibleIssues = !!$('.issue:visible').length
+    var useScopeCycle = $('[data-use-scope-cycle]').data('useScopeCycle')
 
-    $('[name$="[state]"]').attr('readonly', hasVisibleIssues)
+    if (useScopeCycle) {
+      var hasVisibleIssues = !!$('.issue:visible').length
+
+      $('[name$="[state]"]').attr('readonly', hasVisibleIssues)
+    }
   }
 
   $(document).on('dynamic-item:added', '[data-association="issues"]', function () {
@@ -156,11 +163,6 @@ jQuery(function ($) {
         $commitmentDate.prop('disabled', false)
       })
     }
-  })
-
-  $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
-    $('[name$="[risk]"]').attr('disabled', ! $(this).is(':checked'))
-    $('[data-risk-modifier]').change()
   })
 
   $(document).on('change', '[data-risk-modifier]', function () {
@@ -356,6 +358,61 @@ jQuery(function ($) {
       })
     }
   })
+
+  $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
+    var manual_risk = $(this).is(':checked')
+    
+    if($(this).data('replaceWithOriginalValueWhenDisabled')) {
+      $('[data-bic-original-value]:hidden').each(function (i, e) {
+        manual_risk ? $(e).val('') : $(e).val($(e).data('bicOriginalValue'))
+      })
+
+      $('select[data-bic-original-value]').each(function (i, e) {
+        if(!manual_risk) {
+          $(e).val($(e).data('bicOriginalValue'))
+        }
+      })
+    }
+
+    $('[data-bic-field-to-disabled-when-is-manual]').attr('disabled', manual_risk)
+    $('[data-bic-field-to-disabled-when-is-automatic]').attr('disabled', !manual_risk)
+
+    if (!manual_risk) {
+      bicCalculatedRisk()
+    }
+  })
+
+  $(document).on('change', '[data-bic-calculate-risk]', function () {
+    bicCalculatedRisk()
+  })
+
+  var bicCalculatedRisk = function() {
+    var types = $('[data-bic-risks-types]').data('bicRisksTypes')
+    var total = 0
+    var risk
+
+    $('[data-bic-calculate-risk]').each(function (i, e) {
+      total += +$(e).val()
+    })
+
+    $.each(types, function (i, data) {
+      var riskValue = data[0]
+      var riskId    = data[1]
+
+      if (total >= riskValue) {
+        risk = riskId
+
+        return false
+      }
+    })
+
+    var riskChanged = $('[name$="[risk]"]').val() !== String(risk)
+
+    if (riskChanged) {
+      $('[name$="[risk]"]:enabled').val(risk)
+      $('[name$="[risk]"]:disabled').val(risk).trigger('change')
+    }
+  }
 
   $(document).on('change', '[data-skip-commitment-support]', function () {
     if ($(this).is(':checked')) {

@@ -7,6 +7,10 @@ class WeaknessTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    clear_current_attributes
+  end
+
   test 'create' do
     state = if USE_SCOPE_CYCLE
               Finding::STATUS[:incomplete]
@@ -35,9 +39,8 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
-        impact_risk: Finding.impact_risks[:small],
-        probability: Finding.probabilities[:rare],
         manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -91,9 +94,8 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
-        impact_risk: Finding.impact_risks[:small],
-        probability: Finding.probabilities[:rare],
         manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -509,15 +511,234 @@ class WeaknessTest < ActiveSupport::TestCase
     refute weakness.rescheduled?
   end
 
-  test 'compliance observations attribute not be empty when option is yes' do
+  test 'invalids compliance observations attributtes' do
     skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
 
-    weakness = findings :being_implemented_weakness_on_approved_draft
+    @weakness.compliance = 'yes'
 
-    weakness.compliance = 'yes'
+    assert @weakness.invalid?
+    assert_error @weakness, :compliance_observations, :blank
+    assert_error @weakness, :compliance_susceptible_to_sanction, :inclusion
+  end
 
-    assert weakness.invalid?
-    assert_error weakness, :compliance_observations, :blank
+  test 'valids compliance observations attributtes' do
+    skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+
+    @weakness.compliance                         = 'yes'
+    @weakness.compliance_observations            = 'test'
+    @weakness.compliance_susceptible_to_sanction = COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values.first
+
+    assert @weakness.valid?
+  end
+
+  test 'invalid when sigen fields are not numbers and superate max lenght' do
+    @weakness.year        = '2022a'
+    @weakness.nsisio      = '12a34'
+    @weakness.nobs        = 'a9876'
+
+    assert @weakness.invalid?
+    assert_error @weakness, :year, :not_a_number
+    assert_error @weakness, :nsisio, :not_a_number
+    assert_error @weakness, :nobs, :not_a_number
+    assert_error @weakness, :year, :too_long, count: 4
+    assert_error @weakness, :nsisio, :too_long, count: 4
+    assert_error @weakness, :nobs, :too_long, count: 4
+  end
+
+  test 'valid if change sigen field when no repeated state' do
+    @weakness.year   = '2022'
+    @weakness.nsisio = '1234'
+    @weakness.nobs   = '9876'
+
+    assert @weakness.valid?
+  end
+
+  test 'invalid when manual risk and blank justification' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @weakness.risk_justification = ''
+
+    refute @weakness.valid?
+    assert_error @weakness, :risk_justification, :blank
+  end
+
+  test 'invalid when manual risk and have attributes for automatic risks' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.state_regulations            = Finding.state_regulations[:exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:comply]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:most_expected]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
+
+    refute @weakness.valid?
+    assert_error @weakness, :impact_risk, :present
+    assert_error @weakness, :probability, :present
+    assert_error @weakness, :state_regulations, :present
+    assert_error @weakness, :degree_compliance, :present
+    assert_error @weakness, :observation_originated_tests, :present
+    assert_error @weakness, :sample_deviation, :present
+    assert_error @weakness, :external_repeated, :present
+  end
+
+  test 'invalid when automatic risk and present justification' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @weakness.manual_risk        = false
+    @weakness.risk_justification = 'Test'
+
+    refute @weakness.valid?
+    assert_error @weakness, :risk_justification, :present
+  end
+
+  test 'valid with low risk' do
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
+
+    @weakness.manual_risk        = false
+    @weakness.risk_justification = nil
+
+    @weakness.state_regulations            = Finding.state_regulations[:exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:comply]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
+
+    assert @weakness.valid?
+  end
+
+  test 'invalid with low risk' do
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
+
+    @weakness.manual_risk        = false
+    @weakness.risk               = Finding.risks[:high]
+    @weakness.risk_justification = nil
+
+    @weakness.state_regulations            = Finding.state_regulations[:exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:comply]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:most_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
+
+    refute @weakness.valid?
+  end
+
+  test 'valid with medium risk' do
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
+
+    @weakness.manual_risk        = false
+    @weakness.risk               = Finding.risks[:medium]
+    @weakness.risk_justification = nil
+
+    @weakness.state_regulations            = Finding.state_regulations[:not_exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:fails]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.external_repeated            = Finding.external_repeated[:no_repeated]
+
+    assert @weakness.valid?
+  end
+
+  test 'invalid with medium risk' do
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
+
+    @weakness.manual_risk        = false
+    @weakness.risk_justification = nil
+
+    @weakness.state_regulations            = Finding.state_regulations[:not_exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:fails]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.external_repeated            = Finding.external_repeated[:no_repeated]
+
+    refute @weakness.valid?
+  end
+
+  test 'valid with high risk' do
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
+
+    @weakness.manual_risk        = false
+    @weakness.risk               = Finding.risks[:high]
+    @weakness.risk_justification = nil
+
+    @weakness.state_regulations            = Finding.state_regulations[:not_exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:fails]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:high]
+    @weakness.probability                  = Finding.frequencies[:high]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
+
+    assert @weakness.valid?
+  end
+
+  test 'invalid with high risk' do
+    skip unless Current.conclusion_pdf_format == 'bic' && !USE_SCOPE_CYCLE
+
+    @weakness.manual_risk        = false
+    @weakness.risk_justification = nil
+
+    @weakness.state_regulations            = Finding.state_regulations[:not_exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:fails]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:high]
+    @weakness.probability                  = Finding.frequencies[:high]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
+
+    refute @weakness.valid?
+  end
+
+  test 'invalid because not same draft review code parent' do
+    parent                   = findings(:being_implemented_weakness)
+    parent.draft_review_code = 'test code'
+    @weakness.parent         = parent
+    @weakness.final          = true
+
+    refute @weakness.valid?
+    assert_error @weakness, :draft_review_code, :not_same_draft_review_code_parent
+  end
+
+  test 'valid because same draft review code parent' do
+    parent                      = findings(:being_implemented_weakness)
+    parent.draft_review_code    = 'test code'
+    @weakness.parent            = parent
+    @weakness.final             = true
+    @weakness.draft_review_code = 'test code'
+
+    assert @weakness.valid?
+  end
+
+  test 'invalid because not same draft review code children' do
+    children                   = findings(:being_implemented_weakness)
+    children.final             = true
+    children.draft_review_code = 'test code'
+
+    @weakness.children << children
+
+    refute @weakness.valid?
+    assert_error @weakness, :draft_review_code, :not_same_draft_review_code_children
+  end
+
+  test 'valid because same draft review code children' do
+    children                   = findings(:being_implemented_weakness)
+    children.final             = true
+    children.draft_review_code = 'test code'
+
+    @weakness.children << children
+
+    @weakness.draft_review_code = 'test code'
+
+    assert @weakness.valid?
   end
 
   private

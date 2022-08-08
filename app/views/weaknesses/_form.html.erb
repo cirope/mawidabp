@@ -8,16 +8,6 @@
     assignment_confirm_message: t('finding.assignment_confirm_message')
   }
 } %>
-<% if USE_SCOPE_CYCLE
-    form_options[:data] = form_options[:data].merge({ confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
-                                                                       { state: I18n.t('findings.state.being_implemented'),
-                                                                         extension: Finding.human_attribute_name(:extension) }),
-                                                      checkbox_target: '#weakness_extension',
-                                                      target_value_checkbox: false,
-                                                      state_target: Finding::STATUS[:being_implemented],
-                                                      input_with_state: '#weakness_state',
-                                                      condition_to_receive_confirm: first_version_in_being_implementation?(@weakness) })
-    end %>
 
 <%= simple_form_for @weakness, form_options do |f| %>
   <% content_for :js_extra do %>
@@ -80,11 +70,115 @@
           <%= f.input :effect, input_html: { readonly: readonly, rows: 5 } %>
         <% end %>
         <%= f.input :audit_recommendations, input_html: { readonly: readonly, rows: HIDE_WEAKNESS_EFFECT ? 7 : 5 } %>
+        <% if %w(bic).include? Current.conclusion_pdf_format %>
+          <div class="row">
+            <div class="col-md-4">
+              <%= f.input :year,
+                          input_html:
+                          {
+                            maxlength: 4,
+                            readonly: readonly,
+                            data: { input_text_only_accept_numerics: true }
+                          } %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :nsisio,
+                          input_html:
+                          {
+                            maxlength: 4,
+                            readonly: readonly,
+                            data: { input_text_only_accept_numerics: true }
+                          } %>
+            </div>
+            <div class="col-md-4">
+              <%= f.input :nobs,
+                          input_html:
+                          {
+                            maxlength: 4,
+                            readonly: readonly,
+                            data: { input_text_only_accept_numerics: true }
+                          } %>
+            </div>
+          </div>
+        <% end %>
       </div>
       <div class="col-md-6">
         <%= f.input :origination_date, as: :date_picker, input_html: {
-          readonly: (readonly || @weakness.repeated_of)
+          readonly: (readonly || @weakness.repeated_of), data: data_options_for_suggested_follow_up_date('weakness')
         } %>
+        <% if %w(bic).include? Current.conclusion_pdf_format %>
+          <input type="hidden" id="bic-risk-types" data-bic-risks-types="<%= finding_bic_risks_types(@weakness) %>">
+          <div class="row">
+            <div class="col">
+              <%= f.input :state_regulations, collection: weakness_state_regulations, prompt: true,
+                disabled: !@weakness.automatic_risk? || readonly,
+                input_html: {
+                  data: { bic_calculate_risk: true, bic_field_to_disabled_when_is_manual: true }
+                } %>
+              <%= f.hidden_field :state_regulations, value: nil, disabled: @weakness.automatic_risk? || readonly,
+                data: { bic_field_to_disabled_when_is_automatic: true } %>
+            </div>
+            <div class="col">
+              <%= f.input :degree_compliance, collection: weakness_degree_compliance, prompt: true,
+                disabled: !@weakness.automatic_risk? || readonly,
+                input_html: {
+                  data: { bic_calculate_risk: true, bic_field_to_disabled_when_is_manual: true }
+                } %>
+              <%= f.hidden_field :degree_compliance, value: nil, disabled: @weakness.automatic_risk? || readonly,
+                data: { bic_field_to_disabled_when_is_automatic: true } %>
+            </div>
+            <div class="col">
+              <%= f.input :observation_originated_tests, collection: weakness_observation_origination_tests, prompt: true,
+                disabled: !@weakness.automatic_risk? || readonly,
+                input_html: {
+                  data: { bic_calculate_risk: true, bic_field_to_disabled_when_is_manual: true }
+                } %>
+              <%= f.hidden_field :observation_originated_tests, value: nil, disabled: @weakness.automatic_risk? || readonly,
+                data: { bic_field_to_disabled_when_is_automatic: true } %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
+                disabled: !@weakness.automatic_risk? || readonly,
+                input_html: {
+                  data: { bic_calculate_risk: true, bic_field_to_disabled_when_is_manual: true }
+                } %>
+              <%= f.hidden_field :impact_risk, value: nil, disabled: @weakness.automatic_risk? || readonly,
+                data: { bic_field_to_disabled_when_is_automatic: true } %>
+            </div>
+            <div class="col">
+              <%= f.input :probability, collection: weakness_probabilities, prompt: true,
+                disabled: !@weakness.automatic_risk? || readonly,
+                input_html: {
+                  data: { bic_calculate_risk: true, bic_field_to_disabled_when_is_manual: true }
+                } %>
+              <%= f.hidden_field :probability, value: nil, disabled: @weakness.automatic_risk? || readonly,
+                data: { bic_field_to_disabled_when_is_automatic: true } %>
+            </div>
+            <div class="col">
+              <%= f.input :sample_deviation, collection: weakness_sample_deviation, prompt: true,
+                disabled: !@weakness.automatic_risk? || readonly,
+                input_html: {
+                  data: { bic_calculate_risk: true, bic_field_to_disabled_when_is_manual: true }
+                } %>
+              <%= f.hidden_field :sample_deviation, value: nil, disabled: @weakness.automatic_risk? || readonly,
+                data: { bic_field_to_disabled_when_is_automatic: true } %>
+            </div>
+            </div>
+          <div class="row">
+            <div class="col">
+              <%= f.input :external_repeated, collection: weakness_external_repeated, prompt: true,
+                disabled: !@weakness.automatic_risk? || readonly,
+                input_html: {
+                  data: { bic_calculate_risk: true, bic_field_to_disabled_when_is_manual: true  }
+                } %>
+              <%= f.hidden_field :external_repeated, value: nil, disabled: @weakness.automatic_risk? || readonly,
+                data: { bic_field_to_disabled_when_is_automatic: true } %>
+            </div>
+          </div>
+        <% end %>
+
         <% if USE_SCOPE_CYCLE %>
           <div class="row">
             <div class="col">
@@ -96,16 +190,16 @@
               <%= f.input :impact_risk, as: :hidden, disabled: !@weakness.use_suggested_impact.present? %>
             </div>
             <div class="col"
-              data-impact-absolute-value="<%= Finding::SUGGESTED_IMPACT_RISK_TYPES[:absolute_value] %>"
-              data-impact-representativeness-value="<%= Finding::SUGGESTED_IMPACT_RISK_TYPES[:representativeness] %>">
-              <%= f.input :use_suggested_impact, collection: suggested_type_risks,
-                include_blank: t('helpers.select.prompt'),
-                input_html: {
-                  data: {
-                    toggle_suggested_impact_disabled_attr: true,
-                    suggested_impact_option: true
-                  }
-              } %>
+                 data-impact-absolute-value="<%= Finding::SUGGESTED_IMPACT_RISK_TYPES[:absolute_value] %>"
+                 data-impact-representativeness-value="<%= Finding::SUGGESTED_IMPACT_RISK_TYPES[:representativeness] %>">
+                 <%= f.input :use_suggested_impact, collection: suggested_type_risks,
+                   include_blank: t('helpers.select.prompt'),
+                   input_html: {
+                     data: {
+                       toggle_suggested_impact_disabled_attr: true,
+                       suggested_impact_option: true
+                     }
+                   } %>
             </div>
             <div class="col">
               <%= f.input :probability, collection: weakness_probabilities, prompt: true,
@@ -116,59 +210,72 @@
               <%= f.input :probability, as: :hidden, disabled: !@weakness.use_suggested_probability.present? %>
             </div>
             <div class="col"
-              data-probability-repeatability-value="<%= Finding::SUGGESTED_PROBABILITIES_TYPES[:repeatability] %>"
-              data-probability-representativeness-value="<%= Finding::SUGGESTED_PROBABILITIES_TYPES[:representativeness] %>">
-              <%= f.input :use_suggested_probability, collection: suggested_type_probabilities,
-                include_blank: t('helpers.select.prompt'),
-                input_html: {
-                  data: {
-                    toggle_suggested_probability_disabled_attr: true,
-                    suggested_probability_option: true
-                  }
-                 } %>
+                 data-probability-repeatability-value="<%= Finding::SUGGESTED_PROBABILITIES_TYPES[:repeatability] %>"
+                 data-probability-representativeness-value="<%= Finding::SUGGESTED_PROBABILITIES_TYPES[:representativeness] %>">
+                 <%= f.input :use_suggested_probability, collection: suggested_type_probabilities,
+                   include_blank: t('helpers.select.prompt'),
+                   input_html: {
+                     data: {
+                       toggle_suggested_probability_disabled_attr: true,
+                       suggested_probability_option: true
+                     }
+                   } %>
             </div>
           </div>
-
+        <% end %>
+        <% if %w(bic pat).include? Current.conclusion_pdf_format %>
           <div class="row">
             <div class="col-9">
               <%= f.input :risk, collection: risks, prompt: true, disabled: @weakness.automatic_risk? || readonly, input_html: {
-                data: weakness_risk_data_options
+                data: weakness_risk_data_options.merge({ bic_field_to_disabled_when_is_automatic: true })
               } %>
+              <%= f.hidden_field :risk, disabled: !@weakness.automatic_risk? || readonly,
+                data: { bic_field_to_disabled_when_is_manual: true } %>
             </div>
             <div class="col-3 text-right">
-              <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
-                data: { toggle_risk_disabled_attr: true }
-              } %>
+              <%= f.input :manual_risk,
+                          wrapper_html: { class: 'mt-4 pt-2' },
+                          disabled: readonly,
+                          input_html: {
+                            data: { toggle_risk_disabled_attr: true, replace_with_original_value_when_disabled: false }
+                          } %>
             </div>
           </div>
+
         <% else %>
           <%= f.input :risk, collection: risks, prompt: true, disabled: readonly, input_html: {
             data: weakness_risk_data_options
           } %>
         <% end %>
-      <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
-        disabled: disabled_priority(@weakness, readonly),
-        readonly: !!USE_SCOPE_CYCLE
-      %>
+
+        <% if %w(bic).include? Current.conclusion_pdf_format %>
+          <%= f.input :risk_justification, disabled: @weakness.automatic_risk? || readonly, input_html: {
+                data: { bic_field_to_disabled_when_is_automatic: true } } %>
+          <%= f.hidden_field :risk_justification, value: nil, disabled: !@weakness.automatic_risk? || readonly,
+                data: { bic_field_to_disabled_when_is_manual: true } %>
+        <% end %>
+
+        <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
+          disabled: disabled_priority(@weakness, readonly),
+          readonly: !!USE_SCOPE_CYCLE
+        %>
         <%= f.label :state, raw(Weakness.human_attribute_name(:state) + ' ' +
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : '')) %>
 
-        <% options_for_select = if USE_SCOPE_CYCLE
+        <% options_for_select = if USE_SCOPE_CYCLE && !readonly
                                   {
                                     data:
-                                      { target_value_change_label: Finding::STATUS[:implemented_audited],
-                                        suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
-                                        target_input_with_label: '#weakness_follow_up_date',
-                                        target_value_enable_checkbox: extension_enabled?(f.object) ? Finding::STATUS[:being_implemented] : '',
-                                        target_checkbox: '#weakness_extension',
-                                        disabled_and_deny: true }
+                                      {
+                                        target_values_enable_checkbox: Finding.states_that_allow_extension,
+                                        target_checkbox: '#weakness_extension'
+                                      }.merge(data_options_for_suggested_follow_up_date('weakness'))
                                   }
                                 else
                                   {}
                                 end %>
         <%= finding_status_field(f,
-                                 disabled: readonly || @weakness.issues.any?,
+                                 disabled: readonly || finding_has_issues?(@weakness),
                                  options_html: options_for_select) %>
 
         <% if show_skip_work_paper_for @weakness %>
@@ -211,24 +318,7 @@
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
 
         <% if %w(bic pat).include? Current.conclusion_pdf_format %>
-          <% @weakness.build_image_model unless @weakness.image_model %>
-
-          <div class="clearfix">
-            <%= f.simple_fields_for :image_model do |im_f| %>
-              <p class="mb-1"><%= ImageModel.model_name.human %></p>
-
-              <div class="file-container float-left">
-                <%= link_to_upload im_f.object, :image %>
-                <% if im_f.object.image_cache %>
-                  <%= im_f.input :image_cache, as: :hidden %>
-                  <%= im_f.input :image, as: :hidden, input_html: { value: nil } %>
-                <% else %>
-                  <%= im_f.input :image, label: false %>
-                <% end %>
-              </div>
-            <% end %>
-            <%= link_to_download_image f.object %>
-          </div>
+          <%= render 'image_model', f: f, readonly: readonly %>
         <% end %>
       </div>
     </div>
@@ -248,11 +338,20 @@
                                    }
           %>
           <%= f.input :compliance, as: :hidden, input_html: { id: 'weakness_hidden_compliance' } %>
-          <div data-compliance-observations <%= 'hidden' unless @weakness.compliance == 'yes' %>>
-            <%= f.input :compliance_observations, input_html: {
-              data: { compliance_observations_text: true }
+        </div>
+      </div>
+      <div class="row" data-compliance-observations <%= 'hidden' unless @weakness.compliance == 'yes' %>>
+        <div class="col-md-6">
+          <%= f.input :compliance_observations, input_html: {
+            data: { compliance_observations_text: true }
             } %>
-          </div>
+        </div>
+        <div class="col-md-2">
+          <%= f.input :compliance_susceptible_to_sanction, collection: weakness_compliance_susceptible_to_sanction_options,
+                                                           include_blank: t('helpers.select.prompt'),
+                                                           input_html: {
+                                                             data: { compliance_susceptible_to_sanction: true }
+                                                           } %>
         </div>
       </div>
       <div class="row">
@@ -482,7 +581,7 @@
         <%= f.input :probability_amount,
           input_html: {
             data: {
-              probability_previous_amount: @weakness.probability_risk_previous,
+              probability_previous_amount: Finding.list.probability_risk_previous(@weakness.review, @weakness.weakness_template),
               probability_representativeness_amount: @weakness.probability_risks_representativeness,
               probability_risks_types: finding_percentage_impact_risks_types(@weakness),
               probability_amount: true

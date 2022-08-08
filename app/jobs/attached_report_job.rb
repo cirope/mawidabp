@@ -11,6 +11,9 @@ class AttachedReportJob < ApplicationJob
     organization_id = args.fetch :organization_id
 
     Current.organization = Organization.find organization_id
+    Current.user         = User.list.find user_id
+
+    set_conclusion_pdf_format
 
     scope        = build_scope_for model, query_methods
     report       = scope.send method_name, **options
@@ -30,6 +33,16 @@ class AttachedReportJob < ApplicationJob
   end
 
   private
+
+    def set_conclusion_pdf_format
+      prefix = Current.organization&.prefix&.downcase
+
+      if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
+        Current.conclusion_pdf_format = SHOW_CONCLUSION_ALTERNATIVE_PDF[prefix]
+      end
+
+      Current.conclusion_pdf_format ||= 'default'
+    end
 
     def build_scope_for model, raw_query_methods
       query_methods = JSON.parse(raw_query_methods).deep_symbolize_keys

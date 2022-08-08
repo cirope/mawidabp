@@ -101,7 +101,7 @@ module Prawn
       def add_organization_image(organization, font_size = 10, factor: PDF_LOGO_FACTOR)
         organization_image = organization.try(:image_model).try(:image).try(
           :thumb).try(:path)
-        if organization_image && File.exists?(organization_image)
+        if organization_image && File.exist?(organization_image)
           image_geometry = organization.image_model.image_geometry(:pdf_thumb)
           image_geometry[:height] = image_geometry[:height] * factor
           image_geometry[:width] = image_geometry[:width] * factor

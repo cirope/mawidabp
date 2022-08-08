@@ -67,6 +67,8 @@ SPLIT_OR_TERMS_REGEXP = /\s+o\s+|\s*[,]\s*|\s+OR\s+/i
 TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 # Ruta a un archivo para realizar las pruebas (ruta completa)
 TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
+# Ruta a una imagen para realizar las pruebas (ruta completa)
+TEST_IMAGE_FULL_PATH = File.join(Rails.root, 'test/test_images', 'logo.png').freeze
 # Dirección base para formar los links absolutos
 URL_HOST = (ENV['APP_HOST'] + (Rails.env.development? ? ':3000' : '')).freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador
@@ -91,9 +93,15 @@ POSTGRESQL_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' 
 # Limite de filas en reportes para servir en real-time
 SEND_REPORT_EMAIL_AFTER_COUNT = 100000
 # Planes de licencias
-LICENSE_PLANS = YAML.load(
-  File.read('config/license_plans.yml')
-)[Rails.env].with_indifferent_access.freeze
+LICENSE_PLANS = if RUBY_VERSION >= '3.1.0'
+                  YAML.load(
+                    File.read('config/license_plans.yml'), aliases: true
+                  )[Rails.env].with_indifferent_access.freeze
+                else
+                  YAML.load(
+                    File.read('config/license_plans.yml')
+                  )[Rails.env].with_indifferent_access.freeze
+                end
 # Redis config
 REDIS_HOST = ENV['REDIS_HOST'] || 'localhost'
 REDIS_PORT = ENV['REDIS_PORT'] || '6379'
