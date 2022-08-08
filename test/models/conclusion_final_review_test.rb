@@ -30,9 +30,11 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un informe final
   test 'create' do
-    Current.user         = users :supervisor
-    review               = reviews :review_approved_with_conclusion
-    findings_not_revoked = review.weaknesses.not_revoked + review.oportunities.not_revoked
+    Current.user           = users :supervisor
+    review                 = reviews :review_approved_with_conclusion
+    findings_not_revoked   = review.weaknesses.not_revoked + review.oportunities.not_revoked
+    findings_revoked       = review.weaknesses.revoked + review.oportunities.revoked
+    old_draft_review_codes = (findings_not_revoked + findings_revoked).map(&:review_code)
 
     assert findings_not_revoked.present?
 
@@ -70,15 +72,19 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       end
     end
 
-    final_findings = review.final_weaknesses.not_revoked + review.final_oportunities.not_revoked
+    final_findings_not_revoked = review.final_weaknesses.not_revoked + review.final_oportunities.not_revoked
+    final_findings_revoked     = review.final_weaknesses.revoked + review.final_oportunities.revoked
+    draft_review_codes         = (final_findings_not_revoked + final_findings_revoked).map(&:draft_review_code)
 
-    final_findings.each do |f_f|
+    assert_equal old_draft_review_codes, draft_review_codes
+
+    final_findings_not_revoked.each do |f_f|
       assert_equal f_f.draft_review_code, f_f.parent.draft_review_code
     end
 
-    assert_equal findings_not_revoked.count, final_findings.count
-    assert_not_equal 0, Finding.finals(true).count
-    assert Finding.finals(true).all? { |f| f.parent }
+    assert_equal findings_not_revoked.count, final_findings_not_revoked.count
+    assert_equal findings_revoked.count, final_findings_revoked.count
+    assert final_findings_not_revoked.all? { |f| f.parent.present? }
 
     if DISABLE_COI_AUDIT_DATE_VALIDATION
       assert review.control_objective_items.any? { |coi| coi.audit_date.today? }
@@ -89,13 +95,13 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'create 2 times and keep draft review code' do
     skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
 
-    Current.user = users :supervisor
-    review       = reviews :review_approved_with_conclusion
+    Current.user           = users :supervisor
+    review                 = reviews :review_approved_with_conclusion
+    findings_not_revoked   = review.weaknesses.not_revoked + review.oportunities.not_revoked
+    findings_revoked       = review.weaknesses.revoked + review.oportunities.revoked
+    old_draft_review_codes = (findings_not_revoked + findings_revoked).map(&:review_code)
 
-    old_draft_review_codes =
-      (review.weaknesses.not_revoked + review.oportunities.not_revoked).map do |f|
-        f.review_code
-      end
+    assert findings_not_revoked.present?
 
     assert_difference 'ConclusionFinalReview.count' do
       @conclusion_review = ConclusionFinalReview.list.new(
@@ -140,16 +146,13 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert @conclusion_review.save
     end
 
-    draft_review_codes =
-      (review.weaknesses.not_revoked + review.oportunities.not_revoked).map do |f|
-        f.draft_review_code
-      end
+    final_findings_not_revoked = review.final_weaknesses.not_revoked + review.final_oportunities.not_revoked
+    final_findings_revoked     = review.final_weaknesses.revoked + review.final_oportunities.revoked
+    draft_review_codes         = (final_findings_not_revoked + final_findings_revoked).map(&:draft_review_code)
 
     assert_equal old_draft_review_codes, draft_review_codes
 
-    final_findings = review.final_weaknesses.not_revoked + review.final_oportunities.not_revoked
-
-    final_findings.each do |f_f|
+    final_findings_not_revoked.each do |f_f|
       assert_equal f_f.draft_review_code, f_f.parent.draft_review_code
     end
   end
@@ -163,10 +166,12 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert weakness.update_attribute :state, 7
 
-    old_draft_review_codes =
-      (review.weaknesses.revoked + review.oportunities.revoked).map do |f|
-        f.review_code
-      end
+    findings_not_revoked = review.weaknesses.not_revoked + review.oportunities.not_revoked
+    findings_revoked     = review.weaknesses.revoked + review.oportunities.revoked
+
+    assert findings_revoked.present?
+
+    old_draft_review_codes = (findings_not_revoked + findings_revoked).map(&:review_code)
 
     assert_difference 'ConclusionFinalReview.count' do
       @conclusion_review = ConclusionFinalReview.list.new(
@@ -211,11 +216,11 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert @conclusion_review.save
     end
 
-    draft_review_codes =
-      (review.final_weaknesses.revoked + review.final_oportunities.revoked).map do |f|
-        f.draft_review_code
-      end
+    final_findings_not_revoked = review.final_weaknesses.not_revoked + review.final_oportunities.not_revoked
+    final_findings_revoked     = review.final_weaknesses.revoked + review.final_oportunities.revoked
+    draft_review_codes         = (final_findings_not_revoked + final_findings_revoked).map(&:draft_review_code)
 
+    assert final_findings_revoked.present?
     assert_equal old_draft_review_codes, draft_review_codes
   end
 
@@ -228,6 +233,14 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     control_objective_items(:management_dependency_item).update! order_number: 2
     control_objective_items(:impact_analysis_item).update! order_number: 1
     findings(:notify_oportunity).update! state: 7
+    findings(:being_implemented_weakness_final).update_column :parent_id, nil
+    findings(:being_implemented_weakness_final).update_column :control_objective_item_id, nil
+    findings(:notify_oportunity_final).update_column :parent_id, nil
+    findings(:notify_oportunity_final).update_column :control_objective_item_id, nil
+    findings(:unanswered_weakness_final).update_column :parent_id, nil
+    findings(:unanswered_weakness_final).update_column :control_objective_item_id, nil
+    findings(:confirmed_oportunity_final).update_column :parent_id, nil
+    findings(:confirmed_oportunity_final).update_column :control_objective_item_id, nil
 
     review = reviews :current_review
 
@@ -390,16 +403,13 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'allow destruction' do
     skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
 
-    weakness = @conclusion_review.review.weaknesses.first
+    final_findings_count =
+      @conclusion_review.review.final_weaknesses.count + @conclusion_review.review.final_oportunities.count 
 
-    weakness.update_column :final, true
-
-    findings_count = @conclusion_review.review.final_weaknesses.count
-
-    assert findings_count > 0
+    assert final_findings_count > 0
 
     assert_difference 'ConclusionFinalReview.count', -1 do
-      assert_difference 'Finding.finals(true).count', -findings_count do
+      assert_difference 'Finding.finals(true).count', -final_findings_count do
         @conclusion_review.destroy
       end
     end

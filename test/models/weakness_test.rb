@@ -231,6 +231,8 @@ class WeaknessTest < ActiveSupport::TestCase
   test 'should allow revoked prefixed codes' do
     revoked_prefix = I18n.t 'code_prefixes.revoked'
 
+    @weakness.children.clear
+
     @weakness.review_code = "#{revoked_prefix}#{@weakness.review_code}"
 
     assert @weakness.valid?
@@ -699,46 +701,18 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'invalid because not same draft review code parent' do
-    parent                   = findings(:being_implemented_weakness)
-    parent.draft_review_code = 'test code'
-    @weakness.parent         = parent
-    @weakness.final          = true
+    children                   = findings :unanswered_weakness_final
+    children.draft_review_code = 'different code'
 
-    refute @weakness.valid?
-    assert_error @weakness, :draft_review_code, :not_same_draft_review_code_parent
-  end
-
-  test 'valid because same draft review code parent' do
-    parent                      = findings(:being_implemented_weakness)
-    parent.draft_review_code    = 'test code'
-    @weakness.parent            = parent
-    @weakness.final             = true
-    @weakness.draft_review_code = 'test code'
-
-    assert @weakness.valid?
+    refute children.valid?
+    assert_error children, :draft_review_code, :not_same_draft_review_code_parent
   end
 
   test 'invalid because not same draft review code children' do
-    children                   = findings(:being_implemented_weakness)
-    children.final             = true
-    children.draft_review_code = 'test code'
-
-    @weakness.children << children
+    @weakness.draft_review_code = 'different code'
 
     refute @weakness.valid?
     assert_error @weakness, :draft_review_code, :not_same_draft_review_code_children
-  end
-
-  test 'valid because same draft review code children' do
-    children                   = findings(:being_implemented_weakness)
-    children.final             = true
-    children.draft_review_code = 'test code'
-
-    @weakness.children << children
-
-    @weakness.draft_review_code = 'test code'
-
-    assert @weakness.valid?
   end
 
   private
