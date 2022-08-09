@@ -139,13 +139,13 @@ module Reviews::ScoreSheet
         if coi[:options]
           [
             "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[:name]}</i>",
-            coi[:exclude] ? '-' : coi[:previous_ef] ? "<i>#{effectiveness_format coi[:previous_ef]}</i>" : '',
+            coi[:exclude] ? '-' : coi[:pre_effectiveness] ? "<i>#{effectiveness_format coi[:pre_effectiveness]}</i>" : '',
             coi[:exclude] ? '-' : "<i>#{effectiveness_format coi[:options]}</i>"
           ]
         else
           [
             "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[:name]}</i>",
-            coi[:exclude] ? '-' : coi[:previous_ef] ? "<i>#{coi[:previous_ef]}%</i>" : '',
+            coi[:exclude] ? '-' : coi[:pre_effectiveness] ? "<i>#{coi[:pre_effectiveness]}%</i>" : '',
             coi[:exclude] ? '-' : "<i>#{coi[:effectiveness].round}%</i>"
           ]
         end

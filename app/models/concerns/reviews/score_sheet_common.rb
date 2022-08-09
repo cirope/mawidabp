@@ -78,15 +78,11 @@ module Reviews::ScoreSheetCommon
     end
 
     def process_control_previous process_control
-      pc  = previous.control_objective_items
+      previous_cois = previous.control_objective_items
 
-      cois = pc.map do |c|
-        if c.process_control.id == process_control.id
-          {
-            relevance: c.relevance,
-            effectiveness: c.effectiveness,
-            exclude: c.exclude_from_score
-          }
+      cois = previous_cois.map do |coi|
+        if coi.process_control.id == process_control.id
+          { relevance: coi.relevance, effectiveness: coi.effectiveness, exclude: coi.exclude_from_score }
         end
       end
 
@@ -148,12 +144,12 @@ module Reviews::ScoreSheetCommon
       control_objective_items.each_with_object({}) do |coi, process_controls|
         process_controls[coi.process_control] ||= []
         process_controls[coi.process_control] << {
-          name: coi.to_s,
-          effectiveness: (coi.effectiveness || 0),
-          relevance: (coi.relevance || 0),
-          exclude: coi.exclude_from_score,
-          previous_ef: (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
-          options: coi_options(coi)
+          name:                  coi.to_s,
+          effectiveness:         (coi.effectiveness || 0),
+          relevance:             (coi.relevance || 0),
+          exclude:               coi.exclude_from_score,
+          pre_effectivenes: (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
+          options:               coi_options(coi)
         }
       end
     end
