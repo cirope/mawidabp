@@ -70,23 +70,27 @@ module Reviews::ScoreSheetCommon
     end
 
     def process_control_row_data process_control, effectiveness, exclude, global: false, effectiveness_text: nil
+      pre_process_control = process_control_previous(process_control)
+
       [
         "#{ProcessControl.model_name.human}: #{process_control.name}",
-        ("#{process_control_previous(process_control).round}%" unless global),
+        global ? '-' : (pre_process_control ? "#{pre_process_control.round}%" : '-'),
         exclude ? '-' : "#{effectiveness.round}%"
       ].compact
     end
 
     def process_control_previous process_control
-      previous_cois = previous.control_objective_items
+      previous_cois = previous&.control_objective_items
 
-      cois = previous_cois.map do |coi|
-        if coi.process_control.id == process_control.id
-          { relevance: coi.relevance, effectiveness: coi.effectiveness, exclude: coi.exclude_from_score }
+      if previous_cois
+        cois = previous_cois.map do |coi|
+          if coi.process_control.id == process_control.id
+            { relevance: coi.relevance, effectiveness: coi.effectiveness, exclude: coi.exclude_from_score }
+          end
         end
-      end
 
-      control_objective_effectiveness_for cois.compact
+        control_objective_effectiveness_for cois.compact
+      end
     end
 
     def effectiveness_format effectiveness_text
