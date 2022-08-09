@@ -41,5 +41,22 @@
         ) %>
       </li>
     </ul>
+  <% elsif params[:completion_state] == 'incomplete' %>
+    <ul class="nav nav-tabs mb-3" data-hide-in-search>
+      <li class="nav-item">
+        <%= link_to(
+          t(".#{params[:completion_state]}"),
+          findings_path(request.query_parameters.except(:pending_to_endorsement)),
+          class: (params[:pending_to_endorsement].blank? ? 'nav-link active' : 'nav-link')
+        ) %>
+      </li>
+      <li class="nav-item">
+        <%= link_to(
+          t('.pending_to_endorsement'),
+          findings_path(request.query_parameters.merge(pending_to_endorsement: true)),
+          class: (params[:pending_to_endorsement].present? ? 'nav-link active' : 'nav-link')
+        ) %>
+      </li>
+    </ul>
   <% end %>
 <% end %>
