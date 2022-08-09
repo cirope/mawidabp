@@ -72,20 +72,25 @@ module Reviews::ScoreSheetCommon
     def process_control_row_data process_control, effectiveness, exclude, global: false, effectiveness_text: nil
       [
         "#{ProcessControl.model_name.human}: #{process_control.name}",
-        (process_control_previous unless global),
+        ("#{process_control_previous(process_control).round}%" unless global),
         exclude ? '-' : "#{effectiveness.round}%"
       ].compact
     end
 
-    def process_control_previous
-     pc                     =  collect_process_controls previous: true
-     effectiveness_previous = nil
+    def process_control_previous process_control
+      pc  = previous.control_objective_items
 
-     pc.each do |process_control, coi_data|
-        effectiveness_previous = control_objective_effectiveness_for coi_data
-     end
-byebug
-     effectiveness_previous
+      cois = pc.map do |c|
+        if c.process_control.id == process_control.id
+          {
+            relevance: c.relevance,
+            effectiveness: c.effectiveness,
+            exclude: c.exclude_from_score
+          }
+        end
+      end
+
+      control_objective_effectiveness_for cois.compact
     end
 
     def effectiveness_format effectiveness_text
@@ -94,12 +99,12 @@ byebug
 
     def control_objective_effectiveness_for control_objective_item_data
       coi_relevance_count = control_objective_item_data.inject(0.0) do |t, e|
-        e[3] ? t : t + e[2]
+        e[:exclude] ? t : t + e[:relevance]
       end
 
       control_objective_item_data.inject(0.0) do |t, e|
         if coi_relevance_count > 0
-          e[3] ? t : t + (e[1] * e[2]) / coi_relevance_count
+          e[:exclude] ? t : t + (e[:effectiveness] * e[:relevance]) / coi_relevance_count
         else
           100.0
         end
@@ -139,19 +144,17 @@ byebug
       pdf.add_review_signatures_table users
     end
 
-    def collect_process_controls review_previous = false
-      cois = review_previous ? previous.control_objective_items : control_objective_items
-
-      cois.each_with_object({}) do |coi, process_controls|
+    def collect_process_controls
+      control_objective_items.each_with_object({}) do |coi, process_controls|
         process_controls[coi.process_control] ||= []
-        process_controls[coi.process_control] << [
-          coi.to_s,
-          coi.effectiveness || 0,
-          coi.relevance     || 0,
-          coi.exclude_from_score,
-          (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
-          coi_options(coi),
-        ]
+        process_controls[coi.process_control] << {
+          name: coi.to_s,
+          effectiveness: (coi.effectiveness || 0),
+          relevance: (coi.relevance || 0),
+          exclude: coi.exclude_from_score,
+          previous_ef: (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
+          options: coi_options(coi)
+        }
       end
     end
 

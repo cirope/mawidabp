@@ -107,7 +107,7 @@ module Reviews::ScoreSheet
       process_controls.each do |process_control, coi_data|
         effectiveness      = control_objective_effectiveness_for coi_data
         effectiveness_text = effectiveness_text coi_data
-        exclude            = coi_data.all? { |e| e[3] }
+        exclude            = coi_data.all? { |e| e[:exclude] }
         row                = process_control_row_data(
                                process_control, effectiveness,
                                exclude, effectiveness_text: effectiveness_text
@@ -121,7 +121,7 @@ module Reviews::ScoreSheet
     end
 
     def effectiveness_text coi_data
-      coi_data.first[5]
+      coi_data.first[:options]
     end
 
     def initial_control_objective_row_data
@@ -136,17 +136,17 @@ module Reviews::ScoreSheet
       pad = Prawn::Text::NBSP * 4
 
       control_objective_item_data.map do |coi|
-        if coi[5]
+        if coi[:options]
           [
-            "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[0]}</i>",
-            coi[3] ? '-' : coi[4] ? "<i>#{effectiveness_format coi[4]}</i>" : '',
-            coi[3] ? '-' : "<i>#{effectiveness_format coi[5]}</i>"
+            "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[:name]}</i>",
+            coi[:exclude] ? '-' : coi[:previous_ef] ? "<i>#{effectiveness_format coi[:previous_ef]}</i>" : '',
+            coi[:exclude] ? '-' : "<i>#{effectiveness_format coi[:options]}</i>"
           ]
         else
           [
-            "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[0]}</i>",
-            coi[3] ? '-' : coi[4] ? "<i>#{coi[4]}%</i>" : '',
-            coi[3] ? '-' : "<i>#{coi[1].round}%</i>"
+            "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[:name]}</i>",
+            coi[:exclude] ? '-' : coi[:previous_ef] ? "<i>#{coi[:previous_ef]}%</i>" : '',
+            coi[:exclude] ? '-' : "<i>#{coi[:effectiveness].round}%</i>"
           ]
         end
       end
