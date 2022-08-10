@@ -74,7 +74,7 @@ module Reviews::ScoreSheetCommon
 
       [
         "#{ProcessControl.model_name.human}: #{process_control.name}",
-        ((pre_process_control ? "#{pre_process_control.round}%" : '-') unless global),
+        ((pre_process_control ? "#{pre_process_control.round}%" : '') unless global),
         exclude ? '-' : "#{effectiveness.round}%"
       ].compact
     end
@@ -148,12 +148,12 @@ module Reviews::ScoreSheetCommon
       control_objective_items.each_with_object({}) do |coi, process_controls|
         process_controls[coi.process_control] ||= []
         process_controls[coi.process_control] << {
-          name:             coi.to_s,
-          effectiveness:    (coi.effectiveness || 0),
-          relevance:        (coi.relevance || 0),
-          exclude:          coi.exclude_from_score,
-          pre_effectivenes: (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
-          options:          coi_options(coi)
+          name:              coi.to_s,
+          effectiveness:     (coi.effectiveness || 0),
+          relevance:         (coi.relevance || 0),
+          exclude:           coi.exclude_from_score,
+          pre_effectiveness: (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
+          options:           coi_options(coi)
         }
       end
     end
