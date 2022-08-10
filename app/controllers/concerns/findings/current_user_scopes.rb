@@ -96,10 +96,12 @@ module Findings::CurrentUserScopes
       conditions = {}
 
       if params[:pending_to_endorsement].present?
-        conditions[FindingAnswer.table_name] = {}
-
-        conditions[FindingAnswer.table_name][Endorsement.table_name] =
-          { status: Endorsement.statuses['pending'], user_id: @auth_user.id }
+        conditions[FindingAnswer.table_name] =
+          { Endorsement.table_name =>
+            {
+              status: Endorsement.statuses['pending'],
+              user_id: @auth_user.id
+            } }
       end
 
       conditions

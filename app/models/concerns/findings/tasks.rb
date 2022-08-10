@@ -12,7 +12,7 @@ module Findings::Tasks
   def next_task_expiration
     tasks.where(status: [Task.statuses['pending'], Task.statuses['in_progress']],
                 due_on: Date.today..)
-         &.first
+         .first
          &.due_on
   end
 
