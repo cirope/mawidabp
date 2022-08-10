@@ -74,7 +74,7 @@ module Reviews::ScoreSheetCommon
 
       [
         "#{ProcessControl.model_name.human}: #{process_control.name}",
-        global ? '-' : (pre_process_control ? "#{pre_process_control.round}%" : '-'),
+        ((pre_process_control ? "#{pre_process_control.round}%" : '-') unless global),
         exclude ? '-' : "#{effectiveness.round}%"
       ].compact
     end
