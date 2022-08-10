@@ -108,7 +108,7 @@ module Reviews::ScoreSheetGlobal
 
       process_controls.each do |process_control, coi_data|
         effectiveness = control_objective_effectiveness_for coi_data
-        exclude       = coi_data.all? { |e| e[3] }
+        exclude       = coi_data.all? { |e| e[:exclude] }
         row           =
           process_control_row_data(process_control, effectiveness, exclude, global: true)
 

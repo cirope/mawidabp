@@ -70,11 +70,27 @@ module Reviews::ScoreSheetCommon
     end
 
     def process_control_row_data process_control, effectiveness, exclude, global: false, effectiveness_text: nil
+      pre_process_control = process_control_previous(process_control)
+
       [
-        "#{ProcessControl.model_name.human}: #{process_control}",
-        ('' unless global),
+        "#{ProcessControl.model_name.human}: #{process_control.name}",
+        ((pre_process_control ? "#{pre_process_control.round}%" : '') unless global),
         exclude ? '-' : "#{effectiveness.round}%"
       ].compact
+    end
+
+    def process_control_previous process_control
+      previous_cois = previous&.control_objective_items
+
+      if previous_cois
+        cois = previous_cois.map do |coi|
+          if coi.process_control.id == process_control.id
+            { relevance: coi.relevance, effectiveness: coi.effectiveness, exclude: coi.exclude_from_score }
+          end
+        end
+
+        control_objective_effectiveness_for cois.compact
+      end
     end
 
     def effectiveness_format effectiveness_text
@@ -83,12 +99,12 @@ module Reviews::ScoreSheetCommon
 
     def control_objective_effectiveness_for control_objective_item_data
       coi_relevance_count = control_objective_item_data.inject(0.0) do |t, e|
-        e[3] ? t : t + e[2]
+        e[:exclude] ? t : t + e[:relevance]
       end
 
       control_objective_item_data.inject(0.0) do |t, e|
         if coi_relevance_count > 0
-          e[3] ? t : t + (e[1] * e[2]) / coi_relevance_count
+          e[:exclude] ? t : t + (e[:effectiveness] * e[:relevance]) / coi_relevance_count
         else
           100.0
         end
@@ -130,15 +146,15 @@ module Reviews::ScoreSheetCommon
 
     def collect_process_controls
       control_objective_items.each_with_object({}) do |coi, process_controls|
-        process_controls[coi.process_control.name] ||= []
-        process_controls[coi.process_control.name] << [
-          coi.to_s,
-          coi.effectiveness || 0,
-          coi.relevance     || 0,
-          coi.exclude_from_score,
-          (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
-          coi_options(coi)
-        ]
+        process_controls[coi.process_control] ||= []
+        process_controls[coi.process_control] << {
+          name:              coi.to_s,
+          effectiveness:     (coi.effectiveness || 0),
+          relevance:         (coi.relevance || 0),
+          exclude:           coi.exclude_from_score,
+          pre_effectiveness: (coi_options(coi, previous_effectiveness: true) || coi.previous_effectiveness),
+          options:           coi_options(coi)
+        }
       end
     end
 
