@@ -195,7 +195,7 @@ GEM
       activerecord (>= 5.2)
       request_store (~> 1.1)
     pdf-core (0.9.0)
-    pg (1.4.2)
+    pg (1.4.3)
     popper_js (1.16.0)
     prawn (2.4.0)
       pdf-core (~> 0.9.0)
@@ -397,4 +397,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   2.3.14
+   2.3.17
