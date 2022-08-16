@@ -173,7 +173,7 @@ module ConclusionReviews::UplPdf
     end
 
     def put_upl_control_objectives_on pdf, grouped_control_objectives
-      grouped_control_objectives.each do |process_control, cois|
+      grouped_control_objectives.sort.each do |process_control, cois|
         coi_data              = cois.sort.map { |coi| ['• ', coi.to_s] }
         process_control_text  = "<b>#{ProcessControl.model_name.human}: "
         process_control_text << "<i>#{process_control.name}</i></b>"
