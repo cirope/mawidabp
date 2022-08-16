@@ -145,7 +145,7 @@ module Reviews::ScoreSheetCommon
     end
 
     def collect_process_controls
-      control_objective_items.each_with_object({}) do |coi, process_controls|
+      control_objective_items.reorder(:order_number).each_with_object({}) do |coi, process_controls|
         process_controls[coi.process_control] ||= []
         process_controls[coi.process_control] << {
           name:              coi.to_s,
