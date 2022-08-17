@@ -207,10 +207,10 @@ class UserTest < ActiveSupport::TestCase
     @user.change_password_hash = 'abcde' * 52
 
     assert @user.invalid?
-    assert_error @user, :user, :too_long, count: 30
+    assert_error @user, :user, :too_long, count: 255
     assert_error @user, :name, :too_long, count: 100
     assert_error @user, :last_name, :too_long, count: 100
-    assert_error @user, :email, :too_long, count: 100
+    assert_error @user, :email, :too_long, count: 255
     assert_error @user, :password, :too_long, count: 128
     assert_error @user, :function, :too_long, count: 255
     assert_error @user, :office, :too_long, count: 255
