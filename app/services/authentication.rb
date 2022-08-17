@@ -87,7 +87,7 @@ class Authentication
           end
         end
 
-        if user.organization_roles.empty? && USE_SCOPE_CYCLE
+        if user.organization_roles.where(organization_id: @current_organization.id).empty? && USE_SCOPE_CYCLE
             default_saml_roles.each do |default_role|
               user.organization_roles.create! organization_id: default_role.organization_id,
                                               role_id:         default_role.id

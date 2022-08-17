@@ -319,6 +319,8 @@ es:
       info: 'Informativo'
       warning: 'Advertencia'
       danger: 'Peligro'
+    saml_providers:
+      azure: 'Azure'
 
   periods:
     edit:

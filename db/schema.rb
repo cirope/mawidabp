@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_01_181957) do
+ActiveRecord::Schema.define(version: 2022_08_16_174248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1145,6 +1145,22 @@ ActiveRecord::Schema.define(version: 2022_08_01_181957) do
     t.index ["organization_id"], name: "index_roles_on_organization_id"
   end
 
+  create_table "saml_providers", force: :cascade do |t|
+    t.string "provider", null: false
+    t.string "idp_homepage", null: false
+    t.string "idp_entity_id", null: false
+    t.string "idp_sso_target_url", null: false
+    t.string "sp_entity_id", null: false
+    t.string "assertion_consumer_service_url", null: false
+    t.string "name_identifier_format", null: false
+    t.string "assertion_consumer_service_binding", null: false
+    t.text "idp_cert", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_saml_providers_on_organization_id"
+  end
+
   create_table "sectors", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "organization_id", null: false
@@ -1482,6 +1498,7 @@ ActiveRecord::Schema.define(version: 2022_08_01_181957) do
   add_foreign_key "risk_weights", "risk_assessment_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_weights", "risk_assessment_weights", on_update: :restrict, on_delete: :restrict
   add_foreign_key "roles", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "saml_providers", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "sectors", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "settings", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "subsidiaries", "organizations", on_update: :restrict, on_delete: :restrict
