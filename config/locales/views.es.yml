@@ -222,7 +222,7 @@ es:
         title: 'Autorizar nuevo plan'
         body: |-
           Para cambiar de plan, deberá autorizar el nuevo plan mensual.
-          El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios auditores en el momento.'
+          El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios Analista UPLA en el momento.'
     authorizations:
       new:
         title: 'Licencia'
@@ -657,7 +657,7 @@ es:
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
     create:
-      correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
+      correctly_created_with_count: 'Usuario creado, cantidad de Analista UPLA restantes para su licencia: %{count}'
     imports:
       new:
         title: 'Importar usuarios desde LDAP'

@@ -101,8 +101,8 @@ es:
     correctly_updated: "Unidad organizativa actualizada correctamente."
     stale_object_error: "La unidad organizativa no fue actualizada, intente nuevamente."
     add_business_unit: "Agregar unidad de negocio"
-    internal_audit: "Auditorías realizadas por la entidad"
-    external_audit: "Auditorías realizadas por otras entidades"
+    internal_audit: "Tareas realizadas por la entidad"
+    external_audit: "Tareas realizadas por otras entidades"
     errors:
       can_not_be_destroyed: "El unidad organizativa no puede ser eliminada"
       business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
@@ -420,7 +420,7 @@ es:
       assumed_risk_weaknesses: "Riesgo asumido"
     detailed_review:
       title: "Informe detallado"
-      legend: "Durante el corriente mes se ha efectuado una UPLA sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
+      legend: "Durante el corriente mes se ha efectuado una UPLA sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por UPLA; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta tareas de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
     annex:
       title: "Anexo I"
       legend: "La UPLA practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
@@ -496,7 +496,7 @@ es:
       without_design_tests: "sin pruebas de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
       without_sustantive_tests: "sin pruebas sustantivas"
-      without_auditor_comment: "sin conclusiones del auditor"
+      without_auditor_comment: "sin conclusiones del Analista UPLA"
     review:
       edit: 'Editar informe'
       show: 'Ver informe'
@@ -529,10 +529,10 @@ es:
       column_month: "Mes"
       column_estimated_amount: "Unidades estimadas"
     planned_cost_summary_title: "Análisis de costos planificados"
-    reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor"
+    reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad del Analista UPLA"
     reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión supervisor"
     reviews_with_incomplete_work_papers_report:
-      empty_incomplete: "No hay informes cerrados sin conformidad auditor en papeles de trabajo"
+      empty_incomplete: "No hay informes cerrados sin conformidad del Analista UPLA en papeles de trabajo"
       empty_revised: "No hay informes cerrados sin revisión supervisor en papeles de trabajo"
     index_title: "Reportes de ejecución"
     findings_type_external: "Observaciones UPLA"
@@ -607,7 +607,7 @@ es:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"
       column_review: "Informe"
-      column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)"
+      column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por tareas )"
       column_audited_cost: "Cantidad de horas dedicas a la solución (suma de las horas de seguimiento de los auditados)"
       title: "ANALISIS DE COSTOS\nDE SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA\nPOR INFORME DE LA TAREA INTERNA"
       weaknesses: "OBSERVACIONES"
@@ -902,7 +902,7 @@ es:
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
-      without_auditor: "no tiene auditor"
+      without_auditor: "no tiene Analista UPLA"
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de UPLA"
@@ -959,7 +959,7 @@ es:
       other: "Los siguientes códigos de papeles de trabajo están duplicados: %{duplicated_work_papers}"
     user_assignment:
       type_viewer: "Veedor"
-      type_auditor: "Auditor"
+      type_auditor: "Analista UPLA"
       type_supervisor: "Supervisor"
       type_manager: "Gerente"
       type_responsible: "Responsable máximo de UPLA"
@@ -974,7 +974,7 @@ es:
     draft_score_sheet: "Borrador"
     audit_period: "%{start} al %{end}"
     audit_period_title: "PERIODO DE LA UPLA"
-    auditors: "AUDITORES"
+    auditors: "ANALISTAS UPLA"
     score: "CALIFICACIÓN"
     control_objectives_effectiveness: "Efectividad de control"
     control_objectives_relevance: "Peso"
@@ -991,7 +991,7 @@ es:
     oportunities_work_papers: "Oportunidades"
     follow_up_work_papers: "Seguimiento de observaciones"
     download_work_papers: "Descargar papeles de trabajo"
-    finished_work_papers: "Papeles de trabajo - Conforme auditor"
+    finished_work_papers: "Papeles de trabajo - Conforme Analista UPLA"
     revise_work_papers: "Papeles de trabajo - Revisado supervisor"
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
@@ -1050,7 +1050,7 @@ es:
     stale_object_error: "El perfil no fue actualizado, intente nuevamente."
     type_admin: "Administrador"
     type_supervisor: "Supervisor"
-    type_auditor: "Auditor"
+    type_auditor: "Analista UPLA"
     type_audited: "Auditado"
     type_committee: "Comité"
     type_manager: "Gerente de UPLA"
@@ -1101,7 +1101,7 @@ es:
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
-      without_auditor: "no tiene auditor"
+      without_auditor: "no tiene Analista UPLA"
       without_effect: "no tiene efecto"
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
@@ -1238,7 +1238,7 @@ es:
         additional_comments: "Comentarios adicionales"
         exclude_regularized_findings: "Excluir hallazgos regularizados"
       conclusion_review/review/best_practice_comments:
-        auditor_comment: "Conclusiones del auditor (proceso)"
+        auditor_comment: "Conclusiones del Analista UPLA (proceso)"
       control:
         order: "Orden"
         control: "Controles"
@@ -1254,7 +1254,7 @@ es:
         compliance_score: "Calificación pruebas de cumplimiento"
         sustantive_score: "Calificación pruebas sustantivas"
         audit_date: "Fecha de UPLA"
-        auditor_comment: "Conclusiones del auditor"
+        auditor_comment: "Conclusiones del Analista UPLA"
         finished: "Terminado"
         exclude_from_score: "No calificar"
         issues_count: "Casos observados"
@@ -1323,7 +1323,7 @@ es:
         user_id: 'Usuario'
         user: 'Usuario'
         process_owner: 'Responsables'
-        responsible_auditor: 'Auditor referente'
+        responsible_auditor: 'Analista UPLA referente'
       group:
         name: "Nombre"
         description: "Descripción"

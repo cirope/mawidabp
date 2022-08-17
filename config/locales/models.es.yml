@@ -53,8 +53,8 @@ es:
         one: 'Buena práctica'
         other: 'Buenas prácticas'
       best_practice_comment:
-        one: 'Comentario del auditor (buena práctica)'
-        other: 'Comentarios del auditor (buena práctica)'
+        one: 'Comentario del Analista UPLA (buena práctica)'
+        other: 'Comentarios del Analista UPLA (buena práctica)'
       business_unit:
         one: 'Unidad de negocio'
         other: 'Unidades de negocio'
@@ -240,7 +240,7 @@ es:
       best_practice/process_controls/control_objectives/taggings:
         tag_id: 'Objetivo de control (etiqueta)'
       best_practice_comment:
-        auditor_comment: 'Conclusiones del auditor'
+        auditor_comment: 'Conclusiones del Analista UPLA'
         best_practice: 'Buena práctica'
       business_unit_kind:
         name: 'Nombre'
@@ -439,7 +439,7 @@ es:
         organizational_unit: "Unidad organizacional por defecto (OU)"
       license:
         paid_until: 'Pagada hasta'
-        auditors_limit: 'Limite de usuarios auditores'
+        auditors_limit: 'Limite de usuarios Analista UPLA'
         status: 'Estado'
       login_record:
         data: 'Datos'
@@ -750,7 +750,7 @@ es:
             extension:
               must_be_being_implemented: 'Para indicar que es %{extension} debe estar en estado %{state}'
               had_no_extension_when_being_implemented: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension}'
-              reference_auditor_required: 'debe tener un auditor referente'
+              reference_auditor_required: 'debe tener un Analista UPLA referente'
             risk_justification:
               present: 'No debe tener justificacion de riesgo'
         finding_user_assignment:
@@ -797,4 +797,4 @@ es:
         user:
           attributes:
             base:
-              auditors_limit_reached: 'Limite de auditores alcanzado, por favor actualice su licencia.'
+              auditors_limit_reached: 'Limite de Analista UPLA alcanzado, por favor actualice su licencia.'
