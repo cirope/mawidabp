@@ -15,6 +15,14 @@ class AuthenticationTest < ActionController::TestCase
     assert_valid_authentication
   end
 
+  test 'shuld authenticate by email' do
+    @params = { user: @user.email, password: 'admin123' }
+
+    assert_valid_authentication redirect_url: Group, admin_mode: true
+  ensure
+    @params = { user: @user.user, password: 'admin123' }
+  end
+
   test 'should authenticate via ldap' do
     @organization = organizations :google
     @params = { user: @user.user, password: 'admin123' }
