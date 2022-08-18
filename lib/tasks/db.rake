@@ -658,7 +658,7 @@ private
 
           Weakness.where(organization_id: org.id, parent_id: nil).each do |w|
             w.versions.each do |version|
-              next if version.object_changes.blank?
+              next if version.object_changes.blank? || version.object.blank?
 
               if version_was_in_a_final_review? version
                 finding_and_children_update_draft_review_code w, version.object.dig('review_code')
@@ -676,7 +676,7 @@ private
             end
 
             o.versions.each do |version|
-              next if ver.object_changes.blank?
+              next if version.object_changes.blank? || version.object.blank?
 
               if version_was_in_a_final_review? version
                 o.update_column :draft_review_code, version.object.dig('review_code')
