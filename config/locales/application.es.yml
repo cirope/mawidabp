@@ -1240,6 +1240,7 @@ es:
         without_number: "Sin número"
         reviews_for: "Informes para"
         detailed_review: "Informe detallado"
+        grouped_by_business_unit_annual_report: "Agrupado por unidad de negocio en reporte anual"
       business_unit_type/business_units:
         one: "Proceso crítico"
         other: "Procesos críticos"

@@ -12,7 +12,7 @@ class SamlSessionsController < ApplicationController
 
       redirect_to action
     else
-      redirect_to new_session_url
+      redirect_to login_url
     end
   end
 

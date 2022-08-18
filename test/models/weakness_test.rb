@@ -231,6 +231,8 @@ class WeaknessTest < ActiveSupport::TestCase
   test 'should allow revoked prefixed codes' do
     revoked_prefix = I18n.t 'code_prefixes.revoked'
 
+    @weakness.children.clear
+
     @weakness.review_code = "#{revoked_prefix}#{@weakness.review_code}"
 
     assert @weakness.valid?
@@ -696,6 +698,21 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     refute @weakness.valid?
+  end
+
+  test 'invalid because not same draft review code parent' do
+    children                   = findings :unanswered_weakness_final
+    children.draft_review_code = 'different code'
+
+    refute children.valid?
+    assert_error children, :draft_review_code, :not_same_draft_review_code_parent
+  end
+
+  test 'invalid because not same draft review code children' do
+    @weakness.draft_review_code = 'different code'
+
+    refute @weakness.valid?
+    assert_error @weakness, :draft_review_code, :not_same_draft_review_code_children
   end
 
   private

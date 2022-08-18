@@ -236,15 +236,20 @@ module ConclusionReviews::NbcPdf
       repeated      = weaknesses.not_revoked.where.not repeated_of_id: nil
       title_options = [(PDF_FONT_SIZE).round, :center, false]
 
-      pdf.start_new_page if repeated.any? || weaknesses.not_revoked.where(repeated_of_id: nil).any?
+      finding_assignments = review.finding_review_assignments.map(&:finding).select do |fra|
+        fra.state == Finding::STATUS[:implemented_audited]
+      end
 
-      if repeated.any?
+      if repeated.any? || finding_assignments.any?
+        pdf.start_new_page
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.repeated'), *title_options
 
-        repeated.each_with_index do |weakness, idx|
+        repeated_findings = repeated + finding_assignments
+
+        repeated_findings.each_with_index do |weakness, idx|
           weakness_partial pdf, weakness
 
-          pdf.start_new_page if idx < repeated.size - 1
+          pdf.start_new_page if idx < repeated_findings.size - 1
         end
       end
 
@@ -253,10 +258,12 @@ module ConclusionReviews::NbcPdf
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.name'), *title_options
       end
 
-      weaknesses.not_revoked.where(repeated_of_id: nil).each_with_index do |weakness, idx|
+      findings = weaknesses.not_revoked.where(repeated_of_id: nil)
+
+      findings.each_with_index do |weakness, idx|
         weakness_partial pdf, weakness
 
-        pdf.start_new_page if idx < weaknesses.not_revoked.where(repeated_of_id: nil).size - 1
+        pdf.start_new_page if idx < findings.size - 1
       end
     end
 
