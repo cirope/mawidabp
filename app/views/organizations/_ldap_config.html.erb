@@ -1,14 +1,21 @@
-<div class="card my-3">
-  <div class="card-header">
-    <h5 class="mb-0">
-      <a class="dropdown-toggle text-reset text-decoration-none d-block" href="#ldap_config" data-toggle="collapse">
-        <%= LdapConfig.model_name.human count: 1 %>
-      </a>
-    </h5>
-  </div>
+<% @organization.build_ldap_config unless @organization.ldap_config %>
+<%= f.simple_fields_for :ldap_config do |l_f| %>
+  <div class="card my-3">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-10">
+          <h5 class="mb-0">
+            <a class="dropdown-toggle text-reset text-decoration-none d-block" href="#ldap_config" data-toggle="collapse">
+              <%= LdapConfig.model_name.human count: 1 %>
+            </a>
+          </h5>
+        </div>
+        <div class="col-md-2">
+          <%= link_to_remove_authentication_configuration l_f %>
+        </div>
+      </div>
+    </div>
 
-  <% @organization.build_ldap_config unless @organization.ldap_config %>
-  <%= f.simple_fields_for :ldap_config do |l_f| %>
     <% collapse_in = l_f.object.persisted? || l_f.object.errors.present? %>
     <div id="ldap_config" class="card-body collapse<%= ' show' if collapse_in %>">
       <% if l_f.object.errors[:base].present? %>
@@ -57,5 +64,5 @@
         </div>
       </fieldset>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>

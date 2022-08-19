@@ -72,12 +72,13 @@ class OrganizationsController < ApplicationController
           :email_attribute, :function_attribute, :office_attribute,
           :roles_attribute, :manager_attribute, :tls, :ca_path, :test_user,
           :test_password, :user, :password, :alternative_hostname,
-          :alternative_port, :organizational_unit_attribute, :organizational_unit
+          :alternative_port, :organizational_unit_attribute, :organizational_unit,
+          :_destroy
         ],
         saml_provider_attributes: [
-          :provider, :idp_homepage, :idp_entity_id, :idp_sso_target_url,
+          :id, :provider, :idp_homepage, :idp_entity_id, :idp_sso_target_url,
           :sp_entity_id, :assertion_consumer_service_url, :name_identifier_format,
-          :assertion_consumer_service_binding, :idp_cert
+          :assertion_consumer_service_binding, :idp_cert, :_destroy
         ]
       )
     end

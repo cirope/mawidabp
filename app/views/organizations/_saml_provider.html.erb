@@ -1,14 +1,21 @@
-<div class="card my-3">
-  <div class="card-header">
-    <h5 class="mb-0">
-      <a class="dropdown-toggle text-reset text-decoration-none d-block" href="#saml_provider" data-toggle="collapse">
-        <%= SamlProvider.model_name.human count: 1 %>
-      </a>
-    </h5>
-  </div>
+<% @organization.build_saml_provider unless @organization.saml_provider %>
+<%= f.simple_fields_for :saml_provider do |s_p_f| %>
+  <div class="card my-3">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-10">
+          <h5 class="mb-0">
+            <a class="dropdown-toggle text-reset text-decoration-none d-block" href="#saml_provider" data-toggle="collapse">
+              <%= SamlProvider.model_name.human count: 1 %>
+            </a>
+          </h5>
+        </div>
+        <div class="col-md-2">
+          <%= link_to_remove_authentication_configuration s_p_f %>
+        </div>
+      </div>
+    </div>
 
-  <% @organization.build_saml_provider unless @organization.saml_provider %>
-  <%= f.simple_fields_for :saml_provider do |s_p_f| %>
     <% collapse_in = s_p_f.object.persisted? || s_p_f.object.errors.present? %>
     <div id="saml_provider" class="card-body collapse<%= ' show' if collapse_in %>">
       <% if s_p_f.object.errors[:base].present? %>
@@ -38,5 +45,5 @@
         </div>
       </fieldset>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>
