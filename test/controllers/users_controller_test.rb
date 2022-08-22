@@ -40,6 +40,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'can not get new when ldap' do
+    skip if ENABLE_USER_CREATION_WHEN_LDAP
+
     login prefix: organizations(:google).prefix
 
     get :new
