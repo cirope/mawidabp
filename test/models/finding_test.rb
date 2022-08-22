@@ -1330,8 +1330,8 @@ class FindingTest < ActiveSupport::TestCase
       affects_compliance: false
     ).save!
 
-    final_twin = finding.children.take!
-    tag = tags :follow_up
+    final_twin = finding.reload.children.take!
+    tag        = tags :follow_up
 
     assert final_twin.taggings.where(tag_id: tag.id).empty?
 

@@ -287,7 +287,7 @@
         <%= render 'findings/finding_answer', f: f, show: true, readonly: true %>
 
         <div class="text-right">
-          <%= f.submit t('finding.submit_answer'), class: 'btn btn-outline-secondary' %>
+          <%= f.submit t('finding.submit_answer'), class: 'btn btn-outline-secondary', data: { disable_with: false } %>
         </div>
       <% end %>
     <% end %>
