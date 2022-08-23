@@ -27,12 +27,12 @@ class SamlSessionsController < ApplicationController
 
     if auth.authenticated?
       flash.notice = auth.message
-
+      Rails.logger.info "Se autentico!!!!"
       set_session_values auth.user
     else
       flash.alert = auth.message
     end
-
+    Rails.logger.info "Session user_id en create de SamlSessionsController: #{session[:user_id]}"
     redirect_to auth.redirect_url
   end
 
