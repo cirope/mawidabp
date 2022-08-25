@@ -259,7 +259,7 @@ class LdapConfigTest < ActiveSupport::TestCase
   test "massive import by file" do
     skip unless EXTRA_USERS_INFO.any?
 
-    assert_difference 'User.count' do
+    assert_difference 'User.count', 2 do
       LdapConfig.sync_users
     end
   end
