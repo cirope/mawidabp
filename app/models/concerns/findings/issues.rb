@@ -49,7 +49,7 @@ module Findings::Issues
     def weakness_by_template? review, weakness_template
       wt_ids = WeaknessTemplate.list.where(reference: weakness_template.reference).ids
 
-      review.weaknesses&.where(weakness_template_id: wt_ids).present?
+      review&.weaknesses&.where(weakness_template_id: wt_ids).present?
     end
 
     private
@@ -57,7 +57,7 @@ module Findings::Issues
       def repeatability_csv_base quantity, weakness_template, review
         csv_options          = { headers: true }
         file                 = FINDING_REPEATABILITY_FILE[review.organization.prefix]
-        subsidiary_identity = review.subsidiary.identity
+        subsidiary_identity = review&.subsidiary&.identity
 
         CSV.foreach(file, csv_options) do |row|
           reference_file     = row['id_ofinal']

@@ -1330,8 +1330,8 @@ class FindingTest < ActiveSupport::TestCase
       affects_compliance: false
     ).save!
 
-    final_twin = finding.children.take!
-    tag = tags :follow_up
+    final_twin = finding.reload.children.take!
+    tag        = tags :follow_up
 
     assert final_twin.taggings.where(tag_id: tag.id).empty?
 
@@ -1599,89 +1599,204 @@ class FindingTest < ActiveSupport::TestCase
     Current.user         = nil
   end
 
-  test 'notify action not found when subject have no finding_id' do
+  test 'notify action not found when subject have no finding_id - pop3' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
 
     supervisor = users :supervisor
     body       = 'Reply On Tuesday wrote: Another reply'
 
-    Finding.receive_mail(new_email(supervisor.email, 'subject without id', body))
+    Finding.receive_mail(new_email_pop3(supervisor.email, 'subject without id', body))
 
     assert_enqueued_emails 1
     assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[supervisor.email], "Reply "]
-
+  ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
   end
 
-  test 'notify action not found when email does not belong to any user' do
+  test 'notify action not found when email does not belong to any user - pop3' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
 
     finding = findings :confirmed_oportunity
 
     body = 'Reply On Tuesday wrote: Another reply'
 
-    Finding.receive_mail(new_email('nouser@nouser.com', "[##{finding.id}]", body))
+    Finding.receive_mail(new_email_pop3('nouser@nouser.com', "[##{finding.id}]", body))
 
     assert_enqueued_emails 1
     assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [['nouser@nouser.com'], "Reply "]
-
+  ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
   end
 
-  test 'notify action not found when auditee is not related' do
+  test 'notify action not found when auditee is not related - pop3' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
 
     finding = findings :confirmed_oportunity
     audited = users :audited_second
     body    = 'Reply On Tuesday wrote: Another reply'
 
-    Finding.receive_mail(new_email(audited.email, "[##{finding.id}]", body))
+    Finding.receive_mail(new_email_pop3(audited.email, "[##{finding.id}]", body))
 
     assert_enqueued_emails 1
     assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[audited.email], "Reply "]
-
+  ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
   end
 
-  test 'add finding answer when auditee is related' do
+  test 'add finding answer when auditee is related - pop3' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
 
     finding = findings :confirmed_oportunity
     audited = users :audited
     body    = 'Reply On Tuesday wrote: Another reply'
 
     assert_difference 'finding.finding_answers.count' do
-      Finding.receive_mail(new_email(audited.email, "[##{finding.id}]", body))
+      Finding.receive_mail(new_email_pop3(audited.email, "[##{finding.id}]", body))
     end
 
     assert_equal finding.finding_answers.last.user, audited
     assert_equal finding.finding_answers.last.answer, 'Reply '
     assert finding.finding_answers.last.imported
-
+  ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
   end
 
-  test 'add finding answer to finding as supervisor' do
+  test 'add finding answer to finding as supervisor - pop3' do
     old_regex                = ENV['REGEX_REPLY_EMAIL']
     ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
 
     finding    = findings :confirmed_oportunity
     supervisor = users :supervisor
     body       = 'Reply On Tuesday wrote: Another reply'
 
     assert_difference 'finding.finding_answers.count' do
-      Finding.receive_mail(new_email(supervisor.email, "[##{finding.id}]", body))
+      Finding.receive_mail(new_email_pop3(supervisor.email, "[##{finding.id}]", body))
     end
 
     assert_equal finding.finding_answers.last.user, supervisor
     assert_equal finding.finding_answers.last.answer, 'Reply '
     assert finding.finding_answers.last.imported
-
+  ensure
     ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when subject have no finding_id - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_mgraph('id test', supervisor.email, 'subject without id', body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[supervisor.email], "Reply "]
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when email does not belong to any user - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding = findings :confirmed_oportunity
+
+    body = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_mgraph('id test', 'nouser@nouser.com', "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [['nouser@nouser.com'], 'Reply ']
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when auditee is not related - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited_second
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_mgraph('id test', audited.email, "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[audited.email], 'Reply ']
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'add finding answer when auditee is related - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email_mgraph('id test', audited.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, audited
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'add finding answer to finding as supervisor - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding    = findings :confirmed_oportunity
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email_mgraph('id test', supervisor.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, supervisor
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
   end
 
   test 'valid with same review code when repeated' do
@@ -1959,7 +2074,7 @@ class FindingTest < ActiveSupport::TestCase
 
   private
 
-    def new_email from, subject, body
+    def new_email_pop3 from, subject, body
       mail = create_mail from, subject
 
       mail.text_part = Mail::Part.new do
@@ -1980,6 +2095,13 @@ class FindingTest < ActiveSupport::TestCase
         to      'support@postman.com'
         subject subject
       end
+    end
+
+    def new_email_mgraph id, from, subject, body
+      OpenStruct.new id: id,
+                     subject: subject,
+                     from: [from],
+                     body: body
     end
 
     def review_codes_on_findings_by_user method

@@ -18,10 +18,11 @@ module Findings::Validations
     validate :validate_state
     validate :validate_review_code, if: -> { repeated_of.blank? }
     validate :validate_finding_user_assignments
-    validate :validate_manager_presence, if: :validate_manager_presence?
-    validate :validate_follow_up_date,   if: :check_dates?
-    validate :validate_solution_date,    if: :check_dates?
-    validate :extension_enabled,         if: :extension
+    validate :validate_manager_presence,  if: :validate_manager_presence?
+    validate :validate_follow_up_date,    if: :check_dates?
+    validate :validate_solution_date,     if: :check_dates?
+    validate :extension_enabled,          if: :extension
+    validate :validate_draft_review_code, if: -> { !revoked? }
   end
 
   def is_in_a_final_review?
@@ -214,5 +215,25 @@ module Findings::Validations
       persisted? &&
         review.conclusion_final_review.present? &&
         !extension_was
+    end
+
+    def validate_draft_review_code
+      if final?
+        check_invalid_draft_review_code_when_is_final
+      else
+        check_invalid_draft_review_code_when_is_not_final
+      end
+    end
+
+    def check_invalid_draft_review_code_when_is_final
+      if parent.draft_review_code != draft_review_code
+        errors.add :draft_review_code, :not_same_draft_review_code_parent
+      end
+    end
+
+    def check_invalid_draft_review_code_when_is_not_final
+      if children.present? && children.take.draft_review_code != draft_review_code
+        errors.add :draft_review_code, :not_same_draft_review_code_children
+      end
     end
 end
