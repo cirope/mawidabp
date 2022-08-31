@@ -13,6 +13,19 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       :management_dependency_item_editable).id
   end
 
+  test 'return informal with process control' do
+    assert_equal "#{@control_objective_item.process_control} - #{@control_objective_item.review}", 
+                 @control_objective_item.informal
+  end
+
+  test 'return informal without process control' do
+    control_objective = @control_objective_item.control_objective
+
+    control_objective.update! process_control: nil
+
+    assert_equal @control_objective_item.review.to_s, @control_objective_item.informal
+  end
+
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     retrived_coi = control_objective_items(:management_dependency_item_editable)

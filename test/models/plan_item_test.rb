@@ -176,4 +176,57 @@ class PlanItemTest < ActiveSupport::TestCase
     assert reponse.present?
     assert reponse.include?(new_plan_item)
   end
+
+  test 'completed_early status' do
+    @plan_item.start                              = 1.day.from_now.to_date
+    @plan_item.end                                = 2.day.from_now.to_date
+    @plan_item.conclusion_final_review.issue_date = 1.day.ago.to_date
+
+    assert @plan_item.completed_early?
+  end
+
+  test 'completed status' do
+    assert_equal @plan_item.completed?, @plan_item.conclusion_final_review
+  end
+
+  test 'in_early_progress status' do
+    plan_item_3 = plan_items :current_plan_item_3
+
+    assert plan_item_3.valid?
+    assert plan_item_3.in_early_progress?
+  end
+
+  test 'in_progress_no_delayed status' do
+    plan_item_2 = plan_items :current_plan_item_2
+
+    assert plan_item_2.valid?
+    assert plan_item_2.in_progress_no_delayed?
+  end
+
+  test 'overdue status' do
+    plan_item_3       = plan_items :current_plan_item_3
+    plan_item_3.start = 2.day.ago.to_date
+    plan_item_3.end   = 1.day.ago.to_date
+
+    assert_nil plan_item_3.conclusion_final_review
+    assert plan_item_3.valid?
+    assert plan_item_3.overdue?
+  end
+
+  test 'not_started_no_delayed status' do
+    plan_item_6       = plan_items :current_plan_item_6
+    plan_item_6.start = 1.day.from_now.to_date
+
+    assert plan_item_6.valid?
+    assert_nil plan_item_6.review
+    assert plan_item_6.not_started_no_delayed?
+  end
+
+  test 'delayed_pat status' do
+    plan_item_6 = plan_items :current_plan_item_6
+
+    assert plan_item_6.valid?
+    assert_nil plan_item_6.review
+    assert plan_item_6.delayed_pat?
+  end
 end
