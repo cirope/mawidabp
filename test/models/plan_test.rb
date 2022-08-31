@@ -175,8 +175,8 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   test 'totals in progress report by status' do
-    csv = @plan.to_csv_prs(business_unit_type: @business_unit_type)
-    rows = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
+    csv             = @plan.to_csv_prs(business_unit_type: @business_unit_type)
+    rows            = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
     rows_transposed = rows.transpose
 
     rows.each do |row|
