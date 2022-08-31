@@ -15,6 +15,7 @@ class PlanItem < ApplicationRecord
   include PlanItems::Spread
   include PlanItems::Stats
   include PlanItems::Status
+  include PlanItems::StatusCsvPat
   include PlanItems::Units
   include PlanItems::Validations
   include Taggable
