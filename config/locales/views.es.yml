@@ -169,6 +169,7 @@ es:
     edit_bic_sigen_fields:
       title: 'Editar campos sigen de observacion.'
     current_user_filters:
+      pending_to_endorsement: 'Pendientes de aprobación'
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'
       complete: 'Solucionados'
