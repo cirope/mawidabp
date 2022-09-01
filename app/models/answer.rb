@@ -1,5 +1,6 @@
 class Answer < ApplicationRecord
   include Auditable
+  include Answers::Completed
   include Answers::Validations
 
   belongs_to :question, optional: true
