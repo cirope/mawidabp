@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 6.1'
 
-gem 'pg'
+gem 'pg', '< 1.3.0'
 gem 'activerecord-nulldb-adapter'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -29,15 +29,15 @@ gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jbuilder'
-gem 'sidekiq'
+gem 'sidekiq', '< 6.0'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 gem 'execjs', '< 2.8'
-gem 'net-smtp', require: false
-gem 'net-imap', require: false
-gem 'net-pop', require: false
+#gem 'net-smtp', require: false
+#gem 'net-imap', require: false
+#gem 'net-pop', require: false
 gem 'rexml'
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
