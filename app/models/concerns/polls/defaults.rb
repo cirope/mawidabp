@@ -17,6 +17,6 @@ module Polls::Defaults
     end
 
     def set_answered
-      self.answered = true
+      self.answered = answers.all? &:completed?
     end
 end
