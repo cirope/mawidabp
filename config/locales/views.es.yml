@@ -169,6 +169,7 @@ es:
     edit_bic_sigen_fields:
       title: 'Editar campos sigen de observacion.'
     current_user_filters:
+      pending_to_endorsement: 'Pendientes de aprobación'
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'
       complete: 'Solucionados'
@@ -390,6 +391,14 @@ es:
       delayed:
         long: 'Retrasado'
         short: 'R'
+    item_status_csv_pat:
+      completed: 'Concluidos (Azul)'
+      completed_early: 'Adelantados con informe emitido (Gris)'
+      in_early_progress: 'Adelantados en proceso (Celeste)'
+      not_started_no_delayed: 'Sin retrasos no iniciados (Verde Claro)'
+      in_progress_no_delayed: 'Sin retrasos en proceso (Verde Oscuro)'
+      delayed_pat: 'Retrasados (Amarillo)'
+      overdue: 'Trabajos vencidos (Rojo)'
     period:
       title: 'Periodo (%{name})'
       range: 'desde el %{from_date} al %{to_date}'
@@ -401,6 +410,11 @@ es:
       title: 'Plan de auditoría'
       csv_name: 'plan_periodo_%{period}.csv'
       number_observations_per_risk: 'Cantidad observaciones por riesgo'
+    csv_prs_pat:
+      csv_name: 'grado_avance_estados_%{current_date}.csv'
+      business_unit: 'Sector'
+      totals: 'Totales'
+      total_plan_items: 'Total de Trabajos Planificados'
     calendar:
       show:
         title: 'Cronograma'
@@ -426,6 +440,7 @@ es:
     business_unit_type_plan_items:
       associate_control_objective: 'Asociar objetivo de control'
       associate_best_practice: 'Asociar buena práctica'
+    download_progress_report_with_statuses_pat: 'Descargar grado de avance con estados de trabajos'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
     download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'

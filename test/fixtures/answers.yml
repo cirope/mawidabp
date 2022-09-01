@@ -7,7 +7,6 @@ answer_written:
 
 answer_yes_no:
   comments: "Me agrada la forma de trabajo"
-  answer_option: no
   question: question_yes_no
   poll: poll_one
   type: <%= AnswerYesNo.name %>

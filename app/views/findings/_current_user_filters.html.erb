@@ -24,22 +24,33 @@
         </div>
       </div>
     <% end %>
-  <% elsif @auth_user.can_act_as_audited? %>
-    <ul class="nav nav-tabs mb-3" data-hide-in-search>
-      <li class="nav-item">
-        <%= link_to(
-          t(".#{params[:completion_state]}"),
-          findings_path(request.query_parameters.except(:as_owner)),
-          class: (params[:as_owner].blank? ? 'nav-link active' : 'nav-link')
-        ) %>
-      </li>
+  <% end %>
+
+  <ul class="nav nav-tabs mb-3" data-hide-in-search>
+    <li class="nav-item">
+      <%= link_to(
+        t(".#{params[:completion_state]}"),
+        findings_path(request.query_parameters.except(:as_owner, :pending_to_endorsement)),
+        class: (params.slice(:as_owner, :pending_to_endorsement).blank? ? 'nav-link active' : 'nav-link')
+      ) %>
+    </li>
+    <% if @auth_user.can_act_as_audited? %>
       <li class="nav-item">
         <%= link_to(
           t('.as_owner', kind: t(".#{params[:completion_state]}")),
-          findings_path(request.query_parameters.merge(as_owner: true)),
+          findings_path(request.query_parameters.except(:pending_to_endorsement).merge(as_owner: true)),
           class: (params[:as_owner].present? ? 'nav-link active' : 'nav-link')
         ) %>
       </li>
-    </ul>
-  <% end %>
+    <% end %>
+    <% if params[:completion_state] == 'incomplete' %>
+      <li class="nav-item">
+        <%= link_to(
+          t('.pending_to_endorsement'),
+          findings_path(request.query_parameters.except(:as_owner).merge(pending_to_endorsement: true)),
+          class: (params[:pending_to_endorsement].present? ? 'nav-link active' : 'nav-link')
+        ) %>
+      </li>
+    <% end %>
+  </ul>
 <% end %>
