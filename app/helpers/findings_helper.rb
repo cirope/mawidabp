@@ -48,6 +48,12 @@ module FindingsHelper
     end
   end
 
+  def next_task_expiration finding
+    next_expiration = finding.next_task_expiration
+
+    next_expiration ? "/#{l finding.next_task_expiration, format: :short}" : ''
+  end
+
   def finding_updated_at_text finding
     text = Finding.human_attribute_name 'updated_at'
     date = l finding.updated_at, format: :minimal

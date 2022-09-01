@@ -173,4 +173,18 @@ class PlanTest < ActiveSupport::TestCase
   ensure
     Current.user = nil
   end
+
+  test 'totals in progress report by status' do
+    csv             = @plan.to_csv_prs(business_unit_type: @business_unit_type)
+    rows            = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
+    rows_transposed = rows.transpose
+
+    rows.each do |row|
+      assert_equal row[1..7].map(&:to_i).sum, row.last.to_i
+    end
+
+    rows_transposed.each do |row_t|
+      assert_equal row_t[1..row_t.length - 2].map(&:to_i).sum, row_t.last.to_i
+    end
+  end
 end

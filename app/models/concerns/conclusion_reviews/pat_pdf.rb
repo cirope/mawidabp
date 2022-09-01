@@ -288,7 +288,7 @@ module ConclusionReviews::PatPdf
     def put_pat_previous_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
       assigned   = review.assigned_weaknesses
-      filtered   = assigned.not_revoked.order(sort_weaknesses_by).select do |w|
+      filtered   = assigned.not_revoked.reorder(sort_weaknesses_by).select do |w|
                      w.business_unit_type.external == false
                    end
 
@@ -337,7 +337,7 @@ module ConclusionReviews::PatPdf
     def put_pat_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked
+      filtered   = weaknesses.not_revoked.reorder(sort_weaknesses_by)
 
       if filtered.any?
         i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
@@ -406,7 +406,7 @@ module ConclusionReviews::PatPdf
     def put_pat_weaknesses_external_on pdf
       use_finals = kind_of? ConclusionFinalReview
       assigned   = review.assigned_weaknesses
-      filtered   = assigned.not_revoked.order(sort_weaknesses_by).select do |w|
+      filtered   = assigned.not_revoked.reorder(sort_weaknesses_by).select do |w|
                      w.business_unit_type.external == true
                    end
 

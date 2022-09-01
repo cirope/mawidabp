@@ -2072,6 +2072,50 @@ class FindingTest < ActiveSupport::TestCase
                  [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
   end
 
+  test 'should return next task expiration when have tasks in progress' do
+    finding              = findings :being_implemented_weakness
+    next_task_expiration = finding.tasks
+                                  .where(status: Task.statuses['in_progress'],
+                                         due_on: Date.today..)
+                                  .first
+                                  .due_on
+
+    assert_equal finding.next_task_expiration, next_task_expiration
+  end
+
+  test 'should return next task expiration when have tasks pending' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! status: Task.statuses['pending']
+
+    next_task_expiration = finding.tasks
+                                  .where(status: Task.statuses['pending'],
+                                         due_on: Date.today..)
+                                  .first
+                                  .due_on
+
+    assert_equal finding.next_task_expiration, next_task_expiration
+  end
+
+  test 'should not return next task expiration when all tasks are finished' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! status: Task.statuses['finished']
+
+    assert_nil finding.next_task_expiration
+  end
+
+  test 'should not return next task expiration when have task for before today' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! due_on: Time.zone.yesterday.to_s(:db)
+
+    assert_nil finding.next_task_expiration
+  end
+
   private
 
     def new_email_pop3 from, subject, body
