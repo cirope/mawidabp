@@ -35,6 +35,7 @@ module Findings::CurrentUserScopes
       end
 
       conditions.merge! by_owner_conditions
+      conditions.merge! by_pending_to_endorsement_conditions
       conditions.merge! by_id_or_state_conditions
 
       build_search_conditions Finding, conditions
@@ -91,6 +92,21 @@ module Findings::CurrentUserScopes
       conditions
     end
 
+    def by_pending_to_endorsement_conditions
+      conditions = {}
+
+      if params[:pending_to_endorsement].present?
+        conditions[FindingAnswer.table_name] =
+          { Endorsement.table_name =>
+            {
+              status: Endorsement.statuses['pending'],
+              user_id: @auth_user.id
+            } }
+      end
+
+      conditions
+    end
+
     def by_id_or_state_conditions
       conditions = {}
 
@@ -128,7 +144,7 @@ module Findings::CurrentUserScopes
     def filtered_current_user_findings
       scope = scoped_findings.
         includes(*current_user_includes).
-        left_joins(:users).
+        left_joins(current_user_left_joins).
         merge(
           PlanItem.allowed_by_business_units
         )
@@ -170,6 +186,13 @@ module Findings::CurrentUserScopes
         :tags,
         :work_papers
       ]
+    end
+
+    def current_user_left_joins
+      [
+        :users,
+        ({ finding_answers: [:endorsements] } if params[:pending_to_endorsement].present?)
+      ].compact
     end
 
     def current_user_default_sort_columns

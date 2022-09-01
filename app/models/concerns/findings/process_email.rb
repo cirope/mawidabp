@@ -10,7 +10,7 @@ module Findings::ProcessEmail
       if finding
         finding.finding_answers.create! generate_finding_answer_from_mail(mail, user)
       else
-        NotifierMailer.notify_action_not_found(mail.from, extract_answer(mail)).deliver_later
+        NotifierMailer.notify_action_not_found(mail.from, EMail.clean_answer(mail)).deliver_later
       end
     end
 
@@ -49,20 +49,10 @@ module Findings::ProcessEmail
 
       def generate_finding_answer_from_mail mail, user
         {
-          answer: extract_answer(mail),
+          answer: EMail.clean_answer(mail),
           user: user,
           imported: true
         }
-      end
-
-      def extract_answer mail
-        charset_mail = mail.text_part.charset
-        body         = mail.text_part.decoded
-        body         = body.force_encoding(charset_mail).encode('UTF-8') if charset_mail
-        regex        = Regexp.new(ENV['REGEX_REPLY_EMAIL'], Regexp::MULTILINE)
-        clean_answer = body.split regex
-
-        clean_answer.present? ? clean_answer.first : '-'
       end
 
       def find_user mail, finding_id

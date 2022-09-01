@@ -16,6 +16,14 @@ es:
         name: 'Nombre'
         organization_name: 'Nombre de la organización'
         user: 'Nombre de usuario'
+      nbc_annual_report_form:
+        period_id: 'Periodo'
+        date: 'Fecha'
+        cc: 'CC'
+        name: 'Nombre'
+        objective: 'Objetivo'
+        conclusion: 'Conclusion'
+        introduction_and_scope: 'Introduccion y Alcance'
 
   activerecord:
     models:
@@ -726,6 +734,9 @@ es:
       risk_weight:
         value: 'Valor'
         weight: 'Ponderador'
+      subsidiary:
+        name: 'Nombre'
+        identity: 'Identificacion'
       weakness:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -804,6 +815,9 @@ es:
               present: 'No debe tener justificacion de riesgo'
             compliance_susceptible_to_sanction:
               inclusion: 'debe ser uno de la lista'
+            draft_review_code:
+              not_same_draft_review_code_parent: 'No tiene el mismo review code borrador que su finding original'
+              not_same_draft_review_code_children: 'No tiene el mismo review code borrador que su finding final'
         finding_user_assignment:
           attributes:
             user:
@@ -858,3 +872,7 @@ es:
               cant_change_fields: 'No puede cambiar ningun campo debido a que supero la fecha de cierre'
             plan_item_id:
               used: 'El proyecto ya esta siendo utilizado por otro Informe o Informe externo'
+        subsidiary:
+          attributes:
+            identity:
+              only_numerics: 'solo puede contener valores numericos'

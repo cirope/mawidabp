@@ -70,7 +70,7 @@
               </div>
             </div>
           <% else %>
-            <%= f.input :risk, collection: risks, prompt: true, input_html: {
+            <%= f.input :risk, collection: risks, prompt: true, disabled: true, input_html: {
               autofocus: true,
               data: weakness_risk_data_options
             } %>
@@ -343,6 +343,6 @@
   <div class="form-actions">
     <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary' %>
+    <%= f.submit class: 'btn btn-primary', data: { disable_with: false }  %>
   </div>
 <% end %>

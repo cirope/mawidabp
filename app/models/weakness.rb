@@ -8,6 +8,7 @@ class Weakness < Finding
   include Weaknesses::Risk
   include Weaknesses::Scopes
   include Weaknesses::Score
+  include Weaknesses::SigenFields
   include Weaknesses::Tags
   include Weaknesses::Template
   include Weaknesses::Validations

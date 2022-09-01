@@ -299,7 +299,7 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'review score by weaknesses' do
-    skip if score_type != :weaknesses
+    skip if USE_SCOPE_CYCLE || score_type != :weaknesses
 
     # With two low risk and not repeated weaknesses
     assert_equal :require_some_improvements, @review.score_array.first
@@ -316,8 +316,9 @@ class ReviewTest < ActiveSupport::TestCase
 
     finding.save!(:validate => false)
 
+    score_weakness = SCORE_BY_WEAKNESS.present? ? :require_improvements : :require_some_improvements
     # High risk counts 12
-    assert_equal :require_some_improvements, @review.reload.score_array.first
+    assert_equal score_weakness , @review.reload.score_array.first
     assert_equal 84, @review.score
 
     repeated_of = findings :being_implemented_weakness
@@ -351,7 +352,7 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item.update! scope: scope.first
 
     # With two low risk on design
-    assert_equal :improve, @review.score_array.first
+    assert_equal :regular, @review.score_array.first
     assert_equal 50, @review.score
     assert_equal 75, @review.score_alt
     assert_equal 'splitted_effectiveness', @review.score_type
