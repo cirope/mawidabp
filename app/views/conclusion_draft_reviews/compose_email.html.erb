@@ -6,18 +6,22 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
-          <%= select_tag 'conclusion_review[review_type]', send_review_options, class: 'form-control' %>
+          <%= select_tag 'conclusion_review[review_type]', send_review_options(@conclusion_draft_review), class: 'form-control' %>
         </div>
-        <% if !SHOW_CONCLUSION_ALTERNATIVE_PDF && ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
-          <div class="form-group">
-            <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
-              for: :conclusion_review_include_global_score_sheet %>
-            <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, true %>
+        <% if Current.conclusion_pdf_format == 'default' && ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
+          <div class="custom-control custom-checkbox mb-1">
+            <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false,
+              id: 'conclusion_review_include_global_score_sheet', class: 'custom-control-input' %>
+            <label class="custom-control-label" for="conclusion_review_include_global_score_sheet">
+              <%= t 'conclusion_review.include_global_score_sheet' %>
+            </label>
           </div>
-          <div class="form-group">
-            <%= content_tag :label, t('conclusion_review.include_score_sheet'),
-              for: :conclusion_review_include_score_sheet %>
-            <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
+          <div class="custom-control custom-checkbox mb-3">
+            <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
+              id: 'conclusion_review_include_score_sheet', class: 'custom-control-input' %>
+            <label class="custom-control-label" for="conclusion_review_include_score_sheet">
+              <%= t 'conclusion_review.include_score_sheet' %>
+            </label>
           </div>
         <% end %>
         <div class="form-group">
@@ -32,7 +36,7 @@
 
   <div class="row">
     <div class="col-md-6">
-      <h5><strong><%= User.model_name.human %></strong></h5>
+      <h5 class="h6"><%= User.model_name.human %></h5>
     </div>
   </div>
 
@@ -49,7 +53,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right">
+    <div class="float-right">
       <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
       <%= link_to_index conclusion_draft_reviews_path %>
     </div>

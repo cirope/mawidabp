@@ -14,17 +14,19 @@ class ControlObjectiveItemsController < ApplicationController
   def index
     @title = t 'control_objective_item.index_title'
 
-    build_search_conditions ControlObjectiveItem
-
     @control_objectives = ControlObjectiveItem.list.includes(
       :weaknesses,
       :work_papers,
-      { review: :period },
-      { control_objective: :process_control }
-    ).where(@conditions).references(:review).order(
-      "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
-      "#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('id')} DESC"
-    ).page(params[:page])
+      :process_control,
+      :oportunities,
+      review: [:period, :conclusion_final_review, :plan_item],
+      control_objective: :process_control
+    ).
+    search(**search_params).
+    references(:review).
+    merge(Review.allowed_by_business_units).
+    default_order.
+    page params[:page]
 
     respond_to do |format|
       format.html
@@ -119,6 +121,7 @@ class ControlObjectiveItemsController < ApplicationController
   end
 
   private
+
     def set_control_objective_item
       @control_objective_item = ControlObjectiveItem.list.includes(
         :control, :weaknesses, :work_papers
@@ -127,9 +130,10 @@ class ControlObjectiveItemsController < ApplicationController
 
     def control_objective_item_params
       params.require(:control_objective_item).permit(
-        :control_objective_text, :relevance, :design_score, :compliance_score, :sustantive_score,
+        :control_objective_text, :relevance, :design_score,
+        :compliance_score, :sustantive_score,
         :audit_date, :auditor_comment, :control_objective_id, :review_id, :finished,
-        :exclude_from_score, :lock_version,
+        :exclude_from_score, :issues_count, :alerts_count, :lock_version,
         :lock_version, control_attributes: [
           :id, :control, :effects, :design_tests, :compliance_tests,
           :sustantive_tests

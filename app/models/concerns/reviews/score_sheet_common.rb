@@ -92,7 +92,7 @@ module Reviews::ScoreSheetCommon
     end
 
     def put_risk_subtitle_on pdf
-      sorted_risks  = Review::RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }
+      sorted_risks  = Review.risks.sort { |r1, r2| r2[1] <=> r1[1] }
       risk_levels   = sorted_risks.map { |r| I18n.t "risk_types.#{r[0]}" }
       risk_subtitle = I18n.t 'review.weaknesses_summary',
         risks: risk_levels.to_sentence

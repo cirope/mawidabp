@@ -1,8 +1,12 @@
 security:
+  reference: '123'
+  subreference: '456'
   title: Security weakness
   description: Some nasty security bug
+  brief: A brief of the security bug
   risk: <%= Finding.risks_values.last %>
   impact: ['econimic', 'regulatory']
   operational_risk: ['internal fraud']
   internal_control_components: ['risk_evaluation', 'monitoring']
   organization: cirope
+  failure: false

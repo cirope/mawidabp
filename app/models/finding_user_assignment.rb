@@ -1,6 +1,7 @@
 class FindingUserAssignment < ApplicationRecord
   include Auditable
   include Comparable
+  include FindingUserAssignments::AttributeTypes
 
   # Scopes
   scope :owners, -> { where(:process_owner => true) }
@@ -16,7 +17,7 @@ class FindingUserAssignment < ApplicationRecord
   validates_each :process_owner do |record, attr, value|
     organization_id = record.finding.try(:organization_id)
 
-    if value && !record.user.can_act_as_audited? && !record.user.can_act_as_audited_on?(organization_id)
+    if value && !record.user&.can_act_as_audited? && !record.user&.can_act_as_audited_on?(organization_id)
       record.errors.add attr, :invalid
     end
   end
@@ -26,10 +27,10 @@ class FindingUserAssignment < ApplicationRecord
 
     record.errors.add attr, :taken if users.select { |u| u == value }.size > 1
   end
+  validate :process_owner_uniqueness, if: :validate_process_owner_uniqueness?
 
   # Relaciones
-  belongs_to :finding, :inverse_of => :finding_user_assignments,
-    :polymorphic => true, :optional => true
+  belongs_to :finding, :polymorphic => true, :touch => true, :optional => true
   belongs_to :raw_finding, :foreign_key => :finding_id, :class_name => 'Finding', :optional => true
   belongs_to :user
 
@@ -55,7 +56,7 @@ class FindingUserAssignment < ApplicationRecord
   end
 
   def users_notification
-    if user_id_changed? && persisted?
+    if user_id_changed? && persisted? && !finding.incomplete?
       user_removed = User.find user_id_was
 
       NotifierMailer.reassigned_findings_notification(
@@ -63,4 +64,20 @@ class FindingUserAssignment < ApplicationRecord
       ).deliver_later
     end
   end
+
+  private
+
+    def validate_process_owner_uniqueness?
+      finding && SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+    end
+
+    def process_owner_uniqueness
+      process_owners = finding.finding_user_assignments.
+        reject(&:marked_for_destruction?).
+        select(&:process_owner)
+
+      if process_owners.size > 1 && process_owner
+        errors.add :process_owner, :taken
+      end
+    end
 end

@@ -8,7 +8,8 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   test 'public and private actions' do
     public_actions = []
     private_actions = [
-      :index, :weaknesses_by_state_execution, :detailed_management_report
+      :index, :weaknesses_by_state_execution, :detailed_management_report,
+      :planned_cost_summary, :weaknesses_current_situation
     ]
 
     private_actions.each do |action|
@@ -128,6 +129,8 @@ class ExecutionReportsControllerTest < ActionController::TestCase
           finding_status: '1',
           finding_title: '1',
           risk: '1',
+          compliance: 'yes',
+          repeated: 'false',
           priority: Finding.priorities_values.first,
           issue_date: Date.today.to_s(:db),
           issue_date_operator: '=',
@@ -174,6 +177,48 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     }
 
     assert_response :redirect
+
+    assert_match I18n.t('execution_reports.weaknesses_report.pdf_name'),
+      @response.body
+  end
+
+  test 'queue async weaknesses report' do
+    login
+
+    old_count = ::SEND_REPORT_EMAIL_AFTER_COUNT
+    back_url  = weaknesses_report_url execution: true
+
+    silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = 1 }
+
+    request.headers['HTTP_REFERER'] = back_url
+
+    post :create_weaknesses_report, params: {
+      execution: 'true',
+      weaknesses_report: {
+        finding_status: Finding::STATUS[:being_implemented].to_s
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = old_count }
+
+    assert_response :redirect
+    assert_match back_url, @response.body
+  end
+
+  test 'weaknesses report as CSV' do
+    login
+
+    get :weaknesses_report, params: {
+      execution: 'true',
+      weaknesses_report: {
+        finding_status: Finding::STATUS[:being_implemented].to_s
+      }
+    }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'reviews with incomplete work papers' do
@@ -190,5 +235,266 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     get :reviews_with_incomplete_work_papers_report, params: { revised: true }
     assert_response :success
     assert_template 'execution_reports/reviews_with_incomplete_work_papers_report'
+  end
+
+  test 'planned cost summary report' do
+    login
+
+    get :planned_cost_summary
+    assert_response :success
+    assert_template 'execution_reports/planned_cost_summary'
+
+    assert_nothing_raised do
+      get :planned_cost_summary, params: {
+        planned_cost_summary: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
+        }
+      }
+    end
+
+    assert_response :success
+    assert_template 'execution_reports/planned_cost_summary'
+  end
+
+  test 'create planned cost summary report' do
+    login
+
+    post :create_planned_cost_summary, params: {
+      planned_cost_summary: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
+      },
+      report_title: 'New title'
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('execution_reports.planned_cost_summary.pdf_name',
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
+      'planned_cost_summary', 0)
+  end
+
+  test 'findings tagged report' do
+    login
+
+    get :tagged_findings_report
+    assert_response :success
+    assert_template 'execution_reports/tagged_findings_report'
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3
+        }
+      }
+    end
+
+    assert_template 'execution_reports/tagged_findings_report'
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3,
+          finding_status: [Finding::STATUS[:being_implemented]]
+        }
+      }
+    end
+
+    assert_template 'execution_reports/tagged_findings_report'
+  end
+
+  test 'findings tagged report csv' do
+    login
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3,
+          finding_status: [Finding::STATUS[:being_implemented]]
+        }
+      },
+      as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+
+  test 'create findings tagged report' do
+    login
+
+    post :create_tagged_findings_report, params: {
+      tagged_findings_report: {
+        tags_count: 3
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    assert_response :redirect
+
+    post :create_tagged_findings_report, params: {
+      tagged_findings_report: {
+        tags_count: 3,
+        finding_status: [Finding::STATUS[:being_implemented]]
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    assert_response :redirect
+  end
+
+  test 'weaknesses current situation' do
+    login
+
+    get :weaknesses_current_situation
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_current_situation'
+
+    assert_nothing_raised do
+      get :weaknesses_current_situation, :params => {
+        :weaknesses_current_situation => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'execution',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_current_situation'
+  end
+
+  test 'weaknesses current situation from permalink' do
+    login
+
+    get :weaknesses_current_situation, :params => {
+      permalink_token: permalinks(:execution_link).token
+    }
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_current_situation'
+  end
+
+  test 'weaknesses current situation as CSV' do
+    login
+
+    get :weaknesses_current_situation, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_current_situation, :params => {
+        :weaknesses_current_situation => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'execution',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'filtered weaknesses current situation' do
+    login
+
+    get :weaknesses_current_situation, :params => {
+      :weaknesses_current_situation => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :cut_date => 10.days.ago.to_date,
+        :review => '1',
+        :project => '2',
+        :risk => ['', '1', '2'],
+        :priority => Finding.priorities_values.last.to_s,
+        :scope => ['committee'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :control_objective_tags => ['one'],
+        :weakness_tags => ['two'],
+        :review_tags => ['three'],
+        :compliance => 'no'
+      },
+      :controller_name => 'execution',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_current_situation'
+  end
+
+  test 'filtered weaknesses current situation by extra attributes' do
+    skip unless POSTGRESQL_ADAPTER
+
+    login
+
+    get :weaknesses_current_situation, :params => {
+      :weaknesses_current_situation => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :cut_date => 10.days.ago.to_date,
+        :risk => ['', '1', '2'],
+        :priority => Finding.priorities_values.last.to_s,
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :compliance => 'no',
+        :impact => [WEAKNESS_IMPACT.keys.first],
+        :operational_risk => [WEAKNESS_OPERATIONAL_RISK.keys.first],
+        :internal_control_components => [WEAKNESS_INTERNAL_CONTROL_COMPONENTS.first]
+      },
+      :controller_name => 'execution',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_current_situation'
+  end
+
+  test 'create weaknesses current situation' do
+    login
+
+    post :create_weaknesses_current_situation, :params => {
+      :weaknesses_current_situation => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :cut_date => 10.days.ago.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'execution',
+      :final => false
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('execution_committee_report.weaknesses_current_situation.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_current_situation', 0)
+  end
+
+  test 'create weaknesses current situation permalink' do
+    login
+
+    assert_difference 'Permalink.count' do
+      post :create_weaknesses_current_situation_permalink, :params => {
+        :weaknesses_current_situation => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'execution',
+        :final => false
+      }, xhr: true, as: :js
+    end
+
+    assert_response :success
+    assert_match Mime[:js].to_s, @response.content_type
   end
 end

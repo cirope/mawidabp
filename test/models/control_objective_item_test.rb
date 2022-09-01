@@ -13,9 +13,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       :management_dependency_item_editable).id
   end
 
-  teardown do
-    Organization.current_id = nil
-    Group.current_id = nil
+  test 'return informal with process control' do
+    assert_equal "#{@control_objective_item.process_control} - #{@control_objective_item.review}", 
+                 @control_objective_item.informal
+  end
+
+  test 'return informal without process control' do
+    control_objective = @control_objective_item.control_objective
+
+    control_objective.update! process_control: nil
+
+    assert_equal @control_objective_item.review.to_s, @control_objective_item.informal
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -90,10 +98,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @control_objective_item.control_objective_text = '  '
     @control_objective_item.control_objective_id = nil
+    @control_objective_item.issues_count = nil
+    @control_objective_item.alerts_count = nil
 
     assert @control_objective_item.invalid?
     assert_error @control_objective_item, :control_objective_text, :blank
     assert_error @control_objective_item, :control_objective_id, :blank
+
+    if validate_counts?
+      assert_error @control_objective_item, :issues_count, :blank
+      assert_error @control_objective_item, :alerts_count, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -229,10 +244,13 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.finished = true
 
     assert @control_objective_item.invalid?
-    assert_error @control_objective_item, :audit_date, :blank
     assert_error @control_objective_item, :relevance, :blank
     assert_error @control_objective_item.control, :control, :blank
     assert_error @control_objective_item, :auditor_comment, :blank
+
+    unless DISABLE_COI_AUDIT_DATE_VALIDATION
+      assert_error @control_objective_item, :audit_date, :blank
+    end
 
     unless HIDE_CONTROL_EFFECTS
       assert_error @control_objective_item.control, :effects, :blank
@@ -244,7 +262,13 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     @control_objective_item.design_score = 0
 
-    expected_error_count = HIDE_CONTROL_EFFECTS ? 5 : 6
+    expected_error_count = if HIDE_CONTROL_EFFECTS && DISABLE_COI_AUDIT_DATE_VALIDATION
+                             4
+                           elsif HIDE_CONTROL_EFFECTS || DISABLE_COI_AUDIT_DATE_VALIDATION
+                             5
+                           else
+                             6
+                           end
 
     assert !@control_objective_item.valid?
     assert_equal expected_error_count, @control_objective_item.errors.count
@@ -342,6 +366,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert @control_objective_item.must_be_approved?
     assert @control_objective_item.approval_errors.blank?
 
+    @control_objective_item.reload
+    @control_objective_item.audit_date =
+      @control_objective_item.review.conclusion_draft_review.issue_date + 1.day
+    assert !@control_objective_item.must_be_approved?
+    assert_equal 1, @control_objective_item.approval_errors.size
+
     assert @control_objective_item.reload.must_be_approved?
     assert @control_objective_item.approval_errors.blank?
   end
@@ -373,6 +403,8 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'work papers can be added to uneditable control objectives' do
+    Current.user = users(:supervisor)
+
     uneditable_control_objective_item = ControlObjectiveItem.find(
       control_objective_items(:management_dependency_item).id)
 
@@ -387,7 +419,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
               :description => 'New workpaper description',
               :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
-                :file => fixture_file_upload(TEST_FILE, 'text/plain')
+                :file => fixture_file_upload(TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
           }
@@ -411,7 +443,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
               :description => 'New post_workpaper description',
               :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
-                :file => fixture_file_upload(TEST_FILE, 'text/plain')
+                :file => fixture_file_upload(TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
           }
@@ -421,7 +453,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'to pdf' do
-    assert !File.exist?(@control_objective_item.absolute_pdf_path)
+    FileUtils.rm_f @control_objective_item.absolute_pdf_path
 
     assert_nothing_raised do
       @control_objective_item.to_pdf(organizations(:cirope))
@@ -433,11 +465,37 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     FileUtils.rm @control_objective_item.absolute_pdf_path
   end
 
+  test 'show counts' do
+    skip if validate_counts?
+
+    refute @control_objective_item.show_counts?(Current.organization.prefix)
+
+    @control_objective_item.review.business_unit_type.update! require_counts: true
+
+    assert @control_objective_item.show_counts?(Current.organization.prefix)
+  end
+
+  test 'previous effectiveness' do
+    Current.user             = users :supervisor
+
+    coi = control_objective_items(:management_dependency_item)
+
+    assert_nil @control_objective_item.previous_effectiveness
+
+    @control_objective_item.reload.review.plan_item.business_unit_id =  coi.review.plan_item.business_unit_id
+    @control_objective_item.created_at = 2.days.from_now.to_date
+
+    assert_equal coi.effectiveness, @control_objective_item.previous_effectiveness
+  ensure
+    Current.user = nil
+  end
+
   private
-
     def use_review_weaknesses_score?
-      organization = Organization.find Organization.current_id
+      ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization.prefix
+    end
 
-      ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
+    def validate_counts?
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? Current.organization.prefix
     end
 end

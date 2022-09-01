@@ -14,17 +14,19 @@ class WorkflowsControllerTest < ActionController::TestCase
     }
     public_actions = []
     private_actions = [
-      [:get, :index],
+      [:get, :index, {}],
       [:get, :show, id_param],
-      [:get, :new],
+      [:get, :new, {}],
       [:get, :edit, id_param],
-      [:post, :create],
+      [:post, :create, {}],
       [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
     private_actions.each do |action|
-      send *action
+      options = action.pop
+
+      send *action, **options
       assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
@@ -76,36 +78,48 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'create workflow' do
-    counts_array = ['Workflow.count', 'WorkflowItem.count',
-      'ResourceUtilization.material.count', 'ResourceUtilization.human.count']
+    counts_array = [
+      'Workflow.count',
+      'WorkflowItem.count',
+      'ResourceUtilization.material.count',
+      'ResourceUtilization.human.count'
+    ]
 
     assert_difference counts_array do
-      login
-      post :create, :params => {
-        :workflow => {
-          :period_id => periods(:current_period).id,
-          :review_id => reviews(:review_without_conclusion).id,
-          :workflow_items_attributes => [
-            {
-              :task => 'New task',
-              :start => Date.today,
-              :end => 10.days.from_now.to_date,
-              :order_number => 1,
-              :resource_utilizations_attributes => [
-                {
-                  :resource_id => users(:manager).id,
-                  :resource_type => 'User',
-                  :units => '12.21'
-                }, {
-                  :resource_id => resources(:laptop_resource).id,
-                  :resource_type => 'Resource',
-                  :units => '2'
+      assert_difference 'FileModel.count', 2 do
+        login
+        post :create, :params => {
+          :workflow => {
+            :period_id => periods(:current_period).id,
+            :review_id => reviews(:review_without_conclusion).id,
+            :file_model_attributes => {
+              :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+            },
+            :workflow_items_attributes => [
+              {
+                :task => 'New task',
+                :start => Date.today,
+                :end => 10.days.from_now.to_date,
+                :order_number => 1,
+                :resource_utilizations_attributes => [
+                  {
+                    :resource_id => users(:manager).id,
+                    :resource_type => 'User',
+                    :units => '12.21'
+                  }, {
+                    :resource_id => resources(:laptop_resource).id,
+                    :resource_type => 'Resource',
+                    :units => '2'
+                  }
+                ],
+                file_model_attributes: {
+                  file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
-      }
+      end
     end
   end
 
@@ -137,7 +151,7 @@ class WorkflowsControllerTest < ActionController::TestCase
                   {
                     :id => resource_utilizations(:auditor_for_20_units_with_conclusion_workflow_item_1).id,
                     :resource_id => users(:manager).id,
-                    :units => '12.21'
+                    :units => '7'
                   }
                 ]
               },

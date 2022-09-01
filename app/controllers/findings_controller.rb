@@ -3,12 +3,19 @@ class FindingsController < ApplicationController
   include AutoCompleteFor::Tagging
   include Findings::CurrentUserScopes
   include Findings::SetFinding
+  include Reports::FileResponder
 
   respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_finding, only: [:show, :edit, :update]
+  before_action :set_finding, only: [:show,
+                                     :edit,
+                                     :update,
+                                     :edit_bic_sigen_fields,
+                                     :update_bic_sigen_fields]
   before_action :check_if_editable, only: [:edit, :update]
+  before_action :check_if_editable_bic_sigen_fields, only: [:edit_bic_sigen_fields, 
+                                                            :update_bic_sigen_fields]
   before_action :set_title, except: [:destroy]
 
   # * GET /incomplete/findings
@@ -16,8 +23,8 @@ class FindingsController < ApplicationController
     @findings = current_user_findings
 
     respond_to do |format|
-      format.html { @findings = @findings.page params[:page] }
-      format.csv  { render csv: @findings.to_csv(csv_options), filename: @title.downcase }
+      format.html { paginate_findings }
+      format.csv  { render_index_csv }
       format.pdf  { redirect_to pdf.relative_path }
     end
   end
@@ -34,34 +41,68 @@ class FindingsController < ApplicationController
   def update
     update_resource @finding, finding_params
 
-    location = if @finding.pending?
-                 edit_finding_url params[:completed], @finding
+    location = if @finding.invalid? || @finding.reload.pending?
+                 edit_finding_url params[:completion_state], @finding
                else
                  finding_url 'complete', @finding
                end
 
-    respond_with @finding, location: location
+    respond_with @finding, location: location unless performed?
+  end
+
+  # * GET /incomplete/findings/1/edit_bic_sigen_fields
+  def edit_bic_sigen_fields
+  end
+
+  # * PATCH /incomplete/findings/1/update_bic_sigen_fields
+  def update_bic_sigen_fields
+    @title = t 'findings.edit_bic_sigen_fields.title'
+
+    Finding.transaction do
+      if @finding.update(bic_sigen_fields_params)
+        flash.notice = t 'finding.correctly_updated'
+        redirect_to(edit_bic_sigen_fields_finding_path('complete', @finding))
+      else
+        render action: :edit_bic_sigen_fields
+        raise ActiveRecord::Rollback
+      end
+    end
   end
 
   private
 
     def finding_params
-      if @auth_user.can_act_as_audited?
-        audited_finding_params
-      else
-        auditor_finding_params
-      end
+      casted_params = if @auth_user.can_act_as_audited?
+                        audited_finding_params
+                      else
+                        auditor_finding_params
+                      end
+
+      casted_params.merge(
+        can_close_findings: USE_SCOPE_CYCLE && can_perform?(:approval)
+      )
     end
 
     def auditor_finding_params
       params.require(:finding).permit(
         :id, :control_objective_item_id, :review_code, :title, :description,
-        :answer, :current_situation, :current_situation_verified,
-        :audit_comments, :state, :progress, :origination_date, :solution_date,
+        :brief, :answer, :current_situation, :current_situation_verified,
+        :audit_comments, :state, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
-        :compliance, :nested_user, :skip_work_paper, :lock_version,
+        :compliance, :impact_risk, :probability, :compliance_observations,
+        :compliance_susceptible_to_sanction, :manual_risk, :nested_user,
+        :skip_work_paper, :use_suggested_impact,
+        :use_suggested_probability, :impact_amount, :probability_amount,
+        :extension, :state_regulations, :degree_compliance,
+        :observation_originated_tests, :sample_deviation, :external_repeated,
+        :risk_justification, :year, :nsisio, :nobs,
+        :lock_version,
+        impact: [],
+        operational_risk: [],
+        internal_control_components: [],
         users_for_notification: [],
         business_unit_ids: [],
+        tag_ids: [],
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],
@@ -70,11 +111,19 @@ class FindingsController < ApplicationController
           file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_answers_attributes: [
-          :answer, :user_id, :notify_users,
-          file_model_attributes: [:file, :file_cache]
+          :id, :answer, :user_id, :notify_users,
+          file_model_attributes: [:file, :file_cache],
+          endorsements_attributes: [:id, :status, :user_id, :_destroy]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
+        ],
+        issues_attributes: [
+          :id, :customer, :entry, :operation, :amount, :currency, :comments,
+          :close_date, :_destroy
+        ],
+        tasks_attributes: [
+          :id, :code, :description, :status, :due_on, :_destroy
         ],
         taggings_attributes: [
           :id, :tag_id, :_destroy
@@ -88,12 +137,17 @@ class FindingsController < ApplicationController
       )
     end
 
+    def bic_sigen_fields_params
+      params.require(:finding).permit(:year, :nsisio, :nobs, :skip_work_paper)
+    end
+
     def audited_finding_params
       params.require(:finding).permit(
         :id, :lock_version,
         finding_answers_attributes: [
-          :answer, :user_id, :commitment_date, :notify_users,
-          file_model_attributes: [:file, :file_cache]
+          :answer, :user_id, :commitment_date, :notify_users, :skip_commitment_support,
+          file_model_attributes: [:file, :file_cache],
+          commitment_support_attributes: [:id, :reason, :plan, :controls]
         ],
         costs_attributes: [
           :id, :raw_cost, :cost, :cost_type, :description, :user_id
@@ -108,12 +162,15 @@ class FindingsController < ApplicationController
       )
     end
 
-    def scoped_findings
-      current_organization.corporate? ? Finding.group_list : Finding.list
-    end
-
     def pdf
-      title_partial = params[:completed] == 'incomplete' ? 'pending' : 'complete'
+      title_partial = case params[:completion_state]
+                      when'incomplete'
+                        'pending'
+                      when 'repeated'
+                        'repeated'
+                      else
+                        'complete'
+                      end
 
       FindingPdf.create(
         title: t("menu.follow_up.#{title_partial}_findings"),
@@ -126,15 +183,44 @@ class FindingsController < ApplicationController
 
     def csv_options
       {
-        completed: params[:completed],
         corporate: current_organization.corporate?
       }
     end
 
     def check_if_editable
-      not_editable = !@finding.pending? ||
-        (@auth_user.can_act_as_audited? && @finding.users.exclude?(@auth_user))
+      not_editable = (!@finding.pending? && @finding.valid?) ||
+        (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
 
       raise ActiveRecord::RecordNotFound if not_editable
+    end
+
+    def check_if_editable_bic_sigen_fields
+      if %w(bic).exclude?(Current.conclusion_pdf_format)
+        raise ActiveRecord::RecordNotFound
+      elsif @finding.pending? || @finding.repeated? ||
+            (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
+        raise ActiveRecord::RecordNotFound
+      end
+    end
+
+    def render_index_csv
+      render_or_send_by_mail(
+        collection:  @findings,
+        filename:    "#{@title.downcase}.csv",
+        method_name: :to_csv,
+        options:     csv_options
+      )
+    end
+
+    def paginate_findings
+      @findings = @findings.page params[:page]
+
+      if ORACLE_ADAPTER
+        @findings.total_entries = @findings.unscope(
+          :group, :order, :select
+        ).select(:id).distinct.count
+      end
+
+      @findings
     end
 end

@@ -1,8 +1,10 @@
 require 'test_helper'
 
 class Users::RegistrationsControllerTest < ActionController::TestCase
+  include ActionMailer::TestHelper
+
   setup do
-    @request.host = "#{organizations(:cirope).prefix}.localhost.i"
+    set_host_for_organization(organizations(:cirope).prefix)
   end
 
   test 'new' do

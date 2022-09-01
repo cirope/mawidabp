@@ -1,7 +1,10 @@
 class Question < ApplicationRecord
   include Auditable
-  include Questions::Validations
+
   include Questions::Callbacks
+  include Questions::Options
+  include Questions::Scopes
+  include Questions::Validations
 
   belongs_to :questionnaire, optional: true
   has_one :answer

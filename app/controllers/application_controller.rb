@@ -3,15 +3,18 @@ class ApplicationController < ActionController::Base
   include UpdateResource
   include ParameterSelector
   include CacheControl
+  include FlashResponders
+  include LicenseCheck if ENABLE_PUBLIC_REGISTRATION
 
   protect_from_forgery
 
   before_action :set_paper_trail_whodunnit
   before_action :scope_current_organization
+  before_action :set_conclusion_pdf_format
 
   def current_user
     load_user
-    Finding.current_user = @auth_user
+    Current.user = @auth_user
 
     @auth_user.try(:id)
   end
@@ -19,32 +22,80 @@ class ApplicationController < ActionController::Base
   def current_organization
     @current_organization ||= Organization.by_subdomain(
       request.subdomains.first
-    ) if APP_ADMIN_PREFIXES.exclude?(request.subdomains.first)
+    ) if request.subdomains.any? && APP_ADMIN_PREFIXES.exclude?(request.subdomains.first)
   end
   helper_method :current_organization
 
-  def can_perform? action
+  def can_perform? action, privilege = nil
     load_current_module
+
+    privilege ||= @action_privileges[action]
+
     allowed_by_type = ALLOWED_MODULES_BY_TYPE[@auth_user.get_type].try(
       :include?, @current_module)
-    allowed_by_privileges = @auth_privileges[@current_module] &&
-      @auth_privileges[@current_module][@action_privileges[action]]
 
-    allowed_by_type && allowed_by_privileges
+    allowed_by_privileges = @auth_privileges[@current_module] &&
+      @auth_privileges[@current_module][privilege]
+
+    select_module_in_children privilege if @drop_down_menu
+
+    allowed_by_type && allowed_by_privileges && @current_module
   end
   helper_method :can_perform?
+
+  def select_module_in_children privilege
+    @current_module = nil
+
+    @current_menu_item.children.each do |children_menu_item|
+      allowed_by_type = ALLOWED_MODULES_BY_TYPE[@auth_user.get_type].try(
+        :include?, children_menu_item.menu_name)
+
+      allowed_by_privileges = @auth_privileges[children_menu_item.menu_name] &&
+        @auth_privileges[children_menu_item.menu_name][privilege]
+
+      if @current_module.blank? && allowed_by_type && allowed_by_privileges
+        @current_module    = children_menu_item.try(:menu_name)
+        @current_menu_item = children_menu_item
+      end
+    end
+  end
+
+  def search_params
+    @search_params ||= params[:search]&.permit(:query, columns: []).to_h.symbolize_keys
+  end
+  helper_method :search_params
+
+  def order_param
+    @order_param ||= params[:search]&.permit(:order)&.fetch :order, nil
+  end
+  helper_method :order_param
 
   private
 
     def scope_current_organization
-      Group.current_id        = current_organization&.group_id
-      Group.corporate_ids     = current_organization&.group&.organizations&.corporate&.ids
-      Organization.current_id = current_organization&.id
+      Current.group         = current_organization&.group
+      Current.corporate_ids = current_organization&.group&.organizations&.corporate&.ids
+      Current.organization  = current_organization
+    end
+
+    def set_conclusion_pdf_format
+      prefix = current_organization&.prefix&.downcase
+
+      if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
+        Current.conclusion_pdf_format = SHOW_CONCLUSION_ALTERNATIVE_PDF[prefix]
+      end
+
+      if USE_GLOBAL_WEAKNESS_REVIEW_CODE.include? prefix
+        Current.global_weakness_code = true
+      end
+
+      Current.conclusion_pdf_format ||= 'default'
     end
 
     def load_user
       if @auth_user.nil? && session[:user_id]
         @auth_user = User.includes(
+          :business_unit_types,
           organization_roles: { role: :privileges }
         ).find(session[:user_id])
       end
@@ -66,6 +117,7 @@ class ApplicationController < ActionController::Base
         session[:back_to] = nil if action == :index
 
         if current_organization.try(:ldap_config).blank? &&
+            current_organization.try(:saml_provider).blank? &&
             @auth_user.try(:must_change_the_password?) &&
             ![:edit_password, :update_password].include?(action)
           flash.notice ||= t 'message.must_change_the_password'
@@ -86,8 +138,8 @@ class ApplicationController < ActionController::Base
           @auth_user.try(:privileges, current_organization) : {}
       else
         go_to = request.fullpath
-        store_go_to = request.get? && !request.xhr?
-        session[:go_to] = go_to if store_go_to
+        store_go_to = request.get? && request.format.html? && !request.xhr?
+        session[:go_to] = go_to if store_go_to && go_to !~ /\A\/sessions/
         @auth_user = nil
         redirect_to_login t('message.must_be_authenticated'), :alert
       end
@@ -120,18 +172,11 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    # Redirige la navegación a la página por defecto
-    # _message_:: Mensaje que se mostrará luego de la redirección
-    def redirect_to_index(message = nil, type = :notice) #:doc:
-      flash[type] = message if message
-      redirect_to :action => :index
-    end
-
     # Redirige la navegación a la página de autenticación
     # _message_:: Mensaje que se mostrará luego de la redirección
-    def redirect_to_login(message = nil, type = :notice) #:doc:
+    def redirect_to_login(message = nil, type = :notice, params = nil) #:doc:
       flash[type] = message if message
-      redirect_to login_url
+      redirect_to login_url(params)
     end
 
     # Reinicia la sessión (conservando el contenido de flash)
@@ -148,7 +193,7 @@ class ApplicationController < ActionController::Base
 
       top_level_menu = true
 
-      until modules.blank?
+      while modules.present?
         selected_module = nil
         modules.each do |mod|
           if mod.controllers.include?(controller_name) && (top_level_menu ||
@@ -160,15 +205,26 @@ class ApplicationController < ActionController::Base
           end
         end
 
-        modules = selected_module ? selected_module.children : []
+        if selected_module.blank? || selected_module_is_drop_down_menu?(selected_module)
+          modules = []
+        else
+          modules = selected_module.children
+        end
       end
 
       selected_module
     end
 
+    def selected_module_is_drop_down_menu? selected_module
+      selected_module.drop_down_menu && @drop_down_menu
+    end
+
     def load_current_module
+      @drop_down_menu = params[:drop_down_menu]
       controller_name = controller_path.split('/').first
-      @current_module ||= module_name_for(controller_name.to_sym).try(:menu_name)
+
+      @current_menu_item ||= module_name_for(controller_name.to_sym)
+      @current_module    ||= @current_menu_item.try(:menu_name)
     end
 
     # Comprueba que se tengan privilegios para la acción en curso, en caso de no
@@ -177,28 +233,20 @@ class ApplicationController < ActionController::Base
     def check_privileges #:doc:
       current_action = action_name.to_sym
 
-      unless can_perform?(current_action)
-        if request.xhr?
-          render :partial => 'shared/ajax_message', :layout => false,
-            :locals => {:message => t('message.insufficient_privileges')}
-        else
-          redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
-        end
+      if can_perform? current_action
+        redirect_to @current_menu_item.url if @drop_down_menu
+      elsif request.xhr?
+        render :partial => 'shared/ajax_message', :layout => false,
+               :locals => {:message => t('message.insufficient_privileges')}
+      else
+        redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
       end
-
-    rescue ActionController::RedirectBackError
-      restart_session
-      redirect_to_login t('message.insufficient_privileges'), :alert
     end
 
     def check_group_admin
       unless @auth_user.is_group_admin?
         redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
       end
-
-    rescue ActionController::RedirectBackError
-      restart_session
-      redirect_to_login t('message.insufficient_privileges'), :alert
     end
 
     def make_date_range(parameters = nil)
@@ -207,10 +255,16 @@ class ApplicationController < ActionController::Base
         to_date = Timeliness.parse(parameters[:to_date], :date)
       end
 
-      from_date ||= Date.today.at_beginning_of_month
-      to_date ||= Date.today.at_end_of_month
+      from_date ||= Time.zone.today.at_beginning_of_month
+      to_date ||= Time.zone.today.at_end_of_month
 
       [from_date.to_date, to_date.to_date].sort
+    end
+
+    def extract_cut_date parameters
+      cut_date = Timeliness.parse parameters[:cut_date], :date if parameters
+
+      cut_date&.to_date || Time.zone.today
     end
 
     def extract_operator(search_term)
@@ -223,61 +277,89 @@ class ApplicationController < ActionController::Base
 
     def build_search_conditions(model, default_conditions = {})
       if params[:search] && params[:search][:order].present?
-        @order_by = model.columns_for_sort[params[:search][:order]][:field]
-        @order_by_column_name = model.columns_for_sort[params[:search][:order]][:name]
+        order_data = model.columns_for_sort[params[:search][:order]]
+
+        @order_by             = order_data[:field]
+        @order_by_column_name = order_data[:name]
+        @extra_query_values   = order_data[:extra_query_values]
       end
 
       if params[:search] && params[:search][:query].present?
-        raw_query = params[:search][:query].to_s.mb_chars.downcase.to_s
-        and_query = raw_query.split(SEARCH_AND_REGEXP).reject(&:blank?)
-        @query = and_query.map do |query|
-          query.split(SEARCH_OR_REGEXP).reject(&:blank?)
-        end
         @columns = params[:search][:columns] || []
-        search_string = []
-        filters = { :boolean_false => false }
 
-
-        @query.each_with_index do |or_queries, i|
-          or_search_string = []
-
-          or_queries.each_with_index do |or_query, j|
-            @columns.each do |column|
-              clean_or_query, operator = *extract_operator(or_query)
-
-              if clean_or_query =~ model.get_column_regexp(column) && (!operator || model.allow_search_operator?(operator, column))
-                index = i * 1000 + j
-                conversion_method = model.get_column_conversion_method(column)
-                filter = "#{model.get_column_name(column)} "
-                operator ||= model.get_column_operator(column).kind_of?(Array) ?
-                  '=' : model.get_column_operator(column)
-
-                filter << operator
-                or_search_string << "#{filter} :#{column}_filter_#{index}"
-
-                if conversion_method.respond_to?(:call)
-                  casted_value = conversion_method.call(clean_or_query.strip)
-                else
-                  casted_value = clean_or_query.strip.send(conversion_method) rescue nil
-                end
-
-                filters[:"#{column}_filter_#{index}"] = model.get_column_mask(column) % casted_value
-              end
-            end
-          end
-
-          if or_search_string.present?
-            search_string << "(#{or_search_string.join(' OR ')})"
-          end
-        end
-
-        @conditions = @columns.empty? || search_string.empty? ?
-          default_conditions :
-          model.prepare_search_conditions(default_conditions, [search_string.join(' AND '), filters])
+        result = prepare_search(
+          model:              model,
+          raw_query:          params[:search][:query],
+          columns:            @columns,
+          default_conditions: default_conditions
+        )
+        @query      = result[:query]
+        @conditions = result[:conditions]
       else
-        @columns = []
+        @columns    = []
         @conditions = default_conditions
       end
+    end
+
+    def prepare_search(model:, raw_query: nil, columns: [], default_conditions: {})
+      raw_query = raw_query.to_s.mb_chars.downcase.to_s
+      and_query = raw_query.split(SEARCH_AND_REGEXP).reject(&:blank?)
+
+      query = and_query.map do |q|
+        q.split(SEARCH_OR_REGEXP).reject(&:blank?)
+      end
+
+      search_string = []
+      filters = { boolean_false: false }
+
+      query.each_with_index do |or_queries, i|
+        or_search_string = []
+
+        or_queries.each_with_index do |or_query, j|
+          columns.each do |column|
+            clean_or_query, operator = *extract_operator(or_query)
+
+            if (
+                clean_or_query =~ model.get_column_regexp(column) &&
+                (!operator || model.allow_search_operator?(operator, column))
+            )
+              index = i * 1000 + j
+              mask              = model.get_column_mask(column)
+              conversion_method = model.get_column_conversion_method(column)
+              filter            = "#{model.get_column_name(column)} "
+              operator          ||= if model.get_column_operator(column).kind_of?(Array)
+                                      '='
+                                    else
+                                      model.get_column_operator(column)
+                                    end
+
+              filter << operator
+              or_search_string << "#{filter} :#{column}_filter_#{index}"
+
+              casted_value = if conversion_method.respond_to?(:call)
+                               conversion_method.call(clean_or_query.strip)
+                             else
+                               clean_or_query.strip.send(conversion_method) rescue nil
+                             end
+
+              filters[:"#{column}_filter_#{index}"] = mask ? mask % casted_value : casted_value
+            end
+          end
+        end
+
+        search_string << "(#{or_search_string.join(' OR ')})" if or_search_string.present?
+      end
+
+      conditions = if columns.empty? || search_string.empty?
+                     default_conditions
+                   else
+                     model.prepare_search_conditions(default_conditions, [search_string.join(' AND '), filters])
+                   end
+
+      {
+        query: query,
+        conditions: conditions
+      }
     end
 
     def help

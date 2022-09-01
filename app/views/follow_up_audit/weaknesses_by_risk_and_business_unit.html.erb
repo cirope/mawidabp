@@ -1,0 +1,143 @@
+<%= render partial: 'shared/filter_form',
+  locals: {
+    action: :weaknesses_by_risk_and_business_unit,
+    extra_params: {
+      controller_name: 'follow_up',
+      final: false
+    },
+    forms: {
+      date_range: {
+        show_mid_date: true
+      },
+      icon: true
+    }
+  } %>
+
+<% if @weaknesses_by_business_unit_types.first.size > 1 %>
+  <table class="table table-sm table-striped table-hover">
+    <thead>
+      <tr>
+        <% unless @icon %>
+          <th rowspan="3"><%= BusinessUnitType.model_name.human %></th>
+        <% end %>
+        <th rowspan="3"><%= @icon ? Tag.model_name.human : BusinessUnit.model_name.human %></th>
+        <th colspan="<%= Weakness.risks.size.next %>" class="text-center">
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented',
+            date: l(@mid_date, format: :minimal) %>
+        </th>
+        <th colspan="<%= Weakness.risks.size.next %>" class="text-center">
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.created',
+            from_date: l(@mid_date, format: :minimal), to_date: l(@to_date, format: :minimal) %>
+        </th>
+        <th colspan="<%= Weakness.risks.size.next %>" class="text-center">
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.implemented',
+            from_date: l(@mid_date, format: :minimal), to_date: l(@to_date, format: :minimal) %>
+        </th>
+        <th colspan="<%= Weakness.risks.size.next %>" class="text-center">
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented',
+            date: l(@to_date, format: :minimal) %>
+        </th>
+      </tr>
+
+      <tr>
+        <% @weaknesses_by_business_unit_types.size.times do %>
+          <th colspan="<%= Weakness.risks.size %>" class="text-center">
+            <%= Weakness.human_attribute_name 'risk' %>
+          </th>
+
+          <th rowspan="2" class="text-center" class="text-center">
+            <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.total' %>
+          </th>
+        <% end %>
+      </tr>
+
+      <tr>
+        <% @weaknesses_by_business_unit_types.size.times do %>
+          <% Weakness.risks.keys.reverse.each do |risk_type| %>
+            <th class="text-center"><%= t "risk_types.#{risk_type}" %></th>
+          <% end %>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @business_unit_type_names.sort.each do |but_name| %>
+        <% @unit_names[but_name].sort.each_with_index do |unit_name, i| %>
+          <tr>
+            <% if i == 0 && @icon.blank? %>
+              <td rowspan="<%= @unit_names[but_name].size %>"><%= but_name %></td>
+            <% end %>
+
+            <td><%= unit_name %></td>
+
+            <% @weaknesses_by_business_unit_types.each do |weaknesses_by_business_unit_types| %>
+              <% business_units = weaknesses_by_business_unit_types[but_name] || {} %>
+              <% risk_counts = business_units[unit_name] || Hash.new(0) %>
+
+              <% Weakness.risks.keys.reverse.each do |risk_type| %>
+                <td class="text-center"><%= risk_counts[risk_type] %></td>
+              <% end %>
+
+              <td class="text-center">
+                <strong><%= risk_counts[:total] %></strong>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="<%= @icon ? 1 : 2 %>">
+          <strong>
+            <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.total' %>
+          </strong>
+        </td>
+        <% @weaknesses_by_business_unit_types.each do |weaknesses_by_business_unit_types| %>
+          <% Weakness.risks.keys.reverse.each do |risk_type| %>
+            <td class="text-center">
+              <strong>
+                <%= weaknesses_by_business_unit_types[:total_by_risk][risk_type] %>
+              </strong>
+            </td>
+          <% end %>
+
+          <td class="text-center">
+            <strong>
+              <%= weaknesses_by_business_unit_types[:total_by_risk][:total] %>
+            </strong>
+          </td>
+        <% end %>
+      </tr>
+    </tfoot>
+  </table>
+<% else %>
+  <div class="alert alert-info">
+    <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.empty' %>
+  </div>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to t('label.back'), action: :index %> |
+  <%= link_to t('label.download'), '#',
+    data: { toggle: 'modal', target: '#customize_report' } %>
+</div>
+
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      {action: :create_weaknesses_by_risk_and_business_unit, _ts: Time.now.to_i}
+    ),
+    fields: [
+      {
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('follow_up_committee_report.weaknesses_by_risk_and_business_unit.title')
+      }
+    ]
+  }
+} %>

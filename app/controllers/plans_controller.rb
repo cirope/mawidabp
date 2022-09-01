@@ -1,19 +1,20 @@
 class PlansController < ApplicationController
   include AutoCompleteFor::BusinessUnit
+  include AutoCompleteFor::BusinessUnitType
   include AutoCompleteFor::Tagging
 
   respond_to :html, :js
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_business_unit_type, only: [:show, :new, :edit]
+  before_action :set_business_unit_type, only: [:show, :new, :edit, :update]
   before_action :set_plan, only: [:show, :edit, :update, :destroy, :export_to_pdf]
   before_action :set_plan_clone, only: [:new, :create]
   before_action :set_title, except: [:destroy]
 
   # * GET /plans
   def index
-    @plans = Plan.list.includes(:period).references(:period).order(
-      "#{Period.quoted_table_name}.#{Period.qcn('start')} DESC"
+    @plans = Plan.list.includes(:period, plan_items: :review).references(:period).order(
+      Arel.sql "#{Period.quoted_table_name}.#{Period.qcn('start')} DESC"
     ).page params[:page]
   end
 
@@ -23,6 +24,7 @@ class PlansController < ApplicationController
       format.html
       format.js
       format.pdf  { redirect_to plan_pdf_path }
+      format.csv  { plan_csv_path }
     end
   end
 
@@ -72,13 +74,16 @@ class PlansController < ApplicationController
       params.require(:plan).permit(
         :period_id, :allow_overload, :allow_duplication,
         :lock_version, plan_items_attributes: [
-          :id, :project, :start, :end, :order_number, :risk_exposure,
+          :id, :project, :start, :end, :order_number, :risk_exposure, :scope,
           :business_unit_id, :_destroy,
           resource_utilizations_attributes: [
             :id, :resource_id, :resource_type, :units, :_destroy
           ],
           taggings_attributes: [
             :id, :tag_id, :_destroy
+          ],
+          auxiliar_business_unit_types_attributes: [
+            :id, :business_unit_type_id, :_destroy
           ]
         ]
       )
@@ -109,6 +114,14 @@ class PlansController < ApplicationController
         business_unit_type: @business_unit_type
 
       @plan.relative_pdf_path
+    end
+
+    def plan_csv_path
+      if params[:prs]
+        render csv: @plan.to_csv_prs(business_unit_type: @business_unit_type), filename: @plan.csv_filename_prs
+      else
+        render csv: @plan.to_csv(business_unit_type: @business_unit_type), filename: @plan.csv_filename
+      end
     end
 
     def load_privileges

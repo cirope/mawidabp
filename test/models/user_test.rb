@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
@@ -12,11 +14,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Organization.current_id = nil
+    Current.organization = nil
+    Current.user         = nil
   end
 
   test 'create' do
-    assert_difference 'User.count' do
+    assert_difference %w(User.count BusinessUnitTypeUser.count) do
       role = roles :admin_role
 
       role.inject_auth_privileges Hash.new(true)
@@ -27,6 +30,7 @@ class UserTest < ActiveSupport::TestCase
         language: 'es',
         email: 'emailxx@emailxx.ccc',
         function: 'New function',
+        office: 'New office',
         user: 'new_user',
         enable: true,
         failed_attempts: 0,
@@ -38,11 +42,45 @@ class UserTest < ActiveSupport::TestCase
             organization_id: organizations(:cirope).id,
             role_id: role.id
           }
+        ],
+        business_unit_type_users_attributes: [
+          {
+            business_unit_type_id: business_unit_types(:cycle).id
+          }
         ]
       )
 
       assert_not_nil user.parent
     end
+  end
+
+  test 'new user should fail with duplicated email' do
+    role = roles :admin_role
+
+    role.inject_auth_privileges Hash.new(true)
+
+    user = User.new(
+      name: 'New name',
+      last_name: 'New lastname',
+      language: 'es',
+      email: users(:bare).email,
+      function: 'New function',
+      office: 'New office',
+      user: 'new_user',
+      enable: true,
+      failed_attempts: 0,
+      logged_in: false,
+      notes: 'Some user notes',
+      organization_roles_attributes: [
+        {
+          organization_id: organizations(:cirope).id,
+          role_id: role.id
+        }
+      ]
+    )
+
+    assert user.invalid?
+    assert_error user, :email, :taken
   end
 
   test 'update' do
@@ -105,15 +143,12 @@ class UserTest < ActiveSupport::TestCase
     @user.last_name = nil
     @user.language = '   '
     @user.email = '  '
-    @user.organization_roles.clear
 
     assert @user.invalid?
     assert_error @user, :name, :blank
     assert_error @user, :last_name, :blank
     assert_error @user, :language, :blank
     assert_error @user, :email, :blank
-    assert_error @user, :manager_id, :invalid
-    assert_error @user, :organization_roles, :blank
   end
 
   test 'validates well formated attributes' do
@@ -124,16 +159,22 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    @user.user = users(:bare).user
-    @user.email = users(:bare).email
+    @user.user = users(:administrator).user
+    @user.email = users(:administrator).email
 
     assert @user.invalid?
     assert_error @user, :user, :taken
     assert_error @user, :email, :taken
   end
 
+  test 'skip duplicated attributes on different groups' do
+    @user.email = users(:bare).email
+
+    assert @user.valid?
+  end
+
   test 'validates can duplicate user if ldap' do
-    Organization.current_id = organizations(:google).id
+    Current.organization = organizations(:google)
 
     @user.user = users(:bare).user
 
@@ -154,22 +195,26 @@ class UserTest < ActiveSupport::TestCase
     assert @user.invalid?
     assert_error @user, :user, :too_short, count: 3
 
-    @user.user = 'abcd' * 10
+    @user.user = 'abcde' * 52
     @user.name = 'abcde' * 21
     @user.last_name = 'abcde' * 21
-    @user.email = "#{'abcde' * 21}@email.com"
+    @user.email = "#{'abcde' * 52}@email.com"
     @user.password = 'aB1d_' * 26
     @user.function = 'abcde' * 52
+    @user.office = 'abcde' * 52
+    @user.organizational_unit = 'abcde' * 52
     @user.salt = 'abcde' * 52
     @user.change_password_hash = 'abcde' * 52
 
     assert @user.invalid?
-    assert_error @user, :user, :too_long, count: 30
+    assert_error @user, :user, :too_long, count: 255
     assert_error @user, :name, :too_long, count: 100
     assert_error @user, :last_name, :too_long, count: 100
-    assert_error @user, :email, :too_long, count: 100
+    assert_error @user, :email, :too_long, count: 255
     assert_error @user, :password, :too_long, count: 128
     assert_error @user, :function, :too_long, count: 255
+    assert_error @user, :office, :too_long, count: 255
+    assert_error @user, :organizational_unit, :too_long, count: 255
     assert_error @user, :salt, :too_long, count: 255
     assert_error @user, :change_password_hash, :too_long, count: 255
   end
@@ -299,6 +344,27 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test 'user role needed at creation ' do
+    user = User.create(
+      name: 'New name',
+      last_name: 'New lastname',
+      language: 'es',
+      email: 'emailxx@emailxx.ccc',
+      function: 'New function',
+      office: 'New office',
+      user: 'new_user',
+      enable: true,
+      failed_attempts: 0,
+      logged_in: false,
+      notes: 'Some user notes',
+      manager_id: users(:administrator).id,
+      organization_roles_attributes: []
+    )
+
+    assert_error user, :organization_roles, :blank
+    assert_error user, :manager_id, :invalid
+  end
+
   test 'change user role from auditor to audited' do
     auditor = users :auditor
 
@@ -319,8 +385,19 @@ class UserTest < ActiveSupport::TestCase
     assert auditor.save
   end
 
+  test 'remove user roles' do
+    roles_attr = @user.organization_roles.map do |o_r|
+      { id: o_r.id, _destroy: '1' }
+    end
+
+    assert @user.update(organization_roles_attributes: roles_attr)
+    assert_empty @user.organization_roles.reload
+  end
+
   test 'release for all pending fingings' do
-    auditor = users :auditor
+    Current.organization = organizations :cirope
+    Current.user         = users :auditor
+    auditor              = Current.user
 
     assert auditor.findings.all_for_reallocation.any?
     assert auditor.reviews.list_without_final_review.any?
@@ -334,7 +411,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'try to release all pending findings for a unique audited' do
-    audited = users :audited
+    Current.organization = organizations :cirope
+    Current.user         = users :audited
+    audited              = Current.user
+
     old_findings_count = audited.findings.all_for_reallocation.count
     old_reviews_count = audited.reviews.list_without_final_review.count
 
@@ -413,7 +493,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'review assignment options' do
-    Organization.current_id = organizations(:google).id
+    Current.organization = organizations(:google)
 
     options = @user.review_assignment_options
 
@@ -424,12 +504,20 @@ class UserTest < ActiveSupport::TestCase
     user    = users :supervisor
     options = user.review_assignment_options
 
-    assert_equal 1, options.size
-    assert options[:supervisor]
+    if Current.conclusion_pdf_format == 'gal'
+      assert_equal 1, options.size
+      assert options[:supervisor]
+    else
+      assert_equal 2, options.size
+      assert options[:supervisor]
+      assert options[:responsible]
+    end
   end
 
   test 'notify finding changes function' do
-    Organization.current_id = nil
+    skip if USE_SCOPE_CYCLE
+
+    Current.organization = nil
     user = users :administrator
 
     assert user.findings.for_notification.any?
@@ -445,6 +533,11 @@ class UserTest < ActiveSupport::TestCase
           fua.dup.attributes.merge('finding_id' => nil)
         end
       )
+      new_finding.taggings.build(
+        finding.taggings.map do |t|
+          t.dup.attributes.merge('id' => nil, 'taggable_id' => nil)
+        end
+      )
 
       assert new_finding.save
     end
@@ -455,7 +548,7 @@ class UserTest < ActiveSupport::TestCase
       review_codes_by_user[user] = user.findings.for_notification.pluck 'review_code'
     end
 
-    assert_enqueued_emails 6 do
+    assert_enqueued_emails 12 do
       User.notify_new_findings
     end
 
@@ -471,29 +564,289 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify conclusion final review close date warning' do
-    ConclusionFinalReview.list.new({
+    Current.user = users :supervisor
+
+    ConclusionFinalReview.list.new(
       review_id: reviews(:review_approved_with_conclusion).id,
       issue_date: Date.today,
-      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.business_days.from_now.to_date,
       applied_procedures: 'New applied procedures',
-      conclusion: 'New conclusion',
+      conclusion: CONCLUSION_OPTIONS.first,
       recipients: 'John Doe',
       sectors: 'Area 51',
-      evolution: 'Do the evolution',
+      evolution: EVOLUTION_OPTIONS.second,
       evolution_justification: 'Ok',
       main_weaknesses_text: 'Some main weakness X',
       corrective_actions: 'You should do it this way',
+      :reference => 'Some reference',
+      :observations => 'Some observations',
+      :scope => 'Some scope',
       affects_compliance: false
-    }, false).save!
+    ).save!
 
-    Organization.current_id = nil
+    Current.organization = nil
 
     users = User.all_with_conclusion_final_reviews_for_notification
-
     assert users.any?
 
     assert_enqueued_emails users.count do
       User.notify_auditors_about_close_date
     end
+  end
+
+  test 'auditor users limit reached' do
+    group = groups :second_group
+
+    group.update_columns licensed: true
+    group.license.update_columns auditors_limit: 4
+
+    set_organization organizations :alphabet
+
+    assert_equal 4, group.users.can_act_as(:auditor).count
+
+    role_id = Current.organization.roles.find_by(
+      role_type: Role::TYPES[:auditor]
+    ).id
+
+    assert_no_difference 'User.count' do
+      user = User.create(
+        name:                          'New name',
+        last_name:                     'New lastname',
+        language:                      'es',
+        email:                         'emailxx@emailxx.ccc',
+        user:                          'new_user',
+        enable:                        true,
+        organization_roles_attributes: [
+          {
+            organization_id: Current.organization.id,
+            role_id:         role_id
+          }
+        ]
+      )
+
+      assert user.new_record?
+      assert_error user, :base, :auditors_limit_reached
+    end
+  end
+
+  test 'not auditor users can be created with license limit' do
+    group = groups :second_group
+
+    group.update_columns licensed: true
+    group.license.update_columns auditors_limit: 4
+
+    set_organization organizations :alphabet
+
+    assert_equal 4, group.users.can_act_as(:auditor).count
+
+    role_id = Current.organization.roles.find_by(
+      role_type: Role::TYPES[:admin]
+    ).id
+
+    assert_difference 'User.count' do
+      User.create(
+        name:                          'New name',
+        last_name:                     'New lastname',
+        language:                      'es',
+        email:                         'emailxx@emailxx.ccc',
+        user:                          'new_user',
+        enable:                        true,
+        organization_roles_attributes: [
+          {
+            organization_id: Current.organization.id,
+            role_id:         role_id
+          }
+        ]
+      )
+    end
+  end
+
+  test 'notify new admin user on create' do
+    skip unless NOTIFY_NEW_ADMIN
+
+    set_organization
+
+    organization = organizations :cirope
+    email        = 'emailxx@emailxx.ccc'
+
+    assert_enqueued_emails 1 do
+      assert_difference 'User.count' do
+        User.create!(
+          name:                          'New name',
+          last_name:                     'New lastname',
+          language:                      'es',
+          email:                         email,
+          function:                      'New function',
+          office:                        'New office',
+          user:                          'new_user',
+          enable:                        true,
+          failed_attempts:               0,
+          logged_in:                     false,
+          notes:                         'Some user notes',
+          manager_id:                    users(:administrator).id,
+          organization_roles_attributes: [
+            {
+              organization_id: organization.id,
+              role_id:         roles(:admin_role).id
+            }
+          ]
+        )
+      end
+    end
+  end
+
+  test 'notify new admin user on update' do
+    skip unless NOTIFY_NEW_ADMIN
+
+    set_organization
+
+    organization = organizations :cirope
+    user         = users :audited
+
+    user.organization_roles.each &:mark_for_destruction
+    user.organization_roles.build(
+      organization_id: organization.id,
+      role_id:         roles(:admin_role).id
+    )
+
+    assert_enqueued_emails 1 do
+      user.save!
+    end
+  end
+
+  test 'import' do
+    Current.organization = organizations(:google)
+    organization         = Current.organization
+
+    skip unless EXTRA_USERS_INFO.has_key? organization.prefix
+
+    assert_difference 'User.count', 2 do
+      User.import organization, 'admin', 'admin123'
+    end
+
+    one_user_file = User.find_by email: 'juan127@cirope.com'
+    two_user_file = User.find_by email: 'pedro127@cirope.com'
+
+    assert_equal one_user_file.manager_id, two_user_file.id
+    assert_equal one_user_file.roles.count, 2
+  end
+
+  test 'should return auditors' do
+    expected = User.includes(organization_roles: :role).where(
+      roles: {
+        role_type: ::Role::TYPES[:auditor]
+      }
+    )
+
+    assert_equal expected, User.auditors
+  end
+
+  test 'should can act as audited when is audited' do
+    assert users(:audited).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is audited and auditor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:audited)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:auditor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is audited and supervisor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:audited)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:supervisor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is audited and manager' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:audited)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:manager_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should can act as audited when is executive manager' do
+    assert users(:plain_manager).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is executive manager and auditor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:plain_manager)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:auditor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is executive manager and supervisor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:plain_manager)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:supervisor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is executive manager and manager' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:plain_manager)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:manager_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should can act as audited when is admin' do
+    assert users(:administrator).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is admin and auditor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:administrator)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:auditor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is admin and supervisor' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:administrator)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:supervisor_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is admin and manager' do
+    skip if USE_SCOPE_CYCLE
+
+    user = users(:administrator)
+    user.organization_roles << OrganizationRole.new(organization: organizations(:cirope), role: roles(:manager_role))
+
+    refute user.can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is auditor' do
+    refute users(:bare).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is supervisor' do
+    refute users(:supervisor).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is manager' do
+    refute users(:manager).can_act_as_audited?
+  end
+
+  test 'should not can act as audited when is committee' do
+    refute users(:committee).can_act_as_audited?
   end
 end

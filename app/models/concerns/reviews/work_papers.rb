@@ -38,11 +38,33 @@ module Reviews::WorkPapers
       work_papers.concat coi.work_papers
     end
 
+    (weaknesses + final_weaknesses).each do |w|
+      work_papers.concat w.work_papers
+    end
+
     (oportunities + final_oportunities).each do |w|
       work_papers.concat w.work_papers
     end
 
     work_papers
+  end
+
+  def recode_work_papers
+    work_papers = self.work_papers.sort_by &:code
+    codes       = {}
+
+    WorkPaper.transaction do
+      work_papers.each do |work_paper|
+        prefix, code_number = work_paper.code.split
+        codes[prefix]     ||= 1
+
+        if codes[prefix] != code_number.to_i
+          work_paper.update! code: "#{prefix} #{'%.3d' % codes[prefix]}"
+        end
+
+        codes[prefix] += 1
+      end
+    end
   end
 
   private

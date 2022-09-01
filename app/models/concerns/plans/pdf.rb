@@ -1,4 +1,4 @@
-module Plans::PDF
+module Plans::Pdf
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil, include_details: true, business_unit_type: nil
@@ -34,7 +34,7 @@ module Plans::PDF
 
     def pdf_period
       period_label = I18n.t 'plans.period.title', name: period.name
-      range_label  = I18n.t 'plans.period.range', {
+      range_label  = I18n.t 'plans.period.range', **{
         from_date: I18n.l(period.start, format: :long),
         to_date:   I18n.l(period.end,   format: :long)
       }

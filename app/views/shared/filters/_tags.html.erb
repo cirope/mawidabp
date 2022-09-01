@@ -1,13 +1,31 @@
-<div id="tags_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-group">
-        <% tags_filter = params[action] ? params[action][:tags] : nil %>
-        <%= f.label :tags, Tag.model_name.human, class: 'col-md-3' %>
-        <div class="col-md-9">
-          <%= f.text_field :tags, value: tags_filter, maxlength: 3072, class: 'form-control' %>
-        </div>
+<% group        ||= nil %>
+<% can_negate   ||= nil %>
+<% field_label  ||= Tag.model_name.human %>
+<% field_name   ||= :tags %>
+<% check_action ||= :"negate_#{field_name}" %>
+<% check_label  ||= t ".#{check_action}" %>
+
+<% unless group %>
+  <div id="<%= field_name %>_filter" class="row" <%== 'style="display: none;"' unless display %>>
+<% end %>
+  <div class="col-md-6" <%== 'style="display: none;"' unless display %>>
+    <div class="form-group row">
+      <% tags_filter = params[action] ? params[action][field_name] : nil %>
+      <%= f.label field_name, field_label, class: 'col-md-4 col-form-label' %>
+      <div class="col-md-8">
+        <%= f.text_field field_name, value: tags_filter, maxlength: 3072, class: 'form-control' %>
       </div>
     </div>
   </div>
-</div>
+  <% if can_negate %>
+    <div class="col-md-6">
+      <div class="custom-control custom-checkbox mt-lg-2">
+        <% check_value = params[action] && params[action][check_action] %>
+        <%= f.check_box check_action, checked: check_value == '1', id: check_action, class: 'custom-control-input' %>
+        <label class="custom-control-label" for="<%= check_action %>"><%= check_label %></label>
+      </div>
+    </div>
+  <% end %>
+<% unless group %>
+  </div>
+<% end %>

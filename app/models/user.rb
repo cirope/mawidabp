@@ -2,16 +2,19 @@ class User < ApplicationRecord
   include ActsAsTree
   include Comparable
   include ParameterSelector
-  include SearchCop
   include Trimmer
+  include Users::AttributeTypes
   include Users::Auditable
   include Users::Authorization
+  include Users::BusinessUnitTypes
   include Users::CloseDateWarning
   include Users::CustomAttributes
-  include Users::DateColumns
   include Users::Defaults
   include Users::DestroyValidation
   include Users::Findings
+  include Users::Import
+  include Users::Group
+  include Users::Licenses
   include Users::MarkChanges
   include Users::Name
   include Users::Notifications
@@ -25,21 +28,21 @@ class User < ApplicationRecord
   include Users::Roles
   include Users::Scopes
   include Users::Search
+  include Users::BaseValidations
   include Users::Validations
   include Users::Tree
+  include Users::Update
 
   trimmed_fields :user, :email, :name, :last_name
-
-  search_scope :search do
-    attributes :user, :name, :last_name, :function
-  end
 
   has_many :login_records, dependent: :destroy
   has_many :error_records, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_many :review_user_assignments, dependent: :destroy
+  has_many :time_consumptions, dependent: :destroy
   has_many :reviews, through: :review_user_assignments
   has_many :conclusion_final_reviews, through: :reviews
+  has_many :business_units, through: :business_unit_types
 
   def <=>(other)
     other.kind_of?(User) ? id <=> other.id : -1
@@ -50,6 +53,6 @@ class User < ApplicationRecord
   end
 
   def to_param
-    user_changed? ? user_was : user
+    "#{id}-#{user}".parameterize
   end
 end

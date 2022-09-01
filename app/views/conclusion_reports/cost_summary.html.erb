@@ -7,15 +7,15 @@
 <% end %>
 
 <% @periods.each do |period| %>
-  <div class="page-header">
-    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
-  </div>
+  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+
+  <hr>
 
   <% if @data[period].present? && @data[period][:data].present? %>
     <% @data[period][:data].each do |user_id, data| %>
       <h4><%= data[:name] %></h4>
 
-      <table class="table table-condensed table-hover">
+      <table class="table table-sm table-hover">
         <thead>
           <tr>
             <th><%= t 'conclusion_report.cost_summary.column_month' %></th>
@@ -30,7 +30,7 @@
             <% month_data = data[:data][month] || {} %>
             <tr>
               <td><%= l month, format: '%b-%y' %></td>
-              <td><%= '%.2f' % (month_data[:planed_units] || 0) %></td>
+              <td><%= '%.2f' % (month_data[:planned_units] || 0) %></td>
               <td><%= '%.2f' % (month_data[:executed_units] || 0) %></td>
               <td><%= '%.0f%%' % (month_data[:deviation] || 0) %></td>
             </tr>
@@ -49,7 +49,9 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: "#customize_report" } %>
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
+  <%= link_to t('label.download_csv'),
+    cost_summary_conclusion_reports_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {

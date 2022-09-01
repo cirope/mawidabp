@@ -5,10 +5,10 @@
   <div class="row">
     <div class="col-md-1">
       <div class="media">
-        <div class="pull-left">
+        <div class="float-left mt-2 mr-1">
           <%= show_plan_item_info(f.object) %>
         </div>
-        <div class="pull-left">
+        <div class="float-left mt-2 mr-2">
           <%= link_to_fetch_hide id, fetch ? :fetch : :show %>
         </div>
         <div class="media-body">
@@ -35,15 +35,22 @@
       <%= f.input :business_unit_id, as: :hidden, input_html: {
         value: f.object.business_unit_id, id: "hidden_business_unit_id_#{id}" } %>
     </div>
-    <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES ? 3 : 4 %>">
+    <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES || USE_SCOPE_CYCLE ? 2 : 4 %>">
       <%= f.input :project, label: false, input_html: { maxlength: 255 } %>
     </div>
-    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+    <% if USE_SCOPE_CYCLE %>
+      <div class="col-md-2">
+        <%= f.input :scope, collection: review_scope_options, label: false, prompt: true %>
+      </div>
+    <% elsif SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+      <div class="col-md-2">
+        <%= f.input :scope, collection: review_scope_options, label: false, prompt: true %>
+      </div>
       <div class="col-md-2">
         <%= f.input :risk_exposure, collection: review_risk_exposure_options, label: false, prompt: true %>
       </div>
     <% end %>
-    <div class="col-md-3">
+    <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES ? 2 : 3 %>">
       <div class="row">
         <div class="col-md-6">
           <%= f.input :start, as: :date_picker, label: false %>
@@ -54,8 +61,7 @@
       </div>
     </div>
     <div class="col-md-1">
-      <div class="toggle-visibility">
-        <%= f.input :id, as: :hidden %>
+      <div class="mt-2 text-right text-nowrap">
         <%= link_to_insert_field f %>
         <span class="text-muted">|</span>
         <% unless f.object.try(:review) %>
@@ -63,21 +69,22 @@
           <span class="text-muted">|</span>
         <% end %>
         <%= link_to_move %>
+        <%= f.input :id, as: :hidden %>
       </div>
     </div>
   </div>
 
-  <div class="nested hidden">
-    <div class="row nested">
+  <div class="pl-4 ml-3" data-nested hidden>
+    <div class="row" data-nested>
       <div class="col-md-8">
-        <h5><strong><%= ResourceUtilization.human_attribute_name 'resource' %></strong></h5>
+        <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'resource' %></h5>
       </div>
       <div class="col-md-3">
-        <h5><strong><%= ResourceUtilization.human_attribute_name 'units' %></strong></h5>
+        <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'units' %></h5>
       </div>
     </div>
 
-    <div class="hidden" data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= plan_item_path f.object %>">
+    <div data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= plan_item_path f.object %>" hidden>
       <% if fetch %>
         <div class="alert alert-warning"><%= t 'navigation.loading' %></div>
       <% else %>
@@ -85,7 +92,7 @@
       <% end %>
     </div>
 
-    <p class="nested">
+    <p data-nested>
       <%= link_to_add_fields(
         t('.add_material_resource_utilization'),
         f, :resource_utilizations, 'plan_items/material_resource_utilization', {
@@ -106,6 +113,13 @@
           insert_into: "#tags_#{id}",
           association: 'taggings'
         }
+      ) %>
+      <%= link_to_add_fields(
+        t('.add_auxiliar_business_unit_type'),
+        f, :auxiliar_business_unit_types, 'plan_items/auxiliar_business_unit_type', {
+          insert_into: "#auxiliar_business_unit_types_#{id}",
+          association: 'auxiliar_business_unit_types'
+        }, { plan_item_id: f.object.id, business_unit_type_id: params['business_unit_type'] }
       ) %>
     </p>
   </div>

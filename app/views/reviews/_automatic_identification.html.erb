@@ -1,12 +1,15 @@
 <% prefix, number, year = *@review.identification.to_s.split(/[-\/]/) %>
-<% number = Review.list.next_identification_number year if @review.errors[:identification].any? %>
+
+<% if @review.errors[:identification].any? %>
+  <% number = Review.list.next_identification_number prefix, year, use_prefix: @review.business_unit_type&.independent_identification %>
+<% end %>
 
 <% if @review.new_record? %>
   <div class="row">
-    <div class="col-xs-4">
+    <div class="col-4">
       <%= f.input :identification_prefix,
         label: Review.human_attribute_name('identification'),
-        collection: BusinessUnitType.list.pluck('review_prefix'),
+        collection: review_business_unit_type_prefixes,
         prompt: true,
         selected: prefix,
         input_html: {
@@ -18,12 +21,12 @@
         }
       %>
     </div>
-    <div class="col-xs-4">
+    <div class="col-4">
       <%= f.input :identification_number, label: raw('&nbsp;'), input_html: {
         value: number, readonly: true
       } %>
     </div>
-    <div class="col-xs-4">
+    <div class="col-4">
       <%= f.input :identification_suffix,
         collection: review_year_suffixes,
         label: raw('&nbsp;'),

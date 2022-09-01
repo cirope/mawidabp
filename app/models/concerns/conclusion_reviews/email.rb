@@ -3,8 +3,8 @@ module ConclusionReviews::Email
 
   def send_by_email_to user, options = {}
     default_options = {
-      organization_id: Organization.current_id,
-      user_id:         PaperTrail.whodunnit
+      organization_id: Current.organization&.id,
+      user_id:         PaperTrail.request.whodunnit
     }
 
     NotifierMailer.conclusion_review_notification(

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class TaggingTest < ActiveSupport::TestCase
   setup do
-    @tagging = taggings :important_finding
+    @tagging = taggings :high_priority_review
   end
 
   test 'blank attributes' do

@@ -12,4 +12,10 @@ module Findings::WorkPapers
   def prepare_work_paper work_paper
     work_paper.code_prefix ||= I18n.t 'code_prefixes.work_papers_in_weaknesses_follow_up'
   end
+
+  def pdf_cover_items
+    control_objective_item.pdf_cover_items + [
+      [self.class.model_name.human, title]
+    ]
+  end
 end

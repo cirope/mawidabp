@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <table class="table table-condensed table-hover">
+  <table class="table table-sm table-hover mt-3">
     <thead>
       <tr>
         <th></th>
@@ -40,7 +40,14 @@
       </tr>
       <tr style="vertical-align: text-top;">
         <td><strong><%= t('workflow.row_cost') %></strong></td>
-        <td><%= '%.2f' %  @workflow.human_units %></td>
+        <td>
+          <abbr title="<%= t 'workflow.human_resources' %>"><%= t 'workflow.human_resources_abbr' %></abbr>:
+          <%= '%.2f' % @workflow.human_units %> /
+          <%= '%.2f' % @workflow.review&.time_consumptions&.sum(&:amount).to_f %>
+          <abbr title="<%= t 'workflow.material_resources' %>"><%= t 'workflow.material_resources_abbr' %></abbr>:
+          <%= '%.2f' % @workflow.material_units %>
+
+        </td>
         <td style="width: 30%;">
           <div id="estimated_amount">
             <%= render 'estimated_amount', plan_item: @workflow.review.try(:plan_item) %>
@@ -50,15 +57,37 @@
     </tbody>
   </table>
 
+  <% f.object.build_file_model unless f.object.file_model %>
+
   <div class="row">
-    <div class="col-md-6 col-md-offset-1">
-      <h5><strong><%= WorkflowItem.human_attribute_name(:task) %></strong></h5>
+    <div class="col-md-12 text-right">
+      <p class="mb-1 mr-3"><%= Workflow.human_attribute_name 'file_model_id' %></p>
+      <div class="clearfix float-right">
+        <%= f.simple_fields_for :file_model do |fm_f| %>
+          <div class="file-container float-left">
+            <%= link_to_upload(fm_f.object) %>
+            <% if fm_f.object.file_cache %>
+              <%= fm_f.input :file_cache, as: :hidden %>
+              <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
+            <% else %>
+              <%= fm_f.input :file, label: false %>
+            <% end %>
+          </div>
+        <% end %>
+        <%= link_to_download f.object %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 offset-md-1">
+      <h5 class="h6"><%= WorkflowItem.human_attribute_name(:task) %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= WorkflowItem.human_attribute_name :start %></strong></h5>
+      <h5 class="h6"><%= WorkflowItem.human_attribute_name :start %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= WorkflowItem.human_attribute_name :end %></strong></h5>
+      <h5 class="h6"><%= WorkflowItem.human_attribute_name :end %></h5>
     </div>
   </div>
 
@@ -67,20 +96,21 @@
       <%= render 'workflow_item', f: wi_f %>
     <% end %>
 
-    <%= link_to_add_fields(t('label.add_item'), f, :workflow_items) %>
+    <p class="mb-1">
+      <%= link_to_add_fields(t('label.add_item'), f, :workflow_items) %>
+    </p>
   </div>
 
   <% if @workflow.overloaded? %>
-    <p>
-      <%= f.input :allow_overload, as: :boolean, label: false,
-        inline_label: t('workflow.allow_overload') %>
+    <p class="mb-1">
+      <%= f.input :allow_overload, as: :boolean, label: t('workflow.allow_overload') %>
     </p>
   <% end %>
 
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>
@@ -99,7 +129,7 @@ jQuery(function() {
         HTMLUtil.updateOptions(
           $('#workflow_review_id'), HTMLUtil.optionsFromArray(data)
         );
-      }).complete(function() {
+      }).done(function() {
         Helper.hideLoading(element);
         Helper.hideLoading('#workflow_review_id');
       });
@@ -118,7 +148,7 @@ jQuery(function() {
       $('#estimated_amount').html(data).stop(true, true).effect(
         'highlight', {}, 2000
       );
-    }).complete(function() {
+    }).done(function() {
       Helper.hideLoading(element);
     });
   });

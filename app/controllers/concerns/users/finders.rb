@@ -3,7 +3,7 @@ module Users::Finders
 
   private
 
-    def find_with_organization id, field = :user
+    def find_with_organization id, field = :id
       id = field == :id ? id.to_i : id.try(:downcase).try(:strip)
       quoted_field = "#{User.quoted_table_name}.#{User.qcn(field)}"
       id_field = field == :id ? quoted_field : "LOWER(#{quoted_field})"
@@ -23,7 +23,7 @@ module Users::Finders
 
     def set_user
       @user = User.includes(:organizations).where(
-        user: params[:id], organizations: { id: current_organization.try(:id) },
+        id: params[:id], organizations: { id: current_organization.try(:id) },
       ).references(:organizations).first if params[:id].present?
     end
 end

@@ -2,7 +2,8 @@ module ConclusionReviews::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list, -> { where organization_id: Organization.current_id }
+    scope :list, -> { where organization_id: Current.organization&.id }
+    scope :approved, -> { where approved: true }
   end
 
   module ClassMethods
@@ -10,6 +11,13 @@ module ConclusionReviews::Scopes
       includes(review: :period).
         where(periods: { id: period.id }).
         references(:periods)
+    end
+
+    def for_month month
+      from = month.at_beginning_of_month
+      to   = month.at_end_of_month
+
+      where(issue_date: from..to)
     end
 
     def by_best_practice_names *best_practice_names
@@ -58,9 +66,15 @@ module ConclusionReviews::Scopes
     end
 
     def by_business_unit_type business_unit_type_id
-      includes(review: { plan_item: :business_unit }).
+      ids_by_review = includes(review: { plan_item: :business_unit }).
         where(business_units: { business_unit_type_id: business_unit_type_id }).
-        references(:business_units)
+        references(:business_units).pluck('id')
+
+      ids_by_control_objectives = includes(business_unit_includes).
+        where(business_units: { business_unit_type_id: business_unit_type_id }).
+        references(:business_units).pluck('id')
+
+      where(id: ids_by_control_objectives | ids_by_review)
     end
 
     def by_business_unit_names(*business_unit_names)

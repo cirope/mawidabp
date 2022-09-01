@@ -59,30 +59,24 @@ module WeaknessesHelper
     @weakness.control_objective_item.business_units
   end
 
-  def weakness_progresses weakness
-    values = if weakness.being_implemented?
-               [25, 50, 75]
-             else
-               [0, 25, 50, 75, 100]
-             end
-
-    values.map { |n| ["#{n}%", n] }
-  end
-
-  def weakness_progress_disabled? weakness, readonly = false
-    readonly || !weakness.allow_progress_edition?
-  end
-
   def weakness_compliance_options
-    %w(yes no).map { |option| [t("label.#{option}"), option] }
+    COMPLIANCE_OPTIONS.map do |option, options|
+      [t("label.#{option}"), option, options]
+    end
+  end
+
+  def weakness_compliance_susceptible_to_sanction_options
+    COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.map do |k, v|
+      [t("label.#{k}"), v]
+    end
   end
 
   def weakness_operational_risk_options
-    WEAKNESS_OPERATIONAL_RISK.map { |option| [option, option] }
+    WEAKNESS_OPERATIONAL_RISK.map { |option, options| [option, option, options] }
   end
 
   def weakness_impact_options
-    WEAKNESS_IMPACT.map { |option| [option, option] }
+    WEAKNESS_IMPACT.map { |option, options| [option, option, options] }
   end
 
   def weakness_internal_control_components_options
@@ -100,5 +94,82 @@ module WeaknessesHelper
 
     control_objective &&
       WeaknessTemplate.list.by_control_objective(control_objective)
+  end
+
+  def weakness_risk_data_options
+    if SHOW_CONDENSED_PRIORITIES
+      { toggle_priority: Finding.risks[:medium], toggle_compliance: Finding.risks[:low] }
+    elsif USE_SCOPE_CYCLE
+      { copy_priority: true }
+    else
+      {}
+    end
+  end
+
+  def weakness_impact_risks
+    if USE_SCOPE_CYCLE
+      Finding.impact_risks.map do |key, value|
+        [t("impact_risk_types.#{key}"), value]
+      end
+    else
+      Finding.impact_risks_bic.map do |key, value|
+        [t("bic_impact_risk_types.#{key}"), value]
+      end
+    end
+  end
+
+  def weakness_probabilities
+    if USE_SCOPE_CYCLE
+      Finding.probabilities.map do |key, value|
+        [t("probability_types.#{key}"), value]
+      end
+    else
+      Finding.frequencies.map do |key, value|
+        [t("frequencies_types.#{key}"), value]
+      end
+    end
+  end
+
+  def weakness_state_regulations
+    Finding.state_regulations.map do |key, value|
+      [t("state_regulations_types.#{key}"), value]
+    end
+  end
+
+
+  def weakness_degree_compliance
+    Finding.degree_compliance.map do |key, value|
+      [t("degree_compliance_types.#{key}"), value]
+    end
+  end
+
+  def weakness_observation_origination_tests
+    Finding.observation_origination_tests.map do |key, value|
+      [t("observation_originated_tests_types.#{key}"), value]
+    end
+  end
+
+  def weakness_sample_deviation
+    Finding.sample_deviation.map do |key, value|
+      [t("sample_deviation_types.#{key}"), value]
+    end
+  end
+
+  def weakness_external_repeated
+    Finding.external_repeated.map do |key, value|
+      [t("external_repeated_types.#{key}"), value]
+    end
+  end
+
+  def suggested_type_risks
+    Finding::SUGGESTED_IMPACT_RISK_TYPES.map do |key, value|
+      [t("suggested_type_risks.#{key}"), value]
+    end
+  end
+
+  def suggested_type_probabilities
+    Finding::SUGGESTED_PROBABILITIES_TYPES.map do |key, value|
+      [t("suggested_type_probabilities.#{key}"), value]
+    end
   end
 end

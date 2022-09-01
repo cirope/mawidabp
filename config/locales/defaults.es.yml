@@ -110,6 +110,7 @@ es:
     messages:
       accepted: debe ser aceptado
       blank: no puede estar en blanco
+      required: no puede estar en blanco
       confirmation: no coincide
       empty: no puede estar vacío
       equal_to: debe ser igual a %{count}
@@ -131,6 +132,8 @@ es:
       too_long: es demasiado largo (%{count} caracteres máximo)
       too_short: es demasiado corto (%{count} caracteres mínimo)
       wrong_length: no tiene la longitud correcta (%{count} caracteres exactos)
+      extension_whitelist_error: no tiene un formato permitido
+      unknown_format: Formato desconocido
     template:
       body: ! 'Se encontraron problemas con los siguientes campos:'
       header:
@@ -150,6 +153,7 @@ es:
         format: ! '%u%n'
         precision: 2
         separator: ! ','
+        delimiter: '.'
         significant: false
         strip_insignificant_zeros: false
         unit: $

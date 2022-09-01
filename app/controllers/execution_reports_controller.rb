@@ -1,8 +1,11 @@
 class ExecutionReportsController < ApplicationController
   include Reports::WeaknessesByStateExecution
+  include Reports::WeaknessesCurrentSituation
   include Reports::WeaknessesReport
+  include Reports::PlannedCostSummary
   include Reports::DetailedManagement
   include Reports::ReviewsWithIncompleteWorkPapers
+  include Reports::TaggedFindingsReport
 
   before_action :auth, :load_privileges, :check_privileges
 
@@ -23,7 +26,12 @@ class ExecutionReportsController < ApplicationController
         create_weaknesses_report: :read,
         detailed_management_report: :read,
         create_detailed_management_report: :read,
-        reviews_with_incomplete_work_papers_report: :read
+        planned_cost_summary: :read,
+        create_planned_cost_summary: :read,
+        reviews_with_incomplete_work_papers_report: :read,
+        weaknesses_current_situation: :read,
+        create_weaknesses_current_situation: :read,
+        create_weaknesses_current_situation_permalink: :read
       )
     end
 end

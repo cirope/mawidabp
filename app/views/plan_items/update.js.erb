@@ -1,0 +1,10 @@
++function () {
+  var $container = $('tr[data-plan-item-id="<%= @plan_item.id %>"]')
+
+  <% if params[:button] == 'done' %>
+    $container.attr('hidden', true)
+  <% else %>
+    $container.find('td').html('<%= j render(@partial) %>')
+    $container.find('[autofocus]').focus()
+  <% end %>
+}()

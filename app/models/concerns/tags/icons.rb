@@ -3,55 +3,54 @@ module Tags::Icons
 
   included do
     ICONS = %w(
-      alert
       asterisk
-      ban-circle
+      ban
       bell
+      bolt
       book
       bookmark
       briefcase
       bullhorn
       calendar
       camera
-      cd
+      chart-bar
       cloud
       cog
       comment
-      compressed
+      compact-disc
+      compress
       envelope
-      exclamation-sign
-      facetime-video
+      exclamation-circle
+      exclamation-triangle
       file
       film
-      fire
+      fire-alt
       flag
-      flash
-      folder-close
+      folder
       folder-open
       font
       globe
       home
+      image
       inbox
-      info-sign
+      info-circle
       leaf
       list-alt
       lock
       map-marker
       paperclip
-      phone-alt
-      picture
+      phone
       print
-      pushpin
-      question-sign
+      question-circle
       random
       signal
       star
-      stats
       tag
       tags
-      tree-deciduous
+      thumbtack
+      tree
       user
-      warning-sign
+      video
       wrench
     )
   end

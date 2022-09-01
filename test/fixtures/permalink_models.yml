@@ -1,0 +1,7 @@
+link_being_implemented_weakness:
+  permalink: link
+  model: being_implemented_weakness (Finding)
+
+execution_link_being_implemented_weakness:
+  permalink: execution_link
+  model: unanswered_for_level_1_notification (Finding)

@@ -1,21 +1,9 @@
 # Importar Builder si no fue importado previamente
 require 'active_support/builder' unless defined?(Builder)
 
-Numeric.send :include, ActiveSupport::CoreExtensions::Numeric::BusinessTime
-Date.send :include, ActiveSupport::CoreExtensions::Date::BusinessTime
 ActionView::Base.send :include, ActionView::Helpers::DateHelper::CustomExtension
 
 class ActiveRecord::Base
-  def version_of(date = nil)
-    if date && date.to_time <= Time.now && respond_to?(:versions)
-      condition = "#{PaperTrail::Version.quoted_table_name}.#{PaperTrail::Version.qcn 'created_at'} > ?"
-
-      versions.where(condition, date.to_time).first.try(:reify) || self
-    else
-      self
-    end
-  end
-
   def self.qcn(name)
     connection.quote_table_name(name)
   end
@@ -71,13 +59,20 @@ class ActiveRecord::Base
     end
 
     def self.sanitize_hash attrs
-      table = ActiveRecord::TableMetadata.new(self, arel_table)
-      attrs = table.resolve_column_aliases attrs
-      attrs = expand_hash_conditions_for_aggregates attrs
+      table      = ActiveRecord::TableMetadata.new self, table
+      predicate  = ActiveRecord::PredicateBuilder.new table
 
-      ActiveRecord::PredicateBuilder.new(table).build_from_hash(attrs.stringify_keys).map do |b|
-        connection.visitor.compile b
+      predicate_builder.build_from_hash(attrs.stringify_keys).map do |b|
+        visit_nodes b
       end.join ' AND '
+    end
+
+    def self.visit_nodes b
+      # Taken from https://github.com/CanCanCommunity/cancancan/pull/503/files
+      sql_string = Arel::Collectors::SQLString.new
+      collector  = Arel::Collectors::SubstituteBinds.new connection, sql_string
+
+      connection.visitor.accept(b, collector).value
     end
 end
 

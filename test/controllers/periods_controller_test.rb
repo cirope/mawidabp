@@ -99,7 +99,7 @@ class PeriodsControllerTest < ActionController::TestCase
     assert_equal [
       I18n.t('periods.errors.can_not_be_destroyed'),
       I18n.t('periods.errors.reviews', count: @period.reviews.size),
-      I18n.t('periods.errors.plans', count: @period.plans.size),
+      I18n.t('periods.errors.plan', count: 1),
       I18n.t('periods.errors.workflows', count: @period.workflows.size)
     ].join(APP_ENUM_SEPARATOR), flash.alert
     assert_redirected_to periods_url

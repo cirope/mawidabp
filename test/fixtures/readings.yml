@@ -1,0 +1,4 @@
+administrator_on_auditor_answer:
+  user: administrator
+  readable: auditor_answer (FindingAnswer)
+  organization: cirope

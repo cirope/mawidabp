@@ -1,5 +1,5 @@
 module FindingsHelper
-  def finding_status_field form, disabled: false
+  def finding_status_field form, disabled: false, options_html: {}
     finding = form.object
 
     form.input :state,
@@ -7,9 +7,8 @@ module FindingsHelper
       label:      false,
       prompt:     true,
       input_html: {
-        disabled: (disabled || finding.unconfirmed?),
-        data: { weakness_state_changed_url: state_changed_weaknesses_path }
-      }
+        disabled: (disabled || finding.unconfirmed?)
+      }.merge(options_html)
   end
 
   def finding_repeated_of_label form, readonly:
@@ -49,6 +48,19 @@ module FindingsHelper
     end
   end
 
+  def next_task_expiration finding
+    next_expiration = finding.next_task_expiration
+
+    if next_expiration.present?
+      next_expiration_text = " / #{l finding.next_task_expiration, format: :short}"
+      html_class           = (next_expiration < Date.today ? 'strike bg-danger' : 'text-success')
+
+      content_tag :span, next_expiration_text, class: html_class
+    else
+      ''
+    end
+  end
+
   def finding_updated_at_text finding
     text = Finding.human_attribute_name 'updated_at'
     date = l finding.updated_at, format: :minimal
@@ -73,21 +85,13 @@ module FindingsHelper
   end
 
   def finding_answer_notification_check form
-    html_class = @auth_user.can_act_as_audited? ? 'hidden' : nil
-    label_text = html_class.blank? &&
-      FindingAnswer.human_attribute_name('notify_users')
-
     form.input :notify_users,
       as:           :boolean,
-      label:        false,
-      inline_label: label_text,
-      input_html:   { class: html_class }
+      wrapper_html: { hidden: @auth_user.can_act_as_audited? }
   end
 
   def finding_show_status_change_history element_id
-    icon = content_tag :span, nil, class: 'glyphicon glyphicon-time'
-
-    link_to icon, "##{element_id}", {
+    link_to icon('fas', 'history'), "##{element_id}", {
       title: t('findings.form.show_status_change_history'),
       data:  { toggle: 'collapse' }
     }
@@ -103,7 +107,7 @@ module FindingsHelper
       end
     end
 
-    array_to_ul users
+    array_to_ul users, class: 'mb-1'
   end
 
   def finding_work_paper_frozen? finding, work_paper
@@ -123,7 +127,20 @@ module FindingsHelper
       class: html_class
     }
 
-    raw "#{finding_answers_count} / #{user_count}"
+    raw [finding_answers_count, user_count].join(' / ')
+  end
+
+  def show_finding_reading_warning finding
+    readed_count  = finding.finding_answers.readed_by(@auth_user).count
+    answers_count = finding.finding_answers.count
+
+    if readed_count < answers_count
+      title = t '.unread_answers', count: answers_count - readed_count
+
+      content_tag(:span, class: 'text-warning', title: title) do
+        icon 'fas', 'exclamation-triangle'
+      end
+    end
   end
 
   def show_finding_related_users
@@ -141,23 +158,53 @@ module FindingsHelper
   end
 
   def finding_fixed_status_options
-    Finding::STATUS.slice(:implemented_audited, :assumed_risk, :expired).map do |k, v|
+    slice  = [:implemented_audited, :expired]
+    slice |= [:assumed_risk] unless HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    Finding::STATUS.slice(*slice).map do |k, v|
       [t("findings.state.#{k}"), v.to_s]
     end
   end
 
   def finding_execution_status_options
-    exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:unconfirmed, :confirmed]
+    exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:unconfirmed, :confirmed, :notify, :incomplete]
 
     Finding::STATUS.except(*exclude).map do |k, v|
       [t("findings.state.#{k}"), v.to_s]
     end
   end
 
+  def finding_status_options_by_action(action, params)
+    case
+    when action == :fixed_weaknesses_report
+      finding_fixed_status_options
+    when params[:execution].present?
+      finding_execution_status_options
+    else
+      finding_status_options
+    end
+  end
+
   def show_commitment_date? finding_answer
-    finding_answer.user.can_act_as_audited? &&
+    finding_answer.commitment_date.present? || (
+      finding_answer.user.can_act_as_audited?  &&
       finding_answer.requires_commitment_date? &&
       !current_organization.corporate?
+    )
+  end
+
+  def show_commitment_endorsement_edition? finding_answer
+    !@auth_user.can_act_as_audited? && finding_answer.finding.being_implemented?
+  end
+
+  def finding_endorsement_class endorsement
+    if endorsement.pending?
+      'secondary'
+    elsif endorsement.approved?
+      'success'
+    else
+      'danger'
+    end
   end
 
   def finding_description_label
@@ -175,6 +222,140 @@ module FindingsHelper
 
     finding.skip_work_paper ||
       state_errors.any? { |msg| msg[:error] == :must_have_a_work_paper }
+  end
+
+  def finding_task_status_options
+    Task.statuses.map do |k, v|
+      [t("tasks.status.#{k}"), k.to_s]
+    end
+  end
+
+  def finding_tag_options
+    Tag.list.for_findings.where(obsolete: false).order(:name).map do |t|
+      options = {
+        data: {
+          name:     t.name,
+          readonly: TAGS_READONLY.include?(t.name)
+        }
+      }
+
+      [t.name, t.id, options]
+    end
+  end
+
+  def link_to_recode_tasks
+    options = {
+      class: 'float-right',
+      title: t('finding.recode_tasks'),
+      data: {
+        recode_tasks: true,
+        confirm: t('messages.confirmation')
+      }
+    }
+
+    link_to '#', options do
+      icon 'fas', 'sort-numeric-down'
+    end
+  end
+
+  def link_to_create_work_paper finding_answer
+    if action_name == 'edit' && !@auth_user.can_act_as_audited?
+      path    = finding_work_papers_path finding_id:        @finding,
+                                         finding_answer_id: finding_answer
+      options = {
+        class: 'btn btn-outline-secondary',
+        title: t('finding.create_work_paper'),
+        data: {
+          add_param: 'last_work_paper_code',
+          method:    :post,
+          remote:    true,
+          confirm:   t('messages.confirmation')
+        }
+      }
+
+      link_to icon('fas', 'paperclip'), path, options
+    end
+  end
+
+  def show_follow_up_timestamps?
+    if @_show_follow_up_timestamps.nil?
+      setting = current_organization.settings.find_by name: 'show_follow_up_timestamps'
+      result  = (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+
+      @_show_follow_up_timestamps = result
+    else
+      @_show_follow_up_timestamps
+    end
+  end
+
+  def disabled_priority finding, readonly
+    if SHOW_CONDENSED_PRIORITIES
+      readonly || finding.risk != Finding.risks[:medium]
+    else
+      readonly
+    end
+  end
+
+  def finding_answer_rows
+    if SHOW_FINDING_CURRENT_SITUATION && USE_SCOPE_CYCLE
+      7
+    elsif SHOW_FINDING_CURRENT_SITUATION
+      9
+    else
+      5
+    end
+  end
+
+  def extension_enabled? finding
+    finding.review.conclusion_final_review.blank? || finding.extension
+  end
+
+  def data_for_submit finding
+    if USE_SCOPE_CYCLE
+      {
+        data: {
+          confirm_message: I18n.t('findings.form.confirm_finding_without_extension',
+                                  extension: Finding.human_attribute_name(:extension)),
+          checkbox_target: '#finding_extension',
+          target_value_checkbox: false,
+          states_target: Finding.states_that_allow_extension,
+          input_with_state: '#finding_state',
+          condition_to_receive_confirm: finding.review.conclusion_final_review.present? && finding.extension
+        }
+      }
+    else
+      {}
+    end
+  end
+
+  def finding_has_issues? finding
+    USE_SCOPE_CYCLE ? finding.issues.any? : false
+  end
+
+  def data_options_for_suggested_follow_up_date type_form
+    if USE_SCOPE_CYCLE
+      {
+        target_input_with_origination_date: "##{type_form}_origination_date",
+        target_input_with_risk: "##{type_form}_risk",
+        target_input_with_state: "##{type_form}_state",
+        target_values_states_change_label: Finding.states_that_suggest_follow_up_date,
+        days_to_add: Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk.to_json,
+        suffix: I18n.t('findings.form.follow_up_date_label_append'),
+        target_input_with_label: "##{type_form}_follow_up_date"
+      }
+    else
+      {}
+    end
+  end
+
+  def link_to_edit_finding finding, auth_user
+    if !auth_user.can_act_as_audited? || finding.users.reload.include?(auth_user)
+      if finding.pending?
+        link_to_edit(edit_finding_path('incomplete', finding, user_id: params[:user_id]))
+      elsif !finding.repeated? && %w(bic).include?(Current.conclusion_pdf_format)
+        link_to_edit(edit_bic_sigen_fields_finding_path('complete', finding))
+      end
+    end
   end
 
   private
@@ -296,5 +477,21 @@ module FindingsHelper
       summary = review.conclusion_final_review.summary || '-'
 
       "#{ConclusionReview.human_attribute_name 'summary'}: #{summary}"
+    end
+
+    def finding_impact_risks_types finding
+      finding.amount_by_impact.invert.reverse_each.to_json
+    end
+
+    def finding_percentage_impact_risks_types finding
+      finding.percentage_by_impact.invert.reverse_each.to_json
+    end
+
+    def finding_probability_risks_types finding
+      finding.percentage_by_probability.invert.reverse_each.to_json
+    end
+
+    def finding_bic_risks_types finding
+      finding.bic_risks_types.invert.reverse_each.to_json
     end
 end

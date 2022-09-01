@@ -1,0 +1,16 @@
+<div class="m-2">
+  <%= simple_form_for @plan_item, data: { remote: true }, url: plan_plan_item_path(@plan, @plan_item, partial: 'best_practice') do |f| %>
+    <div id="best_practice_projects">
+      <% @plan_item.best_practice_projects.build unless @plan_item.best_practice_projects.detect &:new_record? %>
+
+      <%= f.simple_fields_for :best_practice_projects do |cf| %>
+        <%= render 'best_practice_project', f: cf %>
+      <% end %>
+
+      <p class="mt-2">
+        <%= f.button :submit, t('.best_practice_projects.save'), class: 'btn-sm btn-secondary' %>
+        <%= f.button :button, t('.best_practice_projects.done'), class: 'btn-sm btn-primary ml-1', type: 'submit', value: 'done' %>
+      </p>
+    </div>
+  <% end %>
+</div>

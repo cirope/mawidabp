@@ -1,15 +1,17 @@
 <%= simple_form_for(@questionnaire) do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
         <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
         <%= f.input :email_subject, input_html: { maxlength: 255 } %>
         <%= f.input :email_link, input_html: { maxlength: 255 } %>
+        <%= f.input :pollable_type, collection: pollable_types, prompt: true %>
       </div>
       <div class="col-md-6">
-        <%= f.input :email_text, input_html: { maxlength: 255 } %>
-        <%= f.input :email_clarification, input_html: { maxlength: 255 } %>
-        <%= f.input :pollable_type, collection: pollable_types, prompt: true %>
+        <%= f.input :email_text, input_html: { rows: 4 } %>
+        <%= f.input :email_clarification, input_html: { rows: 4 } %>
       </div>
     </div>
   </div>
@@ -18,13 +20,13 @@
 
   <div class="row">
     <div class="col-md-6">
-      <h5>
-        <strong><%= Question.model_name.human(count: 0) %></strong>
+      <h5 class="h6">
+        <%= Question.model_name.human(count: 0) %>
       </h5>
     </div>
     <div class="col-md-4">
-      <h5>
-        <strong><%= Question.human_attribute_name :answer_type %></strong>
+      <h5 class="h6">
+        <%= Question.human_attribute_name :answer_type %>
       </h5>
     </div>
   </div>
@@ -42,7 +44,7 @@
   <div class="form-actions">
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
   </div>
 <% end %>
 <script type="text/javascript">

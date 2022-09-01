@@ -1,4 +1,4 @@
-<table class="table table-condensed table-striped table-hover">
+<table class="table table-sm table-striped table-hover">
   <thead>
     <tr>
       <th><%= Role.human_attribute_name :name %></th>
@@ -12,9 +12,9 @@
       <tr>
         <td><%= role.name %></td>
         <td><%= role_type_text(role.role_type) %></td>
-        <td><%= link_to_show role %></td>
-        <td><%= link_to_edit edit_role_path(role) %></td>
-        <td><%= link_to_destroy role %></td>
+        <td class="text-right"><%= link_to_show role %></td>
+        <td class="text-right"><%= link_to_edit edit_role_path(role) %></td>
+        <td class="text-right"><%= link_to_destroy role %></td>
       </tr>
     <% end %>
   </tbody>

@@ -3,6 +3,7 @@ class WeaknessesController < ApplicationController
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
   include AutoCompleteFor::WeaknessTemplate
+  include Reports::FileResponder
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
@@ -45,7 +46,8 @@ class WeaknessesController < ApplicationController
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
     @weaknesses = Weakness.list.includes(
-      :work_papers, :tags,
+      :work_papers, :tags, :review,
+      review: [:plan_item, :conclusion_final_review],
       control_objective_item: {
         review: [:period, :plan_item, :conclusion_final_review]
       }
@@ -53,12 +55,14 @@ class WeaknessesController < ApplicationController
       @order_by || [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn('review_code')} ASC"
-      ]
-    ).references(:periods, :conclusion_reviews)
+      ].map { |o| Arel.sql o }
+    ).
+    references(:periods, :conclusion_reviews).
+    merge Review.allowed_by_business_units
 
     respond_to do |format|
       format.html { @weaknesses = @weaknesses.page params[:page] }
-      format.csv  { render csv: @weaknesses.to_csv, filename: @title.downcase }
+      format.csv  { render_index_csv }
     end
   end
 
@@ -70,7 +74,7 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json # show.json.jbuilder
+      format.js   # show.js.erb
     end
   end
 
@@ -80,7 +84,8 @@ class WeaknessesController < ApplicationController
   def new
     @title = t 'weakness.new_title'
     @weakness = Weakness.new(
-      control_objective_item_id: params[:control_objective_item]
+      control_objective_item_id: params[:control_objective_item],
+      manual_risk: !USE_SCOPE_CYCLE
     )
 
     @weakness.import_users
@@ -102,7 +107,7 @@ class WeaknessesController < ApplicationController
   # * POST /weaknesses
   def create
     @title = t 'weakness.new_title'
-    @weakness = Weakness.list.new(weakness_params)
+    @weakness = Weakness.list.new weakness_params
 
     respond_to do |format|
       if @weakness.save
@@ -149,18 +154,12 @@ class WeaknessesController < ApplicationController
     end
   end
 
-  # * GET /weaknesses/state_changed
-  def state_changed
-    @state = params[:state].to_i
-
-    respond_to do |format|
-      format.js
-    end
-  end
-
   # * GET /weaknesses/weakness_template_changed
   def weakness_template_changed
-    @weakness_template = WeaknessTemplate.list.find_by id: params[:id]
+    control_objective_item   = ControlObjectiveItem.list.find_by id: params[:control_objective_item_id]
+    @weakness_template       = WeaknessTemplate.list.find_by id: params[:id]
+    @probability_risk_amount = Finding.list.probability_risk_previous control_objective_item&.review,
+                                                                      @weakness_template
 
     respond_to do |format|
       format.js
@@ -168,15 +167,22 @@ class WeaknessesController < ApplicationController
   end
 
   private
+
     def weakness_params
-      params.require(:weakness).permit(
-        :control_objective_item_id, :review_code, :title, :description, :answer,
-        :audit_comments, :state, :progress, :origination_date, :solution_date,
+      casted_params = params.require(:weakness).permit(
+        :control_objective_item_id, :review_code, :title, :description, :brief,
+        :answer, :audit_comments, :state, :origination_date, :solution_date,
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
-        :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
-        :weakness_template_id, :lock_version,
+        :follow_up_date, :users_for_notification, :compliance, :impact_risk,
+        :probability, :skip_work_paper, :weakness_template_id,
+        :compliance_observations, :compliance_susceptible_to_sanction,
+        :manual_risk, :use_suggested_impact,
+        :use_suggested_probability, :impact_amount, :probability_amount,
+        :lock_version, :extension, :state_regulations, :degree_compliance,
+        :observation_originated_tests, :sample_deviation, :external_repeated,
+        :risk_justification, :year, :nsisio, :nobs,
         operational_risk: [], impact: [], internal_control_components: [],
-        business_unit_ids: [],
+        business_unit_ids: [], tag_ids: [],
         achievements_attributes: [
           :id, :benefit_id, :amount, :comment, :_destroy
         ],
@@ -194,12 +200,26 @@ class WeaknessesController < ApplicationController
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
         ],
+        issues_attributes: [
+          :id, :customer, :entry, :operation, :amount, :currency, :comments,
+          :close_date, :_destroy
+        ],
+        tasks_attributes: [
+          :id, :code, :description, :status, :due_on, :_destroy
+        ],
         taggings_attributes: [
           :id, :tag_id, :_destroy
         ],
         comments_attributes: [
           :user_id, :comment
+        ],
+        image_model_attributes: [
+          :id, :image, :image_cache, :_destroy
         ]
+      )
+
+      casted_params.merge(
+        can_close_findings: USE_SCOPE_CYCLE && can_perform?(:approval)
       )
     end
 
@@ -217,8 +237,16 @@ class WeaknessesController < ApplicationController
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
         auto_complete_for_weakness_template: :read,
-        state_changed: :read,
-        undo_reiteration: :modify
+        undo_reiteration: :modify,
+        weakness_template_changed: :read
+      )
+    end
+
+    def render_index_csv
+      render_or_send_by_mail(
+        collection:  @weaknesses,
+        filename:    "#{@title.downcase}.csv",
+        method_name: :to_csv
       )
     end
 end

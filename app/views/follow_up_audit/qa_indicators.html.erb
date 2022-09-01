@@ -3,13 +3,11 @@
   :forms => {:date_range => true}} %>
 <% if @periods.present? %>
   <% @periods.each do |period| %>
-    <div class="page-header">
-      <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
-    </div>
+    <h2 class="mb-3"><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
 
     <% @indicators[period].each do |data| %>
       <% unless data[:column_data].blank? %>
-        <table class="table table-condensed table-striped table-hover">
+        <table class="table table-sm table-striped table-hover">
           <thead>
             <tr>
               <% @columns.each do |col_name| %>
@@ -34,7 +32,7 @@
           </tbody>
         </table>
       <% else %>
-        <p style="margin: 1em;">
+        <p class="m-2">
           <em><%= t 'follow_up_committee_report.qa_indicators.without_audits_in_the_period' %></em>
         </p>
       <% end %>
@@ -42,14 +40,13 @@
   <% end %>
 
   <% if @ancient_medium_risk_label %>
-    <h4 class="simple_title with_border_bottom"><%= @ancient_medium_risk_label %></h4>
+    <h5 class="simple_title with_border_bottom"><%= @ancient_medium_risk_label %></h5>
   <% end %>
     <% if @ancient_highest_risk_label %>
-    <h4 class="simple_title with_border_bottom"><%= @ancient_highest_risk_label %></h4>
-    <br>
+    <h5 class="simple_title with_border_bottom mb-3"><%= @ancient_highest_risk_label %></h5>
   <% end %>
 <% else %>
-  <p style="margin: 1em;">
+  <p class="m-2">
     <em><%= t 'follow_up_committee_report.qa_indicators.without_data' %></em>
   </p>
 <% end %>
@@ -59,7 +56,7 @@
 <div>
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#',
-    data: { toggle: 'modal', target: "#customize_report" } %>
+    data: { toggle: 'modal', target: '#customize_report' } %>
 </div>
 
 <%= render :partial => 'shared/customize_report_form', :locals => {

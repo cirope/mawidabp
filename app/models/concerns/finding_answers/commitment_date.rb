@@ -4,7 +4,8 @@ module FindingAnswers::CommitmentDate
   def requires_commitment_date?
     has_date_required_status? &&
       has_follow_up_date_blank_or_expired? &&
-      has_expired_commitment_date?
+      has_expired_commitment_date? &&
+      !imported
   end
 
   private
@@ -20,11 +21,10 @@ module FindingAnswers::CommitmentDate
     end
 
     def has_date_required_status?
-      finding.awaiting?            ||
-        finding.being_implemented? ||
-        finding.notify?            ||
-        finding.unconfirmed?       ||
-        finding.confirmed?         ||
+      finding.being_implemented? ||
+        finding.notify?          ||
+        finding.unconfirmed?     ||
+        finding.confirmed?       ||
         finding.unanswered?
     end
 end

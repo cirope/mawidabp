@@ -1,13 +1,18 @@
 class Group < ApplicationRecord
   include Trimmer
+  include Groups::AttributeTypes
   include Groups::Auditable
   include Groups::Current
+  include Groups::Licenses
   include Groups::Notifications
   include Groups::Validations
 
   trimmed_fields :name, :admin_email, :admin_hash
 
+  has_one :license, dependent: :destroy
+
   has_many :organizations, -> { order(name: :asc) }, dependent: :destroy
+  has_many :users, through: :organizations
   accepts_nested_attributes_for :organizations, allow_destroy: true
 
   has_many :ldap_configs, through: :organizations

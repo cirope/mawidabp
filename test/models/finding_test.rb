@@ -9,56 +9,78 @@ class FindingTest < ActiveSupport::TestCase
     set_organization
   end
 
-  teardown do
-    Finding.current_user = nil
-  end
-
   test 'create' do
+    state = if USE_SCOPE_CYCLE
+              Finding::STATUS[:incomplete]
+            else
+              Finding::STATUS[:notify]
+            end
+
     assert_difference 'Finding.count' do
-      @finding.class.list.create!(
-        control_objective_item: control_objective_items(:impact_analysis_item_editable),
-        review_code: 'O020',
-        title: 'Title',
-        description: 'New description',
-        answer: 'New answer',
-        audit_comments: 'New audit comments',
-        state: Finding::STATUS[:notify],
-        origination_date: 1.day.ago.to_date,
-        solution_date: nil,
-        audit_recommendations: 'New proposed action',
-        effect: 'New effect',
-        risk: Finding.risks_values.first,
-        priority: Finding.priorities_values.first,
-        follow_up_date: nil,
-        compliance: 'no',
-        operational_risk: ['internal fraud'],
-        impact: ['econimic', 'regulatory'],
-        internal_control_components: ['risk_evaluation', 'monitoring'],
-        finding_user_assignments_attributes: {
-          new_1: {
-            user_id: users(:audited).id, process_owner: true
+      assert_difference 'Tagging.count', 2 do
+        @finding.class.list.create!(
+          control_objective_item: control_objective_items(:impact_analysis_item_editable),
+          review_code: 'O020',
+          title: 'Title',
+          description: 'New description',
+          brief: 'New brief',
+          answer: 'New answer',
+          audit_comments: 'New audit comments',
+          state: state,
+          origination_date: 1.day.ago.to_date,
+          solution_date: nil,
+          audit_recommendations: 'New proposed action',
+          effect: 'New effect',
+          risk: Finding.risks_values.first,
+          priority: Finding.priorities_values.first,
+          follow_up_date: nil,
+          compliance: 'no',
+          operational_risk: ['internal fraud'],
+          impact: ['econimic', 'regulatory'],
+          internal_control_components: ['risk_evaluation', 'monitoring'],
+          manual_risk: true,
+          risk_justification: 'Test',
+          finding_user_assignments_attributes: {
+            new_1: {
+              user_id: users(:audited).id, process_owner: true
+            },
+            new_2: {
+              user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
+            },
+            new_3: {
+              user_id: users(:supervisor).id, process_owner: false
+            }
           },
-          new_2: {
-            user_id: users(:auditor).id, process_owner: false
-          },
-          new_3: {
-            user_id: users(:supervisor).id, process_owner: false
+          taggings_attributes: {
+            new_1: {
+              tag_id: tags(:important).id
+            },
+            new_2: {
+              tag_id: tags(:pending).id
+            }
           }
-        }
-      )
+        )
+      end
     end
   end
 
   test 'control objective from final review can not be used to create new finding' do
+    state = if USE_SCOPE_CYCLE
+              Finding::STATUS[:incomplete]
+            else
+              Finding::STATUS[:notify]
+            end
+
     assert_no_difference 'Finding.count' do
       finding = Finding.list.create(
         control_objective_item: control_objective_items(:impact_analysis_item),
         review_code: 'O020',
         title: 'Title',
         description: 'New description',
+        brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
-        state: Finding::STATUS[:notify],
+        state: state,
         origination_date: 35.days.from_now.to_date,
         audit_recommendations: 'New proposed action',
         effect: 'New effect',
@@ -69,15 +91,22 @@ class FindingTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
+        manual_risk: true,
+        risk_justification: 'Test',
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
           },
           new_2: {
-            user_id: users(:auditor).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false, responsible_auditor: true
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
+          }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
           }
         }
       )
@@ -101,6 +130,7 @@ class FindingTest < ActiveSupport::TestCase
     @finding.review_code               = '   '
     @finding.title                     = '   '
     @finding.description               = '   '
+    @finding.brief                     = '   '
 
     assert @finding.invalid?
     assert_error @finding, :control_objective_item_id, :blank
@@ -108,6 +138,12 @@ class FindingTest < ActiveSupport::TestCase
     assert_error @finding, :review_code, :invalid
     assert_error @finding, :title, :blank
     assert_error @finding, :description, :blank
+
+    if USE_SCOPE_CYCLE
+      assert_error @finding, :brief, :blank
+    else
+      assert @finding.errors[:brief].blank?
+    end
   end
 
   test 'validates special blank attributes' do
@@ -139,13 +175,12 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates special not blank attributes' do
-    finding                = findings :unanswered_weakness
-    finding.follow_up_date = Time.zone.today
-    finding.solution_date  = Time.zone.tomorrow
+    @finding.follow_up_date = Time.zone.today
+    @finding.solution_date  = Time.zone.tomorrow
 
-    assert finding.invalid?
-    assert_error finding, :follow_up_date, :must_be_blank
-    assert_error finding, :solution_date, :must_be_blank
+    assert @finding.invalid?
+    assert_error @finding, :follow_up_date, :must_be_blank
+    assert_error @finding, :solution_date, :must_be_blank
   end
 
   test 'validates duplicated attributes' do
@@ -215,12 +250,81 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates implemented can be back at being implemented if comment' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
     finding       = findings :being_implemented_weakness_on_final
     finding.state = Finding::STATUS[:implemented]
 
     finding.save!
 
     finding.state = Finding::STATUS[:being_implemented]
+
+    assert finding.invalid?
+    assert_error finding, :state, :must_have_a_comment
+
+    finding.comments.build(
+      user:    users(:administrator),
+      comment: 'Test comment'
+    )
+
+    assert finding.valid?
+  end
+
+  test 'validates implemented audited can be back at implemented if comment' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    finding                 = findings :being_implemented_weakness_on_final
+    finding.state           = Finding::STATUS[:implemented_audited]
+    finding.solution_date   = Time.zone.today
+    finding.skip_work_paper = true
+
+    Current.user = users :supervisor
+
+    cfr = finding.review.conclusion_final_review
+
+    def cfr.can_be_destroyed?; true; end
+
+    cfr.destroy!
+
+    finding.save!
+    finding.reload
+
+    finding.state         = Finding::STATUS[:implemented]
+    finding.solution_date = nil
+
+    assert finding.invalid?
+    assert_error finding, :state, :must_have_a_comment
+
+    finding.comments.build(
+      user:    users(:administrator),
+      comment: 'Test comment'
+    )
+
+    assert finding.valid?
+  end
+
+  test 'validates expired can be back at implemented if comment' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    finding                = findings :being_implemented_weakness_on_final
+    finding.state          = Finding::STATUS[:expired]
+    finding.follow_up_date = nil
+    finding.solution_date  = Time.zone.today
+
+    Current.user = users :supervisor
+
+    cfr = finding.review.conclusion_final_review
+
+    def cfr.can_be_destroyed?; true; end
+
+    cfr.destroy!
+
+    finding.save!
+    finding.reload
+
+    finding.state          = Finding::STATUS[:implemented]
+    finding.follow_up_date = Time.zone.today
+    finding.solution_date  = nil
 
     assert finding.invalid?
     assert_error finding, :state, :must_have_a_comment
@@ -257,7 +361,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.state         = Finding::STATUS[:implemented_audited]
     finding.solution_date = Time.zone.today
 
-    Finding.current_user    = users :supervisor
+    Current.user = users :supervisor
     finding.skip_work_paper = true
 
     assert finding.work_papers.empty?
@@ -297,7 +401,8 @@ class FindingTest < ActiveSupport::TestCase
   test 'validate final state can be changed only by supervisors' do
     skip if DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION
 
-    Finding.current_user  = users :auditor
+    Current.user = users :auditor
+
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
     finding.solution_date = 1.month.from_now
@@ -305,7 +410,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.invalid?
     assert_error finding, :state, :must_be_done_by_proper_role
 
-    Finding.current_user  = users :supervisor
+    Current.user = users :supervisor
 
     assert finding.valid?
   end
@@ -313,14 +418,15 @@ class FindingTest < ActiveSupport::TestCase
   test 'validate final state can be changed by any auditor' do
     skip unless DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION
 
-    Finding.current_user  = users :auditor
+    Current.user = users :auditor
+
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
     finding.solution_date = 1.month.from_now
 
     assert finding.valid?
 
-    Finding.current_user  = users :supervisor
+    Current.user = users :supervisor
 
     assert finding.valid?
   end
@@ -508,16 +614,14 @@ class FindingTest < ActiveSupport::TestCase
       @finding.update! audit_comments: 'Updated comments'
     end
 
-    Finding.current_user = users :supervisor
+    Current.user = users :supervisor
 
     assert_difference '@finding.status_change_history.size' do
       @finding.update!(
-        state:         Finding::STATUS[:assumed_risk],
+        state:         Finding::STATUS[:expired],
         solution_date: Date.today
       )
     end
-
-    Finding.current_user = nil
   end
 
   test 'mark as unconfirmed' do
@@ -721,7 +825,7 @@ class FindingTest < ActiveSupport::TestCase
 
       until days_to_add == 0
         first_notification_date += 1.day
-        days_to_add -= 1 unless [0, 6].include?(first_notification_date.wday)
+        days_to_add -= 1 if first_notification_date.workday?
       end
 
       assert_equal computed_date, first_notification_date
@@ -746,12 +850,25 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 20.days.from_now.to_date, @finding.last_commitment_date
   end
 
+  test 'first follow up date' do
+    @finding.state          = Finding::STATUS[:being_implemented]
+    @finding.follow_up_date = Time.zone.today
+
+    @finding.save!
+
+    assert @finding.reload.first_follow_up_date.present?
+    assert @finding.follow_up_date.present?
+    assert_equal @finding.follow_up_date, @finding.first_follow_up_date
+    assert_equal @finding.first_follow_up_date, @finding.first_follow_up_date_on_versions
+  end
+
   test 'mark as duplicated' do
     finding     = findings :unanswered_for_level_1_notification
     repeated_of = findings :being_implemented_weakness
 
     assert_equal 0, finding.repeated_ancestors.size
     assert_equal 0, repeated_of.repeated_children.size
+    assert_nil repeated_of.latest_id
     assert_not_equal repeated_of.origination_date, finding.origination_date
     refute repeated_of.repeated?
 
@@ -759,10 +876,13 @@ class FindingTest < ActiveSupport::TestCase
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
+    refute finding.rescheduled?
+    assert_equal 0, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
     assert_equal repeated_of, finding.repeated_root
+    assert_equal finding.id, repeated_of.latest_id
 
     # After that it can not be destroyed
     assert_no_difference 'Finding.count' do
@@ -784,16 +904,64 @@ class FindingTest < ActiveSupport::TestCase
 
     refute repeated_of.repeated?
 
-    finding.update! repeated_of_id: repeated_of.id
+    finding.update! repeated_of_id: repeated_of.id, reschedule_count: 1
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
+    assert finding.rescheduled?
+    assert_equal 1, finding.reschedule_count
+    assert_equal finding.id, repeated_of.latest_id
+
+    if POSTGRESQL_ADAPTER
+      assert_equal [repeated_of.id], finding.parent_ids
+      assert_empty repeated_of.parent_ids
+    end
 
     finding.undo_reiteration
 
     refute repeated_of.reload.repeated?
     assert_nil finding.reload.repeated_of
+    assert_nil repeated_of.latest_id
+    refute finding.rescheduled?
+    assert_equal 0, finding.reschedule_count
     assert_equal repeated_of_original_state, repeated_of.state
+
+    if POSTGRESQL_ADAPTER
+      assert_empty finding.parent_ids
+      assert_empty repeated_of.parent_ids
+    end
+  end
+
+  test 'reschedule when mark as duplicated and follow up date differs' do
+    finding     = findings :unanswered_for_level_1_notification
+    repeated_of = findings :being_implemented_weakness
+
+    assert_equal 0, finding.repeated_ancestors.size
+    assert_equal 0, repeated_of.repeated_children.size
+    assert_not_equal repeated_of.origination_date, finding.origination_date
+    refute repeated_of.repeated?
+
+    finding.update! repeated_of_id: repeated_of.id,
+      state: Finding::STATUS[:being_implemented],
+      follow_up_date: repeated_of.follow_up_date + 1.day
+
+    assert repeated_of.reload.repeated?
+    assert finding.reload.repeated_of
+    assert finding.rescheduled?
+
+    count_reschedule = USE_SCOPE_CYCLE ? 3 : 4
+
+    assert_equal count_reschedule, finding.reschedule_count
+    assert_equal repeated_of.origination_date, finding.origination_date
+    assert_equal 1, finding.repeated_ancestors.size
+    assert_equal 1, repeated_of.repeated_children.size
+    assert_equal repeated_of, finding.repeated_root
+
+    finding.update! follow_up_date: repeated_of.follow_up_date
+
+    # Should unmark when follow up date has been "restored"
+    refute finding.reload.rescheduled?
+    assert_equal 0, finding.reschedule_count
   end
 
   test 'do nothing on repeat if repeated_of is not included on review' do
@@ -815,7 +983,17 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     assert File.exist?(@finding.absolute_follow_up_pdf_path)
+    assert (size = File.size(@finding.absolute_follow_up_pdf_path)) > 0
+
+    FileUtils.rm @finding.absolute_follow_up_pdf_path
+
+    assert_nothing_raised do
+      @finding.follow_up_pdf organizations(:cirope), brief: true
+    end
+
+    assert File.exist?(@finding.absolute_follow_up_pdf_path)
     assert File.size(@finding.absolute_follow_up_pdf_path) > 0
+    assert_not_equal size, File.size(@finding.absolute_follow_up_pdf_path)
 
     FileUtils.rm @finding.absolute_follow_up_pdf_path
   end
@@ -835,7 +1013,8 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'to csv' do
     csv  = Finding.all.to_csv
-    rows = CSV.parse csv, col_sep: ';'
+    # TODO: change to liberal_parsing: true when 2.3 support is dropped
+    rows = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
 
     assert_equal Finding.count + 1, rows.length
   end
@@ -858,9 +1037,9 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify for stale and unconfirmed findings' do
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
     assert_not_equal 0, Finding.unconfirmed_for_notification.size
 
     review_codes_by_user =
@@ -872,9 +1051,9 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'warning users about findings expiration' do
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
     review_codes_by_user = review_codes_on_findings_by_user :next_to_expire
 
@@ -886,18 +1065,37 @@ class FindingTest < ActiveSupport::TestCase
   test 'remember users about expired findings' do
     skip if DISABLE_FINDINGS_EXPIRATION_NOTIFICATION
 
-    Organization.current_id = nil
-    review_codes_by_user    = review_codes_on_findings_by_user :expired
+    Current.organization = nil
+    review_codes_by_user = review_codes_on_findings_by_user :expired
 
     assert_enqueued_emails 6 do
       Finding.remember_users_about_expiration
     end
   end
 
+  test 'remember users about unanswered findings' do
+    skip if DISABLE_FINDINGS_EXPIRATION_NOTIFICATION
+
+    Current.organization = nil
+    review_codes_by_user = review_codes_on_findings_by_user :expired
+
+    Finding.unanswered.update_all notification_level: -1
+
+    assert Finding.unanswered_disregarded.count > 0
+
+    users = Finding.unanswered_disregarded.inject([]) do |u, finding|
+      u | finding.users
+    end
+
+    assert_enqueued_emails users.size do
+      Finding.remember_users_about_unanswered
+    end
+  end
+
   test 'mark stale and confirmed findings as unanswered' do
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
     review_codes_by_user = review_codes_on_user_findings_by_user :confirmed_and_stale
     unanswered_count     = Finding.where(state: Finding::STATUS[:unanswered]).count
@@ -918,9 +1116,9 @@ class FindingTest < ActiveSupport::TestCase
       'Finding.where(state: Finding::STATUS[:unanswered]).count'
     ]
 
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
     assert Finding.confirmed_and_stale.any?
 
     Finding.confirmed_and_stale.each do |finding|
@@ -938,9 +1136,9 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify manager if necesary' do
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
     findings_and_users              = unanswered_and_stale_findings_with_users_by_level
     users_by_level_for_notification = findings_and_users[:users_by_level_for_notification]
@@ -962,7 +1160,70 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'notify expired follow up' do
+    skip unless NOTIFY_EXPIRED_AND_STALE_FOLLOW_UP
+
+    Current.organization = nil
+    # Only if no weekend
+    assert Time.zone.today.workday?
+
+    finding = findings :being_implemented_weakness
+
+    finding.update! follow_up_date: (1.weeks + 1.day).ago.to_date
+
+    findings_and_users              = expired_findings_with_users_by_level
+    users_by_level_for_notification = findings_and_users[:users_by_level_for_notification]
+    finding_ids                     = findings_and_users[:finding_ids]
+
+
+    assert_enqueued_emails 1 do
+      level_counts = {}
+
+      finding_ids.each do |f_id|
+        level_counts[f_id] = Finding.find(f_id).notification_level
+      end
+
+      Finding.notify_expired_and_stale_follow_up
+
+      finding_ids.each do |f_id|
+        level = Finding.find(f_id).notification_level
+
+        assert level == level_counts[f_id].next || level == -1
+      end
+    end
+  end
+
+  test 'send findings brief' do
+    Current.organization = nil
+
+    # Since default settings prevents this from happening
+    assert_no_enqueued_emails do
+      Finding.send_brief
+    end
+
+    organization         = organizations :cirope
+    Current.organization = organization # Since we use list below
+    users                = organization.users.list_all_with_pending_findings
+
+    organization.settings.find_by(name: 'brief_period_in_weeks').update! value: '2'
+
+    assert_not_equal 0, users.size
+
+    Timecop.freeze(FINDING_INITIAL_BRIEF_DATE + 2.weeks) do
+      assert_enqueued_emails users.size do
+        Finding.send_brief
+      end
+    end
+
+    Timecop.freeze(FINDING_INITIAL_BRIEF_DATE + 1.weeks) do
+      assert_no_enqueued_emails do
+        Finding.send_brief
+      end
+    end
+  end
+
   test 'work papers can be added to finding with current close date' do
+    Current.user       = users :supervisor
     uneditable_finding = findings :being_implemented_weakness
 
     assert_difference 'WorkPaper.count' do
@@ -1002,20 +1263,111 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'validate final state change mark all task as finished' do
+    Current.user = users :supervisor
+    finding      = findings :being_implemented_weakness
+
+    assert_difference 'finding.tasks.count' do
+      finding.tasks.create! code: '02', description: 'Test', due_on: Time.zone.today
+    end
+
+    assert finding.reload.tasks.all? { |t| !t.finished? }
+
+    unless HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+      assert_no_difference 'Task.finished.count' do
+        finding.update! state: Finding::STATUS[:implemented]
+      end
+    end
+
+    assert_difference 'Task.finished.count', finding.tasks.count do
+      finding.update!(
+        state:         Finding::STATUS[:implemented_audited],
+        solution_date: 1.month.from_now
+      )
+    end
+
+    assert finding.reload.tasks.all? { |t| t.finished? }
+  end
+
+  test 'mark all task as finished when repeated' do
+    finding     = findings :unanswered_for_level_1_notification
+    repeated_of = findings :being_implemented_weakness
+
+    assert_difference 'repeated_of.tasks.count' do
+      repeated_of.tasks.create! code: '01', description: 'Test', due_on: Time.zone.today
+    end
+
+    assert repeated_of.reload.tasks.all? { |t| !t.finished? }
+
+    assert_difference 'Task.finished.count', repeated_of.tasks.count do
+      finding.update! repeated_of_id: repeated_of.id
+    end
+
+    assert repeated_of.reload.tasks.all? { |t| t.finished? }
+  end
+
+  test 'sync taggings' do
+    skip unless WEAKNESS_TAG_SYNC
+
+    finding      = findings :being_implemented_weakness_on_approved_draft
+    Current.user = users :supervisor
+
+    ConclusionFinalReview.list.new(
+      review_id: reviews(:review_approved_with_conclusion).id,
+      issue_date: Date.today,
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.business_days.from_now.to_date,
+      applied_procedures: 'New applied procedures',
+      conclusion: CONCLUSION_OPTIONS.first,
+      recipients: 'John Doe',
+      sectors: 'Area 51',
+      evolution: EVOLUTION_OPTIONS.second,
+      evolution_justification: 'Ok',
+      main_weaknesses_text: 'Some main weakness X',
+      corrective_actions: 'You should do it this way',
+      :reference => 'Some reference',
+      :observations => 'Some observations',
+      :scope => 'Some scope',
+      affects_compliance: false
+    ).save!
+
+    final_twin = finding.reload.children.take!
+    tag        = tags :follow_up
+
+    assert final_twin.taggings.where(tag_id: tag.id).empty?
+
+    assert_difference 'Tagging.count', 2 do
+      finding.taggings.create! tag_id: tag.id
+    end
+
+    assert final_twin.reload.taggings.where(tag_id: tag.id).exists?
+
+    assert_difference 'Tagging.count', -2 do
+      finding.reload.taggings.each do |t|
+        if t.tag_id == tag.id
+          t.mark_for_destruction
+        end
+      end
+
+      finding.save!
+    end
+
+    assert final_twin.reload.taggings.where(tag_id: tag.id).empty?
+  end
+
   test 'unconfirmed for notification scope' do
     assert Finding.unconfirmed_for_notification.any?
 
     Finding.unconfirmed_for_notification.each do |finding|
       finding.update_column :first_notification_date,
-        FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.days.ago_in_business.to_date
+        FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.business_days.ago.to_date
     end
 
     refute Finding.unconfirmed_for_notification.any?
   end
 
   test 'next to expire scope' do
-    before_expire = FINDING_WARNING_EXPIRE_DAYS.pred.days.from_now_in_business.to_date
-    expire        = FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
+    before_expire = FINDING_WARNING_EXPIRE_DAYS.pred.business_days.from_now.to_date
+    expire        = FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
 
     all_findings_are_in_range = Finding.next_to_expire.all? do |finding|
       finding.follow_up_date.between?(before_expire, expire) ||
@@ -1033,7 +1385,759 @@ class FindingTest < ActiveSupport::TestCase
     assert all_follow_up_dates_are_old
   end
 
+  test 'reset notification level on follow up date change' do
+    @finding.update! notification_level: 2
+
+    @finding.update! follow_up_date: Time.zone.today,
+                     state:          Finding::STATUS[:being_implemented]
+
+    assert_equal 0, @finding.reload.notification_level
+  end
+
+  test 'put state dates on changes' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    @finding.update! state:          Finding::STATUS[:implemented],
+                     follow_up_date: Time.zone.today
+
+    assert_equal Time.zone.today, @finding.reload.implemented_at
+    assert_nil @finding.closed_at
+
+    Current.user = users :supervisor
+
+    @finding.update! state:           Finding::STATUS[:implemented_audited],
+                     solution_date:   Time.zone.today,
+                     skip_work_paper: true
+
+    assert_equal Time.zone.today, @finding.reload.closed_at
+  end
+
+  test 'version implemented at' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    Timecop.travel 2.days.ago do
+      @finding.update! state:          Finding::STATUS[:implemented],
+                       follow_up_date: Time.zone.today
+    end
+
+    assert_equal 2.days.ago.to_date, @finding.version_implemented_at
+  end
+
+  test 'version closed at' do
+    Current.user = users :supervisor
+
+    Timecop.travel 2.days.ago do
+      @finding.update! state:         Finding::STATUS[:expired],
+                       solution_date: Time.zone.today
+    end
+
+    assert_equal 2.days.ago.to_date, @finding.version_closed_at
+  end
+
+  test 'require commitment support' do
+    skip unless %(true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+
+    finding = findings :being_implemented_weakness
+
+    assert finding.require_commitment_support?(finding.follow_up_date + 1.day)
+    refute finding.require_commitment_support?(finding.follow_up_date)
+  end
+
+  test 'commitment date required level' do
+    finding              = findings :being_implemented_weakness
+    first_follow_up_date = finding.first_follow_up_date
+    finding_answer       = finding.finding_answers.create!(
+      answer:          'New answer',
+      user:            users(:audited),
+      commitment_date: first_follow_up_date + 10.days,
+      notify_users:    false
+    )
+
+    assert_equal :manager, finding.commitment_date_required_level
+
+    finding_answer.update_column :commitment_date, first_follow_up_date + 4.months
+
+    assert_equal :management, finding.commitment_date_required_level
+
+    finding_answer.update_column :commitment_date, first_follow_up_date + 11.months
+
+    assert_equal :ceo, finding.commitment_date_required_level
+
+    finding_answer.update_column :commitment_date, first_follow_up_date + 13.months
+
+    assert_equal :committee, finding.commitment_date_required_level
+  end
+
+  test 'commitment limit date message' do
+    skip if COMMITMENT_DATE_LIMITS.blank?
+
+    @finding.risk           = Finding.risks[:high]
+    @finding.follow_up_date = Time.zone.today
+    commitment_date         = Time.zone.today + 13.months
+    comment_six_months      = COMMITMENT_DATE_LIMITS['reschedule']['default']['6.months']
+
+    with_follow_up_date     = @finding.commitment_date_message_for commitment_date
+
+    assert_equal with_follow_up_date, comment_six_months
+
+    comment_one_year        = COMMITMENT_DATE_LIMITS['first_date']['high']['1.year']
+    @finding.follow_up_date = nil
+    without_follow_up_date  = @finding.commitment_date_message_for commitment_date
+
+    assert_equal without_follow_up_date, comment_one_year
+
+    @finding.risk           = Finding.risks[:low]
+    @finding.follow_up_date = nil
+    commitment_date         = Time.zone.today + 13.months
+
+    without_message  = @finding.commitment_date_message_for commitment_date
+
+    assert_nil without_message
+  end
+
+  test 'check auto risk when change to automatic' do
+    skip unless USE_SCOPE_CYCLE
+
+    @finding.risk = Finding.risks[:high]
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:high], @finding.risk
+
+    @finding.manual_risk = false
+    @finding.probability        = Finding.probabilities[:rare]
+    @finding.impact_risk        = Finding.impact_risks[:moderate]
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:low], @finding.risk
+
+    @finding.probability        = Finding.probabilities[:almost_certain]
+    @finding.impact_risk        = Finding.impact_risks[:critical]
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:high], @finding.risk
+
+    @finding.probability = Finding.probabilities[:possible]
+    @finding.impact_risk = Finding.impact_risks[:moderate]
+
+    assert @finding.valid?
+    assert_equal Finding.risks[:medium], @finding.risk
+  end
+
+  test 'automatic issue based state' do
+    skip unless USE_SCOPE_CYCLE && SHOW_WEAKNESS_PROGRESS
+
+    @finding.issues.build customer: 'Some customer'
+
+    assert @finding.valid?, @finding.errors.full_messages.to_sentence
+    assert @finding.awaiting?
+
+    Current.user = users :supervisor
+
+    @finding.issues.all? { |issue| issue.close_date = Time.zone.today }
+
+    @finding.follow_up_date  = Time.zone.today
+    @finding.skip_work_paper = true
+
+    assert @finding.valid?
+    assert @finding.implemented_audited?
+    assert_equal @finding.issues.map(&:close_date).last, @finding.solution_date
+
+    @finding.issues.create! customer: 'Another customer'
+
+    @finding.solution_date = nil
+
+    assert @finding.valid?, @finding.errors.full_messages
+    assert @finding.being_implemented?
+  ensure
+    Current.user = nil
+  end
+
+  test 'issues amount' do
+    @finding.issues.create!(customer: 'Some customer', amount: 10)
+    @finding.issues.create!(customer: 'Some customer dup', amount: 23)
+
+    assert_equal @finding.issues_amount, 33
+  end
+
+  test 'get amount by impact' do
+    amount = 30844081
+
+    @finding.issues.create!(customer: 'Some customer', amount: amount)
+
+    amount_by_impact = @finding.amount_by_impact
+
+    result = amount_by_impact.reverse_each.to_h.detect { |id, value| amount >= value }
+
+    assert_equal result.first,  @finding.impact_risk_value
+  end
+
+  test 'probability risk previuos' do
+    Current.organization = organizations :cirope
+    Current.user         = users :auditor
+    repeatability_in_file = 1
+
+    assert_equal Finding.probability_risk_previous(@finding.review), 0
+
+    @finding.weakness_template = weakness_templates :security
+
+    assert @finding.valid?
+
+    probability_risk_previous_amount = Finding.list.probability_risk_previous @finding.review, @finding.weakness_template
+
+    assert_equal probability_risk_previous_amount, repeatability_in_file
+
+    weakness_previous = @finding.review.previous.weaknesses.first
+
+    weakness_previous.update_column :weakness_template_id, weakness_templates(:security).id
+
+    probability_risk_previous_amount = Finding.probability_risk_previous @finding.review, @finding.weakness_template
+
+    assert_equal probability_risk_previous_amount, repeatability_in_file + 1
+
+  ensure
+    Current.organization = nil
+    Current.user         = nil
+  end
+
+  test 'notify action not found when subject have no finding_id - pop3' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
+
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_pop3(supervisor.email, 'subject without id', body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[supervisor.email], "Reply "]
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when email does not belong to any user - pop3' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
+
+    finding = findings :confirmed_oportunity
+
+    body = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_pop3('nouser@nouser.com', "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [['nouser@nouser.com'], "Reply "]
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when auditee is not related - pop3' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited_second
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_pop3(audited.email, "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[audited.email], "Reply "]
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'add finding answer when auditee is related - pop3' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email_pop3(audited.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, audited
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'add finding answer to finding as supervisor - pop3' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'pop3'
+
+    finding    = findings :confirmed_oportunity
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email_pop3(supervisor.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, supervisor
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when subject have no finding_id - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_mgraph('id test', supervisor.email, 'subject without id', body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[supervisor.email], "Reply "]
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when email does not belong to any user - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding = findings :confirmed_oportunity
+
+    body = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_mgraph('id test', 'nouser@nouser.com', "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [['nouser@nouser.com'], 'Reply ']
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'notify action not found when auditee is not related - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited_second
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    Finding.receive_mail(new_email_mgraph('id test', audited.email, "[##{finding.id}]", body))
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with NotifierMailer, :notify_action_not_found, args: [[audited.email], 'Reply ']
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'add finding answer when auditee is related - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding = findings :confirmed_oportunity
+    audited = users :audited
+    body    = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email_mgraph('id test', audited.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, audited
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'add finding answer to finding as supervisor - mgraph' do
+    old_regex                = ENV['REGEX_REPLY_EMAIL']
+    ENV['REGEX_REPLY_EMAIL'] = 'On .*wrote:'
+    old_email_method         = ENV['EMAIL_METHOD']
+    ENV['EMAIL_METHOD']      = 'mgraph'
+
+    finding    = findings :confirmed_oportunity
+    supervisor = users :supervisor
+    body       = 'Reply On Tuesday wrote: Another reply'
+
+    assert_difference 'finding.finding_answers.count' do
+      Finding.receive_mail(new_email_mgraph('id test', supervisor.email, "[##{finding.id}]", body))
+    end
+
+    assert_equal finding.finding_answers.last.user, supervisor
+    assert_equal finding.finding_answers.last.answer, 'Reply '
+    assert finding.finding_answers.last.imported
+  ensure
+    ENV['REGEX_REPLY_EMAIL'] = old_regex
+    ENV['EMAIL_METHOD']      = old_email_method
+  end
+
+  test 'valid with same review code when repeated' do
+    @finding.repeated_of = findings(:unconfirmed_weakness)
+    @finding.review_code = findings(:unconfirmed_weakness).review_code
+
+    assert @finding.valid?
+  end
+
+  test 'should be invalid because has extension when has state excluded from states allowed' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding           = findings :incomplete_weakness
+    finding.extension = true
+
+    refute finding.valid?
+    assert_error finding,
+                 :extension,
+                 :must_have_state_that_allows_extension,
+                 extension: Finding.human_attribute_name(:extension),
+                 states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
+  end
+
+  test 'should be invalid when is being implemented and has final review but extension_was is false' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding           = findings :being_implemented_weakness
+    finding.extension = true
+
+    refute finding.valid?
+    assert_error finding,
+                 :extension,
+                 :cant_have_extension_when_didnt_have_extension,
+                 extension: Finding.human_attribute_name(:extension),
+                 states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
+  end
+
+  test 'should be invalid when is awaiting and has final review but extension_was is false' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+    finding.state = Finding::STATUS[:awaiting]
+    finding.extension = true
+
+    refute finding.valid?
+    assert_error finding,
+                 :extension,
+                 :cant_have_extension_when_didnt_have_extension,
+                 extension: Finding.human_attribute_name(:extension),
+                 states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
+  end
+
+  test 'should be valid when is being implemented and has final review and extension_was is true' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_attribute :extension, true
+
+    finding.extension = true
+
+    assert finding.valid?
+  end
+
+  test 'should be valid when is awaiting and has final review and extension_was is true' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_attribute :extension, true
+
+    finding.state     = Finding::STATUS[:awaiting]
+    finding.extension = true
+
+    assert finding.valid?
+  end
+
+  test 'should be valid when is being implemented and dont has final review' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :incomplete_weakness
+
+    finding.update_attribute :extension, true
+
+    finding.state          = Finding::STATUS[:being_implemented]
+    finding.follow_up_date = Date.today.to_date.to_s(:db)
+    finding.extension      = true
+
+    assert finding.valid?
+  end
+
+  test 'should be valid when is awaiting and dont has final review' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :incomplete_weakness
+
+    finding.update_attribute :extension, true
+
+    finding.state          = Finding::STATUS[:awaiting]
+    finding.follow_up_date = Date.today.to_date.to_s(:db)
+    finding.extension      = true
+
+    assert finding.valid?
+  end
+
+  test 'calculate reschedule' do
+    finding = findings :being_implemented_weakness
+
+    expected_reschedules = USE_SCOPE_CYCLE ? 2 : 3
+
+    assert_equal expected_reschedules, finding.calculate_reschedule_count
+
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    assert_equal expected_reschedules + 1, finding.calculate_reschedule_count
+
+    finding.save!
+
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 1.days).to_s(:db)
+
+    assert_equal expected_reschedules + 1, finding.calculate_reschedule_count
+
+    finding.save!
+
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 4.days).to_s(:db)
+
+    assert_equal expected_reschedules + 2, finding.calculate_reschedule_count
+
+    if USE_SCOPE_CYCLE
+      finding.save!
+
+      finding.state = Finding::STATUS[:awaiting]
+      finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 6.days).to_s(:db)
+
+      assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
+
+      finding.save!
+
+      finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 5.days).to_s(:db)
+
+      assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
+    end
+  end
+
+  test 'should return not reschedule' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_attribute('extension', true)
+
+    finding.versions.each do |v|
+      v.object['extension'] = true
+
+      v.save
+    end
+
+    finding.extension      = false
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+    reschedules            = finding.calculate_reschedule_count
+
+    assert reschedules.zero?
+
+    finding.extension = true
+    reschedules       = finding.calculate_reschedule_count
+
+    assert reschedules.zero?
+  end
+
+  test 'store follow_up_date_last_changed when change' do
+    finding                = findings :being_implemented_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
+  end
+
+  test 'store follow_up_date_last_changed when change to nil' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    finding.follow_up_date = nil
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
+  end
+
+  test 'store follow_up_date_last_changed when change from nil' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed, Time.zone.today
+  end
+
+  test 'should return follow_up_date_last_changed when in last version change follow_up_date' do
+    finding = findings :being_implemented_weakness
+
+    follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
+
+    assert_equal follow_up_date_last_changed_on_versions, I18n.l(finding.updated_at, format: :minimal)
+  end
+
+  test 'should return created_at when dont have changes from creation in follow_up_date' do
+    finding = findings :being_implemented_weakness_on_draft
+
+    finding.description = 'test'
+
+    finding.save!
+
+    follow_up_date_last_changed_on_versions = finding.follow_up_date_last_changed_on_versions
+
+    assert_equal follow_up_date_last_changed_on_versions, I18n.l(finding.created_at, format: :minimal)
+  end
+
+  test 'should return nil when never have follow_up_date' do
+    finding = findings :unconfirmed_for_notification_weakness
+
+    finding.description = 'test'
+
+    finding.save!
+
+    assert_nil finding.follow_up_date_last_changed_on_versions
+  end
+
+  test 'should return follow_up_date_last_changed when in past didnt have' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(finding.updated_at, format: :minimal)
+  end
+
+  test 'should return follow_up_date when dont have follow_up_date but in past have' do
+    finding                = findings :incomplete_weakness
+    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+
+    finding.save!
+
+    follow_up_date_last_changed_expected = finding.updated_at
+    finding.follow_up_date               = nil
+
+    finding.save!
+
+    assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(follow_up_date_last_changed_expected, format: :minimal)
+  end
+
+  test 'should return suggestion to add days follow up date depending on the risk' do
+    expected = {
+      0 => 180,
+      1 => 365,
+      2 => 270,
+      3 => 180
+    }
+
+    assert_equal Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk,
+                 expected
+  end
+
+  test 'should return states that suggest follow up date' do
+    assert_equal Finding.states_that_suggest_follow_up_date,
+                 [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
+  end
+
+  test 'should return states that allow extension' do
+    assert_equal Finding.states_that_allow_extension,
+                 [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
+  end
+
+  test 'should return next task expiration when have tasks in progress' do
+    finding              = findings :being_implemented_weakness
+    next_task_expiration = finding.tasks
+                                  .where(status: Task.statuses['in_progress'],
+                                         due_on: Date.today..)
+                                  .first
+                                  .due_on
+
+    assert_equal finding.next_task_expiration, next_task_expiration
+  end
+
+  test 'should return next task expiration when have tasks pending' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! status: Task.statuses['pending']
+
+    next_task_expiration = finding.tasks
+                                  .where(status: Task.statuses['pending'],
+                                         due_on: Date.today..)
+                                  .first
+                                  .due_on
+
+    assert_equal finding.next_task_expiration, next_task_expiration
+  end
+
+  test 'should not return next task expiration when all tasks are finished' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! status: Task.statuses['finished']
+
+    assert_nil finding.next_task_expiration
+  end
+
   private
+
+    def new_email_pop3 from, subject, body
+      mail = create_mail from, subject
+
+      mail.text_part = Mail::Part.new do
+        body body
+      end
+
+      mail.html_part = Mail::Part.new do
+        content_type 'text/html; charset=UTF-8'
+        body          body
+      end
+
+      mail
+    end
+
+    def create_mail from, subject
+      Mail.new do
+        from    from
+        to      'support@postman.com'
+        subject subject
+      end
+    end
+
+    def new_email_mgraph id, from, subject, body
+      OpenStruct.new id: id,
+                     subject: subject,
+                     from: [from],
+                     body: body
+    end
 
     def review_codes_on_findings_by_user method
       review_codes_by_user = {}
@@ -1091,6 +2195,36 @@ class FindingTest < ActiveSupport::TestCase
             end
 
             unless has_audited_comments
+              finding_ids << finding.id
+              users_by_level_for_notification[n] |= finding.users |
+                finding.users_for_scaffold_notification(n)
+            end
+          end
+        end
+      end
+
+      {
+        users_by_level_for_notification: users_by_level_for_notification,
+        finding_ids:                     finding_ids
+      }
+    end
+
+    def expired_findings_with_users_by_level
+      n                               = 0
+      finding_ids                     = []
+      users_by_level_for_notification = {1 => [], 2 => [], 3 => [], 4 => []}
+      deepest_level                   = User.deepest_level
+
+      (1..deepest_level).each do |n|
+        findings = Finding.pending_expired_and_stale n
+
+        findings.each do |finding|
+          # Not for president users since it belongs to another organization
+          if n != 4
+            users = finding.users_for_scaffold_notification(n)
+            commitment_date = finding.last_commitment_date
+
+            if commitment_date.blank? || commitment_date.past?
               finding_ids << finding.id
               users_by_level_for_notification[n] |= finding.users |
                 finding.users_for_scaffold_notification(n)

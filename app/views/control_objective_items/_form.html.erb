@@ -33,6 +33,7 @@
           <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
             <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
               input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
+            <small><%= previous_effectiveness @control_objective_item %></small>
           <% end %>
 
           <% test_rows = HIDE_CONTROL_COMPLIANCE_TESTS ? 7 : 5 %>
@@ -96,13 +97,10 @@
 
         <div class="row">
           <div class="col-md-6">
-            <%= f.input :finished, as: :boolean, label: false, inline_label:
-              ControlObjectiveItem.human_attribute_name(:finished),
-              input_html: { disabled: readonly } %>
+            <%= f.input :finished, input_html: { disabled: readonly } %>
           </div>
           <div class="col-md-6">
-            <%= f.input :exclude_from_score, as: :boolean, label: false, inline_label:
-              ControlObjectiveItem.human_attribute_name(:exclude_from_score),
+            <%= f.input :exclude_from_score,
               input_html: {
                 disabled: readonly,
                 data: {
@@ -112,11 +110,23 @@
               } %>
           </div>
         </div>
+
       </div>
     </div>
 
+    <% if @control_objective_item.show_counts?(current_organization.prefix) %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :issues_count, input_html: { readonly: readonly } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :alerts_count, input_html: { readonly: readonly } %>
+        </div>
+      </div>
+    <% end %>
+
     <% if @control_objective_item.support? %>
-      <p>
+      <p class="mb-1">
         <strong>
           <%= ControlObjectiveItem.human_attribute_name :support %>
         </strong>
@@ -125,31 +135,28 @@
     <% end %>
   </div>
 
-  <br />
   <%= render 'weaknesses_summary', readonly: readonly, frozen: frozen %>
 
   <% unless HIDE_OPORTUNITIES %>
-    <br />
     <%= render 'oportunities_summary', readonly: readonly, frozen: frozen %>
   <% end %>
 
   <% unless HIDE_BUSINESS_UNIT_SCORES %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= BusinessUnitScore.model_name.human count: @control_objective_item.business_unit_scores.size %>
-    </h4>
+    </h5>
     <div class="row">
-      <div class="col-md-4">
-        <h5><strong><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></strong></h5>
+      <div class="col-md-5">
+        <h5 class="h6"><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></h5>
       </div>
       <div class="col-md-2">
-        <h5><strong><%= BusinessUnitScore.human_attribute_name 'design_score' %></strong></h5>
+        <h5 class="h6"><%= BusinessUnitScore.human_attribute_name 'design_score' %></h5>
       </div>
       <div class="col-md-2">
-        <h5><strong><%= BusinessUnitScore.human_attribute_name 'compliance_score' %></strong></h5>
+        <h5 class="h6"><%= BusinessUnitScore.human_attribute_name 'compliance_score' %></h5>
       </div>
       <div class="col-md-2">
-        <h5><strong><%= BusinessUnitScore.human_attribute_name 'sustantive_score' %></strong></h5>
+        <h5 class="h6"><%= BusinessUnitScore.human_attribute_name 'sustantive_score' %></h5>
       </div>
     </div>
 
@@ -174,25 +181,24 @@
     </div>
   <% end %>
 
-  <br />
-  <h4>
+  <h5 class="mt-3">
     <%= WorkPaper.model_name.human count: @control_objective_item.work_papers.size %>
-  </h4>
+  </h5>
   <div class="row">
     <div class="col-md-3">
-      <h5><strong><%= WorkPaper.human_attribute_name 'name' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'name' %></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= WorkPaper.human_attribute_name 'code' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'code' %></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= WorkPaper.human_attribute_name 'number_of_pages' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'number_of_pages' %></h5>
     </div>
     <div class="col-md-4">
-      <h5><strong><%= WorkPaper.human_attribute_name 'description' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'description' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= WorkPaper.human_attribute_name 'file_model' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'file_model' %></h5>
     </div>
   </div>
 
@@ -208,7 +214,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.input :control_objective_id, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', disabled: frozen %>

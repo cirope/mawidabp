@@ -1,9 +1,42 @@
 <h2>
-  <div class="label label-<%= @tag.style %>">
-    <span class="glyphicon glyphicon-<%= @tag.icon %>"></span>
+  <div class="badge badge-<%= @tag.style %>">
+    <%= icon 'fas', @tag.icon %>
     <%= @tag %>
   </div>
 </h2>
+
+<p class="mb-1">
+  <strong><%= Tag.human_attribute_name 'shared' %></strong>:
+  <%= t "label.#{@tag.shared ? 'yes' : 'no'}" %>
+</p>
+
+<p class="mb-1">
+  <strong><%= Tag.human_attribute_name 'obsolete' %></strong>:
+  <%= t "label.#{@tag.obsolete ? 'yes' : 'no'}" %>
+</p>
+
+<% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+  <% Array(TAG_OPTIONS[@tag.kind]).each do |title, value| %>
+    <p class="mb-1">
+      <strong><%= title %></strong>:
+      <%= t "label.#{@tag.options&.include?(value) ? 'yes' : 'no'}" %>
+    </p>
+  <% end %>
+<% end %>
+
+<% if @tag.children.any? %>
+  <h5><%= t 'tags.form.children' %></h5>
+
+  <ul class="lead">
+    <% @tag.children.each do |tag| %>
+      <li>
+        <span class="badge badge-<%= tag.style %>">
+          <%= tag %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
 
 <hr>
 

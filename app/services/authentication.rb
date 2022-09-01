@@ -16,16 +16,19 @@ class Authentication
     authenticate
 
     if @valid && @valid_user
-      unless @current_organization.try(:ldap_config)
+      if @current_organization.try(:ldap_config)
+        verify_pending_poll
+      elsif @current_organization&.saml_provider.present?
+        verify_pending_poll
+      else
         verify_days_for_password_expiration
         verify_pending_poll
         verify_if_must_change_the_password
       end
-
-      @message ||= I18n.t 'message.welcome'
     else
       @message ||= I18n.t 'message.invalid_user_or_password'
-      @redirect_url = { controller: 'sessions', action: 'new' }
+      @redirect_url ||= { controller: 'sessions', action: 'new' }
+
       register_login_error
     end
 
@@ -35,9 +38,98 @@ class Authentication
   private
 
     def set_resources
+      set_saml_user
       set_login_user
       set_ldap_config
       set_valid_user
+    end
+
+    def set_saml_user
+      if @current_organization&.saml_provider.present?
+        provider      = @current_organization.saml_provider
+        saml_config   = IdpSettingsAdapter.saml_settings provider
+        saml_response = OneLogin::RubySaml::Response.new @params[:SAMLResponse], settings: saml_config
+
+        if saml_response.is_valid?
+          @user = saml_user_for saml_response.nameid, saml_response.attributes
+        end
+      end
+    end
+
+    def saml_user_for email, attributes
+      pruned_attributes = send("prune_#{@current_organization.saml_provider}_attributes", attributes)
+      email             = pruned_attributes[:email] || email
+      @params[:user]    = pruned_attributes[:user]
+
+      if user = User.find_by(user: @params[:user])
+        update_user user, pruned_attributes.merge(email: email)
+      else
+        create_user pruned_attributes.merge(email: email)
+      end
+    end
+
+    def update_user user, attributes
+      current_roles = user.organization_roles.where organization_id: @current_organization.id
+      remove_roles  = current_roles.includes(:role).references(:roles).where.not roles: { name: attributes[:roles] }
+      add_roles     = Array(attributes[:roles]).select do |name|
+        current_roles.includes(:role).references(:roles).where(roles: { name: name }).empty?
+      end
+
+      User.transaction do
+        user.organization_roles.where(id: remove_roles.ids).destroy_all
+
+        add_roles.each do |name|
+          role = Role.where(organization_id: @current_organization.id, name: name).take
+
+          if role
+            user.organization_roles.create! organization_id: role.organization_id,
+                                            role_id:         role.id
+          end
+        end
+
+        if user.organization_roles.empty? && USE_SCOPE_CYCLE
+            default_saml_roles.each do |default_role|
+              user.organization_roles.create! organization_id: default_role.organization_id,
+                                              role_id:         default_role.id
+          end
+        end
+
+        user.update! user:      attributes[:user],
+                     email:     attributes[:email],
+                     name:      attributes[:name],
+                     last_name: attributes[:last_name],
+                     enable:    true
+      end
+
+      user if user.organization_roles.where(organization_id: @current_organization.id).any?
+    end
+
+    def create_user attributes
+      roles = Role.where organization_id: @current_organization.id, name: attributes[:roles]
+      roles = default_saml_roles if roles.empty? && USE_SCOPE_CYCLE
+
+      if roles.any?
+        User.create!(
+          name:                          attributes[:name],
+          last_name:                     attributes[:last_name],
+          email:                         attributes[:email],
+          user:                          attributes[:user],
+          enable:                        true,
+          organization_roles_attributes: roles.map do |r|
+            { organization_id: r.organization_id, role_id: r.id }
+          end
+        )
+      end
+    end
+
+    def prune_azure_attributes attributes
+      {
+        user:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, ''),
+        name:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first,
+        email:     Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first,
+        last_name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first,
+        roles:     attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
+      }
     end
 
     def unmasked_user
@@ -47,7 +139,7 @@ class Authentication
     end
 
     def set_login_user
-      @user = User.new user: @params[:user], password: @params[:password]
+      @user ||= User.new user: @params[:user], password: @params[:password]
     end
 
     def set_ldap_config
@@ -55,8 +147,17 @@ class Authentication
     end
 
     def set_valid_user
-      conditions = ["LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user"]
-      parameters = { user: unmasked_user.to_s.downcase.strip }
+      conditions = [
+        [
+          "LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user",
+          "LOWER(#{User.quoted_table_name}.#{User.qcn('email')}) = :email"
+        ].join(' OR ')
+      ]
+
+      parameters = {
+        user: unmasked_user.to_s.downcase.strip,
+        email: unmasked_user.to_s.downcase.strip
+      }
 
       if @admin_mode
         conditions << "#{User.quoted_table_name}.#{User.qcn('group_admin')} = :true"
@@ -84,8 +185,22 @@ class Authentication
     def authenticate
       if @current_organization.try(:ldap_config)
         ldap_auth
+      elsif @current_organization&.saml_provider.present?
+        saml_auth
       else
         local_auth
+      end
+    end
+
+    def saml_auth
+      if @user&.valid?
+        @valid        = true
+        @valid_user   = @user
+        @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
+
+        register_login
+      else
+        @redirect_url = { controller: 'sessions', action: 'new', saml_error: true }
       end
     end
 
@@ -99,8 +214,16 @@ class Authentication
 
         @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
       end
-    rescue Net::LDAP::Error
-      @message = I18n.t 'message.ldap_error'
+    rescue Net::LDAP::Error, Errno::ECONNRESET, Errno::ECONNREFUSED => ex
+      ::Rails.logger.error ex
+
+      if @ldap_config.try_alternative_ldap?
+        @ldap_config = @ldap_config.alternative_ldap
+
+        retry
+      end
+
+      @message = I18n.t('message.ldap_error')
     end
 
     def choose_ldap_config username
@@ -136,9 +259,9 @@ class Authentication
       verify_if_user_expired
 
       if @valid_user.is_enable? && !@valid_user.hidden && valid_password?
-          register_login
-          @valid = true
-          @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
+        register_login
+        @valid = true
+        @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
       end
     end
 
@@ -160,7 +283,7 @@ class Authentication
 
         user.is_an_important_change = false
         user.save(validate: false)
-      else
+      elsif @current_organization
         create_error_record user_name: @user.user, error_type: :on_login
       end
     end
@@ -178,7 +301,7 @@ class Authentication
     def verify_if_must_change_the_password
       if @valid_user.must_change_the_password?
         @message = I18n.t 'message.must_change_the_password'
-        @redirect_url = [:edit, 'users_password', id: @valid_user]
+        @redirect_url = [:edit, :users_password, id: @valid_user]
       end
     end
 
@@ -201,8 +324,12 @@ class Authentication
 
     def verify_pending_poll
       if poll = @valid_user.first_pending_poll
-        @message = I18n.t 'polls.must_answer_poll'
-        @redirect_url = ['edit', poll, token: poll.access_token]
+        @message = I18n.t(
+          'polls.has_unanswered',
+          count: @valid_user.list_unanswered_polls.count
+        )
+
+        @redirect_url = [:edit, poll, token: poll.access_token]
       end
     end
 
@@ -211,5 +338,9 @@ class Authentication
         login_record = LoginRecord.list.create!(user: @valid_user, request: @request)
         @session[:record_id] = login_record.id
       end
+    end
+
+    def default_saml_roles
+      Role.where organization_id: @current_organization.id, name: DEFAULT_SAML_ROLES
     end
 end

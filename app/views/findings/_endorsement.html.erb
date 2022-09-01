@@ -1,0 +1,47 @@
+<%
+  finding_answer = f.object.finding_answer || parent.object
+  user = f.object.user
+  id = f.object.object_id
+%>
+<fieldset class="endorsement">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% unless readonly %>
+          <%= f.input :user_id, as: :string, label: false, input_html: {
+            value: user.try(:full_name_with_function),
+            id: "finding_user_#{id}", name: "auto_user_id_#{id}",
+            title: t('label.search'),
+            autocomplete: :off,
+            autofocus: !user,
+            data: {
+              autocomplete_url: url_for([finding_answer.finding.class.model_name.plural.to_sym, :users]),
+              autocomplete_id_target: "#user_id_#{id}"
+            }
+          } %>
+        <% else %>
+          <%= f.input :user_id, as: :string, label: false, input_html: {
+            value: user.full_name_with_function(f.object.created_at),
+            id: "endorsement_user_#{id}", name: "user_name_#{id}", readonly: true
+          } %>
+        <% end %>
+        <%= f.input :user_id, as: :hidden, input_html: { value: f.object.user_id, id: "user_id_#{id}" } %>
+      </div>
+      <div class="col-md-1 pt-1">
+        <span class="badge badge-<%= finding_endorsement_class f.object %>">
+          <%= t "findings.endorsements.status.#{f.object.status}" %>
+        </span>
+
+        <%= f.input :status, as: :hidden %>
+      </div>
+      <div class="col-md-4 pt-1">
+        <span class="text-muted"><%= f.object.reason %></span>
+      </div>
+      <div class="col-md-1">
+        <div class="mt-2 text-right">
+          <%= link_to_remove_nested_item(f) unless readonly %>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

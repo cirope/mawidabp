@@ -11,7 +11,8 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     private_actions = [
       :index, :synthesis_report, :weaknesses_by_state, :weaknesses_by_risk,
       :weaknesses_by_audit_type, :weaknesses_by_audit_type, :cost_analysis,
-      :cost_summary, :weaknesses_by_risk_report, :fixed_weaknesses_report
+      :cost_summary, :weaknesses_by_risk_report, :fixed_weaknesses_report,
+      :weaknesses_by_month
     ]
 
     private_actions.each do |action|
@@ -62,14 +63,15 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one'
+        :business_unit => 'one',
+        :scope => 'committee'
       },
       :controller_name => 'conclusion'
     }
 
     assert_response :success
     assert_not_nil assigns(:filters)
-    assert_equal 2, assigns(:filters).count
+    assert_equal 3, assigns(:filters).count
     assert_template 'conclusion_reports/synthesis_report'
   end
 
@@ -129,6 +131,29 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:filters)
     assert_equal 2, assigns(:filters).count
+    assert_equal 2, assigns(:conclusion_reviews).count
+    assert_template 'conclusion_reports/review_stats_report'
+  end
+
+  test 'filtered review stats report for scored reports' do
+    reviews(:past_review).update_column :score_type, 'none'
+
+    login
+
+    get :review_stats_report, :params => {
+      :review_stats_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one'
+      },
+      :controller_name => 'conclusion'
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:filters)
+    assert_equal 2, assigns(:filters).count
+    assert_equal 1, assigns(:conclusion_reviews).count
     assert_template 'conclusion_reports/review_stats_report'
   end
 
@@ -150,6 +175,147 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'review_stats_report', 0)
+  end
+
+  test 'review scores report' do
+    login
+
+    get :review_scores_report, :params => { :controller_name => 'conclusion' }
+    assert_response :success
+    assert_template 'conclusion_reports/review_scores_report'
+
+    assert_nothing_raised do
+      get :review_scores_report, :params => {
+        :review_scores_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/review_scores_report'
+  end
+
+  test 'filtered review scores report' do
+    login
+    get :review_scores_report, :params => {
+      :review_scores_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one'
+      },
+      :controller_name => 'conclusion'
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:filters)
+    assert_equal 2, assigns(:filters).count
+    assert_template 'conclusion_reports/review_scores_report'
+  end
+
+  test 'create review scores report' do
+    login
+
+    post :create_review_scores_report, :params => {
+      :review_scores_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion'
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.review_scores_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'review_scores_report', 0)
+  end
+
+  test 'review score details report' do
+    login
+
+    get :review_score_details_report, :params => { :controller_name => 'conclusion' }
+    assert_response :success
+    assert_template 'conclusion_reports/review_score_details_report'
+
+    assert_nothing_raised do
+      get :review_score_details_report, :params => {
+        :review_score_details_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/review_score_details_report'
+  end
+
+  test 'review score details report as CSV' do
+    login
+
+    get :review_score_details_report, :params => { :controller_name => 'conclusion' }, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :review_score_details_report, :params => {
+        :review_score_details_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion', as: :csv
+      }
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'filtered review score details report' do
+    login
+    get :review_score_details_report, :params => {
+      :review_score_details_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :conclusion => [CONCLUSION_OPTIONS.first],
+        :scope => ['committee'],
+        :business_unit_type => [business_unit_types(:cycle).id],
+        :business_unit => 'one, two'
+      },
+      :controller_name => 'conclusion'
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:filters)
+    assert_equal 4, assigns(:filters).count
+    assert_template 'conclusion_reports/review_score_details_report'
+  end
+
+  test 'create review score details report' do
+    login
+
+    post :create_review_score_details_report, :params => {
+      :review_score_details_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion'
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.review_score_details_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'review_score_details_report', 0)
   end
 
   test 'weaknesses by state report' do
@@ -205,7 +371,9 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       get :weaknesses_by_risk, :params => {
         :weaknesses_by_risk => {
           :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+          :to_date => 10.years.from_now.to_date,
+          :compliance => 'yes',
+          :repeated => 'false'
         },
         :controller_name => 'conclusion',
         :final => true
@@ -318,6 +486,27 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'cost_analysis', 0)
   end
 
+  test 'cost analysis report as CSV' do
+    login
+
+    get :cost_analysis, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :cost_analysis, :params => {
+        :cost_analysis => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'detailed cost analysis report' do
     login
     expected_title = I18n.t 'conclusion_report.detailed_cost_analysis_title'
@@ -360,6 +549,28 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'cost_analysis', 0)
   end
 
+  test 'detailed cost analysis report as CSV' do
+    login
+
+    get :cost_analysis, :params => { :include_details => 1 }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :cost_analysis, :params => {
+        :include_details => 1,
+        :cost_analysis => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        }
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'cost summary report' do
     login
     expected_title = I18n.t 'conclusion_report.cost_summary_title'
@@ -398,6 +609,27 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'cost_summary', 0)
+  end
+
+  test 'cost summary report as CSV' do
+    login
+
+    get :cost_summary, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :cost_summary, :params => {
+        :cost_summary => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'weaknesses by risk report' do
@@ -459,6 +691,263 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_risk_report', 0)
+  end
+
+  test 'weaknesses by business unit' do
+    login
+
+    get :weaknesses_by_business_unit
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_business_unit'
+
+    assert_nothing_raised do
+      get :weaknesses_by_business_unit, :params => {
+        :weaknesses_by_business_unit => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => true
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_business_unit'
+  end
+
+  test 'weaknesses by business unit as CSV' do
+    login
+
+    get :weaknesses_by_business_unit, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_by_business_unit, :params => {
+        :weaknesses_by_business_unit => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => true
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'weaknesses by business unit as RTF' do
+    login
+
+    get :weaknesses_by_business_unit, as: :rtf
+    assert_response :success
+    assert_match Mime[:rtf].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_by_business_unit, :params => {
+        :weaknesses_by_business_unit => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => true
+      }, as: :rtf
+    end
+
+    assert_response :success
+    assert_match Mime[:rtf].to_s, @response.content_type
+  end
+
+  test 'filtered weaknesses by business unit' do
+    login
+
+    get :weaknesses_by_business_unit, :params => {
+      :weaknesses_by_business_unit => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :business_unit_id => [business_units(:business_unit_one).id].to_json
+      },
+      :controller_name => 'conclusion',
+      :final => true
+    }
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_business_unit'
+  end
+
+  test 'create weaknesses by business unit' do
+    login
+
+    get :create_weaknesses_by_business_unit, :params => {
+      :weaknesses_by_business_unit => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion',
+      :final => true
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.weaknesses_by_business_unit.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_by_business_unit', 0)
+  end
+
+  test 'weaknesses by user' do
+    login
+
+    get :weaknesses_by_user
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_user'
+
+    assert_nothing_raised do
+      get :weaknesses_by_user, :params => {
+        :weaknesses_by_user => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => true
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_user'
+  end
+
+  test 'weaknesses by user as CSV' do
+    login
+
+    get :weaknesses_by_user, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_by_user, :params => {
+        :weaknesses_by_user => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => true
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'filtered weaknesses by user' do
+    login
+
+    get :weaknesses_by_user, :params => {
+      :weaknesses_by_user => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :user_id => [users(:audited).id.to_s]
+      },
+      :controller_name => 'conclusion',
+      :final => true
+    }
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_user'
+  end
+
+  test 'create weaknesses by user' do
+    login
+
+    get :create_weaknesses_by_user, :params => {
+      :weaknesses_by_user => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion',
+      :final => true
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.weaknesses_by_user.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_by_user', 0)
+  end
+
+  test 'weaknesses by month' do
+    login
+
+    get :weaknesses_by_month
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_month'
+
+    assert_nothing_raised do
+      get :weaknesses_by_month, :params => {
+        :weaknesses_by_month => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_month'
+  end
+
+  test 'filtered weaknesses by month' do
+    login
+
+    get :weaknesses_by_month, :params => {
+      :weaknesses_by_month => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'three',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
+      },
+      :controller_name => 'conclusion',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_month'
+  end
+
+  test 'create weaknesses by month' do
+    login
+
+    get :create_weaknesses_by_month, :params => {
+      :weaknesses_by_month => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion',
+      :final => false
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.weaknesses_by_month.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_by_month', 0)
   end
 
   test 'fixed weaknesses report' do
@@ -709,6 +1198,17 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'process_control_stats', 0)
   end
 
+  test 'process control stats report as CSV' do
+    login
+
+    assert_nothing_raised do
+      get :process_control_stats_csv, format: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'weaknesses graphs for user' do
     login
 
@@ -811,5 +1311,126 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'benefits', 0)
+  end
+
+  test 'control objective counts' do
+    login
+
+    get :control_objective_counts
+    assert_response :success
+    assert_template 'conclusion_reports/control_objective_counts'
+
+    assert_nothing_raised do
+      get :control_objective_counts, :params => {
+        :control_objective_counts => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/control_objective_counts'
+  end
+
+  test 'control objective counts as CSV' do
+    login
+
+    get :control_objective_counts, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :control_objective_counts, :params => {
+        :control_objective_counts => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'filtered control objective counts' do
+    login
+
+    get :control_objective_counts, :params => {
+      :control_objective_counts => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => ['', business_unit_types(:cycle).id]
+      },
+      :controller_name => 'conclusion'
+    }
+
+    assert_response :success
+    assert_template 'conclusion_reports/control_objective_counts'
+  end
+
+  test 'create control objective counts' do
+    login
+
+    get :create_control_objective_counts, :params => {
+      :control_objective_counts => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion'
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.control_objective_counts.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'control_objective_counts', 0)
+  end
+
+  test 'nbc annual report report' do
+    set_organization
+
+    skip unless Current.conclusion_pdf_format == 'nbc'
+
+    login
+
+    get :nbc_annual_report
+    assert_response :success
+    assert_template 'conclusion_reports/nbc_annual_report'
+  end
+
+  test 'create nbc annual report report' do
+    set_organization
+
+    skip unless Current.conclusion_pdf_format == 'nbc'
+
+    login
+
+    period = periods(:current_period)
+
+    assert_nothing_raised do
+      post :create_nbc_annual_report, params: {
+        nbc_annual_report: {
+          period_id: period.id,
+          date: Date.today.to_s,
+          cc: 'cc',
+          name: 'name',
+          objective: 'objective',
+          conclusion: 'conclusion',
+          introduction_and_scope: 'introduction and scope'
+        }
+      }
+    end
+    
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.nbc_annual_report.pdf_name',
+        from_date: period.start,
+        to_date: period.end),
+        'nbc_annual_report', 
+        0)
   end
 end

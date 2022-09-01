@@ -2,7 +2,7 @@ class WorkflowItem < ApplicationRecord
   include Auditable
   include Comparable
   include ParameterSelector
-  include WorkflowItems::DateColumns
+  include WorkflowItems::AttributeTypes
 
   # Callbacks para registrar los cambios en los modelos cuando son modificados o
   # creados
@@ -67,8 +67,10 @@ class WorkflowItem < ApplicationRecord
   belongs_to :workflow
   has_many :resource_utilizations, :as => :resource_consumer,
     :dependent => :destroy
+  belongs_to :file_model, :optional => true
 
   accepts_nested_attributes_for :resource_utilizations, :allow_destroy => true
+  accepts_nested_attributes_for :file_model, :allow_destroy => true
 
   def <=>(other)
     if other.kind_of?(WorkflowItem)
@@ -76,6 +78,10 @@ class WorkflowItem < ApplicationRecord
     else
       -1
     end
+  end
+
+  def to_s
+    [workflow.review.long_identification, task].join ' - '
   end
 
   def start
@@ -132,35 +138,41 @@ class WorkflowItem < ApplicationRecord
       :font_size => PDF_FONT_SIZE, :inline_format => true
 
     column_order = [['resource_id', 80], ['units', 20]]
-    column_data, column_headers, column_widths = [], [], []
+    column_headers, column_widths = [], []
 
     column_order.each do |col_name, col_width|
       column_headers << ResourceUtilization.human_attribute_name(col_name)
       column_widths << pdf.percent_width(col_width)
     end
 
-    self.resource_utilizations.each do |resource_utilization|
-      column_data << [
-        resource_utilization.resource.resource_name,
-        resource_utilization.units
-      ]
-    end
+    %w(human material).each do |r_name|
+      column_data = []
 
-    column_data << [
-      '', "<b>#{'%.2f' % units}</b>"
-    ]
+      send("#{r_name}_resource_utilizations").each do |resource_utilization|
+        column_data << [
+          resource_utilization.resource.resource_name,
+          '%.2f' % resource_utilization.units
+        ]
+      end
 
-    pdf.move_down((PDF_FONT_SIZE * 0.5).round)
+      if column_data.present?
+        column_data << [
+          '', "<b>#{'%.2f' % send("#{r_name}_units")}</b>"
+        ]
+      end
 
-    unless column_data.blank?
-      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-        table_options = pdf.default_table_options(column_widths)
+      pdf.move_down((PDF_FONT_SIZE * 0.5).round)
 
-        pdf.table(column_data.insert(0, column_headers), table_options) do
-          row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-          )
+      if column_data.present?
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       end
     end

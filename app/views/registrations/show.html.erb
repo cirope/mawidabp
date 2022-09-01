@@ -1,0 +1,21 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="card-header text-center bg-white border-white pt-5 pb-3">
+        <%= image_tag 'logo.svg', alt: t('app_name'), height: 40 %>
+      </div>
+
+      <div class="card-body text-center px-5">
+        <p class="lead text-muted">
+          <%= t '.body' %>
+        </p>
+      </div>
+
+      <div class="card-footer text-center bg-white border-white pb-4">
+        <hr>
+
+        <%= link_to t('navigation.back'), login_path %>
+      </div>
+    </div>
+  </div>
+</div>

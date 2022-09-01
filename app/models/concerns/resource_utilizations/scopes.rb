@@ -7,8 +7,8 @@ module ResourceUtilizations::Scopes
   end
 
   module ClassMethods
-    def planed_on reviews
-      joins(:planed_review).where reviews: { id: reviews.map(&:id) }
+    def planned_on reviews
+      joins(:planned_review).where reviews: { id: reviews.map(&:id) }
     end
 
     def executed_on reviews

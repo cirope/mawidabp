@@ -1,13 +1,13 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title" id="weakness-template-heading">
-      <a data-toggle="collapse" href="#weakness-templates" aria-expanded="true" aria-controls="weakness-templates">
+<div class="card mb-3">
+  <div class="card-header">
+    <h5 class="mb-0" id="weakness-template-heading">
+      <a class="text-reset d-block" data-toggle="collapse" href="#weakness-templates">
         <%= WeaknessTemplate.model_name.human count: 0 %>
       </a>
-    </h3>
+    </h5>
   </div>
-  <div id="weakness-templates" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="weakness-template-heading">
-    <div class="panel-body">
+  <div id="weakness-templates" class="collapse show">
+    <div class="card-body">
       <div class="row">
         <div class="col-md-6">
           <%= f.input :weakness_template_from_control_objective, collection: weakness_templates_for(f.object), prompt: true, input_html: {
@@ -25,10 +25,12 @@
           } %>
         </div>
       </div>
+      <div class="col-12" data-notes></div>
       <%= f.input :weakness_template_id, as: :hidden, input_html: {
         id: 'weakness_template_id',
         data: {
-          weakness_template_changed_url: weakness_template_changed_weaknesses_path
+          weakness_template_changed_url: weakness_template_changed_weaknesses_path,
+          control_objective_item_id: f.object.control_objective_item_id
         }
       } %>
     </div>

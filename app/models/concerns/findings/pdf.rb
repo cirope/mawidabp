@@ -1,8 +1,8 @@
-module Findings::PDF
+module Findings::Pdf
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil
-    pdf = Prawn::Document.create_generic_pdf :portrait, false
+    pdf = Prawn::Document.create_generic_pdf :portrait, footer: false
 
     put_cover_on pdf, organization
 
@@ -153,7 +153,7 @@ module Findings::PDF
     def weakness_description_items
       [
         [Weakness.human_attribute_name('risk'), risk_text, 0, false],
-        ([Weakness.human_attribute_name('priority'), priority_text, 0, false] unless HIDE_WEAKNESS_PRIORITY),
+        [Weakness.human_attribute_name('priority'), priority_text, 0, false],
         ([Weakness.human_attribute_name('effect'), effect, 0, false] unless HIDE_WEAKNESS_EFFECT),
         [Weakness.human_attribute_name('audit_recommendations'), audit_recommendations, 0, false]
       ].compact

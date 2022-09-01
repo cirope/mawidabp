@@ -66,7 +66,7 @@ class PlanTest < ActiveSupport::TestCase
   test 'allow overload' do
     assert !@plan.allow_overload?
 
-    @plan.allow_overload = '0'
+    @plan.allow_overload = ''
 
     assert !@plan.allow_overload?
 
@@ -145,8 +145,9 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   test 'clone from with period' do
-    period   = periods :unused_period
-    new_plan = Plan.list.new period_id: period.id
+    period       = periods :unused_period
+    new_plan     = Plan.list.new period_id: period.id
+    Current.user = users :supervisor
 
     new_plan.clone_from @plan
 
@@ -169,5 +170,21 @@ class PlanTest < ActiveSupport::TestCase
     assert new_plan.allow_duplication?
     assert new_plan.allow_overload?
     assert new_plan.valid?
+  ensure
+    Current.user = nil
+  end
+
+  test 'totals in progress report by status' do
+    csv             = @plan.to_csv_prs(business_unit_type: @business_unit_type)
+    rows            = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
+    rows_transposed = rows.transpose
+
+    rows.each do |row|
+      assert_equal row[1..7].map(&:to_i).sum, row.last.to_i
+    end
+
+    rows_transposed.each do |row_t|
+      assert_equal row_t[1..row_t.length - 2].map(&:to_i).sum, row_t.last.to_i
+    end
   end
 end

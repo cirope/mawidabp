@@ -10,7 +10,50 @@ module Reviews::FindingCode
   end
 
   def recode_weaknesses_by_risk
-    recode_findings weaknesses, order: [risk: :desc, review_code: :asc]
+    recode_findings weaknesses, order: [
+      risk:        :desc,
+      priority:    :desc,
+      review_code: :asc
+    ]
+  end
+
+  def recode_weaknesses_by_repetition_and_risk
+    repeated_column = [
+      Weakness.quoted_table_name,
+      Weakness.qcn('repeated_of_id')
+    ].join('.')
+
+    repeated_order = if self.class.connection.adapter_name == 'OracleEnhanced'
+                        "CASE WHEN #{repeated_column} IS NULL THEN 1 ELSE 0 END"
+                      else
+                        "#{repeated_column} IS NULL"
+                      end
+
+    recode_findings weaknesses, order: [
+      repeated_order,
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+    ].map { |o| Arel.sql o }
+  end
+
+  def recode_weaknesses_by_risk_and_repetition
+    repeated_column = [
+      Weakness.quoted_table_name,
+      Weakness.qcn('repeated_of_id')
+    ].join('.')
+
+    repeated_order = if self.class.connection.adapter_name == 'OracleEnhanced'
+                        "CASE WHEN #{repeated_column} IS NULL THEN 0 ELSE 1 END"
+                      else
+                        "#{repeated_column} IS NOT NULL"
+                      end
+
+    recode_findings weaknesses, order: [
+      repeated_order,
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'priority'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+    ].map { |o| Arel.sql o }
   end
 
   def recode_weaknesses_by_control_objective_order
@@ -43,7 +86,8 @@ module Reviews::FindingCode
     end
 
     def next_finding_code prefix, findings
-      last_review_code = findings.order(:review_code).last&.review_code || '0'
+      condition        = "#{Finding.quoted_table_name}.#{Finding.qcn 'review_code'} LIKE ?", "#{prefix}___"
+      last_review_code = findings.where(condition).order(:review_code).last&.review_code || '0'
       last_number      = last_review_code.match(/\d+\Z/).to_a.first.to_i
 
       raise 'A review can not have more than 999 findings' if last_number > 999
@@ -54,7 +98,7 @@ module Reviews::FindingCode
     def recode_findings findings, order: :review_code
       raise 'Cannot recode if final review' if has_final_review?
 
-      findings = findings.order order
+      findings = findings.reorder order
 
       assign_new_review_code_to_findings findings.not_revoked, findings.revoked
     end
@@ -62,9 +106,9 @@ module Reviews::FindingCode
     def assign_new_review_code_to_findings not_revoked, revoked
       self.class.transaction do
         revoked.each_with_index do |f, i|
-          unless f.review_code.start_with? revoked_prefix
-            f.update_column :review_code, "#{revoked_prefix}#{f.review_code}"
-          end
+          new_code = "#{revoked_prefix}#{f.prefix}#{'%.3d' % i.next}"
+
+          f.update_column :review_code, new_code
         end
 
         not_revoked.each_with_index do |f, i|

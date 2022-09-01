@@ -6,26 +6,36 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <% unless @conclusion_final_review.review %>
-          <%= conclusion_final_review_review_field f, @conclusion_final_review.review %>
-        <% else %>
+        <% if @conclusion_final_review.review&.persisted? %>
           <%= f.input :review, label: ConclusionFinalReview.human_attribute_name(:review_id),
             input_html: { value: @conclusion_final_review.review.identification, readonly: true } %>
           <%= f.input :review_id, as: :hidden %>
+        <% else %>
+          <%= conclusion_final_review_review_field f, @conclusion_final_review.review %>
         <% end %>
         <%= f.input :business_unit, input_html: {
-          value: (@conclusion_final_review.review.business_unit.name if @conclusion_final_review.review),
+          value: (@conclusion_final_review.review.business_unit.name if @conclusion_final_review.review&.persisted?),
           readonly: true } %>
         <%= f.input :project, input_html: {
-          value: (@conclusion_final_review.review.plan_item.project if @conclusion_final_review.review),
+          value: (@conclusion_final_review.review.plan_item.project if @conclusion_final_review.review&.persisted?),
           readonly: true } %>
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
-          value: (@conclusion_final_review.review.score_text if @conclusion_final_review.review),
+          value: (@conclusion_final_review.review.score_text if @conclusion_final_review.review&.persisted?),
           readonly: true } %>
-        <%= f.input :summary %>
+        <% if USE_SCOPE_CYCLE %>
+          <%= f.input :score_alt, label: Review.human_attribute_name(:score_alt), input_html: {
+            value: (@conclusion_final_review.review.score_alt_text if @conclusion_final_review.review&.persisted?),
+            readonly: true } %>
+        <% end %>
+        <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
+          <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
+          <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+        <% else %>
+          <%= f.input :summary %>
+        <% end %>
       </div>
       <div class="col-md-6">
-        <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+        <% if Current.conclusion_pdf_format == 'gal' %>
           <% if SHOW_CONCLUSION_AS_OPTIONS %>
             <%= f.input :conclusion, collection: conclusion_options, prompt: true,
               input_html: { disabled: readonly } %>
@@ -44,12 +54,22 @@
           <% end %>
         <% end %>
 
-        <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
-        <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+        <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
+          <%= f.input :recipients, input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 2 : 5 } %>
+
+          <% if USE_SCOPE_CYCLE %>
+            <%= f.input :additional_comments, input_html: { readonly: readonly, rows: 2 } %>
+          <% end %>
+
+          <%= f.input :summary %>
+        <% else %>
+          <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
+          <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+        <% end %>
       </div>
     </div>
 
-    <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+    <% if Current.conclusion_pdf_format == 'gal' %>
       <div class="row">
         <div class="col-md-6">
           <%= f.input :recipients, input_html: { rows: 4, readonly: readonly } %>
@@ -74,27 +94,85 @@
         <div class="col-md-6">
           <%= f.input :observations, input_html: { rows: 4, readonly: readonly } %>
         </div>
-        <% if show_review_best_practice_comments? %>
-          <div class="col-md-6 toggle-visibility">
+        <div class="col-md-6 mt-4">
+          <% if show_review_best_practice_comments? %>
             <%= f.input :affects_compliance, input_html: { disabled: readonly } %>
-          </div>
-        <% end %>
+          <% else %>
+            <%= f.input :collapse_control_objectives %>
+          <% end %>
+        </div>
+      </div>
+    <% elsif Current.conclusion_pdf_format == 'bic' %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :previous_identification, input_html: { readonly: readonly } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :previous_date, as: :date_picker, input_html: { readonly: readonly } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <% @conclusion_final_review.build_review unless @conclusion_final_review.review %>
+          <%= f.simple_fields_for :review do |r_f| %>
+            <%= r_f.input :description, input_html: { rows: 4, readonly: readonly } %>
+            <%= r_f.input :id, as: :hidden %>
+          <% end %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :scope, input_html: { rows: 4, readonly: readonly } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :reference, input_html: { rows: 4, readonly: readonly } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :observations, input_html: { rows: 4, readonly: readonly } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :recipients, input_html: { rows: 4, readonly: readonly } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :main_recommendations, input_html: { rows: 4, readonly: readonly } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :exclude_regularized_findings, input_html: { readonly: readonly } %>
+        </div>
       </div>
     <% end %>
 
     <% if show_review_best_practice_comments? %>
       <div id="best_practice_comments_container">
-        <% if @conclusion_final_review.review %>
+        <% if @conclusion_final_review.review&.persisted? %>
           <%= render 'best_practice_comments', f: f, readonly: readonly %>
         <% end %>
       </div>
     <% end %>
   </div>
 
+  <% if USE_SCOPE_CYCLE %>
+    <h4 class="mt-3">
+      <%= Annex.model_name.human count: 0 %>
+    </h4>
+
+    <div id="annexes">
+      <%= render 'annexes', f: f %>
+    </div>
+  <% end %>
+
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

@@ -25,18 +25,38 @@ class PollTest < ActiveSupport::TestCase
     end
   end
 
-  test 'update' do
+  test 'update and not finished yet' do
     assert_equal @poll.answered, false
     assert @poll.update(:comments => 'Updated comments'),
       @poll.errors.full_messages.join('; ')
     @poll.reload
+    assert_equal 'Updated comments', @poll.comments
+    assert_equal @poll.answered, false
+  end
+
+  test 'update and finished' do
+    assert_equal @poll.answered, false
+
+    answer_yes_no = @poll.answers.find_by(type: 'AnswerYesNo')
+
+    @poll.update(comments: 'Updated comments',
+                 answers_attributes:
+                 [
+                   {
+                     id: answer_yes_no.id,
+                     answer_option_id: answer_options(:yes_no_no).id
+                   }
+                 ])
+
+    @poll.reload
+
     assert_equal 'Updated comments', @poll.comments
     assert_equal @poll.answered, true
   end
 
   test 'delete' do
     assert_difference 'Poll.count', -1 do
-      assert_difference 'Answer.count', -2 do
+      assert_difference 'Answer.count', -@poll.answers.count do
         @poll.destroy
       end
     end
@@ -51,14 +71,27 @@ class PollTest < ActiveSupport::TestCase
     assert_error @poll, :organization_id, :blank
   end
 
-  test 'validates length of attributes' do
-    @poll.comments = 'abcde' * 52
-
-    assert @poll.invalid?
-    assert_error @poll, :comments, :too_long, count: 255
-  end
-
   test 'validates pollable_type attribute' do
     assert_equal @poll.pollable_type, @poll.questionnaire.pollable_type
+  end
+
+  test 'validates about type attribute' do
+    @poll.about_id   = nil
+    @poll.about_type = nil
+
+    assert @poll.valid?
+
+    @poll.about_id = users(:auditor).id
+
+    assert @poll.invalid?
+    assert_error @poll, :about_type, :blank
+
+    @poll.about_type = 'OtherClass'
+
+    assert @poll.invalid?
+    assert_error @poll, :about_type, :inclusion
+
+    @poll.about_type = User.name
+    assert @poll.valid?
   end
 end

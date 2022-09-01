@@ -2,7 +2,7 @@ module ControlObjectiveItems::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list,                    -> { where organization_id: Organization.current_id }
+    scope :list,                    -> { where organization_id: Current.organization&.id }
     scope :not_excluded_from_score, -> { where exclude_from_score: false }
   end
 
@@ -10,7 +10,7 @@ module ControlObjectiveItems::Scopes
     def with_names(*control_objective_names)
       conditions  = []
       parameters  = {}
-      column_name = "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn 'name'}"
+      column_name = "#{::ControlObjective.quoted_table_name}.#{::ControlObjective.qcn 'name'}"
 
       control_objective_names.each_with_index do |control_objective_name, i|
         conditions << "LOWER(#{column_name}) LIKE :co_#{i}"
@@ -65,6 +65,30 @@ module ControlObjectiveItems::Scopes
       else
         all
       end
+    end
+
+    def list_with_final_review
+      includes(:review).merge Review.list_with_final_review
+    end
+
+    def by_issue_date operator, date, date_until = nil
+      mask      = operator.downcase == 'between' && date_until ? '? AND ?' : '?'
+      condition = "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} #{operator} #{mask}"
+
+      includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
+    end
+
+    def by_business_unit_type business_unit_type_id
+      includes(review: { plan_item: :business_unit }).
+        where(business_units: { business_unit_type_id: business_unit_type_id }).
+        references :business_units
+    end
+
+    def default_order
+      reorder(
+        Arel.sql("#{Review.quoted_table_name}.#{Review.qcn 'identification'} DESC"),
+        id: :desc
+      )
     end
   end
 end

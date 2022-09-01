@@ -131,7 +131,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
+    assert_difference 'ActionMailer::Base.deliveries.size' do
       assert_difference 'Notification.count' do
         assert review_user_assignment.save
       end

@@ -18,16 +18,18 @@ class OportunitiesControllerTest < ActionController::TestCase
     }
     public_actions = []
     private_actions = [
-      [:get, :index],
+      [:get, :index, {}],
       [:get, :show, id_param],
-      [:get, :new],
+      [:get, :new, {}],
       [:get, :edit, id_param],
-      [:post, :create],
+      [:post, :create, {}],
       [:patch, :update, id_param]
     ]
 
     private_actions.each do |action|
-      send *action
+      options = action.pop
+
+      send *action, **options
       assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
@@ -77,20 +79,16 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_template 'oportunities/show'
   end
 
-  test 'show oportunity in json' do
+  test 'show oportunity in JS' do
     oportunity = findings :confirmed_oportunity
 
     login
-    get :show, :params => {
-      :completed => 'incomplete',
-      :id => oportunity.id
-    }, :as => :json
+    get :show, :params => { :id => oportunity.id }, :xhr => true, :as => :js
     assert_response :success
     assert_not_nil assigns(:oportunity)
 
-    decoded_oportunity = ActiveSupport::JSON.decode @response.body
-
-    assert_equal oportunity.id, decoded_oportunity['id']
+    assert_match Mime[:js].to_s, @response.content_type
+    assert_template 'oportunities/show'
   end
 
   test 'new oportunity' do
@@ -121,6 +119,7 @@ class OportunitiesControllerTest < ActionController::TestCase
           :review_code => 'OM020',
           :title => 'Title',
           :description => 'New description',
+          :brief => 'New brief',
           :answer => 'New answer',
           :audit_comments => 'New audit comments',
           :origination_date => 1.day.ago.to_date.to_s(:db),
@@ -128,22 +127,22 @@ class OportunitiesControllerTest < ActionController::TestCase
           :business_unit_ids => [business_units(:business_unit_three).id],
           :finding_user_assignments_attributes => [
             {
-              :user_id => users(:bare).id, :process_owner => '0'
+              :user_id => users(:bare).id, :process_owner => ''
             },
             {
               :user_id => users(:audited).id, :process_owner => '1'
             },
             {
-              :user_id => users(:auditor).id, :process_owner => '0'
+              :user_id => users(:auditor).id, :process_owner => ''
             },
             {
-              :user_id => users(:manager).id, :process_owner => '0'
+              :user_id => users(:manager).id, :process_owner => ''
             },
             {
-              :user_id => users(:supervisor).id, :process_owner => '0'
+              :user_id => users(:supervisor).id, :process_owner => ''
             },
             {
-              :user_id => users(:administrator).id, :process_owner => '0'
+              :user_id => users(:administrator).id, :process_owner => ''
             }
           ],
           :work_papers_attributes => [
@@ -204,7 +203,7 @@ class OportunitiesControllerTest < ActionController::TestCase
               {
                 :id => finding_user_assignments(:confirmed_oportunity_bare).id,
                 :user_id => users(:bare).id,
-                :process_owner => '0'
+                :process_owner => ''
               },
               {
                 :id => finding_user_assignments(:confirmed_oportunity_audited).id,
@@ -214,22 +213,22 @@ class OportunitiesControllerTest < ActionController::TestCase
               {
                 :id => finding_user_assignments(:confirmed_oportunity_auditor).id,
                 :user_id => users(:auditor).id,
-                :process_owner => '0'
+                :process_owner => ''
               },
               {
                 :id => finding_user_assignments(:confirmed_oportunity_manager).id,
                 :user_id => users(:manager).id,
-                :process_owner => '0'
+                :process_owner => ''
               },
               {
                 :id => finding_user_assignments(:confirmed_oportunity_supervisor).id,
                 :user_id => users(:supervisor).id,
-                :process_owner => '0'
+                :process_owner => ''
               },
               {
                 :id => finding_user_assignments(:confirmed_oportunity_administrator).id,
                 :user_id => users(:administrator).id,
-                :process_owner => '0'
+                :process_owner => ''
               }
             ],
             :work_papers_attributes => [
@@ -318,8 +317,8 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
     get :auto_complete_for_finding_relation, :params => {
-      :completed => 'incomplete',
-      :q => 'O001, 1 2 3',
+      :completion_state => 'incomplete',
+      :q => 'O001; 1 2 3',
       :finding_id => finding.id,
       :review_id => finding.review.id
     }, :as => :json
@@ -351,10 +350,10 @@ class OportunitiesControllerTest < ActionController::TestCase
     }, :as => :json
     assert_response :success
 
-    tags = ActiveSupport::JSON.decode(@response.body)
+    response_tags = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 1, tags.size
-    assert tags.all? { |t| t['label'].match /impor/i }
+    assert_equal 1, response_tags.size
+    assert response_tags.all? { |t| t['label'].match /impor/i }
 
     get :auto_complete_for_tagging, :params => {
       :q => 'x_none',
@@ -362,9 +361,25 @@ class OportunitiesControllerTest < ActionController::TestCase
     }, :as => :json
     assert_response :success
 
-    tags = ActiveSupport::JSON.decode(@response.body)
+    response_tags = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, tags.size # Sin resultados
+    assert_equal 0, response_tags.size # Sin resultados
+
+    tag = tags :important
+
+    tag.update! obsolete: true
+
+    get :auto_complete_for_tagging, params: {
+      q: 'impor',
+      completion_state: 'incomplete',
+      kind: 'finding'
+    }, as: :json
+
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode @response.body
+
+    assert_equal 0, response_tags.size
   end
 
   test 'auto complete for control objective item' do

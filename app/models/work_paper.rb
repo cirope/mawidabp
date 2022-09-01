@@ -6,7 +6,7 @@ class WorkPaper < ApplicationRecord
   include WorkPapers::Review
 
   # Named scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
+  scope :list, -> { where(organization_id: Current.organization&.id) }
   scope :sorted_by_code, -> { order(code: :asc) }
   scope :with_prefix, ->(prefix) {
     where("#{quoted_table_name}.#{qcn 'code'} LIKE ?", "#{prefix}%").sorted_by_code
@@ -54,7 +54,7 @@ class WorkPaper < ApplicationRecord
   # Relaciones
   belongs_to :organization
   belongs_to :file_model, :optional => true
-  belongs_to :owner, :polymorphic => true, :optional => true
+  belongs_to :owner, :polymorphic => true, :touch => true, :optional => true
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
     reject_if: ->(attrs) { ['file', 'file_cache'].all? { |a| attrs[a].blank? } }
@@ -62,7 +62,7 @@ class WorkPaper < ApplicationRecord
   def initialize(attributes = nil)
     super(attributes)
 
-    self.organization_id = Organization.current_id
+    self.organization_id = Current.organization&.id
   end
 
   def inspect
@@ -105,24 +105,23 @@ class WorkPaper < ApplicationRecord
     @zip_must_be_created = self.file_model.try(:file?) ||
       self.file_model.try(:changed?)
     @cover_must_be_created = self.changed?
+    @previous_code = self.code_was if self.code_changed?
 
     true
   end
 
   def create_cover_and_zip
-    self.file_model.try(:file?).tap do |file|
-      self.create_pdf_cover if @cover_must_be_created && file
-      self.create_zip if @zip_must_be_created || (@cover_must_be_created && file)
-    end
+    self.file_model.try(:file?) &&
+      (@zip_must_be_created || @cover_must_be_created) &&
+      create_zip
 
     true
   end
 
   def create_pdf_cover(filename = nil, review = nil)
-    review ||= self.owner.kind_of?(ControlObjectiveItem) ? self.owner.review :
-      (self.owner.kind_of?(Finding) ?
-        self.owner.try(:control_objective_item).try(:review) : nil)
-    pdf = Prawn::Document.create_generic_pdf(:portrait, false)
+    pdf = Prawn::Document.create_generic_pdf(:portrait, footer: false)
+
+    review ||= owner.review
 
     pdf.add_review_header review.try(:organization),
       review.try(:identification), review.try(:plan_item).try(:project)
@@ -132,6 +131,14 @@ class WorkPaper < ApplicationRecord
     pdf.add_title WorkPaper.model_name.human, PDF_FONT_SIZE * 2
 
     pdf.move_down PDF_FONT_SIZE * 4
+
+    if owner.respond_to?(:pdf_cover_items)
+      owner.pdf_cover_items.each do |label, text|
+        pdf.move_down PDF_FONT_SIZE
+
+        pdf.add_description_item label, text, 0, false
+      end
+    end
 
     unless self.name.blank?
       pdf.move_down PDF_FONT_SIZE
@@ -167,12 +174,14 @@ class WorkPaper < ApplicationRecord
   def pdf_cover_name(filename = nil, short = false)
     code = sanitized_code
     short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+    prev_code = @previous_code.sanitized_for_filename if @previous_code
 
     if self.file_model.try(:file?)
       filename ||= self.file_model.identifier.sanitized_for_filename
       filename = filename.sanitized_for_filename.
         sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
         sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
+      filename = filename.sub("#{prev_code}-", '') if prev_code
     end
 
     I18n.t 'work_paper.cover_name', :prefix => "#{short ? short_code : code}-",
@@ -201,6 +210,10 @@ class WorkPaper < ApplicationRecord
   def create_zip
     self.unzip_if_necesary
 
+    if @previous_code
+      prev_code = sanitized_previous_code
+    end
+
     original_filename = self.file_model.file.path
     directory = File.dirname original_filename
     code = sanitized_code
@@ -209,24 +222,26 @@ class WorkPaper < ApplicationRecord
     filename = filename.sanitized_for_filename.
       sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
       sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
+    filename = filename.sub("#{prev_code}-", '') if prev_code
     zip_filename = File.join directory, "#{code}-#{filename}.zip"
     pdf_filename = self.absolute_cover_path
 
     self.create_pdf_cover
 
     if File.file?(original_filename) && File.file?(pdf_filename)
+      FileUtils.rm zip_filename if File.exist?(zip_filename)
+
       Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
         zipfile.add(self.filename_with_prefix, original_filename) { true }
         zipfile.add(File.basename(pdf_filename), pdf_filename) { true }
       end
 
-      FileUtils.rm pdf_filename if File.exists?(pdf_filename)
-      FileUtils.rm original_filename if File.exists?(original_filename)
+      FileUtils.rm pdf_filename if File.exist?(pdf_filename)
+      FileUtils.rm original_filename if File.exist?(original_filename)
 
-      self.file_model.file_file_size = File.size(zip_filename)
+      self.file_model.file = File.open(zip_filename)
 
       self.file_model.save!
-      self.file_model.update_column :file_file_name, File.basename(zip_filename)
     end
 
     FileUtils.chmod 0640, zip_filename if File.exist?(zip_filename)
@@ -235,39 +250,54 @@ class WorkPaper < ApplicationRecord
   def unzip_if_necesary
     file_name = self.file_model.try(:identifier) || ''
     code = sanitized_code
-    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
 
-    if File.extname(file_name) == '.zip' &&
-        file_name.start_with?(code, short_code) &&
-        !file_name.start_with?("#{code}-zip", "#{short_code}-zip")
+    if File.extname(file_name) == '.zip' && start_with_code?(file_name)
       zip_path = self.file_model.file.path
       base_dir = File.dirname self.file_model.file.path
 
       Zip::File.foreach(zip_path) do |entry|
         if entry.file?
           filename = File.join base_dir, entry.name
-          ext = File.extname(filename)[1..-1]
+          filename = filename.sub(sanitized_previous_code, code) if @previous_code
 
           if filename != zip_path && !File.exist?(filename)
             entry.extract(filename)
           end
-
           if File.basename(filename) != pdf_cover_name &&
               File.basename(filename) != pdf_cover_name(nil, true)
-            self.file_model.update_column :file_file_name, File.basename(filename)
-            self.file_model.file_file_size = File.size(filename)
-            self.file_model.save!
-            self.file_model.reload
+            self.file_model.file = File.open(filename)
           end
         end
       end
 
+      self.file_model.save! if self.file_model.changed?
+
       # Pregunta para evitar eliminar el archivo si es un zip con el mismo
       # nombre
       unless File.basename(zip_path) == self.file_model.identifier
-        FileUtils.rm zip_path
+        FileUtils.rm zip_path if File.exist? zip_path
       end
     end
+  end
+
+  def sanitized_previous_code
+    @previous_code.sanitized_for_filename
+  end
+
+  def start_with_code? file_name
+    code = sanitized_code
+    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+    result = file_name.start_with?(code, short_code) &&
+              !file_name.start_with?("#{code}-zip", "#{short_code}-zip")
+
+    if @previous_code
+      prev_code = sanitized_previous_code
+      prev_short_code = prev_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+      result = result || (file_name.start_with?(prev_code, prev_short_code) &&
+                           !file_name.start_with?("#{prev_code}-zip", "#{prev_short_code}-zip"))
+    end
+
+    result
   end
 
   def sanitized_code

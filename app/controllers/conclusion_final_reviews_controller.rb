@@ -2,23 +2,27 @@ class ConclusionFinalReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_final_review, only: [
     :show, :edit, :update, :destroy, :export_to_pdf, :score_sheet,
-    :download_work_papers, :create_bundle, :compose_email, :send_by_email
+    :download_work_papers, :create_bundle, :compose_email, :send_by_email,
+    :export_to_rtf
   ]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   def index
     @title = t 'conclusion_final_review.index_title'
 
-    build_search_conditions ConclusionFinalReview
-
-    order = @order_by || "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC"
-    order << ", #{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
-
     @conclusion_final_reviews = ConclusionFinalReview.list.includes(
-      review: [:period, { plan_item: :business_unit }]
-    ).where(@conditions).order(order).page(params[:page])
-    .references(:periods, :reviews, :business_units)
-
+      review: [:period, :conclusion_final_review, plan_item: :business_unit]
+    ).search(
+      **search_params
+    ).order_by(
+      order_param
+    ).page(
+      params[:page]
+    ).references(
+      :periods, :reviews, :business_units
+    ).merge(
+      PlanItem.allowed_by_business_units
+    )
     respond_to do |format|
       format.html
     end
@@ -46,7 +50,7 @@ class ConclusionFinalReviewsController < ApplicationController
     unless conclusion_final_review
       @title = t 'conclusion_final_review.new_title'
       @conclusion_final_review =
-        ConclusionFinalReview.new(review_id: params[:review])
+        ConclusionFinalReview.new(review_id: params[:review], import_from_draft: true)
 
       respond_to do |format|
         format.html # new.html.erb
@@ -70,7 +74,9 @@ class ConclusionFinalReviewsController < ApplicationController
   def create
     @title = t 'conclusion_final_review.new_title'
     @conclusion_final_review =
-      ConclusionFinalReview.list.new(conclusion_final_review_params, false)
+      ConclusionFinalReview.list.new(conclusion_final_review_params)
+
+    @conclusion_final_review.duplicate_annexes_and_images_from_draft
 
     respond_to do |format|
       if @conclusion_final_review.save
@@ -118,16 +124,24 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
-    options = params[:export_options]&.to_unsafe_h
+    options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization, options)
-    else
-      @conclusion_final_review.to_pdf(current_organization, options)
-    end
+    @conclusion_final_review.to_pdf(current_organization, options)
 
     respond_to do |format|
       format.html { redirect_to @conclusion_final_review.relative_pdf_path }
+    end
+  end
+
+  # Exporta el informe en formato RTF
+  #
+  # * GET /conclusion_draft_reviews/export_to_rtf/1
+  def export_to_rtf
+    respond_to do |format|
+      format.rtf do
+        render rtf: @conclusion_final_review.to_rtf(current_organization),
+               filename: @conclusion_final_review.rtf_name
+      end
     end
   end
 
@@ -191,7 +205,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     users = []
     users_with_poll = []
-    export_options = params[:export_options] || {}
+    export_options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
 
     if params[:conclusion_review]
       include_score_sheet = params[:conclusion_review][:include_score_sheet] == '1'
@@ -203,14 +217,12 @@ class ConclusionFinalReviewsController < ApplicationController
         export_options[:brief] = '1'
       elsif review_type == 'without_score'
         export_options[:hide_score] = '1'
+      elsif review_type == 'expanded'
+        export_options[:expanded] = '1'
       end
     end
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization, export_options)
-    else
-      @conclusion_final_review.to_pdf(current_organization, export_options)
-    end
+    @conclusion_final_review.to_pdf(current_organization, export_options)
 
     if include_score_sheet
       @conclusion_final_review.review.score_sheet current_organization
@@ -238,25 +250,26 @@ class ConclusionFinalReviewsController < ApplicationController
         questionnaire = Questionnaire.find user_data[:questionnaire_id]
         affected_user_id = user_data[:affected_user_id].present? ?
           user_data[:affected_user_id] : nil
-        has_poll = Poll.list.exists?(
-          user_id: user.id,
-          affected_user_id: affected_user_id,
-          questionnaire_id: user_data[:questionnaire_id],
-          organization_id: current_organization.id,
-          pollable_type: questionnaire.pollable_type,
-          pollable_id: @conclusion_final_review
-        )
 
-        if has_poll
+        poll_attrs = {
+          user_id:          user.id,
+          questionnaire_id: user_data[:questionnaire_id],
+          organization_id:  current_organization.id,
+          pollable_type:    questionnaire.pollable_type,
+          pollable_id:      @conclusion_final_review
+        }
+
+        if affected_user_id
+          poll_attrs.merge!(
+            about_id:   affected_user_id,
+            about_type: User.name
+          )
+        end
+
+        if Poll.list.exists?(poll_attrs)
           users_with_poll << user.informal_name
         else
-          @conclusion_final_review.polls.create!(
-            user_id: user.id,
-            affected_user_id: affected_user_id,
-            questionnaire_id: user_data[:questionnaire_id],
-            organization_id: current_organization.id,
-            pollable_type: questionnaire.pollable_type
-          )
+          @conclusion_final_review.polls.create!(poll_attrs)
         end
       end
     end
@@ -264,7 +277,7 @@ class ConclusionFinalReviewsController < ApplicationController
     if users.present?
       flash.notice = t('conclusion_review.review_sended')
 
-      if users_with_poll.present?
+      if users_with_poll.any?
         flash.notice << ". #{t 'polls.already_exists', user: users_with_poll.uniq.to_sentence}"
       end
 
@@ -278,12 +291,18 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf
   def export_list_to_pdf
-    build_search_conditions ConclusionFinalReview
+    order_by_column_name = ConclusionFinalReview.order_by_column_name order_param
+    query                = ConclusionFinalReview.split_terms_in_query search_params[:q]
+    columns              = search_params[:columns] || []
 
     conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
-    ).where(@conditions).references(:periods, :reviews, :business_units).order(
-      @order_by || "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC"
+    ).search(
+      **search_params
+    ).references(
+      :periods, :reviews, :business_units
+    ).order_by(
+      order_param
     )
 
     pdf = Prawn::Document.create_generic_pdf :landscape
@@ -302,7 +321,6 @@ class ConclusionFinalReviewsController < ApplicationController
       ['score', Review.human_attribute_name(:score), 7]
     ]
 
-    columns = {}
     column_data, column_headers, column_widths = [], [], []
 
     column_order.each do |col_data|
@@ -323,24 +341,24 @@ class ConclusionFinalReviewsController < ApplicationController
       ]
     end
 
-    unless @columns.blank? || @query.blank?
+    unless columns.blank? || query.blank?
       pdf.move_down PDF_FONT_SIZE
       pointer_moved = true
-      filter_columns = @columns.map do |c|
+      filter_columns = columns.map do |c|
         column_name = column_order.detect { |co| co[0] == c }
         "<b>#{column_name[1]}</b>"
       end
 
       pdf.text t('conclusion_final_review.pdf.filtered_by',
-        query: @query.flatten.map { |q| "<b>#{q}</b>"}.join(', '),
-        columns: filter_columns.to_sentence, count: @columns.size),
+        query: query.flatten.map { |q| "<b>#{q}</b>"}.join(', '),
+        columns: filter_columns.to_sentence, count: columns.size),
         font_size: (PDF_FONT_SIZE * 0.75).round, inline_format: true
     end
 
-    unless @order_by_column_name.blank?
+    unless order_by_column_name.blank?
       pdf.move_down PDF_FONT_SIZE unless pointer_moved
       pdf.text t('conclusion_final_review.pdf.sorted_by',
-        column: "<b>#{@order_by_column_name}</b>"),
+        column: "<b>#{order_by_column_name}</b>"),
         font_size: (PDF_FONT_SIZE * 0.75).round
     end
 
@@ -387,9 +405,12 @@ class ConclusionFinalReviewsController < ApplicationController
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :summary, :recipients, :evolution, :evolution_justification, :sectors,
         :observations, :main_weaknesses_text, :corrective_actions,
-        :affects_compliance, :lock_version,
+        :affects_compliance, :collapse_control_objectives,
+        :reference, :scope, :previous_identification, :previous_date,
+        :main_recommendations, :effectiveness_notes, :additional_comments,
+        :lock_version, :exclude_regularized_findings,
         review_attributes: [
-          :id, :manual_score, :lock_version,
+          :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [
             :id, :best_practice_id, :auditor_comment
           ]

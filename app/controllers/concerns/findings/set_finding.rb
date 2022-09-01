@@ -17,8 +17,12 @@ module Findings::SetFinding
       @finding.finding_prefix = true
     end
 
+    def scoped_findings
+      current_organization.corporate? ? Finding.group_list : Finding.list
+    end
+
     def find_finding_conditions
-      conditions = { id: params[:id], final: false }
+      conditions = { id: params[:finding_id] || params[:id], final: false }
 
       if scope_current_user_findings?
         user_ids = @auth_user.self_and_descendants.map(&:id) +
@@ -27,9 +31,20 @@ module Findings::SetFinding
         conditions[User.table_name] = { id: user_ids }
       end
 
-      conditions[:state] = Finding::STATUS.values - [Finding::STATUS[:incomplete]]
+      conditions[:state] = Finding::STATUS.values - excluded_states
 
       conditions
+    end
+
+    def excluded_states
+      if @auth_user.supervisor? || @auth_user.manager?
+        []
+      else
+        [
+          Finding::STATUS[:incomplete],
+          Finding::STATUS[:revoked]
+        ]
+      end
     end
 
     def scope_current_user_findings?

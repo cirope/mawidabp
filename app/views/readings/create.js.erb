@@ -1,0 +1,5 @@
++function () {
+  var $container = $('[data-readable-id="<%= @reading.readable_id %>"][data-readable-type="<%= @reading.readable_type %>"]')
+
+  $container.replaceWith('<%= j render('reading', reading: @reading) %>')
+}()

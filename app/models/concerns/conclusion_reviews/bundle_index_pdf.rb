@@ -1,8 +1,8 @@
-module ConclusionReviews::BundleIndexPDF
+module ConclusionReviews::BundleIndexPdf
   extend ActiveSupport::Concern
 
   def bundle_index_pdf organization = nil, index_items = nil
-    pdf        = Prawn::Document.create_generic_pdf :portrait, false
+    pdf        = Prawn::Document.create_generic_pdf :portrait, footer: false
     use_finals = kind_of? ConclusionFinalReview
 
     pdf.add_review_header organization || self.organization,

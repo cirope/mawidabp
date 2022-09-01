@@ -48,7 +48,7 @@ laptop_for_2_units_past_plan_item_1:
   resource_type: Resource
 
 auditor_for_20_units_with_conclusion_workflow_item_1:
-  units: 20
+  units: 7
   resource_consumer_id: <%= ActiveRecord::FixtureSet.identify(:with_conclusion_workflow_item_1) %>
   resource_consumer_type: WorkflowItem
   resource_id: <%= ActiveRecord::FixtureSet.identify(:manager) %>

@@ -7,6 +7,12 @@ class Users::StatusControllerTest < ActionController::TestCase
     login
   end
 
+  test 'should get index' do
+    get :index, session: { status_user_ids: [@user.id] }
+    assert_redirected_to findings_url(completion_state: 'incomplete', user_ids: [@user.id])
+    assert session[:status_user_ids].empty?
+  end
+
   test 'show' do
     get :show, params: { id: @user }
     assert_response :success
@@ -22,5 +28,24 @@ class Users::StatusControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:user)
     assert_equal [:graph], @request.variant
+  end
+
+  test 'should add user to status via xhr' do
+    post :create, params: { id: @user.id }, xhr: true, as: :js
+    assert_response :success
+    assert_match Mime[:js].to_s, @response.content_type
+    assert_includes session[:status_user_ids], @user.id
+  end
+
+  test 'should delete user from status via xhr' do
+    delete :destroy, params: {
+      id: @user.id
+    }, session: {
+      status_user_ids: [@user.id]
+    }, xhr: true, as: :js
+
+    assert_response :success
+    assert_match Mime[:js].to_s, @response.content_type
+    assert session[:status_user_ids].exclude?(@user.id)
   end
 end

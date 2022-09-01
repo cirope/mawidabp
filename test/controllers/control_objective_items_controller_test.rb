@@ -14,7 +14,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     }
     public_actions = []
     private_actions = [
-      [:get, :index],
+      [:get, :index, {}],
       [:get, :show, id_param],
       [:get, :edit, id_param],
       [:patch, :update, id_param],
@@ -22,7 +22,9 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     ]
 
     private_actions.each do |action|
-      send *action
+      options = action.pop
+
+      send *action, **options
       assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
@@ -79,11 +81,13 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'update control_objective_item' do
+    control_objective_item = control_objective_items(:management_dependency_item_editable)
+
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
       assert_difference 'WorkPaper.count', 2 do
         login
         patch :update, :params => {
-          :id => control_objective_items(:management_dependency_item_editable).id,
+          :id => control_objective_item.id,
           :control_objective_item => {
             :control_objective_text => 'Updated text',
             :relevance => ControlObjectiveItem.relevances_values.last,
@@ -110,7 +114,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :description => 'New workpaper description',
                 :organization_id => organizations(:cirope).id,
                 :file_model_attributes =>
-                  { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
+                  { :file => fixture_file_upload(TEST_FILE_FULL_PATH, 'text/plain') }
               },
               {
                 :name => 'New workpaper2 name',
@@ -119,7 +123,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :description => 'New workpaper2 description',
                 :organization_id => organizations(:cirope).id,
                 :file_model_attributes =>
-                  { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
+                  { :file => fixture_file_upload(TEST_FILE_FULL_PATH, 'text/plain') }
               }
             ]
           }
@@ -128,7 +132,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to edit_control_objective_item_url(
-      control_objective_items(:management_dependency_item_editable))
+      control_objective_item)
     assert_not_nil assigns(:control_objective_item)
     assert_equal 'Updated text',
       assigns(:control_objective_item).control_objective_text
@@ -170,7 +174,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             ],
             :business_unit_type_ids => [business_unit_types(:consolidated_substantive).id.to_s]
           }
-	      }
+        }
       end
     end
 

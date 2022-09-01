@@ -12,6 +12,11 @@ admin_google_role:
   role_type: <%= Role::TYPES[:admin] %>
   organization: google
 
+supervisor_google_role:
+  name: Supervisor Google
+  role_type: <%= Role::TYPES[:supervisor] %>
+  organization: google
+
 admin_second_role:
   name: Administrator Second
   role_type: <%= Role::TYPES[:admin] %>
@@ -24,7 +29,7 @@ admin_twitter_role:
 
 auditor_second_role:
   name: Auditor Second
-  role_type: <%= Role::TYPES[:auditor_senior] %>
+  role_type: <%= Role::TYPES[:auditor] %>
   organization: google
 
 admin_second_alphabet_role:
@@ -34,10 +39,16 @@ admin_second_alphabet_role:
 
 auditor_second_alphabet_role:
   name: Auditor Corp Second
-  role_type: <%= Role::TYPES[:auditor_senior] %>
+  role_type: <%= Role::TYPES[:auditor] %>
   organization: alphabet
 
 empty_admin_role:
   name: Empty
   role_type: <%= Role::TYPES[:admin] %>
   organization: cirope
+
+audited_role:
+  name: Auditado
+  role_type: <%= Role::TYPES[:audited] %>
+  organization: cirope
+

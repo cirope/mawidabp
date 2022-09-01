@@ -17,8 +17,10 @@ module Parameters::Priority
     private
 
       def priority_types
-        if HIDE_WEAKNESS_PRIORITY
-          { default: 0 }
+        if USE_SCOPE_CYCLE
+          { none: 0, low: 1, medium: 2, high: 3 }
+        elsif SHOW_CONDENSED_PRIORITIES
+          { low: 0, high: 2 }
         else
           { low: 0, medium: 1, high: 2 }
         end

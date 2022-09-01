@@ -1,17 +1,17 @@
-module Findings::FollowUpPDF
+module Findings::FollowUpPdf
   extend ActiveSupport::Concern
 
-  def follow_up_pdf organization = nil
+  def follow_up_pdf organization = nil, brief: false
     pdf = Prawn::Document.create_generic_pdf :portrait
 
     put_follow_up_cover_on             pdf, organization
     put_follow_up_description_items_on pdf
     put_follow_up_user_data_on         pdf
     put_relation_information_on        pdf
-    put_history_on                     pdf
+    put_history_on                     pdf unless brief
     put_follow_up_comments_on          pdf
     put_follow_up_work_papers_on       pdf
-    put_follow_up_finding_answers_on   pdf
+    put_follow_up_finding_answers_on   pdf unless brief
 
     pdf.custom_save_as follow_up_pdf_name, Finding.table_name, id
   end
@@ -71,6 +71,10 @@ module Findings::FollowUpPDF
       if solution_date
         pdf.add_description_item Finding.human_attribute_name(:solution_date), I18n.l(solution_date, format: :long), 0, false
       end
+
+      if tags.any?
+        pdf.add_description_item Tag.model_name.human(count: 0), tags.map(&:name).join('; '), 0, false
+      end
     end
 
     def put_follow_up_user_data_on pdf
@@ -84,14 +88,14 @@ module Findings::FollowUpPDF
     end
 
     def put_relation_information_on pdf
-      if repeated_ancestors.any?
+      if (ancestors = repeated_ancestors).any?
         pdf.add_title I18n.t('finding.repeated_ancestors'), PDF_FONT_SIZE, :left
-        pdf.add_list repeated_ancestors, PDF_FONT_SIZE * 2
+        pdf.add_list ancestors, PDF_FONT_SIZE * 2
       end
 
-      if repeated_children.any?
+      if (children = repeated_children).any?
         pdf.add_title I18n.t('finding.repeated_children'), PDF_FONT_SIZE, :left
-        pdf.add_list repeated_children, PDF_FONT_SIZE * 2
+        pdf.add_list children, PDF_FONT_SIZE * 2
       end
     end
 
@@ -255,25 +259,27 @@ module Findings::FollowUpPDF
     def weakness_follow_up_description_items
       [
         [self.class.human_attribute_name(:risk), risk_text, 0, false],
-        ([self.class.human_attribute_name(:priority), priority_text, 0, false] unless HIDE_WEAKNESS_PRIORITY),
+        [self.class.human_attribute_name(:priority), priority_text, 0, false],
         ([Finding.human_attribute_name(:effect), effect, 0, false] unless HIDE_WEAKNESS_EFFECT),
         [Finding.human_attribute_name(:audit_recommendations), audit_recommendations, 0, false]
       ].compact
     end
 
     def follow_up_important_attributes
-      if HIDE_WEAKNESS_PRIORITY
-        [:state, :risk, :follow_up_date]
-      else
-        [:state, :risk, :priority, :follow_up_date]
-      end
+      [:state, :risk, :priority, :follow_up_date]
     end
 
     def important_changed_versions
-      previous_version   = versions.first
-      important_versions = [PaperTrail::Version.new]
+      previous_version     = versions.first
+      important_versions   = [PaperTrail::Version.new]
+      last_checked_version = nil
+      next_version         = -> {
+        previous_version&.event && (
+          last_checked_version = previous_version&.next || current_version
+        )
+      }
 
-      while previous_version&.event && last_checked_version = previous_version&.next
+      while next_version.call
         has_important_changes = follow_up_important_attributes.any? do |attribute|
           current_value = last_checked_version.reify(has_one: false) ?
             last_checked_version.reify(has_one: false).send(attribute) : nil
@@ -290,16 +296,16 @@ module Findings::FollowUpPDF
         previous_version = last_checked_version
       end
 
-      important_versions + [current_version]
+      important_versions
     end
 
     def current_version
-      object    = paper_trail.object_attrs_for_paper_trail
-      use_plain = self.class.connection.adapter_name == 'PostgreSQL'
+      event  = PaperTrail::Events::Base.new self, false
+      object = event.send :object_attrs_for_paper_trail, false
 
       PaperTrail::Version.new(
         item:      self,
-        object:    use_plain ? object : object.to_json,
+        object:    POSTGRESQL_ADAPTER ? object : object.to_json,
         whodunnit: paper_trail.originator
       )
     end

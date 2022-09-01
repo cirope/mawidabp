@@ -4,12 +4,12 @@ class FindingAnswerTest < ActiveSupport::TestCase
   include ActionMailer::TestHelper
 
   setup do
-    @finding_answer = finding_answers :confirmed_oportunity_auditor_answer
+    @finding_answer = finding_answers :auditor_answer
   end
 
   test 'auditor create without notification' do
     assert_no_enqueued_emails do
-      assert_difference 'FindingAnswer.count' do
+      assert_difference ['FindingAnswer.count', 'Reading.count'] do
         @finding_answer = FindingAnswer.create(
           answer: 'New answer',
           finding: findings(:unanswered_weakness),
@@ -79,16 +79,16 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
   test 'validates blank attributes with auditor' do
     @finding_answer.answer = '      '
-    @finding_answer.finding_id = nil
+    @finding_answer.finding = nil
     @finding_answer.commitment_date = ''
 
     assert @finding_answer.invalid?
     assert_error @finding_answer, :answer, :blank
-    assert_error @finding_answer, :finding_id, :blank
+    assert_error @finding_answer, :finding, :blank
   end
 
   test 'validates blank attributes with audited' do
-    Organization.current_id = organizations(:cirope).id
+    Current.organization = organizations(:cirope)
 
     @finding_answer.user = users(:audited)
     @finding_answer.answer = ' '
@@ -99,7 +99,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
     assert_error @finding_answer, :answer, :blank
     assert_error @finding_answer, :commitment_date, :blank
 
-    Organization.current_id = nil
+    Current.organization = nil
   end
 
   test 'validates well formated attributes' do
@@ -110,7 +110,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
   end
 
   test 'requires commitment date' do
-    Organization.current_id = organizations(:cirope).id
+    Current.organization = organizations(:cirope)
 
     @finding_answer.user = users(:audited)
     @finding_answer.finding = findings(:being_implemented_weakness_on_final)
@@ -120,12 +120,51 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
     @finding_answer.finding.follow_up_date = Time.zone.today
 
-    assert !@finding_answer.requires_commitment_date?
+    refute @finding_answer.requires_commitment_date?
 
     @finding_answer.finding.follow_up_date = 1.day.ago
 
     assert @finding_answer.requires_commitment_date?
 
-    Organization.current_id = nil
+    @finding_answer.imported = true
+
+    refute @finding_answer.requires_commitment_date?
+
+    Current.organization = nil
+  end
+
+  test 'commitment date limit' do
+    skip if FINDING_ANSWER_COMMITMENT_DATE_LIMITS.blank?
+
+    finding = findings(:being_implemented_weakness_on_final)
+    risk = Finding.risks.invert[finding.risk]
+
+    expected_limit = eval(
+      FINDING_ANSWER_COMMITMENT_DATE_LIMITS["#{risk}_multi_responsible"]
+    ).from_now.to_date
+
+    @finding_answer.user = users(:audited)
+    @finding_answer.finding = finding
+    @finding_answer.commitment_date = expected_limit + 1.day
+
+    assert @finding_answer.invalid?
+    assert_error @finding_answer, :commitment_date, :on_or_before,
+      restriction: I18n.l(expected_limit)
+  end
+
+  test 'commitment date status' do
+    @finding_answer.endorsements.destroy_all
+
+    assert_equal 'approved', @finding_answer.commitment_date_status
+
+    endorsement = @finding_answer.endorsements.create!(
+      user_id: users(:audited).id
+    )
+
+    assert_equal 'pending', @finding_answer.commitment_date_status
+
+    endorsement.update! status: 'rejected', reason: 'Because I say so'
+
+    assert_equal 'rejected', @finding_answer.commitment_date_status
   end
 end

@@ -1,0 +1,35 @@
+<% organization = task.organization %>
+<% finding = task.finding %>
+<% finding_url = finding_url(finding.pending? ? 'incomplete' : 'complete',
+  finding, host: ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
+
+<p style="margin: .1em 0em;">
+  <b><%= Review.model_name.human %></b>:
+  <%= finding.review %>
+</p>
+<p style="margin: .1em 0em;">
+  <b><%= finding.class.model_name.human %></b>:
+  <%= [finding.review_code, finding.title].join(' - ') %>
+</p>
+<p style="margin: .1em 0em;">
+  <b><%= task.class.human_attribute_name 'code' %></b>:
+  <%= task.code %>
+</p>
+<div style="margin: .1em 0em;">
+  <b><%= task.class.model_name.human %></b>:
+  <%= markdown task.description %>
+</div>
+<p style="margin: .1em 0em;">
+  <b><%= task.class.human_attribute_name 'status' %></b>:
+  <%= t "tasks.status.#{task.status}" %>
+</p>
+<p style="margin: .1em 0em;">
+  <b><%= task.class.human_attribute_name 'due_on' %></b>:
+  <%= l task.due_on, format: :long %>
+</p>
+
+<br>
+
+<p style="margin: .1em 0em;">
+  <%= link_to t('notifier.notify_new_finding_answer.finding_link'), finding_url %>
+</p>

@@ -1,9 +1,22 @@
 default: &default
-  adapter: postgresql
+  adapter: <%= ENV['DB_ADAPTER'] || 'postgresql' %>
   encoding: unicode
+  host: <%= ENV['DB_HOST'] || 'localhost' %>
+  port: 5432
   pool: 5
-  username: <%= ENV['TRAVIS'] ? 'postgres' : 'mawidabp' %>
-  password: <%= ENV['TRAVIS'] ? '' : 'mawidabp' %>
+  username: <%= ENV['GH_ACTIONS'] ? 'postgres' : ENV['DB_USER'] || 'mawidabp' %>
+  password: <%= if ENV['GH_ACTIONS']
+                  'postgres'
+                elsif ENV['ENCRYPTED_DB_PASSWORD']
+                  ActiveSupport::MessageEncryptor.new(
+                    Rails.application.secrets.secret_key_base[0..31],
+                    # TODO: change on Rails 5.2 migration since it's the new default
+                    cipher: 'aes-256-gcm'
+                  ).decrypt_and_verify(ENV['ENCRYPTED_DB_PASSWORD'])
+                else
+                  ENV['DB_PASSWORD'] || 'mawidabp'
+                end
+              %>
 
 development:
   <<: *default
@@ -15,7 +28,7 @@ test:
 
 production:
   <<: *default
-  database: mawidabp_production
+  database: <%= ENV['DB_NAME'] || 'mawidabp_production' %>
 
 sandbox:
   <<: *default

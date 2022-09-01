@@ -2,13 +2,23 @@
   id = f.object.object_id
   finding = f.object.taggable || parent.object
   tagging = f.object
+  readonly = readonly
 %>
 <fieldset class="tagging">
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <% if tagging.tag.blank? %>
-          <%= f.input :tag_id, as: :string, label: false, input_html: {
+        <% if has_nested_tags?(kind: 'finding') && tagging.tag.blank? %>
+          <%= f.input :tag_id,
+            as: :grouped_select,
+            group_method: :last,
+            collection: grouped_tag_options(kind: 'finding'),
+            label: false,
+            prompt: true,
+            input_html: { autofocus: true }
+          %>
+        <% elsif tagging.tag.blank? %>
+          <%= f.input :tag, as: :string, label: false, input_html: {
             value: tagging.tag.to_s,
             id: "finding_tagging_#{id}",
             title: t('label.search'), autocomplete: :off, autofocus: true,
@@ -18,14 +28,15 @@
               autocomplete_id_target: "#hidden_tag_#{id}"
             }
           } %>
+          <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
         <% else %>
           <%= f.input "finding_tagging_#{id}", label: false, input_html: { value: tagging.tag.to_s, readonly: true } %>
+          <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
         <% end %>
-        <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
       </div>
-      <div class="col-md-2">
-        <div class="toggle-visibility">
-          <%= link_to_remove_nested_item f %>
+      <div class="col-md-1">
+        <div class="mt-2 text-right">
+          <%= link_to_remove_nested_item f unless readonly %>
         </div>
       </div>
     </div>

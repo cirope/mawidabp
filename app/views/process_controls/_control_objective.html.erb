@@ -1,5 +1,6 @@
 <% id = f.object.object_id %>
 <% process_control_id = process_control_id %>
+<% control_objective = f.object %>
 
 <fieldset class="control_objective">
   <div class="form-inputs">
@@ -20,32 +21,25 @@
         <label for="control_objective_obsolete_<%= id %>">
           <%= ControlObjective.human_attribute_name 'obsolete' %>
         </label>
-        <div>
-          <%= f.check_box :obsolete, id: "control_objective_obsolete_#{id}", data: { process_control_id: process_control_id } %>
+        <div class="pt-2">
+          <%= f.input :obsolete, label: '&nbsp;'.html_safe, input_html: {
+            id: "control_objective_obsolete_#{id}", data: { process_control_id: process_control_id }
+          } %>
         </div>
       </div>
-      <div class="col-md-1">
-        <label>
-          <%= ControlObjective.human_attribute_name 'support' %>
-        </label>
-        <div>
-          <div class="file-container pull-left">
-            <%= link_to_upload f.object, :support %>
-
-            <% if f.object.support_cache %>
-              <%= f.input :support_cache, as: :hidden, id: "control_objective_support_#{id}" %>
-            <% else %>
-              <%= f.input :support, as: :file, label: false, hint: f.object.identifier, id: "control_objective_support_#{id}" %>
-            <% end %>
+      <div class="col-md-2">
+        <div class="row">
+          <div class="col-8">
+            <%= render 'process_controls/support', f: f %>
           </div>
-        </div>
-      </div>
-      <div class="col-md-1">
-        <div class="toggle-visibility">
-          <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
-          <%= link_to_insert_field(f) %>
-          <span class="text-muted">|</span>
-          <%= link_to_remove_nested_item(f) %>
+          <div class="col-4 text-right">
+            <div class="mt-3">
+              <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
+              <%= link_to_insert_field(f) %>
+              <span class="text-muted">|</span>
+              <%= link_to_remove_nested_item(f) %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -74,15 +68,54 @@
         <%= c_f.input :order, as: :hidden %>
       <% end %>
     </div>
-  </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">
+    <% if Current.conclusion_pdf_format == 'gal' %>
+      <div class="row">
+        <div class="col-md-2">
+          <%= f.input :audit_sector, collection: gal_audit_sectors, prompt: true %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :date_charge, as: :date_picker %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :affected_sector_id, collection: affected_sectors, include_blank: t('helpers.select.prompt') %>
+        </div>
+      </div>
+
+      <div class="card mb-2">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <%= ControlObjectiveAuditor.model_name.human count: 0 %>
+          </h5>
+        </div>
+        <div class="card-body">
+          <div id="control_objective_auditors_<%= id %>">
+            <% control_objective.control_objective_auditors.each do |control_objective_auditor| %>
+              <% control_objective_auditor_child_index = control_objective.control_objective_auditors.index control_objective_auditor %>
+              <%= f.simple_fields_for :control_objective_auditors, control_objective_auditor, child_index: control_objective_auditor_child_index do |aux_coa_f| %>
+                <%= render 'control_objectives/control_objective_auditor', f: aux_coa_f %>
+              <% end %>
+            <% end %>
+          </div>
+    
+          <%= link_to_add_fields(
+            t('control_objectives.new.add_control_objective_auditor'),
+            f, :control_objective_auditors, 'control_objectives/control_objective_auditor', {
+              insert_into: "#control_objective_auditors_#{id}",
+              association: 'control_objective_auditors'
+            }, { control_objective_id: control_objective.id }
+          ) %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">
         <%= Tag.model_name.human count: 0 %>
-      </h3>
+      </h5>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
       <%= f.simple_fields_for :taggings do |tf| %>
         <%= render 'control_objectives/tagging', f: tf, kind: 'control_objective' %>
       <% end %>

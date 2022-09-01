@@ -1,9 +1,12 @@
 class BestPractice < ApplicationRecord
   include Auditable
+  include BestPractices::AttributeTypes
+  include BestPractices::Csv
   include BestPractices::Defaults
   include BestPractices::DestroyValidation
-  include BestPractices::JSON
+  include BestPractices::Json
   include BestPractices::ProcessControls
+  include BestPractices::Scopes
   include BestPractices::Search
   include BestPractices::Shared
   include BestPractices::Validations
@@ -12,4 +15,8 @@ class BestPractice < ApplicationRecord
 
   belongs_to :group
   belongs_to :organization
+
+  def to_s
+    name
+  end
 end

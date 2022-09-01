@@ -2,11 +2,16 @@ module Organizations::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :name, :prefix, pdf_encoding: true, presence: true, length: { maximum: 255 }
+    validates :name, :prefix, :logo_style, pdf_encoding: true, presence: true,
+      length: { maximum: 255 }
     validates :description, pdf_encoding: true
     validates :name, uniqueness: { case_sensitive: false, scope: :group_id }
+    validates :logo_style, inclusion: {
+      in: %w(default success info warning danger)
+    }
+    validates :saml_provider, inclusion: { in: %w(azure) }, allow_nil: true, allow_blank: true
     validates :prefix,
-      format: { with: /\A[A-Za-z][A-Za-z0-9\-]+\z/ },
+      format: { with: /\A[A-Za-z0-9][A-Za-z0-9\-]+\z/ },
       uniqueness: { case_sensitive: false },
       exclusion: { in: APP_ADMIN_PREFIXES }
   end

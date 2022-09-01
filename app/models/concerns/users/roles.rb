@@ -6,6 +6,7 @@ module Users::Roles
 
     before_validation :inject_auth_privileges_in_roles, :set_proper_parent
     before_update :check_roles_changes
+    before_save :notify_on_new_admin, if: :notify_new_admin?
 
     has_many :organization_roles, dependent: :destroy,
       after_add:    :mark_roles_as_changed,
@@ -17,7 +18,7 @@ module Users::Roles
 
   def roles organization_id = nil
     ors              = organization_roles.reject &:marked_for_destruction?
-    organization_ids = [organization_id] | (Group.corporate_ids || [])
+    organization_ids = [organization_id] | (Current.corporate_ids || [])
 
     ors.select! { |o_r| organization_ids.include?(o_r.organization_id) } if organization_id
 
@@ -37,7 +38,7 @@ module Users::Roles
   end
 
   def get_type
-    roles(Organization.current_id).max.try(:get_type)
+    roles(Current.organization&.id).max.try(:get_type)
   end
 
   def privileges organization
@@ -56,7 +57,7 @@ module Users::Roles
 
   Role::TYPES.each do |type, value|
     define_method("#{type}?") do
-      roles(Organization.current_id).any? { |role| role.role_type == value }
+      roles(Current.organization&.id).any? { |role| role.role_type == value }
     end
 
     define_method("#{type}_on?") do |organization_id|
@@ -64,23 +65,68 @@ module Users::Roles
     end
   end
 
-  def auditor?
-    auditor_junior? || auditor_senior?
-  end
-
-  def auditor_on? organization_id
-    auditor_junior_on?(organization_id) || auditor_senior_on?(organization_id)
-  end
-
   def can_act_as_audited?
-    audited? || executive_manager? || admin?
+    USE_SCOPE_CYCLE ? roles_audited? : (roles_audited? && !roles_auditors?)
   end
 
   def can_act_as_audited_on? organization_id
-    audited_on?(organization_id) || executive_manager_on?(organization_id) || admin_on?(organization_id)
+    (
+      audited_on?(organization_id)           ||
+      executive_manager_on?(organization_id) ||
+      admin_on?(organization_id)
+    ) && !(
+      auditor_on?(organization_id)    ||
+      supervisor_on?(organization_id) ||
+      manager_on?(organization_id)
+    )
+  end
+
+  def roles_has_changed?
+    roles_changed || organization_roles.any?(&:changed?)
+  end
+
+  def parent_root
+    root unless root == self
+  end
+
+  def parent_intermediates
+    result       = []
+    intermediate = self.parent
+
+    while intermediate&.parent && intermediate.parent != root do
+      result << (intermediate = intermediate.parent)
+    end
+
+    result
+  end
+
+  module ClassMethods
+    def can_act_as role
+      includes(organization_roles: :role).where(
+        roles: {
+          role_type: ::Role::ACT_AS[role]
+        }
+      )
+    end
+
+    def with_role role
+      includes(organization_roles: :role).where(
+        roles: {
+          role_type: ::Role::TYPES[role]
+        }
+      )
+    end
   end
 
   private
+
+    def roles_audited?
+      audited? || executive_manager? || admin?
+    end
+
+    def roles_auditors?
+      auditor? || supervisor? || manager?
+    end
 
     def inject_auth_privileges_in_roles
       roles.each { |r| r.inject_auth_privileges Hash.new(Hash.new(true)) }
@@ -103,10 +149,6 @@ module Users::Roles
       attributes['organization_id'].blank? || attributes['role_id'].blank?
     end
 
-    def roles_has_changed?
-      roles_changed || organization_roles.any?(&:changed?)
-    end
-
     def user_act_as_changed?
       old_user = User.find id
 
@@ -123,5 +165,24 @@ module Users::Roles
       organization_role.user = self unless organization_role.frozen?
 
       self.roles_changed = true
+    end
+
+    def notify_new_admin?
+      NOTIFY_NEW_ADMIN && roles_has_changed?
+    end
+
+    def notify_on_new_admin
+      old_user = User.find id unless new_record?
+
+      org_ids = organization_roles.reject(&:marked_for_destruction?).map do |organization_role|
+        organization_id = organization_role.organization_id
+        was_admin       = old_user&.admin_on? organization_id
+
+        organization_id if !was_admin && admin_on?(organization_id)
+      end.compact.uniq
+
+      org_ids.each do |organization_id|
+        NotifierMailer.new_admin_user(organization_id, email).deliver_later
+      end
     end
 end

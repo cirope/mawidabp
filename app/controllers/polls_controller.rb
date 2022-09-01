@@ -1,4 +1,6 @@
 class PollsController < ApplicationController
+  include AutoCompleteFor::BusinessUnit
+
   before_action :load_privileges, :auth, except: [:edit, :update, :show]
   before_action :check_privileges, except: [:edit, :update, :show]
   before_action :set_poll, only: [:show, :edit, :update, :destroy]
@@ -11,13 +13,12 @@ class PollsController < ApplicationController
   # GET /polls
   # GET /polls.json
   def index
-    @polls = @questionnaire.polls if @questionnaire
-
-    build_search_conditions Poll
-
-    @polls = (@polls || Poll.list).includes(:questionnaire, :user).
-      where(@conditions).order("#{Poll.quoted_table_name}.#{Poll.qcn('created_at')} DESC").
-      references(:questionnaire, :user).page(params[:page])
+    @polls = (@questionnaire&.polls || Poll.list).
+      includes(:questionnaire, :user).
+      search(**search_params).
+      default_order.
+      references(:questionnaire, :user).
+      page params[:page]
 
     respond_with @polls
   end
@@ -79,6 +80,7 @@ class PollsController < ApplicationController
     def poll_params
       params.require(:poll).permit(
         :user_id, :questionnaire_id, :comments, :lock_version,
+        :about_id, :about_type,
         answers_attributes: [
           :id, :answer, :comments, :answer_option_id, :type
         ]
@@ -90,7 +92,7 @@ class PollsController < ApplicationController
     end
 
     def set_poll
-      @poll = Poll.list.find params[:id]
+      @poll = Poll.list.preload(answers: { question: :answer_options }).find params[:id]
     end
 
     def set_current_module
@@ -98,6 +100,9 @@ class PollsController < ApplicationController
     end
 
     def load_privileges
-      @action_privileges.update reports: :read if @action_privileges
+      @action_privileges.update(
+        reports: :read,
+        auto_complete_for_business_unit: :read
+      ) if @action_privileges
     end
  end

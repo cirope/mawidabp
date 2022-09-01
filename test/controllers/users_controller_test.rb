@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
@@ -38,10 +40,22 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'can not get new when ldap' do
+    skip if ENABLE_USER_CREATION_WHEN_LDAP
+
     login prefix: organizations(:google).prefix
 
     get :new
     assert_redirected_to login_url
+  end
+
+  test 'can get new when ldap and ENABLE_USER_CREATION_WHEN_LDAP' do
+    skip unless ENABLE_USER_CREATION_WHEN_LDAP
+
+    login prefix: organizations(:google).prefix
+
+    get :new
+    assert_response :success
+    assert_not_nil assigns(:user)
   end
 
   test 'create user' do
@@ -51,20 +65,20 @@ class UsersControllerTest < ActionController::TestCase
       assert_difference counts_array do
         post :create, params: {
           user: {
-            user: 'new_user',
-            name: 'New Name',
-            last_name: 'New Last Name',
-            email: 'new_user@newemail.net',
-            language: I18n.available_locales.last.to_s,
-            notes: 'Some user notes',
-            manager_id: users(:administrator).id,
-            logged_in: false,
-            enable: true,
-            send_notification_email: true,
+            user:                          'new_user',
+            name:                          'New Name',
+            last_name:                     'New Last Name',
+            email:                         'new_user@newemail.net',
+            language:                      I18n.available_locales.last.to_s,
+            notes:                         'Some user notes',
+            manager_id:                    users(:administrator).id,
+            logged_in:                     false,
+            enable:                        true,
+            send_notification_email:       '1',
             organization_roles_attributes: [
               {
                 organization_id: organizations(:cirope).id,
-                role_id: roles(:admin_role).id
+                role_id:         roles(:executive_manager_role).id
               }
             ],
             related_user_relations_attributes: [
@@ -75,24 +89,27 @@ class UsersControllerTest < ActionController::TestCase
       end
     end
 
-    assert_difference ['User.count', 'OrganizationRole.count'] do
-      assert_no_emails do
+    clear_enqueued_jobs
+    clear_performed_jobs
+
+    assert_no_enqueued_emails do
+      assert_difference ['User.count', 'OrganizationRole.count'] do
         post :create, params: {
           user: {
-            user: 'new_user_2',
-            name: 'New Name2',
-            last_name: 'New Last Name2',
-            email: 'new_user2@newemail.net',
-            language: I18n.available_locales.last.to_s,
-            notes: 'Some user notes',
-            manager_id: users(:administrator).id,
-            logged_in: false,
-            enable: true,
-            send_notification_email: false,
+            user:                          'new_user_2',
+            name:                          'New Name2',
+            last_name:                     'New Last Name2',
+            email:                         'new_user2@newemail.net',
+            language:                      I18n.available_locales.last.to_s,
+            notes:                         'Some user notes',
+            manager_id:                    users(:administrator).id,
+            logged_in:                     false,
+            enable:                        true,
+            send_notification_email:       '',
             organization_roles_attributes: [
               {
                 organization_id: organizations(:cirope).id,
-                role_id: roles(:admin_role).id
+                role_id:         roles(:executive_manager_role).id
               }
             ]
           }
@@ -114,7 +131,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_no_emails do
       assert_no_difference counts_array do
         patch :update, params: {
-          id: user.user,
+          id: user,
           user: {
             user: 'updated_name',
             name: 'Updated Name',
@@ -124,7 +141,7 @@ class UsersControllerTest < ActionController::TestCase
             language: I18n.available_locales.first.to_s,
             logged_in: false,
             enable: true,
-            send_notification_email: false,
+            send_notification_email: '',
             organization_roles_attributes: [
               {
                 id: organization_roles(:admin_role_for_administrator_in_cirope).id,
@@ -161,7 +178,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_enqueued_emails 1 do
         assert_difference 'OrganizationRole.count' do
           patch :update, params: {
-            id: users(:administrator).user,
+            id: users(:administrator),
             user: {
               user: 'updated_name_2',
               name: 'Updated Name',
@@ -171,7 +188,7 @@ class UsersControllerTest < ActionController::TestCase
               notes: 'Updated user notes',
               logged_in: false,
               enable: true,
-              send_notification_email: true,
+              send_notification_email: '1',
               organization_roles_attributes: [
                 {
                   organization_id: organizations(:google).id,
@@ -218,7 +235,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'disable audited user' do
     assert_no_difference 'User.count' do
-      delete :destroy, params: { id: users(:audited).user }
+      delete :destroy, params: { id: users(:audited) }
     end
 
     assert_redirected_to users_url
@@ -238,5 +255,81 @@ class UsersControllerTest < ActionController::TestCase
     }, as: :pdf
 
     assert_redirected_to UserPdf.new.relative_path
+  end
+
+  test 'create user with left users count with registration' do
+    skip unless ENABLE_PUBLIC_REGISTRATION
+
+    set_organization
+
+    original_limit = Rails.application.credentials.auditors_limit
+
+    assert_difference 'User.count' do
+      Rails.application.credentials.auditors_limit = (
+        Current.group.users.can_act_as(:auditor).reload.count + 5
+      )
+
+      post :create, params: {
+        user: {
+          user:                          'new_user',
+          name:                          'New Name',
+          last_name:                     'New Last Name',
+          email:                         'new_user@newemail.net',
+          language:                      I18n.available_locales.last.to_s,
+          notes:                         'Some user notes',
+          enable:                        true,
+          organization_roles_attributes: [
+            {
+              organization_id: Current.organization.id,
+              role_id:         roles(:auditor_role).id
+            }
+          ]
+        }
+      }
+
+      assert_redirected_to users_url
+    end
+
+    assert_equal I18n.t('users.create.correctly_created_with_count', count: 4), flash.notice
+
+    Rails.application.credentials.auditors_limit = original_limit
+  end
+
+  test 'create user with left users count without registration' do
+    skip if ENABLE_PUBLIC_REGISTRATION
+
+    set_organization
+
+    original_limit = Rails.application.credentials.auditors_limit
+
+    assert_difference 'User.count' do
+      Rails.application.credentials.auditors_limit = (
+        User.can_act_as(:auditor).reload.count + 5
+      )
+
+      post :create, params: {
+        user: {
+          user:                          'new_user',
+          name:                          'New Name',
+          last_name:                     'New Last Name',
+          email:                         'new_user@newemail.net',
+          language:                      I18n.available_locales.last.to_s,
+          notes:                         'Some user notes',
+          enable:                        true,
+          organization_roles_attributes: [
+            {
+              organization_id: Current.organization.id,
+              role_id:         roles(:auditor_role).id
+            }
+          ]
+        }
+      }
+
+      assert_redirected_to users_url
+    end
+
+    assert_equal I18n.t('users.create.correctly_created_with_count', count: 4), flash.notice
+
+    Rails.application.credentials.auditors_limit = original_limit
   end
 end

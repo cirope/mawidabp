@@ -4,15 +4,20 @@ module Reviews::Validations
   included do
     validates :identification, :period_id, :plan_item_id, :organization_id, presence: true
     validates :description, presence: true, unless: -> { HIDE_REVIEW_DESCRIPTION }
+    validates :scope, presence: true, if: -> { USE_SCOPE_CYCLE }
+    validates :identification, :scope, length: { maximum: 255 }
     validates :identification,
-      length:     { maximum: 255 },
-      format:     { with: /\A\w([\w\s-]|\/)*\z/ }, allow_nil: true, allow_blank: true
+      format:      { with: /\A\w([.\w\sáéíóúÁÉÍÓÚñÑ-]|\/)*\z/ },
+      allow_nil:   true,
+      allow_blank: true
     validates :identification, uniqueness: {
       case_sensitive: false, scope: :organization_id
     }, unless: -> { SHOW_REVIEW_AUTOMATIC_IDENTIFICATION }
     validates :identification, :description, :survey, :scope, :risk_exposure,
       :include_sox, pdf_encoding: true
-    validates :plan_item_id, uniqueness: { case_sensitive: false }
+    validates :score_type, inclusion: {
+      in: %w(effectiveness manual none weaknesses splitted_effectiveness weaknesses_alt)
+    }, allow_blank: true, allow_nil: true
 
     validates :scope,
               :risk_exposure,
@@ -20,14 +25,20 @@ module Reviews::Validations
               presence: true, if: :validate_extra_attributes?
 
     validates :manual_score, numericality: {
-      greater_than_or_equal_to: 0, less_than_or_equal_to: 1000
-    }, allow_nil: true, if: :validate_extra_attributes?
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: USE_SCOPE_CYCLE ? 100 : 1000,
+    }, allow_nil: true, if: :validate_manual_score?
+    validates :manual_score_alt, numericality: {
+      greater_than_or_equal_to: 0, less_than_or_equal_to: 100
+    }, allow_nil: true, if: :validate_manual_score?
 
     validate :validate_user_roles
     validate :validate_plan_item
-    validate :validate_required_tag
+    validate :validate_required_business_unit_tag
+    validate :validate_required_tags, if: :validate_extra_attributes?
     validate :validate_identification_number_uniqueness,
       on: :create, if: -> { SHOW_REVIEW_AUTOMATIC_IDENTIFICATION }
+    validate :plan_item_is_not_used
   end
 
   private
@@ -46,18 +57,24 @@ module Reviews::Validations
     end
 
     def has_valid_users?
+      has_some_manager = has_supervisor? || has_manager? || has_responsible?
+
       if DISABLE_REVIEW_AUDITED_VALIDATION
-        has_auditor? && (has_supervisor? || has_manager?)
+        has_auditor? && has_some_manager
       else
-        has_audited? && has_auditor? && (has_supervisor? || has_manager?)
+        has_audited? && has_auditor? && has_some_manager
       end
+    end
+
+    def validate_manual_score?
+      SHOW_REVIEW_EXTRA_ATTRIBUTES || USE_SCOPE_CYCLE
     end
 
     def validate_extra_attributes?
       SHOW_REVIEW_EXTRA_ATTRIBUTES
     end
 
-    def validate_required_tag
+    def validate_required_business_unit_tag
       business_unit_type = plan_item&.business_unit&.business_unit_type
       is_invalid = business_unit_type&.require_tag &&
         taggings.reject(&:marked_for_destruction?).blank?
@@ -65,18 +82,37 @@ module Reviews::Validations
       errors.add :taggings, :blank if is_invalid
     end
 
+    def validate_required_tags
+      if will_save_change_to_scope? || taggings.any?(&:marked_for_destruction?)
+        tag_options   = REVIEW_SCOPES[scope]&.fetch(:require_tags, nil) || []
+        required_tags = tag_options.flat_map { |option| Tag.list.with_option option }.uniq
+        tags          = taggings.reject(&:marked_for_destruction?).map &:tag
+
+        if required_tags.any? && (required_tags & tags).empty?
+          errors.add :taggings, :missing_tags_for_scope,
+            r_scope: scope,
+            tags:    required_tags.to_sentence
+        end
+      end
+    end
+
     def validate_identification_number_uniqueness
-      suffix = identification.to_s.split('-').last
+      suffix     = identification.to_s.split('-').last
+      use_prefix = business_unit_type&.independent_identification
+      pattern    = "%#{suffix}" unless use_prefix
+
       conditions = [
         "#{Review.quoted_table_name}.#{Review.qcn 'organization_id'} = :organization_id",
         "#{Review.quoted_table_name}.#{Review.qcn 'identification'} LIKE :identification"
       ].join(' AND ')
 
       if suffix.present?
-        is_taken = Review.where(
+        is_taken = Review.joins(:business_unit_type).where(
           conditions,
           organization_id: organization_id,
-          identification: "%#{suffix}"
+          identification: pattern
+        ).where(
+          business_unit_types: { independent_identification: use_prefix }
         ).any?
 
         errors.add :identification, :taken if is_taken
@@ -98,5 +134,21 @@ module Reviews::Validations
       end
 
       required_roles
+    end
+
+    def plan_item_is_not_used
+      errors.add(:plan_item_id, :used) if plan_item.present? && plan_item_used?
+    end
+
+    def plan_item_used?
+      plan_item_used_by_review? || Memo.list.exists?(plan_item_id: plan_item.id)
+    end
+
+    def plan_item_used_by_review?
+      if new_record?
+        Review.list.exists?(plan_item_id: plan_item.id)
+      else
+        Review.list.where.not(id: id).exists?(plan_item_id: plan_item.id)
+      end
     end
 end

@@ -1,28 +1,26 @@
-<ul class="nav navbar-nav navbar-right">
-  <li>
-    <a href="/help" target="_blank" title="<%= t 'menu.help_title' %>">
-      <span class="glyphicon glyphicon-question-sign"></span>
+<ul class="navbar-nav">
+  <li class="nav-item">
+    <a class="nav-link" href="/help" target="_blank" title="<%= t 'menu.help_title' %>">
+      <%= icon 'fas', 'question-circle' %>
     </a>
   </li>
 
-  <li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-      <span class="glyphicon glyphicon-user"></span>
-      <span class="caret"></span>
+  <li class="nav-item dropdown">
+    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+      <%= icon 'fas', 'user' %>
     </a>
 
-    <ul class="dropdown-menu">
-      <% if current_organization && current_organization.ldap_config.blank? %>
-        <li>
-          <%= link_to t('users.profiles.edit.title'), edit_users_profile_path(user) %>
-        </li>
-        <li class="divider"></li>
+    <div class="dropdown-menu dropdown-menu-right">
+      <% if current_organization && (current_organization.ldap_config.blank? && current_organization.saml_provider.blank?) %>
+        <%= link_to t('users.profiles.edit.title'), edit_users_profile_path(user), class: 'dropdown-item' %>
+      <% else %>
+        <%= link_to t('users.status.show.title'), users_status_path(user, graph: true), class: 'dropdown-item' %>
       <% end %>
-      <li>
-        <%= link_to t('navigation.logout'), logout_path, data: { method: :delete } %>
-      </li>
-    </ul>
+      <div class="dropdown-divider"></div>
+      <%= link_to t('navigation.logout'), logout_path, class: 'dropdown-item', data: { method: :delete } %>
+    </div>
   </li>
 </ul>
 
 <%= render 'shared/time_left' %>
+<%= render 'shared/messages' %>

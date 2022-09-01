@@ -1,6 +1,8 @@
-confirmed_oportunity_auditor_answer:
+auditor_answer:
   answer: Auditor text
   commitment_date: <%= Date.today.to_s(:db) %>
   finding: confirmed_oportunity
   user: supervisor
   file_model:
+  skip_commitment_support: false
+  imported: false

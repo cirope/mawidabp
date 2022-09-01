@@ -2,17 +2,17 @@ module DocumentsHelper
   def link_to_download_document document, options = {}
     url   = url_from_document_file_model(document) || url_from_document_description(document)
     title = document.file_model&.identifier&.titleize || url
-    icon  = document.file_model ? 'download-alt' : 'link'
+    icon  = document.file_model ? 'download' : 'link'
 
     if url.present?
       default_options = {
-        class: 'btn btn-default',
+        class: 'btn btn-outline-secondary',
         title: title,
         data:  { ignore_unsaved_data: true }
       }
 
       link_to url, default_options.merge(options) do
-        content_tag :span, nil, class: "icon glyphicon glyphicon-#{icon}"
+        icon 'fas', icon
       end
     end
   end
@@ -26,7 +26,7 @@ module DocumentsHelper
     show_info [
       "#{created_at_label}: #{created_at_value}",
       "#{updated_at_label}: #{updated_at_value}"
-    ].join("\n")
+    ].join(' | ')
   end
 
   private

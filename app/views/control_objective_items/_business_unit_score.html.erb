@@ -2,7 +2,7 @@
 <fieldset class="business_unit_score">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-5">
         <% copy_attribute_errors(:business_unit_id, :auto_business_unit_name, f) %>
         <%= f.input :auto_business_unit_name, label: false, autofocus: true,
           input_html: {
@@ -32,8 +32,8 @@
           include_blank: t('control_objective_item.not_rated'),
           input_html: { data: { business_unit_score: 'sustantive' }, disabled: readonly } %>
       </div>
-      <div class="col-md-2">
-        <div class="toggle-visibility">
+      <div class="col-md-1">
+        <div class="mt-2 text-right">
           <%= link_to_remove_nested_item(f) unless readonly %>
         </div>
       </div>

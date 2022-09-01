@@ -11,10 +11,13 @@ class WorkflowsController < ApplicationController
   # * GET /workflows
   def index
     @title = t 'workflow.index_title'
-    @workflows = Workflow.list.includes(:review).order(
-      "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC").page(
+    @workflows = Workflow.list.includes(review: :plan_item).order(
+      Arel.sql "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC"
+    ).page(
       params[:page]
-    ).references(:reviews)
+    ).references(:reviews).merge(
+      Review.allowed_by_business_units
+    )
 
     respond_to do |format|
       format.html # index.html.erb
@@ -151,11 +154,13 @@ class WorkflowsController < ApplicationController
     def workflow_params
       params.require(:workflow).permit(
         :period_id, :review_id, :allow_overload, :lock_version,
+        file_model_attributes: [:id, :file, :file_cache, :_destroy],
         workflow_items_attributes: [
           :id, :task, :start, :end, :order_number, :_destroy,
           resource_utilizations_attributes: [
             :id, :resource_id, :resource_type, :units, :_destroy
-          ]
+          ],
+          file_model_attributes: [:id, :file, :file_cache, :_destroy]
         ]
       )
     end

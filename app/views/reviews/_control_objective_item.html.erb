@@ -1,11 +1,25 @@
 <% control_objective_item = f.object %>
 <fieldset class="control_objective_item">
   <% if control_objective_item.new_record? %>
-    <div class="hidden">
+    <ul class="mb-1">
+      <li>
+        <%= content_tag(
+          :span,
+          control_objective_item.control_objective_text,
+          class: review_control_objective_class(control_objective_item),
+          data: {
+            control_objective_item_id: control_objective_item.id
+          }
+        ) %>
+      </li>
+    </ul>
+
+    <div hidden>
       <%= f.input :order_number, as: :hidden %>
       <%= f.input :control_objective_id, as: :hidden %>
       <%= f.input :control_objective_text, as: :hidden %>
       <%= f.input :relevance, as: :hidden %>
+      <%= f.input :lock_version, as: :hidden %>
       <%= f.simple_fields_for :control do |c_f| %>
         <%= c_f.input :control, as: :hidden %>
         <%= c_f.input :effects, as: :hidden %>
@@ -15,11 +29,21 @@
       <% end %>
     </div>
   <% else %>
-    <ul>
+    <ul class="mb-1">
       <li>
-        <%= content_tag :span, control_objective_item.control_objective_text,
-          :class => review_control_objective_class(control_objective_item) %>
+        <%= content_tag(
+          :span,
+          control_objective_item.control_objective_text,
+          class: review_control_objective_class(control_objective_item),
+          data: {
+            control_objective_item_id: control_objective_item.id
+          }
+        ) %>
         <% if !readonly %>
+          <% unless control_objective_item.original_text? %>
+            <span class="text-muted">|</span>
+            <%= link_to_recover_original_control_objective_name(control_objective_item) %>
+          <% end %>
           <span class="text-muted">|</span>
           <%= link_to_move %>
           <span class="text-muted">|</span>
@@ -34,8 +58,7 @@
           <% end %>
           <%= f.input :id, as: :hidden %>
           <%= f.input :order_number, as: :hidden, input_html: { class: 'sort_number' } %>
-        <% end %>
-        <% if readonly && !frozen %>
+        <% else %>
           <span class="text-muted">|</span>
           <%= link_to_edit edit_control_objective_item_path(control_objective_item) %>
         <% end %>
@@ -46,7 +69,7 @@
               <li>
                 <% if weakness.weakness_template_id %>
                   <span class="text-success" title="<%= t 'review.weakness_from_template' %>">
-                    <span class="glyphicon glyphicon-duplicate"></span>
+                    <%= icon 'fas', 'copy' %>
                   </span>
                 <% end %>
                 <span class="text-danger">

@@ -9,13 +9,29 @@ module PlanItems::Validations
     validates :start, timeliness: { type: :date }
     validates :end, timeliness: { type: :date, on_or_after: :start }
     validates :risk_exposure, presence: true, if: :validate_extra_attributes?
+    validates :scope, presence: true, if: :require_scope?
+    validates :business_unit_type, presence: true, if: :validate_business_unit_type?
     validate :project_is_unique
     validate :dates_are_included_in_period
     validate :not_overloaded_or_allowed
     validate :related_plan_item_dates
+    validate :uniqueness_auxiliar_business_unit_types
   end
 
     private
+
+      def uniqueness_auxiliar_business_unit_types
+        business_unit_types = []
+      
+        auxiliar_business_unit_types.each do |auxiliar_business_unit_type|
+          if business_unit_types.include?(auxiliar_business_unit_type.business_unit_type.id)
+            auxiliar_business_unit_type.errors.add(:business_unit_type_id, :taken)
+            errors.add(:auxiliar_business_unit_types, :taken)
+          else
+            business_unit_types.push(auxiliar_business_unit_type.business_unit_type.id)
+          end
+        end
+      end
 
       def project_is_unique
         unless plan&.allow_duplication?
@@ -99,5 +115,13 @@ module PlanItems::Validations
 
       def validate_extra_attributes?
         SHOW_REVIEW_EXTRA_ATTRIBUTES
+      end
+
+      def require_scope?
+        SHOW_REVIEW_EXTRA_ATTRIBUTES || USE_SCOPE_CYCLE
+      end
+
+      def validate_business_unit_type?
+        Current.user&.business_unit_types&.list&.any?
       end
 end

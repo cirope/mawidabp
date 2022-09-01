@@ -9,10 +9,12 @@ module Findings::SaveCallbacks
 
     def recalculate_review_score
       # Since score gets refreshed on review before save we just need to save =)
-      review.save!
+      review.save! if review.scored_by_weaknesses? || review.scored_by_splitted_effectiveness?
     rescue ActiveRecord::StaleObjectError
       review.reload.save!
     rescue ActiveRecord::RecordInvalid
+      errors.add :base, 'Review can not be saved!'
+
       throw :abort
     end
 end

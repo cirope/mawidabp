@@ -3,3 +3,9 @@
   option: <%= option %>
   question: question_multi_choice
 <% end %>
+
+<% Question::ANSWER_YES_NO_OPTIONS.each do |option| %>
+yes_no_<%= option %>:
+  option: <%= option %>
+  question: question_yes_no
+<% end %>

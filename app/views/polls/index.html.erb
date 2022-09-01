@@ -1,18 +1,18 @@
-<%= render :partial => 'shared/search', :locals => {
-  :options => {},
-  :columns => @query.blank? ? Poll::COLUMNS_FOR_SEARCH.keys : @columns
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: search_columns_for_model(Poll)
 } %>
 
-<table class="table table-condensed table-striped table-hover">
+<table class="table table-sm table-striped table-hover">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Poll.human_attribute_name('user'), nil, 'name', 'last_name' %>
       <%= make_filterable_column Poll.human_attribute_name('questionnaire'), nil, 'questionnaire_name' %>
-      <%= make_not_available_column Poll.human_attribute_name('pollable'), class: 'hidden-xs hidden-sm hidden-md' %>
-      <%= make_not_available_column Poll.human_attribute_name('affected_user'), class: 'hidden-xs hidden-sm' %>
-      <%= make_filterable_column Poll.human_attribute_name('answered'), { class: 'hidden-xs' }, 'answered' %>
-      <%= make_not_available_column Poll.human_attribute_name('send_date'), class: 'hidden-xs hidden-sm' %>
-      <%= make_not_available_column Poll.human_attribute_name('answer_date'), class: 'hidden-xs hidden-sm' %>
+      <%= make_not_available_column Poll.human_attribute_name('pollable'), class: 'd-none d-lg-table-cell' %>
+      <%= make_not_available_column Poll.human_attribute_name('about'), class: 'd-none d-md-table-cell' %>
+      <%= make_filterable_column Poll.human_attribute_name('answered'), { class: 'd-none d-sm-table-cell' }, 'answered' %>
+      <%= make_not_available_column Poll.human_attribute_name('send_date'), class: 'd-none d-md-table-cell' %>
+      <%= make_not_available_column Poll.human_attribute_name('answer_date'), class: 'd-none d-md-table-cell' %>
       <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -22,13 +22,13 @@
       <tr>
         <td><%= poll.user.informal_name %></td>
         <td><%= poll.questionnaire.name %></td>
-        <td class="hidden-xs hidden-sm hidden-md"><%= poll.conclusion_review&.review&.identification || '-' %></td>
-        <td class="hidden-xs hidden-sm"><%= poll.affected_user&.informal_name || t('label.all') %></td>
-        <td class="hidden-xs"><%= t_boolean poll.answered %></td>
-        <td class="hidden-xs hidden-sm"><%= l poll.created_at.to_date, format: :minimal %></td>
-        <td class="hidden-xs hidden-sm"><%= l(poll.updated_at.to_date, format: :minimal) if poll.answered %></td>
-        <td><%= link_to_show poll %></td>
-        <td><%= link_to_destroy poll %></td>
+        <td class="d-none d-lg-table-cell"><%= poll.conclusion_review&.review&.identification || '-' %></td>
+        <td class="d-none d-md-table-cell"><%= poll.about&.display_name || (poll.conclusion_review && t('label.all')) || '-' %></td>
+        <td class="d-none d-sm-table-cell"><%= t_boolean poll.answered %></td>
+        <td class="d-none d-md-table-cell"><%= l poll.created_at.to_date, format: :minimal %></td>
+        <td class="d-none d-md-table-cell"><%= l(poll.updated_at.to_date, format: :minimal) if poll.answered %></td>
+        <td class="text-right"><%= link_to_show poll %></td>
+        <td class="text-right"><%= link_to_destroy poll %></td>
       </tr>
     <% end %>
   </tbody>

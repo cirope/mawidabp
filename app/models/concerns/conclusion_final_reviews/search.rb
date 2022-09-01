@@ -3,7 +3,7 @@ module ConclusionFinalReviews::Search
 
   included do
     COLUMNS_FOR_SEARCH = {
-      close_date: close_date_search_options 
+      close_date: close_date_search_options
     }.merge(ConclusionReview::GENERIC_COLUMNS_FOR_SEARCH).with_indifferent_access
   end
 

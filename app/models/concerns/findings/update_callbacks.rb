@@ -2,8 +2,10 @@ module Findings::UpdateCallbacks
   extend ActiveSupport::Concern
 
   included do
-    before_save :can_be_modified?, :users_notification
-    after_update :notify_changes_to_users
+    before_save :can_be_modified?
+    after_save :users_notification
+    after_update :save_changed_users
+    after_commit :notify_changes_to_users
   end
 
   def can_be_modified?
@@ -36,6 +38,11 @@ module Findings::UpdateCallbacks
       end
     end
 
+    def save_changed_users
+      @users_added   = finding_user_assignments.select(&:new_record?).map &:user
+      @users_removed = finding_user_assignments.select(&:marked_for_destruction?).map &:user
+    end
+
     def notify_changes_to_users
       unless incomplete?
         notify_changes unless avoid_changes_notification
@@ -43,25 +50,17 @@ module Findings::UpdateCallbacks
     end
 
     def notify_changes
-      if users_added.present? && users_removed.present?
+      if @users_added.present? && @users_removed.present?
         NotifierMailer.reassigned_findings_notification(
-          users_added, users_removed, self, false
+          @users_added, @users_removed, self, false
         ).deliver_later
-      elsif users_added.blank? && users_removed.present?
+      elsif @users_added.blank? && @users_removed.present?
         NotifierMailer.changes_notification(
-          users_removed,
+          @users_removed,
           title: responsibility_removed_title,
           organizations: [organization]
         ).deliver_later
       end
-    end
-
-    def users_added
-      finding_user_assignments.select(&:new_record?).map &:user
-    end
-
-    def users_removed
-      finding_user_assignments.select(&:marked_for_destruction?).map &:user
     end
 
     def responsibility_removed_title

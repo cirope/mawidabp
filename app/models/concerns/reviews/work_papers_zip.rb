@@ -4,7 +4,7 @@ module Reviews::WorkPapersZip
   def zip_all_work_papers organization = nil
     filename = absolute_work_papers_zip_path
 
-    FileUtils.rm filename if File.exists?(filename)
+    FileUtils.rm filename if File.exist?(filename)
     FileUtils.makedirs File.dirname(filename)
 
     Zip::File.open(filename, Zip::File::CREATE) do |zipfile|
@@ -28,7 +28,7 @@ module Reviews::WorkPapersZip
     work_papers_label = WorkPaper.model_name.human count: 0
     filename_prefix   = work_papers_label.downcase.sanitized_for_filename
     path              =
-      ('%08d' % (Organization.current_id || 0)).scan(/\d{4}/) +
+      ('%08d' % (Current.organization&.id || 0)).scan(/\d{4}/) +
       [Review.table_name] +
       ('%08d' % id).scan(/\d{4}/) +
       ["#{filename_prefix}-#{sanitized_identification}.zip"]
@@ -62,12 +62,14 @@ module Reviews::WorkPapersZip
 
   private
 
-    def add_work_papers_from enumerable, zipfile, i18n_dir_key, prefix = nil
+    def add_work_papers_from enumerable, zipfile, i18n_dir_key, extra_dir: nil, prefix: nil
       dir = I18n.t(i18n_dir_key).sanitized_for_filename
 
       enumerable.each do |item|
         item.work_papers.each do |item_wp|
-          add_work_paper_to_zip item_wp, dir, zipfile, prefix
+          nested_dir = item.send(extra_dir).sanitized_for_filename if extra_dir
+
+          add_work_paper_to_zip item_wp, [dir, nested_dir].compact.join('/'), zipfile, prefix
         end
       end
     end
@@ -75,7 +77,7 @@ module Reviews::WorkPapersZip
     def add_control_objective_work_papers_to zipfile
       i18n_dir_key = 'review.control_objectives_work_papers'
 
-      add_work_papers_from control_objective_items, zipfile, i18n_dir_key
+      add_work_papers_from control_objective_items, zipfile, i18n_dir_key, extra_dir: :control_objective_text
     end
 
     def add_finding_work_papers_to zipfile
@@ -91,16 +93,18 @@ module Reviews::WorkPapersZip
         findings     = []
       end
 
-      add_work_papers_from weaknesses,   zipfile, 'review.weaknesses_work_papers',   'E_'
-      add_work_papers_from oportunities, zipfile, 'review.oportunities_work_papers', 'E_'
-      add_work_papers_from findings,     zipfile, 'review.follow_up_work_papers',    'S_'
+      add_work_papers_from weaknesses,   zipfile, 'review.weaknesses_work_papers',   prefix: 'E_', extra_dir: :review_code
+      add_work_papers_from oportunities, zipfile, 'review.oportunities_work_papers', prefix: 'E_', extra_dir: :review_code
+      add_work_papers_from findings,     zipfile, 'review.follow_up_work_papers',    prefix: 'S_', extra_dir: :review_code
     end
 
     def add_survey_to zipfile
       dir = Review.human_attribute_name 'survey'
 
-      if file_model&.file?
-        add_file_to_zip file_model.file.path, file_model.identifier, dir, zipfile
+      if file_models.any?
+        file_models.each.with_index(1) do |f, idx|
+          add_file_to_zip f.file.path, "#{idx}_#{f.identifier}", dir, zipfile
+        end
       end
 
       if survey.present?

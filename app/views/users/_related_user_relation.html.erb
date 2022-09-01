@@ -14,8 +14,11 @@
       } %>
       <%= f.input :related_user_id, as: :hidden, input_html: { id: "related_user_relation_#{id}" } %>
     </div>
-    <div class="col-md-6">
-      <div class="toggle-visibility">
+    <div class="col-md-3">
+      <%= f.input :notify, wrapper_html: { class: 'mt-2' } %>
+    </div>
+    <div class="col-md-1">
+      <div class="mt-2 text-right">
         <%= link_to_remove_nested_item f %>
       </div>
     </div>

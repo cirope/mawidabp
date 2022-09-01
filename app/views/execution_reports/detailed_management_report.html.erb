@@ -3,9 +3,10 @@
   forms: { date_range: true  }} %>
 
 <% @audits_by_period.each do |audit_by_period| %>
-  <div class="page-header">
-    <h2><%= Period.model_name.human %>: <%= audit_by_period[:period].inspect %></h2>
-  </div>
+  <h2><%= Period.model_name.human %>: <%= audit_by_period[:period].inspect %></h2>
+
+  <hr>
+
   <% audit_by_period[:audits_by_business_unit].each do |data| %>
     <% if !data[:external] && !@internal_title_showed %>
       <h3 class="text-center">
@@ -20,7 +21,7 @@
     <% end %>
     <h4><%= data[:name] %></h4>
     <% unless data[:column_data].blank? %>
-      <table class="table table-condensed table-striped table-hover">
+      <table class="table table-sm table-striped table-hover">
         <thead>
           <tr>
             <% @column_order.each do |col_name| %>
@@ -55,7 +56,7 @@
 
 <div>
   <%= simple_format t('execution_reports.detailed_management_report.references',
-    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence) %>
+    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence), class: 'mb-1' %>
 </div>
 
 <hr />
@@ -63,7 +64,7 @@
 <div>
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#',
-    data: { toggle: 'modal', target: "#customize_report" } %>
+    data: { toggle: 'modal', target: '#customize_report' } %>
 </div>
 
 <%= render :partial => 'shared/customize_report_form', :locals => {

@@ -1,29 +1,41 @@
-<%= simple_form_for @organization do |f| %>
-  <div class="row">
-    <div class="col-md-6">
-      <%= f.input :name, autofocus: true %>
-      <%= f.input :prefix unless action_name.presence_in %w(edit update) %>
+<div class="card">
+  <div class="card-header">
+    <h5 class="mb-0">
+      <%= @title %>
+    </h5>
+  </div>
+
+  <%= simple_form_for @organization do |f| %>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :name, autofocus: true %>
+          <%= f.input :prefix unless @organization.persisted? %>
+          <%= f.input :saml_provider, collection: [['Azure', 'azure']], prompt: true %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :description, input_html: { rows: @organization.persisted? ? 5 : 8 } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :corporate, input_html: { disabled: @organization.corporate } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :logo_style, collection: organization_logo_style_options, include_blank: false %>
+        </div>
+      </div>
 
       <%= render 'image_input', f: f %>
+
+      <%= render 'ldap_config', f: f %>
     </div>
-    <div class="col-md-6">
-      <%= f.input :description, input_html: { rows: 5 } %>
+
+    <div class="card-footer">
+      <%= f.input :lock_version, as: :hidden %>
+      <%= f.submit class: 'btn btn-primary' %>
+      <div class="float-right"><%= yield :form_actions %></div>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <%= f.input :corporate, input_html: { disabled: @organization.corporate } %>
-    </div>
-  </div>
-
-  <%= render 'ldap_config', f: f %>
-
-  <hr />
-
-  <div class="form-actions">
-    <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary' %>
-    <div class="pull-right"><%= yield :form_actions %></div>
-  </div>
-<% end %>
+  <% end %>
+</div>

@@ -1,0 +1,2 @@
+module Plans::ResourcesHelper
+end

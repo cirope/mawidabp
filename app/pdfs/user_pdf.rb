@@ -13,7 +13,7 @@ class UserPdf < Prawn::Document
   end
 
   def self.create attributes = nil
-    _pdf = new attributes
+    _pdf = new **Hash(attributes)
 
     _pdf.send :generate
 
@@ -69,14 +69,14 @@ class UserPdf < Prawn::Document
     end
 
     def make_column_data
-      @users.map do |user|
+      @users.preload(organization_roles: :role).map do |user|
         [
           "<b>#{user.user}</b>",
           user.name,
           user.last_name,
           user.email,
           user.function,
-          user.roles.map(&:name).join('; '),
+          user.roles(@current_organization.id).map(&:name).join('; '),
           I18n.t(user.enable? ? 'label.yes' : 'label.no'),
           user.password_changed ? I18n.l(user.password_changed, format: :minimal) : '-',
           user.last_access ? I18n.l(user.last_access, format: :minimal) : '-'

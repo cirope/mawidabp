@@ -9,10 +9,22 @@ env :PATH, ENV['PATH']
 
 job_type :runner_file, 'cd :path && :runner_command -e :environment :task :output'
 
+every 5.minutes do
+  runner_file 'runners/every_5_minutes.rb'
+end
+
 every 1.day, at: '20:00' do
   runner_file 'runners/daily.rb'
 end
 
 every :thursday, at: '20:00' do
   runner_file 'runners/weekly.rb'
+end
+
+every 1.day, at: '03:00' do
+  rake 'licenses:check_subscriptions'
+end
+
+every 1.hour do
+  rake 'licenses:process_webhooks'
 end

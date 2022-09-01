@@ -35,8 +35,8 @@ class QuestionnaireTest < ActiveSupport::TestCase
 
   test 'delete' do
     assert_difference 'Questionnaire.count', -1 do
-      assert_difference 'Question.count', -2 do
-        assert_difference 'AnswerOption.count', -Question::ANSWER_OPTIONS.size do
+      assert_difference 'Question.count', -@questionnaire.questions.count do
+        assert_difference 'AnswerOption.count', -@questionnaire.answer_options.count do
           @questionnaire.destroy
         end
       end
@@ -55,16 +55,14 @@ class QuestionnaireTest < ActiveSupport::TestCase
   end
 
   test 'validates length of attributes' do
-    @questionnaire.name = @questionnaire.email_subject =
-      @questionnaire.email_text = @questionnaire.email_link =
-        @questionnaire.email_clarification = 'abcde' * 52
+    @questionnaire.name =
+      @questionnaire.email_subject =
+      @questionnaire.email_link = 'abcde' * 52
 
     assert @questionnaire.invalid?
     assert_error @questionnaire, :name, :too_long, count: 255
     assert_error @questionnaire, :email_subject, :too_long, count: 255
-    assert_error @questionnaire, :email_text, :too_long, count: 255
     assert_error @questionnaire, :email_link, :too_long, count: 255
-    assert_error @questionnaire, :email_clarification, :too_long, count: 255
   end
 
   test 'validates unique attributes' do
@@ -72,5 +70,37 @@ class QuestionnaireTest < ActiveSupport::TestCase
 
     assert @questionnaire.invalid?
     assert_error @questionnaire, :name, :taken
+  end
+
+  test 'clone from other questionnaire' do
+    cloned = Questionnaire.new
+    cloned.clone_from @questionnaire
+    cloned.name += ' cloned' # unique name
+
+    assert_difference 'Questionnaire.count' do
+      assert_difference 'Question.count', @questionnaire.questions.count do
+        assert_difference 'AnswerOption.count', @questionnaire.answer_options.count do
+          cloned.save
+        end
+      end
+    end
+
+    cloned.reload
+    %i(
+      organization_id pollable_type email_text email_link email_subject
+      email_clarification
+    ).each do |attr|
+      assert_equal @questionnaire.send(attr).to_s, cloned.send(attr).to_s, attr
+    end
+  end
+
+  test 'cannot destroy with answered polls' do
+    @questionnaire.polls.update_all(answered: true)
+
+    assert_no_difference 'Questionnaire.count' do
+      @questionnaire.destroy
+    end
+
+    assert_error @questionnaire, :base, :cannot_destroy_with_answered_poll
   end
 end

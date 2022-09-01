@@ -14,45 +14,33 @@
   # * GET /oportunities
   def index
     @title = t 'oportunity.index_title'
-    default_conditions = [
-      [
-        [
-          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL",
-          "#{Oportunity.quoted_table_name}.#{Oportunity.qcn('final')} = :boolean_false"
-        ].join(' AND '),
-        [
-          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
-          "#{Oportunity.quoted_table_name}.#{Oportunity.qcn('final')} = :boolean_true"
-        ].join(' AND ')
-      ].map {|condition| "(#{condition})"}.join(' OR ')
-    ]
-    parameters = { :boolean_true => true, :boolean_false => false }
 
-    if params[:control_objective].to_i > 0
-      default_conditions << "#{Weakness.quoted_table_name}.#{Weakness.qcn('control_objective_item_id')} = " +
-        ":control_objective_id"
-      parameters[:control_objective_id] = params[:control_objective].to_i
-    end
-
-    if params[:review].to_i > 0
-      default_conditions << "#{Review.quoted_table_name}.#{Review.qcn('id')} = :review_id"
-      parameters[:review_id] = params[:review].to_i
-    end
-
-    build_search_conditions Oportunity,
-      default_conditions.map { |c| "(#{c})" }.join(' AND ')
-
-    @oportunities = Oportunity.list.includes(
+    default_scope = Oportunity.list.includes(
       :work_papers, :tags,
-      :control_objective_item => {
-        :review => [:period, :plan_item, :conclusion_final_review]
+      control_objective_item: {
+        review: [:period, :plan_item, :conclusion_final_review]
       }
-    ).where([@conditions, parameters]).order(
-      @order_by || [
-        "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
-        "#{Oportunity.quoted_table_name}.#{Oportunity.qcn('review_code')} ASC"
-      ]
-    ).references(control_objective_item: :review).page(params[:page])
+    ).execution_list
+
+    if (co_id = params[:control_objective].to_i).positive?
+      default_scope = default_scope.where control_objective_item_id: co_id
+    end
+
+    if (review_id = params[:review].to_i).positive?
+      default_scope = default_scope.where(
+        Review.table_name => { id: review_id }
+      )
+    end
+
+    @oportunities = default_scope.search(
+      **search_params
+    ).order_by(
+      order_param
+    ).references(
+      control_objective_item: :review
+    ).merge(
+      Review.allowed_by_business_units
+    ).page params[:page]
 
     respond_to do |format|
       format.html
@@ -67,7 +55,7 @@
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json # show.json.jbuilder
+      format.js   # show.js.erb
     end
   end
 
@@ -157,8 +145,8 @@
 
     def oportunity_params
       params.require(:oportunity).permit(
-        :control_objective_item_id, :review_code, :title, :description, :answer,
-        :audit_comments, :follow_up_date, :state, :organization_date,
+        :control_objective_item_id, :review_code, :title, :description, :brief,
+        :answer, :audit_comments, :follow_up_date, :state, :organization_date,
         :solution_date, :repeated_of_id, :origination_date, :skip_work_paper,
         :lock_version,
         business_unit_ids: [],

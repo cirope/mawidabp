@@ -2,8 +2,15 @@
 log/
 private/
 public/help
+scripts/secret
 tmp/
 uploads/
 
 # Ignore application configuration
 config/application.yml
+
+# Ignore byebugHistory
+.byebug_history
+
+# Ignore ./vscode
+.vscode/

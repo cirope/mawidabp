@@ -8,9 +8,9 @@ class NewsController < ApplicationController
   before_action :set_title, except: [:destroy]
 
   def index
-    build_search_conditions News
-
-    @news = news.includes(:tags).where(@conditions).references(:tags).order(published_at: :desc).page params[:page]
+    @news = news.includes(:tags).search(
+      **search_params
+    ).references(:tags).order(published_at: :desc).page params[:page]
   end
 
   def show

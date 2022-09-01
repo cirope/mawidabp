@@ -1,15 +1,13 @@
 require 'test_helper'
+require 'minitest/mock'
 
 class AuthenticationTest < ActionController::TestCase
   setup do
-    @user = users :administrator
-    @organization = organizations :cirope
-    @params = { user: @user.user, password: 'admin123' }
-    Organization.current_id = @organization.id
-  end
-
-  teardown do
-    Organization.current_id = nil
+    @user                = users :administrator
+    @organization        = organizations :cirope
+    @params              = { user: @user.user, password: 'admin123' }
+    @external_saml_url   = 'https://login.saml/saml2'
+    Current.organization = @organization
   end
 
   test 'should authenticate' do
@@ -17,10 +15,18 @@ class AuthenticationTest < ActionController::TestCase
     assert_valid_authentication
   end
 
+  test 'shuld authenticate by email' do
+    @params = { user: @user.email, password: 'admin123' }
+
+    assert_valid_authentication redirect_url: Group, admin_mode: true
+  ensure
+    @params = { user: @user.user, password: 'admin123' }
+  end
+
   test 'should authenticate via ldap' do
     @organization = organizations :google
     @params = { user: @user.user, password: 'admin123' }
-    Organization.current_id = @organization.id
+    Current.organization = @organization
 
     assert_valid_authentication
   end
@@ -31,7 +37,7 @@ class AuthenticationTest < ActionController::TestCase
     username = ldap_config.login_mask % { user: @user.user, basedn: ldap_config.basedn }
     @params = { user: username, password: 'admin123' }
     @organization = organizations :alphabet
-    Organization.current_id = @organization.id
+    Current.organization = @organization
 
     @user.organization_roles.create! role_id: role.id, organization_id: role.organization_id
 
@@ -39,7 +45,7 @@ class AuthenticationTest < ActionController::TestCase
   end
 
   test 'no group admin user attempt login in admin mode' do
-    request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
+    request.host = [APP_ADMIN_PREFIXES.first, URL_HOST].join('.')
     @user.update_column :group_admin, false
 
     assert_invalid_authentication admin_mode: true
@@ -60,17 +66,18 @@ class AuthenticationTest < ActionController::TestCase
   test 'should show message must change the password' do
     @user.update_column :password_changed, get_test_parameter(:password_expire_time).to_i.next.days.ago
 
-    assert_valid_authentication redirect_url: [:edit, 'users_password', id: @user],
+    assert_valid_authentication redirect_url: [:edit, :users_password, id: @user],
       message: 'message.must_change_the_password'
   end
 
   test 'should show message pending poll' do
-    Poll.first.update_column :user_id, @user.id
+    Poll.answered(false).first.update_column :user_id, @user.id
+
     poll = @user.first_pending_poll
-    poll_redirect = ['edit', poll, token: poll.access_token]
+    poll_redirect = [:edit, poll, token: poll.access_token]
 
     assert_valid_authentication redirect_url: poll_redirect,
-      message: 'polls.must_answer_poll'
+      message: ['polls.has_unanswered', count: @user.list_unanswered_polls.count]
   end
 
   test 'should not login with invalid password' do
@@ -83,7 +90,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should not authenticate via ldap with invalid password' do
     @organization = organizations :google
     @params = { user: @user.user, password: 'wrong password' }
-    Organization.current_id = @organization.id
+    Current.organization = @organization
 
     assert_invalid_authentication
   end
@@ -91,7 +98,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should show a message when ldap is not reacheble' do
     @organization = organizations :google
     @params = { user: @user.user, password: 'wrong password' }
-    Organization.current_id = @organization.id
+    Current.organization = @organization
 
     @organization.ldap_config.update port: 1
 
@@ -152,11 +159,442 @@ class AuthenticationTest < ActionController::TestCase
   test 'first login' do
     @user.update_column :last_access, nil
 
-    assert_valid_authentication redirect_url: [:edit, 'users_password', id: @user],
+    assert_valid_authentication redirect_url: [:edit, :users_password, id: @user],
       message: 'message.must_change_the_password'
 
     login_record = LoginRecord.find_by user: @user, organization: @organization
     assert_kind_of LoginRecord, login_record
+  end
+
+  #authentication with saml
+
+  test 'should create user with roles and redirect to welcome - saml authentication' do
+    @organization               = organizations :cirope
+    @organization.saml_provider = 'azure'
+
+    @organization.save!
+
+    Current.group = @organization.group
+    response_stub =
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
+
+    mock = Minitest::Mock.new
+
+    mock.expect :nameid, 'email'
+
+    hash_attributes = get_hash_attributes name:      'new_user@azure.com',
+                                          givenname: 'new_user_name',
+                                          surname:   'new_user_surname',
+                                          groups:    ['SUPERVISOR']
+
+    mock.expect :attributes, hash_attributes
+    mock.expect :is_valid?, true
+
+    IdpSettingsAdapter.stub :saml_settings, response_stub do
+      OneLogin::RubySaml::Response.stub :new, mock do
+        assert_difference ['User.count', 'OrganizationRole.count'] do
+          assert_valid_authentication
+
+          last_user = User.last
+
+          assert_equal last_user.user, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, '')
+          assert_equal last_user.name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first
+          assert_equal last_user.email, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first
+          assert_equal last_user.last_name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first
+          assert last_user.enable
+          assert_equal last_user.organization_roles.first.role, roles(:supervisor_role)
+        end
+      end
+    end
+  end
+
+  test 'should create user with default roles and redirect to welcome - saml authentication' do
+    skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.present?
+
+    @organization               = organizations :cirope
+    @organization.saml_provider = 'azure'
+
+    @organization.save!
+
+    Current.group = @organization.group
+
+    DEFAULT_SAML_ROLES.each do |role_name|
+      new_role = Role.new name: role_name,
+                          organization: @organization
+
+      new_role.inject_auth_privileges(Hash.new(Hash.new(true)))
+
+      new_role.save!
+    end
+
+    response_stub =
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
+
+    mock = Minitest::Mock.new
+
+    mock.expect :nameid, 'email'
+
+    hash_attributes = get_hash_attributes name:      'new_user@azure.com',
+                                          givenname: 'new_user_name',
+                                          surname:   'new_user_surname',
+                                          groups:    []
+
+    mock.expect :attributes, hash_attributes
+    mock.expect :is_valid?, true
+
+    default_roles = Role.where(organization: @organization, name: DEFAULT_SAML_ROLES).sort_by(&:id).to_a
+
+    IdpSettingsAdapter.stub :saml_settings, response_stub do
+      OneLogin::RubySaml::Response.stub :new, mock do
+        assert_difference 'User.count' do
+          assert_difference 'OrganizationRole.count', default_roles.count do
+            assert_valid_authentication
+
+            last_user = User.last
+
+            assert_equal last_user.user, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, '')
+            assert_equal last_user.name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first
+            assert_equal last_user.email, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first
+            assert_equal last_user.last_name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first
+            assert last_user.enable
+
+            new_user_roles = last_user.organization_roles.where(organization: @organization).map {|o_r| o_r.role}.sort_by(&:id)
+
+            assert_equal default_roles, new_user_roles
+          end
+        end
+      end
+    end
+  end
+
+  test 'should not create user when dont have DEFAULT_SAML_ROLES - saml authentication' do
+    skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.blank?
+
+    @organization               = organizations :cirope
+    @organization.saml_provider = 'azure'
+
+    @organization.save!
+
+    response_stub =
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
+
+    mock = Minitest::Mock.new
+
+    mock.expect :nameid, 'email'
+
+    hash_attributes = get_hash_attributes name:      'new_user@azure.com',
+                                          givenname: 'new_user_name',
+                                          surname:   'new_user_surname',
+                                          groups:    []
+
+    mock.expect :attributes, hash_attributes
+    mock.expect :is_valid?, true
+
+    IdpSettingsAdapter.stub :saml_settings, response_stub do
+      OneLogin::RubySaml::Response.stub :new, mock do
+        assert_no_difference ['User.count', 'OrganizationRole.count', 'LoginRecord.count'] do
+          assert_invalid_authentication redirect_url: Hash[controller: 'sessions', action: 'new', saml_error: true]
+        end
+      end
+    end
+  end
+
+  #same in update
+  test 'should raise exception when have blank attribute in response - saml authentication' do
+    @organization               = organizations :cirope
+    @organization.saml_provider = 'azure'
+
+    @organization.save!
+
+    response_stub =
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
+
+    mock = Minitest::Mock.new
+
+    mock.expect :nameid, 'email'
+
+    hash_attributes = get_hash_attributes name:      '',
+                                          givenname: 'new_user_name',
+                                          surname:   'new_user_surname',
+                                          groups:    ['SUPERVISOR']
+
+    mock.expect :attributes, hash_attributes
+    mock.expect :is_valid?, true
+
+    IdpSettingsAdapter.stub :saml_settings, response_stub do
+      OneLogin::RubySaml::Response.stub :new, mock do
+        assert_raise ActiveRecord::RecordInvalid do
+          @auth = Authentication.new @params, request, session, @organization, false
+        end
+      end
+    end
+  end
+
+  #same in update
+  test 'should not create user when saml_response is invalid - saml authentication' do
+    @organization               = organizations :cirope
+    @organization.saml_provider = 'azure'
+
+    @organization.save!
+
+    response_stub =
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
+
+    mock = Minitest::Mock.new
+
+    mock.expect :nameid, 'email'
+
+    hash_attributes = get_hash_attributes name:      'new_user@azure.com',
+                                          givenname: 'new_user_name',
+                                          surname:   'new_user_surname',
+                                          groups:    []
+
+    mock.expect :attributes, hash_attributes
+    mock.expect :is_valid?, false
+
+    IdpSettingsAdapter.stub :saml_settings, response_stub do
+      OneLogin::RubySaml::Response.stub :new, mock do
+        assert_no_difference ['User.count', 'OrganizationRole.count', 'LoginRecord.count'] do
+          assert_invalid_authentication redirect_url: Hash[controller: 'sessions', action: 'new', saml_error: true]
+        end
+      end
+    end
+  end
+
+  test 'should update user with roles and redirect to welcome - saml authentication' do
+    @organization               = organizations :cirope
+    @organization.saml_provider = 'azure'
+
+    @organization.save!
+
+    response_stub =
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
+
+    mock = Minitest::Mock.new
+
+    mock.expect :nameid, 'email'
+
+    user_to_update  = users :disabled
+    hash_attributes = get_hash_attributes name:      user_to_update.email,
+                                          givenname: 'updated_name',
+                                          surname:   'updated_surname',
+                                          groups:    ['SUPERVISOR']
+
+    mock.expect :attributes, hash_attributes
+    mock.expect :is_valid?, true
+
+    IdpSettingsAdapter.stub :saml_settings, response_stub do
+      OneLogin::RubySaml::Response.stub :new, mock do
+        assert_no_difference ['User.count', 'OrganizationRole.count'] do
+          assert_valid_authentication
+
+          user_to_update.reload
+
+          assert_equal user_to_update.name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first
+          assert_equal user_to_update.last_name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first
+          assert user_to_update.enable
+          assert_equal user_to_update.organization_roles.first.role, roles(:supervisor_role)
+        end
+      end
+    end
+  end
+
+  test 'should update user with roles and redirect to poll - saml authentication' do
+    @organization               = organizations :cirope
+    @organization.saml_provider = 'azure'
+
+    @organization.save!
+
+    response_stub =
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
+
+    mock = Minitest::Mock.new
+
+    mock.expect :nameid, 'email'
+
+    user_to_update  = users :poll
+    hash_attributes = get_hash_attributes name:      "#{user_to_update.user}@test.com",
+                                          givenname: 'updated_name',
+                                          surname:   'updated_surname',
+                                          groups:    ['SUPERVISOR']
+
+    mock.expect :attributes, hash_attributes
+    mock.expect :is_valid?, true
+
+    IdpSettingsAdapter.stub :saml_settings, response_stub do
+      OneLogin::RubySaml::Response.stub :new, mock do
+        assert_no_difference ['User.count', 'OrganizationRole.count'] do
+          poll = user_to_update.list_unanswered_polls.first
+
+          assert_valid_authentication redirect_url: [:edit, poll, token: poll.access_token], message: ['polls.has_unanswered', { count: user_to_update.list_unanswered_polls.count }]
+
+          user_to_update.reload
+
+          assert_equal user_to_update.user, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, '')
+          assert_equal user_to_update.name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first
+          assert_equal user_to_update.email, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first
+          assert_equal user_to_update.last_name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first
+          assert user_to_update.enable
+          assert_equal user_to_update.organization_roles.first.role, roles(:supervisor_role)
+        end
+      end
+    end
+  end
+
+  test 'should update user with default roles and redirect to welcome - saml authentication' do
+    skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.present?
+
+    @organization               = organizations :cirope
+    @organization.saml_provider = 'azure'
+
+    @organization.save!
+
+    DEFAULT_SAML_ROLES.each do |role_name|
+      new_role = Role.new name: role_name,
+                          organization: @organization
+
+      new_role.inject_auth_privileges(Hash.new(Hash.new(true)))
+
+      new_role.save!
+    end
+
+    response_stub =
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
+
+    mock = Minitest::Mock.new
+
+    mock.expect :nameid, 'email'
+
+    user_to_update = users :disabled
+
+    organization_roles(:admin_role_for_disabled_in_cirope).destroy!
+
+    default_roles   = Role.where(organization: @organization, name: DEFAULT_SAML_ROLES).sort_by(&:id).to_a
+    hash_attributes = get_hash_attributes name:      user_to_update.email,
+                                          givenname: 'updated_name',
+                                          surname:   'updated_surname',
+                                          groups:    []
+
+    mock.expect :attributes, hash_attributes
+    mock.expect :is_valid?, true
+
+    IdpSettingsAdapter.stub :saml_settings, response_stub do
+      OneLogin::RubySaml::Response.stub :new, mock do
+        assert_no_difference 'User.count' do
+          assert_difference 'OrganizationRole.count', default_roles.count do
+            assert_valid_authentication
+
+            user_to_update.reload
+
+            assert_equal user_to_update.name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first
+            assert_equal user_to_update.last_name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first
+            assert user_to_update.enable
+
+            new_user_roles = user_to_update.organization_roles.where(organization: @organization).map {|o_r| o_r.role}.sort_by(&:id)
+
+            assert_equal default_roles, new_user_roles
+          end
+        end
+      end
+    end
+  end
+
+  test 'should update user with default roles and redirect to poll - saml authentication' do
+    skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.present?
+
+    @organization               = organizations :cirope
+    @organization.saml_provider = 'azure'
+
+    @organization.save!
+
+    DEFAULT_SAML_ROLES.each do |role_name|
+      new_role = Role.new name: role_name,
+                          organization: @organization
+
+      new_role.inject_auth_privileges(Hash.new(Hash.new(true)))
+
+      new_role.save!
+    end
+
+    response_stub =
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
+
+    mock = Minitest::Mock.new
+
+    mock.expect :nameid, 'email'
+
+    user_to_update = users :poll
+
+    organization_roles(:auditor_role_for_poll_in_cirope).destroy!
+
+    default_roles   = Role.where(organization: @organization, name: DEFAULT_SAML_ROLES).sort_by(&:id).to_a
+    hash_attributes = get_hash_attributes name:      "#{user_to_update.user}@test.com",
+                                          givenname: 'updated_name',
+                                          surname:   'updated_surname',
+                                          groups:    []
+
+    mock.expect :attributes, hash_attributes
+    mock.expect :is_valid?, true
+
+    IdpSettingsAdapter.stub :saml_settings, response_stub do
+      OneLogin::RubySaml::Response.stub :new, mock do
+        assert_no_difference 'User.count' do
+          assert_difference 'OrganizationRole.count', default_roles.count do
+            poll = user_to_update.list_unanswered_polls.first
+
+            assert_valid_authentication redirect_url: [:edit, poll, token: poll.access_token], message: ['polls.has_unanswered', { count: user_to_update.list_unanswered_polls.count }]
+
+            user_to_update.reload
+
+            assert_equal user_to_update.user, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, '')
+            assert_equal user_to_update.name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first
+            assert_equal user_to_update.email, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first
+            assert_equal user_to_update.last_name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first
+            assert user_to_update.enable
+
+            new_user_roles = user_to_update.organization_roles.where(organization: @organization).map {|o_r| o_r.role}.sort_by(&:id)
+
+            assert_equal default_roles, new_user_roles
+          end
+        end
+      end
+    end
+  end
+
+  test 'should not update user because dont have roles and redirect to login - saml authentication' do
+    skip unless USE_SCOPE_CYCLE && DEFAULT_SAML_ROLES.blank?
+
+    @organization               = organizations :cirope
+    @organization.saml_provider = 'azure'
+
+    @organization.save!
+
+    response_stub =
+      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
+
+    mock = Minitest::Mock.new
+
+    mock.expect :nameid, 'email'
+
+    user_to_update   = users :administrator
+    roles_to_destroy = user_to_update.organization_roles.where(organization: @organization).count
+    hash_attributes  = get_hash_attributes name:      "#{user_to_update.user}@test.com",
+                                           givenname: 'updated_name',
+                                           surname:   'updated_surname',
+                                           groups:    []
+
+    mock.expect :attributes, hash_attributes
+    mock.expect :is_valid?, true
+
+    IdpSettingsAdapter.stub :saml_settings, response_stub do
+      OneLogin::RubySaml::Response.stub :new, mock do
+        assert_no_difference ['User.count', 'LoginRecord.count'] do
+          assert_difference 'OrganizationRole.count', (roles_to_destroy * -1) do
+            assert_invalid_authentication redirect_url: Hash[controller: 'sessions', action: 'new', saml_error: true]
+          end
+        end
+      end
+    end
   end
 
   private
@@ -167,7 +605,16 @@ class AuthenticationTest < ActionController::TestCase
       assert_difference 'LoginRecord.count' do
         assert @auth.authenticated?
         assert_equal redirect_url || Hash[controller: 'welcome', action: 'index'], @auth.redirect_url
-        assert_equal I18n.t(*message || 'message.welcome'), @auth.message
+
+        if message && message.respond_to?(:last) && message.last.is_a?(Hash)
+          options = message.pop
+
+          assert_equal I18n.t(*message, **options), @auth.message
+        elsif message
+          assert_equal I18n.t(*message), @auth.message
+        else
+          assert_nil @auth.message
+        end
       end
     end
 
@@ -185,5 +632,14 @@ class AuthenticationTest < ActionController::TestCase
     def error_record error_type
       ErrorRecord.where(user: @user, error: ErrorRecord::ERRORS[error_type]).
         order('created_at DESC').first
+    end
+
+    def get_hash_attributes name: nil, givenname: nil, surname: nil, groups: []
+      {
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' => name,
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' => givenname,
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname' => surname,
+        'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups' => groups
+      }
     end
 end

@@ -1,13 +1,13 @@
 <%= render partial: 'shared/search', locals: {
   options: {},
-  columns: @query.blank? ? BestPractice::COLUMNS_FOR_SEARCH.keys : @columns
+  columns: search_columns_for_model(BestPractice)
 } %>
-<table class="table table-condensed table-striped table-hover">
+<table class="table table-sm table-striped table-hover">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column BestPractice.human_attribute_name('name'), nil, 'name' %>
-      <%= make_not_available_column BestPractice.human_attribute_name('description'), { :class => 'hidden-xs' } %>
-      <th colspan="3" class="text-right"><%= link_to_search %></th>
+      <%= make_not_available_column BestPractice.human_attribute_name('description'), { :class => 'd-none d-md-table-cell' } %>
+      <th colspan="4" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
 
@@ -18,10 +18,15 @@
           <%= best_practice_shared_icon best_practice %>
           <%= super_truncate best_practice.name, 40 %>
         </td>
-        <td class="hidden-xs"><%= super_truncate(best_practice.description, 40) %></td>
-        <td><%= link_to_show best_practice %></td>
-        <td><%= link_to_edit edit_best_practice_path(best_practice) %></td>
-        <td><%= link_to_destroy best_practice %></td>
+        <td class="d-none d-md-table-cell"><%= super_truncate(best_practice.description, 40) %></td>
+        <td class="text-right">
+          <%= link_to [best_practice, format: :csv], title: t('label.download_csv') do %>
+            <%= icon 'fas', 'file-download' %>
+          <% end %>
+        </td>
+        <td class="text-right"><%= link_to_show best_practice %></td>
+        <td class="text-right"><%= link_to_edit edit_best_practice_path(best_practice) %></td>
+        <td class="text-right"><%= link_to_destroy best_practice %></td>
       </tr>
     <% end %>
   </tbody>

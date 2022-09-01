@@ -31,6 +31,10 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
         :sectors => 'Area 51',
         :external => false,
         :require_tag => false,
+        :require_counts => false,
+        :hide_review_logo => false,
+        :independent_identification => false,
+        :shared_business_units => false,
         :organization_id => @business_unit_type.organization_id
       )
     end

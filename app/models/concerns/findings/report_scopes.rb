@@ -4,11 +4,15 @@ module Findings::ReportScopes
   included do
     scope :awaiting,          -> { where state: Finding::STATUS[:awaiting] }
     scope :being_implemented, -> { where state: Finding::STATUS[:being_implemented] }
+    scope :implemented,       -> { where state: Finding::STATUS[:implemented] }
     scope :not_incomplete,    -> { where "state <> ?", Finding::STATUS[:incomplete] }
     scope :internal_audit,    -> { with_business_unit_external false }
     scope :external_audit,    -> { with_business_unit_external true }
+
     scope :with_status_for_report, -> {
-      where state: Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).values
+      exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS
+
+      where state: Finding::STATUS.except(*exclude).values
     }
   end
 
@@ -28,7 +32,7 @@ module Findings::ReportScopes
         order && [
           "#{Period.quoted_table_name}.#{Period.qcn('start')} ASC",
           "#{Period.quoted_table_name}.#{Period.qcn('end')} ASC"
-        ]
+        ].map { |o| Arel.sql o }
       )
     end
 
@@ -58,6 +62,18 @@ module Findings::ReportScopes
       ).where(
         "#{BusinessUnitType.table_name}.external" => external
       ).references(:business_unit_types)
+    end
+
+    def with_repeated_status_for_report(execution: false)
+      except = if execution
+                 [:incomplete, :notify, :unconfirmed, :confirmed, :repeated]
+               else
+                 [:repeated]
+               end
+
+      exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - except
+
+      where state: Finding::STATUS.except(*exclude).values
     end
 
     def for_user user_id

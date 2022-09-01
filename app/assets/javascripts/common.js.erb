@@ -162,7 +162,7 @@ var Helper = {
      * Oculta el elemento que indica que algo se está cargando
      */
   hideLoading: function(element) {
-    $('.loading-caption').addClass('hidden');
+    $('.loading-caption').attr('hidden', true);
 
     $(element).removeAttr('disabled');
   },
@@ -230,7 +230,7 @@ var Helper = {
      * Muestra una imagen para indicar que una operación está en curso
      */
   showLoading: function(element) {
-    $('.loading-caption').removeClass('hidden');
+    $('.loading-caption').removeAttr('hidden');
 
     $(element).attr('disabled', true);
   },
@@ -332,7 +332,7 @@ var Search = {
       var columnNamesDiv = $('#search_column_names');
 
       if(e.hasClass('selected')) {
-        e.addClass('disabled').removeClass('selected');
+        e.attr('disabled', true).removeClass('selected');
 
         columnNamesDiv.find(hiddenFilter).remove();
       } else {
@@ -345,7 +345,7 @@ var Search = {
           columnNamesDiv.append(hiddenColumn);
         });
 
-        e.addClass('selected').removeClass('disabled');
+        e.addClass('selected').removeAttr('disabled');
       }
 
       $('#search_query').focus();
@@ -362,7 +362,7 @@ var Search = {
         if($(this).hasClass('filterable')) {
           $(this).addClass('selected');
         } else {
-          $(this).addClass('not_available');
+          $(this).addClass('not-available');
         }
       });
 

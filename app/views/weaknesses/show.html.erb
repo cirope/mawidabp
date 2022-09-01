@@ -1,123 +1,132 @@
-<p>
+<p class="mb-1">
   <strong><%= Review.model_name.human %>:</strong>
   <%= @weakness.review.try(:identification) %>
 </p>
 
 <div>
   <strong><%= ControlObjective.model_name.human %>:</strong>
-  <%= simple_format @weakness.control_objective_item.try(:to_s) %>
+  <%= simple_format @weakness.control_objective_item.try(:to_s), class: 'mb-1' %>
 </div>
 
-<p>
+<p class="mb-1">
   <strong><%= Weakness.human_attribute_name :review_code %>:</strong>
   <%= @weakness.review_code %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= Weakness.human_attribute_name :title %>:</strong>
   <%= @weakness.title %>
 </p>
 
 <div>
   <strong><%= Weakness.human_attribute_name :description %>:</strong>
-  <%= simple_format @weakness.description %>
+  <%= simple_format @weakness.description, class: 'mb-1' %>
 </div>
+
+<% if USE_SCOPE_CYCLE %>
+  <div>
+    <strong><%= Weakness.human_attribute_name :brief %>:</strong>
+    <%= simple_format @weakness.brief, class: 'mb-1' %>
+  </div>
+<% end %>
 
 <div>
   <strong><%= Weakness.human_attribute_name :audit_recommendations %>:</strong>
-  <%= simple_format @weakness.audit_recommendations %>
+  <%= simple_format @weakness.audit_recommendations, class: 'mb-1' %>
 </div>
+
+<% if %w(bic).include? Current.conclusion_pdf_format %>
+  <div>
+    <strong><%= Weakness.human_attribute_name :year %>:</strong>
+    <%= @weakness.year.to_s %>
+  </div>
+
+  <div>
+    <strong><%= Weakness.human_attribute_name :nsisio %>:</strong>
+    <%= @weakness.nsisio.to_s %>
+  </div>
+
+  <div>
+    <strong><%= Weakness.human_attribute_name :nobs %>:</strong>
+    <%= @weakness.nobs.to_s %>
+  </div>
+<% end %>
 
 <div>
   <strong><%= Weakness.human_attribute_name :answer %>:</strong>
-  <%= simple_format @weakness.answer %>
+  <%= simple_format @weakness.answer, class: 'mb-1' %>
 </div>
 
 <% unless HIDE_WEAKNESS_EFFECT %>
   <div>
     <strong><%= Weakness.human_attribute_name :effect %>:</strong>
-    <%= simple_format @weakness.effect %>
+    <%= simple_format @weakness.effect, class: 'mb-1' %>
   </div>
 <% end %>
 
-<p>
+<p class="mb-1">
   <strong><%= Weakness.human_attribute_name :risk %>:</strong>
   <%= @weakness.risk_text %>
 </p>
 
-<% unless HIDE_WEAKNESS_PRIORITY %>
-  <p>
-    <strong><%= Weakness.human_attribute_name :priority %>:</strong>
-    <%= @weakness.priority_text %>
-  </p>
-<% end %>
+<p class="mb-1">
+  <strong><%= Weakness.human_attribute_name :priority %>:</strong>
+  <%= @weakness.priority_text %>
+</p>
 
 <div>
   <strong><%= Weakness.human_attribute_name :audit_comments %>:</strong>
-  <%= simple_format @weakness.audit_comments %>
+  <%= simple_format @weakness.audit_comments, class: 'mb-1' %>
 </div>
 
-<p>
+<p class="mb-1">
   <strong><%= Weakness.human_attribute_name :state %>:</strong>
   <%= @weakness.state_text %>
 </p>
 
-<% if SHOW_WEAKNESS_PROGRESS %>
-  <p>
-    <strong><%= Weakness.human_attribute_name :progress %>:</strong>
-
-  </p>
-
-  <div class="progress">
-    <div class="progress-bar" role="progressbar" style="width: <%= @weakness.progress.to_i %>%;">
-      <%= @weakness.progress.to_i %>%
-    </div>
-  </div>
-<% end %>
-
-<p>
+<p class="mb-1">
   <strong><%= Weakness.human_attribute_name :origination_date %>:</strong>
   <%=l @weakness.origination_date, :format => :long if @weakness.origination_date %>
 </p>
 
-<p>
-  <strong><%= Weakness.human_attribute_name(:follow_up_date) %>:</strong>
+<p class="mb-1">
+  <strong><%= Weakness.human_attribute_name :follow_up_date %>:</strong>
   <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= Weakness.human_attribute_name :solution_date %>:</strong>
   <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
 </p>
 
 <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
-  <p>
+  <p class="mb-1">
     <strong><%= Weakness.human_attribute_name :compliance %>:</strong>
     <%= t "label.#{@weakness.compliance}" if @weakness.compliance.present? %>
   </p>
 
-  <p>
+  <p class="mb-1">
     <strong><%= Weakness.human_attribute_name :operational_risk %>:</strong>
     <%= Array(@weakness.operational_risk).to_sentence %>
   </p>
 
-  <p>
+  <p class="mb-1">
     <strong><%= Weakness.human_attribute_name :impact %>:</strong>
     <%= Array(@weakness.impact).to_sentence %>
   </p>
 
-  <p>
+  <p class="mb-1">
     <strong><%= Weakness.human_attribute_name :internal_control_components %>:</strong>
     <%= Array(@weakness.internal_control_components).to_sentence %>
   </p>
 <% end %>
 
-<h3><%= t('finding.responsibles', :count => @weakness.users.size) %></h3>
+<h5 class="mt-3"><%= t('finding.responsibles', :count => @weakness.users.size) %></h5>
 <%= finding_responsibles_list(@weakness) %>
 
 <% unless (repeated_ancestors = @weakness.repeated_ancestors).blank? %>
-  <h3><%= t('finding.repeated_ancestors') %></h3>
-  <ul>
+  <h5 class="mt-3"><%= t('finding.repeated_ancestors') %></h5>
+  <ul class="mb-1">
     <% repeated_ancestors.each do |repeated_ancestor| %>
       <li>
         <%= link_to(
@@ -130,8 +139,9 @@
 <% end %>
 
 <% unless (repeated_children = @weakness.repeated_children).blank? %>
-  <h3><%= t('finding.repeated_children') %></h3>
-  <ul>
+  <h5 class="mt-3"><%= t('finding.repeated_children') %></h5>
+
+  <ul class="mb-1">
     <% repeated_children.each do |repeated_child| %>
       <li>
         <%= link_to(
@@ -144,11 +154,11 @@
 <% end %>
 
 <% unless @weakness.taggings.blank? %>
-  <h3>
+  <h5 class="mt-3">
     <%= Tag.model_name.human count: 0 %>
-  </h3>
+  </h5>
 
-  <ul class="list-unstyled">
+  <ul class="list-unstyled mb-1">
     <% @weakness.taggings.each do |tagging| %>
       <%= tagging_item tagging %>
     <% end %>
@@ -156,11 +166,11 @@
 <% end %>
 
 <% unless @weakness.finding_relations.blank? %>
-  <h3>
+  <h5 class="mt-3">
     <%= t('finding.finding_relations') %>
-  </h3>
+  </h5>
 
-  <table class="table table-condensed table-striped table-hover">
+  <table class="table table-sm table-striped table-hover mt-3">
     <thead>
       <tr>
         <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
@@ -179,11 +189,11 @@
 <% end %>
 
 <% unless @weakness.inverse_finding_relations.blank? %>
-  <h3>
+  <h5 class="mt-3">
     <%= t('finding.inverse_finding_relations') %>
-  </h3>
+  </h5>
 
-  <table class="table table-condensed table-striped table-hover">
+  <table class="table table-sm table-striped table-hover mt-3">
     <thead>
       <tr>
         <th><%= FindingRelation.human_attribute_name :finding_id %></th>
@@ -202,23 +212,51 @@
 <% end %>
 
 <% unless @weakness.business_units.blank? %>
-  <h3>
+  <h5 class="mt-3">
     <%= BusinessUnit.model_name.human count: 0 %>
-  </h3>
+  </h5>
 
-  <ul>
+  <ul class="mb-1">
     <% @weakness.business_units.each do |bu| %>
       <li><%= bu.name %></li>
     <% end %>
   </ul>
 <% end %>
 
-<% unless @weakness.finding_answers.blank? %>
-  <h3>
-    <%= t('finding.finding_answers') %>
-  </h3>
+<% if @weakness.tasks.any? %>
+  <h5 class="mt-3">
+    <%= Task.model_name.human count: 0 %>
+  </h5>
 
-  <table class="table table-condensed table-striped table-hover">
+  <table class="table table-sm table-striped table-hover mt-3">
+    <thead>
+      <tr>
+        <th><%= Task.human_attribute_name 'code' %></th>
+        <th><%= Task.human_attribute_name 'description' %></th>
+        <th><%= Task.human_attribute_name 'status' %></th>
+        <th><%= Task.human_attribute_name 'due_on' %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @weakness.tasks.each do |task| %>
+        <tr>
+          <td><%= task.code %></td>
+          <td><%= task.description %></td>
+          <td><%= t "tasks.status.#{task.status}" %></td>
+          <td><%= l task.due_on %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless @weakness.finding_answers.blank? %>
+  <h5 class="mt-3">
+    <%= t('finding.finding_answers') %>
+  </h5>
+
+  <table class="table table-sm table-striped table-hover mt-3">
     <thead>
       <tr>
         <th><%= User.model_name.human %></th>
@@ -235,17 +273,20 @@
       <% @weakness.finding_answers.each do |finding_answer| %>
         <tr>
           <td><%= finding_answer.user.full_name %></td>
-          <td><%= simple_format finding_answer.answer %></td>
+          <td><%= simple_format finding_answer.answer, class: 'mb-1' %></td>
           <td>
             <%= finding_answer.file_model.try(:file?) ?
-              link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
+              link_to(t('label.download'), finding_answer.file_model.file.url) : '-' %>
           </td>
           <td>
             <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
             <% if finding_answer.commitment_date %>
-              <br />
-              <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
-              <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+              <div class="my-1">
+                <strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+                <span class="d-block">
+                  <%= l(finding_answer.commitment_date, format: :long) %>
+                </span>
+              </div>
             <% end %>
           </td>
         </tr>
@@ -255,8 +296,9 @@
 <% end %>
 
 <% unless @weakness.work_papers.empty? %>
-  <h3><%= WorkPaper.model_name.human(count: 0) %></h3>
-  <table class="table table-condensed table-striped table-hover">
+  <h5 class="mt-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
+
+  <table class="table table-sm table-striped table-hover mt-3">
     <thead>
       <tr>
         <th><%= WorkPaper.human_attribute_name :name %></th>
@@ -272,9 +314,9 @@
           <td><%= wp.name %></td>
           <td><%= wp.code %></td>
           <td><%= wp.number_of_pages %></td>
-          <td><%= simple_format wp.description %></td>
+          <td><%= simple_format wp.description, class: 'mb-1' %></td>
           <td><%= wp.file_model.try(:file?) ?
-            link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
+            link_to(t('label.download'), wp.file_model.file.url) : '-' %></td>
         </tr>
       <% end %>
     </tbody>

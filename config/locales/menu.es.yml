@@ -6,19 +6,25 @@ es:
       organization:
         management: 'Gestión'
         business_units: 'Unidades organizativas'
+        business_unit_kind: 'Tipos de unidad de negocio'
       security_title: 'Seguridad'
       security:
         reports: 'Reportes de seguridad'
         users: 'Usuarios'
         roles: 'Perfiles y Privilegios'
-      best_practices: 'Buenas prácticas'
+      best_practices_title: 'Buenas prácticas'
+      best_practices:
+        best_practices: 'Gestión'
+        control_objectives: 'Objetivos de control'
       settings: 'Configuraciones'
       weakness_templates: 'Plantillas de observaciones'
+      risk_assessment_templates: 'Plantillas evaluación de riesgo'
       tags: 'Etiquetas'
       documents: 'Documentos'
       news: 'Noticias'
       benefits: 'Beneficios / Perjuicios'
       e_mails: 'Correos'
+      activity_groups: 'Actividades'
       questionnaires_title: 'Cuestionarios'
       questionnaires:
         definition: 'Definición'
@@ -28,19 +34,26 @@ es:
     planning:
       periods: 'Periodos'
       resources: 'Recursos'
+      risk_assessments: 'Evaluaciones de riesgo'
       plans: 'Planes de trabajo'
     execution_title: 'Ejecución'
     execution:
       reviews: 'Informes'
-      workflows: 'Programa de trabajo'
+      workflows: 'Programas de trabajo'
+      time_summary: 'Resumen horario'
       control_objectives: 'Objetivos de control'
       weaknesses: 'Observaciones'
       oportunities: 'Oportunidades de mejora'
+      interviews_title: 'Entrevistas'
+      interviews:
+        opening_interviews: 'Entrevistas de inicio'
+        closing_interviews: 'Entrevistas de cierre'
       reports: 'Reportes'
       findings_title: 'Hallazgos'
       findings:
         weaknesses: 'Observaciones'
         oportunities: 'Oportunidades de mejora'
+      memos: 'Informes externos'
     conclusion_title: 'Conclusión'
     conclusion:
       draft_reviews: 'Informes borradores'
@@ -50,6 +63,10 @@ es:
     follow_up:
       pending_findings: 'Hallazgos pendientes'
       complete_findings: 'Hallazgos solucionados'
+      repeated_findings: 'Hallazgos reiterados'
       notifications: 'Notificaciones'
-      reports: 'Reportes'
+      reports_title: 'Reportes'
+      reports:
+        audited: 'Generales'
+        audit: 'Auditoría'
     help_title: 'Ayuda'

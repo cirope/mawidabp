@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 # Clase para probar el modelo "ControlObjective"
@@ -97,5 +99,39 @@ class ControlObjectiveTest < ActiveSupport::TestCase
 
     assert @control_objective.invalid?
     assert_error @control_objective, :control, :blank
+  end
+
+  test 'hide obsolete control objectives' do
+    organization = organizations :cirope
+
+    set_organization organization
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '1'
+
+    @control_objective.update! obsolete: true
+
+    assert_equal ControlObjective.visible.count,  ControlObjective.count - 1
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '0'
+
+    assert_equal ControlObjective.visible.count, ControlObjective.count
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').destroy
+
+    if DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value] == '0'
+      assert_equal ControlObjective.visible.count, ControlObjective.count
+    else
+      assert_equal ControlObjective.visible.count, ControlObjective.count - 1
+    end
+  end
+
+  test 'invalid because repeat auditor' do
+    control_objective = control_objectives :organization_security_4_1
+
+    control_objective.auditors << users(:auditor)
+
+    refute control_objective.valid?
+    assert_error control_objective, :control_objective_auditors, :taken
+    assert_error control_objective.control_objective_auditors.last, :user_id, :taken
   end
 end

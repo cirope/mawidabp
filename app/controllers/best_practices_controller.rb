@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BestPracticesController < ApplicationController
   include AutoCompleteFor::Tagging
 
@@ -9,16 +11,21 @@ class BestPracticesController < ApplicationController
 
   # * GET /best_practices
   def index
-    build_search_conditions BestPractice
-
-    @best_practices = BestPractice.list.where(@conditions).reorder(
-      obsolete: :asc, name: :asc
-    ).page(params[:page])
+    @best_practices = BestPractice.list.
+      visible.
+      search(**search_params).
+      ordered.
+      page params[:page]
   end
 
   # * GET /best_practices/1
   def show
-    respond_with @best_practice
+    respond_to do |format|
+      format.html
+      format.csv  {
+        render csv: @best_practice.to_csv, filename: @best_practice.csv_filename
+      }
+    end
   end
 
   # * GET /best_practices/new
@@ -34,16 +41,25 @@ class BestPracticesController < ApplicationController
   def create
     @best_practice = BestPractice.new best_practice_params
 
-    @best_practice.save
-    respond_with @best_practice, location: edit_best_practice_url(@best_practice)
+    if @best_practice.save
+      respond_with @best_practice, location: edit_best_practice_url(@best_practice)  
+    else
+      render action: :new
+    end
   end
 
   # * PATCH /best_practices/1
   def update
     update_resource @best_practice, best_practice_params
 
+    redirect_to_index = @best_practice.obsolete &&
+                        @best_practice.errors.empty? &&
+                        hide_obsolete_best_practices != '0'
+
+    location = redirect_to_index ? best_practices_url : edit_best_practice_url(@best_practice)
+
     unless response_body
-      respond_with @best_practice, location: edit_best_practice_url(@best_practice)
+      respond_with @best_practice, location: location
     end
   end
 
@@ -59,7 +75,11 @@ class BestPracticesController < ApplicationController
     def set_best_practice
       @best_practice = BestPractice.list.includes({
         process_controls: :control_objectives
-      }).find params[:id]
+      }).merge(
+        ProcessControl.visible
+      ).references(
+        :process_controls
+      ).find params[:id]
     end
 
     def best_practice_params
@@ -68,14 +88,29 @@ class BestPracticesController < ApplicationController
         process_controls_attributes: [
           :id, :name, :order, :obsolete, :_destroy,
           control_objectives_attributes: [
-            :id, :name, :relevance, :risk, :obsolete, :support, :support_cache, :order, :_destroy,
+            :id, :name, :relevance, :risk, :obsolete, :support, :support_cache,
+            :audit_sector, :date_charge, :order, :_destroy, :remove_support,
+            :affected_sector_id,
             taggings_attributes: [:id, :tag_id, :_destroy],
             control_attributes:  [
               :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy,
+            ],
+            control_objective_auditors_attributes: [
+              :id, :user_id, :_destroy
             ]
           ]
         ]
       )
+    end
+
+    def hide_obsolete_best_practices
+      setting = Current.organization.settings.find_by name: 'hide_obsolete_best_practices'
+
+      if setting
+        setting.value
+      else
+        DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value]
+      end
     end
 
     def load_privileges

@@ -1,47 +1,72 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h4 class="panel-title">
+<div class="card mb-3">
+  <div class="card-header">
+    <h5 class="mb-0">
       <%= Finding.model_name.human count: 0 %>
-    </h4>
+    </h5>
   </div>
 
-  <div class="panel-body">
+  <div class="card-body">
     <div class="row">
       <div class="col-md-6">
         <div class="list-group">
           <%= link_to t('execution_reports.weaknesses_by_state_title'),
-            { action: :weaknesses_by_state_execution }, class: 'list-group-item' %>
+            { action: :weaknesses_by_state_execution }, class: 'list-group-item list-group-item-action' %>
+          <%= link_to t('execution_reports.tagged_findings_report.title'),
+            { action: :tagged_findings_report }, class: 'list-group-item list-group-item-action' %>
         </div>
       </div>
       <div class="col-md-6">
         <div class="list-group">
           <%= link_to t('execution_reports.weaknesses_report.title'),
-            { action: :weaknesses_report, execution: true }, class: 'list-group-item' %>
+            { action: :weaknesses_report, execution: true }, class: 'list-group-item list-group-item-action' %>
+          <% if Current.conclusion_pdf_format == 'gal' %>
+            <%= link_to t('execution_reports.weaknesses_current_situation_title'),
+              { action: :weaknesses_current_situation, controller_name: 'execution', final: false, execution: true }, class: 'list-group-item list-group-item-action' %>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h4 class="panel-title">
+<div class="card mb-3">
+  <div class="card-header">
+    <h5 class="mb-0">
       <%= Review.model_name.human count: 0 %>
-    </h4>
+    </h5>
   </div>
 
-  <div class="panel-body">
+  <div class="card-body">
     <div class="row">
       <div class="col-md-6">
         <div class="list-group">
           <%= link_to t('execution_reports.detailed_management_report_title'),
-            { action: :detailed_management_report }, class: 'list-group-item' %>
+            { action: :detailed_management_report }, class: 'list-group-item list-group-item-action' %>
         </div>
       </div>
       <div class="col-md-6">
         <div class="list-group">
           <%= link_to t('execution_reports.reviews_with_incomplete_work_papers_report_incomplete_title'),
-            { action: :reviews_with_incomplete_work_papers_report }, class: 'list-group-item' %>
+            { action: :reviews_with_incomplete_work_papers_report }, class: 'list-group-item list-group-item-action' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <h5 class="mb-0">
+      <%= t 'execution_reports.cost_analysis_title' %>
+    </h5>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="list-group">
+          <%= link_to t('execution_reports.planned_cost_summary_title'),
+            { action: :planned_cost_summary }, class: 'list-group-item list-group-item-action' %>
         </div>
       </div>
     </div>

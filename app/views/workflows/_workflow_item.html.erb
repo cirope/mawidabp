@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-1">
       <div class="media">
-        <div class="pull-left">
+        <div class="float-left mr-2 mt-2">
           <%= link_to_show_hide "resource_utilizations_for_#{id}" %>
         </div>
         <div class="media-body">
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="col-md-6">
-      <%= f.input :task, label: false, input_html: { autofocus: true } %>
+      <%= f.input :task, label: false, input_html: { autofocus: f.object.new_record? } %>
     </div>
     <div class="col-md-2">
       <%= f.input :start, as: :date_picker, label: false %>
@@ -22,8 +22,7 @@
       <%= f.input :end, as: :date_picker, label: false %>
     </div>
     <div class="col-md-1">
-      <div class="toggle-visibility">
-        <%= f.input :id, as: :hidden %>
+      <div class="mt-2 text-right text-nowrap">
         <%= link_to_insert_field f %>
         <% unless f.object.try(:review) %>
           <span class="text-muted">|</span>
@@ -31,42 +30,68 @@
         <% end %>
         <span class="text-muted">|</span>
         <%= link_to_move %>
+        <%= f.input :id, as: :hidden %>
       </div>
     </div>
   </div>
 
   <div id="resource_utilizations_for_<%= id %>" style="display: none;">
-    <div class="row nested">
-      <div class="col-md-8">
-        <h5><strong><%= ResourceUtilization.human_attribute_name 'resource' %></strong></h5>
+    <% if !USE_SCOPE_CYCLE %>
+      <div class="row pl-4" data-nested>
+        <div class="col-md-8">
+          <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'resource' %></h5>
+        </div>
+        <div class="col-md-3">
+          <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'units' %></h5>
+        </div>
       </div>
-      <div class="col-md-3">
-        <h5><strong><%= ResourceUtilization.human_attribute_name 'units' %></strong></h5>
+
+      <div id="material_resource_utilizations_<%= id %>">
+        <%= f.simple_fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
+          <%= render 'material_resource_utilization', f: ru_f %>
+        <% end %>
       </div>
-    </div>
 
-    <div id="material_resource_utilizations_<%= id %>">
-      <%= f.simple_fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
-        <%= render 'material_resource_utilization', f: ru_f %>
-      <% end %>
-    </div>
+      <div id="human_resource_utilizations_<%= id %>">
+        <%= f.simple_fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
+          <%= render 'human_resource_utilization', f: ru_f %>
+        <% end %>
+      </div>
 
-    <div id="human_resource_utilizations_<%= id %>">
-      <%= f.simple_fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
-        <%= render 'human_resource_utilization', f: ru_f %>
-      <% end %>
-    </div>
-
-    <p class="nested">
+      <p class="pl-4" data-nested>
       <%= link_to_add_fields(t('workflow.add_material_resource_utilization'), f, :resource_utilizations,
-        'material_resource_utilization', {
-        insert_into: "#material_resource_utilizations_#{id}", association: 'material_resource_utilizations'
-      } ) %>
-      <%= link_to_add_fields(t('workflow.add_human_resource_utilization'), f, :resource_utilizations,
-        'human_resource_utilization', {
-        insert_into: "#human_resource_utilizations_#{id}", association: 'human_resource_utilizations'
-      } ) %>
-    </p>
+                             'material_resource_utilization', {
+                               insert_into: "#material_resource_utilizations_#{id}", association: 'material_resource_utilizations'
+                             } ) %>
+                           <%= link_to_add_fields(t('workflow.add_human_resource_utilization'), f, :resource_utilizations,
+                                                  'human_resource_utilization', {
+                                                    insert_into: "#human_resource_utilizations_#{id}", association: 'human_resource_utilizations'
+                                                  } ) %>
+      </p>
+    <% end %>
+    
+    <% f.object.build_file_model unless f.object.file_model %>
+
+    <div class="row">
+      <div class="col-md-12 text-right">
+        <p class="mb-1 mr-3"><%= Workflow.human_attribute_name 'file_model_id' %></p>
+        <div class="clearfix float-right">
+          <%= f.simple_fields_for :file_model do |fm_f| %>
+            <div class="file-container float-left">
+              <%= link_to_upload(fm_f.object) %>
+              <% if fm_f.object.file_cache %>
+                <%= fm_f.input :file_cache, as: :hidden %>
+                <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
+              <% else %>
+                <%= fm_f.input :file, label: false %>
+              <% end %>
+            </div>
+          <% end %>
+          <%= link_to_download f.object %>
+        </div>
+      </div>
+    </div>
+
   </div>
 </fieldset>
 <script type="text/javascript">

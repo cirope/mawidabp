@@ -5,7 +5,15 @@ module Findings::UserAssignments
     has_many :finding_user_assignments, dependent: :destroy, inverse_of: :finding,
       before_add:    :check_for_final_review,
       before_remove: :check_for_final_review
+    has_many :finding_owner_assignments, -> { owners }, foreign_key: :finding_id,
+      class_name: 'FindingUserAssignment'
+    has_many :finding_responsible_assignments, -> { responsibles }, foreign_key: :finding_id,
+      class_name: 'FindingUserAssignment'
     has_many :users, -> { order(last_name: :asc) }, through: :finding_user_assignments
+    has_many :users_that_can_act_as_audited, -> { can_act_as(:audited) },
+      through: :finding_user_assignments, source: :user
+    has_many :users_that_can_act_as_auditor, -> { can_act_as(:auditor) },
+      through: :finding_user_assignments, source: :user
 
     accepts_nested_attributes_for :finding_user_assignments, allow_destroy: true
   end
@@ -23,11 +31,11 @@ module Findings::UserAssignments
   end
 
   def process_owners
-    finding_user_assignments.select(&:process_owner).map &:user
+    finding_owner_assignments.map &:user
   end
 
   def responsible_auditors
-    finding_user_assignments.responsibles.map &:user
+    finding_responsible_assignments.map &:user
   end
 
   def import_users

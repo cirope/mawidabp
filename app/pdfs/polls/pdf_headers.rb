@@ -1,12 +1,11 @@
-module Polls::PDFHeaders
+module Polls::PdfHeaders
   extend ActiveSupport::Concern
 
   def pdf_add_header
     pdf.add_generic_report_header @current_organization
     pdf.add_title @report.params[:report_title], PDF_FONT_SIZE, :center
-    pdf.move_down PDF_FONT_SIZE
     pdf.add_title @report.params[:report_subtitle], PDF_FONT_SIZE, :center
-    pdf.move_down PDF_FONT_SIZE * 2
+    pdf.move_down PDF_FONT_SIZE * 1.5
   end
 
   def pdf_add_description
@@ -17,9 +16,7 @@ module Polls::PDFHeaders
         to_date: I18n.l(@report.to_date, format: :long)
       )
     )
-    pdf.move_down PDF_FONT_SIZE
     pdf.add_description_item(Questionnaire.model_name.human, @report.questionnaire.name)
-    pdf.move_down PDF_FONT_SIZE * 2
   end
 
   def pdf_name

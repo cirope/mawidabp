@@ -19,7 +19,7 @@
 </p>
 <div style="margin: .1em 0em;">
   <b><%= finding.class.human_attribute_name 'description' %></b>:
-  <%= textilize finding.description %>
+  <%= markdown finding.description %>
 </div>
 <p style="margin: .1em 0em;">
   <b><%= finding.class.human_attribute_name 'state' %></b>:
@@ -44,13 +44,13 @@
   <b><%= t 'finding.audited', count: audited.size %></b>:
 </p>
 
-<%= textilize_without_paragraph finding_audited_names(finding).map { |name| "* #{name}" }.join("\n") %>
+<%= markdown_without_paragraph finding_audited_names(finding).map { |name| "* #{name}" }.join("\n") %>
 
 <p style="margin: .1em 0em;">
   <b><%= t('finding.reviewers', count: auditors.size) %></b>:
 </p>
 
-<%= textilize_without_paragraph auditors.map { |u| "* #{u.full_name}" }.join("\n") %>
+<%= markdown_without_paragraph auditors.map { |u| "* #{u.full_name}" }.join("\n") %>
 
 <p style="margin: .1em 0em;">
   <%= link_to t('notifier.notify_new_finding_answer.finding_link'), finding_url %>

@@ -1,3 +1,5 @@
+/* global Helper HTMLUtil */
+
 jQuery(function ($) {
   var controllerSelector = '[data-controller="users"], [data-controller="registrations"]'
 
@@ -12,7 +14,7 @@ jQuery(function ($) {
       var $element = $(this)
       var role     = $($element.data('updateRole'))
 
-      if($element.val()) {
+      if ($element.val()) {
         Helper.showLoading($element)
 
         $.get($element.data('rolesUrl'), {
@@ -20,7 +22,7 @@ jQuery(function ($) {
           format: 'json'
         }, function (data) {
           HTMLUtil.updateOptions(role, HTMLUtil.optionsFromArray(data))
-        }).complete(function () {
+        }).done(function () {
           role.val('')
           Helper.hideLoading($element)
         })

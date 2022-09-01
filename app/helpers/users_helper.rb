@@ -3,12 +3,22 @@ module UsersHelper
     content_tag(:abbr, h(user.user), :title => user.email)
   end
 
-  def user_language_field(form)
+  def user_language_field(form, disabled: false)
     options = AVAILABLE_LOCALES.map do |lang|
       [t("lang.#{lang}"), lang.to_s]
     end.sort{ |a, b| a[0] <=> b[0] }
 
-   form.input :language, collection: options, prompt: true
+   form.input :language, collection: options, prompt: true, input_html: { disabled: disabled }
+  end
+
+  def user_row_class user
+    if user.hidden
+      'strike'
+    elsif user.enable
+      'enabled_item'
+    else
+      'disabled_item'
+    end
   end
 
   def user_info user
@@ -19,12 +29,20 @@ module UsersHelper
     end
   end
 
-  def user_organizations
-    group = current_organization ?
-      current_organization.group :
-      Group.find_by_admin_hash(params[:hash])
+  def user_organizations organization_role
+    group = if current_organization
+              current_organization.group
+            else
+              Group.find_by_admin_hash params[:hash]
+            end
 
-    sorted_options_array_for Organization.with_group(group), :name, :id
+    organizations = if NOTIFY_NEW_ADMIN
+                      Organization.list_with_selected group, organization_role&.organization
+                    else
+                      Organization.with_group group
+                    end
+
+    sorted_options_array_for organizations, :name, :id
   end
 
   def user_organization_roles
@@ -48,5 +66,16 @@ module UsersHelper
     else
       users_roles_path
     end
+  end
+
+  def show_import_from_ldap?
+    setting = current_organization.settings.find_by name: 'hide_import_from_ldap'
+    result  = (setting ? setting.value : DEFAULT_SETTINGS[:hide_import_from_ldap][:value]) != '0'
+
+    !result || can_perform?(:edit, :approval)
+  end
+
+  def user_business_unit_types
+    BusinessUnitType.list.order :name
   end
 end

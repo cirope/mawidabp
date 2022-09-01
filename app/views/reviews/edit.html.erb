@@ -1,45 +1,61 @@
 <%= content_for :form_actions do %>
   <%= link_to_show @review %> |
   <%= link_to_index reviews_path %> |
-  <div class="dropdown dropup inline">
+  <div class="dropdown dropup d-inline">
     <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
       <%= t 'review.other_actions' %>
-      <span class="caret"></span>
     <% end %>
-    <ul class="dropdown-menu dropdown-menu-right">
-      <li><%= link_to t('review.download_work_papers'), action: :download_work_papers, id: @review, _ts: Time.now.to_i %></li>
+    <div class="dropdown-menu dropdown-menu-right">
+      <%= link_to t('review.download_work_papers'), {
+        action: :download_work_papers, id: @review, _ts: Time.now.to_i
+      }, class: 'dropdown-item' %>
       <% if @review.work_papers_not_finished? %>
-        <li>
-          <%= link_to t('review.finished_work_papers'), { action: :finished_work_papers, id: @review, _ts: Time.now.to_i }, data: {
-            method: :patch, confirm: t('messages.confirmation')
-          } %>
-        </li>
+        <%= link_to t('review.finished_work_papers'), { action: :finished_work_papers, id: @review, _ts: Time.now.to_i }, data: {
+          method: :patch, confirm: t('messages.confirmation')
+        }, class: 'dropdown-item' %>
       <% elsif @review.work_papers_finished? && @auth_user.supervisor? %>
-        <li>
-          <%= link_to t('review.revise_work_papers'), { action: :finished_work_papers, id: @review, revised: true, _ts: Time.now.to_i }, data: {
-            method: :patch, confirm: t('messages.confirmation')
-          } %>
-        </li>
+        <%= link_to t('review.revise_work_papers'), { action: :finished_work_papers, id: @review, revised: true, _ts: Time.now.to_i }, data: {
+          method: :patch, confirm: t('messages.confirmation')
+        }, class: 'dropdown-item' %>
+      <% end %>
+      <% unless @review.is_frozen? %>
+        <%= link_to t('review.recode_work_papers'), recode_work_papers_review_path(@review, _ts: Time.now.to_i), data: {
+          method: :patch, confirm: t('messages.confirmation')
+        }, class: 'dropdown-item' %>
       <% end %>
       <% unless @review.has_final_review? %>
-        <li>
-          <%= link_to t('review.recode_findings'), recode_findings_review_path(@review, _ts: Time.now.to_i), data: {
+        <%= link_to t('review.reorder'), reorder_review_path(@review, _ts: Time.now.to_i), data: {
+          method: :patch, confirm: t('messages.confirmation')
+        }, class: 'dropdown-item' %>
+        <%= link_to t('review.recode_findings'), recode_findings_review_path(@review, _ts: Time.now.to_i), data: {
+          method: :patch, confirm: t('messages.confirmation')
+        }, class: 'dropdown-item' %>
+        <%= link_to t('review.recode_weaknesses_by_risk'), recode_weaknesses_by_risk_review_path(@review, _ts: Time.now.to_i), data: {
+          method: :patch, confirm: t('messages.confirmation')
+        }, class: 'dropdown-item' %>
+        <%= link_to(
+          t('review.recode_weaknesses_by_repetition_and_risk'),
+          recode_weaknesses_by_repetition_and_risk_review_path(@review, _ts: Time.now.to_i),
+          class: 'dropdown-item',
+          data: {
             method: :patch, confirm: t('messages.confirmation')
-          } %>
-        </li>
-        <li>
-          <%= link_to t('review.recode_weaknesses_by_risk'), recode_weaknesses_by_risk_review_path(@review, _ts: Time.now.to_i), data: {
+          }
+        ) %>
+        <%= link_to(
+          t('review.recode_weaknesses_by_risk_and_repetition'),
+          recode_weaknesses_by_risk_and_repetition_review_path(@review, _ts: Time.now.to_i),
+          class: 'dropdown-item',
+          data: {
             method: :patch, confirm: t('messages.confirmation')
-          } %>
-        </li>
-        <li>
-          <%= link_to t('review.recode_weaknesses_by_control_objective_order'),
-            recode_weaknesses_by_control_objective_order_review_path(@review, _ts: Time.now.to_i),
-            data: { method: :patch, confirm: t('messages.confirmation') }
-          %>
-        </li>
+          }
+        ) %>
+        <%= link_to t('review.recode_weaknesses_by_control_objective_order'),
+          recode_weaknesses_by_control_objective_order_review_path(@review, _ts: Time.now.to_i),
+          data: { method: :patch, confirm: t('messages.confirmation') },
+          class: 'dropdown-item'
+        %>
       <% end %>
-    </ul>
+    </div>
   </div>
 <% end %>
 

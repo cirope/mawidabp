@@ -4,17 +4,22 @@ class Role < ApplicationRecord
   include Roles::Scopes
   include ParameterSelector
 
-  # Constantes
+  # REMINDER: DO NOT use 4 until all clients are migrated from "old"
+  # auditor junior role
   TYPES = {
     :admin => 0,
     :manager => 1,
     :supervisor => 2,
-    :auditor_senior => 3,
-    :auditor_junior => 4,
+    :auditor => 3,
     :committee => 5,
     :audited => 6,
     :executive_manager => 7
   }
+
+  ACT_AS = {
+    audited: TYPES.values_at(:admin, :audited, :executive_manager),
+    auditor: TYPES.values_at(:auditor, :supervisor, :manager)
+  }.freeze
 
   # Callbacks
   before_validation :check_auth_privileges
@@ -57,9 +62,13 @@ class Role < ApplicationRecord
     self.touch if !self.new_record? && self.privileges.any?(&:changed?)
   end
 
-  # Definición dinámica de todos los métodos "tipo?"
+  # Definición dinámica de todos los métodos "tipo?" y scopes ".tipo"
   TYPES.each do |type, value|
     define_method(:"#{type}?") { self.role_type == value }
+
+    define_singleton_method type do
+      find_by(role_type: value)
+    end
   end
 
   def get_type

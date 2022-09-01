@@ -1,27 +1,35 @@
 cirope:
   name: Cirope S.A.
   prefix: cirope
+  logo_style: 'default'
   description: ''
+  saml_provider:
   group: main_group
   corporate: false
 
 twitter:
   name: Twitter Inc.
   prefix: tw
+  logo_style: 'default'
   description: ''
+  saml_provider:
   group: main_group
   corporate: true
 
 google:
   name: Google Inc.
   prefix: google
+  logo_style: 'default'
   description: ''
+  saml_provider:
   group: second_group
   corporate: false
 
 alphabet:
   name: Alphabet Inc.
   prefix: alphabet
+  logo_style: 'default'
   description: ''
+  saml_provider:
   group: second_group
   corporate: true

@@ -15,8 +15,10 @@ module Findings::Approval
       valid_state_error,
       audited_error,
       auditor_error,
+      audit_recommendation_errors,
       effect_error,
-      audit_comments_error
+      audit_comments_error,
+      task_error
     ].compact
 
     (@approval_errors = errors).blank?
@@ -41,7 +43,9 @@ module Findings::Approval
     end
 
     def answer_error
-      if being_implemented? && answer.blank?
+      check_blank = being_implemented? || SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+
+      if check_blank && answer.blank?
         I18n.t "#{class_name}.errors.without_answer"
       end
     end
@@ -50,6 +54,7 @@ module Findings::Approval
       has_valid_state = implemented_audited? ||
         implemented?                         ||
         awaiting?                            ||
+        failure?                             ||
         being_implemented?                   ||
         unanswered?                          ||
         assumed_risk?                        ||
@@ -73,15 +78,29 @@ module Findings::Approval
       end
     end
 
+    def audit_recommendation_errors
+      if USE_SCOPE_CYCLE && audit_recommendations.blank?
+        I18n.t "#{class_name}.errors.without_audit_recommendations"
+      end
+    end
+
     def effect_error
       if kind_of?(Weakness) && !HIDE_WEAKNESS_EFFECT && effect.blank?
-        I18n.t "#{class_name}.errors.without_effect"
+        if !USE_SCOPE_CYCLE || (USE_SCOPE_CYCLE && risk != RISK_TYPES[:none])
+          I18n.t "#{class_name}.errors.without_effect"
+        end
       end
     end
 
     def audit_comments_error
-      if audit_comments.blank? && !revoked? && !SHOW_CONCLUSION_ALTERNATIVE_PDF
+      if audit_comments.blank? && !revoked? && Current.conclusion_pdf_format != 'gal'
         I18n.t "#{class_name}.errors.without_audit_comments"
+      end
+    end
+
+    def task_error
+      if tasks.any?(&:expired?)
+        I18n.t "#{class_name}.errors.with_expired_tasks"
       end
     end
 

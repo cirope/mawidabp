@@ -1,30 +1,5 @@
 module Reports::Pdf
-
-  def init_pdf(title, subtitle)
-    pdf = Prawn::Document.create_generic_pdf :landscape
-
-    pdf.add_generic_report_header current_organization
-
-    pdf.add_title title, PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    if subtitle
-      pdf.add_title subtitle, PDF_FONT_SIZE, :center
-      pdf.move_down PDF_FONT_SIZE * 2
-    end
-
-    pdf
-  end
-
-  def add_period_title(pdf, period, align = :left)
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-      (PDF_FONT_SIZE * 1.25).round, align
-
-    pdf.move_down PDF_FONT_SIZE
-  end
+  include Reports::BasePdf
 
   def add_weaknesses_synthesis_table(pdf, data, font_size = PDF_FONT_SIZE)
     if data.kind_of?(Hash)
@@ -93,10 +68,6 @@ module Reports::Pdf
             "#{count} (#{'%.2f' % percentage}%)" : '-'
           percentage_total += percentage
 
-          if !final && count > 0 && rl == highest_risk && state[0].to_s == 'awaiting'
-            column_row[rl.first] << '****'
-          end
-
           if !final && count > 0 && rl == highest_risk && state[0].to_s == 'being_implemented'
             column_row[rl.first] << '**'
           end
@@ -104,10 +75,6 @@ module Reports::Pdf
 
         column_row['count'] = sub_total_count > 0 ?
           "<strong>#{sub_total_count} (#{'%.1f' % percentage_total}%)</strong>" : '-'
-
-        if !final && state.first.to_s == 'awaiting' && sub_total_count != 0
-          column_row['count'] << '***'
-        end
 
         if !final && state.first.to_s == 'being_implemented' && sub_total_count != 0
           column_row['count'] << '*'
@@ -175,10 +142,6 @@ module Reports::Pdf
 
         if audit_type_symbol == :internal && !HIDE_OPORTUNITIES
           column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
-        end
-
-        if !final && state.first.to_s == 'awaiting'
-          column_data.last[1] << ' **' if column_data.last[1] != '0 (0.00%)'
         end
 
         if !final && state.first.to_s == 'being_implemented'
@@ -263,14 +226,6 @@ module Reports::Pdf
       t("#{controller}_committee_report.period.range",
         :from_date => l(from_date, :format => :long),
         :to_date => l(to_date, :format => :long)))
-  end
-
-  def add_pdf_filters(pdf, controller, filters)
-    pdf.move_down PDF_FONT_SIZE
-    pdf.text t("#{controller}_committee_report.applied_filters",
-      :filters => filters.to_sentence, :count => filters.size),
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify,
-      :inline_format => true
   end
 
   def save_pdf(pdf, controller, from_date, to_date, sub_directory, id = 0)

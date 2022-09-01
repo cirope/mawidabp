@@ -11,19 +11,50 @@
       </div>
     </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
+    <%= f.input :shared, input_html: { disabled: @tag.shared_was } %>
+    <%= f.input :obsolete %>
+
+    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES && tags_options_collection(kind: @tag.kind).any? %>
+      <%= f.input :options,
+        label: '',
+        as: :check_boxes,
+        item_wrapper_class: 'custom-control custom-checkbox',
+        collection: tags_options_collection(kind: @tag.kind) %>
+    <% end %>
+
+    <h5><%= t '.children' %></h5>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-md-10">
+        <h5 class="h6"><%= Tag.human_attribute_name 'name' %></h5>
+      </div>
+    </div>
+
+    <div id="tags">
+      <%= f.simple_fields_for :children do |c_f| %>
+        <%= render 'child', f: c_f %>
+      <% end %>
+
+      <p>
+        <%= link_to_add_fields t('.add_child'), f, :children %>
+      </p>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h5 class="mb-0">
           <%= Tag.human_attribute_name 'icon' %>
-        </h4>
+        </h5>
       </div>
 
-      <div class="panel-body">
+      <div class="card-body">
         <ul class="nav nav-pills lead">
           <% Tag.available_icons.each do |icon| %>
-            <li <%== 'class="active"' if @tag.icon == icon %>>
-              <a class="text-muted" href="#" data-icon="<%= icon %>">
-                <span class="glyphicon glyphicon-<%= icon %>"></span>
+            <li class="nav-item">
+              <a class="nav-link<%= ' active' if @tag.icon == icon %>" href="#" data-icon="<%= icon %>">
+                <%= icon 'fas', icon %>
               </a>
             </li>
           <% end %>

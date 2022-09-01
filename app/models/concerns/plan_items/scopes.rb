@@ -3,15 +3,31 @@ module PlanItems::Scopes
 
   included do
     scope :with_business_unit, -> { where.not business_unit_id: nil }
+    scope :list, -> {
+      joins(:plan).where plans: { organization_id: Current.organization&.id }
+    }
   end
 
   module ClassMethods
     def list_unused period_id
-      left_joins(:review, :plan).
-        where(plans: { period_id: period_id }, reviews: { plan_item_id: nil }).
-        where.not(business_unit_id: nil).
-        references(:plans, :reviews).
-        order(project: :asc)
+      left_joins(:review, :plan, :memo)
+        .where(plans: { period_id: period_id },
+               reviews: { plan_item_id: nil },
+               memos: { plan_item_id: nil })
+        .where.not(business_unit_id: nil)
+        .allowed_by_business_units
+        .references(:plans, :reviews, :memos)
+        .order(project: :asc)
+    end
+
+    def allowed_by_business_units
+      business_units = Current.user.business_units
+
+      if business_units.any?
+        where business_unit_id: business_units
+      else
+        all
+      end
     end
 
     def for_business_unit_type business_unit_type
@@ -25,6 +41,10 @@ module PlanItems::Scopes
         where(condition).
         order(order_number: :asc).
         references(:business_units)
+    end
+
+    def for_period period
+      joins(:plan).where plans: { period_id: period.id }
     end
 
     def between _start, _end

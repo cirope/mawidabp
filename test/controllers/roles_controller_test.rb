@@ -14,17 +14,19 @@ class RolesControllerTest < ActionController::TestCase
     }
     public_actions = []
     private_actions = [
-      [:get, :index],
+      [:get, :index, {}],
       [:get, :show, id_param],
-      [:get, :new],
+      [:get, :new, {}],
       [:get, :edit, id_param],
-      [:post, :create],
+      [:post, :create, {}],
       [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
     private_actions.each do |action|
-      send *action
+      options = action.pop
+
+      send *action, **options
       assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
@@ -59,6 +61,13 @@ class RolesControllerTest < ActionController::TestCase
     assert_template 'roles/new'
   end
 
+  test 'new role as JS' do
+    login
+    get :new, xhr: true, as: :js
+    assert_response :success
+    assert_match Mime[:js].to_s, @response.content_type
+  end
+
   test 'create role' do
     assert_difference ['Role.count', 'Privilege.count'] do
       login
@@ -86,6 +95,13 @@ class RolesControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:role)
     assert_template 'roles/edit'
+  end
+
+  test 'edit role as JS' do
+    login
+    get :edit, params: { id: roles(:admin_role).id }, xhr: true, as: :js
+    assert_response :success
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'update role' do
@@ -122,7 +138,7 @@ class RolesControllerTest < ActionController::TestCase
   test 'destroy role' do
     login
     assert_difference 'Role.count', -1 do
-      delete :destroy, params: { id: roles(:auditor_senior_role).id }
+      delete :destroy, params: { id: roles(:auditor_role).id }
     end
 
     assert_redirected_to roles_url

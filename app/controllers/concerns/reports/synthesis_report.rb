@@ -8,26 +8,27 @@ module Reports::SynthesisReport
     if params[:synthesis_report]
       synthesis_business_unit_type_reviews if params[:synthesis_report][:business_unit_type].present?
       synthesis_business_unit_reviews if params[:synthesis_report][:business_unit].present?
+      synthesis_reviews_by_scope if params[:synthesis_report][:scope].present?
     end
 
     @business_unit_types = @selected_business_unit ?
-      [@selected_business_unit] : BusinessUnitType.list
+      [@selected_business_unit] : BusinessUnitType.allowed_business_unit_types.compact
 
     @periods.each do |period|
       @business_unit_types.each do |but|
         set_synthesis_columns(but)
-        init_business_unit_type_vars
+        init_synthesis_report_business_unit_type_vars
 
         @conclusion_reviews.for_period(period).each do |c_r|
           if c_r.review.business_unit.business_unit_type_id == but.id
-            set_process_controls_data(c_r)
-            count_weaknesses(c_r)
-            set_column_data(c_r)
+            set_synthesis_report_process_controls_data(c_r)
+            set_synthesis_report_control_objectives_data(c_r)
+            set_synthesis_report_column_data(c_r)
           end
         end
 
-        sort_column_data
-        set_audits_by_business_unit_data(period, but)
+        sort_synthesis_report_column_data
+        set_synthesis_report_audits_by_business_unit_data(period, but)
       end
     end
   end
@@ -36,21 +37,22 @@ module Reports::SynthesisReport
     synthesis_report
 
     pdf = init_pdf(params[:report_title], params[:report_subtitle])
+
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
     @periods.each do |period|
       add_period_title(pdf, period, :justify)
-      add_average_score(period, pdf) if !@selected_business_unit
+      add_synthesis_report_average_score(period, pdf) if !@selected_business_unit
 
       @audits_by_business_unit[period].each do |data|
         prepare_synthesis_columns(pdf, data[:columns])
-        add_pdf_titles(pdf, data[:external], data[:name])
+        add_synthesis_report_pdf_titles(pdf, data[:external], data[:name])
         prepare_synthesis_rows(data[:column_data])
 
         if @column_data.present?
-          add_synthesis_report_pdf_table(pdf)
-          add_score_data(pdf, data[:review_scores], data[:name])
-          add_repeated_text(pdf, data[:repeated_count]) if @controller == 'follow_up'
+          add_synthesis_report_data(pdf)
+          add_synthesis_report_score_data(pdf, data[:review_scores], data[:name])
+          add_synthesis_report_repeated_text(pdf, data[:repeated_count]) if @controller == 'follow_up'
         else
           pdf.text t("#{@controller}_committee_report.synthesis_report.without_audits_in_the_period"),
             :style => :italic
@@ -60,7 +62,7 @@ module Reports::SynthesisReport
 
     add_pdf_filters(pdf, @controller, @filters) if @filters.present?
 
-    add_pdf_references(pdf)
+    add_synthesis_report_pdf_references(pdf)
 
     save_pdf(pdf, @controller, @from_date, @to_date, 'synthesis_report')
     redirect_to_pdf(@controller, @from_date, @to_date, 'synthesis_report')
@@ -104,23 +106,30 @@ module Reports::SynthesisReport
       end
     end
 
+    def synthesis_reviews_by_scope
+      scope = params[:synthesis_report][:scope]
+
+      @conclusion_reviews = @conclusion_reviews.where(reviews: { scope: scope })
+      @filters << "<b>#{Review.human_attribute_name 'scope'}</b> = \"#{scope}\""
+    end
+
     def set_synthesis_columns(but)
-      @columns = {'business_unit_report_name' => [but.business_unit_label, 15],
-        'review' => [Review.model_name.human, 16],
-        'score' => ["#{Review.human_attribute_name(:score)} (1)", 15],
-        'process_control' => ["#{BestPractice.human_attribute_name('process_controls.name')} (2)", 30],
-        'weaknesses_count' => ["#{t('review.weaknesses_count')} (3)", 12],
-        'oportunities_count' => ["#{t('review.oportunities_count')} (4)", 12]
+      @columns = {'business_unit_report_name' => [but.business_unit_label, 10],
+        'review' => [Review.model_name.human, 10],
+        'score' => ["#{Review.human_attribute_name(:score)} (1)", 10],
+        'process_control' => ["#{BestPractice.human_attribute_name('process_controls.name')} (2)", 16],
+        'weaknesses_count' => ["#{t('conclusion_review.objectives_and_scopes').downcase.upcase_first} (3)", 28],
+        'oportunities_count' => ["#{Weakness.model_name.human(count: 0)} (4)", 26]
       }
     end
 
-    def init_business_unit_type_vars
+    def init_synthesis_report_business_unit_type_vars
       @column_data = []
       @review_scores = []
       @repeated_count = 0 if @controller == 'follow_up'
     end
 
-    def set_process_controls_data(c_r)
+    def set_synthesis_report_process_controls_data(c_r)
       @process_controls = {}
 
       c_r.review.control_objective_items_for_score.each do |coi|
@@ -141,52 +150,39 @@ module Reports::SynthesisReport
       end
     end
 
-    def count_weaknesses(c_r)
-      weaknesses_count = {}
-      weaknesses = @final ? c_r.review.final_weaknesses.not_revoked :
-        c_r.review.weaknesses.not_revoked
+    def set_synthesis_report_control_objectives_data(c_r)
+      @control_objective_text = []
 
-      weaknesses.each do |w|
-        @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
-
-        weaknesses_count[w.risk_text] ||= 0
-
-        if w.repeated? && @controller == 'follow_up'
-          @repeated_count += 1
-        else
-          weaknesses_count[w.risk_text] += 1
-        end
-      end
-
-      @weaknesses_count_text = get_weaknesses_count_text(weaknesses_count)
-    end
-
-    def get_weaknesses_count_text(weaknesses_count)
-      if weaknesses_count.values.sum == 0
-        t("#{@controller}_committee_report.synthesis_report.without_weaknesses")
-      else
-        @risk_levels.map do |risk|
-          risk_text = t("risk_types.#{risk}")
-          "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
-        end
+      c_r.review.grouped_control_objective_items.each do |process_control, cois|
+        @control_objective_text << [process_control.name, cois.sort.map(&:to_s)]
       end
     end
 
-    def get_process_controls_text
+    def get_synthesis_report_process_controls_text
       @process_controls.sort do |pc1, pc2|
         pc1[1] <=> pc2[1]
       end.map { |pc| "#{pc[0]} (#{'%.2f' % pc[1]}%)" }
     end
 
-    def get_oportunities_count_text(c_r)
-      c_r.review.oportunities.not_revoked.count > 0 ?
-        c_r.review.final_oportunities.not_revoked.count.to_s :
-        t("#{@controller}_committee_report.synthesis_report.without_oportunities")
+    def get_synthesis_report_weaknesses_text(c_r)
+      weaknesses_text = []
+
+      c_r.review.grouped_control_objective_items.each do |process_control, cois|
+        cois.sort.each do |coi|
+          weaknesses = @final ? coi.final_weaknesses : coi.weaknesses
+
+          weaknesses.not_revoked.sort_for_review.each do |w|
+            weaknesses_text << w.title
+          end
+        end
+      end
+
+      weaknesses_text
     end
 
-    def set_column_data(c_r)
-      process_control_text = get_process_controls_text
-      oportunities_count_text = get_oportunities_count_text(c_r)
+    def set_synthesis_report_column_data(c_r)
+      process_control_text = get_synthesis_report_process_controls_text
+      weaknesses_text = get_synthesis_report_weaknesses_text(c_r)
 
       @review_scores << c_r.review.score
       @column_data << [
@@ -194,13 +190,13 @@ module Reports::SynthesisReport
         c_r.review.to_s,
         c_r.review.reload,
         process_control_text,
-        @risk_levels.blank? ?
-          t('follow_up_committee_report.synthesis_report.without_weaknesses') :
-          @weaknesses_count_text, oportunities_count_text
+        @control_objective_text,
+        weaknesses_text.blank? ?
+          t('follow_up_committee_report.synthesis_report.without_weaknesses') : weaknesses_text
       ]
     end
 
-    def sort_column_data
+    def sort_synthesis_report_column_data
       @column_data.sort! do |cd_1, cd_2|
         cd_1[2].score <=> cd_2[2].score
       end
@@ -210,7 +206,7 @@ module Reports::SynthesisReport
       end
     end
 
-    def set_audits_by_business_unit_data(period, but)
+    def set_synthesis_report_audits_by_business_unit_data(period, but)
       @audits_by_business_unit[period] ||= []
       @audits_by_business_unit[period] << {
         :name => but.name,
@@ -222,15 +218,13 @@ module Reports::SynthesisReport
       }
     end
 
-    def add_synthesis_report_pdf_table(pdf)
-      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-        table_options = pdf.default_table_options(@column_widths)
-        pdf.table(@column_data.insert(0, @column_headers), table_options) do
-          row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-          )
+    def add_synthesis_report_data(pdf)
+      @column_data.each do |row|
+        row.each_with_index do |text, index|
+          pdf.add_description_item @column_headers[index], text, 0, false
         end
+
+        pdf.put_hr
       end
     end
 
@@ -241,16 +235,32 @@ module Reports::SynthesisReport
         new_row = []
 
         row.each do |column|
-          new_row << (column.kind_of?(Array) ?
-            column.map {|l| " • #{l}"}.join("\n") :
-            column)
+          new_row << prepare_synthesis_column(column)
         end
 
         @column_data << new_row
       end
     end
 
-    def add_pdf_references(pdf)
+    def prepare_synthesis_column(column, indent: 2)
+      if column.kind_of?(Array)
+        list = column.map do |l|
+          if l.kind_of?(Array) && l.first.kind_of?(String) && l.second.kind_of?(Array)
+            children = prepare_synthesis_column l.second, indent: indent + 2
+
+            "#{Prawn::Text::NBSP * indent}<i>#{l.first}</i>#{children}"
+          else
+            "#{Prawn::Text::NBSP * indent}• #{l}"
+          end
+        end
+
+        "\n#{list.join "\n"}"
+      else
+        column
+      end
+    end
+
+    def add_synthesis_report_pdf_references(pdf)
       pdf.move_down PDF_FONT_SIZE
 
       references = t("#{@controller}_committee_report.synthesis_report.references", :risk_types => @risk_levels.to_sentence)
@@ -259,12 +269,12 @@ module Reports::SynthesisReport
         :align => :justify
     end
 
-    def add_repeated_text(pdf, repeated_count)
+    def add_synthesis_report_repeated_text(pdf, repeated_count)
       pdf.text(t('follow_up_committee_report.synthesis_report.repeated_count',
         :count => repeated_count), :font_size => PDF_FONT_SIZE) if repeated_count > 0
     end
 
-    def add_score_data(pdf, scores, audit_type_name)
+    def add_synthesis_report_score_data(pdf, scores, audit_type_name)
       unless scores.blank?
         title = t("#{@controller}_committee_report.synthesis_report.generic_score_average",
           :count => scores.size, :audit_type => audit_type_name)
@@ -278,7 +288,7 @@ module Reports::SynthesisReport
       pdf.text text, :font_size => PDF_FONT_SIZE, :inline_format => true
     end
 
-    def add_average_score(period, pdf)
+    def add_synthesis_report_average_score(period, pdf)
       unless @audits_by_business_unit[period].blank?
         count = 0
 
@@ -300,15 +310,19 @@ module Reports::SynthesisReport
         average_score = count > 0 ? (total.to_f / count).round : 100
       end
 
-      add_pdf_score(pdf, period, average_score)
+      add_synthesis_report_pdf_score(pdf, period, average_score)
     end
 
-    def add_pdf_score(pdf, period, average_score)
+    def add_synthesis_report_pdf_score(pdf, period, average_score)
       pdf.move_down PDF_FONT_SIZE
 
       pdf.add_title(
-        t('follow_up_committee_report.synthesis_report.organization_score',
-          :score => average_score || 100), (PDF_FONT_SIZE * 1.5).round)
+        t(
+          'follow_up_committee_report.synthesis_report.organization_score',
+          :score => average_score || 100
+        ),
+        (PDF_FONT_SIZE * 1.1).round
+      )
 
       pdf.move_down((PDF_FONT_SIZE * 0.75).round)
 
@@ -322,15 +336,12 @@ module Reports::SynthesisReport
     end
 
     def prepare_synthesis_columns(pdf, columns)
-      @column_headers, @column_widths = [], []
-
-      @column_order.each do |col_name|
-        @column_headers << "<b>#{columns[col_name].first}</b>"
-        @column_widths << pdf.percent_width(columns[col_name].last)
+      @column_headers = @column_order.map do |col_name|
+        "<b>#{columns[col_name].first}</b>"
       end
     end
 
-    def add_pdf_titles(pdf, external, but_name)
+    def add_synthesis_report_pdf_titles(pdf, external, but_name)
       if external && !@internal_title_showed
         title = t "#{@controller}_committee_report.synthesis_report.internal_audit_weaknesses"
         @internal_title_showed = true

@@ -1,4 +1,4 @@
-module ConclusionReviews::FindingsSheetPDF
+module ConclusionReviews::FindingsSheetPdf
   extend ActiveSupport::Concern
 
   def create_findings_sheet_pdf organization = nil, index = 1
@@ -6,7 +6,7 @@ module ConclusionReviews::FindingsSheetPDF
     weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
     if weaknesses.any?
-      pdf = Prawn::Document.create_generic_pdf :portrait, false
+      pdf = Prawn::Document.create_generic_pdf :portrait, footer: false
 
       pdf.add_watermark I18n.t('pdf.draft') if kind_of? ConclusionDraftReview
 

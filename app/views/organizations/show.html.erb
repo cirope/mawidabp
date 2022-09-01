@@ -1,25 +1,44 @@
-<div class="page-header">
-  <h1>
-    <%= @organization %>
-    <small><%= @organization.prefix %></small>
-  </h1>
+<div class="card">
+  <div class="card-header">
+    <h5 class="mb-0">
+      <%= @title %>
+    </h5>
+  </div>
+
+  <div class="card-body">
+    <h2>
+      <%= @organization %>
+    </h2>
+
+    <p class="mb-0">
+      <strong><%= Organization.human_attribute_name 'prefix' %></strong>:
+      <%= @organization.prefix %>
+    </p>
+
+    <div>
+      <strong><%= Organization.human_attribute_name 'description' %></strong>:
+      <%= simple_format @organization.description, class: 'mb-1' unless @organization.description.blank? %>
+    </div>
+
+    <% if @organization.image_model %>
+      <p class="mb-2">
+        <strong><%= Organization.human_attribute_name 'image_model' %></strong>:
+      </p>
+
+      <div><%= organization_image_tag %></div>
+    <% end %>
+
+    <% if @organization.co_brand_image_model %>
+      <p class="my-2">
+        <strong><%= Organization.human_attribute_name 'co_brand_image_model' %></strong>:
+      </p>
+
+      <div><%= organization_image_tag model: :co_brand_image_model %></div>
+    <% end %>
+  </div>
+
+  <div class="card-footer">
+    <%= link_to_edit edit_organization_path(@organization) %> |
+    <%= link_to_index organizations_path %>
+  </div>
 </div>
-
-<p>
-  <strong><%= Organization.human_attribute_name 'description' %></strong>:
-  <%= @organization.description %>
-</p>
-
-<p>
-  <strong><%= Organization.human_attribute_name 'image_model' %></strong>:
-</p>
-
-<% if @organization.image_model %>
-  <br />
-  <div><%= organization_image_tag %></div>
-<% end %>
-
-<hr />
-
-<%= link_to_edit edit_organization_path(@organization) %> |
-<%= link_to_index organizations_path %>

@@ -4,55 +4,76 @@ class Finding < ApplicationRecord
   include Comparable
   include Findings::Achievements
   include Findings::Answers
+  include Findings::AttributeTypes
+  include Findings::AutoRisk
+  include Findings::Brief
   include Findings::BusinessUnits
+  include Findings::ByControlObjectiveProcessCsv
+  include Findings::ByUserCsv
+  include Findings::WeaknessesHeatmapCsv
   include Findings::Code
   include Findings::Comments
   include Findings::Confirmation
   include Findings::ControlObjective
   include Findings::Cost
   include Findings::CreateValidation
-  include Findings::CSV
+  include Findings::Csv
+  include Findings::Commitments
+  include Findings::CommitmentSupport
+  include Findings::Current
+  include Findings::CurrentSituationCsv
   include Findings::CustomAttributes
-  include Findings::DateColumns
   include Findings::Defaults
   include Findings::DestroyValidation
   include Findings::Display
   include Findings::Expiration
+  include Findings::Extension
   include Findings::FinalReview
+  include Findings::FirstFollowUp
   include Findings::FollowUp
-  include Findings::FollowUpPDF
+  include Findings::FollowUpLastChanged
+  include Findings::FollowUpPdf
   include Findings::ImportantDates
-  include Findings::JSON
+  include Findings::Issues
+  include Findings::Json
+  include Findings::NotificationLevel
   include Findings::Notifications
   include Findings::Overrides
-  include Findings::PDF
-  include Findings::Reiterations
+  include Findings::Pdf
+  include Findings::ProcessEmail
+  include (POSTGRESQL_ADAPTER ? Findings::Reiterations : Findings::ReiterationsAlt)
   include Findings::Relations
+  include Findings::RepeatedCsv
   include Findings::ReportScopes
+  include Findings::Reschedule
   include Findings::SaveCallbacks
+  include Findings::ScaffoldFollowUp
   include Findings::ScaffoldNotifications
   include Findings::Scopes
   include Findings::Search
   include Findings::SerializedAttributes
   include Findings::SortColumns
   include Findings::State
+  include Findings::StateDates
+  include Findings::SuggestionAddDaysFollowUpDate
+  include Findings::Taggable
+  include Findings::Tasks
   include Findings::Unanswered
+  include Findings::UnansweredNotifications
   include Findings::Unconfirmed
   include Findings::UpdateCallbacks
   include Findings::UserAssignments
   include Findings::UserScopes
-  include Findings::Validations
   include Findings::ValidationCallbacks
+  include Findings::Validations
   include Findings::Versions
+  include Findings::WeaknessReportPdf
   include Findings::WorkPapers
-  include Parameters::Risk
-  include Parameters::Priority
   include ParameterSelector
-  include Taggable
+  include Parameters::Priority
+  include Parameters::Risk
 
   acts_as_tree
-
-  cattr_accessor :current_user, :current_organization
 
   belongs_to :organization
   has_many :finding_review_assignments, dependent: :destroy, inverse_of: :finding

@@ -1,13 +1,13 @@
 module Parameters::Score
   extend ActiveSupport::Concern
 
-  SCORE_TYPES = {
+  DEFAULT_SCORES = {
     satisfactory: 80,
     improve: 50,
     unsatisfactory: 0
   }
 
-  SCORE_BY_WEAKNESSES = {
+  DEFAULT_SCORE_BY_WEAKNESSES = {
     adequate: 100,
     require_some_improvements: 80,
     require_improvements: 60,
@@ -16,12 +16,34 @@ module Parameters::Score
   }
 
   module ClassMethods
-    def scores
-      SCORE_TYPES
+    def scores date = nil
+      scores_on_date = scores_for_date(date || Time.zone.today)
+
+      DEFAULT_SCORES.merge(
+        scores_on_date.symbolize_keys
+      ).sort_by { |k, v| v }.reverse.to_h
     end
 
-    def scores_by_weaknesses
-      SCORE_BY_WEAKNESSES
+    def scores_by_weaknesses date = nil
+      scores = JSON.parse ENV['SCORE_BY_WEAKNESS'] || '{}'
+
+      DEFAULT_SCORE_BY_WEAKNESSES.merge scores.symbolize_keys
     end
+
+    private
+
+      def scores_for_date date
+        scores = JSON.parse ENV['REVIEW_SCORES'] || '{}'
+
+        if scores.present?
+          scores.detect do |date_string, _|
+            score_date = Date.parse date_string
+
+            score_date <= date
+          end&.last || {}
+        else
+          {}
+        end
+      end
   end
 end

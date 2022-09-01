@@ -5,6 +5,12 @@ answer_written:
   poll: poll_one
   type: <%= AnswerWritten.name %>
 
+answer_yes_no:
+  comments: "Me agrada la forma de trabajo"
+  question: question_yes_no
+  poll: poll_one
+  type: <%= AnswerYesNo.name %>
+
 answer_multi_choice:
   comments: "Me agrada la forma de trabajo"
   answer_option: strongly_agree

@@ -5,7 +5,7 @@ class SessionsControllerTest < ActionController::TestCase
     @organization = organizations(:cirope)
     @user = users :administrator
 
-    @request.host = "#{@organization.prefix}.localhost.i"
+    set_host_for_organization(@organization.prefix)
   end
 
   test 'should get login' do
@@ -15,7 +15,8 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   test 'login without organization' do
-    @request.host = 'localhost.i'
+    @request.host = URL_HOST
+
     post :create, params: {
       user: @user.user,
       password: 'admin123'

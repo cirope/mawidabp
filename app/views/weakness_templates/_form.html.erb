@@ -2,16 +2,42 @@
   <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
+    <%= f.input :title, input_html: { autofocus: true } %>
+
     <div class="row">
-      <div class="col-md-6">
-        <%= f.input :title, input_html: { autofocus: true } %>
+      <div class="col-md-<%= USE_SCOPE_CYCLE ? 4 : 6 %>">
+        <%= f.input :reference %>
       </div>
-      <div class="col-md-6">
+      <% if USE_SCOPE_CYCLE %>
+        <div class="col-md-4">
+          <%= f.input :subreference %>
+        </div>
+      <% end %>
+      <div class="col-md-<%= USE_SCOPE_CYCLE ? 4 : 6 %>">
         <%= f.input :risk, collection: risks, prompt: true %>
       </div>
     </div>
-    <%= f.input :description, input_html: { rows: 6 } %>
-
+    <div class="row">
+      <div class="col-md-<%= USE_SCOPE_CYCLE ? 6 : 12 %>">
+        <%= f.input :description, input_html: { rows: 6 } %>
+      </div>
+      <% if USE_SCOPE_CYCLE %>
+        <div class="col-md-6">
+          <%= f.input :brief, input_html: { rows: 6 } %>
+        </div>
+      <% end %>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :notes, input_html: { rows: 6 } %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :audit_recommendations, input_html: { rows: 6 } %>
+      </div>
+    </div>
+    <% if USE_SCOPE_CYCLE %>
+      <%= f.input :failure %>
+    <% end %>
     <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-4">
@@ -50,7 +76,7 @@
   <hr>
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>

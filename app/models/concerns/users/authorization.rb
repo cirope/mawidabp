@@ -2,7 +2,7 @@ module Users::Authorization
   extend ActiveSupport::Concern
 
   def is_enable?
-    enable? && Organization.current_id && !expired?
+    enable? && Current.organization && !expired?
   end
 
   def is_group_admin?
@@ -79,10 +79,11 @@ module Users::Authorization
     end
 
     def revoke_concurrent_sessions?
-      get_parameter_for_now(:allow_concurrent_sessions).to_i == 0
+      get_parameter(:allow_concurrent_sessions).to_i == 0
     end
 
     def has_a_current_session?
-      logged_in? && last_access > session_expire_time.minutes.ago
+      logged_in? &&
+        (session_expire_time == 0 || last_access > session_expire_time.minutes.ago)
     end
 end

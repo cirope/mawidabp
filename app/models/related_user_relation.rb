@@ -1,8 +1,5 @@
 class RelatedUserRelation < ApplicationRecord
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
+  include Auditable
 
   # Restricciones
   validates :related_user, :presence => true

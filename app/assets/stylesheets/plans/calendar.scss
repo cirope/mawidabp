@@ -1,0 +1,11 @@
+[data-controller="calendar"] {
+  table.table-weeks {
+    margin-bottom: 0;
+
+    td {
+      border: 1px solid #ddd;
+      padding: 0;
+      width: .75em;
+    }
+  }
+}

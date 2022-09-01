@@ -3,50 +3,49 @@ module FileModelHelper
     model.build_file_model unless model.file_model
   end
 
-  def link_to_download model
+  def link_to_download model, extra_classes: nil
     file_model = model.file_model
 
     if file_model && file_model.file? && file_model.file.cached?.blank?
       options = {
-        class: 'btn btn-default',
+        class: "btn btn-outline-secondary #{extra_classes}",
         title: file_model.identifier.titleize,
         data:  { ignore_unsaved_data: true }
       }
 
       link_to file_model.file.url, options do
-        content_tag(:span, nil, class: 'icon glyphicon glyphicon-download-alt')
+        icon 'fas', 'download'
       end
     end
   end
 
   def link_to_upload model, attr = :file
     cache_column = "#{attr}_cache"
-    options      = {
-      class: 'glyphicon-folder-open',
-      title: t('navigation.upload')
-    }
+    icon         = 'folder-open'
+    title        = t('navigation.upload')
 
     if model.send(cache_column)
-      options = {
-        class: 'glyphicon-file',
-        title: model.identifier.to_s.titleize
-      }
+      icon  = 'file'
+      title = model.identifier.to_s.titleize
     end
 
-    content_tag :span, class: 'btn btn-default file', title: options[:title] do
-      content_tag(:span, nil, class: "icon glyphicon #{options[:class]}")
+    content_tag :span, class: 'btn btn-outline-secondary file', title: title do
+      icon 'fas', icon
     end
   end
 
   def link_to_file description
     file_url = description.match(/(ftp|file|http|https):\/\/[\\\w\-.:%]+(\/\S*)?/) && $~[0]
     url      = file_url ? file_url.strip : '#'
-    classes  = 'btn btn-default'
+    options  = {
+      class: 'btn btn-outline-secondary',
+      target: '_blank',
+      hidden: file_url.blank?,
+      data: { file_url: true }
+    }
 
-    classes << ' hidden' unless file_url
-
-    link_to url, class: classes, target: '_blank', data: { file_url: true } do
-      content_tag :span, nil, class: 'icon glyphicon glyphicon-download-alt'
+    link_to url, options do
+      icon 'fas', 'download'
     end
   end
 

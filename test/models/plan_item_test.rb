@@ -2,9 +2,14 @@ require 'test_helper'
 
 class PlanItemTest < ActiveSupport::TestCase
   setup do
-    @plan_item = plan_items :current_plan_item_1
+    @plan_item   = plan_items :current_plan_item_1
+    Current.user = users :supervisor
 
     set_organization
+  end
+
+  teardown do
+    Current.user = nil
   end
 
   test 'create' do
@@ -16,6 +21,7 @@ class PlanItemTest < ActiveSupport::TestCase
         start: 6.days.from_now.to_date,
         end: 7.days.from_now.to_date,
         order_number: 4,
+        scope: 'committee',
         risk_exposure: 'high',
         plan: plan,
         business_unit: business_units(:business_unit_one)
@@ -64,6 +70,7 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.order_number = nil
     @plan_item.start = nil
     @plan_item.end = '   '
+    @plan_item.scope = '   '
     @plan_item.risk_exposure = '   '
 
     assert @plan_item.invalid?
@@ -73,6 +80,7 @@ class PlanItemTest < ActiveSupport::TestCase
     assert_error @plan_item, :end, :invalid_date
 
     if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      assert_error @plan_item, :scope, :blank
       assert_error @plan_item, :risk_exposure, :blank
     end
   end
@@ -124,5 +132,101 @@ class PlanItemTest < ActiveSupport::TestCase
 
     assert units > 0
     assert_equal units, @plan_item.units
+  end
+
+  test 'should return blank unused because period not have plan item unused' do
+    assert PlanItem.list_unused((periods :third_period).id).blank?
+  end
+
+  test 'should return blank unused because free plan item dont have business unit' do
+    assert PlanItem.list_unused((periods :current_period).id).blank?
+  end
+
+  test 'should return blank unused because current user dont have business_unit' do
+    Current.user = users :poll
+
+    PlanItem.create!(
+      project: 'free plan item',
+      start: 10.days.ago.to_date.to_s(:db),
+      end: 10.days.from_now.to_date.to_s(:db),
+      order_number: 7,
+      scope: users(:committee),
+      risk_exposure: 'high',
+      plan: plans(:current_plan),
+      business_unit: business_units(:business_unit_three)
+    )
+
+    assert PlanItem.list_unused((periods :current_period).id).blank?
+  end
+
+  test 'should return unused plan item' do
+    new_plan_item = PlanItem.create!(
+      project: 'free plan item',
+      start: 10.days.ago.to_date.to_s(:db),
+      end: 10.days.from_now.to_date.to_s(:db),
+      order_number: 7,
+      scope: users(:committee),
+      risk_exposure: 'high',
+      plan: plans(:current_plan),
+      business_unit: business_units(:business_unit_three)
+    )
+
+    reponse = PlanItem.list_unused((periods :current_period).id)
+
+    assert reponse.present?
+    assert reponse.include?(new_plan_item)
+  end
+
+  test 'completed_early status' do
+    @plan_item.start                              = 1.day.from_now.to_date
+    @plan_item.end                                = 2.day.from_now.to_date
+    @plan_item.conclusion_final_review.issue_date = 1.day.ago.to_date
+
+    assert @plan_item.completed_early?
+  end
+
+  test 'completed status' do
+    assert_equal @plan_item.completed?, @plan_item.conclusion_final_review
+  end
+
+  test 'in_early_progress status' do
+    plan_item_3 = plan_items :current_plan_item_3
+
+    assert plan_item_3.valid?
+    assert plan_item_3.in_early_progress?
+  end
+
+  test 'in_progress_no_delayed status' do
+    plan_item_2 = plan_items :current_plan_item_2
+
+    assert plan_item_2.valid?
+    assert plan_item_2.in_progress_no_delayed?
+  end
+
+  test 'overdue status' do
+    plan_item_3       = plan_items :current_plan_item_3
+    plan_item_3.start = 2.day.ago.to_date
+    plan_item_3.end   = 1.day.ago.to_date
+
+    assert_nil plan_item_3.conclusion_final_review
+    assert plan_item_3.valid?
+    assert plan_item_3.overdue?
+  end
+
+  test 'not_started_no_delayed status' do
+    plan_item_6       = plan_items :current_plan_item_6
+    plan_item_6.start = 1.day.from_now.to_date
+
+    assert plan_item_6.valid?
+    assert_nil plan_item_6.review
+    assert plan_item_6.not_started_no_delayed?
+  end
+
+  test 'delayed_pat status' do
+    plan_item_6 = plan_items :current_plan_item_6
+
+    assert plan_item_6.valid?
+    assert_nil plan_item_6.review
+    assert plan_item_6.delayed_pat?
   end
 end

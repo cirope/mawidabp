@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <title>{{ page.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{% asset_path favicon.ico %}" type="image/x-icon">
-    {% stylesheet application %}
-    {% javascript application %}
+    <link rel="icon" href="{% asset favicon.ico @path %}" type="image/x-icon">
+    {% asset application.css %}
+    {% asset application.js %}
   </head>
   <body>
     <div class="container">
@@ -22,4 +22,12 @@
       {% include footer.html %}
     </div>
   </body>
+
+  <script charset="utf-8">
+    $(document).ready(function () {
+      $('h2,h3,h4,h5,h6').filter('[id]').each(function () {
+        $(this).html('<a href="#'+$(this).attr('id')+'">'+ $(this).text() + '</a>')
+      })
+    })
+  </script>
 </html>

@@ -5,9 +5,10 @@
   :forms => {:date_range => true}} %>
 
 <% @periods.each do |period| %>
-  <div class="page-header">
-    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
-  </div>
+  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+
+  <hr>
+
   <% @audit_types.each do |type| %>
     <h3 class="text-center">
       <%= t(:"conclusion_committee_report.findings_type_#{type}") %>
@@ -40,7 +41,7 @@
                 <%= t('follow_up_committee_report.weaknesses_by_audit_type.oportunities') %>
               </h4>
               <% unless bu_data[:oportunities_table_data].blank? %>
-                <table class="table table-condensed table-striped table-hover">
+                <table class="table table-sm table-striped table-hover">
                   <thead>
                     <tr>
                       <th><%= Oportunity.human_attribute_name(:state) %></th>
@@ -84,7 +85,7 @@
 <div>
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#',
-    data: { toggle: 'modal', target: "#customize_report" } %>
+    data: { toggle: 'modal', target: '#customize_report' } %>
 </div>
 
 <%= render :partial => 'shared/customize_report_form', :locals => {

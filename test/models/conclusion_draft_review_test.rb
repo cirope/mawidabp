@@ -36,13 +36,16 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion',
+        :conclusion => CONCLUSION_OPTIONS.first,
         :recipients => 'John Doe',
         :sectors => 'Area 51',
-        :evolution => 'Do the evolution',
+        :evolution => EVOLUTION_OPTIONS.second,
         :evolution_justification => 'Ok',
         :main_weaknesses_text => 'Some main weakness X',
         :corrective_actions => 'You should do it this way',
+        :reference => 'Some reference',
+        :observations => 'Some observations',
+        :scope => 'Some scope',
         :affects_compliance => false
       )
 
@@ -92,7 +95,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     assert_error @conclusion_review, :issue_date, :blank
     assert_error @conclusion_review, :review_id, :blank
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+    if Current.conclusion_pdf_format == 'gal'
       assert_error @conclusion_review, :recipients, :blank
       assert_error @conclusion_review, :sectors, :blank
       assert_error @conclusion_review, :evolution, :blank
@@ -123,7 +126,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
       :conclusion_approved_with_conclusion_draft_review
     )
 
-    @conclusion_review.review.file_model = FileModel.take!
+    @conclusion_review.review.file_models << FileModel.take!
     @conclusion_review.review.save!
 
     assert @conclusion_review.reload.check_for_approval

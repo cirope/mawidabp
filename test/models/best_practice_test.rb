@@ -113,7 +113,9 @@ class BestPracticeTest < ActiveSupport::TestCase
               {
                 name: 'new control objective 1 1',
                 control_attributes: {
-                  control: 'new control 1 1'
+                  control: 'new control 1 1',
+                  effects: 'effects',
+                  compliance_tests: 'compliance tests'
                 },
                 order: 1,
                 taggings_attributes: tag_ids.map { |t_id| { tag_id: t_id } }
@@ -128,6 +130,38 @@ class BestPracticeTest < ActiveSupport::TestCase
 
     @best_practice.control_objectives.reload.each do |co|
       assert co.tags.all?(&:shared)
+    end
+  end
+
+  test 'to csv' do
+    csv  = @best_practice.to_csv
+    # TODO: change to liberal_parsing: true when 2.3 support is dropped
+    rows = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
+
+    assert_equal @best_practice.control_objectives.count + 1, rows.length
+  end
+
+  test 'hide obsolete best practices' do
+    organization = organizations :cirope
+
+    set_organization organization
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '1'
+
+    @best_practice.update! obsolete: true
+
+    assert_equal BestPractice.visible.count, BestPractice.count - 1
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '0'
+
+    assert_equal BestPractice.visible.count, BestPractice.count
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').destroy
+
+    if DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value] == '0'
+      assert_equal BestPractice.visible.count, BestPractice.count
+    else
+      assert_equal BestPractice.visible.count, BestPractice.count - 1
     end
   end
 end

@@ -1,9 +1,9 @@
 class ConclusionDraftReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_draft_review, only: [
-    :show, :edit, :update, :export_to_pdf, :score_sheet,
-    :download_work_papers, :create_bundle, :compose_email,
-    :send_by_email
+    :show, :edit, :update, :export_to_pdf, :export_to_rtf,
+    :score_sheet, :download_work_papers, :create_bundle, 
+    :compose_email, :send_by_email
   ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
@@ -13,22 +13,19 @@ class ConclusionDraftReviewsController < ApplicationController
   def index
     @title = t 'conclusion_draft_review.index_title'
 
-    build_search_conditions ConclusionDraftReview
-
     @conclusion_draft_reviews = ConclusionDraftReview.list.includes(
       review: [
         :period,
         :conclusion_final_review,
-        {plan_item: :business_unit}
+        plan_item: :business_unit
       ]
-    ).where(@conditions).references(
+    ).search(
+      **search_params
+    ).references(
       :reviews, :business_units
-    ).order(
-      [
-        "#{ConclusionDraftReview.quoted_table_name}.#{ConclusionDraftReview.qcn('issue_date')} DESC",
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
-      ].join(', ')
-    ).page(params[:page])
+    ).merge(
+      PlanItem.allowed_by_business_units
+    ).order_by.page params[:page]
 
     respond_to do |format|
       format.html
@@ -116,14 +113,22 @@ class ConclusionDraftReviewsController < ApplicationController
   def export_to_pdf
     options = params[:export_options]&.to_unsafe_h
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_draft_review.alternative_pdf(current_organization, options)
-    else
-      @conclusion_draft_review.to_pdf(current_organization, options)
-    end
+    @conclusion_draft_review.to_pdf(current_organization, options)
 
     respond_to do |format|
       format.html { redirect_to @conclusion_draft_review.relative_pdf_path }
+    end
+  end
+
+  # Exporta el informe en formato RTF
+  #
+  # * GET /conclusion_draft_reviews/export_to_rtf/1
+  def export_to_rtf
+    respond_to do |format|
+      format.rtf do
+        render rtf: @conclusion_draft_review.to_rtf(current_organization),
+               filename: @conclusion_draft_review.rtf_name
+      end
     end
   end
 
@@ -201,11 +206,7 @@ class ConclusionDraftReviewsController < ApplicationController
         end
       end
 
-      if SHOW_CONCLUSION_ALTERNATIVE_PDF
-        @conclusion_draft_review.alternative_pdf(current_organization, export_options)
-      else
-        @conclusion_draft_review.to_pdf(current_organization, export_options)
-      end
+      @conclusion_draft_review.to_pdf(current_organization, export_options)
 
       if include_score_sheet
         @conclusion_draft_review.review.score_sheet current_organization, draft: true
@@ -293,11 +294,20 @@ class ConclusionDraftReviewsController < ApplicationController
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :recipients, :sectors, :evolution, :evolution_justification,
         :observations, :main_weaknesses_text, :corrective_actions,
-        :affects_compliance, :force_approval, :lock_version,
+        :affects_compliance, :collapse_control_objectives, :force_approval,
+        :reference, :scope, :previous_identification, :previous_date,
+        :main_recommendations, :effectiveness_notes, :additional_comments,
+        :lock_version, :exclude_regularized_findings,
         review_attributes: [
-          :id, :manual_score, :lock_version,
+          :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [
             :id, :best_practice_id, :auditor_comment
+          ]
+        ],
+        annexes_attributes: [
+          :id, :title, :description, :_destroy,
+          image_models_attributes: [
+            :id, :image, :image_cache, :_destroy
           ]
         ]
       )

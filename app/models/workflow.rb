@@ -1,8 +1,9 @@
 class Workflow < ApplicationRecord
   include ParameterSelector
+  include Workflows::Scopes
 
   has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
+    organization_id: ->(model) { Current.organization&.id }
   }
 
   # Callbacks
@@ -13,9 +14,6 @@ class Workflow < ApplicationRecord
   attr_accessor :allow_overload
 
   attr_readonly :period_id, :review_id
-
-  # Scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
 
   # Restricciones
   validates :period_id, :review_id, :organization_id, :presence => true
@@ -29,18 +27,22 @@ class Workflow < ApplicationRecord
   belongs_to :period
   belongs_to :review
   belongs_to :organization
+  belongs_to :file_model, :optional => true
   has_one :plan_item, :through => :review
 
   has_many :workflow_items, -> {
     order(
-      "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('order_number')} ASC",
-      "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('start')} ASC",
-      "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('end')} ASC"
+      [
+        "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('order_number')} ASC",
+        "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('start')} ASC",
+        "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('end')} ASC"
+      ].map { |o| Arel.sql o }
     )
   }, :dependent => :destroy
   has_many :resource_utilizations, :through => :workflow_items
 
   accepts_nested_attributes_for :workflow_items, :allow_destroy => true
+  accepts_nested_attributes_for :file_model, :allow_destroy => true
 
   def initialize(attributes = nil)
     super(attributes)
@@ -95,8 +97,8 @@ class Workflow < ApplicationRecord
   def to_pdf(organization = nil, include_details = true)
     pdf = Prawn::Document.create_generic_pdf :landscape
     column_order = [
-      ['order_number', 10], ['task', 60], ['start', 10], ['end', 10],
-      ['resources', 10]
+      ['order_number', 10], ['task', 50], ['start', 10], ['end', 10],
+      ['resources', 20]
     ]
     column_data, column_headers, column_widths = [], [], []
 
@@ -118,11 +120,15 @@ class Workflow < ApplicationRecord
       column_widths << pdf.percent_width(col_name.last)
     end
 
-    column_data[0] = column_headers
+    column_data << column_headers
 
     self.workflow_items.sort_by(&:order_number).each do |workflow_item|
-      resource_text = '%.2f' % workflow_item.units
-      column_data[workflow_item.order_number] = [
+      resource_text = [
+        "#{I18n.t 'workflow.human_resources_abbr'}: #{'%.2f' % workflow_item.human_units}",
+        "#{I18n.t 'workflow.material_resources_abbr'}: #{'%.2f' % workflow_item.material_units}"
+      ].join "\n"
+
+      column_data << [
         workflow_item.order_number,
         workflow_item.task,
         I18n.l(workflow_item.start, :format => :default),
@@ -131,8 +137,13 @@ class Workflow < ApplicationRecord
       ]
     end
 
+    total_units_text = [
+      "#{I18n.t 'workflow.human_resources_abbr'}: #{'%.2f' % human_units}",
+      "#{I18n.t 'workflow.material_resources_abbr'}: #{'%.2f' % material_units}"
+    ].join "\n"
+
     column_data << [
-      '', '', '', '', "<b>#{'%.2f' % units}</b>"
+      '', '', '', '', "<b>#{total_units_text}</b>"
     ]
 
     unless column_data.blank?
@@ -195,6 +206,10 @@ class Workflow < ApplicationRecord
 
   def human_units
     workflow_items.to_a.sum &:human_units
+  end
+
+  def material_units
+    workflow_items.to_a.sum &:material_units
   end
 
   def units

@@ -25,7 +25,7 @@ module ReviewsHelper
     end
 
     form.grouped_collection_select :plan_item_id, business_unit_types,
-      :plan_items, :name, :id, :project, {:prompt => true},
+      :plan_items, :name, :id, :project_with_dates, {:prompt => true},
       {:class => 'form-control', :disabled => readonly}
   end
 
@@ -35,6 +35,26 @@ module ReviewsHelper
 
   def review_business_unit_text(review)
     review.plan_item.try(:business_unit).try(:name)
+  end
+
+  def review_business_unit_types
+    if @review&.business_unit_type
+      BusinessUnitType.list.where.not(id: @review.business_unit_type.id).order :name
+    else
+      BusinessUnitType.list.order :name
+    end
+  end
+
+  def review_business_unit_type_prefixes
+    BusinessUnitType.list.map do |but|
+      [
+        but.review_prefix,
+        but.review_prefix,
+        {
+          data: { use_prefix: but.independent_identification }
+        }
+      ]
+    end
   end
 
   def user_assignment_type_field(form, inline = true, disabled = false)
@@ -76,17 +96,24 @@ module ReviewsHelper
     link_for_download = link_to(
       t('label.download'),
       :action => :survey_pdf, :id => review, :_ts => Time.now.to_i
-    ).html_safe
-    link_for_download_attachment = link_to(
-      t('review.survey.download_attachment'), review.file_model.file.url
-    ).html_safe if review.file_model.try(:file?)
+    )
 
     out = "<b>#{Review.human_attribute_name(:survey)}</b>"
 
     out << " | #{link_for_download}" unless review.survey.blank?
-    out << " | #{link_for_download_attachment}" if review.file_model.try(:file?)
+    out << "<ul>"
 
-    raw(out + simple_format(review.survey))
+    review.file_models.each do |fm|
+      link_for_download_attachment = link_to(
+        fm.file_file_name, fm.file.url
+      )
+
+      out << "<li>#{link_for_download_attachment}</li>"
+    end
+
+    out << "</ul>"
+
+    raw(out + simple_format(review.survey, class: 'mb-1'))
   end
 
   def link_to_suggested_process_control_findings(process_control)
@@ -96,12 +123,12 @@ module ReviewsHelper
     }
 
     link_to suggested_process_control_findings_review_path(process_control.id), options do
-      content_tag :span, nil, class: 'glyphicon glyphicon-eye-open'
+      icon 'fas', 'eye'
     end
   end
 
   def review_scope_options
-    REVIEW_SCOPES.map { |scope| [scope, scope] }
+    REVIEW_SCOPES.keys
   end
 
   def review_risk_exposure_options
@@ -150,10 +177,7 @@ module ReviewsHelper
 
     if review.work_papers_finished? || review.work_papers_revised?
       content_tag(:span, class: wrapper_class) do
-        content_tag(:span, nil,
-          class: 'glyphicon glyphicon-paperclip',
-          title: t('review.work_papers_marked_as_finished')
-        )
+        icon 'fas', 'paperclip', title: t('review.work_papers_marked_as_finished')
       end
     end
   end
@@ -164,8 +188,7 @@ module ReviewsHelper
     ActiveSupport::SafeBuffer.new.tap do |buffer|
       audit_team.each do |rua|
         buffer << content_tag(:span, class: 'text-muted') do
-          content_tag :span, nil, class: 'glyphicon glyphicon-user',
-            title: rua.user.full_name
+          icon 'fas', 'user', title: rua.user.full_name
         end
 
         buffer << ' '
@@ -180,9 +203,7 @@ module ReviewsHelper
       data:  { remote: true }
     }
 
-    link_to path, options do
-      content_tag :span, nil, class: 'glyphicon glyphicon-scissors'
-    end
+    link_to icon('fas', 'cut'), path, options
   end
 
   def excluded_control_objective_class control_objective
@@ -193,5 +214,45 @@ module ReviewsHelper
     else
       'bg-warning'
     end
+  end
+
+  def link_to_recover_original_control_objective_name(control_objective_item)
+    icon = content_tag(
+      :span,
+      icon('fas', 'exclamation-triangle'),
+      class: 'text-warning'
+    )
+
+    link_to(
+      icon,
+      reset_control_objective_name_review_path(
+        control_objective_item.review.id, control_objective_item_id: control_objective_item.id
+      ),
+      title: t('review.outdated_control_objective_name'),
+      data:  {
+        remote:  true,
+        method:  :patch,
+        confirm: t('messages.confirmation'),
+        reset_name_for: control_objective_item.id
+      }
+    )
+  end
+
+  def count_control_objective_items_by_finished_status review, finished: false
+    review.control_objective_items.select { |coi| coi.finished == finished }.count
+  end
+
+  def type_review
+    Review::TYPES_REVIEW.map do |key, value|
+      [t("reviews.form.#{key}"), value]
+    end
+  end
+
+  def show_external_review_options review
+    Review.list.map { |r| [r.identification, r.id] }
+  end
+
+  def subsidiaries_options
+    Subsidiary.list.map { |s| [s.to_s, s.id] }
   end
 end

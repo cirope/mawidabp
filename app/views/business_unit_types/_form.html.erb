@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+    <% if Current.conclusion_pdf_format == 'gal' %>
       <div class="row">
         <div class="col-md-6">
           <%= f.input :recipients, input_html: { rows: 4 } %>
@@ -34,16 +34,53 @@
     <% end %>
 
     <div class="row">
-      <div class="col-md-6">
-        <%= f.input :external, label: false, inline_label: true %>
+      <div class="col-md-3">
+        <%= f.input :external %>
       </div>
-      <div class="col-md-6">
-        <%= f.input :require_tag, label: false, inline_label: true %>
+      <div class="col-md-3">
+        <%= f.input :require_tag %>
       </div>
+      <% if Current.conclusion_pdf_format == 'gal' %>
+        <div class="col-md-3">
+          <%= f.input :require_counts %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :hide_review_logo %>
+        </div>
+      <% elsif Current.conclusion_pdf_format == 'pat' %>
+        <div class="col-md-3">
+          <%= f.input :shared_business_units %>
+        </div>
+      <% elsif Current.conclusion_pdf_format == 'nbc' %>
+        <div class="col-md-6">
+          <%= f.input :grouped_by_business_unit_annual_report %>
+        </div>
+      <% end %>
     </div>
 
+    <% if Current.conclusion_pdf_format == 'gal' %>
+      <div class="row">
+        <div class="col-md-3">
+          <%= f.input :independent_identification %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :without_number %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :reviews_for, input_html: { maxlength: 255 } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :detailed_review, input_html: { maxlength: 255 } %>
+        </div>
+      </div>
+    <% end %>
+
     <hr />
-    <h5><strong><%= BusinessUnit.model_name.human %></strong></h5>
+
+    <h5 class="h6"><%= BusinessUnit.model_name.human %></h5>
 
     <div id="business_units">
       <%= f.simple_fields_for :business_units do |bu_f| %>
@@ -57,7 +94,7 @@
   <hr />
 
   <div class="form-inputs">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.submit class: 'btn btn-primary' %>
     <%= f.input :lock_version, as: :hidden %>
   </div>

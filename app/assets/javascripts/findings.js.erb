@@ -1,0 +1,436 @@
+jQuery(function ($) {
+  $(document).on('change', '[data-repeated-url]', function () {
+    var $repeatedSelect = $(this)
+    var repeatedId      = $repeatedSelect.val()
+    var urlTemplate     = decodeURI($repeatedSelect.data('repeatedUrl'))
+    var url             = urlTemplate.replace('[FINDING_ID]', repeatedId)
+    var checkFields     = [
+      'impact',
+      'operational_risk',
+      'internal_control_components'
+    ]
+    var fields          = [
+      'title',
+      'description',
+      'effect',
+      'audit_recommendations',
+      'risk',
+      'priority',
+      'answer',
+      'audit_comments',
+      'compliance',
+      'year',
+      'nsisio',
+      'nobs'
+    ]
+
+    if (repeatedId) {
+      $repeatedSelect.prop('disabled', true)
+
+      $.getScript(url).always(function () {
+        $repeatedSelect.prop('disabled', false)
+      })
+    } else {
+      $.each(fields, function (i, field) {
+        $('[name$="[' + field + ']"]').val('').trigger('change')
+      })
+
+      $.each(checkFields, function (i, field) {
+        $('[name$="[' + field + '][]"]').prop('checked', false).trigger('custom:change')
+      })
+
+      $('[name$="[state]"]').val('<%= Finding::STATUS[:incomplete] %>').trigger('change')
+
+      $('input[type="checkbox"][name$="[tag_ids][]"]').prop('checked', false)
+
+      $('#taggings .tagging').remove()
+      $('#tasks .task').remove()
+      disableFollowUpDate()
+
+      $('[name$="[follow_up_date]"]').datepicker('setDate', null)
+      $('[name$="[origination_date]"]').
+        datepicker('setDate', new Date).
+        prop('readonly', false)
+    }
+  })
+
+  var disableFollowUpDate = function () {
+    var hasVisibleTasks = !!$('.task:visible').length
+
+    $('[name$="[follow_up_date]"]').prop('readonly', hasVisibleTasks)
+
+    if (hasVisibleTasks)
+      changeFollowUpDate()
+  }
+
+  $(document).on('dynamic-item:added', '[data-association="tasks"]', disableFollowUpDate)
+  $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".task"]', disableFollowUpDate)
+
+  var disableState = function () {
+    var useScopeCycle = $('[data-use-scope-cycle]').data('useScopeCycle')
+
+    if (useScopeCycle) {
+      var hasVisibleIssues = !!$('.issue:visible').length
+
+      $('[name$="[state]"]').attr('readonly', hasVisibleIssues)
+    }
+  }
+
+  $(document).on('dynamic-item:added', '[data-association="issues"]', function () {
+    refreshProbability()
+    disableState()
+  })
+
+  $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".issue"]', function () {
+    var total = sumAmountIssues()
+
+    $('[data-sum-amount-impact-risks]').text(total.toFixed(2))
+
+    refreshProbability()
+    refreshImpactAmount()
+    disableState()
+  })
+
+  var changeFollowUpDate = function () {
+    var lang     = $('html').prop('lang')
+    var format   = $.datepicker.regional[lang].dateFormat
+    var newValue = ''
+    var intValue = 0
+
+    $('[data-override-follow-up-date]:visible').each(function (i, e) {
+      var val = $(e).val()
+      var int = val ? $.datepicker.parseDate(format, val).getTime() : 0
+
+      if (int && int > intValue) {
+        intValue = int
+        newValue = val
+      }
+    })
+
+    if (newValue && $('[name$="[follow_up_date]"]').val() != newValue) {
+      var $warningElement = $('[data-follow-up-date-changed-warning]')
+      var message         = $warningElement.data('followUpDateChangedWarning')
+
+      $('[name$="[follow_up_date]"]').val(newValue)
+
+      alert(message)
+    }
+  }
+
+  $(document).on('change', '[data-override-follow-up-date]', changeFollowUpDate)
+
+  $(document).on('change', '[data-toggle-priority]', function () {
+    var enabledFor = $(this).data('togglePriority')
+
+    $('[name$="[priority]"]').
+      attr('disabled', +$(this).val() !== enabledFor).
+      val('<%= Finding.priorities[:low] %>')
+  })
+
+  $(document).on('change', '[data-copy-priority]', function () {
+    var risk_value = $(this).val()
+
+    $('[name$="[priority]"]').val(risk_value)
+  })
+
+  $(document).on('change', '[data-toggle-compliance]', function () {
+    var disabledFor = $(this).data('toggleCompliance')
+    var $compliance = $('select[name$="[compliance]"]')
+
+    if (+$(this).val() === disabledFor) {
+      $compliance.attr('disabled', true).val('no').change()
+    } else {
+      $compliance.removeAttr('disabled')
+    }
+  })
+
+  $(document).on('change', '[name$="[compliance]"]', function () {
+    $('[type="hidden"][name$="[compliance]"]').val($(this).val())
+  })
+
+  $(document).on('change', '[data-check-commitment-date-url]', function () {
+    var $commitmentDate = $(this)
+    var commitmentDate  = $commitmentDate.val()
+
+    if (commitmentDate && !$('[data-skip-commitment-support]').is(':checked')) {
+      var commitmentParam = commitmentDate.replace(/\//g, '-')
+      var urlTemplate     = decodeURI($commitmentDate.data('checkCommitmentDateUrl'))
+      var url             = urlTemplate.replace('NEW_DATE', commitmentParam)
+
+      $commitmentDate.prop('disabled', true)
+
+      $.getScript(url).always(function () {
+        $commitmentDate.prop('disabled', false)
+      })
+    }
+  })
+
+  $(document).on('change', '[data-risk-modifier]', function () {
+    var automatic = !$('[name$="[manual_risk]"]').is(':checked')
+    var values    = $('[data-risk-modifier]').map(function () {
+      return +$(this).val()
+    }).get()
+
+    if (automatic) {
+      var risk = undefined
+
+      if (values.every(function (v) { return v })) {
+        var result     = values.reduce(function (acc, v) { return acc * v }, 1)
+        var thresholds = $(this).data('riskModifier')
+
+        $.each(thresholds, function (risk_value, threshold) {
+          if (! risk && result <= threshold) {
+            risk = risk_value
+          }
+        })
+      }
+
+      if (risk) {
+        $('[name$="[risk]"]').val(risk).change()
+      } else {
+        $('[name$="[risk]"]').val(risk)
+      }
+    }
+  })
+
+  $(document).on('change', '[data-suggested-impact-option]', function () {
+    var absoluteValueId           = $('[data-impact-absolute-value]').data('impactAbsoluteValue')
+    var representativenessValueId = $('[data-impact-representativeness-value]').data('impactRepresentativenessValue')
+
+    if ($(this).val() === String(absoluteValueId) || $(this).val() === String(representativenessValueId)) {
+      $('select[name$="[impact_risk]"]').attr('disabled', true)
+      $('input[name$="[impact_risk]"]').attr('disabled', false)
+
+      refreshImpactAmount()
+    } else {
+      $('select[name$="[impact_risk]"]').attr('disabled', false)
+      $('input[name$="[impact_risk]"]').attr('disabled', true)
+    }
+  })
+
+  $(document).on('keyup change', '[data-finding-issue-amount]', function () {
+    var currency = $('[data-current-currency]').data('currentCurrency')
+    var total    = sumAmountIssues()
+
+    $('[data-sum-amount-impact-risks]').text(currency + total.toFixed(2))
+
+    refreshImpactAmount()
+    refreshProbability()
+  })
+
+  $(document).on('keyup change', '[data-amount-impact]', function () {
+    refreshImpactAmount()
+  })
+
+  $(document).on('keyup change', '[data-probability-amount]', function () {
+    refreshProbability()
+  })
+
+  var refreshImpactAmount = function () {
+    var currentImpactValue        = +$('[data-amount-impact]').val()
+    var absoluteValueId           = $('[data-impact-absolute-value]').data('impactAbsoluteValue')
+    var representativenessValueId = $('[data-impact-representativeness-value]').data('impactRepresentativenessValue')
+    var suggestedImpactOption     = $('[data-suggested-impact-option]').val()
+    var total                     = sumAmountIssues()
+    var issuePercentage           = 0
+
+    if (currentImpactValue > 0) {
+      issuePercentage = total / currentImpactValue
+    }
+
+    if (suggestedImpactOption === String(absoluteValueId)) {
+      var impactRisksTypes = $('[data-impact-risks-types]').data('impactRisksTypes')
+      var totalIssues      = $('[data-finding-issue-amount]:visible').length
+
+      if (totalIssues === 0) {
+        total = currentImpactValue
+      }
+
+      var impactValueId     = impactRisksTypesValue(impactRisksTypes, total)
+      var impactRiskChanged = $('[name$="[impact_risk]"]').val() !== String(impactValueId)
+
+      if (impactRiskChanged) {
+        $('[name$="[impact_risk]"]').val(impactValueId).trigger('change')
+      }
+    } else if (suggestedImpactOption === String(representativenessValueId)) {
+      var percentageImpactRisksTypes = $('[data-impact-risks-types]').data('percentageImpactRisksTypes')
+      var impactRisksId              = impactRisksTypesValue(percentageImpactRisksTypes, issuePercentage)
+      var impactRiskChanged          = $('[name$="[impact_risk]"]').val() !== String(impactRisksId)
+
+      if (impactRiskChanged) {
+        $('[name$="[impact_risk]"]').val(impactRisksId).trigger('change')
+      }
+    }
+  }
+
+  var refreshProbability = function () {
+    var filterAmount               = function (i, e) { return e.value.trim() }
+    var totalIssues                = $('[data-finding-issue-amount]:visible').filter(filterAmount).length
+    var currentProbabilityAmount   = +$('[data-probability-risks-types]').val()
+    var representativenessValueId  = $('[data-probability-representativeness-value]').data('probabilityRepresentativenessValue')
+    var repeatabilityValueId       = $('[data-probability-representativeness-value]').data('probabilityRepeatabilityValue')
+    var probabilityPreviousTotal   = $('[data-probability-previous-amount]').data('probabilityPreviousAmount')
+    var probabilityRisksTypes      = $('[data-probability-risks-types]').data('probabilityRisksTypes')
+    var issuePercentage            = 0
+
+    if (currentProbabilityAmount > 0) {
+      issuePercentage = totalIssues / currentProbabilityAmount
+    }
+
+    if ($('[data-suggested-probability-option]').val() === String(representativenessValueId)) {
+      var probabilityId           = impactRisksTypesValue(probabilityRisksTypes, issuePercentage)
+      var probabilityRiskChanged  = $('[name$="[probability]"]').val() !== String(probabilityId)
+
+      if (probabilityRiskChanged) {
+        $('[name$="[probability]"]').val(probabilityId).trigger('change')
+      }
+    } else if ($('[data-suggested-probability-option]').val() === String(repeatabilityValueId)) {
+      var probabilityRiskChanged = $('[name$="[probability]"]').val() !== String(probabilityId)
+
+      if (probabilityRiskChanged) {
+        if (probabilityPreviousTotal === 0) {
+          probabilityPreviousTotal = ''
+        }
+
+        $('[name$="[probability]"]').val(probabilityPreviousTotal).trigger('change')
+      }
+    }
+  }
+
+  var impactRisksTypesValue = function (types, total) {
+    var impactValue
+
+    $.each(types, function (i, data) {
+      var impactRiskId     = data[1]
+      var impactRiskAmount = data[0]
+
+      if (total > impactRiskAmount || (total === 0 && impactRiskAmount === 0)) {
+        impactValue = impactRiskId
+
+        return false
+      }
+    })
+
+    return impactValue
+  }
+
+  var sumAmountIssues = function () {
+    var total = 0
+
+    $('[data-finding-issue-amount]:visible').each(function (i, e) {
+      total += +$(e).val()
+    })
+
+    return total
+  }
+
+  $(document).on('change', '[data-suggested-probability-option]', function () {
+    var repeatabilityValue      = $('[data-probability-repeatability-value]').data('probabilityRepeatabilityValue')
+    var representativenessValue = $('[data-probability-representativeness-value]').data('probabilityRepresentativenessValue')
+
+    if ($(this).val() === String(repeatabilityValue) || $(this).val() === String(representativenessValue)) {
+      $('select[name$="[probability]"]').attr('disabled', true)
+      $('input[name$="[probability]"]').attr('disabled', false)
+
+      refreshProbability()
+    } else {
+      $('select[name$="[probability]"]').attr('disabled', false)
+      $('input[name$="[probability]"]').attr('disabled', true)
+    }
+  })
+
+  $(document).on('keyup', '[data-endorsement-reason]', function () {
+    var $reason       = $(this)
+    var reason        = $reason.val() || ''
+    var endorsementId = $reason.data('endorsementReason')
+
+    if (reason.trim()) {
+      $('[data-endorsement-action="' + endorsementId + '"]').each(function (i, e) {
+        var $link = $(e)
+        var href = $link.attr('href')
+        var newHref = href.replace(/reason=[^&]+/, 'reason=' + encodeURI(reason))
+
+        $link.removeClass('disabled').attr('href', newHref)
+      })
+    } else {
+      $('[data-endorsement-action="' + endorsementId + '"]').each(function (i, e) {
+        $(e).addClass('disabled')
+      })
+    }
+  })
+
+  $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
+    var manual_risk = $(this).is(':checked')
+    
+    if($(this).data('replaceWithOriginalValueWhenDisabled')) {
+      $('[data-bic-original-value]:hidden').each(function (i, e) {
+        manual_risk ? $(e).val('') : $(e).val($(e).data('bicOriginalValue'))
+      })
+
+      $('select[data-bic-original-value]').each(function (i, e) {
+        if(!manual_risk) {
+          $(e).val($(e).data('bicOriginalValue'))
+        }
+      })
+    }
+
+    $('[data-bic-field-to-disabled-when-is-manual]').attr('disabled', manual_risk)
+    $('[data-bic-field-to-disabled-when-is-automatic]').attr('disabled', !manual_risk)
+
+    if (!manual_risk) {
+      bicCalculatedRisk()
+    }
+  })
+
+  $(document).on('change', '[data-bic-calculate-risk]', function () {
+    bicCalculatedRisk()
+  })
+
+  var bicCalculatedRisk = function() {
+    var types = $('[data-bic-risks-types]').data('bicRisksTypes')
+    var total = 0
+    var risk
+
+    $('[data-bic-calculate-risk]').each(function (i, e) {
+      total += +$(e).val()
+    })
+
+    $.each(types, function (i, data) {
+      var riskValue = data[0]
+      var riskId    = data[1]
+
+      if (total >= riskValue) {
+        risk = riskId
+
+        return false
+      }
+    })
+
+    var riskChanged = $('[name$="[risk]"]').val() !== String(risk)
+
+    if (riskChanged) {
+      $('[name$="[risk]"]:enabled').val(risk)
+      $('[name$="[risk]"]:disabled').val(risk).trigger('change')
+    }
+  }
+
+  $(document).on('change', '[data-skip-commitment-support]', function () {
+    if ($(this).is(':checked')) {
+      $('[data-commitment-support]').addClass('d-none')
+      $('[data-check-commitment-date-url]').
+        removeAttr('data-required').
+        attr('disabled', 'disabled').
+        val('')
+    } else {
+      $('[data-check-commitment-date-url]').
+        attr('data-required', 'true').
+        removeAttr('disabled')
+
+      if ($('[data-commitment-support]').length) {
+        $('[data-commitment-support]').removeClass('d-none')
+      } else {
+        $('[data-check-commitment-date-url]').trigger('change')
+      }
+    }
+  })
+})

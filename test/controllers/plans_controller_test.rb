@@ -17,9 +17,41 @@ class PlansControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'show plan on pdf' do
+  test 'show plan as pdf' do
     get :show, params: { id: @plan }, as: :pdf
     assert_redirected_to @plan.relative_pdf_path
+  end
+
+  test 'show plan as csv' do
+    get :show, params: { id: @plan }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'show plan as csv with business unit type' do
+    business_unit_type = business_unit_types :cycle
+
+    get :show, params: {
+      id: @plan,
+      business_unit_type: business_unit_type,
+    }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'shows plan progress by status as csv' do
+    business_unit_type = business_unit_types :cycle
+
+    get :show, params: {
+      id: @plan,
+      business_unit_type: business_unit_type,
+      prs: 1
+    }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'show plan on js' do
@@ -67,6 +99,7 @@ class PlansControllerTest < ActionController::TestCase
               start: 71.days.from_now.to_date,
               end: 80.days.from_now.to_date,
               order_number: 1,
+              scope: 'committee',
               risk_exposure: 'high',
               business_unit_id: business_units(:business_unit_one).id,
               resource_utilizations_attributes: [
@@ -120,7 +153,7 @@ class PlansControllerTest < ActionController::TestCase
             id: plan,
             plan: {
               period_id: periods(:past_period).id,
-              new_version: '0',
+              new_version: '',
               plan_items_attributes: {
                 '0' => {
                   id: plan_items(:past_plan_item_1).id,
@@ -128,12 +161,13 @@ class PlansControllerTest < ActionController::TestCase
                   start: 55.days.ago.to_date,
                   end: 45.days.ago.to_date,
                   order_number: 1,
+                  scope: 'committee',
                   risk_exposure: 'high',
                   business_unit_id: business_units(:business_unit_one).id,
                   resource_utilizations_attributes: {
                     '1' => {
                       id: resource_utilizations(:auditor_for_20_units_past_plan_item_1).id,
-                      resource_id: resources(:laptop_resource).id,
+                      resource_id: resources(:mouse_resource).id,
                       resource_type: 'Resource',
                       units: '12.21'
                     }
@@ -141,6 +175,11 @@ class PlansControllerTest < ActionController::TestCase
                   taggings_attributes: [
                     {
                       tag_id: tags(:extra).id
+                    }
+                  ],
+                  auxiliar_business_units_attributes: [
+                    {
+                      business_unit_id: business_units(:business_unit_one).id
                     }
                   ]
                 },
@@ -173,6 +212,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 71.days.from_now.to_date,
             end: 80.days.from_now.to_date,
             order_number: 1,
+            scope: 'committee',
             risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
@@ -188,6 +228,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 79.days.from_now.to_date,
             end: 90.days.from_now.to_date,
             order_number: 2,
+            scope: 'committee',
             risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
@@ -224,6 +265,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 71.days.from_now.to_date,
             end: 80.days.from_now.to_date,
             order_number: 1,
+            scope: 'committee',
             risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
@@ -239,6 +281,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 81.days.from_now.to_date,
             end: 90.days.from_now.to_date,
             order_number: 2,
+            scope: 'committee',
             risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
@@ -315,5 +358,67 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_equal 2, business_units.size # All in the organization (one and two)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
+  end
+
+  test 'auto complete for business unit type' do
+    get :auto_complete_for_business_unit_type, params: { q: 'noway' }, as: :json
+
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, business_unit_types.size # Fifth is in another organization
+
+    get :auto_complete_for_business_unit_type, params: { q: 'cycle' }, as: :json
+
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_unit_types.size # One only
+    assert business_unit_types.all? { |u| u['label'].match /cycle/i }
+
+    get :auto_complete_for_business_unit_type, params: {
+      q: 'C',
+      plan_item_id: plan_items(:current_plan_item_1).id
+    }, as: :json
+
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_unit_types.size # Cycle and Consolidated Sustantive is excluded in params
+    assert_equal 'B.C.R.A.', business_unit_types[0]['label']
+
+    get :auto_complete_for_business_unit_type, params: { 
+      q: 'C',
+      plan_item_id: plan_items(:current_plan_item_1).id,
+      business_unit_type_id: plan_items(:current_plan_item_1).business_unit_type.id 
+    }, as: :json
+
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_unit_types.size # Cycle and Consolidated Sustantive is excluded in params
+    assert_equal 'B.C.R.A.', business_unit_types[0]['label']
+
+    get :auto_complete_for_business_unit_type, params: {
+      q: 'C',
+      business_unit_type_id: business_unit_types(:cycle).id
+    }, as: :json
+
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    expected_business_unit_types = BusinessUnitType.where(organization_id: Current.organization.id)
+                                                   .where.not(id: business_unit_types(:cycle).id).map { |but| but.name}
+
+    assert_equal expected_business_unit_types.count, business_unit_types.size
+
+    business_unit_types.each do |but|
+      assert expected_business_unit_types.include? but['label']
+    end
   end
 end

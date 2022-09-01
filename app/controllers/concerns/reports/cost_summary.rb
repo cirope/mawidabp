@@ -1,4 +1,5 @@
 module Reports::CostSummary
+  include Reports::Period
   include Reports::Pdf
 
   def cost_summary
@@ -15,6 +16,14 @@ module Reports::CostSummary
         data:   cost_summary_data_for(reviews_by_month),
         months: reviews_by_month.keys.sort
       }
+    end
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.csv do
+        render csv: cost_summary_report_csv, filename: @title.downcase
+      end
     end
   end
 
@@ -59,10 +68,10 @@ module Reports::CostSummary
       data = {}
 
       Hash[reviews_by_month.sort].each do |date, reviews|
-        planed   = ResourceUtilization.human.joins(:user).planed_on   reviews
+        planned  = ResourceUtilization.human.joins(:user).planned_on  reviews
         executed = ResourceUtilization.human.joins(:user).executed_on reviews
 
-        put_planned_data_on   data, planed, date
+        put_planned_data_on   data, planned, date
         put_executed_data_on  data, executed, date
         put_deviation_data_on data, date
       end
@@ -70,8 +79,8 @@ module Reports::CostSummary
       data
     end
 
-    def put_planned_data_on data, planed, date
-      planed.group(:resource_id, :name, :last_name).sum(:units).each do |user_data, sum|
+    def put_planned_data_on data, planned, date
+      planned.group(:resource_id, :name, :last_name).sum(:units).each do |user_data, sum|
         user_id = user_data.first
 
         data[user_id] ||= {
@@ -79,7 +88,7 @@ module Reports::CostSummary
           data: {}
         }
 
-        data[user_id][:data][date] = { planed_units: sum }
+        data[user_id][:data][date] = { planned_units: sum }
       end
     end
 
@@ -100,7 +109,7 @@ module Reports::CostSummary
     def put_deviation_data_on data, date
       data.each do |user_id, user_data|
         if user_data[:data][date]
-          estimated  = user_data[:data][date][:planed_units] || 0
+          estimated  = user_data[:data][date][:planned_units] || 0
           real       = user_data[:data][date][:executed_units] || 0
           difference = estimated - real
           deviation  = real > 0 ? difference / real.to_f * 100 : (estimated > 0 ? 100 : 0)
@@ -151,7 +160,7 @@ module Reports::CostSummary
 
         [
           I18n.l(month, format: '%b-%y'),
-          '%.2f' % (month_data[:planed_units] || 0),
+          '%.2f' % (month_data[:planned_units] || 0),
           '%.2f' % (month_data[:executed_units] || 0),
           '%.0f%%' % (month_data[:deviation] || 0)
         ]
@@ -170,6 +179,49 @@ module Reports::CostSummary
       respond_to do |format|
         format.html { redirect_to @report_path }
         format.js { render 'shared/pdf_report' }
+      end
+    end
+
+    def cost_summary_report_csv
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      csv_str = CSV.generate(**options) do |csv|
+        csv << cost_summary_headers
+
+        cost_summary_data csv
+      end
+
+      "\uFEFF#{csv_str}"
+    end
+
+    def cost_summary_headers
+      [
+        t('conclusion_report.cost_summary.column_month'),
+        t('conclusion_report.cost_summary.column_estimated_amount'),
+        t('conclusion_report.cost_summary.column_real_amount'),
+        t('conclusion_report.cost_summary.column_deviation'),
+        t('conclusion_report.cost_summary.column_interval')
+      ]
+    end
+
+    def cost_summary_data csv
+      @periods.each do |period|
+        if @data[period].present? && @data[period][:data].present?
+          @data[period][:data].each do |user_id, data|
+            @data[period][:months].each do |month|
+              month_data = data[:data][month] || {}
+
+              csv << [
+                I18n.l(month, format: '%b-%y'),
+                '%.2f' % (month_data[:planned_units] || 0),
+                '%.2f' % (month_data[:executed_units] || 0),
+                month_data[:deviation],
+                period.inspect,
+                data[:name]
+              ]
+            end
+          end
+        end
       end
     end
 end

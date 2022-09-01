@@ -27,7 +27,9 @@
       else
         $e.before(partial)
 
-      $e.trigger('dynamic-item.added', $e)
+      setTimeout(function () {
+        $e.trigger('dynamic-item:added', $e)
+      })
     },
 
     insertNestedItem: function ($e) {
@@ -38,20 +40,31 @@
 
       $e.closest('fieldset').before(DynamicFormHelper.replaceIds(template, regexp))
 
-      $e.trigger('dynamic-item.added', $e)
+      setTimeout(function () {
+        $e.trigger('dynamic-item:added', $e)
+      })
     },
 
     hideItem: function ($e) {
-      EffectHelper.hide($e.closest('fieldset'))
+      $e.prev('input[type=hidden].destroy').val('1')
 
-      $e.prev('input[type=hidden].destroy').val('1').trigger(
-        'dynamic-item.hidden', $e
-      )
+      EffectHelper.hide($e.closest('fieldset'), function () {
+        $e.trigger('dynamic-item:hidden', $e)
+      })
+    },
+
+    hideItembutton: function ($e) {
+      $e.prev('input[type=hidden].destroy').val('1')
+
+      var target = $e.data('dynamic-target')
+
+      $e.remove()
+      $(target).remove()
     },
 
     removeItem: function ($e) {
       EffectHelper.remove($e.closest('fieldset'), function () {
-        $e.trigger('dynamic-item.removed', $e)
+        $e.trigger('dynamic-item:removed', $e)
       })
     }
   }
@@ -95,8 +108,8 @@
       }
     })
 
-    $(document).on('dynamic-item.added', linkSelector, function (event, element) {
-      $(element).prev('fieldset').find(
+    $(document).on('dynamic-item:added', linkSelector, function (event, element) {
+      $(element).prev('fieldset:not([data-dynamic])').find(
         '[autofocus]:not([readonly]):enabled:visible:first'
       ).focus()
     })

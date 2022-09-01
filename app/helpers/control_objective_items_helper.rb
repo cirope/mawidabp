@@ -43,11 +43,20 @@ module ControlObjectiveItemsHelper
     weaknesses = control_objective_item.is_in_a_final_review? ?
       control_objective_item.final_weaknesses : control_objective_item.weaknesses
 
-    link_to_unless weaknesses.count == 0, weaknesses.count,
-      weaknesses_path(:control_objective => control_objective_item)
+    count = weaknesses.count
+
+    link_to_unless count.zero?, count, weaknesses_path(control_objective: control_objective_item)
   end
 
   def auditor_comment_options
     CONCLUSION_OPTIONS.map { |option| [option, option] }
+  end
+
+  def previous_effectiveness(control_objective_item)
+    effectiveness = control_objective_item.previous_effectiveness
+
+    if effectiveness
+      t('control_objective_item.previous_effectiveness', effectiveness: effectiveness)
+    end
   end
 end

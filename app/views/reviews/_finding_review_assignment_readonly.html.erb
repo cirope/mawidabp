@@ -1,19 +1,21 @@
 <fieldset class="finding_review_assignment">
   <div class="form-inputs">
-    <ul>
+    <ul class="mb-1">
       <li>
         <%= f.input :finding_id, as: :hidden, input_html: {
           value: f.object.finding_id, id: "hidden_finding_id_#{f.object.finding_id}"
         } %>
         <%= f.object.finding.try(:to_s) %>
         <strong>[<%= f.object.finding.try(:state_text) %>]</strong> |
-        <% if f.object.finding %>
-          <%= link_to_show finding_path(
-            f.object.finding.pending? ? 'incomplete' : 'complete', f.object.finding) %>
-        <% end %>
-        <% if !readonly && f.object.can_be_destroyed? %>
-          | <%= link_to_remove_nested_item(f) %>
-        <% end %>
+        <span class="text-nowrap">
+          <% if f.object.finding %>
+            <%= link_to_show finding_path(
+              f.object.finding.pending? ? 'incomplete' : 'complete', f.object.finding) %>
+          <% end %>
+          <% if !readonly && f.object.can_be_destroyed? %>
+            | <%= link_to_remove_nested_item(f) %>
+          <% end %>
+        </span>
       </li>
     </ul>
   </div>

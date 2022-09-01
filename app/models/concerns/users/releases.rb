@@ -80,8 +80,8 @@ module Users::Releases
     def finding_description_for finding
       [
         finding.class.model_name.human,
-        "*#{[finding.review_code.strip, finding.title && finding.title.strip].compact.join(' - ')}*",
-        "(#{Review.model_name.human} *#{finding.review.identification.strip}*)"
+        "**#{[finding.review_code.strip, finding.title && finding.title.strip].compact.join(' - ')}**",
+        "(#{Review.model_name.human} **#{finding.review.identification.strip}**)"
       ].join ' '
     end
 
@@ -94,6 +94,6 @@ module Users::Releases
     end
 
     def mini_review_description_for review
-      "*#{review.identification.strip}*"
+      "**#{review.identification.strip}**"
     end
 end

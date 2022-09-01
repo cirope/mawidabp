@@ -2,26 +2,23 @@ module Users::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :email, uniqueness: { case_sensitive: false }
     validates :user, uniqueness: { case_sensitive: false }, unless: :ldap?
-    validates :user, length: { in: 3..30 }, pdf_encoding: true
-    validates :name, :last_name, :email, presence: true, length: { maximum: 100 },
-      pdf_encoding: true
     validates :password, length: { maximum: 128 }, allow_nil: true, allow_blank: true
-    validates :function, :salt, :change_password_hash, length: { maximum: 255 },
-      allow_nil: true, allow_blank: true
-    validates :password, confirmation: true, unless: :is_encrypted?
+    validates :function, :office, :organizational_unit, :salt,
+      :change_password_hash,
+      length: { maximum: 255 }, allow_nil: true, allow_blank: true
     validates :language, length: { maximum: 10 }, presence: true
-    validates :email, format: { with: EMAIL_REGEXP }, allow_nil: true, allow_blank: true
+    validates :password, confirmation: true, unless: :is_encrypted?
     validate :validate_manager
-    validate :validate_roles
+    validate :validate_roles, on: :create
     validate :validate_password
+    validate :validate_email_group_uniqueness
   end
 
   private
 
     def ldap?
-      LdapConfig.exists? organization_id: Organization.current_id
+      LdapConfig.exists? organization_id: Current.organization&.id
     end
 
     def validate_manager
@@ -50,6 +47,21 @@ module Users::Validations
       end
     end
 
+    def validate_email_group_uniqueness
+      if will_save_change_to_email?
+        email_column = "#{self.class.quoted_table_name}.#{self.class.qcn 'email'}"
+        # Getting group this way only to work also on new records
+        group = organization_roles.take&.organization&.group
+        other_user_has_email = group &&
+          group.
+          users.
+          where.not(id: id).
+          where("LOWER(#{email_column}) = ?", email.downcase).any?
+
+        errors.add :email, :taken if other_user_has_email
+      end
+    end
+
     def share_organizations_with_his_manager?
       organization_roles.any? do |o_r|
         parent.organizations.find_by id: o_r.organization_id
@@ -57,15 +69,15 @@ module Users::Validations
     end
 
     def password_min_length
-      @_pml ||= get_parameter_for_now(:password_minimum_length).to_i
+      @_pml ||= get_parameter(:password_minimum_length).to_i
     end
 
     def password_min_time
-      @_pmt ||= get_parameter_for_now(:password_minimum_time).to_i
+      @_pmt ||= get_parameter(:password_minimum_time).to_i
     end
 
     def password_regex
-      @_pc ||= Regexp.new get_parameter_for_now(:password_constraint)
+      @_pc ||= Regexp.new get_parameter(:password_constraint)
     end
 
     def repeat_password_from? old_user

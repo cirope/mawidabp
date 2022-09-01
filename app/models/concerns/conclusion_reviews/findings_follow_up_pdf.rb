@@ -1,4 +1,4 @@
-module ConclusionReviews::FindingsFollowUpPDF
+module ConclusionReviews::FindingsFollowUpPdf
   extend ActiveSupport::Concern
 
   def create_findings_follow_up_pdf organization = nil, index = 1
@@ -7,7 +7,7 @@ module ConclusionReviews::FindingsFollowUpPDF
     oportunities = sorted_follow_up_findings :oportunities, use_finals
 
     if weaknesses.any? || oportunities.any?
-      pdf = Prawn::Document.create_generic_pdf :portrait, false
+      pdf = Prawn::Document.create_generic_pdf :portrait, footer: false
 
       pdf.add_watermark I18n.t('pdf.draft') if kind_of? ConclusionDraftReview
 

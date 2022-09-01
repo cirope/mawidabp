@@ -1,5 +1,6 @@
 class News < ApplicationRecord
   include Auditable
+  include NewsModule::AttributeTypes
   include NewsModule::Defaults
   include NewsModule::ImageModels
   include NewsModule::Scopes
