@@ -2,7 +2,7 @@
 
 class SamlProvider < ApplicationRecord
   include Trimmer
-  include SamlProviders::Validations
+  include SamlProviders::Validation
 
   belongs_to :default_role_for_users, class_name: 'Role', optional: true
   belongs_to :organization

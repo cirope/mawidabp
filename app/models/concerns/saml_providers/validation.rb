@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SamlProviders::Validations
+module SamlProviders::Validation
   extend ActiveSupport::Concern
 
   included do
