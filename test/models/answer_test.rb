@@ -39,19 +39,11 @@ class AnswerTest < ActiveSupport::TestCase
     assert_difference('Answer.count', -1) { @answer.destroy }
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates blank attributes' do
-    @answer.answer = '  '
+  test 'invalid answer type' do
+    @answer.type = 'test'
 
-    assert @answer.invalid?
-    assert_error @answer, :answer, :blank
-
-    # Cuestión multi choice
-    answer = answers(:answer_multi_choice)
-    answer.answer_option = nil
-
-    assert answer.invalid?
-    assert_error answer, :answer_option, :blank
+    refute @answer.valid?
+    assert_error @answer, :type, :inclusion
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -60,5 +52,41 @@ class AnswerTest < ActiveSupport::TestCase
 
     assert @answer.invalid?
     assert_error @answer, :answer, :too_long, count: 255
+  end
+
+  test 'must be incompleted when is blank answer' do
+    @answer.answer = ''
+
+    refute @answer.completed?
+
+    @answer.answer = nil
+
+    refute @answer.completed?
+  end
+
+  test 'must be completed when is present answer' do
+    assert @answer.completed?
+  end
+
+  test 'must be incompleted when is blank answer option' do
+    answer_yes_no = answers :answer_yes_no
+
+    refute answer_yes_no.completed?
+
+    answer_multi_choice               = answers :answer_multi_choice
+    answer_multi_choice.answer_option = nil
+
+    refute answer_multi_choice.completed?
+  end
+
+  test 'must be completed when is present answer option' do
+    answer_yes_no               = answers :answer_yes_no
+    answer_yes_no.answer_option = answer_options :yes_no_no
+
+    assert answer_yes_no.completed?
+
+    answer_multi_choice = answers :answer_multi_choice
+
+    assert answer_multi_choice.completed?
   end
 end
