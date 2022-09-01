@@ -78,7 +78,8 @@ class OrganizationsController < ApplicationController
         saml_provider_attributes: [
           :id, :provider, :idp_homepage, :idp_entity_id, :idp_sso_target_url,
           :sp_entity_id, :assertion_consumer_service_url, :name_identifier_format,
-          :assertion_consumer_service_binding, :idp_cert, :_destroy
+          :assertion_consumer_service_binding, :idp_cert, :default_role_for_users_id,
+          :_destroy
         ]
       )
     end

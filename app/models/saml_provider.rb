@@ -4,6 +4,7 @@ class SamlProvider < ApplicationRecord
   include Trimmer
   include SamlProviders::Validations
 
+  belongs_to :default_role_for_users, class_name: 'Role', optional: true
   belongs_to :organization
 
   trimmed_fields :idp_homepage, :idp_entity_id, :idp_sso_target_url,

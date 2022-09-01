@@ -109,7 +109,6 @@ class ApplicationController < ActionController::Base
     end
 
     def auth
-      Rails.logger.info "Session user_id en auth de ApplicationController: #{session[:user_id]}"
       action = (params[:action] || 'none').to_sym
 
       if login_check

@@ -10,6 +10,9 @@ class CreateSamlProvider < ActiveRecord::Migration[6.1]
       t.string     :name_identifier_format, null: false
       t.string     :assertion_consumer_service_binding, null: false
       t.text       :idp_cert, null: false
+      t.references :default_role_for_users,
+                   index: true,
+                   foreign_key: FOREIGN_KEY_OPTIONS.dup.merge({ to_table: :roles })
       t.references :organization,
                    index: true,
                    null: false,

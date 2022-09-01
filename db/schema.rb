@@ -1155,9 +1155,11 @@ ActiveRecord::Schema.define(version: 2022_08_16_174248) do
     t.string "name_identifier_format", null: false
     t.string "assertion_consumer_service_binding", null: false
     t.text "idp_cert", null: false
+    t.bigint "default_role_for_users_id"
     t.bigint "organization_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["default_role_for_users_id"], name: "index_saml_providers_on_default_role_for_users_id"
     t.index ["organization_id"], name: "index_saml_providers_on_organization_id"
   end
 
@@ -1499,6 +1501,7 @@ ActiveRecord::Schema.define(version: 2022_08_16_174248) do
   add_foreign_key "risk_weights", "risk_assessment_weights", on_update: :restrict, on_delete: :restrict
   add_foreign_key "roles", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "saml_providers", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "saml_providers", "roles", column: "default_role_for_users_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "sectors", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "settings", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "subsidiaries", "organizations", on_update: :restrict, on_delete: :restrict
