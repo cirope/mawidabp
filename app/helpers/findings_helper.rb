@@ -51,7 +51,14 @@ module FindingsHelper
   def next_task_expiration finding
     next_expiration = finding.next_task_expiration
 
-    next_expiration ? "/#{l finding.next_task_expiration, format: :short}" : ''
+    if next_expiration.present?
+      next_expiration_text = " / #{l finding.next_task_expiration, format: :short}"
+      html_class           = (next_expiration < Date.today ? 'strike bg-danger' : 'text-success')
+
+      content_tag :span, next_expiration_text, class: html_class
+    else
+      ''
+    end
   end
 
   def finding_updated_at_text finding
