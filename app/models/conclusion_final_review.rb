@@ -114,7 +114,9 @@ class ConclusionFinalReview < ConclusionReview
           ).check_code_prefix = false
         end
 
-        final_finding.draft_review_code ||= finding.draft_review_code ||= finding.review_code
+        unless finding.review_code.size == 8 && finding.draft_review_code.blank?
+          final_finding.draft_review_code ||= finding.draft_review_code ||= finding.review_code
+        end
 
         if Current.global_weakness_code && finding.kind_of?(Weakness)
           if finding.repeated_of.present?
@@ -137,8 +139,11 @@ class ConclusionFinalReview < ConclusionReview
       revoked_findings = self.review.weaknesses.revoked + self.review.oportunities.revoked
 
       revoked_findings.each do |rf|
-        rf.final               = true
-        rf.draft_review_code ||= rf.review_code
+        rf.final = true
+
+        unless rf.review_code.size == 8 && rf.draft_review_code.blank?
+          rf.draft_review_code ||= rf.review_code
+        end
 
         rf.save! validate: false
       end

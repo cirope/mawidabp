@@ -86,17 +86,18 @@ es:
         brief:
           title: "Ref: %{description}\nInforme de Auditoría %{review}"
           notice:
-            one: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} página."
-            other: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} páginas."
+            one: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el %{review}, consta de %{count} página."
+            other: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el %{review}, consta de %{count} páginas."
           details_title: "A continuación se detallan las principales debilidades observadas, así como su situación al momento de emitir el respectivo informe:"
           weaknesses_title: "Observaciones del presente período:"
       weaknesses:
         title: "Anexo I"
         previous_title: "%{prefix} Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."
         current_title:
-          cycle: "%{prefix} Observaciones surgidas durante la revisión correspondiente al año %{year}."
+          cycle: "%{prefix} Observaciones surgidas durante la revisión correspondiente al %{year}."
           sustantive: "%{prefix} Observaciones del ciclo surgidas durante la revisión correspondiente al %{year}."
         follow_up: "%{prefix} Seguimiento de aspectos observados en otras inspecciones."
+        external: "%{prefix} Seguimiento de aspectos observados en otras inspecciones."
         current_situation: "Situación Actual:"
         risk: "<b>Nivel de riesgo</b>: %{risk}"
         follow_up_date: "Fecha estimada de regularización:"

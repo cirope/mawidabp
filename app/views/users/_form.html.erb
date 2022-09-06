@@ -6,10 +6,10 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <%= f.input :user, input_html: { maxlength: 30, autofocus: true, readonly: limited_edition } %>
+        <%= f.input :user, input_html: { maxlength: 255, autofocus: true, readonly: limited_edition } %>
         <%= f.input :name, input_html: { maxlength: 100, readonly: limited_edition } %>
         <%= f.input :last_name, input_html: { maxlength: 100, readonly: limited_edition } %>
-        <%= f.input :email, input_html: { maxlength: 100, readonly: limited_edition } %>
+        <%= f.input :email, input_html: { maxlength: 255, readonly: limited_edition } %>
         <%= f.input :function, input_html: { maxlength: 255 } %>
       </div>
       <div class="col-md-6">
