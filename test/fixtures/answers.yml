@@ -4,6 +4,7 @@ answer_written:
   question: question_written
   poll: poll_one
   type: <%= AnswerWritten.name %>
+  attached: 'text.txt'
 
 answer_yes_no:
   comments: "Me agrada la forma de trabajo"

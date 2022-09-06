@@ -132,11 +132,13 @@ class PollsControllerTest < ActionController::TestCase
               id: answers(:answer_written).id,
               answer: 'Answer',
               comments: 'Comments',
-              type: 'AnswerWritten'
+              type: 'AnswerWritten',
+              attached: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
             }, {
               id: answers(:answer_multi_choice).id,
               answer_option_id: answer_options(:strongly_agree).id,
-              type: 'AnswerMultiChoice'
+              type: 'AnswerMultiChoice',
+              attached: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
             }
           ]
         }
@@ -163,7 +165,8 @@ class PollsControllerTest < ActionController::TestCase
             {
               id: answers(:answer_yes_no).id,
               answer_option_id: answer_options(:yes_no_yes).id,
-              type: 'AnswerYesNo'
+              type: 'AnswerYesNo',
+              attached: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
             }
           ]
         }
