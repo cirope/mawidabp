@@ -63,14 +63,14 @@ module Plans::CsvPrhPat
         ]
 
         totals_row_data << values
-        csv << values
+        csv             << values
       end
     end
 
     def put_totals_row_prh csv, totals_row_data
       total_budgeted = totals_row_data.transpose[1].sum
       total_progress = totals_row_data.transpose[2].sum
-      percentage = total_budgeted == 0 ? 0.0 : (total_progress.to_f * 100 / total_budgeted.to_f).round(2)
+      percentage     = total_budgeted == 0 ? 0.0 : (total_progress.to_f * 100 / total_budgeted.to_f).round(2)
 
       totals_row = [
         I18n.t('plans.csv_prh_pat.total_hours'),
