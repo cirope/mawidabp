@@ -335,7 +335,10 @@ GEM
     websocket-extensions (0.1.5)
     whenever (1.0.0)
       chronic (>= 0.6.3)
+    wicked_pdf (2.6.3)
+      activesupport
     will_paginate (3.3.1)
+    wkhtmltopdf-binary (0.12.6.5)
     zeitwerk (2.5.4)
 
 PLATFORMS
@@ -399,7 +402,9 @@ DEPENDENCIES
   validates_timeliness!
   web-console
   whenever
+  wicked_pdf
   will_paginate
+  wkhtmltopdf-binary
 
 BUNDLED WITH
    2.3.7
