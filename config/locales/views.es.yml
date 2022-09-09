@@ -416,6 +416,13 @@ es:
       business_unit: 'Sector'
       totals: 'Totales'
       total_plan_items: 'Total de Trabajos Planificados'
+    csv_prh_pat:
+      csv_name: 'grado_avance_horas_trabajo_%{current_date}.csv'
+      business_unit: 'Sector'
+      budgeted_hours: 'Horas Presupuestadas'
+      progress: 'Avance Total'
+      percentage: 'Procentaje'
+      total_hours: 'Total de Horas'
     calendar:
       show:
         title: 'Cronograma'
@@ -442,6 +449,7 @@ es:
       associate_control_objective: 'Asociar objetivo de control'
       associate_best_practice: 'Asociar buena práctica'
     download_progress_report_with_statuses_pat: 'Descargar grado de avance con estados de trabajos'
+    download_progress_report_in_hours_of_work_pat: 'Descargar grado de avance en horas de trabajo'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
     download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
