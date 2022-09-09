@@ -19,38 +19,6 @@ class FindingsHelperTest < ActionView::TestCase
     refute extension_enabled?(finding)
   end
 
-  test 'Show attachment creation date when have file_model' do
-    work_paper_with_file     = work_papers :image_work_paper
-    file_model_creation_date = work_paper_with_file.file_model.created_at.strftime('%d/%m/%Y')
-
-    assert_equal file_model_created_at(work_papers :image_work_paper), file_model_creation_date
-  end
-
-  test 'Dont show attachment creation date when not have file_model' do
-    finding    = findings :being_implemented_weakness
-    work_paper = finding.work_papers.first
-
-    assert_equal file_model_created_at(work_paper), '-'
-  end
-
-  test 'Should first version in being implementation when is a new record' do
-    finding = Finding.new
-
-    assert first_version_in_being_implementation?(finding)
-  end
-
-  test 'Should first version in being implementation when it never was being implementation' do
-    finding = findings :incomplete_weakness
-
-    assert first_version_in_being_implementation?(finding)
-  end
-
-  test 'Should not first version in being implementation when have version in being implemented and extension in false' do
-    finding = findings :being_implemented_weakness
-
-    refute first_version_in_being_implementation?(finding)
-  end
-
   test 'Should extension enabled when have final review and have extension' do
     skip unless USE_SCOPE_CYCLE
 
