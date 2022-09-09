@@ -8,6 +8,16 @@
     assignment_confirm_message: t('finding.assignment_confirm_message')
   }
 } %>
+<% if USE_SCOPE_CYCLE
+    form_options[:data] = form_options[:data].merge({ confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
+                                                                       { state: I18n.t('findings.state.being_implemented'),
+                                                                         extension: Finding.human_attribute_name(:extension) }),
+                                                      checkbox_target: '#weakness_extension',
+                                                      target_value_checkbox: false,
+                                                      state_target: Finding::STATUS[:being_implemented],
+                                                      input_with_state: '#weakness_state',
+                                                      condition_to_receive_confirm: first_version_in_being_implementation?(@weakness) })
+    end %>
 
 <%= simple_form_for @weakness, form_options do |f| %>
   <% content_for :js_extra do %>
