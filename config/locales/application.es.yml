@@ -1147,6 +1147,7 @@ es:
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
       without_audit_recommendations: "no tiene recomendaciones de auditoria"
+      cannot_update_sigen_fields_in_repeated_of: "No se pudieron actualizar los campos sigen en el finding con id: %{id} debido a los errores: %{messages}"
 
   welcome:
     index_title: "Bienvenido"
@@ -1240,6 +1241,7 @@ es:
         without_number: "Sin número"
         reviews_for: "Informes para"
         detailed_review: "Informe detallado"
+        grouped_by_business_unit_annual_report: "Agrupado por unidad de negocio en reporte anual"
       business_unit_type/business_units:
         one: "Ciclo"
         other: "Ciclos"
@@ -1442,6 +1444,8 @@ es:
         taggings: "Etiquetas"
         review_objective: "Objectivo del informe"
         type_review: "Tipo de informe"
+        subsidiary_id: "Sucursal"
+        subsidiary: "Sucursal"
       review/external_reviews:
         alternative_review: 'Informe externo'
         alternative_review_id: 'Informe externo'

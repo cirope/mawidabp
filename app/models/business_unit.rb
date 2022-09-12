@@ -68,6 +68,6 @@ class BusinessUnit < ApplicationRecord
 
     def require_business_unit_kind?
       !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-        HIDE_FINDING_CRITERIA_MISMATCH
+        HIDE_FINDING_CRITERIA_MISMATCH && !USE_SCOPE_CYCLE
     end
 end

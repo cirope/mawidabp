@@ -1536,6 +1536,7 @@
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
       without_audit_recommendations: "no tiene recomendaciones de auditoria"
+      cannot_update_sigen_fields_in_repeated_of: "No se pudieron actualizar los campos sigen en el finding con id: %{id} debido a los errores: %{messages}"
 
   welcome:
     index_title: "Bienvenido"

@@ -74,6 +74,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :hide_review_logo => '0',
           :independent_identification => '0',
           :shared_business_units => '0',
+          :grouped_by_business_unit_annual_report => '0',
           :business_units_attributes => [
             {
               :name => 'New business unit',
@@ -112,7 +113,8 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :hide_review_logo => '0',
           :independent_identification => '0',
           :shared_business_units => '0',
-          :without_number => true,
+          :grouped_by_business_unit_annual_report => '0',
+          :without_number => '1',
           :reviews_for => 'reviews for',
           :detailed_review => 'detailed review',
           :business_units_attributes => [
@@ -147,6 +149,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :hide_review_logo => '0',
           :independent_identification => '0',
           :shared_business_units => '0',
+          :grouped_by_business_unit_annual_report => '0',
           :without_number => nil,
           :business_units_attributes => [
             {
@@ -185,6 +188,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :hide_review_logo => '0',
           :independent_identification => '0',
           :shared_business_units => '0',
+          :grouped_by_business_unit_annual_report => '1',
           :business_units_attributes => [
             {
               :id => business_units(:business_unit_one).id,
@@ -230,7 +234,8 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :hide_review_logo => '0',
           :independent_identification => '0',
           :shared_business_units => '0',
-          :without_number => true,
+          :grouped_by_business_unit_annual_report => '1',
+          :without_number => '1',
           :reviews_for => 'reviews for',
           :detailed_review => 'detailed review',
           :business_units_attributes => [
@@ -272,6 +277,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :hide_review_logo => '0',
           :independent_identification => '0',
           :shared_business_units => '0',
+          :grouped_by_business_unit_annual_report => '1',
           :without_number => nil,
           :business_units_attributes => [
             {
