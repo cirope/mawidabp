@@ -117,7 +117,13 @@ class PlansController < ApplicationController
     end
 
     def plan_csv_path
-      render csv: @plan.to_csv(business_unit_type: @business_unit_type), filename: @plan.csv_filename
+      if params[:prs]
+        render csv: @plan.to_csv_prs(business_unit_type: @business_unit_type), filename: @plan.csv_filename_prs
+      elsif params[:prh]
+        render csv: @plan.to_csv_prh(business_unit_type: @business_unit_type), filename: @plan.csv_filename_prh
+      else
+        render csv: @plan.to_csv(business_unit_type: @business_unit_type), filename: @plan.csv_filename
+      end
     end
 
     def load_privileges

@@ -3,6 +3,8 @@ class Plan < ApplicationRecord
   include ParameterSelector
   include Plans::Clone
   include Plans::Csv
+  include Plans::CsvPrsPat
+  include Plans::CsvPrhPat
   include Plans::DestroyValidation
   include Plans::Duplication
   include Plans::Overload

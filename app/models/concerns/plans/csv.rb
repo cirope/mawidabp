@@ -59,7 +59,7 @@ module Plans::Csv
         plan_items.each do |plan_item|
           array_to_csv = [
             plan_item.order_number,
-            plan_item.status_text(long: false),
+            plan_item.status_text(long: false).to_s,
             business_unit_type&.name || '',
             plan_item.business_unit&.name || '',
             plan_item.project.to_s,
