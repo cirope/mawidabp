@@ -3,15 +3,10 @@
   <head>
     <meta charset='utf-8' />
     <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
-    <%= wicked_pdf_stylesheet_link_tag "bootstrap_sass" %>
-    <%= wicked_pdf_javascript_include_tag "number_pages" %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" 
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
   </head>
-  <body onload='number_pages'>
-    <div id="header">
-      <%= wicked_pdf_image_tag 'mysite.jpg' %>
-    </div>
-    <div id="content">
-      <%= yield %>
-    </div>
+  <body>
+    <%= yield %>
   </body>
 </html>

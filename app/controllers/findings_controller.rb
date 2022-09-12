@@ -26,7 +26,35 @@ class FindingsController < ApplicationController
       format.html { paginate_findings }
       format.csv  { render_index_csv }
       # format.pdf  { redirect_to pdf.relative_path }
-      format.pdf  { render pdf: 'primer_prueba', template: 'findings/index_pdf.html.erb', layout: 'pdf' }
+      format.pdf  { render  pdf: 'primer_prueba', 
+                            template: 'findings/index_pdf.html.erb', 
+                            layout: 'pdf', 
+                            disposition: 'attachment',
+                            margin:  {   
+                              top:    20,
+                              bottom: 20,
+                              left:   20,
+                              right:  20 
+                            },
+                            header:  {
+                              center:            'TEXT',
+                              font_name:         'NAME',
+                              font_size:         10,
+                              left:              'TEXT',
+                              right:             'TEXT',
+                              spacing:           10.0,
+                              line:              true,
+                            },
+                            footer: {
+                              center:            'TEXT',
+                              font_name:         'NAME',
+                              font_size:         10,
+                              left:              'TEXT',
+                              right:             'TEXT',
+                              spacing:           10.0,
+                              line:              true,
+                            },
+                            orientation: 'Landscape' }
     end
   end
 

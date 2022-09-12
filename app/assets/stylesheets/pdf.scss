@@ -1,38 +1,31 @@
-/*
- * This is a manifest file that'll automatically include all the stylesheets available in this directory
- * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
- * the top of the compiled file, but it's generally better to create a new file per style scope.
- *= require_self
- *= require fonts
- *= require font_awesome
- *= require jquery-ui
- *= require jquery-ui-theme
- *= require chartist.min
- *= require autocomplete
- *= require main
- *= require graph
- *= require activity_groups
- *= require closing_interviews
- *= require documents
- *= require findings/answers
- *= require findings/commitments
- *= require findings/work_papers
- *= require opening_interviews
- *= require permalinks
- *= require plans
- *= require plans/calendar
- *= require plans/resources
- *= require plans/stats
- *= require plan_items
- *= require process_controls
- *= require readings
- *= require reports
- *= require risk_assessments
- *= require risk_assessment_templates
- *= require roles
- *= require sessions
- *= require tags
- *= require time_summary
- *= require weakness_templates
- *= require welcome
-*/
+@import "application";
+
+html {
+  font-size: 9px;
+}
+
+.border-print-0 {
+  border: none;
+}
+
+.card-body {
+  padding: 1.25rem 0.25rem;
+}
+
+.container-fluid {
+  max-width: 300px;
+  float: left;
+}
+
+.d-print-table-cell {
+  display: table-cell;
+}
+
+.d-print-none {
+  display: none;
+}
+
+div.alwaysbreak { page-break-before: always; }
+div.nobreak:before { clear:both; }
+div.nobreak { page-break-inside: avoid; }
+.page-break { display:block; clear:both; page-break-after:always; }
