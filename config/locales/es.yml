@@ -334,7 +334,8 @@
       pdf_name: "resumen_anual_%{from_date}_al_%{to_date}.pdf"
       front_page:
         first_title: 'Calificación del Control Interno de'
-        footer_title: '<b>Informe:</b>'
+        footer_title: 'Informe:'
+        footer_prepared_by: 'Preparado por Auditoría Interna - NBCH'
       executive_summary:
         title: '<b><u>RESUMEN EJECUTIVO</u></b>'
         objective_title: '<b><u>OBJETIVO</u></b>'
