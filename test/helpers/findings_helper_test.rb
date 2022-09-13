@@ -234,6 +234,32 @@ class FindingsHelperTest < ActionView::TestCase
                  link_to_edit_finding(finding, auth_user)
   end
 
+  test 'should return next task expiration when it is not yet due' do
+    finding = findings :being_implemented_weakness
+
+    assert_equal next_task_expiration(finding),
+                 content_tag(:span, " / #{l finding.next_task_expiration, format: :short}", class: 'text-success')
+  end
+
+  test 'should return next task expiration when it is due' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! due_on: Time.zone.yesterday
+
+    assert_equal next_task_expiration(finding),
+                 content_tag(:span, " / #{l finding.next_task_expiration, format: :short}", class: 'strike bg-danger')
+  end
+
+  test 'should not return next task expiration' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! status: Task.statuses['finished']
+
+    assert_equal next_task_expiration(finding), ''
+  end
+
   private
 
     def link_to_edit(*args)

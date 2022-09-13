@@ -25,11 +25,31 @@ class PollTest < ActiveSupport::TestCase
     end
   end
 
-  test 'update' do
+  test 'update and not finished yet' do
     assert_equal @poll.answered, false
     assert @poll.update(:comments => 'Updated comments'),
       @poll.errors.full_messages.join('; ')
     @poll.reload
+    assert_equal 'Updated comments', @poll.comments
+    assert_equal @poll.answered, false
+  end
+
+  test 'update and finished' do
+    assert_equal @poll.answered, false
+
+    answer_yes_no = @poll.answers.find_by(type: 'AnswerYesNo')
+
+    @poll.update(comments: 'Updated comments',
+                 answers_attributes:
+                 [
+                   {
+                     id: answer_yes_no.id,
+                     answer_option_id: answer_options(:yes_no_no).id
+                   }
+                 ])
+
+    @poll.reload
+
     assert_equal 'Updated comments', @poll.comments
     assert_equal @poll.answered, true
   end

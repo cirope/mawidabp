@@ -33,7 +33,7 @@ class ControlObjectiveItem < ApplicationRecord
   has_one :business_unit_type, through: :business_unit
 
   def informal
-    review&.to_s
+    process_control.present? ? "#{process_control&.to_s} - #{review&.to_s}" : review&.to_s
   end
 
   def is_in_a_final_review?

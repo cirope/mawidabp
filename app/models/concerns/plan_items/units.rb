@@ -12,4 +12,9 @@ module PlanItems::Units
   def material_units
     material_resource_utilizations.map(&:units).compact.sum
   end
+
+  def human_units_consumed
+    review&.time_consumptions&.sum(&:amount)
+  end
+
 end

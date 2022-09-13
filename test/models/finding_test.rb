@@ -1330,8 +1330,8 @@ class FindingTest < ActiveSupport::TestCase
       affects_compliance: false
     ).save!
 
-    final_twin = finding.children.take!
-    tag = tags :follow_up
+    final_twin = finding.reload.children.take!
+    tag        = tags :follow_up
 
     assert final_twin.taggings.where(tag_id: tag.id).empty?
 
@@ -2070,6 +2070,41 @@ class FindingTest < ActiveSupport::TestCase
   test 'should return states that allow extension' do
     assert_equal Finding.states_that_allow_extension,
                  [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
+  end
+
+  test 'should return next task expiration when have tasks in progress' do
+    finding              = findings :being_implemented_weakness
+    next_task_expiration = finding.tasks
+                                  .where(status: Task.statuses['in_progress'],
+                                         due_on: Date.today..)
+                                  .first
+                                  .due_on
+
+    assert_equal finding.next_task_expiration, next_task_expiration
+  end
+
+  test 'should return next task expiration when have tasks pending' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! status: Task.statuses['pending']
+
+    next_task_expiration = finding.tasks
+                                  .where(status: Task.statuses['pending'],
+                                         due_on: Date.today..)
+                                  .first
+                                  .due_on
+
+    assert_equal finding.next_task_expiration, next_task_expiration
+  end
+
+  test 'should not return next task expiration when all tasks are finished' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! status: Task.statuses['finished']
+
+    assert_nil finding.next_task_expiration
   end
 
   private

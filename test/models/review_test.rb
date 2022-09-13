@@ -316,8 +316,9 @@ class ReviewTest < ActiveSupport::TestCase
 
     finding.save!(:validate => false)
 
+    score_weakness = SCORE_BY_WEAKNESS.present? ? :require_improvements : :require_some_improvements
     # High risk counts 12
-    assert_equal :require_some_improvements, @review.reload.score_array.first
+    assert_equal score_weakness , @review.reload.score_array.first
     assert_equal 84, @review.score
 
     repeated_of = findings :being_implemented_weakness

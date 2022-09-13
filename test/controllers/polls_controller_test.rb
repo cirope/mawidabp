@@ -117,7 +117,7 @@ class PollsControllerTest < ActionController::TestCase
     assert_template 'polls/edit'
   end
 
-  test 'update poll' do
+  test 'update poll and not finished yet' do
     set_host_for_organization(@poll.organization.prefix)
 
     assert_no_difference ['Poll.count', 'Answer.count'] do
@@ -137,6 +137,33 @@ class PollsControllerTest < ActionController::TestCase
               id: answers(:answer_multi_choice).id,
               answer_option_id: answer_options(:strongly_agree).id,
               type: 'AnswerMultiChoice'
+            }
+          ]
+        }
+      }
+    end
+
+    assert_redirected_to poll_url(@poll)
+    assert_not_nil assigns(:poll)
+    assert_equal 'Encuesta actualizada', assigns(:poll).comments
+    assert_equal false, assigns(:poll).answered
+  end
+
+  test 'update poll and finished' do
+    set_host_for_organization(@poll.organization.prefix)
+
+    assert_no_difference ['Poll.count', 'Answer.count'] do
+      patch :update, params: {
+        id: @poll,
+        poll: {
+          user_id: users(:administrator).id,
+          questionnaire_id: questionnaires(:questionnaire_one).id,
+          comments: 'Encuesta actualizada',
+          answers_attributes: [
+            {
+              id: answers(:answer_yes_no).id,
+              answer_option_id: answer_options(:yes_no_yes).id,
+              type: 'AnswerYesNo'
             }
           ]
         }
