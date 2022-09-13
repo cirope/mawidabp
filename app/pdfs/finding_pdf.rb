@@ -5,7 +5,7 @@ class FindingPdf < Prawn::Document
     @current_organization               = current_organization
     @title, @columns, @query, @findings = title, columns, query, findings
 
-    @pdf = Prawn::Document.create_generic_pdf :landscape
+    @pdf = Prawn::Document.create_generic_pdf :landscape, footer: false, hide_brand: true
   end
 
   def relative_path
