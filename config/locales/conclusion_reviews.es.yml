@@ -128,7 +128,7 @@ es:
         to_label: "Miembros del Comité de Auditoría del Nuevo Banco del Chaco S.A."
         from_label: "Gerencia Auditoría Interna – Nuevo Banco del Chaco S.A"
         number_review: "<b>Numero de Informe</b>"
-        prepared_by: "Preparado por Auditoría Interna - NBCH"
+        prepared_by: "<b>Preparado por</b> Auditoría Interna - NBCH"
         audit_date: "<b>Fecha de Auditoría</b>"
       weaknesses:
         title: "<b>RESUMEN EJECUTIVO</b>"

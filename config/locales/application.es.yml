@@ -284,6 +284,7 @@ es:
       front_page:
         first_title: 'Calificación del Control Interno de'
         footer_title: 'Informe:'
+        footer_prepared_by: 'Preparado por Auditoría Interna - NBCH'
       executive_summary:
         title: '<b><u>RESUMEN EJECUTIVO</u></b>'
         objective_title: '<b><u>OBJETIVO</u></b>'

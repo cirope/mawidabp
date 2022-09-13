@@ -97,7 +97,7 @@ module Reports::NbcAnnualReport
         [
           I18n.t('conclusion_committee_report.nbc_annual_report.front_page.footer_title'),
           @form.name,
-          I18n.t('conclusion_review.nbc.cover.prepared_by')
+          I18n.t('conclusion_committee_report.nbc_annual_report.front_page.footer_prepared_by'),
         ]
       ]
 
