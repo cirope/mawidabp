@@ -100,6 +100,9 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_on pdf
+      use_finals = kind_of? ConclusionFinalReview
+      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+
       if weaknesses.select(&:being_implemented?).any?
         pdf.move_down PDF_FONT_SIZE * 2
         pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
@@ -233,6 +236,9 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_detected_on pdf
+      use_finals = kind_of? ConclusionFinalReview
+      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+
       repeated      = weaknesses.not_revoked.where.not repeated_of_id: nil
       title_options = [(PDF_FONT_SIZE).round, :center, false]
 
