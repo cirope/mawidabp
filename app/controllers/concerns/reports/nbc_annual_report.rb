@@ -119,7 +119,7 @@ module Reports::NbcAnnualReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text @form.objective
+      pdf.text @form.objective, align: :justify
 
       pdf.move_down PDF_FONT_SIZE * 2
 
@@ -128,7 +128,7 @@ module Reports::NbcAnnualReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text @form.conclusion
+      pdf.text @form.conclusion, align: :justify
 
       pdf.move_down PDF_FONT_SIZE * 3
 
@@ -477,6 +477,8 @@ module Reports::NbcAnnualReport
       weaknesses_group_by_business_unit = initial_weaknesses_group_by_business_unit.merge(weaknesses_group_by_business_unit)
 
       array_for_business_unit = weaknesses_group_by_business_unit.map do |g|
+        next if g.second.count.zero?
+
         {
           name: g.first.name,
           count: g.second.count,
@@ -553,6 +555,8 @@ module Reports::NbcAnnualReport
       weaknesses_group_by_business_unit_type = initial_weaknesses_group_by_business_unit_types.merge(weaknesses_group_by_business_unit_type)
 
       array_for_business_unit_type = weaknesses_group_by_business_unit_type.map do |g|
+        next if g.second.count.zero?
+
         {
           name: g.first.name,
           count: g.second.count,
@@ -561,7 +565,7 @@ module Reports::NbcAnnualReport
       end
 
       ######### final union
-      array_for_business_unit + array_for_business_unit_type
+      array_for_business_unit.compact + array_for_business_unit_type.compact
     end
 
     def calculate_weight_for_business_unit_type weaknesses
