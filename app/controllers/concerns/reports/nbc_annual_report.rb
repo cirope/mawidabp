@@ -433,7 +433,8 @@ module Reports::NbcAnnualReport
                                               }
                                             })
                   },
-                  state: Finding::STATUS[:being_implemented]
+                  state: Finding::STATUS[:being_implemented],
+                  final: true
                 )
 
       weaknesses_group_by_business_unit =
@@ -459,7 +460,8 @@ module Reports::NbcAnnualReport
                       }
                     }
                   },
-                  state: Finding::STATUS[:being_implemented]
+                  state: Finding::STATUS[:being_implemented],
+                  final: true
                 )
                 .or(weakness_in_external_review_for_business_units)
                 .group_by(&:business_unit)
@@ -478,7 +480,7 @@ module Reports::NbcAnnualReport
         {
           name: g.first.name,
           count: g.second.count,
-          total_weight: g.second.sum { |f| f.risk_weight + f.state_weight + f.age_weight }
+          total_weight: g.second.sum { |f| f.risk_weight * f.state_weight * f.age_weight }
         }
       end
 
@@ -509,7 +511,8 @@ module Reports::NbcAnnualReport
                                               }
                                             })
                   },
-                  state: Finding::STATUS[:being_implemented]
+                  state: Finding::STATUS[:being_implemented],
+                  final: true
                 )
 
       weaknesses_group_by_business_unit_type =
@@ -535,7 +538,8 @@ module Reports::NbcAnnualReport
                       }
                     }
                   },
-                  state: Finding::STATUS[:being_implemented]
+                  state: Finding::STATUS[:being_implemented],
+                  final: true
                 )
                 .or(weakness_in_external_review_for_business_unit_types)
                 .group_by(&:business_unit_type)
@@ -562,7 +566,7 @@ module Reports::NbcAnnualReport
 
     def calculate_weight_for_business_unit_type weaknesses
       if weaknesses.present?
-        (weaknesses.sum { |w| w.risk_weight + w.state_weight + w.age_weight } / weaknesses.count.to_f).round
+        (weaknesses.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / weaknesses.count.to_f).round
       else
         0
       end
