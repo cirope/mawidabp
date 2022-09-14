@@ -31,26 +31,24 @@ class FindingsController < ApplicationController
                             layout: 'pdf',
                             disposition: 'attachment',
                             margin:  {   
-                              top:    20,
-                              bottom: 20,
+                              top:    10,
+                              bottom: 10,
                               left:   20,
                               right:  20
                             },
-                            header:  {
-                              center:            'TEXT',
-                              font_name:         'NAME',
-                              font_size:         10,
-                              left:              'TEXT',
-                              right:             'TEXT',
-                              spacing:           10.0,
-                              line:              true
+                            header: {
+                              html: {
+                                template: 'shared/pdf/header.html.erb'
+                              }
                             },
                             footer: {
                               html: {
-                                template:'shared/pdf/footer'
+                                template: 'shared/pdf/footer.html.erb'
                               }
                             },
-                            orientation: 'Landscape' }
+                            orientation:  'Landscape',
+                            show_as_html: false
+                          }
     end
   end
 
