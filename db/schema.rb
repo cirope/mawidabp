@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_214928) do
+ActiveRecord::Schema.define(version: 2022_09_05_172357) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_214928) do
     t.integer "answer_option_id", precision: 38
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "attached"
     t.index ["poll_id"], name: "index_answers_on_poll_id"
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["type", "id"], name: "index_answers_on_type_and_id"
