@@ -1611,6 +1611,8 @@
       work_paper: "Papel de trabajo"
 
     attributes:
+      answer:
+        attached: 'Adjunto'
       business_unit:
         name: "Nombre"
       business_unit_type_user:
