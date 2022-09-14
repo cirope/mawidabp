@@ -40,26 +40,18 @@ class PollsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference ['Poll.count', 'ActionMailer::Base.deliveries.count'] do
-      assert_difference 'Answer.count', 2 do
+      assert_difference 'Answer.count', 3 do
         post :create, params: {
           poll: {
             user_id: users(:administrator).id,
-            questionnaire_id: questionnaires(:questionnaire_one).id,
-            answers_attributes: [
-              {
-                answer: 'Answer',
-                comments: 'Comments',
-                type: 'AnswerWritten'
-              }, {
-                answer_option_id: answer_options(:strongly_agree).id,
-                type: 'AnswerMultiChoice'
-              }
-            ]
+            questionnaire_id: questionnaires(:questionnaire_one).id
           }
         }
       end
     end
     assert_redirected_to poll_path(assigns(:poll))
+
+    check_set_type_answers_in_last_poll
   end
 
   test 'create poll about a business unit' do
@@ -81,6 +73,8 @@ class PollsControllerTest < ActionController::TestCase
     assert_equal about.id, assigns(:poll).about_id
     assert_equal about.class.name, assigns(:poll).about_type
     assert_redirected_to poll_path(assigns(:poll))
+
+    check_set_type_answers_in_last_poll
   end
 
   test 'create poll about a (non) business unit' do
@@ -103,6 +97,8 @@ class PollsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:poll)
     assert_template 'polls/new'
+
+    check_set_type_answers_in_last_poll
   end
 
   test 'edit poll' do
@@ -188,4 +184,20 @@ class PollsControllerTest < ActionController::TestCase
 
     assert_redirected_to polls_url
   end
+
+  private
+
+    def check_set_type_answers_in_last_poll
+      last_poll = Poll.last
+
+      last_poll.answers.each do |answer|
+        if answer.question.answer_yes_no?
+          assert_equal answer.type, AnswerYesNo.name
+        elsif answer.question.answer_multi_choice?
+          assert_equal answer.type, AnswerMultiChoice.name
+        elsif answer.question.answer_written?
+          assert_equal answer.type, AnswerWritten.name
+        end
+      end
+    end
 end
