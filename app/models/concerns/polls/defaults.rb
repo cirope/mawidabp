@@ -11,7 +11,7 @@ module Polls::Defaults
     def build_questions
       if questionnaire && answers.empty?
         questionnaire.questions.each do |question|
-          answers.build(question: question)
+          answers.build(question: question, type: question.answer_type_name)
         end
       end
     end
