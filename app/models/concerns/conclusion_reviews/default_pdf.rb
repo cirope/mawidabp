@@ -235,8 +235,7 @@ module ConclusionReviews::DefaultPdf
               cell_style: {
                 align:        :justify,
                 border_width: 0,
-                padding:      [0, 0, 5, 0],
-                inline_format: true
+                padding:      [0, 0, 5, 0]
               }
             }
           end
