@@ -1,4 +1,4 @@
-set :branch,    'c-bvalores-test'
+set :branch,    'c-bvalores'
 set :stage,     :production
 set :rails_env, 'production'
 
