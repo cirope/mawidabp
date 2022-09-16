@@ -283,7 +283,8 @@ es:
       pdf_name: "resumen_anual_%{from_date}_al_%{to_date}.pdf"
       front_page:
         first_title: 'Calificación del Control Interno de'
-        footer_title: '<b>Informe:</b>'
+        footer_title: 'Informe:'
+        footer_prepared_by: 'Preparado por Auditoría Interna - NBCH'
       executive_summary:
         title: '<b><u>RESUMEN EJECUTIVO</u></b>'
         objective_title: '<b><u>OBJETIVO</u></b>'
@@ -1147,6 +1148,7 @@ es:
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
       without_audit_recommendations: "no tiene recomendaciones de auditoria"
+      cannot_update_sigen_fields_in_repeated_of: "No se pudieron actualizar los campos sigen en el finding con id: %{id} debido a los errores: %{messages}"
 
   welcome:
     index_title: "Bienvenido"
@@ -1220,6 +1222,8 @@ es:
       work_paper: "Papel de trabajo"
 
     attributes:
+      answer:
+        attached: 'Adjunto'
       business_unit:
         name: "Nombre"
         business_unit_kind_id: 'Tipo de unidad de negocio'
@@ -1240,6 +1244,7 @@ es:
         without_number: "Sin número"
         reviews_for: "Informes para"
         detailed_review: "Informe detallado"
+        grouped_by_business_unit_annual_report: "Agrupado por unidad de negocio en reporte anual"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"

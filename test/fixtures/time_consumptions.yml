@@ -5,3 +5,10 @@ special_activity_time:
   resource: special_activity
   resource_type: 'Activity'
   detail: ''
+review_time:
+  date: <%= Time.zone.today.to_s :db %>
+  amount: 8.0
+  user: administrator
+  resource: review_with_conclusion
+  resource_type: 'Review'
+  detail: ''

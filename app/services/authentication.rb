@@ -147,8 +147,17 @@ class Authentication
     end
 
     def set_valid_user
-      conditions = ["LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user"]
-      parameters = { user: unmasked_user.to_s.downcase.strip }
+      conditions = [
+        [
+          "LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user",
+          "LOWER(#{User.quoted_table_name}.#{User.qcn('email')}) = :email"
+        ].join(' OR ')
+      ]
+
+      parameters = {
+        user: unmasked_user.to_s.downcase.strip,
+        email: unmasked_user.to_s.downcase.strip
+      }
 
       if @admin_mode
         conditions << "#{User.quoted_table_name}.#{User.qcn('group_admin')} = :true"
