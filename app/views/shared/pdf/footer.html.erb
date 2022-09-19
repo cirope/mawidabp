@@ -1,13 +1,13 @@
 <div class="container">
   <div class="row">
-    <div class="col-2">
-      <%= wicked_pdf_image_tag 'logo_pdf.png' %>
+    <div class="col-1">
+      <%= image_tag wicked_pdf_asset_base64('logo_pdf.png'), width: 100, height: 12 %>
     </div>
-    <div class="col-8">
+    <div class="col-9 ml-3">
       <%= I18n.t :'app_copyright', :year => Time.zone.today.year %>
     </div>
     <div class="col-2">
-      <%= 'PAGE_NUMBER' %>
+      Pagina <span class="page"></span> de <span class="topage"></span>
     </div>
   </div>
 </div>

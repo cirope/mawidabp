@@ -1,5 +1,6 @@
 module OrganizationsHelper
   def organization_image_tag thumb_name: :thumb, model: :image_model
+    byebug
     scoped_organization_image model, thumb_name if image_persisted? model
   end
 
@@ -22,6 +23,7 @@ module OrganizationsHelper
     end
 
     def scoped_organization_image model, thumb_name
+      byebug
       Fiber.new do
         Current.organization = @organization
 

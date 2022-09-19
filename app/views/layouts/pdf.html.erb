@@ -2,11 +2,21 @@
 <html>
   <head>
     <meta charset='utf-8' />
-    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" 
-      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <%= wicked_pdf_stylesheet_link_tag "pdf" %>
+    <script>
+      function number_pages() {
+        var vars={};
+        var x=document.location.search.substring(1).split('&');
+        for(var i in x) {var z=x[i].split('=',2);vars[z[0]] = decodeURIComponent(z[1]);}
+        var x=['frompage','topage','page','webpage','section','subsection','subsubsection'];
+        for(var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for(var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+      }
+    </script>
   </head>
-  <body>
+  <body onload="number_pages()">
     <%= yield %>
   </body>
 </html>

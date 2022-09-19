@@ -28,10 +28,8 @@ class FindingsController < ApplicationController
       # format.pdf  { redirect_to pdf.relative_path }
       format.pdf  { render  pdf: 'primer_prueba',
                             template: 'findings/index_pdf.html.erb',
-                            layout: 'pdf',
-                            disposition: 'attachment',
                             margin:  {   
-                              top:    10,
+                              top:    15,
                               bottom: 10,
                               left:   20,
                               right:  20
@@ -47,6 +45,8 @@ class FindingsController < ApplicationController
                               }
                             },
                             orientation:  'Landscape',
+                            layout:      'pdf.html',
+                            # disposition: 'attachment',
                             show_as_html: false
                           }
     end
