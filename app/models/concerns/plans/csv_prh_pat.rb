@@ -53,7 +53,11 @@ module Plans::CsvPrhPat
           budgeted_hours << plan_item.human_units.to_i
         end
 
-        percentage = budgeted_hours.sum == 0 ? 0.0 : (progress_hours.sum.to_f * 100 / budgeted_hours.sum.to_f).round(2)
+        percentage = if budgeted_hours.sum == 0
+                       0.0
+                     else
+                       (progress_hours.sum.to_f * 100 / budgeted_hours.sum.to_f).round(2)
+                     end
 
         values = [
           business_unit_type&.name || '',
@@ -70,7 +74,11 @@ module Plans::CsvPrhPat
     def put_totals_row_prh csv, totals_row_data
       total_budgeted = totals_row_data.transpose[1].sum
       total_progress = totals_row_data.transpose[2].sum
-      percentage = total_budgeted == 0 ? 0.0 : (total_progress.to_f * 100 / total_budgeted.to_f).round(2)
+      percentage     = if total_budgeted == 0
+                         0.0
+                       else
+                         (total_progress.to_f * 100 / total_budgeted.to_f).round(2)
+                       end
 
       totals_row = [
         I18n.t('plans.csv_prh_pat.total_hours'),
