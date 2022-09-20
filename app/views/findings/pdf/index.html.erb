@@ -1,4 +1,4 @@
-<h2 class="font-weight-bold">Hallazgos pendientes</h2>
+<h2 class="font-weight-bold"><%= @title %></h2>
 
 <table class="table table-striped mt-4">
   <thead>
@@ -22,3 +22,9 @@
     <% end %>
   </tbody>
 </table>
+
+<% if @columns.present? && @query.present? %>
+  <%= I18n.t 'finding.pdf.filtered_by', query: @query.flatten.to_sentence, 
+                                        columns: translate_filter_columns(@columns), 
+                                        count: @columns.size %>
+<% end %>
