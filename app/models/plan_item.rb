@@ -9,6 +9,7 @@ class PlanItem < ApplicationRecord
   include PlanItems::ControlObjectives
   include PlanItems::DestroyValidation
   include PlanItems::Pdf
+  include PlanItems::Progress
   include PlanItems::ResourceUtilizations
   include PlanItems::Scope
   include PlanItems::Scopes
