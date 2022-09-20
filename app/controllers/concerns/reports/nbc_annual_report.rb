@@ -349,7 +349,7 @@ module Reports::NbcAnnualReport
         }
       ]
 
-      annual_weight        = total_weight / (total_cycles.zero? ? 1 : total_cycles)
+      annual_weight        = (total_weight / (total_cycles.zero? ? 1 : total_cycles.to_f)).round
       annual_qualification = calculate_qualification annual_weight
 
       table << [
@@ -423,7 +423,6 @@ module Reports::NbcAnnualReport
                                                 })
                                          .map(&:review)
 
-          cant_reviews_with_weakness = 0
           weakness = []
 
           reviews.each do |review|
@@ -440,10 +439,7 @@ module Reports::NbcAnnualReport
 
             weakness_act = weakness_act.flatten
 
-            if weakness_act.present?
-              weakness << weakness_act
-              cant_reviews_with_weakness += 1
-            end
+            weakness << weakness_act if weakness_act.present?
           end
 
           weakness = weakness.flatten
@@ -452,7 +448,7 @@ module Reports::NbcAnnualReport
             array_for_business_unit << {
               name: bu.name,
               count: weakness.count,
-              total_weight: (weakness.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / cant_reviews_with_weakness)
+              total_weight: (weakness.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / reviews.count.to_f).round
             }
           end
         end
@@ -474,7 +470,6 @@ module Reports::NbcAnnualReport
                                               })
                                        .map(&:review)
 
-        cant_reviews_with_weakness = 0
         weakness = []
 
         reviews.each do |review|
@@ -491,10 +486,7 @@ module Reports::NbcAnnualReport
 
           weakness_act = weakness_act.flatten
 
-          if weakness_act.present?
-            weakness << weakness_act
-            cant_reviews_with_weakness += 1
-          end
+          weakness << weakness_act if weakness_act.present?
         end
 
         weakness = weakness.flatten
@@ -503,21 +495,13 @@ module Reports::NbcAnnualReport
           array_for_business_unit_type << {
             name: but.name,
             count: weakness.count,
-            total_weight: (weakness.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / cant_reviews_with_weakness)
+            total_weight: (weakness.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / reviews.count.to_f).round
           }
         end
       end
 
       ######### final union
       array_for_business_unit + array_for_business_unit_type
-    end
-
-    def calculate_weight_for_business_unit_type weaknesses
-      if weaknesses.present?
-        (weaknesses.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / weaknesses.count.to_f).round
-      else
-        0
-      end
     end
 
     def calculate_qualification total_weight
