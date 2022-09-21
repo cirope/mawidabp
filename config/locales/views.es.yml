@@ -394,25 +394,25 @@ es:
     item_status_csv_pat:
       completed:
         long: 'Concluidos (Azul)'
-        short: 'C'
+        short: 'Concluido'
       completed_early:
         long: 'Adelantados con informe emitido (Gris)'
-        short: 'A (CI)'
+        short: 'Adelantado con informe emitido'
       in_early_progress:
         long: 'Adelantados en proceso (Celeste)'
-        short: 'A (EP)'
+        short: 'Adelantado en proceso'
       not_started_no_delayed:
         long: 'Sin retrasos no iniciados (Verde Claro)'
-        short: 'SR NI'
+        short: 'Sin retraso no iniciado'
       in_progress_no_delayed:
         long: 'Sin retrasos en proceso (Verde Oscuro)'
-        short: 'SR EP'
+        short: 'Sin retraso en proceso'
       delayed_pat:
         long: 'Retrasados (Amarillo)'
-        short: 'R'
+        short: 'Retrasado'
       overdue:
         long: 'Vencidos (Rojo)'
-        short: 'V'
+        short: 'Vencido'
     period:
       title: 'Periodo (%{name})'
       range: 'desde el %{from_date} al %{to_date}'
