@@ -237,7 +237,7 @@ class PlanItemTest < ActiveSupport::TestCase
     assert plan_item_2.review
     assert_equal plan_item_2.progress.to_i, plan_item_2.human_units_consumed.to_i
 
-    plan_item_2.resource_utilizations.first.units = 
+    plan_item_2.resource_utilizations.first.units = 6
 
     assert plan_item_2.valid?
     assert plan_item_2.review
