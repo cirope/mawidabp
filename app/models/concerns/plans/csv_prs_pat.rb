@@ -59,7 +59,7 @@ module Plans::CsvPrsPat
         values = [
           pi_status[:completed],
           pi_status[:completed_early],
-          pi_status[:in_early_progres],
+          pi_status[:in_early_progress],
           pi_status[:not_started_no_delayed],
           pi_status[:in_progress_no_delayed],
           pi_status[:delayed_pat],
