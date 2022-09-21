@@ -61,7 +61,7 @@ module Plans::CsvPrhPat
         ]
 
         totals_row_data << values
-        csv << values
+        csv             << values
       end
     end
 
