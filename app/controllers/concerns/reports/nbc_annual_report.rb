@@ -406,102 +406,66 @@ module Reports::NbcAnnualReport
     end
 
     def results_internal_qualification
+      result = []
+
       ######## grouped by business_unit
-      array_for_business_unit = []
+      BusinessUnit.left_joins(:business_unit_type)
+                  .list
+                  .where(business_unit_types: { grouped_by_business_unit_annual_report: true })
+                  .each do |bu|
+                    reviews = ConclusionFinalReview.left_joins(review: :plan_item)
+                                                   .where(reviews: {
+                                                            plan_items: { business_units: bu },
+                                                            type_review: 1,
+                                                            period: @form.period
+                                                          })
+                                                   .map(&:review)
 
-      business_unit_types_with_grouped_by_business_unit_annual_report =
-        BusinessUnitType.list
-                        .where(grouped_by_business_unit_annual_report: true)
-
-      business_unit_types_with_grouped_by_business_unit_annual_report.each do |but|
-        but.business_units.each do |bu|
-          reviews = ConclusionFinalReview.left_joins(review: :plan_item)
-                                         .where(reviews: {
-                                                  plan_items: { business_units: bu },
-                                                  type_review: 1,
-                                                  period: @form.period
-                                                })
-                                         .map(&:review)
-
-          weakness = []
-
-          reviews.each do |review|
-            weakness_act = []
-
-            weakness_act << review.final_weaknesses
-                                  .where(state: Finding::STATUS[:being_implemented]).to_a
-
-            review.external_reviews.each do |ext_r|
-              weakness_act << ext_r.alternative_review
-                                   .final_weaknesses
-                                   .where(state: Finding::STATUS[:being_implemented]).to_a
-            end
-
-            weakness_act = weakness_act.flatten
-
-            weakness << weakness_act if weakness_act.present?
-          end
-
-          weakness = weakness.flatten
-
-          if weakness.present?
-            array_for_business_unit << {
-              name: bu.name,
-              count: weakness.count,
-              total_weight: (weakness.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / reviews.count.to_f).round
-            }
-          end
-        end
-      end
+                    add_unit_qualification result, bu, reviews
+                  end
 
       ######## grouped by business_unit_type
-      array_for_business_unit_type = []
+      BusinessUnitType.list
+                      .where(grouped_by_business_unit_annual_report: false)
+                      .each do |but|
+                        reviews = ConclusionFinalReview.left_joins(review: :plan_item)
+                                                       .where(reviews: {
+                                                                plan_items: { business_units: but.business_units },
+                                                                type_review: 1,
+                                                                period: @form.period
+                                                              })
+                                                       .map(&:review)
 
-      business_unit_types_without_grouped_by_business_unit_annual_report =
-        BusinessUnitType.list
-                        .where(grouped_by_business_unit_annual_report: false)
+                        add_unit_qualification result, but, reviews
+                      end
 
-      business_unit_types_without_grouped_by_business_unit_annual_report.each do |but|
-        reviews = ConclusionFinalReview.left_joins(review: :plan_item)
-                                       .where(reviews: {
-                                                plan_items: { business_units: but.business_units },
-                                                type_review: 1,
-                                                period: @form.period
-                                              })
-                                       .map(&:review)
+      result
+    end
 
-        weakness = []
+    def add_unit_qualification array, unit, reviews
+      weakness = []
 
-        reviews.each do |review|
-          weakness_act = []
-
-          weakness_act << review.final_weaknesses
-                                .where(state: Finding::STATUS[:being_implemented]).to_a
-
-          review.external_reviews.each do |ext_r|
-            weakness_act << ext_r.alternative_review
-                                 .final_weaknesses
-                                 .where(state: Finding::STATUS[:being_implemented]).to_a
-          end
-
-          weakness_act = weakness_act.flatten
-
-          weakness << weakness_act if weakness_act.present?
-        end
-
-        weakness = weakness.flatten
-
-        if weakness.present?
-          array_for_business_unit_type << {
-            name: but.name,
-            count: weakness.count,
-            total_weight: (weakness.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / reviews.count.to_f).round
-          }
-        end
+      reviews.each do |review|
+        weakness << Weakness.left_joins(control_objective_item: :review)
+                            .where(
+                              control_objective_items:
+                              {
+                                reviews: [review] + review.external_reviews.map(&:alternative_review) 
+                              },
+                              state: Finding::STATUS[:being_implemented],
+                              final: true
+                            )
       end
 
-      ######### final union
-      array_for_business_unit + array_for_business_unit_type
+      weakness = weakness.flatten
+
+      if weakness.present?
+        array << {
+          name: unit.name,
+          count: weakness.count,
+          total_weight: (weakness.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / reviews.count.to_f).round
+        }
+      end
     end
 
     def calculate_qualification total_weight
