@@ -1,5 +1,6 @@
 class FileUploader < CarrierWave::Uploader::Base
   storage :file
+  after :remove, :delete_empty_upstream_dirs
 
   def store_dir
     guess_path
@@ -35,5 +36,15 @@ class FileUploader < CarrierWave::Uploader::Base
       end
 
       path || path_for(organization&.id)
+    end
+
+    def delete_empty_upstream_dirs
+      Dir.delete(store_dir)
+
+      parent_dir = File.dirname(store_dir)
+
+      Dir.delete(parent_dir)
+    rescue SystemCallError
+      true # nothing, the dir is not empty
     end
 end
