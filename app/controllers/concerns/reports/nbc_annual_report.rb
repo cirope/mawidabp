@@ -416,7 +416,7 @@ module Reports::NbcAnnualReport
                     reviews = ConclusionFinalReview.left_joins(review: :plan_item)
                                                    .where(reviews: {
                                                             plan_items: { business_units: bu },
-                                                            type_review: 1,
+                                                            type_review: Review::TYPES_REVIEW[:operational_audit],
                                                             period: @form.period
                                                           })
                                                    .map(&:review)
@@ -431,7 +431,7 @@ module Reports::NbcAnnualReport
                         reviews = ConclusionFinalReview.left_joins(review: :plan_item)
                                                        .where(reviews: {
                                                                 plan_items: { business_units: but.business_units },
-                                                                type_review: 1,
+                                                                type_review: Review::TYPES_REVIEW[:operational_audit],
                                                                 period: @form.period
                                                               })
                                                        .map(&:review)
@@ -443,29 +443,33 @@ module Reports::NbcAnnualReport
     end
 
     def add_unit_qualification array, unit, reviews
-      weakness = []
+      weaknesses = []
 
       reviews.each do |review|
-        weakness << Weakness.left_joins(control_objective_item: :review)
-                            .where(
-                              control_objective_items:
-                              {
-                                reviews: [review] + review.external_reviews.map(&:alternative_review) 
-                              },
-                              state: Finding::STATUS[:being_implemented],
-                              final: true
-                            )
+        weaknesses << Weakness.left_joins(control_objective_item: :review)
+                              .where(
+                                control_objective_items:
+                                {
+                                  reviews: [review] + review.external_reviews.map(&:alternative_review) 
+                                },
+                                state: Finding::STATUS[:being_implemented],
+                                final: true
+                              )
       end
 
-      weakness = weakness.flatten
+      weaknesses = weaknesses.flatten
 
-      if weakness.present?
+      if weaknesses.present?
         array << {
           name: unit.name,
-          count: weakness.count,
-          total_weight: (weakness.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / reviews.count.to_f).round
+          count: weaknesses.count,
+          total_weight: calculate_total_weight(weaknesses, reviews)
         }
       end
+    end
+
+    def calculate_total_weight weaknesses, reviews
+      (weaknesses.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / reviews.count.to_f).round
     end
 
     def calculate_qualification total_weight
