@@ -24,7 +24,7 @@
 </table>
 
 <% if @columns.present? && @query.present? %>
-  <%= I18n.t 'finding.pdf.filtered_by', query: @query.flatten.to_sentence, 
+  <%= t 'finding.pdf.filtered_by_html', query: @query.flatten.to_sentence, 
                                         columns: translate_filter_columns(@columns), 
                                         count: @columns.size %>
 <% end %>
