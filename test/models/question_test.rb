@@ -56,4 +56,19 @@ class QuestionTest < ActiveSupport::TestCase
     assert @question.invalid?
     assert_error @question, :answer_type, :inclusion
   end
+
+  test 'should return AnswerYesNo type name when is answer_yes_no' do
+    question = questions :question_yes_no
+
+    assert_equal AnswerYesNo.name, question.answer_type_name
+  end
+
+  test 'should return AnswerMultiChoice type name when is answer_multi_choice' do
+    assert_equal AnswerMultiChoice.name, @question.answer_type_name
+  end
+  test 'should return AnswerWritten type name when is answer_written' do
+    question = questions :question_written
+
+    assert_equal AnswerWritten.name, question.answer_type_name
+  end
 end

@@ -14,7 +14,7 @@ module PlanItems::Units
   end
 
   def human_units_consumed
-    review&.time_consumptions&.sum(&:amount)
+    review&.time_consumptions&.sum(&:amount) || 0
   end
 
 end

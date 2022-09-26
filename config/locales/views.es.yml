@@ -392,13 +392,27 @@ es:
         long: 'Retrasado'
         short: 'R'
     item_status_csv_pat:
-      completed: 'Concluidos (Azul)'
-      completed_early: 'Adelantados con informe emitido (Gris)'
-      in_early_progress: 'Adelantados en proceso (Celeste)'
-      not_started_no_delayed: 'Sin retrasos no iniciados (Verde Claro)'
-      in_progress_no_delayed: 'Sin retrasos en proceso (Verde Oscuro)'
-      delayed_pat: 'Retrasados (Amarillo)'
-      overdue: 'Trabajos vencidos (Rojo)'
+      completed:
+        long: 'Concluidos (Azul)'
+        short: 'Concluido'
+      completed_early:
+        long: 'Adelantados con informe emitido (Gris)'
+        short: 'Adelantado con informe emitido'
+      in_early_progress:
+        long: 'Adelantados en proceso (Celeste)'
+        short: 'Adelantado en proceso'
+      not_started_no_delayed:
+        long: 'Sin retrasos no iniciados (Verde Claro)'
+        short: 'Sin retraso no iniciado'
+      in_progress_no_delayed:
+        long: 'Sin retrasos en proceso (Verde Oscuro)'
+        short: 'Sin retraso en proceso'
+      delayed_pat:
+        long: 'Retrasados (Amarillo)'
+        short: 'Retrasado'
+      overdue:
+        long: 'Vencidos (Rojo)'
+        short: 'Vencido'
     period:
       title: 'Periodo (%{name})'
       range: 'desde el %{from_date} al %{to_date}'
@@ -410,6 +424,9 @@ es:
       title: 'Plan de auditoría'
       csv_name: 'plan_periodo_%{period}.csv'
       number_observations_per_risk: 'Cantidad observaciones por riesgo'
+      annual_plan_hours: 'Hs Plan Anual'
+      auditor: 'Auditor (Usuario)'
+      time_summary_hours: 'Hs Resumen Horario'
     csv_prs_pat:
       csv_name: 'grado_avance_estados_%{current_date}.csv'
       business_unit: 'Sector'

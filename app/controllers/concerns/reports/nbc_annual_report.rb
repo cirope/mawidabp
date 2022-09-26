@@ -97,7 +97,7 @@ module Reports::NbcAnnualReport
         [
           I18n.t('conclusion_committee_report.nbc_annual_report.front_page.footer_title'),
           @form.name,
-          I18n.t('conclusion_review.nbc.cover.prepared_by')
+          I18n.t('conclusion_committee_report.nbc_annual_report.front_page.footer_prepared_by'),
         ]
       ]
 
@@ -119,7 +119,7 @@ module Reports::NbcAnnualReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text @form.objective
+      pdf.text @form.objective, align: :justify
 
       pdf.move_down PDF_FONT_SIZE * 2
 
@@ -128,7 +128,7 @@ module Reports::NbcAnnualReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text @form.conclusion
+      pdf.text @form.conclusion, align: :justify
 
       pdf.move_down PDF_FONT_SIZE * 3
 
@@ -349,7 +349,7 @@ module Reports::NbcAnnualReport
         }
       ]
 
-      annual_weight        = total_weight / total_cycles
+      annual_weight        = (total_weight / (total_cycles.zero? ? 1 : total_cycles.to_f)).round
       annual_qualification = calculate_qualification annual_weight
 
       table << [
@@ -406,166 +406,70 @@ module Reports::NbcAnnualReport
     end
 
     def results_internal_qualification
+      result = []
+
       ######## grouped by business_unit
-      business_unit_types_with_grouped_by_business_unit_annual_report =
-        BusinessUnitType.list
-                        .where(grouped_by_business_unit_annual_report: true)
+      BusinessUnit.left_joins(:business_unit_type)
+                  .list
+                  .where(business_unit_types: { grouped_by_business_unit_annual_report: true })
+                  .each do |bu|
+                    reviews = ConclusionFinalReview.left_joins(review: :plan_item)
+                                                   .where(reviews: {
+                                                            plan_items: { business_units: bu },
+                                                            type_review: Review::TYPES_REVIEW[:operational_audit],
+                                                            period: @form.period
+                                                          })
+                                                   .map(&:review)
 
-      weakness_in_external_review_for_business_units =
-        Weakness.list
-                .left_joins(control_objective_item: { review: { plan_item: { plan: :period, business_unit: :business_unit_type } } })
-                .where(
-                  control_objective_items:
-                  {
-                    reviews: ExternalReview.left_joins(alternative_review: { plan_item: { plan: :period, business_unit: :business_unit_type } })
-                                           .where(alternative_reviews:
-                                            {
-                                              plan_items:
-                                              {
-                                                business_units:
-                                                {
-                                                  business_unit_types: business_unit_types_with_grouped_by_business_unit_annual_report
-                                                },
-                                                plans:
-                                                {
-                                                  periods: @form.period
-                                                }
-                                              }
-                                            })
-                  },
-                  state: Finding::STATUS[:being_implemented]
-                )
-
-      weaknesses_group_by_business_unit =
-        Weakness.list
-                .left_joins(control_objective_item: { review: { plan_item: { plan: :period, business_unit: :business_unit_type } } })
-                .includes(:business_unit)
-                .where(
-                  control_objective_items:
-                  {
-                    reviews:
-                    {
-                      type_review: 1,
-                      plan_items:
-                      {
-                        business_units:
-                        {
-                          business_unit_types: business_unit_types_with_grouped_by_business_unit_annual_report
-                        },
-                        plans:
-                        {
-                          periods: @form.period
-                        }
-                      }
-                    }
-                  },
-                  state: Finding::STATUS[:being_implemented]
-                )
-                .or(weakness_in_external_review_for_business_units)
-                .group_by(&:business_unit)
-
-      initial_weaknesses_group_by_business_unit = {}
-
-      business_unit_types_with_grouped_by_business_unit_annual_report.each do |but|
-        but.business_units.each do |bu|
-          initial_weaknesses_group_by_business_unit[bu] = []
-        end
-      end
-
-      weaknesses_group_by_business_unit = initial_weaknesses_group_by_business_unit.merge(weaknesses_group_by_business_unit)
-
-      array_for_business_unit = weaknesses_group_by_business_unit.map do |g|
-        {
-          name: g.first.name,
-          count: g.second.count,
-          total_weight: g.second.sum { |f| f.risk_weight + f.state_weight + f.age_weight }
-        }
-      end
+                    add_unit_qualification result, bu, reviews
+                  end
 
       ######## grouped by business_unit_type
-      business_unit_types_without_grouped_by_business_unit_annual_report =
-        BusinessUnitType.list
-                        .where(grouped_by_business_unit_annual_report: false)
+      BusinessUnitType.list
+                      .where(grouped_by_business_unit_annual_report: false)
+                      .each do |but|
+                        reviews = ConclusionFinalReview.left_joins(review: :plan_item)
+                                                       .where(reviews: {
+                                                                plan_items: { business_units: but.business_units },
+                                                                type_review: Review::TYPES_REVIEW[:operational_audit],
+                                                                period: @form.period
+                                                              })
+                                                       .map(&:review)
 
-      weakness_in_external_review_for_business_unit_types =
-        Weakness.list
-                .left_joins(control_objective_item: { review: { plan_item: { plan: :period, business_unit: :business_unit_type } } })
-                .where(
-                  control_objective_items:
-                  {
-                    reviews: ExternalReview.left_joins(alternative_review: { plan_item: { plan: :period, business_unit: :business_unit_type } })
-                                           .where(alternative_reviews:
-                                            {
-                                              plan_items:
-                                              {
-                                                business_units:
-                                                {
-                                                  business_unit_types: business_unit_types_without_grouped_by_business_unit_annual_report
-                                                },
-                                                plans:
-                                                {
-                                                  periods: @form.period
-                                                }
-                                              }
-                                            })
-                  },
-                  state: Finding::STATUS[:being_implemented]
-                )
+                        add_unit_qualification result, but, reviews
+                      end
 
-      weaknesses_group_by_business_unit_type =
-        Weakness.list
-                .left_joins(control_objective_item: { review: { plan_item: { plan: :period, business_unit: :business_unit_type } } })
-                .includes(:business_unit_type)
-                .where(
-                  control_objective_items:
-                  {
-                    reviews:
-                    {
-                      type_review: 1,
-                      plan_items:
-                      {
-                        business_units:
-                        {
-                          business_unit_types: business_unit_types_without_grouped_by_business_unit_annual_report
-                        },
-                        plans:
-                        {
-                          periods: @form.period
-                        }
-                      }
-                    }
-                  },
-                  state: Finding::STATUS[:being_implemented]
-                )
-                .or(weakness_in_external_review_for_business_unit_types)
-                .group_by(&:business_unit_type)
-
-      initial_weaknesses_group_by_business_unit_types = {}
-
-      business_unit_types_without_grouped_by_business_unit_annual_report.each do |but|
-        initial_weaknesses_group_by_business_unit_types[but] = []
-      end
-
-      weaknesses_group_by_business_unit_type = initial_weaknesses_group_by_business_unit_types.merge(weaknesses_group_by_business_unit_type)
-
-      array_for_business_unit_type = weaknesses_group_by_business_unit_type.map do |g|
-        {
-          name: g.first.name,
-          count: g.second.count,
-          total_weight: calculate_weight_for_business_unit_type(g.second)
-        }
-      end
-
-      ######### final union
-      array_for_business_unit + array_for_business_unit_type
+      result
     end
 
-    def calculate_weight_for_business_unit_type weaknesses
-      if weaknesses.present?
-        (weaknesses.sum { |w| w.risk_weight + w.state_weight + w.age_weight } / weaknesses.count.to_f).round
-      else
-        0
+    def add_unit_qualification array, unit, reviews
+      weaknesses = []
+
+      reviews.each do |review|
+        weaknesses << Weakness.left_joins(control_objective_item: :review)
+                              .where(
+                                control_objective_items:
+                                {
+                                  reviews: [review] + review.external_reviews.map(&:alternative_review) 
+                                },
+                                state: Finding::STATUS[:being_implemented],
+                                final: true
+                              )
       end
+
+      weaknesses = weaknesses.flatten
+
+      if weaknesses.present?
+        array << {
+          name: unit.name,
+          count: weaknesses.count,
+          total_weight: calculate_total_weight(weaknesses, reviews)
+        }
+      end
+    end
+
+    def calculate_total_weight weaknesses, reviews
+      (weaknesses.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / reviews.count.to_f).round
     end
 
     def calculate_qualification total_weight
