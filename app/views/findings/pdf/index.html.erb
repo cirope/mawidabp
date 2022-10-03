@@ -1,0 +1,30 @@
+<h2 class="font-weight-bold"><%= @title %></h2>
+
+<table class="table table-striped mt-4">
+  <thead>
+    <tr class="bg-secondary text-white">
+      <th class="border border-dark"><%= Review.model_name.human %></th>
+      <th class="border border-dark"><%= Finding.human_attribute_name('review_code') %></th>
+      <th class="border border-dark"><%= BestPractice.model_name.human %></th>
+      <th class="border border-dark"><%= ProcessControl.model_name.human %></th>
+      <th class="border border-dark"><%= Finding.human_attribute_name('title') %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @findings.each do |finding| %>
+      <tr>
+        <td class="border border-dark"><%= finding.review.identification %></td>
+        <td class="border border-dark"><%= finding.review_code %></td>
+        <td class="border border-dark"><%= finding.control_objective&.process_control&.best_practice&.name || '' %></td>
+        <td class="border border-dark"><%= finding.control_objective&.process_control&.name %></td>
+        <td class="border border-dark"><%= finding.title %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @columns.present? && @query.present? %>
+  <%= t 'finding.pdf.filtered_by_html', query: @query.flatten.to_sentence, 
+                                        columns: translate_filter_columns(@columns), 
+                                        count: @columns.size %>
+<% end %>

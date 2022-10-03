@@ -25,7 +25,7 @@ class FindingsController < ApplicationController
     respond_to do |format|
       format.html { paginate_findings }
       format.csv  { render_index_csv }
-      format.pdf  { redirect_to pdf.relative_path }
+      format.pdf  { render_index_pdf }
     end
   end
 
@@ -162,9 +162,36 @@ class FindingsController < ApplicationController
       )
     end
 
-    def pdf
+    def render_index_pdf
+      @title = title_pdf
+
+      render pdf: @title.downcase.gsub(/\s+/, '_').sanitized_for_filename,
+             template: 'findings/pdf/index.html.erb',
+             margin: {
+               top:    15,
+               bottom: 10,
+               left:   20,
+               right:  20
+             },
+             header: {
+               html: {
+                 template: 'shared/pdf/generic_report_header.html.erb'
+               }
+             },
+             footer: {
+               html: {
+                 template: 'shared/pdf/generic_report_footer.html.erb'
+               }
+             },
+             orientation: 'Landscape',
+             layout: 'pdf.html',
+             disposition: 'attachment',
+             show_as_html: false
+    end
+
+    def title_pdf
       title_partial = case params[:completion_state]
-                      when'incomplete'
+                      when 'incomplete'
                         'pending'
                       when 'repeated'
                         'repeated'
@@ -172,13 +199,7 @@ class FindingsController < ApplicationController
                         'complete'
                       end
 
-      FindingPdf.create(
-        title: t("menu.follow_up.#{title_partial}_findings"),
-        columns: @columns,
-        query: @query,
-        findings: @findings.except(:limit),
-        current_organization: current_organization
-      )
+      t("menu.follow_up.#{title_partial}_findings")
     end
 
     def csv_options
