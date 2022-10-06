@@ -27,7 +27,7 @@ class Workflow < ApplicationRecord
   belongs_to :period
   belongs_to :review
   belongs_to :organization
-  belongs_to :file_model, :optional => true
+  belongs_to :file_model, :dependent => :destroy, :optional => true
   has_one :plan_item, :through => :review
 
   has_many :workflow_items, -> {

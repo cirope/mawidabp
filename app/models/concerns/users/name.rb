@@ -13,11 +13,11 @@ module Users::Name
   end
   alias display_name informal_name
 
-  def full_name from = nil
+  def full_name from = nil, csv = false
     version   = paper_trail.version_at from if from
     version ||= self
 
-    "#{version.last_name}, #{version.name}"
+    csv ? "#{version.last_name} #{version.name}" : "#{version.last_name}, #{version.name}"
   end
 
   def full_name_with_user from = nil

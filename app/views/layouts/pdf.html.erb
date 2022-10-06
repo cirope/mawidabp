@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <%= wicked_pdf_stylesheet_link_tag 'wicked_pdf' %>
+    <%= wicked_pdf_javascript_include_tag 'wicked_pdf/number_pages' %>
+  </head>
+  <body onload="number_pages()">
+    <%= yield %>
+  </body>
+</html>
