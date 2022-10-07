@@ -12,8 +12,11 @@ module PlansHelper
   end
 
   def show_plan_item_info plan_item
-    show_info plan_item.status_text(on: plan_status_info_date),
-      class: [plan_item.status_color(on: plan_status_info_date), 'media-object'].join(' ')
+    if Current.conclusion_pdf_format == 'pat'
+      show_info plan_item.status_text_pat(long: false), class: [plan_item.status_color_pat(), 'media-object'].join(' ')
+    else
+      show_info plan_item.status_text(on: plan_status_info_date), class: [plan_item.status_color(on: plan_status_info_date), 'media-object'].join(' ')
+    end
   end
 
   def plan_cost
