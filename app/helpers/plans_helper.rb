@@ -132,7 +132,7 @@ module PlansHelper
         class: 'dropdown-item'
       ),
       link_to(
-        t('plans.download_business_unit_type_plan_csv'),
+        (Current.conclusion_pdf_format == 'pat' ? t('plans.download_progress_report_internal_management_pat') : t('plans.download_business_unit_type_plan_csv')),
         [@plan, include_details: 1, _ts: Time.now.to_i, format: :csv],
         class: 'dropdown-item'
       )
@@ -157,8 +157,13 @@ module PlansHelper
           class: 'dropdown-item'
         ),
         link_to(
-          t('plans.download_progress_report_in_hours_of_work_pat'),
+          t('plans.download_totalizer_progress_report_in_hours_of_work_pat'),
           [@plan, prh: 1,  _ts: Time.now.to_i, format: :csv],
+          class: 'dropdown-item'
+        ),
+        link_to(
+          t('plans.download_detailed_progress_report_in_hours_of_work_pat'),
+          [@plan, include_details: 1, dprh: 1, _ts: Time.now.to_i, format: :csv],
           class: 'dropdown-item'
         )
       ]
