@@ -45,6 +45,7 @@ module Plans::Csv
 
       headers += add_bic_headers if Current.conclusion_pdf_format == 'bic'
       headers += add_bic_headers if Current.conclusion_pdf_format == 'pat'
+      headers
     end
 
     def add_bic_headers
