@@ -82,7 +82,6 @@ module Plans::Csv
     end
 
     def put_csv_rows_on csv, business_unit_type
-
       plan_items = Array(grouped_plan_items[business_unit_type]).sort
 
       if plan_items.present?

@@ -13,9 +13,11 @@ module PlansHelper
 
   def show_plan_item_info plan_item
     if Current.conclusion_pdf_format == 'pat'
-      show_info plan_item.status_text_pat(long: false), class: [plan_item.status_color_pat(), 'media-object'].join(' ')
+      show_info plan_item.status_text_pat(long: false),
+        class: [plan_item.status_color_pat(), 'media-object'].join(' ')
     else
-      show_info plan_item.status_text(on: plan_status_info_date), class: [plan_item.status_color(on: plan_status_info_date), 'media-object'].join(' ')
+      show_info plan_item.status_text(on: plan_status_info_date),
+        class: [plan_item.status_color(on: plan_status_info_date), 'media-object'].join(' ')
     end
   end
 
@@ -120,6 +122,12 @@ module PlansHelper
   end
 
   def plan_download_options
+    csv_i18n = if Current.conclusion_pdf_format == 'pat'
+                 t('plans.download_progress_report_internal_management_pat')
+               else
+                 t('plans.download_business_unit_type_plan_csv')
+               end
+
     options = [
       link_to(
         t('plans.download_global_plan'),
@@ -132,7 +140,7 @@ module PlansHelper
         class: 'dropdown-item'
       ),
       link_to(
-        (Current.conclusion_pdf_format == 'pat' ? t('plans.download_progress_report_internal_management_pat') : t('plans.download_business_unit_type_plan_csv')),
+        csv_i18n,
         [@plan, include_details: 1, _ts: Time.now.to_i, format: :csv],
         class: 'dropdown-item'
       )
