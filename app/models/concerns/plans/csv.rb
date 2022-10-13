@@ -27,7 +27,7 @@ module Plans::Csv
   private
 
     def csv_headers
-      [
+      headers = [
         PlanItem.human_attribute_name(:order_number),
         PlanItem.human_attribute_name(:status),
         BusinessUnitType.model_name.human,
@@ -40,17 +40,35 @@ module Plans::Csv
         PlanItem.human_attribute_name(:end),
         (Current.conclusion_pdf_format == 'pat' ? I18n.t('plans.csv.annual_plan_hours') : PlanItem.human_attribute_name(:human_resource_units)),
         (PlanItem.human_attribute_name(:material_resource_units) unless Current.conclusion_pdf_format == 'pat'),
-        (PlanItem.human_attribute_name(:total_resource_units) unless Current.conclusion_pdf_format == 'pat'),
+        (PlanItem.human_attribute_name(:total_resource_units) unless Current.conclusion_pdf_format == 'pat')
+      ].compact
+
+      headers += add_bic_headers if Current.conclusion_pdf_format == 'bic'
+      headers += add_bic_headers if Current.conclusion_pdf_format == 'pat'
+    end
+
+    def add_bic_headers
+      [
         (Review.human_attribute_name(:score) if Current.conclusion_pdf_format == 'bic'),
         (I18n.t('risk_types.low') if Current.conclusion_pdf_format == 'bic'),
         (I18n.t('risk_types.medium') if Current.conclusion_pdf_format == 'bic'),
         (I18n.t('risk_types.high') if Current.conclusion_pdf_format == 'bic'),
-        (ConclusionDraftReview.human_attribute_name(:issue_date) if Current.conclusion_pdf_format == 'bic'),
-        (I18n.t('plans.csv.auditor') if Current.conclusion_pdf_format == 'pat' && @dprh == false),
-        (I18n.t('plans.csv.time_summary_hours') if Current.conclusion_pdf_format == 'pat' && @dprh == false),
-        (I18n.t('plans.csv_prh_pat.progress') if Current.conclusion_pdf_format == 'pat' && @dprh == true),
-        (I18n.t('plans.csv_prh_pat.percentage') if Current.conclusion_pdf_format == 'pat' && @dprh == true)
-      ].compact
+        (ConclusionDraftReview.human_attribute_name(:issue_date) if Current.conclusion_pdf_format == 'bic')
+      ]
+    end
+
+    def add_pat_headers
+      if @dprh
+        [
+          (I18n.t('plans.csv_prh_pat.progress') if Current.conclusion_pdf_format == 'pat' && @dprh == true),
+          (I18n.t('plans.csv_prh_pat.percentage') if Current.conclusion_pdf_format == 'pat' && @dprh == true)
+        ]
+      else
+        [
+          (I18n.t('plans.csv.auditor') if Current.conclusion_pdf_format == 'pat' && @dprh == false),
+          (I18n.t('plans.csv.time_summary_hours') if Current.conclusion_pdf_format == 'pat' && @dprh == false)
+        ]
+      end
     end
 
     def csv_put_business_unit_types_on csv, business_unit_type
