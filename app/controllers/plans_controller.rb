@@ -125,9 +125,7 @@ class PlansController < ApplicationController
         render csv: @plan.to_csv(
           dprh: params[:dprh].present?,
           business_unit_type: @business_unit_type
-        ), filename: @plan.csv_filename(
-          dprh: params[:dprh].present?
-        )
+        ), filename: @plan.csv_filename
       end
     end
 
