@@ -44,30 +44,30 @@ module Plans::Csv
       ].compact
 
       headers += add_bic_headers if Current.conclusion_pdf_format == 'bic'
-      headers += add_bic_headers if Current.conclusion_pdf_format == 'pat'
+      headers += add_pat_headers if Current.conclusion_pdf_format == 'pat'
       headers
     end
 
     def add_bic_headers
       [
-        (Review.human_attribute_name(:score) if Current.conclusion_pdf_format == 'bic'),
-        (I18n.t('risk_types.low') if Current.conclusion_pdf_format == 'bic'),
-        (I18n.t('risk_types.medium') if Current.conclusion_pdf_format == 'bic'),
-        (I18n.t('risk_types.high') if Current.conclusion_pdf_format == 'bic'),
-        (ConclusionDraftReview.human_attribute_name(:issue_date) if Current.conclusion_pdf_format == 'bic')
+        Review.human_attribute_name(:score),
+        I18n.t('risk_types.low'),
+        I18n.t('risk_types.medium'),
+        I18n.t('risk_types.high'),
+        ConclusionDraftReview.human_attribute_name(:issue_date)
       ]
     end
 
     def add_pat_headers
       if @dprh
         [
-          (I18n.t('plans.csv_prh_pat.progress') if Current.conclusion_pdf_format == 'pat' && @dprh == true),
-          (I18n.t('plans.csv_prh_pat.percentage') if Current.conclusion_pdf_format == 'pat' && @dprh == true)
+          I18n.t('plans.csv_prh_pat.progress'),
+          I18n.t('plans.csv_prh_pat.percentage')
         ]
       else
         [
-          (I18n.t('plans.csv.auditor') if Current.conclusion_pdf_format == 'pat' && @dprh == false),
-          (I18n.t('plans.csv.time_summary_hours') if Current.conclusion_pdf_format == 'pat' && @dprh == false)
+          I18n.t('plans.csv.auditor'),
+          I18n.t('plans.csv.time_summary_hours')
         ]
       end
     end
