@@ -13,11 +13,47 @@ class ActiveSupport::TestCase
 
   fixtures :all
 
+  setup do
+    create_carrierwave_dir
+    change_dir_to_upload_files
+  end
+
   teardown do
     clear_current_attributes
 
     try :clear_enqueued_jobs
     try :clear_performed_jobs
+  end
+
+  Minitest.after_run do
+    if Rails.env.test?
+      FileUtils.rm_rf(Dir[PRIVATE_PATH])
+    end
+  end
+
+  def create_carrierwave_dir
+    if Rails.env.test? && !Dir.exist?(PRIVATE_PATH)
+      FileUtils.mkdir_p PRIVATE_PATH
+    end
+  end
+
+  def change_dir_to_upload_files
+    if defined?(CarrierWave)
+      CarrierWave::Uploader::Base.descendants.each do |klass|
+        next if klass.anonymous?
+        klass.class_eval do
+          def store_dir
+            id = ('%08d' % model.id).scan(/\d{4}/).join('/')
+
+            organization_id = (
+              '%08d' % (model.organization_id || Current.organization&.id || 0)
+            ).scan(/\d{4}/).join('/')
+
+            "#{PRIVATE_PATH}#{organization_id}/#{model.class.to_s.underscore.pluralize}/#{id}"
+          end
+        end
+      end
+    end
   end
 
   def set_organization organization = organizations(:cirope)
