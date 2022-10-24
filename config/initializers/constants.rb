@@ -8,12 +8,12 @@ PUBLIC_PATH = File.join(Rails.root, 'public', File::SEPARATOR).freeze
 # Ruta relativa directorio privado de almacenamiento de archivos
 PRIVATE_RELATIVE_PATH =
   if Rails.env.test?
-    "/test/carrierwave/files/"
+    '/test/private/'
   else
-    "/private/"
+    '/private/'
   end
 # Ruta absoluta directorio privado de almacenamiento de archivos
-PRIVATE_PATH = "#{Rails.root}#{PRIVATE_RELATIVE_PATH}"
+PRIVATE_PATH = "#{Rails.root}#{PRIVATE_RELATIVE_PATH}".freeze
 # Ruta al directorio temporal
 TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
 # Prefijo de la organización para administrar grupos
