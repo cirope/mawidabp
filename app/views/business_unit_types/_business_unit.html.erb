@@ -11,6 +11,15 @@
         <%= f.association :business_unit_kind, label: false %>
       </div>
     <% end %>
+    <% if f.object.persisted? %>
+      <div class="col-md-1">
+        <div class="mt-2 text-right">
+          <%= link_to_edit edit_business_unit_type_business_unit_path(
+                             business_unit_type_id: f.object.business_unit_type_id, 
+                             id: f.object.id) %>
+        </div>
+      </div>
+    <% end %>
     <div class="col-md-1">
       <div class="mt-2 text-right">
         <%= link_to_remove_nested_item(f) %>

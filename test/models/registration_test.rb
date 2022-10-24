@@ -73,15 +73,15 @@ class RegistrationTest < ActiveSupport::TestCase
     assert @registration.invalid?
     assert_error @registration, :user, :too_short, count: 3
 
-    @registration.user = 'abcd' * 10
-    @registration.name = 'abcde' * 21
+    @registration.user      = 'abcde' * 52
+    @registration.name      = 'abcde' * 21
     @registration.last_name = 'abcde' * 21
-    @registration.email = "#{'abcde' * 21}@email.com"
+    @registration.email     = "#{'abcde' * 52}@email.com"
 
     assert @registration.invalid?
-    assert_error @registration, :user, :too_long, count: 30
+    assert_error @registration, :user, :too_long, count: 255
     assert_error @registration, :name, :too_long, count: 100
     assert_error @registration, :last_name, :too_long, count: 100
-    assert_error @registration, :email, :too_long, count: 100
+    assert_error @registration, :email, :too_long, count: 255
   end
 end

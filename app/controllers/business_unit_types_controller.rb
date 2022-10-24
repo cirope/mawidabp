@@ -111,7 +111,8 @@ class BusinessUnitTypesController < ApplicationController
         :name, :business_unit_label, :project_label, :review_prefix, :sectors,
         :recipients, :external, :require_tag, :require_counts,
         :hide_review_logo, :independent_identification, :shared_business_units,
-        :without_number, :reviews_for, :detailed_review, :lock_version,
+        :without_number, :reviews_for, :detailed_review,
+        :grouped_by_business_unit_annual_report, :lock_version,
         business_units_attributes: [:id, :name, :business_unit_kind_id, :_destroy]
       )
     end

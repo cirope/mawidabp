@@ -8,6 +8,10 @@ class FindingsControllerTest < ActionController::TestCase
     login
   end
 
+  teardown do
+    clear_current_attributes
+  end
+
   test 'list incomplete findings' do
     incomplete_status_list = Finding::PENDING_STATUS -
                              [Finding::STATUS[:incomplete]]
@@ -154,6 +158,35 @@ class FindingsControllerTest < ActionController::TestCase
     assert assigns(:findings).all? { |f| f.finding_user_assignments.owners.map(&:user).include?(user) }
   end
 
+  test 'list findings pending_to_endorsement' do
+    finding            = findings :being_implemented_weakness
+    new_finding_answer = FindingAnswer.new(answer: 'This date for me',
+                                           commitment_date: Date.today.to_s(:db),
+                                           user_id: users(:audited).id)
+
+    finding.finding_answers << new_finding_answer
+
+    new_finding_answer.reload
+
+    new_finding_answer.endorsements << Endorsement.new(status: 'pending',
+                                                       user_id: users(:supervisor).id)
+
+    user = users :supervisor
+
+    login user: user
+
+    get :index, params: {
+      completion_state:       'incomplete',
+      pending_to_endorsement: true
+    }
+
+    assert_response :success
+    assert assigns(:findings).any?
+    assert assigns(:findings).all? do |f|
+      f.finding_answers.any? { |f_a| f_a.endorsements.where(status: Endorsement.statuses['pending'], user_id: user.id).present? }
+    end
+  end
+
   test 'list findings for specific ids' do
     ids = [
       findings(:being_implemented_weakness).id,
@@ -178,10 +211,39 @@ class FindingsControllerTest < ActionController::TestCase
     assert_match Mime[:csv].to_s, @response.content_type
   end
 
-  test 'list findings as PDF' do
+  test 'list incomplete findings as PDF' do
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
     get :index, params: { completion_state: 'incomplete' }, as: :pdf
 
-    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
+    assert_response :success
+    assert_match Mime[:pdf].to_s, @response.content_type
+  end
+
+  test 'list repeated findings as PDF' do
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
+    get :index, params: { completion_state: 'repeated' }, as: :pdf
+
+    assert_response :success
+    assert_match Mime[:pdf].to_s, @response.content_type
+  end
+
+  test 'list complete findings as PDF' do
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
+    get :index, params: { completion_state: 'complete' }, as: :pdf
+
+    assert_response :success
     assert_match Mime[:pdf].to_s, @response.content_type
   end
 
@@ -318,7 +380,11 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding' do
-    finding = findings :unconfirmed_weakness
+    set_organization
+
+    finding                 = findings :unconfirmed_weakness
+    last_risk               = finding.risk
+    last_risk_justification = finding.risk_justification
 
     login user: users(:supervisor)
 
@@ -354,17 +420,23 @@ class FindingsControllerTest < ActionController::TestCase
               origination_date: 1.day.ago.to_date.to_s(:db),
               audit_recommendations: 'Updated proposed action',
               effect: 'Updated effect',
-              risk: Finding.risks_values.first,
-              priority: Finding.priorities_values.first,
+              risk: Finding.risks_values.last,
+              priority: Finding.priorities_values.last,
               compliance: 'no',
               operational_risk: ['internal fraud'],
               impact: ['econimic', 'regulatory'],
               internal_control_components: ['risk_evaluation', 'monitoring'],
-              impact_risk: Finding.impact_risks[:small],
-              probability: Finding.probabilities[:rare],
               extension: false,
-              manual_risk: '1',
+              manual_risk: (USE_SCOPE_CYCLE || Current.conclusion_pdf_format == 'bic' ? '0' : '1'),
+              impact_risk: USE_SCOPE_CYCLE ? Finding.impact_risks[:critical] : (SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.impact_risks_bic[:high] : ''),
+              probability: USE_SCOPE_CYCLE ? Finding.probabilities[:almost_certain] : (SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.frequencies[:high] : ''),
+              state_regulations: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.state_regulations[:not_exist] : '',
+              degree_compliance: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.degree_compliance[:fails] : '',
+              observation_originated_tests: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.observation_origination_tests[:design] : '',
+              sample_deviation: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.sample_deviation[:most_expected] : '',
+              external_repeated: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.external_repeated[:repeated_without_action_plan] : '',
               business_unit_ids: [business_units(:business_unit_three).id],
+              risk_justification: '',
               finding_user_assignments_attributes: [
                 {
                   id: finding_user_assignments(:unconfirmed_weakness_audited).id,
@@ -449,6 +521,8 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_redirected_to edit_finding_url('incomplete', finding)
     assert_equal 'Updated description', finding.reload.description
+    assert_not_equal last_risk, finding.reload.risk
+    assert_not_equal last_risk_justification, finding.reload.risk_justification
   end
 
   test 'update finding with audited user' do
@@ -473,53 +547,6 @@ class FindingsControllerTest < ActionController::TestCase
           completion_state: 'incomplete',
           id: finding,
           finding: {
-            control_objective_item_id: control_objective_items(:impact_analysis_item_editable).id,
-            review_code: 'O020',
-            title: 'Title',
-            description: 'Updated description',
-            answer: 'Updated answer',
-            current_situation: 'Updated current situation',
-            current_situation_verified: '1',
-            audit_comments: 'Updated audit comments',
-            state: Finding::STATUS[:unconfirmed],
-            origination_date: 35.day.ago.to_date.to_s(:db),
-            solution_date: 31.days.from_now.to_date,
-            audit_recommendations: 'Updated proposed action',
-            effect: 'Updated effect',
-            risk: Finding.risks_values.first,
-            priority: Finding.priorities_values.first,
-            follow_up_date: 3.days.from_now.to_date,
-            compliance: 'no',
-            operational_risk: ['internal fraud'],
-            impact: ['econimic', 'regulatory'],
-            internal_control_components: ['risk_evaluation', 'monitoring'],
-            impact_risk: Finding.impact_risks[:small],
-            probability: Finding.probabilities[:rare],
-            extension: false,
-            manual_risk: '1',
-            finding_user_assignments_attributes: [
-              {
-                user_id: users(:audited).id,
-                process_owner: '1'
-              },
-              {
-                user_id: users(:auditor).id,
-                process_owner: ''
-              },
-              {
-                user_id: users(:supervisor).id,
-                process_owner: ''
-              }
-            ],
-            work_papers_attributes: [
-              {
-                name: 'New workpaper name',
-                code: 'PTSO 20',
-                file_model_attributes: {
-                  file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
-                }
-              }
-            ],
             finding_answers_attributes: [
               {
                 answer: 'New answer',
@@ -528,12 +555,6 @@ class FindingsControllerTest < ActionController::TestCase
                 file_model_attributes: {
                   file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
                 }
-              }
-            ],
-            finding_relations_attributes: [
-              {
-                description: 'Duplicated',
-                related_finding_id: findings(:unanswered_weakness).id
               }
             ],
             costs_attributes: [
@@ -550,7 +571,6 @@ class FindingsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to edit_finding_url('incomplete', finding)
-    assert_not_equal 'Updated description', finding.reload.description
   end
 
   test 'update finding and notify to the new user' do
@@ -575,17 +595,13 @@ class FindingsControllerTest < ActionController::TestCase
           origination_date: 1.day.ago.to_date.to_s(:db),
           audit_recommendations: 'Updated proposed action',
           effect: 'Updated effect',
-          risk: Finding.risks_values.first,
           priority: Finding.priorities_values.first,
           compliance: 'no',
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
           users_for_notification: [users(:bare).id],
-          impact_risk: Finding.impact_risks[:small],
-          probability: Finding.probabilities[:rare],
           extension: false,
-          manual_risk: '1',
           finding_user_assignments_attributes: [
             {
               id: finding_user_assignments(:unconfirmed_weakness_bare).id,
@@ -638,16 +654,12 @@ class FindingsControllerTest < ActionController::TestCase
           origination_date: 1.day.ago.to_date.to_s(:db),
           audit_recommendations: 'Updated proposed action',
           effect: 'Updated effect',
-          risk: Finding.risks_values.first,
           priority: Finding.priorities_values.first,
           compliance: 'no',
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
-          impact_risk: Finding.impact_risks[:small],
-          probability: Finding.probabilities[:rare],
           extension: false,
-          manual_risk: '1',
           tag_ids: [
             tags(:important).id,
             tags(:pending).id,
@@ -861,6 +873,11 @@ class FindingsControllerTest < ActionController::TestCase
       csv_findings << id if id&.positive?
     end
 
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
     get :index, params: {
       completion_state: 'incomplete',
       search: {
@@ -868,7 +885,8 @@ class FindingsControllerTest < ActionController::TestCase
       }
     }, as: :pdf
     # we can't check the order inside the PDF so...
-    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
+    assert_response :success
+    assert_match Mime[:pdf].to_s, @response.content_type
 
     assert_equal(
       html_findings,
@@ -1007,9 +1025,9 @@ class FindingsControllerTest < ActionController::TestCase
         completion_state: 'complete',
         id: finding.id,
         finding: {
-          year: 'test year',
-          nsisio: 'nsisio test',
-          nobs: 'nobs test',
+          year: '2022',
+          nsisio: '1234',
+          nobs: '9876',
           skip_work_paper: '1'
         }
       }
@@ -1028,9 +1046,9 @@ class FindingsControllerTest < ActionController::TestCase
         completion_state: 'complete',
         id: findings(:being_implemented_weakness).id,
         finding: {
-          year: 'test year',
-          nsisio: 'nsisio test',
-          nobs: 'nobs test',
+          year: '2022',
+          nsisio: '1234',
+          nobs: '9876',
           skip_work_paper: '1'
         }
       }
@@ -1053,9 +1071,9 @@ class FindingsControllerTest < ActionController::TestCase
         completion_state: 'complete',
         id: finding.id,
         finding: {
-          year: 'test year',
-          nsisio: 'nsisio test',
-          nobs: 'nobs test',
+          year: '2022',
+          nsisio: '1234',
+          nobs: '9876',
           skip_work_paper: '1'
         }
       }
@@ -1084,9 +1102,9 @@ class FindingsControllerTest < ActionController::TestCase
         completion_state: 'complete',
         id: finding.id,
         finding: {
-          year: 'test year',
-          nsisio: 'nsisio test',
-          nobs: 'nobs test',
+          year: '2022',
+          nsisio: '1234',
+          nobs: '9876',
           skip_work_paper: '1'
         }
       }
@@ -1110,9 +1128,9 @@ class FindingsControllerTest < ActionController::TestCase
       completion_state: 'complete',
       id: finding.id,
       finding: {
-        year: 'test year',
-        nsisio: 'nsisio test',
-        nobs: 'nobs test'
+        year: '2022',
+        nsisio: '1234',
+        nobs: '9876'
       }
     }
 
@@ -1121,9 +1139,9 @@ class FindingsControllerTest < ActionController::TestCase
 
     finding.reload
 
-    assert_not_equal 'test year', finding.year
-    assert_not_equal 'nsisio test', finding.nsisio
-    assert_not_equal 'nobs test', finding.nobs
+    assert_not_equal '2022', finding.year
+    assert_not_equal '1234', finding.nsisio
+    assert_not_equal '9876', finding.nobs
   end
 
   test 'assert response update bic sigen fields' do
@@ -1144,9 +1162,9 @@ class FindingsControllerTest < ActionController::TestCase
         completion_state: 'complete',
         id: finding.id,
         finding: {
-          year: 'test year',
-          nsisio: 'nsisio test',
-          nobs: 'nobs test',
+          year: '2022',
+          nsisio: '1234',
+          nobs: '9876',
           skip_work_paper: '1'
         }
       }
@@ -1158,9 +1176,9 @@ class FindingsControllerTest < ActionController::TestCase
 
     finding.reload
 
-    assert_equal 'test year', finding.year
-    assert_equal 'nsisio test', finding.nsisio
-    assert_equal 'nobs test', finding.nobs
+    assert_equal '2022', finding.year
+    assert_equal '1234', finding.nsisio
+    assert_equal '9876', finding.nobs
   end
 
   private

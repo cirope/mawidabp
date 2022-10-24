@@ -6,9 +6,14 @@ $('[id^=weakness_internal_control_components]').prop('checked', false).trigger('
   $('[name$="[title]"]').val('<%= j @weakness_template.title %>')
   $('[name$="[description]"]').val('<%= j @weakness_template.description %>')
   $('[data-notes]').text('<%= j @weakness_template.notes %>')
-  $('[name$="[brief]"]').val('<%= j @weakness_template.description %>')
+  $('[name$="[brief]"]').val('<%= j @weakness_template.brief %>')
   $('[name$="[risk]"]').val('<%= @weakness_template.risk %>')
+  $('[data-probability-previous-amount]').data('probabilityPreviousAmount', '<%= @probability_risk_amount %>')
   $('[name$="[audit_recommendations]"]').val('<%= j @weakness_template.audit_recommendations %>')
+
+  <% if @weakness_template.failure %>
+    $('[name$="[state]"]').val('<%= j Finding::STATUS['failure'] %>')
+  <% end %>
 
   <% Array(@weakness_template.impact).each do |value| %>
     $('[id^=weakness_impact][value="<%= j value %>"]').prop('checked', true).trigger('custom:change')

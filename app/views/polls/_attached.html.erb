@@ -1,0 +1,23 @@
+<% answer = f.object %>
+
+<div class="row">
+  <label>
+    <%= Answer.human_attribute_name 'attached' %>
+  </label>
+</div>
+
+<div class="row">
+  <div class="file-container float-left">
+    <%= link_to_upload f.object, :attached %>
+    <% if answer.attached_cache %>
+      <%= f.input :attached_cache, as: :hidden %>
+      <%= f.input :attached, as: :hidden, input_html: { value: nil } %>
+    <% else %>
+      <%= f.input :attached, label: false %>
+    <% end %>
+  </div>
+  <%= link_to_download_attached_file f %>
+  <div class="ml-2">
+    <%= link_to_remove_attached_file f %>
+  </div>  
+</div>

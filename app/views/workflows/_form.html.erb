@@ -129,7 +129,7 @@ jQuery(function() {
         HTMLUtil.updateOptions(
           $('#workflow_review_id'), HTMLUtil.optionsFromArray(data)
         );
-      }).complete(function() {
+      }).done(function() {
         Helper.hideLoading(element);
         Helper.hideLoading('#workflow_review_id');
       });
@@ -148,7 +148,7 @@ jQuery(function() {
       $('#estimated_amount').html(data).stop(true, true).effect(
         'highlight', {}, 2000
       );
-    }).complete(function() {
+    }).done(function() {
       Helper.hideLoading(element);
     });
   });

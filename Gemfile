@@ -36,8 +36,13 @@ gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 gem 'execjs', '< 2.8'
 gem 'net-smtp', require: false
+gem 'net-imap', require: false
+gem 'net-pop', require: false
+gem 'rexml'
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
+
+gem 'reform-rails'
 
 gem 'ruby-saml'
 
@@ -48,6 +53,9 @@ gem 'uglifier'
 gem 'unicorn'
 gem 'unicorn-rails'
 gem 'unicorn-worker-killer'
+
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
 
 group :development do
   gem 'web-console'
