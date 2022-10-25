@@ -90,7 +90,7 @@ class UsersController < ApplicationController
     end
 
     def check_ldap
-      if current_organization.ldap_config
+      if current_organization.ldap_config && !ENABLE_USER_CREATION_WHEN_LDAP
         redirect_to_login t('message.insufficient_privileges'), :alert
       end
     end

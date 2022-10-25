@@ -51,6 +51,10 @@
         <div class="col-md-3">
           <%= f.input :shared_business_units %>
         </div>
+      <% elsif Current.conclusion_pdf_format == 'nbc' %>
+        <div class="col-md-6">
+          <%= f.input :grouped_by_business_unit_annual_report %>
+        </div>
       <% end %>
     </div>
 
@@ -58,6 +62,18 @@
       <div class="row">
         <div class="col-md-3">
           <%= f.input :independent_identification %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :without_number %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :reviews_for, input_html: { maxlength: 255 } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :detailed_review, input_html: { maxlength: 255 } %>
         </div>
       </div>
     <% end %>

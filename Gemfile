@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.3.7'
+gem 'rails', '~> 6.1'
 
 gem 'pg'
 gem 'activerecord-nulldb-adapter'
@@ -10,7 +10,7 @@ gem 'responders'
 gem 'mini_magick'
 gem 'simple_form'
 gem 'newrelic_rpm'
-gem 'validates_timeliness'
+gem 'validates_timeliness', git: 'https://github.com/adzap/validates_timeliness.git', tag: 'v6.0.0.beta2'
 gem 'redcarpet'
 gem 'whenever'
 gem 'paper_trail'
@@ -20,6 +20,7 @@ gem 'net-ldap'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'prawn-table'
+gem 'matrix'
 gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
@@ -34,8 +35,14 @@ gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 gem 'execjs', '< 2.8'
+gem 'net-smtp', require: false
+gem 'net-imap', require: false
+gem 'net-pop', require: false
+gem 'rexml'
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
+
+gem 'reform-rails'
 
 gem 'ruby-saml'
 
@@ -46,6 +53,9 @@ gem 'uglifier'
 gem 'unicorn'
 gem 'unicorn-rails'
 gem 'unicorn-worker-killer'
+
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
 
 group :development do
   gem 'web-console'

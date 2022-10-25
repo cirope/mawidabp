@@ -108,6 +108,7 @@ es:
       title: 'Detalle objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
+      add_control_objective_auditor: 'Agregar auditor a cargo'
     score_type:
       option: 'Opciones'
       percentage: 'Porcentaje'
@@ -161,9 +162,14 @@ es:
       title: 'Editar hallazgo'
     form:
       show_status_change_history: 'Ver historial de cambios de estado'
+      follow_up_date_label_append: ' - Sugerida: '
+      confirm_finding_without_extension: '¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo.'
     auditor_form:
       origin: 'origen'
+    edit_bic_sigen_fields:
+      title: 'Editar campos sigen de observacion.'
     current_user_filters:
+      pending_to_endorsement: 'Pendientes de aprobación'
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'
       complete: 'Solucionados'
@@ -199,9 +205,6 @@ es:
     endorsement_item:
       approve: 'Aprobar'
       reject: 'Rechazar'
-    weakness:
-      follow_up_date_label_append: ' - Regularizada'
-      confirm_first_version_being_implemented_withou_extension: '¿Seguro desea establecer el estado %{state} sin %{extension}?'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -244,6 +247,23 @@ es:
     show:
       title: 'Detalles del registro de ingreso'
       list: 'Ver registros de ingreso'
+
+  memos:
+    edit:
+      title: 'Editar Informe externo'
+    index:
+      new: 'Nuevo Informe externo'
+      title: 'Listado de Informes externos'
+      empty_html: 'No hay Informes externos, puede crear una con el botón <span class="badge badge-primary">Nuevo memo</span>'
+      empty_search_html: 'No hay Informes externos que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear Informe externo'
+    form:
+      markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+      add_file_model: 'Agregar archivo'
+      download_cover: 'Descargar caratula'
+    show:
+      title: 'Ver Informe externo'
 
   news:
     edit:
@@ -371,6 +391,28 @@ es:
       delayed:
         long: 'Retrasado'
         short: 'R'
+    item_status_csv_pat:
+      completed:
+        long: 'Concluidos (Azul)'
+        short: 'Concluido'
+      completed_early:
+        long: 'Adelantados con informe emitido (Gris)'
+        short: 'Adelantado con informe emitido'
+      in_early_progress:
+        long: 'Adelantados en proceso (Celeste)'
+        short: 'Adelantado en proceso'
+      not_started_no_delayed:
+        long: 'Sin retrasos no iniciados (Verde Claro)'
+        short: 'Sin retraso no iniciado'
+      in_progress_no_delayed:
+        long: 'Sin retrasos en proceso (Verde Oscuro)'
+        short: 'Sin retraso en proceso'
+      delayed_pat:
+        long: 'Retrasados (Amarillo)'
+        short: 'Retrasado'
+      overdue:
+        long: 'Vencidos (Rojo)'
+        short: 'Vencido'
     period:
       title: 'Periodo (%{name})'
       range: 'desde el %{from_date} al %{to_date}'
@@ -381,6 +423,22 @@ es:
     csv:
       title: 'Plan de auditoría'
       csv_name: 'plan_periodo_%{period}.csv'
+      number_observations_per_risk: 'Cantidad observaciones por riesgo'
+      annual_plan_hours: 'Hs Plan Anual'
+      auditor: 'Auditor (Usuario)'
+      time_summary_hours: 'Hs Resumen Horario'
+    csv_prs_pat:
+      csv_name: 'grado_avance_estados_%{current_date}.csv'
+      business_unit: 'Sector'
+      totals: 'Totales'
+      total_plan_items: 'Total de Trabajos Planificados'
+    csv_prh_pat:
+      csv_name: 'grado_avance_horas_trabajo_%{current_date}.csv'
+      business_unit: 'Sector'
+      budgeted_hours: 'Horas Presupuestadas'
+      progress: 'Avance Total'
+      percentage: 'Procentaje'
+      total_hours: 'Total de Horas'
     calendar:
       show:
         title: 'Cronograma'
@@ -406,6 +464,8 @@ es:
     business_unit_type_plan_items:
       associate_control_objective: 'Asociar objetivo de control'
       associate_best_practice: 'Asociar buena práctica'
+    download_progress_report_with_statuses_pat: 'Descargar grado de avance con estados de trabajos'
+    download_progress_report_in_hours_of_work_pat: 'Descargar grado de avance en horas de trabajo'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
     download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
@@ -508,6 +568,8 @@ es:
       material: 'Materiales'
 
   reviews:
+    auxiliar_business_unit_types:
+      title: 'Unidades organizativas auxiliares'
     index:
       control_objective_items_open:
         title: 'Objetivos de control abiertos'
@@ -617,6 +679,8 @@ es:
       title: 'Nueva actividad'
     form:
       add_business_unit_type: 'Agregar unidad organizativa'
+      activity: 'Actividad'
+      review: 'Informe'
     auxiliar_business_unit_types:
       title: 'Unidades organizativas auxiliares'
       activity: 'Actividad'
@@ -634,6 +698,7 @@ es:
         user: "Usuario"
         business_unit_types: "Unidades organizativas"
         detail: "Detalle"
+        organization: "Organización"
 
   users:
     index:

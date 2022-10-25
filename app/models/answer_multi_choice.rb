@@ -1,3 +1,5 @@
 class AnswerMultiChoice < Answer
-  validates :answer_option, presence: true, on: :update
+  def completed?
+    answer_option.present?
+  end
 end

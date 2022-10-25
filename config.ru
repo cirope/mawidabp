@@ -12,3 +12,4 @@ use Unicorn::WorkerKiller::Oom, (128 * (1024 ** 2)), (384 * (1024 ** 2))
 require_relative 'config/environment'
 
 run Rails.application
+Rails.application.load_server

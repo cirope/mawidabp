@@ -10,6 +10,9 @@
   $('[name$="[answer]"]').val("<%== j @weakness.answer %>").trigger('change')
   $('[name$="[audit_comments]"]').val("<%== j @weakness.audit_comments %>").trigger('change')
   $('[name$="[compliance]"]').val("<%= @weakness.compliance %>").trigger('change')
+  $('[name$="[year]"]').val("<%= @weakness.year %>")
+  $('[name$="[nsisio]"]').val("<%= @weakness.nsisio %>")
+  $('[name$="[nobs]"]').val("<%= @weakness.nobs %>")
 
   <% %w(follow_up_date origination_date).each do |date_field| %>
     var <%= date_field %>Date = new Date('<%= @weakness.attributes[date_field]&.to_s(:db) %>')

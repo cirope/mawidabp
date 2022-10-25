@@ -56,6 +56,7 @@ class Finding < ApplicationRecord
   include Findings::SortColumns
   include Findings::State
   include Findings::StateDates
+  include Findings::SuggestionAddDaysFollowUpDate
   include Findings::Taggable
   include Findings::Tasks
   include Findings::Unanswered

@@ -3,6 +3,11 @@ COMPLIANCE_OPTIONS = {
   'no'  => { data: { tag: 'Compliance', select: 'no' } }
 }
 
+COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS = {
+  'no'  => false,
+  'yes' => true
+}
+
 CONCLUSION_OPTIONS = [
   'Satisfactorio',
   'Satisfactorio con salvedades',

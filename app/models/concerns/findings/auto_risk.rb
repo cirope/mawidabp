@@ -34,13 +34,13 @@ module Findings::AutoRisk
 
     OBSERVATION_ORIGINATED_TESTS = {
       design:     150,
-      compliance: 75,
-      sustantive: 75
+      compliance: 74,
+      sustantive: 76
     }
 
     SAMPLE_DEVIATION = {
-      less_expected: 150,
-      most_expected: 0
+      most_expected: 150,
+      less_expected: 0
     }
 
     IMPACT_RISKS_BIC = {
@@ -56,8 +56,9 @@ module Findings::AutoRisk
     }
 
     EXTERNAL_REPEATED = {
-      repeated:    150,
-      no_repeated: 0
+      repeated_without_action_plan: 150,
+      repeated_with_action_plan:    75,
+      no_repeated:                  0
     }
   end
 

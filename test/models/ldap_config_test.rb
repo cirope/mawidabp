@@ -232,9 +232,11 @@ class LdapConfigTest < ActiveSupport::TestCase
   end
 
   test 'massive import' do
+    skip if EXTRA_USERS_INFO.any?
+
     user         = users(:supervisor)
     organization = organizations(:google)
-    emails_count = if SHOW_WEAKNESS_EXTRA_ATTRIBUTES || EXTRA_USERS_INFO.size > 0
+    emails_count = if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
                      0
                    elsif NOTIFY_NEW_ADMIN
                      2
@@ -251,6 +253,14 @@ class LdapConfigTest < ActiveSupport::TestCase
       assert_difference 'User.count' do
         LdapConfig.sync_users
       end
+    end
+  end
+
+  test "massive import by file" do
+    skip unless EXTRA_USERS_INFO.any?
+
+    assert_difference 'User.count', 2 do
+      LdapConfig.sync_users
     end
   end
 

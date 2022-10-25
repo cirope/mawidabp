@@ -28,12 +28,12 @@ class ControlObjectiveItem < ApplicationRecord
   alias_attribute :label, :control_objective_text
 
   belongs_to :organization
-  belongs_to :review, inverse_of: :control_objective_items
+  belongs_to :review
   has_one :business_unit, through: :review
   has_one :business_unit_type, through: :business_unit
 
   def informal
-    review&.to_s
+    process_control.present? ? "#{process_control&.to_s} - #{review&.to_s}" : review&.to_s
   end
 
   def is_in_a_final_review?

@@ -18,19 +18,11 @@ module Findings::Validations
     validate :validate_state
     validate :validate_review_code, if: -> { repeated_of.blank? }
     validate :validate_finding_user_assignments
-    validate :validate_manager_presence, if: :validate_manager_presence?
-    validate :validate_follow_up_date,   if: :check_dates?
-    validate :validate_solution_date,    if: :check_dates?
-    validate :extension_enabled,         if: :extension
-    validates :risk_justification, presence: true, if: :bic_require_is_manual_risk_enabled?
-    validates :risk_justification, absence: true, if: :bic_require_is_manual_risk_disabled?
-    validates :state_regulations,
-              :degree_compliance,
-              :observation_originated_tests,
-              :sample_deviation, :impact_risk,
-              :probability, :external_repeated,
-              presence: true, if: :bic_require_is_manual_risk_disabled?
-    validate  :bic_calculated_risk, if: :bic_require_is_manual_risk_disabled?
+    validate :validate_manager_presence,  if: :validate_manager_presence?
+    validate :validate_follow_up_date,    if: :check_dates?
+    validate :validate_solution_date,     if: :check_dates?
+    validate :extension_enabled,          if: :extension
+    validate :validate_draft_review_code, if: -> { !revoked? }
   end
 
   def is_in_a_final_review?
@@ -47,29 +39,6 @@ module Findings::Validations
   end
 
   private
-
-    def bic_calculated_risk
-      amount = 0
-      amount += state_regulations.to_i
-      amount += degree_compliance.to_i
-      amount += observation_originated_tests.to_i
-      amount += sample_deviation.to_i
-      amount += impact_risk.to_i
-      amount += probability.to_i
-      amount += external_repeated.to_i
-
-      risk_new = bic_risks_types.reverse_each.to_h.detect { |id, value| amount >= value }
-
-      errors.add :risk, :invalid if risk_new.first != risk
-    end
-
-    def bic_require_is_manual_risk_disabled?
-      Current.conclusion_pdf_format == 'bic' && !manual_risk && kind_of?(Weakness)
-    end
-
-    def bic_require_is_manual_risk_enabled?
-      Current.conclusion_pdf_format == 'bic' && manual_risk && kind_of?(Weakness)
-    end
 
     def audit_comments_should_be_present?
       revoked? || criteria_mismatch?
@@ -229,23 +198,42 @@ module Findings::Validations
     end
 
     def extension_enabled
-      if !being_implemented?
-        errors.add :extension, :must_be_being_implemented, { extension: Finding.human_attribute_name(:extension),
-                                                             state: I18n.t('findings.state.being_implemented') }
-      elsif persisted? && cant_have_an_extension?
-        errors.add :extension, :had_no_extension_when_being_implemented, { extension: Finding.human_attribute_name(:extension) }
+      if Finding.states_that_allow_extension.exclude?(state)
+        errors.add :extension,
+                   :must_have_state_that_allows_extension,
+                   extension: Finding.human_attribute_name(:extension),
+                   states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
+      elsif cant_have_an_extension?
+        errors.add :extension,
+                   :cant_have_extension_when_didnt_have_extension,
+                   extension: Finding.human_attribute_name(:extension),
+                   states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
       end
     end
 
     def cant_have_an_extension?
-      not_the_first_version_of_being_implemented? && !extension_was && being_implemented_was?
+      persisted? &&
+        review.conclusion_final_review.present? &&
+        !extension_was
     end
 
-    def not_the_first_version_of_being_implemented?
-      had_version_with_being_implemented? || being_implemented_was?
+    def validate_draft_review_code
+      if final?
+        check_invalid_draft_review_code_when_is_final
+      else
+        check_invalid_draft_review_code_when_is_not_final
+      end
     end
 
-    def being_implemented_was?
-      state_was == Finding::STATUS[:being_implemented]
+    def check_invalid_draft_review_code_when_is_final
+      if parent.draft_review_code != draft_review_code
+        errors.add :draft_review_code, :not_same_draft_review_code_parent
+      end
+    end
+
+    def check_invalid_draft_review_code_when_is_not_final
+      if children.present? && children.take.draft_review_code != draft_review_code
+        errors.add :draft_review_code, :not_same_draft_review_code_children
+      end
     end
 end

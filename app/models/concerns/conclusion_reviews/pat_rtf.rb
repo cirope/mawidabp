@@ -60,7 +60,7 @@ module ConclusionReviews::PatRtf
     def add_organization_image document, organization
       organization_image = organization.image_model&.image&.thumb&.path
 
-      if organization_image && File.exists?(organization_image)
+      if organization_image && File.exist?(organization_image)
         header = RTF::HeaderNode.new document
 
         header.paragraph { |n| n.image(organization_image) }
@@ -422,7 +422,7 @@ module ConclusionReviews::PatRtf
         end
 
         document.paragraph(description_style) do |p1|
-          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.key(weakness.state)}")
         end
       elsif weakness.follow_up_date
         document.paragraph(title_style) do |p1|
@@ -537,7 +537,7 @@ module ConclusionReviews::PatRtf
         end
 
         document.paragraph(description_style) do |p1|
-          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.key(weakness.state)}")
         end
       elsif weakness.follow_up_date
         document.paragraph(title_style) do |p1|
@@ -673,7 +673,7 @@ module ConclusionReviews::PatRtf
         end
 
         document.paragraph(description_style) do |p1|
-          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.key(weakness.state)}")
         end
       elsif weakness.follow_up_date
         document.paragraph(title_style) do |p1|

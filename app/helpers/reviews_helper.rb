@@ -247,4 +247,12 @@ module ReviewsHelper
       [t("reviews.form.#{key}"), value]
     end
   end
+
+  def show_external_review_options review
+    Review.list.map { |r| [r.identification, r.id] }
+  end
+
+  def subsidiaries_options
+    Subsidiary.list.map { |s| [s.to_s, s.id] }
+  end
 end

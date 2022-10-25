@@ -55,13 +55,13 @@ class ActiveSupport::TestCase
   end
 
   def backup_file file_name
-    if File.exists?(file_name)
+    if File.exist?(file_name)
       FileUtils.cp file_name, "#{TEMP_PATH}#{File.basename(file_name)}"
     end
   end
 
   def restore_file file_name
-    if File.exists?("#{TEMP_PATH}#{File.basename(file_name)}")
+    if File.exist?("#{TEMP_PATH}#{File.basename(file_name)}")
       FileUtils.mv "#{TEMP_PATH}#{File.basename(file_name)}", file_name
     end
   end
@@ -107,6 +107,6 @@ class ActiveSupport::TestCase
   end
 
   def ldap_port
-    ENV['TRAVIS'] ? 3389 : 389
+    ENV['GH_ACTIONS'] ? 3389 : 389
   end
 end
