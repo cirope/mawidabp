@@ -6,14 +6,14 @@ CONFIG_PATH = File.join(Rails.root, 'config', File::SEPARATOR).freeze
 # Ruta hasta el directorio público
 PUBLIC_PATH = File.join(Rails.root, 'public', File::SEPARATOR).freeze
 # Ruta relativa directorio privado de almacenamiento de archivos
-PRIVATE_RELATIVE_PATH =
+RELATIVE_PRIVATE_PATH =
   if Rails.env.test?
-    '/test/private/'
+    File.join(File::SEPARATOR, 'test', 'private', File::SEPARATOR).freeze
   else
-    '/private/'
+    File.join(File::SEPARATOR, 'private', File::SEPARATOR).freeze
   end
 # Ruta absoluta directorio privado de almacenamiento de archivos
-PRIVATE_PATH = "#{Rails.root}#{PRIVATE_RELATIVE_PATH}".freeze
+PRIVATE_PATH = File.join(Rails.root, RELATIVE_PRIVATE_PATH).freeze
 # Ruta al directorio temporal
 TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
 # Prefijo de la organización para administrar grupos

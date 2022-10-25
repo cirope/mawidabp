@@ -19,8 +19,6 @@ class FileModelTest < ActiveSupport::TestCase
 
   # Prueba la creación de un modelo de archivo
   test 'create' do
-    FileUtils.rm_rf(Dir[PRIVATE_PATH])
-
     assert_difference 'FileModel.count' do
       file = Rack::Test::UploadedFile.new(
         "#{self.class.fixture_path}files/test.txt", 'text/plain'
@@ -41,8 +39,6 @@ class FileModelTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un modelo de archivo
   test 'update and delete file' do
-    FileUtils.rm_rf(Dir[PRIVATE_PATH])
-
     file = Rack::Test::UploadedFile.new(
       "#{self.class.fixture_path}files/test.pdf", 'application/pdf'
     )

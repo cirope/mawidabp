@@ -4,7 +4,7 @@ module Prawn
   module Mawida
     module ClassExtension
       def relative_path(filename, sub_directory, id = 0)
-        "#{PRIVATE_RELATIVE_PATH}#{path_without_root(filename, sub_directory, id).join('/')}"
+        "#{RELATIVE_PRIVATE_PATH}#{path_without_root(filename, sub_directory, id).join('/')}"
       end
 
       def absolute_path(filename, sub_directory, id = 0)

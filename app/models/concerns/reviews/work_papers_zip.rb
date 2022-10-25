@@ -21,7 +21,7 @@ module Reviews::WorkPapersZip
   end
 
   def relative_work_papers_zip_path
-    "#{PRIVATE_RELATIVE_PATH}#{work_papers_zip_path}"
+    "#{RELATIVE_PRIVATE_PATH}#{work_papers_zip_path}"
   end
 
   def work_papers_zip_path

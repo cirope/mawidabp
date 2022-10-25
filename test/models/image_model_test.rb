@@ -8,8 +8,6 @@ class ImageModelTest < ActiveSupport::TestCase
   end
 
   test 'create ImageModel, update and delete image' do
-    FileUtils.rm_rf(Dir[PRIVATE_PATH])
-
     assert_difference 'ImageModel.count' do
       new_image_model = create_image_model
 

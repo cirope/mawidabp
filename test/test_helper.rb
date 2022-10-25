@@ -23,18 +23,12 @@ class ActiveSupport::TestCase
 
     try :clear_enqueued_jobs
     try :clear_performed_jobs
-  end
 
-  Minitest.after_run do
-    if Rails.env.test?
-      FileUtils.rm_rf(Dir[PRIVATE_PATH])
-    end
+    FileUtils.rm_rf(Dir[PRIVATE_PATH])
   end
 
   def create_carrierwave_dir
-    if Rails.env.test? && !Dir.exist?(PRIVATE_PATH)
-      FileUtils.mkdir_p PRIVATE_PATH
-    end
+    FileUtils.mkdir_p PRIVATE_PATH if !Dir.exist?(PRIVATE_PATH)
   end
 
   def change_dir_to_upload_files

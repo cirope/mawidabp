@@ -21,7 +21,7 @@ class FileModelsControllerTest < ActionController::TestCase
     private_actions = [
       [
         :get, :download, :params => {
-          :path => @file_model.file.url.gsub(PRIVATE_RELATIVE_PATH, '')
+          :path => @file_model.file.url.gsub(RELATIVE_PRIVATE_PATH, '')
         }
       ]
     ]
@@ -43,7 +43,7 @@ class FileModelsControllerTest < ActionController::TestCase
   test 'download file' do
     login
     get :download, :params => {
-      :path => @file_model.file.url.gsub(PRIVATE_RELATIVE_PATH, '')
+      :path => @file_model.file.url.gsub(RELATIVE_PRIVATE_PATH, '')
     }
     assert_response :success
     assert_equal 'some test text', @response.body
@@ -52,7 +52,7 @@ class FileModelsControllerTest < ActionController::TestCase
   test 'download unauthorized file' do
     login user: users(:administrator_second), prefix: organizations(:google).prefix
     get :download, :params => {
-      :path => @file_model.file.url.gsub(PRIVATE_RELATIVE_PATH, '')
+      :path => @file_model.file.url.gsub(RELATIVE_PRIVATE_PATH, '')
     }
     assert_redirected_to :controller => :welcome, :action => :index
   end
