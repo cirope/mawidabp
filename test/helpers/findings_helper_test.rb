@@ -234,10 +234,21 @@ class FindingsHelperTest < ActionView::TestCase
                  link_to_edit_finding(finding, auth_user)
   end
 
-  test 'should return next task expiration' do
+  test 'should return next task expiration when it is not yet due' do
     finding = findings :being_implemented_weakness
 
-    assert_equal next_task_expiration(finding), "/#{l finding.next_task_expiration, format: :short}"
+    assert_equal next_task_expiration(finding),
+                 content_tag(:span, " / #{l finding.next_task_expiration, format: :short}", class: 'text-success')
+  end
+
+  test 'should return next task expiration when it is due' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! due_on: Time.zone.yesterday
+
+    assert_equal next_task_expiration(finding),
+                 content_tag(:span, " / #{l finding.next_task_expiration, format: :short}", class: 'strike bg-danger')
   end
 
   test 'should not return next task expiration' do
@@ -247,6 +258,30 @@ class FindingsHelperTest < ActionView::TestCase
     task.update! status: Task.statuses['finished']
 
     assert_equal next_task_expiration(finding), ''
+  end
+
+  test 'should return translate filter columns' do
+    columns = ['organization', 'review', 'project', 'review_code', 'title', 'updated_at', 'tags', 'other']
+
+    translated_columns = {
+      'organization' => Finding.human_attribute_name('organization'),
+      'review'       => Review.model_name.human,
+      'project'      => PlanItem.human_attribute_name('project'),
+      'review_code'  => Finding.human_attribute_name('review_code'),
+      'title'        => Finding.human_attribute_name('title'),
+      'updated_at'   => Finding.human_attribute_name('updated_at'),
+      'tags'         => Tag.model_name.human(count: 0)
+    }
+
+    expected_result = columns.map { |c| translated_columns[c] }.compact.to_sentence
+
+    assert_equal translate_filter_columns(columns), expected_result
+  end
+
+  test 'should return blank translate filter columns' do
+    columns = ['other']
+
+    assert_equal translate_filter_columns(columns), ''
   end
 
   private

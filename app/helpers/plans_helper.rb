@@ -135,6 +135,8 @@ module PlansHelper
       )
     ]
 
+    options += pat_download_options if Current.conclusion_pdf_format == 'pat'
+
     if @business_unit_type
       options | business_unit_type_download_options
     else
@@ -143,6 +145,21 @@ module PlansHelper
   end
 
   private
+
+    def pat_download_options
+      [
+        link_to(
+          t('plans.download_progress_report_with_statuses_pat'),
+          [@plan, prs: 1, _ts: Time.now.to_i, format: :csv],
+          class: 'dropdown-item'
+        ),
+        link_to(
+          t('plans.download_progress_report_in_hours_of_work_pat'),
+          [@plan, prh: 1,  _ts: Time.now.to_i, format: :csv],
+          class: 'dropdown-item'
+        )
+      ]
+    end
 
     def business_unit_type_planned_items
       date  = plan_status_date

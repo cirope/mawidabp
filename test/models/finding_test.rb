@@ -2107,15 +2107,6 @@ class FindingTest < ActiveSupport::TestCase
     assert_nil finding.next_task_expiration
   end
 
-  test 'should not return next task expiration when have task for before today' do
-    finding = findings :being_implemented_weakness
-    task    = tasks :setup_all_things
-
-    task.update! due_on: Time.zone.yesterday.to_s(:db)
-
-    assert_nil finding.next_task_expiration
-  end
-
   private
 
     def new_email_pop3 from, subject, body

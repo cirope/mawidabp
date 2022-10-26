@@ -49,6 +49,13 @@
       <em><%= answer.comments %></em>
     </p>
   <% end %>
+
+  <% if answer.attached.present? %>
+    <p class="mb-1">
+      <%= Answer.human_attribute_name 'attached' %>:
+      <%= link_to_download_answer_attached answer %>
+    </p>
+  <% end %>
 <% end %>
 
 <% if @poll.comments.present? %>

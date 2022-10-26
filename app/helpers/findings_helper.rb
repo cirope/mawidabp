@@ -51,7 +51,14 @@ module FindingsHelper
   def next_task_expiration finding
     next_expiration = finding.next_task_expiration
 
-    next_expiration ? "/#{l finding.next_task_expiration, format: :short}" : ''
+    if next_expiration.present?
+      next_expiration_text = " / #{l finding.next_task_expiration, format: :short}"
+      html_class           = (next_expiration < Date.today ? 'strike bg-danger' : 'text-success')
+
+      content_tag :span, next_expiration_text, class: html_class
+    else
+      ''
+    end
   end
 
   def finding_updated_at_text finding
@@ -349,6 +356,20 @@ module FindingsHelper
         link_to_edit(edit_bic_sigen_fields_finding_path('complete', finding))
       end
     end
+  end
+
+  def translate_filter_columns columns
+    translated_columns = {
+      'organization' => Finding.human_attribute_name('organization'),
+      'review'       => Review.model_name.human,
+      'project'      => PlanItem.human_attribute_name('project'),
+      'review_code'  => Finding.human_attribute_name('review_code'),
+      'title'        => Finding.human_attribute_name('title'),
+      'updated_at'   => Finding.human_attribute_name('updated_at'),
+      'tags'         => Tag.model_name.human(count: 0)
+    }
+
+    columns.map { |c| translated_columns[c] }.compact.to_sentence
   end
 
   private
