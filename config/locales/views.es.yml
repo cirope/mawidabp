@@ -439,7 +439,7 @@ es:
       business_unit: 'Sector'
       budgeted_hours: 'Horas Presupuestadas'
       progress: 'Avance Total'
-      percentage: 'Procentaje'
+      percentage: 'Porcentaje'
       total_hours: 'Total de Horas'
     calendar:
       show:
