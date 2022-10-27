@@ -507,8 +507,11 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'notify implemented finding with follow up date last changed greater than 90 days' do
-    finding                = findings :being_implemented_weakness
-    finding.follow_up_date = Time.zone.today - 91.days
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    finding                             = findings :being_implemented_weakness
+    finding.state                       = Finding::STATUS[:implemented]
+    finding.follow_up_date_last_changed = Time.zone.today - 91.days
 
     finding.save!
 
