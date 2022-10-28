@@ -7,7 +7,7 @@ class FileModelsControllerTest < ActionController::TestCase
   setup do
     set_organization
 
-    file_name = "#{TEMP_PATH}temp_test.txt"
+    file_name = File.join TEMP_PATH, 'temp_test.txt'
 
     File.open(file_name, 'w') { |f| f << 'some test text' }
 
