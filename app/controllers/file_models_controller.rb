@@ -52,6 +52,6 @@ class FileModelsController < ApplicationController
     end
 
     def organization_path organization_id
-      "#{PRIVATE_PATH}#{File.join(('%08d' % organization_id).scan(/\d{4}/))}"
+      File.join PRIVATE_PATH, ('%08d' % organization_id).scan(/\d{4}/)
     end
 end
