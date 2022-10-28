@@ -1281,6 +1281,10 @@
       title: "Hallazgo vencido"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
+    notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
+      title: "Vencimiento de observación implementada"
+      finding_follow_up_date_last_changed_is_grerater_90_days: "Han pasado 90 días desde el último cambio en la fecha de implementación de la observación"
+      follow_up_date_last_changed: "Último cambio en fecha de implementación: %{follow_up_date_last_changed}"
     unanswered_finding:
       subject: "Notificación de cambio a hallazgo [#%{finding_id}]"
       title: "Notificación de cambio"
