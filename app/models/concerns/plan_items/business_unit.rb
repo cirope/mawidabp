@@ -1,4 +1,4 @@
-module PlanItems::EditBusinessUnit
+module PlanItems::BusinessUnit
   extend ActiveSupport::Concern
 
   def can_edit_business_unit?
