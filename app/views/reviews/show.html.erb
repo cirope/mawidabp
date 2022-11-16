@@ -67,7 +67,7 @@
     <% @review.review_user_assignments.each do |rua| %>
       <tr>
         <td><%= rua.user.full_name %></td>
-        <td><%= rua.type_text %></td>
+        <td><%= rua.user.roles.first.name %></td>
       </tr>
     <% end %>
   </tbody>
