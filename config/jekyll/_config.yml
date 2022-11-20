@@ -9,4 +9,5 @@ exclude:
   - Gemfile.lock
   - .git
   - .gitignore
+  - _vendor/bundle/
 languages: ['es']
