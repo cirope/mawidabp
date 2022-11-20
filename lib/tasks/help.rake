@@ -12,6 +12,13 @@ namespace :help do
   task :generate do
     Dir.chdir('config/jekyll') do
       Bundler.with_unbundled_env do
+        ruby_version = ENV["RUBY_VERSION"][/\d\.\d/]
+        bootstrap_path = `bundle show bootstrap`
+        bootstrap_version = bootstrap_path[/\d\.\d\.?\d?[^\n]$/]
+
+        File.symlink("../_vendor/bundle/ruby/#{ruby_version}.0/gems/bootstrap-sass-#{bootstrap_version}/assets/fonts/bootstrap", "./assets/fonts")
+        File.symlink("../_vendor/bundle/ruby/#{ruby_version}.0/gems/bootstrap-sass-#{bootstrap_version}/assets/stylesheets", "./_sass")
+
         system 'bundle exec jekyll build' or raise 'generate error!'
       end
     end
