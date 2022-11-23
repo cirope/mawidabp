@@ -1371,10 +1371,10 @@
     user_assignment:
       type_viewer: "Veedor"
       type_auditor: "Analista UPLA"
-      type_supervisor: "Supervisor"
-      type_manager: "Gerente"
+      type_supervisor: "Jefe Regional Upla"
+      type_manager: "Gerente de UPLA"
       type_responsible: "Responsable máximo de UPLA"
-      type_audited: "Auditado"
+      type_audited: "Responsable de unidad de negocio"
       audit_team: "Integrantes UPLA"
       others: "Usuarios"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
