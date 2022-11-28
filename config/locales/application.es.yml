@@ -961,7 +961,7 @@ es:
       type_viewer: "Veedor"
       type_auditor: "Analista UPLA"
       type_supervisor: "Jefe Regional UPLA"
-      type_manager: "Gerente de UPLA"
+      type_manager: "Supervisor"
       type_responsible: "Responsable máximo de UPLA"
       type_audited: "Responsable de unidad de negocio"
       audit_team: "UPLA"
@@ -1053,7 +1053,7 @@ es:
     type_auditor: "Analista UPLA"
     type_audited: "Responsable de unidad de negocio"
     type_committee: "Comité"
-    type_manager: "Gerente de UPLA"
+    type_manager: "Supervisor"
     type_executive_manager: "Gerente"
 
   user:
