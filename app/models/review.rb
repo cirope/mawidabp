@@ -1,4 +1,5 @@
 class Review < ApplicationRecord
+  include ActiveStorage::HasManyFiles
   include Auditable
   include Parameters::Risk
   include Parameters::Score

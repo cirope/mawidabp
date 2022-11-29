@@ -1,4 +1,5 @@
 class WorkPaper < ApplicationRecord
+  include ActiveStorage::HasOneFile
   include Auditable
   include ParameterSelector
   include Comparable

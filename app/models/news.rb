@@ -1,4 +1,5 @@
 class News < ApplicationRecord
+  include ActiveStorage::HasManyImages
   include Auditable
   include NewsModule::AttributeTypes
   include NewsModule::Defaults

@@ -716,3 +716,161 @@ private
   def update_draft_review_code?
     Finding.where.not(draft_review_code: nil).blank?
   end
+
+  def migrate_files_to_active_storage
+    return if ActiveStorage::Blob.exists?
+
+    Answer.where
+          .not(attached: nil)
+          .find_each(batch_size: 50) { |answer| attach_file answer, answer.attached }
+
+    ControlObjective.where
+                    .not(support: nil)
+                    .find_each(batch_size: 50) do |control_objective|
+      attach_file control_objective, control_objective.support
+    end
+
+    Organization.find_each(batch_size: 50) do |organization|
+      Current.organization = organization
+
+      Weakness.list
+              .find_each(batch_size: 50)
+              .select { |weakness| weakness.image_model.present? }
+              .each { |weakness| attach_image weakness, weakness.image_model.image }
+
+      Document.list
+              .where
+              .not(file_model_id: nil)
+              .find_each(batch_size: 50) { |document| attach_file document, document.file_model.file }
+
+      Memo.list
+          .find_each(batch_size: 50) { |memo| attach_file_models memo, memo.file_model_memos }
+
+      Review.list
+            .find_each(batch_size: 50) { |review| attach_file_models review, review.file_model_reviews }
+
+      FindingAnswer.where
+                   .not(file_model_id: nil)
+                   .find_each(batch_size: 50) do |finding_answer|
+        attach_file finding_answer, finding_answer.file_model.file if finding_answer.file_model.file?
+      end
+
+      RiskAssessment.list
+                    .where
+                    .not(file_model_id: nil)
+                    .find_each(batch_size: 50) do |risk_assessment|
+        attach_file risk_assessment, risk_assessment.file_model.file
+      end
+
+      # ver esto con franco por tema del after save de workpaper
+      Current.user = User.list.detect(&:supervisor?)
+
+      WorkPaper.list
+               .where
+               .not(file_model_id: nil)
+               .find_each(batch_size: 50) do |work_paper|
+        attach_file work_paper, work_paper.file_model.file
+      end
+
+      Current.user = nil
+      #
+
+      WorkflowItem.where
+                  .not(file_model_id: nil)
+                  .find_each(batch_size: 50) do |workflow_item|
+        attach_file workflow_item, workflow_item.file_model.file if workflow_item.file_model.file?
+      end
+
+      Workflow.list
+              .where
+              .not(file_model_id: nil)
+              .find_each(batch_size: 50) do |workflow|
+        attach_file workflow, workflow.file_model.file
+      end
+
+      News.list
+          .find_each(batch_size: 50) { |news| attach_image_models news, news.image_models }
+
+      Current.organization = nil
+    end
+
+    Annex.find_each(batch_size: 50) { |annex| attach_image_models annex, annex.image_models }
+
+    Organization.find_each(batch_size: 50) { |organization| attach_images_organization organization }
+  end
+
+  def attach_file object, file_to_attach
+    file_to_attach.cache_stored_file!
+
+    path_file = file_to_attach.sanitized_file.file
+
+    object.file.attach io: File.open(path_file),
+                       content_type: file_to_attach.content_type,
+                       filename: File.basename(path_file)
+
+    object.save! validate: false
+  end
+
+  def attach_image object, image_to_attach
+    image_to_attach.cache_stored_file!
+
+    path_image = image_to_attach.sanitized_file.file
+
+    object.image.attach io: File.open(path_image),
+                        content_type: image_to_attach.content_type,
+                        filename: File.basename(path_image)
+
+    object.save! validate: false
+  end
+
+  def attach_file_models object, file_models_entity
+    object.files.attach(file_models_entity.map { |file_model_entity| create_blob(file_model_entity.file_model.file)})
+
+    object.save! validate: false
+  end
+
+  def attach_image_models object, image_models
+    object.images.attach(image_models.map { |image_model| create_blob(image_model.image)})
+
+    object.save! validate: false
+  end
+
+  def create_blob file
+    file.cache_stored_file!
+
+    path_file = file.sanitized_file.file
+
+    ActiveStorage::Blob.create_after_upload! io: File.open(path_file),
+                                             content_type: file.content_type,
+                                             filename: File.basename(path_file)
+  end
+
+  def attach_images_organization organization
+    if organization.image_model.present? && organization.image_model.image?
+      image_to_attach = organization.image_model.image
+
+      image_to_attach.cache_stored_file!
+
+      path_image = image_to_attach.sanitized_file.file
+
+      organization.image.attach io: File.open(path_image),
+                                content_type: image_to_attach.content_type,
+                                filename: File.basename(path_image)
+
+      organization.save! validate: false
+    end
+
+    if organization.co_brand_image_model.present? && organization.co_brand_image_model.image?
+      co_brand_image_to_attach = organization.co_brand_image_model.image
+
+      co_brand_image_to_attach.cache_stored_file!
+
+      path_co_brand_image = co_brand_image_to_attach.sanitized_file.file
+
+      organization.co_brand_image.attach io: File.open(path_co_brand_image),
+                                         content_type: co_brand_image_to_attach.content_type,
+                                         filename: File.basename(path_co_brand_image)
+
+      organization.save! validate: false
+    end
+  end

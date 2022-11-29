@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Annex < ApplicationRecord
+  include ActiveStorage::HasManyImages
   include Annexes::ImageModels
   include Annexes::Validation
 

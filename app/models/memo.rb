@@ -1,4 +1,5 @@
 class Memo < ApplicationRecord
+  include ActiveStorage::HasManyFiles
   include Memos::BicPdf
   include Memos::CloseDate
   include Memos::DefaultPdf

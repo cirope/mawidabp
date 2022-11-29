@@ -1,4 +1,5 @@
 class Answer < ApplicationRecord
+  include ActiveStorage::HasOneFile
   include Auditable
   include Answers::Completed
   include Answers::Validations

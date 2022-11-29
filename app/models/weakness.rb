@@ -1,4 +1,5 @@
 class Weakness < Finding
+  include ActiveStorage::HasOneImage
   include Findings::Approval
   include Weaknesses::Code
   include Weaknesses::Defaults

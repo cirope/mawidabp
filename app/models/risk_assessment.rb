@@ -1,4 +1,5 @@
 class RiskAssessment < ApplicationRecord
+  include ActiveStorage::HasOneFile
   include Auditable
   include RiskAssessments::AttributeTypes
   include RiskAssessments::Clone
