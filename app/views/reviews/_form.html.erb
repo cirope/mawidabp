@@ -41,7 +41,7 @@
           value: review_business_unit_type_text(@review), readonly: true } %>
 
         <% if USE_SCOPE_CYCLE %>
-          <%= f.input :subsidiary_id, 
+          <%= f.input :subsidiary_id,
                       collection: subsidiaries_options,
                       include_blank: true,
                       input_html: { readonly: @review.weaknesses.any? }
@@ -49,7 +49,10 @@
         <% end %>
 
         <% if Current.conclusion_pdf_format == 'nbc' %>
-          <%= f.input :review_objective, input_html: { rows: 4 } %>
+          <%= f.input :review_objective, input_html: {
+            rows: 4,
+            disabled: readonly }
+          %>
         <% end %>
       </div>
       <div class="col-md-6">

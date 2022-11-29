@@ -743,9 +743,9 @@
       work_papers: "Papeles de trabajo"
       pdf_name: "seguimiento_de_hallazgo_%{code}.pdf"
     pdf:
-      filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
+      filtered_by_html:
+        one: "El listado fue filtrado con la consulta <span class=\"font-weight-bold\">'%{query}'</span> en la columna <span class=\"font-weight-bold\">'%{columns}'</span>"
+        other: "El listado fue filtrado con la consulta <span class=\"font-weight-bold\">'%{query}'</span> en las columnas <span class=\"font-weight-bold\">'%{columns}'</span>"
     user_assignment:
       audit_team: "Auditoría"
       others: "Usuarios"
@@ -1282,6 +1282,10 @@
       title: "Hallazgo vencido"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
+    notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
+      title: "Vencimiento de observación implementada"
+      finding_follow_up_date_last_changed_is_grerater_90_days: "Han pasado 90 días desde el último cambio en la fecha de implementación de la observación"
+      follow_up_date_last_changed: "Último cambio en fecha de implementación: %{follow_up_date_last_changed}"
     unanswered_finding:
       subject: "Notificación de cambio a hallazgo [#%{finding_id}]"
       title: "Notificación de cambio"
@@ -1340,6 +1344,10 @@
     period_description: "Periodo %{period}"
     review_identification: "Número de informe %{review}"
     draft: "Borrador"
+
+  plan_item:
+    errors:
+      cannot_edit_business_unit_for_memos_too: 'o un memo'
 
   questionnaire:
     index_title: "Listado de cuestionarios"
@@ -1540,6 +1548,9 @@
 
   welcome:
     index_title: "Bienvenido"
+
+  wicked_pdf:
+    number_pages_html: 'Pagina <span class="page"></span> de <span class="topage"></span>'
 
   work_paper:
     cover_name: "%{prefix}%{filename}-portada.pdf"

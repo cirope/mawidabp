@@ -260,6 +260,30 @@ class FindingsHelperTest < ActionView::TestCase
     assert_equal next_task_expiration(finding), ''
   end
 
+  test 'should return translate filter columns' do
+    columns = ['organization', 'review', 'project', 'review_code', 'title', 'updated_at', 'tags', 'other']
+
+    translated_columns = {
+      'organization' => Finding.human_attribute_name('organization'),
+      'review'       => Review.model_name.human,
+      'project'      => PlanItem.human_attribute_name('project'),
+      'review_code'  => Finding.human_attribute_name('review_code'),
+      'title'        => Finding.human_attribute_name('title'),
+      'updated_at'   => Finding.human_attribute_name('updated_at'),
+      'tags'         => Tag.model_name.human(count: 0)
+    }
+
+    expected_result = columns.map { |c| translated_columns[c] }.compact.to_sentence
+
+    assert_equal translate_filter_columns(columns), expected_result
+  end
+
+  test 'should return blank translate filter columns' do
+    columns = ['other']
+
+    assert_equal translate_filter_columns(columns), ''
+  end
+
   private
 
     def link_to_edit(*args)

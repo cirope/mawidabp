@@ -59,7 +59,7 @@ module Findings::Issues
         file                 = FINDING_REPEATABILITY_FILE[review.organization.prefix]
         subsidiary_identity = review&.subsidiary&.identity
 
-        CSV.foreach(file, csv_options) do |row|
+        CSV.foreach(file, **csv_options) do |row|
           reference_file     = row['id_ofinal']
           subsidiary_file_id = row['id_suc']
 
