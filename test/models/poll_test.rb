@@ -7,6 +7,29 @@ class PollTest < ActiveSupport::TestCase
     set_organization
   end
 
+  test 'initialize and build questions' do
+    poll = Poll.list.new(
+      :comments => 'New comments',
+      :answered => false,
+      :pollable_id => ActiveRecord::FixtureSet.identify(:conclusion_current_final_review),
+      :pollable_type => 'ConclusionReview',
+      :questionnaire_id => questionnaires(:questionnaire_one).id,
+      :user_id => users(:poll).id
+    )
+
+    poll.answers.each do |answer|
+      assert answer.question.present?
+
+      if answer.question.answer_yes_no?
+        assert_equal answer.type, AnswerYesNo.name
+      elsif answer.question.answer_multi_choice?
+        assert_equal answer.type, AnswerMultiChoice.name
+      elsif answer.question.answer_written?
+        assert_equal answer.type, AnswerWritten.name
+      end
+    end
+  end
+
   test 'create' do
     assert_difference ['Poll.count', 'Answer.count'] do
       Poll.list.create(

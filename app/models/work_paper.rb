@@ -192,7 +192,7 @@ class WorkPaper < ApplicationRecord
     if self.file_model.try(:file?)
       File.join File.dirname(self.file_model.file.path), self.pdf_cover_name
     else
-      "#{TEMP_PATH}#{self.pdf_cover_name(filename || "#{object_id.abs}.pdf")}"
+      File.join TEMP_PATH, self.pdf_cover_name(filename || "#{object_id.abs}.pdf")
     end
   end
 

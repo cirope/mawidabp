@@ -852,6 +852,8 @@ es:
           attributes:
             auxiliar_business_unit_types:
               taken: 'repetidas'
+            business_unit:
+              cannot_edit_business_unit: "no se puede editar debido a que el proyecto ya esta tomado por un informe definitivo %{memo_condition}"
             start:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
