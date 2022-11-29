@@ -237,7 +237,7 @@ module ConclusionReviews::PatPdf
     def put_pat_brief_weaknesses_section_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked
+      filtered   = weaknesses.not_revoked.reorder(sort_weaknesses_by)
 
       if filtered.any?
         pdf.move_down PDF_FONT_SIZE
@@ -515,7 +515,7 @@ module ConclusionReviews::PatPdf
 
         pdf.text Annex.model_name.human(count: 0).upcase, align: :center, style: :bold
 
-        annexes.each_with_index do |annex, idx|
+        annexes.order(:id).each_with_index do |annex, idx|
           pdf.move_down PDF_FONT_SIZE * 2
           pdf.text annex.title, style: :bold
 

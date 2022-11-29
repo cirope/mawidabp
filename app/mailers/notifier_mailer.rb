@@ -345,6 +345,14 @@ class NotifierMailer < ApplicationMailer
          subject: prefix.upcase + t('notifier.notify_new_oportunity.title')
   end
 
+  def notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days(finding)
+    @finding = finding
+    prefix   = "[#{@finding.organization.prefix}]"
+
+    mail to: finding_supervisors(@finding).map(&:email),
+         subject: prefix.upcase + t('notifier.notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days.title')
+  end
+
   private
 
     def users_to_notify_for(users)
@@ -357,5 +365,12 @@ class NotifierMailer < ApplicationMailer
       end
 
       Array(users).concat(extra_users)
+    end
+
+    def finding_supervisors(finding)
+      finding.finding_user_assignments
+             .joins(user: { organization_roles: :role })
+             .where('roles.role_type = ?', ::Role::TYPES[:supervisor])
+             .map { |f_u_a| f_u_a.user }
     end
 end
