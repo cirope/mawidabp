@@ -176,4 +176,145 @@ class PlanItemTest < ActiveSupport::TestCase
     assert reponse.present?
     assert reponse.include?(new_plan_item)
   end
+
+  test 'completed_early status' do
+    @plan_item.start                              = 1.day.from_now.to_date
+    @plan_item.end                                = 2.day.from_now.to_date
+    @plan_item.conclusion_final_review.issue_date = 1.day.ago.to_date
+
+    assert @plan_item.completed_early?
+  end
+
+  test 'completed status' do
+    assert_equal @plan_item.completed?, @plan_item.conclusion_final_review
+  end
+
+  test 'in_early_progress status' do
+    plan_item_3 = plan_items :current_plan_item_3
+
+    assert plan_item_3.valid?
+    assert plan_item_3.in_early_progress?
+  end
+
+  test 'in_progress_no_delayed status' do
+    plan_item_2 = plan_items :current_plan_item_2
+
+    assert plan_item_2.valid?
+    assert plan_item_2.in_progress_no_delayed?
+  end
+
+  test 'overdue status' do
+    plan_item_3       = plan_items :current_plan_item_3
+    plan_item_3.start = 2.day.ago.to_date
+    plan_item_3.end   = 1.day.ago.to_date
+
+    assert_nil plan_item_3.conclusion_final_review
+    assert plan_item_3.valid?
+    assert plan_item_3.overdue?
+  end
+
+  test 'not_started_no_delayed status' do
+    plan_item_6       = plan_items :current_plan_item_6
+    plan_item_6.start = 1.day.from_now.to_date
+
+    assert plan_item_6.valid?
+    assert_nil plan_item_6.review
+    assert plan_item_6.not_started_no_delayed?
+  end
+
+  test 'delayed_pat status' do
+    plan_item_6 = plan_items :current_plan_item_6
+
+    assert plan_item_6.valid?
+    assert_nil plan_item_6.review
+    assert plan_item_6.delayed_pat?
+  end
+
+  test 'progress' do
+    plan_item_2 = plan_items :current_plan_item_2
+
+    assert plan_item_2.valid?
+    assert plan_item_2.review
+    assert_equal plan_item_2.progress.to_i, plan_item_2.human_units_consumed.to_i
+
+    plan_item_2.resource_utilizations.first.units = 6
+
+    assert plan_item_2.valid?
+    assert plan_item_2.review
+    assert_equal plan_item_2.progress.to_i, plan_item_2.human_units.to_i
+
+    plan_item_6 = plan_items :current_plan_item_6
+
+    assert plan_item_6.valid?
+    assert_nil plan_item_6.review
+    assert_equal plan_item_6.progress.to_i, plan_item_6.human_units_consumed.to_i
+    assert_equal @plan_item.progress.to_i, @plan_item.human_units.to_i
+  end
+
+  test 'can edit business unit because is a new record' do
+    new_plan_item = PlanItem.new
+
+    assert new_plan_item.can_edit_business_unit?
+  end
+
+  test 'can edit business unit because is not in memo or review' do
+    plan_item = plan_items :past_plan_item_2
+
+    assert plan_item.can_edit_business_unit?
+  end
+
+  test 'can edit business unit because is in draft review only' do
+    plan_item = plan_items :current_plan_item_2
+
+    assert plan_item.can_edit_business_unit?
+  end
+
+  test 'cannot edit business unit because is in final review' do
+    refute @plan_item.can_edit_business_unit?
+  end
+
+  test 'cannot edit business unit because is in memo' do
+    plan_item = plan_items :current_plan_item_6
+
+    refute plan_item.can_edit_business_unit?
+  end
+
+  test 'valid when change business unit because is not in memo or review' do
+    plan_item               = plan_items :past_plan_item_2
+    business_unit           = business_units :business_unit_one
+    plan_item.business_unit = business_unit
+
+    assert plan_item.valid?
+  end
+
+  test 'valid when change business unit because is in draft review only' do
+    plan_item               = plan_items :current_plan_item_2
+    business_unit           = business_units :business_unit_one
+    plan_item.business_unit = business_unit
+
+    assert plan_item.can_edit_business_unit?
+  end
+
+  test 'invalid when change business unit because is in final review' do
+    business_unit            = business_units :business_unit_two
+    @plan_item.business_unit = business_unit
+
+    refute @plan_item.valid?
+    assert_error @plan_item,
+                 :business_unit,
+                 :cannot_edit_business_unit,
+                 memo_condition: SHOW_MEMOS ? I18n.t('plan_item.errors.cannot_edit_business_unit_for_memos_too') : ''
+  end
+
+  test 'invalid when change business unit because is in memo' do
+    plan_item               = plan_items :current_plan_item_6
+    business_unit           = business_units :business_unit_two
+    plan_item.business_unit = business_unit
+
+    refute plan_item.valid?
+    assert_error plan_item,
+                 :business_unit,
+                 :cannot_edit_business_unit,
+                 memo_condition: SHOW_MEMOS ? I18n.t('plan_item.errors.cannot_edit_business_unit_for_memos_too') : ''
+  end
 end

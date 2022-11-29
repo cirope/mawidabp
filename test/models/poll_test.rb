@@ -7,6 +7,29 @@ class PollTest < ActiveSupport::TestCase
     set_organization
   end
 
+  test 'initialize and build questions' do
+    poll = Poll.list.new(
+      :comments => 'New comments',
+      :answered => false,
+      :pollable_id => ActiveRecord::FixtureSet.identify(:conclusion_current_final_review),
+      :pollable_type => 'ConclusionReview',
+      :questionnaire_id => questionnaires(:questionnaire_one).id,
+      :user_id => users(:poll).id
+    )
+
+    poll.answers.each do |answer|
+      assert answer.question.present?
+
+      if answer.question.answer_yes_no?
+        assert_equal answer.type, AnswerYesNo.name
+      elsif answer.question.answer_multi_choice?
+        assert_equal answer.type, AnswerMultiChoice.name
+      elsif answer.question.answer_written?
+        assert_equal answer.type, AnswerWritten.name
+      end
+    end
+  end
+
   test 'create' do
     assert_difference ['Poll.count', 'Answer.count'] do
       Poll.list.create(
@@ -25,11 +48,31 @@ class PollTest < ActiveSupport::TestCase
     end
   end
 
-  test 'update' do
+  test 'update and not finished yet' do
     assert_equal @poll.answered, false
     assert @poll.update(:comments => 'Updated comments'),
       @poll.errors.full_messages.join('; ')
     @poll.reload
+    assert_equal 'Updated comments', @poll.comments
+    assert_equal @poll.answered, false
+  end
+
+  test 'update and finished' do
+    assert_equal @poll.answered, false
+
+    answer_yes_no = @poll.answers.find_by(type: 'AnswerYesNo')
+
+    @poll.update(comments: 'Updated comments',
+                 answers_attributes:
+                 [
+                   {
+                     id: answer_yes_no.id,
+                     answer_option_id: answer_options(:yes_no_no).id
+                   }
+                 ])
+
+    @poll.reload
+
     assert_equal 'Updated comments', @poll.comments
     assert_equal @poll.answered, true
   end

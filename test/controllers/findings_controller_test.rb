@@ -158,6 +158,35 @@ class FindingsControllerTest < ActionController::TestCase
     assert assigns(:findings).all? { |f| f.finding_user_assignments.owners.map(&:user).include?(user) }
   end
 
+  test 'list findings pending_to_endorsement' do
+    finding            = findings :being_implemented_weakness
+    new_finding_answer = FindingAnswer.new(answer: 'This date for me',
+                                           commitment_date: Date.today.to_s(:db),
+                                           user_id: users(:audited).id)
+
+    finding.finding_answers << new_finding_answer
+
+    new_finding_answer.reload
+
+    new_finding_answer.endorsements << Endorsement.new(status: 'pending',
+                                                       user_id: users(:supervisor).id)
+
+    user = users :supervisor
+
+    login user: user
+
+    get :index, params: {
+      completion_state:       'incomplete',
+      pending_to_endorsement: true
+    }
+
+    assert_response :success
+    assert assigns(:findings).any?
+    assert assigns(:findings).all? do |f|
+      f.finding_answers.any? { |f_a| f_a.endorsements.where(status: Endorsement.statuses['pending'], user_id: user.id).present? }
+    end
+  end
+
   test 'list findings for specific ids' do
     ids = [
       findings(:being_implemented_weakness).id,
@@ -182,10 +211,39 @@ class FindingsControllerTest < ActionController::TestCase
     assert_match Mime[:csv].to_s, @response.content_type
   end
 
-  test 'list findings as PDF' do
+  test 'list incomplete findings as PDF' do
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
     get :index, params: { completion_state: 'incomplete' }, as: :pdf
 
-    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
+    assert_response :success
+    assert_match Mime[:pdf].to_s, @response.content_type
+  end
+
+  test 'list repeated findings as PDF' do
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
+    get :index, params: { completion_state: 'repeated' }, as: :pdf
+
+    assert_response :success
+    assert_match Mime[:pdf].to_s, @response.content_type
+  end
+
+  test 'list complete findings as PDF' do
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
+    get :index, params: { completion_state: 'complete' }, as: :pdf
+
+    assert_response :success
     assert_match Mime[:pdf].to_s, @response.content_type
   end
 
@@ -815,6 +873,11 @@ class FindingsControllerTest < ActionController::TestCase
       csv_findings << id if id&.positive?
     end
 
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
     get :index, params: {
       completion_state: 'incomplete',
       search: {
@@ -822,7 +885,8 @@ class FindingsControllerTest < ActionController::TestCase
       }
     }, as: :pdf
     # we can't check the order inside the PDF so...
-    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
+    assert_response :success
+    assert_match Mime[:pdf].to_s, @response.content_type
 
     assert_equal(
       html_findings,

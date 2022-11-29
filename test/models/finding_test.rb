@@ -2050,6 +2050,34 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(follow_up_date_last_changed_expected, format: :minimal)
   end
 
+  test 'should notify findings with follow_up_date_last_changed greater than 90 days' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    finding                             = findings :being_implemented_weakness
+    finding.state                       = Finding::STATUS[:implemented]
+    finding.follow_up_date_last_changed = Time.zone.today - 91.days
+
+    finding.save!
+
+    assert_enqueued_emails 1 do
+      Finding.notify_implemented_findings_with_follow_up_date_last_changed_greater_than_90_days
+    end
+  end
+
+  test 'should notify not findings with follow_up_date_last_changed greater than 90 days' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    finding                             = findings :being_implemented_weakness
+    finding.state                       = Finding::STATUS[:implemented]
+    finding.follow_up_date_last_changed = Time.zone.today - 90.days
+
+    finding.save!
+
+    assert_enqueued_emails 0 do
+      Finding.notify_implemented_findings_with_follow_up_date_last_changed_greater_than_90_days
+    end
+  end
+
   test 'should return suggestion to add days follow up date depending on the risk' do
     expected = {
       0 => 180,
@@ -2070,6 +2098,41 @@ class FindingTest < ActiveSupport::TestCase
   test 'should return states that allow extension' do
     assert_equal Finding.states_that_allow_extension,
                  [Finding::STATUS[:being_implemented], Finding::STATUS[:awaiting]]
+  end
+
+  test 'should return next task expiration when have tasks in progress' do
+    finding              = findings :being_implemented_weakness
+    next_task_expiration = finding.tasks
+                                  .where(status: Task.statuses['in_progress'],
+                                         due_on: Date.today..)
+                                  .first
+                                  .due_on
+
+    assert_equal finding.next_task_expiration, next_task_expiration
+  end
+
+  test 'should return next task expiration when have tasks pending' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! status: Task.statuses['pending']
+
+    next_task_expiration = finding.tasks
+                                  .where(status: Task.statuses['pending'],
+                                         due_on: Date.today..)
+                                  .first
+                                  .due_on
+
+    assert_equal finding.next_task_expiration, next_task_expiration
+  end
+
+  test 'should not return next task expiration when all tasks are finished' do
+    finding = findings :being_implemented_weakness
+    task    = tasks :setup_all_things
+
+    task.update! status: Task.statuses['finished']
+
+    assert_nil finding.next_task_expiration
   end
 
   private

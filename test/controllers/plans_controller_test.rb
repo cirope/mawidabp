@@ -41,6 +41,32 @@ class PlansControllerTest < ActionController::TestCase
     assert_match Mime[:csv].to_s, @response.content_type
   end
 
+  test 'shows plan progress by status as csv' do
+    business_unit_type = business_unit_types :cycle
+
+    get :show, params: {
+      id: @plan,
+      business_unit_type: business_unit_type,
+      prs: 1
+    }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'shows plan progress by hours as csv' do
+    business_unit_type = business_unit_types :cycle
+
+    get :show, params: {
+      id: @plan,
+      business_unit_type: business_unit_type,
+      prh: 1
+    }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'show plan on js' do
     business_unit_type = business_unit_types :cycle
 
@@ -377,10 +403,10 @@ class PlansControllerTest < ActionController::TestCase
     assert_equal 1, business_unit_types.size # Cycle and Consolidated Sustantive is excluded in params
     assert_equal 'B.C.R.A.', business_unit_types[0]['label']
 
-    get :auto_complete_for_business_unit_type, params: { 
+    get :auto_complete_for_business_unit_type, params: {
       q: 'C',
       plan_item_id: plan_items(:current_plan_item_1).id,
-      business_unit_type_id: plan_items(:current_plan_item_1).business_unit_type.id 
+      business_unit_type_id: plan_items(:current_plan_item_1).business_unit_type.id
     }, as: :json
 
     assert_response :success

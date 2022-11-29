@@ -67,7 +67,7 @@ class WorkflowItem < ApplicationRecord
   belongs_to :workflow
   has_many :resource_utilizations, :as => :resource_consumer,
     :dependent => :destroy
-  belongs_to :file_model, :optional => true
+  belongs_to :file_model, :dependent => :destroy, :optional => true
 
   accepts_nested_attributes_for :resource_utilizations, :allow_destroy => true
   accepts_nested_attributes_for :file_model, :allow_destroy => true
