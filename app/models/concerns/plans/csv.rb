@@ -1,8 +1,9 @@
 module Plans::Csv
   extend ActiveSupport::Concern
 
-  def to_csv business_unit_type: nil
+  def to_csv business_unit_type: nil, dprh: false
     options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+    @dprh   = dprh
 
     csv_str = CSV.generate(**options) do |csv|
       csv << csv_headers
@@ -14,13 +15,19 @@ module Plans::Csv
   end
 
   def csv_filename
-    I18n.t 'plans.csv.csv_name', period: period.name
+    if Current.conclusion_pdf_format == 'pat' && @dprh == true
+      I18n.t 'plans.csv.csv_name_pat_dprh', current_date: Time.zone.now.strftime("%Y%m%d")
+    elsif Current.conclusion_pdf_format == 'pat'
+      I18n.t 'plans.csv.csv_name_pat_im', current_date: Time.zone.now.strftime("%Y%m%d")
+    else
+      I18n.t 'plans.csv.csv_name', period: period.name
+    end
   end
 
   private
 
     def csv_headers
-      [
+      headers = [
         PlanItem.human_attribute_name(:order_number),
         PlanItem.human_attribute_name(:status),
         BusinessUnitType.model_name.human,
@@ -33,15 +40,36 @@ module Plans::Csv
         PlanItem.human_attribute_name(:end),
         (Current.conclusion_pdf_format == 'pat' ? I18n.t('plans.csv.annual_plan_hours') : PlanItem.human_attribute_name(:human_resource_units)),
         (PlanItem.human_attribute_name(:material_resource_units) unless Current.conclusion_pdf_format == 'pat'),
-        (PlanItem.human_attribute_name(:total_resource_units) unless Current.conclusion_pdf_format == 'pat'),
-        (Review.human_attribute_name(:score) if Current.conclusion_pdf_format == 'bic'),
-        (I18n.t('risk_types.low') if Current.conclusion_pdf_format == 'bic'),
-        (I18n.t('risk_types.medium') if Current.conclusion_pdf_format == 'bic'),
-        (I18n.t('risk_types.high') if Current.conclusion_pdf_format == 'bic'),
-        (ConclusionDraftReview.human_attribute_name(:issue_date) if Current.conclusion_pdf_format == 'bic'),
-        (I18n.t('plans.csv.auditor') if Current.conclusion_pdf_format == 'pat'),
-        (I18n.t('plans.csv.time_summary_hours') if Current.conclusion_pdf_format == 'pat')
+        (PlanItem.human_attribute_name(:total_resource_units) unless Current.conclusion_pdf_format == 'pat')
       ].compact
+
+      headers += add_bic_headers if Current.conclusion_pdf_format == 'bic'
+      headers += add_pat_headers if Current.conclusion_pdf_format == 'pat'
+      headers
+    end
+
+    def add_bic_headers
+      [
+        Review.human_attribute_name(:score),
+        I18n.t('risk_types.low'),
+        I18n.t('risk_types.medium'),
+        I18n.t('risk_types.high'),
+        ConclusionDraftReview.human_attribute_name(:issue_date)
+      ]
+    end
+
+    def add_pat_headers
+      if @dprh
+        [
+          I18n.t('plans.csv_prh_pat.progress'),
+          I18n.t('plans.csv_prh_pat.percentage')
+        ]
+      else
+        [
+          I18n.t('plans.csv.auditor'),
+          I18n.t('plans.csv.time_summary_hours')
+        ]
+      end
     end
 
     def csv_put_business_unit_types_on csv, business_unit_type
@@ -88,10 +116,17 @@ module Plans::Csv
           end
 
           if Current.conclusion_pdf_format == 'pat'
-            array_to_csv += [
-              plan_item_auditors(plan_item) || '',
-              '%.2f' % plan_item&.human_units_consumed,
-            ]
+            if @dprh
+              array_to_csv += [
+                '%.2f' % plan_item.progress.to_i,
+                '%.2f' % get_percentage(plan_item.human_units.to_i, plan_item.progress.to_i),
+              ]
+            else
+              array_to_csv += [
+                plan_item_auditors(plan_item) || '',
+                '%.2f' % plan_item&.human_units_consumed,
+              ]
+            end
           end
 
           csv << array_to_csv.compact
