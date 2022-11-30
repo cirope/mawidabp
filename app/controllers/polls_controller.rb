@@ -83,7 +83,8 @@ class PollsController < ApplicationController
         :about_id, :about_type,
         answers_attributes: [
           :id, :answer, :comments, :answer_option_id, :type,
-          :attached, :attached_cache, :remove_attached
+          :attached, :attached_cache, :remove_attached, :file,
+          file_attachment_attributes: [:id, :_destroy]
         ]
       )
     end

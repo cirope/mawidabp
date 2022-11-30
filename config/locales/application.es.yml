@@ -1224,6 +1224,7 @@ es:
     attributes:
       answer:
         attached: 'Adjunto'
+        file: 'Adjunto'
       business_unit:
         name: "Nombre"
         business_unit_kind_id: 'Tipo de unidad de negocio'

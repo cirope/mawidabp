@@ -1620,6 +1620,7 @@
     attributes:
       answer:
         attached: 'Adjunto'
+        file: 'Adjunto'
       business_unit:
         name: "Nombre"
       business_unit_type_user:
