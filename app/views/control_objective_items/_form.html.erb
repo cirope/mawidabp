@@ -125,13 +125,11 @@
       </div>
     <% end %>
 
-    <% if @control_objective_item.support? %>
-      <p class="mb-1">
-        <strong>
-          <%= ControlObjectiveItem.human_attribute_name :support %>
-        </strong>
-        <%= link_to_download_support @control_objective_item.control_objective %>
-      </p>
+    <% if @control_objective_item.control_objective.file.attached? %>
+      <strong>
+        <%= ControlObjectiveItem.human_attribute_name :support %>:
+      </strong>
+      <%= link_to_download_file @control_objective_item.control_objective.file, class: 'btn btn-outline-secondary mb-3 mt-3' %>
     <% end %>
   </div>
 

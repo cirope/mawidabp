@@ -293,6 +293,7 @@ es:
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
         support: 'Soporte'
+        file: 'Soporte'
         score_type: 'Tipo de calificación'
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'

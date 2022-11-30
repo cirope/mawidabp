@@ -35,7 +35,7 @@
             <td><%= simple_format co.control.effects, class: 'mb-1' %></td>
           <% end %>
           <td><%= co.risk_text %></td>
-          <td><%= link_to_download_support co %></td>
+          <td><%= show_link_to_download_file co, class: 'btn btn-outline-secondary btn-sm' %></td>
           <td><%= tags co.tags %></td>
         </tr>
       <% end %>
