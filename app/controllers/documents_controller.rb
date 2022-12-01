@@ -69,7 +69,6 @@ class DocumentsController < ApplicationController
 
     def document_params
       params.require(:document).permit :name, :description, :shared, :file, :lock_version,
-        file_model_attributes: [:id, :file, :file_cache, :_destroy],
         taggings_attributes:   [:id, :tag_id, :_destroy]
     end
 

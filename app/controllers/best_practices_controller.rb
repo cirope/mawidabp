@@ -88,7 +88,7 @@ class BestPracticesController < ApplicationController
         process_controls_attributes: [
           :id, :name, :order, :obsolete, :_destroy,
           control_objectives_attributes: [
-            :id, :name, :relevance, :risk, :obsolete, :support, :support_cache,
+            :id, :name, :relevance, :risk, :obsolete,
             :audit_sector, :date_charge, :order, :_destroy, :remove_support,
             :affected_sector_id, :file,
             file_attachment_attributes: [:id, :_destroy],
