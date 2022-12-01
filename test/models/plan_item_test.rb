@@ -250,4 +250,71 @@ class PlanItemTest < ActiveSupport::TestCase
     assert_equal plan_item_6.progress.to_i, plan_item_6.human_units_consumed.to_i
     assert_equal @plan_item.progress.to_i, @plan_item.human_units.to_i
   end
+
+  test 'can edit business unit because is a new record' do
+    new_plan_item = PlanItem.new
+
+    assert new_plan_item.can_edit_business_unit?
+  end
+
+  test 'can edit business unit because is not in memo or review' do
+    plan_item = plan_items :past_plan_item_2
+
+    assert plan_item.can_edit_business_unit?
+  end
+
+  test 'can edit business unit because is in draft review only' do
+    plan_item = plan_items :current_plan_item_2
+
+    assert plan_item.can_edit_business_unit?
+  end
+
+  test 'cannot edit business unit because is in final review' do
+    refute @plan_item.can_edit_business_unit?
+  end
+
+  test 'cannot edit business unit because is in memo' do
+    plan_item = plan_items :current_plan_item_6
+
+    refute plan_item.can_edit_business_unit?
+  end
+
+  test 'valid when change business unit because is not in memo or review' do
+    plan_item               = plan_items :past_plan_item_2
+    business_unit           = business_units :business_unit_one
+    plan_item.business_unit = business_unit
+
+    assert plan_item.valid?
+  end
+
+  test 'valid when change business unit because is in draft review only' do
+    plan_item               = plan_items :current_plan_item_2
+    business_unit           = business_units :business_unit_one
+    plan_item.business_unit = business_unit
+
+    assert plan_item.can_edit_business_unit?
+  end
+
+  test 'invalid when change business unit because is in final review' do
+    business_unit            = business_units :business_unit_two
+    @plan_item.business_unit = business_unit
+
+    refute @plan_item.valid?
+    assert_error @plan_item,
+                 :business_unit,
+                 :cannot_edit_business_unit,
+                 memo_condition: SHOW_MEMOS ? I18n.t('plan_item.errors.cannot_edit_business_unit_for_memos_too') : ''
+  end
+
+  test 'invalid when change business unit because is in memo' do
+    plan_item               = plan_items :current_plan_item_6
+    business_unit           = business_units :business_unit_two
+    plan_item.business_unit = business_unit
+
+    refute plan_item.valid?
+    assert_error plan_item,
+                 :business_unit,
+                 :cannot_edit_business_unit,
+                 memo_condition: SHOW_MEMOS ? I18n.t('plan_item.errors.cannot_edit_business_unit_for_memos_too') : ''
+  end
 end

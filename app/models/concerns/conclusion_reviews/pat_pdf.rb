@@ -237,7 +237,7 @@ module ConclusionReviews::PatPdf
     def put_pat_brief_weaknesses_section_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked
+      filtered   = weaknesses.not_revoked.reorder(sort_weaknesses_by)
 
       if filtered.any?
         pdf.move_down PDF_FONT_SIZE

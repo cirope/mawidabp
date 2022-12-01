@@ -956,6 +956,10 @@ es:
     review_identification: "Número de informe"
     draft: "Borrador"
 
+  plan_item:
+    errors:
+      cannot_edit_business_unit_for_memos_too: 'o un memo'
+
   review:
     index_title: "Listado de informes"
     show_title: "Detalles del informes"

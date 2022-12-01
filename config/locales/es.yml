@@ -1344,6 +1344,10 @@
     review_identification: "Número de informe %{review}"
     draft: "Borrador"
 
+  plan_item:
+    errors:
+      cannot_edit_business_unit_for_memos_too: 'o un memo'
+
   questionnaire:
     index_title: "Listado de cuestionarios"
     edit_title: "Modificar cuestionario"

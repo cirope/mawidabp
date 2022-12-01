@@ -122,7 +122,10 @@ class PlansController < ApplicationController
       elsif params[:prh]
         render csv: @plan.to_csv_prh(business_unit_type: @business_unit_type), filename: @plan.csv_filename_prh
       else
-        render csv: @plan.to_csv(business_unit_type: @business_unit_type), filename: @plan.csv_filename
+        render csv: @plan.to_csv(
+          dprh: params[:dprh].present?,
+          business_unit_type: @business_unit_type
+        ), filename: @plan.csv_filename
       end
     end
 
