@@ -9,11 +9,7 @@ class Findings::WorkPapersController < ApplicationController
   def create
     @work_paper = @finding.work_papers.new work_paper_params
 
-    if @finding_answer.file_model
-      file = File.open @finding_answer.file_model.file.path
-
-      @work_paper.build_file_model file: file
-    end
+    @work_paper.file.attach @finding_answer.file.blob if @finding_answer.file.attached?
 
     @work_paper.code_prefix = params[:last_work_paper_code].split.first
 

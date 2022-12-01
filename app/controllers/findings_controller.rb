@@ -111,7 +111,7 @@ class FindingsController < ApplicationController
           file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_answers_attributes: [
-          :id, :answer, :user_id, :notify_users,
+          :id, :answer, :user_id, :notify_users, :file,
           file_model_attributes: [:file, :file_cache],
           endorsements_attributes: [:id, :status, :user_id, :_destroy]
         ],
@@ -146,6 +146,7 @@ class FindingsController < ApplicationController
         :id, :lock_version,
         finding_answers_attributes: [
           :answer, :user_id, :commitment_date, :notify_users, :skip_commitment_support,
+          :file,
           file_model_attributes: [:file, :file_cache],
           commitment_support_attributes: [:id, :reason, :plan, :controls]
         ],
