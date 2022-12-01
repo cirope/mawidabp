@@ -90,10 +90,8 @@ class MemosController < ApplicationController
         :period_id, :plan_item_id, :name, :description,
         :required_by, :manual_required_by, :required_by_text,
         :close_date, :lock_version,
-        file_model_memos_attributes: [
-          :id, :_destroy,
-          file_model_attributes: [:id, :file, :file_cache, :_destroy]
-        ]
+        files: [],
+        files_attachments_attributes: [:id, :_destroy]
       )
     end
 end

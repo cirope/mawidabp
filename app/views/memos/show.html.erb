@@ -39,8 +39,12 @@
 </p>
 
 <div class="mb-1">
-  <strong><%= Memo.human_attribute_name :file_model_memos %>:</strong>
-  <%= show_file_model_memos @memo %>
+  <strong><%= Memo.human_attribute_name :files %>:</strong>
+  <ul>
+    <% @memo.files.each do |f_a| %>
+      <li><%= link_to_download_file_attachment f_a, class: 'btn btn-outline-secondary mb-1' %><span class="ml-2"><%= f_a.blob.filename.to_s %></span></li>
+    <% end %>
+  </ul>
 </div>
 
 <hr />
