@@ -2,3 +2,5 @@
 .jekyll-cache/
 _site/
 _vendor/bundle/
+_sass/stylesheets/
+assets/fonts/
