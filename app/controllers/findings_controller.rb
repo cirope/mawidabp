@@ -145,8 +145,7 @@ class FindingsController < ApplicationController
         :id, :lock_version,
         finding_answers_attributes: [
           :answer, :user_id, :commitment_date, :notify_users, :skip_commitment_support,
-          :file,
-          file_model_attributes: [:file, :file_cache],
+          :file, 
           commitment_support_attributes: [:id, :reason, :plan, :controls]
         ],
         costs_attributes: [
