@@ -481,6 +481,7 @@ es:
         name: 'Nombre'
         description: 'Descripción'
         file_model_memos: 'Archivos'
+        files: 'Archivos'
         period_id: 'Periodo'
         plan_item_id: 'Proyecto'
         period: 'Periodo'
@@ -705,6 +706,7 @@ es:
         status: 'Estado'
         shared: 'Compartida'
         file_model: "Anexo"
+        file: "Anexo"
         risk_assessment_weights: 'Ponderadores'
         risk_assessment_items: 'Ítems'
       risk_assessment/risk_assessment_items:

@@ -19,10 +19,10 @@
   <%= t "risk_assessments.status.#{@risk_assessment.status}" %>
 </p>
 
-<% if @risk_assessment.file_model&.file %>
+<% if @risk_assessment.file.attached? %>
   <p class="mb-1">
-    <strong><%= RiskAssessment.human_attribute_name 'file_model' %></strong>:
-    <%= link_to t('navigation.download'), @risk_assessment.file_model.file.url %>
+    <strong><%= RiskAssessment.human_attribute_name 'file' %></strong>:
+    <%= link_to_download_file @risk_assessment.file, class: 'btn btn-outline-secondary mb-1' %>
   </p>
 <% end %>
 
