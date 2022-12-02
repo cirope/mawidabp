@@ -154,7 +154,7 @@ class WorkflowsController < ApplicationController
     def workflow_params
       params.require(:workflow).permit(
         :period_id, :review_id, :allow_overload, :lock_version,
-        file_model_attributes: [:id, :file, :file_cache, :_destroy],
+        :file,
         workflow_items_attributes: [
           :id, :task, :start, :end, :order_number, :_destroy,
           resource_utilizations_attributes: [

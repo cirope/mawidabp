@@ -1803,6 +1803,7 @@
         cost: "Costo"
         units: "Unidades"
         file_model_id: "Anexo"
+        file: "Anexo"
         workflow_items_resources: "Recursos"
         workflow_items:
           one: "Tarea"
