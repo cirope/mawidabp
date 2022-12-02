@@ -157,10 +157,10 @@ class WorkflowsController < ApplicationController
         :file,
         workflow_items_attributes: [
           :id, :task, :start, :end, :order_number, :_destroy,
+          :file,
           resource_utilizations_attributes: [
             :id, :resource_id, :resource_type, :units, :_destroy
-          ],
-          file_model_attributes: [:id, :file, :file_cache, :_destroy]
+          ]
         ]
       )
     end
