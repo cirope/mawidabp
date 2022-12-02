@@ -75,15 +75,7 @@
 
         <div class="row">
           <div class="col-md-6">
-            <p class="mb-1"><%= Review.human_attribute_name 'file_model_id' %></p>
-
-            <div class="clearfix">
-              <%= f.simple_fields_for :file_model_reviews do |fm_r| %>
-                <%= render 'file_model_review', f: fm_r, frozen: frozen %>
-              <% end %>
-
-              <%= link_to_add_fields t('review.add_file_model'), f, :file_model_reviews, 'file_model_review' unless frozen %>
-            </div>
+            <%= render 'active_storage/many_files', f: f, label: Review.human_attribute_name('files'), show_filename: true, allow_upload: !frozen, allow_purge: !frozen %>
           </div>
           <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? current_organization.prefix %>
             <div class="col-md-6">

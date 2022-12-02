@@ -512,10 +512,8 @@ class ReviewsController < ApplicationController
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]
         ],
-        file_model_reviews_attributes: [
-          :id, :_destroy,
-          file_model_attributes: [:id, :file, :file_cache, :_destroy]
-        ],
+        files_attachments_attributes: [:id, :_destroy],
+        files: [],
         control_objective_ids: [],
         process_control_ids: [],
         best_practice_ids: [],

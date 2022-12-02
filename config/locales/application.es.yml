@@ -1436,6 +1436,7 @@ es:
         plan_item_id: "Proyecto"
         plan_item: "Proyecto"
         file_model_id: "Anexos"
+        files: "Anexos"
         score: "Calificación"
         score_alt: "Calificación cumplimiento"
         scope: "Alcance auditoría"
@@ -1626,3 +1627,6 @@ es:
     weaknesses: "Observaciones"
     welcome: "Bienvenida"
     workflows: "Programas de trabajo"
+
+  active_storage:
+    empty_files: 'Seleccione los archivos'
