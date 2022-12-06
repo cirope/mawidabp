@@ -39,22 +39,14 @@
       </div>
 
       <div class="col-md-6">
-        <div class="card <%= 'border-danger' if @news.errors[:image_models].present? %>">
-          <div class="card-header <%= 'bg-danger text-light' if @news.errors[:image_models].present? %>">
+        <div class="card <%= 'border-danger' if @news.errors[:images].present? %>">
+          <div class="card-header <%= 'bg-danger text-light' if @news.errors[:images].present? %>">
             <h5 class="mb-0">
-              <%= ImageModel.model_name.human count: 0 %>
+              <%= News.human_attribute_name(:images) %>
             </h5>
           </div>
           <div class="card-body">
-            <% @news.errors.full_messages_for(:image_models).each do |error| %>
-              <p class="text-danger"><%= error %></p>
-            <% end %>
-
-            <%= f.simple_fields_for :image_models do |imf| %>
-              <%= render 'image_model', f: imf %>
-            <% end %>
-
-            <%= link_to_add_fields t('news.new.image_model'), f, :image_models, 'news/image_model' %>
+            <%= render 'active_storage/many_images', f: f, label: '', show_filename: true, allow_upload: true, allow_purge: true %>
           </div>
         </div>
       </div>

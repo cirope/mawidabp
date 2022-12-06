@@ -496,6 +496,7 @@ es:
         title: 'Título'
         description: 'Descripción'
         body: 'Cuerpo'
+        images: 'Imágenes'
         shared: 'Compartida'
         published_at: 'Fecha de publicación'
       opening_interview:
