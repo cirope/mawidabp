@@ -306,9 +306,8 @@ class ConclusionDraftReviewsController < ApplicationController
         ],
         annexes_attributes: [
           :id, :title, :description, :_destroy,
-          image_models_attributes: [
-            :id, :image, :image_cache, :_destroy
-          ]
+          images_attachments_attributes: [:id, :_destroy],
+          images: []
         ]
       )
     end

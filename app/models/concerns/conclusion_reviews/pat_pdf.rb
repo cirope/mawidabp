@@ -524,13 +524,14 @@ module ConclusionReviews::PatPdf
             pdf.text annex.description
           end
 
-          if annex.image_models.any?
+          if annex.images.attached?
             pdf.move_down PDF_FONT_SIZE
 
-            annex.image_models.each do |image_model|
+            annex.images.each do |image|
               pdf.move_down PDF_FONT_SIZE
-              pdf.image image_model.image.path, position: :center,
-                fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
+              pdf.image StringIO.open(image.download),
+                        position: :center,
+                        fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
             end
           end
 

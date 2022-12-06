@@ -1286,6 +1286,10 @@ es:
         main_recommendations: "Principales Recomendaciones de Auditoría"
         additional_comments: "Comentarios adicionales"
         exclude_regularized_findings: "Excluir hallazgos regularizados"
+      conclusion_review/annexes:
+        title: 'Título de Anexo'
+        description: 'Descripción de Anexo'
+        images: 'Imágenes de Anexo'
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:

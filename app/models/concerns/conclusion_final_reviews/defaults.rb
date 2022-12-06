@@ -14,12 +14,7 @@ module ConclusionFinalReviews::Defaults
       draft.annexes.each do |annex|
         new_annex = annexes.build annex.attributes.dup.merge('id' => nil)
 
-        annex.image_models.each do |image_model|
-          new_image       = ImageModel.new
-          new_image.image = File.open image_model.image.path
-
-          new_annex.image_models << new_image
-        end
+        annex.images.each { |image| new_annex.images.attach image.blob }
       end
     end
   end

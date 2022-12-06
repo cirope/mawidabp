@@ -226,6 +226,7 @@ es:
         title: 'Título'
         description: 'Descripción'
         image_models: 'Imágenes'
+        images: 'Imágenes'
       activity:
         name: 'Nombre'
         require_detail: 'Require detalle'

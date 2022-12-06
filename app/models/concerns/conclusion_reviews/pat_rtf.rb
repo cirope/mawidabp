@@ -744,15 +744,15 @@ module ConclusionReviews::PatRtf
             end
           end
 
-          if annex.image_models.any?
+          if annex.images.attached?
             document.paragraph(description_style) do |p1|
               p1.line_break
             end
 
-            annex.image_models.each do |image_model|
+            annex.images.each do |image|
               document.paragraph(@styles['P_ALIGN_CENTER']) do |p1|
                 p1.line_break
-                p1.image image_model.image.path
+                p1.image ActiveStorage::Blob.service.path_for image.variant(resize_to_fit: [600, 600], format: :png).processed.key
               end
             end
           end
