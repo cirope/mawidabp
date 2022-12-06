@@ -79,6 +79,13 @@
   <%= simple_format @weakness.audit_comments, class: 'mb-1' %>
 </div>
 
+<% if %w(bic pat).include? Current.conclusion_pdf_format %>
+  <div>
+    <strong><%= Weakness.human_attribute_name :image %>:</strong>
+    <%= show_link_to_download_image @weakness, class: 'btn btn-outline-secondary mb-1 ml-1' %>  
+  </div>
+<% end %>
+
 <p class="mb-1">
   <strong><%= Weakness.human_attribute_name :state %>:</strong>
   <%= @weakness.state_text %>
@@ -313,7 +320,8 @@
           <td><%= wp.number_of_pages %></td>
           <td><%= simple_format wp.description, class: 'mb-1' %></td>
           <td><%= wp.file_model.try(:file?) ?
-            link_to(t('label.download'), wp.file_model.file.url) : '-' %></td>
+            link_to(t('label.download'), wp.file_model.file.url) : '-' %>
+            <%= wp.file.attached? ? link_to_download_file(wp.file) : '' %></td>
         </tr>
       <% end %>
     </tbody>

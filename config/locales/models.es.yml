@@ -762,6 +762,7 @@ es:
         compliance_observations: 'Norma que impacta'
         compliance_susceptible_to_sanction: 'Suceptible a sanción'
         operational_risk: 'Riesgo operacional'
+        image: 'Imagen'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
         weakness_template: 'Buscar plantilla por título'

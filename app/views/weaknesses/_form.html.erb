@@ -319,7 +319,9 @@
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
 
         <% if %w(bic pat).include? Current.conclusion_pdf_format %>
-          <%= render 'image_model', f: f, readonly: readonly %>
+          <div class="ml-2">
+            <%= render 'active_storage/image', f: f, label: Weakness.human_attribute_name(:image), allow_upload: !readonly, allow_purge: !readonly %>
+          </div>
         <% end %>
       </div>
     </div>
