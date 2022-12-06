@@ -29,6 +29,7 @@ namespace :db do
       add_commitment_data_on_findings            # 2020-12-01
       update_finding_follow_up_date_last_changed # 2021-12-22
       update_draft_review_code                   # 2022-07-20
+      migrate_files_to_active_storage            # 2022-12-06
     end
   end
 end
