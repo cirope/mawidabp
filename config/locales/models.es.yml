@@ -875,6 +875,7 @@ es:
           attributes:
             base:
               file_model_memos_blank: 'Debe tener al menos un archivo'
+              files_blank: 'Debe tener al menos un archivo'
               cant_change_fields: 'No puede cambiar ningun campo debido a que supero la fecha de cierre'
             plan_item_id:
               used: 'El proyecto ya esta siendo utilizado por otro Informe o Informe externo'
