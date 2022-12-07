@@ -1059,6 +1059,7 @@ es:
       without_survey: "no tiene relevamiento"
       without_audited: "no tiene usuario auditado"
       without_file_model: "no tiene anexo"
+      without_files: "no tiene anexo"
       without_control_objectives: "no tiene objetivos de control"
       related_finding_incomplete: "está pendiente y no se ha marcado como reiterada o solucionada"
     survey:
