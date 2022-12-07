@@ -10,7 +10,7 @@ module Annexes::Validation
   end
 
   def description_or_image_presence
-    if description.blank? && image_models.empty?
+    if description.blank? && !images.attached?
       errors.add :description, :blank
       errors.add :image_models, :blank
     end
