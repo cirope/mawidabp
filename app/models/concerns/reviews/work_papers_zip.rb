@@ -101,9 +101,9 @@ module Reviews::WorkPapersZip
     def add_survey_to zipfile
       dir = Review.human_attribute_name 'survey'
 
-      if file_models.any?
-        file_models.each.with_index(1) do |f, idx|
-          add_file_to_zip f.file.path, "#{idx}_#{f.identifier}", dir, zipfile
+      if files.any?
+        files.each.with_index(1) do |f, idx|
+          add_file_to_zip ActiveStorage::Blob.service.path_for(f.key), "#{idx}_#{f.identifier}", dir, zipfile
         end
       end
 
