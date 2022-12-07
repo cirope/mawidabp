@@ -8,7 +8,7 @@ module Memos::Validations
     validates :required_by_text, presence: true, if: :manual_required_by?
     validates :required_by, inclusion: { in: Memo::REQUIRED_BY_OPTIONS },
                             if: :not_manual_required_by?
-    validate :has_file_model_memos
+    validate :has_files
     validate :plan_item_is_not_used
     validate :cant_change_fields
   end
@@ -27,9 +27,10 @@ module Memos::Validations
       ['1', true].include? manual_required_by
     end
 
-    def has_file_model_memos
-      if file_model_memos.reject(&:marked_for_destruction?).blank?
-        errors.add(:base, :file_model_memos_blank)
+    def has_files
+      if files_attachments.all?(&:marked_for_destruction?) &&
+         files.blobs.detect(&:new_record?).blank?
+        errors.add(:base, :files_blank)
       end
     end
 
@@ -54,12 +55,10 @@ module Memos::Validations
     end
 
     def change_any_field?
-      changed? || file_model_memos_changed?
+      changed? || files_changed?
     end
 
-    def file_model_memos_changed?
-      file_model_memos.any? do |fm_m|
-        fm_m.file_model.changed? || fm_m.new_record? || fm_m.marked_for_destruction? 
-      end
+    def files_changed?
+      files.any? { |f| f.marked_for_destruction? || f.changed? }
     end
 end
