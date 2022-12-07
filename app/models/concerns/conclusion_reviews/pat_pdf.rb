@@ -363,10 +363,11 @@ module ConclusionReviews::PatPdf
       pdf.text "#{i}. #{weakness.title}\n\n", align: :justify, style: :bold
       pdf.text weakness.description, align: :justify
 
-      if weakness.image_model
+      if weakness.image.attached?
         pdf.move_down PDF_FONT_SIZE
-        pdf.image weakness.image_model.image.path, position: :center,
-          fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
+        pdf.image StringIO.open(weakness.image.download),
+                  position: :center,
+                  fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
       end
 
       put_pat_issues_on pdf, weakness if weakness.issues.any?
