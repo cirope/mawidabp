@@ -248,6 +248,8 @@ es:
         obsolete: 'Obsoleta'
         shared: 'Compartida'
         process_controls: 'Proceso'
+      business_unit_type:
+        business_units: 'Unidades de negocio'
       best_practice/process_controls:
         name: 'Proceso'
         order: 'Proceso (orden)'
