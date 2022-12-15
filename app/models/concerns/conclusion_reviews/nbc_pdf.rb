@@ -218,7 +218,7 @@ module ConclusionReviews::NbcPdf
       pdf.move_down PDF_FONT_SIZE
       pdf.text applied_procedures, align: :justify, inline_format: true
 
-      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages'), align: :justify
 
       pdf.move_down PDF_FONT_SIZE
