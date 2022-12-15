@@ -75,13 +75,12 @@ module ConclusionReviews::NbcPdf
     def put_nbc_grid pdf
       column_data = [
         [
-          I18n.t('conclusion_review.nbc.cover.number_review'),
-          review.identification,
+          I18n.t('conclusion_review.nbc.cover.number_review') + ': ' + (review.identification),
           I18n.t('conclusion_review.nbc.cover.prepared_by')
         ]
       ]
 
-      w_c = pdf.bounds.width / 3
+      w_c = pdf.bounds.width / 2
 
       pdf.table(column_data, cell_style: { size: (PDF_FONT_SIZE * 0.75).round, inline_format: true },
                 column_widths: w_c)
