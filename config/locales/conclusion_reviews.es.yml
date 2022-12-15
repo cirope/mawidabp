@@ -127,7 +127,7 @@ es:
         cc: "<b>CC</b>"
         to_label: "Miembros del Comité de Auditoría del Nuevo Banco del Chaco S.A."
         from_label: "Gerencia Auditoría Interna – Nuevo Banco del Chaco S.A"
-        number_review: "<b>Numero de Informe</b>"
+        number_review: "Numero de Informe"
         prepared_by: "Preparado por Auditoría Interna - NBCH"
         audit_date: "<b>Fecha de Auditoría</b>"
       weaknesses:
