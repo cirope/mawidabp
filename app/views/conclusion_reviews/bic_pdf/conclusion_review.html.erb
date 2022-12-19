@@ -19,7 +19,7 @@
       </div>
     </div>
     <% path_watermark = File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'watermark.png') %>
-    <div class="col-7 right-div <%= @draft ? 'watermark-bic' : '' %>">
+    <div class="col-7 right-div <%= watermark_class @draft %>">
       <div class="row">
         <div class="col-3 offset-9">
           <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
@@ -81,7 +81,7 @@
         </tbody>
       </table>
     </div>
-    <div class="col-9 right-div <%= @draft ? 'watermark-bic' : '' %>">
+    <div class="col-9 right-div <%= watermark_class @draft %>">
       <div class="row">
         <div class="col-3 offset-9">
           <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
@@ -117,7 +117,7 @@
         </tbody>
       </table>
     </div>
-    <div class="col-9 right-div <%= @draft ? 'watermark-bic' : '' %>">
+    <div class="col-9 right-div <%= watermark_class @draft %>">
       <div class="row">
         <div class="col-3 offset-9">
           <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
@@ -144,8 +144,7 @@
   </div>
 </div>
 
-<% @conclusion_review.bic_exclude_regularized_findings(@conclusion_review.kind_of?(ConclusionFinalReview) ? @conclusion_review.review.final_weaknesses : @conclusion_review.review.weaknesses).each_with_index do |weakness, i| %>
-
+<% conclusion_review_weaknesses(@conclusion_review).each_with_index do |weakness, i| %>
   <div class="alwaysbreak">
     <div class="row">
       <div class="col-3 left-div text-white">
@@ -163,10 +162,10 @@
           </tbody>
         </table>
       </div>
-      <div class="col-9 right-div <%= @draft ? 'watermark-bic' : '' %>">
+      <div class="col-9 right-div <%= watermark_class @draft %>">
         <div class="row">
           <div class="col-8 offset-1">
-            <p class="pt-5 font-weight-bold aqua-text" style="font-size:2.8em;"><%= weakness.repeated_of.present? ? 'OBSERVACIÓN REITERADA' : ''%></p>
+            <p class="pt-5 font-weight-bold aqua-text" style="font-size:2.8em;"><%= legend_weakness_repeated weakness %></p>
           </div>
           <div class="col-3">
             <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
@@ -185,7 +184,7 @@
             <p class="pt-4" style="font-size:1.9em;"><%= weakness.description %></p>
             <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= Weakness.human_attribute_name :effect %></span> <%= weakness.effect %></p>
             <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.audit_recommendations' %></span> <%= weakness.audit_recommendations %></p>
-            <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.follow_up_date' %></span> <%= weakness.follow_up_date ? I18n.l(weakness.follow_up_date) : '-'%></p>
+            <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.follow_up_date' %></span> <%= follow_up_date_weakness weakness %></p>
             <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= Answer.model_name.human count: 1 %>:</span> <%= weakness.answer %></p>
             <% if weakness.repeated_of.present? %>
               <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= Finding.human_attribute_name :repeated_of_id %>:</span><span class="aqua-text"> <%= weakness.repeated_of %></span></p>

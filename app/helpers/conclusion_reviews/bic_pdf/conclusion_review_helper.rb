@@ -53,4 +53,26 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
       u.full_name_with_function weakness.review.issue_date
     end.join '; '
   end
+
+  def conclusion_review_weaknesses conclusion_review
+    weaknesses = if conclusion_review.kind_of?(ConclusionFinalReview)
+                   conclusion_review.review.final_weaknesses
+                 else
+                   conclusion_review.review.weaknesses
+                 end
+
+    conclusion_review.bic_exclude_regularized_findings weaknesses
+  end
+
+  def watermark_class draft
+    draft ? 'watermark-bic' : ''
+  end
+
+  def legend_weakness_repeated weakness
+    weakness.repeated_of.present? ? I18n.t('conclusion_review.bic.weaknesses.repeated') : ''
+  end
+
+  def follow_up_date_weakness weakness
+    weakness.follow_up_date ? I18n.l(weakness.follow_up_date) : '-'
+  end
 end
