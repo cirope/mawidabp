@@ -34,13 +34,5 @@ div.nobreak:before { clear:both; }
 div.nobreak { page-break-inside: avoid; }
 .page-break { display:block; clear:both; page-break-after:always; }
 
-// bic conclusion_review
-.left-div {
-  background-color: #5bc4e4 ;
-  height: 1001px;
-  //font-family: "Muli";
-}
-
-.right-div {
-  //font-family: "Liberation Sans"
-}
+//customs scss
+@import "pdf/bic_pdf.scss";

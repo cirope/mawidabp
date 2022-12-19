@@ -111,15 +111,21 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * GET /conclusion_draft_reviews/export_to_pdf/1
   def export_to_pdf
-    # options = params[:export_options]&.to_unsafe_h
+    respond_to do |format|
+      format.html do
+        options = params[:export_options]&.to_unsafe_h
 
-    # @conclusion_draft_review.to_pdf(current_organization, options)
+        @conclusion_draft_review.to_pdf(current_organization, options)
 
-    # respond_to do |format|
-    #   format.html { redirect_to @conclusion_draft_review.relative_pdf_path }
-    # end
+        redirect_to @conclusion_draft_review.relative_pdf_path
+      end
+      format.pdf do
+        @conclusion_review = @conclusion_draft_review
+        @draft             = true
 
-    render_conclusion_draft_review_pdf
+        render @conclusion_review.to_pdf
+      end
+    end
   end
 
   # Exporta el informe en formato RTF
@@ -277,21 +283,6 @@ class ConclusionDraftReviewsController < ApplicationController
   end
 
   private
-
-    def render_conclusion_draft_review_pdf
-      render pdf: 'nombre pdf',
-             template: 'conclusion_draft_reviews/pdf/conclusion_draft_review.html.erb',
-             margin: {
-               top:    0,
-               bottom: 0,
-               left:   0,
-               right:  0
-             },
-             orientation: 'Landscape',
-             layout: 'pdf.html',
-             disposition: 'attachment',
-             show_as_html: false
-    end
 
     def set_conclusion_draft_review
       @conclusion_draft_review = ConclusionDraftReview.list.includes(
