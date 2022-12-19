@@ -37,8 +37,6 @@ module MawidaBP
     # Permitted hosts
     config.hosts << /\A[\w\d-]+\.#{ENV['APP_HOST']}\z/
 
-    config.assets.paths << Rails.root.join("vendor", "assets", "javascripts", "wicked_pdf")
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
