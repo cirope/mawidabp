@@ -35,4 +35,4 @@ div.nobreak { page-break-inside: avoid; }
 .page-break { display:block; clear:both; page-break-after:always; }
 
 //customs scss
-@import "pdf/bic_pdf.scss";
+@import "pdf/bic_pdf";
