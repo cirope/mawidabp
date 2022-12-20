@@ -13,7 +13,8 @@ Rails.application.configure do
     user_name:            ENV['SMTP_USER_NAME'].presence,
     password:             ENV['SMTP_PASSWORD'].presence,
     authentication:       ENV['SMTP_AUTHENTICATION'].presence&.to_sym,
-    enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO'] != 'false'
+    enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO'] != 'false',
+    openssl_verify_mode:  OpenSSL::SSL::VERIFY_NONE
   }
 end
 
