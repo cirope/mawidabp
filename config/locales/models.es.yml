@@ -622,7 +622,7 @@ es:
         units: 'Recurso (cantidad de unidades)'
         cost_per_unit: 'Recurso (costo por unidad)'
         cost: 'Recurso (costo)'
-        resource: 'Recurso'
+        resource_id: 'Recurso'
       plan_item:
         project: 'Proyecto'
         start: 'Inicio'
