@@ -1,34 +1,46 @@
 <% if @organization.persisted? %>
   <div class="row">
     <div class="col-md-6">
-      <label>
-        <%= Organization.human_attribute_name 'image_model.one' %>
-      </label>
+      <div class="row">
+        <label>
+          <%= Organization.human_attribute_name 'image' %>
+        </label>
+      </div>
 
-      <p><%= organization_image_tag %></p>
-
-      <%= f.simple_fields_for :image_model, organization_image do |im_f| %>
-        <div class="file-container float-left">
-          <%= link_to_upload im_f.object, :image %>
-          <%= im_f.input :image, label: false %>
+      <% if show_link_to_download_image?(f) %>
+        <div class="row">
+          <%= image_tag f.object.thumb_image, alt: 'Logo' %>
         </div>
       <% end %>
+
+      <div class="row mt-2">
+        <div class="file-container float-left">
+          <%= link_to_upload_image %>
+          <%= f.input :image, label: false %>
+        </div>
+      </div>
     </div>
 
     <div class="col-md-6">
-      <% if @organization.image_model %>
-        <label>
-          <%= Organization.human_attribute_name 'co_brand_image_model.one' %>
-        </label>
+      <% if @organization.image.attached? %>
+        <div class="row">
+          <label>
+            <%= Organization.human_attribute_name 'co_brand_image' %>
+          </label>
+        </div>
 
-        <p><%= organization_image_tag model: :co_brand_image_model %></p>
-
-        <%= f.simple_fields_for :co_brand_image_model, organization_image(:co_brand_image_model) do |im_f| %>
-          <div class="file-container float-left">
-            <%= link_to_upload im_f.object, :image %>
-            <%= im_f.input :image, label: false %>
+        <% if f.object.errors[:co_brand_image].empty? && f.object.co_brand_image.attached? %>
+          <div class="row">
+            <%= image_tag f.object.thumb_co_brand_image, alt: 'Logo' %>
           </div>
         <% end %>
+
+        <div class="row mt-2">
+          <div class="file-container float-left">
+            <%= link_to_upload_image %>
+            <%= f.input :co_brand_image, label: false %>
+          </div>
+        </div>
       <% end %>
     </div>
   </div>

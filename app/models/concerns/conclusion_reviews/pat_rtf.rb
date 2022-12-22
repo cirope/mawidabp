@@ -58,12 +58,10 @@ module ConclusionReviews::PatRtf
     end
 
     def add_organization_image document, organization
-      organization_image = organization.image_model&.image&.thumb&.path
-
-      if organization_image && File.exist?(organization_image)
+      if organization.image.attached?
         header = RTF::HeaderNode.new document
 
-        header.paragraph { |n| n.image(organization_image) }
+        header.paragraph { |n| n.image(ActiveStorage::Blob.service.path_for(organization.thumb_image.processed.key)) }
 
         document.header = header
       end

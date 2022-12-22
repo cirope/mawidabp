@@ -89,13 +89,12 @@ module Reports::WeaknessesByBusinessUnit
     end
 
     def weaknesses_by_business_unit_rtf
-      document           = RTF::Document.new RTF::Font.new(RTF::Font::ROMAN, 'Arial')
-      organization_image = current_organization.image_model&.image&.thumb&.path
+      document = RTF::Document.new RTF::Font.new(RTF::Font::ROMAN, 'Arial')
 
-      if organization_image && File.exist?(organization_image)
+      if current_organization.image.attached?
         header = RTF::HeaderNode.new document
 
-        header.paragraph { |n| n.image(organization_image) }
+        header.paragraph { |n| n.image ActiveStorage::Blob.service.path_for(current_organization.thumb_image.processed.key) }
 
         document.header = header
       end

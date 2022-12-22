@@ -534,6 +534,8 @@ es:
         corporate: 'Corporativa'
         image_model: 'Imagen'
         co_brand_image_model: 'Imagen secundaria'
+        image: 'Imagen'
+        co_brand_image: 'Imagen secundaria'
         saml_provider: 'Proveedor SAML'
       organization/image_model:
         image_file_name: 'Isologotipo (nombre de archivo)'
