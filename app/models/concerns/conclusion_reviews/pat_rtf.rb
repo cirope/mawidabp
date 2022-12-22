@@ -477,9 +477,9 @@ module ConclusionReviews::PatRtf
         p1.line_break
       end
 
-      if weakness.image_model
+      if weakness.image.attached?
         document.paragraph(@styles['P_ALIGN_CENTER']) do |p1|
-          p1.image weakness.image_model.image.path
+          p1.image ActiveStorage::Blob.service.path_for(weakness.image.key)
           p1.line_break
         end
       end
