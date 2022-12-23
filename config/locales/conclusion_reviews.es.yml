@@ -165,6 +165,7 @@ es:
       weaknesses_detected:
         name: "OBSERVACIONES DE LA PRESENTE REVISIÓN"
         repeated: "OBSERVACIONES DE SEGUIMIENTO"
+        external: "OBSERVACIONES DEL INFORME ALTERNATIVO"
         title: "<b>Título</b>"
         description: "<b>Descripción</b>"
         state: "<b>Estado</b>"
