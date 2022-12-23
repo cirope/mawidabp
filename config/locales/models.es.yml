@@ -248,6 +248,8 @@ es:
         obsolete: 'Obsoleta'
         shared: 'Compartida'
         process_controls: 'Proceso'
+      business_unit_type:
+        business_units: 'Unidades de negocio'
       best_practice/process_controls:
         name: 'Proceso'
         order: 'Proceso (orden)'
@@ -620,7 +622,7 @@ es:
         units: 'Recurso (cantidad de unidades)'
         cost_per_unit: 'Recurso (costo por unidad)'
         cost: 'Recurso (costo)'
-        resource: 'Recurso'
+        resource_id: 'Recurso'
       plan_item:
         project: 'Proyecto'
         start: 'Inicio'
