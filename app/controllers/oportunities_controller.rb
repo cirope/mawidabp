@@ -155,7 +155,7 @@
         ],
         work_papers_attributes: [
           :id, :name, :code, :number_of_pages, :description, :_destroy,
-          file_model_attributes: [:id, :file, :file_cache]
+          :file
         ],
         finding_answers_attributes: [
           :answer, :commitment_date, :user_id,

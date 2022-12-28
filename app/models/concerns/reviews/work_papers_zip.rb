@@ -37,11 +37,8 @@ module Reviews::WorkPapersZip
   end
 
   def add_work_paper_to_zip wp, dir, zipfile, prefix = nil
-    has_file   = wp.file_model&.file? && File.exist?(wp.file_model.file.path)
-    file_model = wp.file_model
-
-    if has_file
-      add_file_to_zip file_model.file.path, file_model.identifier, dir, zipfile
+    if wp.file.attached?
+      add_file_to_zip ActiveStorage::Blob.service.path_for(wp.file.key), wp.file.blob.filename.to_s, dir, zipfile
     else
       identification = "#{prefix}#{sanitized_identification}"
 
@@ -103,7 +100,7 @@ module Reviews::WorkPapersZip
 
       if files.any?
         files.each.with_index(1) do |f, idx|
-          add_file_to_zip ActiveStorage::Blob.service.path_for(f.key), "#{idx}_#{f.identifier}", dir, zipfile
+          add_file_to_zip ActiveStorage::Blob.service.path_for(f.key), "#{idx}_#{f.blob.filename}", dir, zipfile
         end
       end
 

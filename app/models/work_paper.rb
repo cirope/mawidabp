@@ -14,7 +14,12 @@ class WorkPaper < ApplicationRecord
   }
 
   # Restricciones de los atributos
-  attr_accessor :code_prefix
+  attr_accessor :code_prefix,
+                :from_sidekiq,
+                :zip_must_be_created,
+                :cover_must_be_created,
+                :previous_code
+
   attr_readonly :organization_id
 
   # Callbacks
@@ -102,30 +107,12 @@ class WorkPaper < ApplicationRecord
     I18n.t('work_paper.number_of_pages', :count => self.number_of_pages)
   end
 
-  def check_for_modifications
-    @zip_must_be_created = self.file_model.try(:file?) ||
-      self.file_model.try(:changed?)
-    @cover_must_be_created = self.changed?
-    @previous_code = self.code_was if self.code_changed?
-
-    true
-  end
-
-  def create_cover_and_zip
-    self.file_model.try(:file?) &&
-      (@zip_must_be_created || @cover_must_be_created) &&
-      create_zip
-
-    true
-  end
-
-  def create_pdf_cover(filename = nil, review = nil)
+  def create_pdf_cover filename, review
     pdf = Prawn::Document.create_generic_pdf(:portrait, footer: false)
 
-    review ||= owner.review
-
     pdf.add_review_header review.try(:organization),
-      review.try(:identification), review.try(:plan_item).try(:project)
+                          review.try(:identification),
+                          review.try(:plan_item).try(:project)
 
     pdf.move_down PDF_FONT_SIZE * 2
 
@@ -141,171 +128,75 @@ class WorkPaper < ApplicationRecord
       end
     end
 
-    unless self.name.blank?
+    unless name.blank?
       pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name(:name),
-        self.name, 0, false
+                               name,
+                               0,
+                               false
     end
 
-    unless self.description.blank?
+    unless description.blank?
       pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name(:description),
-        self.description, 0, false
+                               description,
+                               0,
+                               false
     end
 
-    unless self.code.blank?
+    unless code.blank?
       pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name(:code),
-        self.code, 0, false
+                               code,
+                               0,
+                               false
     end
 
-    unless self.number_of_pages.blank?
+    unless number_of_pages.blank?
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.add_description_item WorkPaper.human_attribute_name(
-        :number_of_pages), self.number_of_pages.to_s, 0, false
+      pdf.add_description_item WorkPaper.human_attribute_name(:number_of_pages),
+                               number_of_pages.to_s,
+                               0,
+                               false
     end
 
-    pdf.save_as self.absolute_cover_path(filename)
+    pdf.save_as absolute_cover_path(filename)
   end
 
-  def pdf_cover_name(filename = nil, short = false)
-    code = sanitized_code
-    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-    prev_code = @previous_code.sanitized_for_filename if @previous_code
-
-    if self.file_model.try(:file?)
-      filename ||= self.file_model.identifier.sanitized_for_filename
-      filename = filename.sanitized_for_filename.
-        sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
-        sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
-      filename = filename.sub("#{prev_code}-", '') if prev_code
-    end
-
-    I18n.t 'work_paper.cover_name', :prefix => "#{short ? short_code : code}-",
-      :filename => File.basename(filename, File.extname(filename))
+  def pdf_cover_name filename
+    I18n.t 'work_paper.cover_name', prefix: "#{sanitized_code}-",
+                                    filename: File.basename(filename, File.extname(filename))
   end
 
-  def absolute_cover_path(filename = nil)
-    if self.file_model.try(:file?)
-      File.join File.dirname(self.file_model.file.path), self.pdf_cover_name
-    else
-      File.join TEMP_PATH, self.pdf_cover_name(filename || "#{object_id.abs}.pdf")
-    end
-  end
-
-  def filename_with_prefix
-    filename = self.file_model.identifier.sub /^(zip-)*/i, ''
-    filename = filename.sanitized_for_filename
-    code_suffix = File.extname(filename) == '.zip' ? '-zip' : ''
-    code = sanitized_code
-    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-
-    filename.starts_with?(code, short_code) ?
-      filename : "#{code}#{code_suffix}-#{filename}"
-  end
-
-  def create_zip
-    self.unzip_if_necesary
-
-    if @previous_code
-      prev_code = sanitized_previous_code
-    end
-
-    original_filename = self.file_model.file.path
-    directory = File.dirname original_filename
-    code = sanitized_code
-    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-    filename = File.basename original_filename, File.extname(original_filename)
-    filename = filename.sanitized_for_filename.
-      sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
-      sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
-    filename = filename.sub("#{prev_code}-", '') if prev_code
-    zip_filename = File.join directory, "#{code}-#{filename}.zip"
-    pdf_filename = self.absolute_cover_path
-
-    self.create_pdf_cover
-
-    if File.file?(original_filename) && File.file?(pdf_filename)
-      FileUtils.rm zip_filename if File.exist?(zip_filename)
-
-      Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
-        zipfile.add(self.filename_with_prefix, original_filename) { true }
-        zipfile.add(File.basename(pdf_filename), pdf_filename) { true }
-      end
-
-      FileUtils.rm pdf_filename if File.exist?(pdf_filename)
-      FileUtils.rm original_filename if File.exist?(original_filename)
-
-      self.file_model.file = File.open(zip_filename)
-
-      self.file_model.save!
-    end
-
-    FileUtils.chmod 0640, zip_filename if File.exist?(zip_filename)
-  end
-
-  def unzip_if_necesary
-    file_name = self.file_model.try(:identifier) || ''
-    code = sanitized_code
-
-    if File.extname(file_name) == '.zip' && start_with_code?(file_name)
-      zip_path = self.file_model.file.path
-      base_dir = File.dirname self.file_model.file.path
-
-      Zip::File.foreach(zip_path) do |entry|
-        if entry.file?
-          filename = File.join base_dir, entry.name
-          filename = filename.sub(sanitized_previous_code, code) if @previous_code
-
-          if filename != zip_path && !File.exist?(filename)
-            entry.extract(filename)
-          end
-          if File.basename(filename) != pdf_cover_name &&
-              File.basename(filename) != pdf_cover_name(nil, true)
-            self.file_model.file = File.open(filename)
-          end
-        end
-      end
-
-      self.file_model.save! if self.file_model.changed?
-
-      # Pregunta para evitar eliminar el archivo si es un zip con el mismo
-      # nombre
-      unless File.basename(zip_path) == self.file_model.identifier
-        FileUtils.rm zip_path if File.exist? zip_path
-      end
-    end
-  end
-
-  def sanitized_previous_code
-    @previous_code.sanitized_for_filename
-  end
-
-  def start_with_code? file_name
-    code = sanitized_code
-    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-    result = file_name.start_with?(code, short_code) &&
-              !file_name.start_with?("#{code}-zip", "#{short_code}-zip")
-
-    if @previous_code
-      prev_code = sanitized_previous_code
-      prev_short_code = prev_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-      result = result || (file_name.start_with?(prev_code, prev_short_code) &&
-                           !file_name.start_with?("#{prev_code}-zip", "#{prev_short_code}-zip"))
-    end
-
-    result
-  end
-
-  def sanitized_code
-    self.code.sanitized_for_filename
+  def absolute_cover_path filename
+    File.join TEMP_PATH, pdf_cover_name(filename)
   end
 
   private
+
+    def check_for_modifications
+      self.zip_must_be_created   = file.attached? || file.changed?
+      self.cover_must_be_created = changed?
+      self.previous_code         = code_was if code_changed?
+    end
+
+    def create_cover_and_zip
+      ZipWorkPaperJob.set(wait: 10.seconds).perform_later self, previous_code if perform_job?
+    end
+
+    def perform_job?
+      file.attached? &&
+        (zip_must_be_created || cover_must_be_created) &&
+        !from_sidekiq
+    end
+
+    def sanitized_code
+      code.sanitized_for_filename
+    end
 
     def destroy_file_model
       file_model.try(:destroy!)

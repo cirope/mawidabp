@@ -277,8 +277,7 @@
             <td><%= work_paper.code %></td>
             <td><%= work_paper.number_of_pages %></td>
             <td><%= simple_format work_paper.description, class: 'mb-1' %></td>
-            <td><%= work_paper.file_model.try(:file?) ?
-              link_to(t('label.download'), work_paper.file_model.file.url) : '-' %></td>
+            <td><%= work_paper.file.attached? ? link_to_download_file(work_paper.file) : '' %></td>
           </tr>
         <% end %>
       </tbody>

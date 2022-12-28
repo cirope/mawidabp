@@ -770,6 +770,8 @@ private
                .where
                .not(file_model_id: nil)
                .find_each(batch_size: 50) do |work_paper|
+        work_paper.from_sidekiq = true
+
         attach_file work_paper, work_paper.file_model.file
       end
 
