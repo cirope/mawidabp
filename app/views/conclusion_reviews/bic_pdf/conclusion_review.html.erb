@@ -40,8 +40,8 @@
       </div>
       <div class="row">
         <div class="col-10 offset-1 border-left">
-          <p class="pt-5 font-weight-bold" style="font-size:1.9em;">Objetivo</p>
-          <p class="pt-5" style="font-size:1.9em;">Efectuar el relevamiento del proceso de Inversiones de BICE Fideicomisos y de los Fideicomisos administrados, evaluando los controles existentes a fin de comprobar que los mismos aseguren, mediante su adecuado funcionamiento, la producción de información contable confiable.</p>
+          <p class="pt-5 font-weight-bold" style="font-size:1.9em;"><%= Review.human_attribute_name :description %></p>
+          <p class="pt-5" style="font-size:1.9em;"><%= @conclusion_review.review.description %></p>
         </div>
       </div>
       <div class="row">
@@ -154,7 +154,7 @@
               <td class="align-middle" style="height: 40%; text-align: center;"><span class="font-weight-bold" style="font-size:2.4em;"><%= I18n.t 'conclusion_review.bic.weaknesses.plan', index: i %></span></td>
             </tr>
             <tr>
-              <td class="align-middle" style="height: 30%; text-align: center;"><span class="font-weight-bold" style="font-size:3.1em;">Debilidades en Manual de Misiones y Funciones</span></td>
+              <td class="align-middle" style="height: 30%; text-align: center;"><span class="font-weight-bold" style="font-size:3.1em;"><%= weakness.title %></span></td>
             </tr>
             <tr>
               <td class="align-middle" style="height: 30%; text-align: center;"><p class="pt-5" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p></td>
@@ -212,7 +212,7 @@
                           height: 93 %>
           </div>
           <div class="col-2 mt-4 pl-0">
-            <span class="font-weight-bold" style="font-size:2.5em;"><%= weakness.state_text %></span>
+            <span class="font-weight-bold <%= risk_style weakness %>" style="font-size:2.5em;"><%= weakness.state_text %></span>
           </div>
         </div>
       </div>
