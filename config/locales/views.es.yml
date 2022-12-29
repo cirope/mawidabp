@@ -441,6 +441,7 @@ es:
       progress: 'Avance Total'
       percentage: 'Porcentaje'
       total_hours: 'Total de Horas'
+      period_name: 'Periodo'
       period_start: 'Periodo Inicio'
       period_end: 'Periodo Fin'
     calendar:
