@@ -27,8 +27,6 @@ module ConclusionFinalReviews::Destroy
       final_findings.each do |finding|
         def finding.can_be_destroyed?; true; end
 
-        finding.work_papers.each { |wp| wp.update_column :file_model_id, nil }
-
         finding.mark_for_destruction
         finding.destroy!
       end
