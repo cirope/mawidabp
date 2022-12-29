@@ -60,10 +60,11 @@ module Plans::Csv
 
     def add_pat_headers
       pat_headers = [
+        I18n.t('plans.csv_prh_pat.period_name'),
         I18n.t('plans.csv_prh_pat.period_start'),
         I18n.t('plans.csv_prh_pat.period_end')
       ]
-      
+
       if @dprh
         pat_headers += [
           I18n.t('plans.csv_prh_pat.progress'),
@@ -122,6 +123,7 @@ module Plans::Csv
 
           if Current.conclusion_pdf_format == 'pat'
             array_to_csv += [
+              plan_item.plan.period.name,
               plan_item.plan.period.start,
               plan_item.plan.period.end,
             ]
