@@ -6,8 +6,7 @@ module Reviews::Clone
       'id'             => nil,
       'period_id'      => nil,
       'plan_item_id'   => nil,
-      'identification' => nil,
-      'file_model_id'  => nil
+      'identification' => nil
     )
 
     copy_control_objective_items_from other
