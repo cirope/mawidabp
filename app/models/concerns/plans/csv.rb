@@ -63,6 +63,7 @@ module Plans::Csv
         I18n.t('plans.csv_prh_pat.period_start'),
         I18n.t('plans.csv_prh_pat.period_end')
       ]
+      
       if @dprh
         pat_headers += [
           I18n.t('plans.csv_prh_pat.progress'),
