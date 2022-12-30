@@ -32,19 +32,4 @@ module BestPracticesHelper
 
     is_valid && control_objectives_are_unchanged
   end
-
-  def link_to_download_support control_objective, options = {}
-    if control_objective.support? && control_objective.support.present?
-      best_practice   = control_objective.best_practice
-      default_options = {
-        class: 'btn btn-outline-secondary btn-sm',
-        title: control_objective.identifier.titleize,
-        data:  { ignore_unsaved_data: true }
-      }.merge(options)
-
-      link_to download_best_practice_control_objective_path(best_practice, control_objective), default_options do
-        icon('fas', 'download')
-      end
-    end
-  end
 end

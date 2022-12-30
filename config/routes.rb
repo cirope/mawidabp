@@ -452,10 +452,6 @@ Rails.application.routes.draw do
   resources :best_practices do
     resources :process_controls, only: [:new, :edit]
 
-    resources :control_objectives, only: [] do
-      get :download, on: :member, controller: 'best_practices/control_objectives'
-    end
-
     get :auto_complete_for_tagging, on: :collection
   end
 
