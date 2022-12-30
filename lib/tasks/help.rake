@@ -13,8 +13,12 @@ namespace :help do
     Dir.chdir('config/jekyll') do
       Bundler.with_unbundled_env do
         bootstrap_path = `bundle show bootstrap`.chop
-        File.symlink("#{bootstrap_path}/assets/fonts/bootstrap", "./assets/fonts")
-        File.symlink("#{bootstrap_path}/assets/stylesheets", "./_sass/stylesheets")
+        fonts_path = './assets/fonts'
+        stylesheets_path = './_sass/stylesheets'
+        FileUtils.remove_dir(fonts_path) if File.exist?(fonts_path)
+        FileUtils.remove_dir(stylesheets_path) if File.exist?(stylesheets_path)
+        FileUtils.symlink("#{bootstrap_path}/assets/fonts/bootstrap", fonts_path)
+        FileUtils.symlink("#{bootstrap_path}/assets/stylesheets", stylesheets_path)
       end
     end
   end
