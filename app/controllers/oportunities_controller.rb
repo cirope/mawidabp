@@ -157,10 +157,6 @@
           :id, :name, :code, :number_of_pages, :description, :_destroy,
           :file
         ],
-        finding_answers_attributes: [
-          :answer, :commitment_date, :user_id,
-          :notify_users, :_destroy, file_model_attributes: [:file, :file_cache]
-        ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
         ],
