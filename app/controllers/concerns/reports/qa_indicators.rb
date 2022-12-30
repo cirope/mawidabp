@@ -177,6 +177,7 @@ module Reports::QaIndicators
   end
 
   def calculate_work_papers_digitalization
+    ###### CON ESTO QUE HACEMOS?
     wps = WorkPaper.list.includes(:owner, :file_model).where(
       'created_at BETWEEN :start AND :end',
       start: @from_date, end: @to_date
