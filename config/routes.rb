@@ -12,6 +12,10 @@ Rails.application.routes.draw do
   post 'saml/callback', to: 'saml_sessions#create', as: :saml_session
   get 'saml/metadata', to: 'saml_sessions#metadata', as: :saml_metadata
 
+  #sidekiq
+  # require 'sidekiq/web'
+  # mount Sidekiq::Web => '/sidekiq'
+
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :activity_groups
@@ -41,7 +45,6 @@ Rails.application.routes.draw do
   resources :readings, only: [:create]
 
   resources :documents do
-    get :download, on: :member
     get :auto_complete_for_tagging, on: :collection
   end
 

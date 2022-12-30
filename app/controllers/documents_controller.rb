@@ -51,12 +51,6 @@ class DocumentsController < ApplicationController
     respond_with @document
   end
 
-  def download
-    flash[:allow_path] = @document.file_model&.file&.path
-
-    redirect_to @document.file_model&.file&.url || root_url
-  end
-
   private
 
     def set_document
