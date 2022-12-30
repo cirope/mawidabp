@@ -57,8 +57,6 @@
     </tbody>
   </table>
 
-  <% f.object.build_file_model unless f.object.file_model %>
-
   <div class="row">
     <div class="col-md-1 offset-md-11">
       <%= render 'active_storage/file', f: f, label: Workflow.human_attribute_name('file'), allow_upload: true, allow_purge: false %>
