@@ -442,6 +442,9 @@ es:
       progress: 'Avance Total'
       percentage: 'Porcentaje'
       total_hours: 'Total de Horas'
+      period_name: 'Periodo'
+      period_start: 'Periodo Inicio'
+      period_end: 'Periodo Fin'
     calendar:
       show:
         title: 'Cronograma'
@@ -706,6 +709,12 @@ es:
         business_unit_types: "Unidades organizativas"
         detail: "Detalle"
         organization: "Organización"
+        period: "Periodo"
+        period_start: "Periodo Inicio"
+        period_end: "Periodo Fin"
+        plan_item: "Proyecto"
+        plan_item_start: "Proyecto Inicio"
+        plan_item_end: "Proyecto Fin"
 
   users:
     index:
