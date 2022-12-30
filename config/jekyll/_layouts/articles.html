@@ -23,10 +23,12 @@
   </body>
 
   <script charset="utf-8">
-    $(document).ready(function () {
-      $('h2,h3,h4,h5,h6').filter('[id]').each(function () {
-        $(this).html('<a href="#'+$(this).attr('id')+'">'+ $(this).text() + '</a>')
-      })
-    })
+    document.addEventListener("DOMContentLoaded", function(event) {
+      Array.from(document.querySelectorAll("h2, h3, h4, h5, h6"))
+        .filter(element => element.id != '')
+        .forEach(function callback(currentValue) {
+        currentValue.innerHTML = `<a href="#${currentValue.id}">${currentValue.textContent}</a>`
+      });
+    });
   </script>
 </html>
