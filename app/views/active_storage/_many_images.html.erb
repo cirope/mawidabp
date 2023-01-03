@@ -1,0 +1,38 @@
+<% if label.present? %>
+  <p class="mb-1"><%= label %></p>
+<% end %>
+
+<div class="clearfix">
+  <%= f.simple_fields_for :images_attachments do |i_a| %>
+    <fieldset>
+      <div class="file-container mb-1 float-left">
+        <%= link_to_download_image_attachment i_a.object %>
+      </div>
+      <div class="mt-1">
+        <% if show_filename %>
+          <span class="ml-2">
+            <%= i_a.object.blob.filename.to_s %>
+          </span>
+        <% end %>
+        <% if allow_purge %>
+          <span class="ml-2">
+            <%= link_to_purge_image_attachment i_a %>
+          </span>
+        <% end %>
+      </div>
+    </fieldset>
+  <% end %>
+
+  <% if allow_upload %>
+    <fieldset>
+      <div class="file-container float-left">
+        <%= link_to_upload_images %>
+        <%= f.input :images, label: false, input_html: { multiple: true, data: { target_show_files_selected: '#selected_images', legend_files_empty: t('active_storage.empty_files') } } %>
+      </div>
+      <ul id="selected_images" class="mt-1 ml-5 text-muted">
+        <li><%= t('active_storage.empty_files') %></li>
+      </ul>
+      <span class="font-italic"><%= t('active_storage.allowed_image_formats') %></span>
+    </fieldset>
+  <% end %>
+</div>

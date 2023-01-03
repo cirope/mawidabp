@@ -1,0 +1,32 @@
+<% if label.present? %>
+  <div class="row">
+    <label>
+      <%= label %>
+    </label>
+  </div>
+<% end %>
+
+<div class="row">
+  <% if allow_upload %>
+    <div class="file-container float-left">
+      <%= link_to_upload_image %>
+      <%= f.input :image, label: false %>
+    </div>
+  <% end %>
+  <% if show_link_to_download_image?(f) %>
+    <%= link_to_download_image f.object.image %>
+    <% if allow_purge %>
+      <div class="ml-2 mt-1">
+        <%= f.simple_fields_for :image_attachment do |i_a| %>
+          <%= link_to_purge_image(i_a) %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<% if allow_upload %>
+  <div class="row">
+    <p class="font-italic"><%= t('active_storage.allowed_image_formats') %></p>
+  </div>
+<% end %>
