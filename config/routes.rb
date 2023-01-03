@@ -521,6 +521,4 @@ Rails.application.routes.draw do
   root 'sessions#new'
 
   post 'paypal', to: 'paypal#create'
-
-  get 'private/:path', to: 'file_models#download', constraints: { path: /.+/ }
 end
