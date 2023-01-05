@@ -11,6 +11,7 @@ module Reviews::Approval
 
     errors  = control_objective_items_errors
     errors += finding_review_assignment_errors
+    errors += alternative_reviews_errors
 
     errors << [Review.model_name.human, review_errors] if review_errors.present?
 
@@ -140,6 +141,21 @@ module Reviews::Approval
           errors << [
             finding_label,
             [I18n.t('review.errors.related_finding_incomplete')]
+          ]
+        end
+      end
+
+      errors
+    end
+
+    def alternative_reviews_errors
+      errors = []
+
+      external_reviews.map(&:alternative_review).each do |alt_review|
+        if alt_review.issue_date > conclusion_draft_review.issue_date
+          errors << [
+            "#{ExternalReview.model_name.human}: #{alt_review.identification}",
+            [I18n.t('external_review.errors.issue_date_after_review_issue_date', date: alt_review.issue_date)]
           ]
         end
       end
