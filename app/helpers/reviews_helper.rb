@@ -249,7 +249,7 @@ module ReviewsHelper
   end
 
   def show_external_review_options review
-    Review.list.map { |r| [r.identification, r.id] }
+    Review.list.map { |r| [r.identification, r.id] if r.conclusion_final_review }.compact
   end
 
   def subsidiaries_options
