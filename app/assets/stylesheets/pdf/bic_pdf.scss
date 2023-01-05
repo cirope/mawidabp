@@ -1,7 +1,6 @@
-// bic conclusion_review
 .left-div {
-  background-color: #5bc4e4;
-  height: 1001px;
+  //background-color: #5bc4e4;
+  //min-height: 1001px
   //font-family: "Muli";
 }
 
@@ -19,4 +18,14 @@
 
 .green-text {
   color:#04b38c;
+}
+
+.body-background-image {
+  background-image: asset-data-url("bic_pdf/background-image.png");
+  background-size: 2000px 1001px;
+}
+
+.watermark-bic {
+  background-image: asset-data-url("bic_pdf/watermark.png");
+  background-size: 300px 300px;
 }
