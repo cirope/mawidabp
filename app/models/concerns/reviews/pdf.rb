@@ -61,13 +61,14 @@ module Reviews::Pdf
 
     def pdf_columns
       [
-        [ControlObjective.model_name.human, 8],
+        [ProcessControl.model_name.human, 6],
+        [ControlObjective.model_name.human, 6],
         ([Control.human_attribute_name('effects'), 10] unless HIDE_CONTROL_EFFECTS),
-        [Control.human_attribute_name('control'), 12],
+        [Control.human_attribute_name('control'), 10],
         [Control.human_attribute_name('design_tests'), HIDE_CONTROL_EFFECTS ? 35 : 20],
         ([Control.human_attribute_name('compliance_tests'), 20] unless HIDE_CONTROL_COMPLIANCE_TESTS),
         [Control.human_attribute_name('sustantive_tests'), HIDE_CONTROL_COMPLIANCE_TESTS ? 35 : 20],
-        [ControlObjectiveItem.human_attribute_name('auditor_comment'), 10]
+        [ControlObjectiveItem.human_attribute_name('auditor_comment'), 8]
       ].compact
     end
 
@@ -85,6 +86,7 @@ module Reviews::Pdf
       grouped_control_objective_items.each do |pc, cois|
         cois.sort.each do |coi|
           rows << [
+            coi.process_control.name,
             coi.control_objective_text.to_s,
             (coi.control.effects.to_s unless HIDE_CONTROL_EFFECTS),
             coi.control.control.to_s,
