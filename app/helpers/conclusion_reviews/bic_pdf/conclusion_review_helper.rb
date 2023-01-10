@@ -35,9 +35,7 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
   end
 
   def bic_review_period conclusion_review
-    start_date = conclusion_review.review.opening_interview&.start_date
-
-    "#{start_date ? I18n.l(date, format: :minimal) : '--/--/--'} al #{I18n.l conclusion_review.issue_date, format: :minimal}"
+    "#{I18n.l conclusion_review.plan_item.start, format: :minimal} al #{I18n.l conclusion_review.plan_item.end, format: :minimal}"
   end
 
   def bic_weakness_responsible weakness

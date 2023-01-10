@@ -1,189 +1,29 @@
 <%= wicked_pdf_javascript_include_tag 'wicked_pdf/bic_pdf/set_background_image' %>
 
-<div class="alwaysbreak <%= watermark_class @draft %>">
-  <div class="row">
-    <div class="col-4 left-div text-white">
-      <div class="row">
-        <div class="col-4 offset-8">
-          <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'logo_1.png')), 
-                        width: 126, 
-                        height: 139,
-                        class: 'mt-5 mb-5' %>
-        </div>  
-      </div>
-      <div class="row">
-        <div class="col-10 offset-1">
-          <p class="font-weight-bold" style="font-size:4.5em;"><%= I18n.t 'conclusion_review.bic.cover.review_identification', identification: @conclusion_review.review.identification %></p>
-          <p class="font-weight-bold" style="font-size:5.5em;"><%= @conclusion_review.review.plan_item.project %></p>
-          <p class="pt-4" style="font-size:2.5em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.auditors' %></span> <%= bic_review_auditors_text @conclusion_review %></p>
-          <p class="pt-4" style="font-size:2.5em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.owners' %></span> <%= bic_review_owners_text @conclusion_review %></p>
-        </div>
-      </div>
-    </div>
-    <div class="col-8 right-div">
-      <div class="row">
-        <div class="col-3 offset-9">
-          <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
-                        width: 49, 
-                        height: 68,
-                        class: 'ml-5' %>
-          <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'sigen_icono.jpg')), 
-                        width: 54, 
-                        height: 90,
-                        class: 'ml-5 mt-1' %>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-10 offset-1">
-          <p class="pt-5" style="font-size:1.9em;"><span class="font-weight-bold"><%= ConclusionReview.human_attribute_name :issue_date %></span> <%= I18n.l @conclusion_review.issue_date, format: :minimal %></p>
-          <p class="pt-3" style="font-size:1.9em;"><span class="font-weight-bold"><%= ConclusionReview.human_attribute_name :previous_identification %></span> <%= bic_previous_review_text @conclusion_review %></p>
-          <p class="pt-3" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.review_period' %></span> <%= bic_review_period @conclusion_review %></p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-10 offset-1 border-left">
-          <p class="pt-5 font-weight-bold" style="font-size:1.9em;"><%= Review.human_attribute_name :description %></p>
-          <p class="pt-5" style="font-size:1.9em;"><%= @conclusion_review.review.description %></p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-1 offset-1">
-          <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'lupa.png')), 
-                        width: 55, 
-                        height: 53,
-                        class: 'mt-4' %>
-        </div>
-        <div class="col-7">
-          <p class="pt-5 font-weight-bold aqua-text" style="font-size:1.9em;"><%= "#{I18n.t 'conclusion_review.bic.cover.cycle_qualification'}#{I18n.t("score_types.#{@conclusion_review.review.score_array.first}")}" %></p>
-        </div>
-        <div class="col-1">
-          <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'emoji.png')), 
-                        width: 67, 
-                        height: 53,
-                        class: 'mt-4' %>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-10 offset-1">
-          <p class="pt-5 font-weight-bold" style="font-size:1.9em;"><%= I18n.t 'conclusion_review.bic.cover.signature' %></p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="alwaysbreak <%= watermark_class @draft %>">
-  <div class="row">
-    <div class="col-4 left-div text-white">
-      <div class="row" style="height: 500px;"></div>
-      <p class="font-weight-bold" style="font-size:4.2em; text-align: center;"><%= I18n.t 'conclusion_review.bic.scope' %></p>
-    </div>
-    <div class="col-8 right-div" >
-      <div class="row">
-        <div class="col-3 offset-9">
-          <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
-                        width: 49, 
-                        height: 68,
-                        class: 'ml-5' %>
-          <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'sigen_icono.jpg')), 
-                        width: 54, 
-                        height: 90,
-                        class: 'ml-5 mt-1' %>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-10 offset-1">
-          <p class="pt-5" style="font-size:1.9em;"><%= @conclusion_review.applied_procedures %></p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="alwaysbreak <%= watermark_class @draft %>">
-  <div class="row">
-    <div class="col-4">
-    </div>
-    <div class="col-8">
-      <div class="col-3 offset-9">
-        <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
-                      width: 49, 
-                      height: 68,
-                      class: 'ml-5' %>
-        <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'sigen_icono.jpg')), 
-                      width: 54, 
-                      height: 90,
-                      class: 'ml-5 mt-1' %>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-4 left-div text-white">
-      <div class="row" style="height: 250px;"></div>
-      <table style="width: 100%">
-        <tbody>
-          <tr>
-            <td class="align-middle" style="text-align: center;"><span class="font-weight-bold" style="font-size:3.4em;"><%= ConclusionReview.human_attribute_name(:reference).upcase %></span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-6 offset-1">
-      <p class="pt-5" style="font-size:1.9em;"><%= @conclusion_review.reference %></p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-4 left-div text-white">
-      <div class="row" style="height: 50px;"></div>
-      <table style="width: 100%">
-        <tbody>
-          <tr>
-            <td class="align-middle" style="text-align: center;"><span class="font-weight-bold" style="font-size:3.4em;"><%= I18n.t 'conclusion_review.bic.audit_comments' %></span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-6 offset-1">
-      <p class="pt-5" style="font-size:1.9em;"><%= @conclusion_review.conclusion %></p>
-    </div>
-  </div>
-</div>
-
-<% conclusion_review_weaknesses(@conclusion_review).each_with_index do |weakness, i| %>
+<div class="text-justify">
   <div class="alwaysbreak <%= watermark_class @draft %>">
-    <div class="row" style="min-height: 1001px;">
+    <div class="row">
       <div class="col-4 left-div text-white">
-        <div class="row" style="height: 250px;"></div>
-        <table style="width: 100%">
-          <tbody>
-            <tr>
-              <td class="align-middle" style="height: 40%; text-align: center;"><span class="font-weight-bold" style="font-size:2.4em;"><%= I18n.t 'conclusion_review.bic.weaknesses.plan', index: i %></span></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="row" style="height: 125px;"></div>
-        <table style="width: 100%">
-          <tbody>
-            <tr>
-              <td class="align-middle" style="height: 30%; text-align: center;"><span class="font-weight-bold" style="font-size:3.1em;"><%= weakness.title %></span></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="row" style="height: 175px;"></div>
-        <table style="width: 100%">
-          <tbody>
-            <tr>
-              <td class="align-middle" style="height: 30%; text-align: center;"><p class="pt-5" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="row">
+          <div class="col-4 offset-8">
+            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'logo_1.png')), 
+                          width: 126, 
+                          height: 139,
+                          class: 'mt-5 mb-5' %>
+          </div>  
+        </div>
+        <div class="row">
+          <div class="col-10 offset-1">
+            <p class="font-weight-bold" style="font-size:4.5em;"><%= I18n.t 'conclusion_review.bic.cover.review_identification', identification: @conclusion_review.review.identification %></p>
+            <p class="font-weight-bold" style="font-size:5.5em;"><%= @conclusion_review.review.plan_item.project %></p>
+            <p class="pt-4" style="font-size:1.8em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.auditors' %></span> <%= bic_review_auditors_text @conclusion_review %></p>
+            <p class="pt-4" style="font-size:1.8em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.owners' %></span> <%= bic_review_owners_text @conclusion_review %></p>
+          </div>
+        </div>
       </div>
       <div class="col-8 right-div">
         <div class="row">
-          <div class="col-8 offset-1">
-            <p class="pt-5 font-weight-bold aqua-text" style="font-size:2.8em;"><%= legend_weakness_repeated weakness %></p>
-          </div>
-          <div class="col-3">
+          <div class="col-3 offset-9">
             <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
                           width: 49, 
                           height: 68,
@@ -196,45 +36,207 @@
         </div>
         <div class="row">
           <div class="col-10 offset-1">
-            <p class="pt-5 font-weight-bold" style="font-size:1.9em;"><%= Weakness.model_name.human count: 1 %></p>
-            <p class="pt-4" style="font-size:1.9em;"><%= weakness.description %></p>
-            <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= Weakness.human_attribute_name :effect %></span> <%= weakness.effect %></p>
-            <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.audit_recommendations' %></span> <%= weakness.audit_recommendations %></p>
-            <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.follow_up_date' %></span> <%= follow_up_date_weakness weakness %></p>
-            <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= Answer.model_name.human count: 1 %>:</span> <%= weakness.answer %></p>
-            <% if weakness.repeated_of.present? %>
-              <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= Finding.human_attribute_name :repeated_of_id %>:</span><span class="aqua-text"> <%= weakness.repeated_of %></span></p>
-            <% end %>
+            <p class="pt-5" style="font-size:1.9em;"><span class="font-weight-bold"><%= ConclusionReview.human_attribute_name :issue_date %></span> <%= I18n.l @conclusion_review.issue_date, format: :minimal %></p>
+            <p class="pt-3" style="font-size:1.9em;"><span class="font-weight-bold"><%= ConclusionReview.human_attribute_name :previous_identification %></span> <%= bic_previous_review_text @conclusion_review %></p>
+            <p class="pt-3" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.review_period' %></span> <%= bic_review_period @conclusion_review %></p>
           </div>
         </div>
-        <div class="row ml-3" style="width: 90%; position: absolute; bottom: 5px;">
-          <div class="col-3 mt-4" style="text-align: center; background-color: #04b38c; height: 50px">
-            <span class="font-weight-bold text-white" style="font-size:2.5em;"><%= Weakness.human_attribute_name :risk %></span>
+        <div class="row">
+          <div class="col-10 offset-1 border-left">
+            <p class="pt-5 font-weight-bold" style="font-size:1.9em;"><%= Review.human_attribute_name :description %></p>
+            <p class="pt-5" style="font-size:1.9em;"><%= @conclusion_review.review.description %></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1 offset-1">
+            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'lupa.png')), 
+                          width: 55, 
+                          height: 53,
+                          class: 'mt-4' %>
+          </div>
+          <div class="col-7">
+            <p class="pt-5 font-weight-bold aqua-text" style="font-size:1.9em;"><%= "#{I18n.t 'conclusion_review.bic.cover.cycle_qualification'}#{I18n.t("score_types.#{@conclusion_review.review.score_array.first}")}" %></p>
           </div>
           <div class="col-1">
-            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'key.png')), 
-                          width: 33, 
-                          height: 93 %>
+            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'emoji.png')), 
+                          width: 67, 
+                          height: 53,
+                          class: 'mt-4' %>
           </div>
-          <div class="col-2 mt-4 pl-0">
-            <span class="font-weight-bold" style="font-size:2.5em;"><%= weakness.risk_text %></span>
-          </div>
-          <div class="col-3 mt-4" style="text-align: center; background-color: #04b38c; height: 50px">
-            <span class="font-weight-bold text-white" style="font-size:2.5em;"><%= Weakness.human_attribute_name :state %></span>
-          </div>
-          <div class="col-1">
-            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'key.png')), 
-                          width: 33, 
-                          height: 93 %>
-          </div>
-          <div class="col-2 mt-4 pl-0">
-            <span class="font-weight-bold <%= risk_style weakness %>" style="font-size:2.1em;"><%= weakness.state_text %></span>
+        </div>
+        <div class="row">
+          <div class="col-10 offset-1">
+            <p class="pt-5 font-weight-bold" style="font-size:1.9em;"><%= I18n.t 'conclusion_review.bic.cover.signature' %></p>
           </div>
         </div>
       </div>
     </div>
   </div>
-<% end %>
 
-<div class="alwaysbreak">
+  <div class="alwaysbreak <%= watermark_class @draft %>">
+    <div class="row">
+      <div class="col-4 left-div text-white">
+        <div class="row" style="height: 500px;"></div>
+        <p class="font-weight-bold" style="font-size:4.2em; text-align: center;"><%= I18n.t 'conclusion_review.bic.scope' %></p>
+      </div>
+      <div class="col-8 right-div" >
+        <div class="row">
+          <div class="col-3 offset-9">
+            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
+                          width: 49, 
+                          height: 68,
+                          class: 'ml-5' %>
+            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'sigen_icono.jpg')), 
+                          width: 54, 
+                          height: 90,
+                          class: 'ml-5 mt-1' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-10 offset-1">
+            <p class="pt-5" style="font-size:1.9em;"><%= @conclusion_review.applied_procedures %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alwaysbreak <%= watermark_class @draft %>">
+    <div class="row">
+      <div class="col-4">
+      </div>
+      <div class="col-8">
+        <div class="col-3 offset-9">
+          <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
+                        width: 49, 
+                        height: 68,
+                        class: 'ml-5' %>
+          <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'sigen_icono.jpg')), 
+                        width: 54, 
+                        height: 90,
+                        class: 'ml-5 mt-1' %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 left-div text-white">
+        <div class="row" style="height: 250px;"></div>
+        <table style="width: 100%">
+          <tbody>
+            <tr>
+              <td class="align-middle" style="text-align: center;"><span class="font-weight-bold" style="font-size:3.4em;"><%= ConclusionReview.human_attribute_name(:reference).upcase %></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-6 offset-1">
+        <p class="pt-5" style="font-size:1.9em;"><%= @conclusion_review.reference %></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 left-div text-white">
+        <div class="row" style="height: 50px;"></div>
+        <table style="width: 100%">
+          <tbody>
+            <tr>
+              <td class="align-middle" style="text-align: center;"><span class="font-weight-bold" style="font-size:3.4em;"><%= I18n.t 'conclusion_review.bic.audit_comments' %></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-6 offset-1">
+        <p class="pt-5" style="font-size:1.9em;"><%= @conclusion_review.conclusion %></p>
+      </div>
+    </div>
+  </div>
+
+  <% conclusion_review_weaknesses(@conclusion_review).each_with_index do |weakness, i| %>
+    <div class="alwaysbreak <%= watermark_class @draft %>">
+      <div class="row" style="min-height: 1001px;">
+        <div class="col-4 left-div text-white">
+          <div class="row" style="height: 250px;"></div>
+          <table style="width: 100%">
+            <tbody>
+              <tr>
+                <td class="align-middle" style="height: 40%; text-align: center;"><span class="font-weight-bold" style="font-size:2.4em;"><%= I18n.t 'conclusion_review.bic.weaknesses.plan', index: i %></span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row" style="height: 125px;"></div>
+          <table style="width: 100%">
+            <tbody>
+              <tr>
+                <td class="align-middle" style="height: 30%; text-align: center;"><span class="font-weight-bold" style="font-size:3.1em;"><%= weakness.title %></span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row" style="height: 175px;"></div>
+          <table style="width: 100%">
+            <tbody>
+              <tr>
+                <td class="align-middle" style="height: 30%; text-align: center;"><p class="pt-5" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-8 right-div">
+          <div class="row">
+            <div class="col-8 offset-1">
+              <p class="pt-5 font-weight-bold aqua-text" style="font-size:2.8em;"><%= legend_weakness_repeated weakness %></p>
+            </div>
+            <div class="col-3">
+              <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')), 
+                            width: 49, 
+                            height: 68,
+                            class: 'ml-5' %>
+              <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'sigen_icono.jpg')), 
+                            width: 54, 
+                            height: 90,
+                            class: 'ml-5 mt-1' %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-10 offset-1">
+              <p class="pt-5 font-weight-bold" style="font-size:1.9em;"><%= Weakness.model_name.human count: 1 %></p>
+              <p class="pt-4" style="font-size:1.9em;"><%= weakness.description %></p>
+              <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= Weakness.human_attribute_name :effect %></span> <%= weakness.effect %></p>
+              <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.audit_recommendations' %></span> <%= weakness.audit_recommendations %></p>
+              <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.follow_up_date' %></span> <%= follow_up_date_weakness weakness %></p>
+              <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= Answer.model_name.human count: 1 %>:</span> <%= weakness.answer %></p>
+              <% if weakness.repeated_of.present? %>
+                <p class="pt-4" style="font-size:1.9em;"><span class="font-weight-bold"><%= Finding.human_attribute_name :repeated_of_id %>:</span><span class="aqua-text"> <%= weakness.repeated_of %></span></p>
+              <% end %>
+            </div>
+          </div>
+          <div class="row ml-3 mt-5" style="width: 90%;">
+            <div class="col-3 mt-4" style="text-align: center; background-color: #04b38c; height: 50px">
+              <span class="font-weight-bold text-white" style="font-size:2.5em;"><%= Weakness.human_attribute_name :risk %></span>
+            </div>
+            <div class="col-1">
+              <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'key.png')), 
+                            width: 33, 
+                            height: 93 %>
+            </div>
+            <div class="col-2 mt-4 pl-0">
+              <span class="font-weight-bold" style="font-size:2.5em;"><%= weakness.risk_text %></span>
+            </div>
+            <div class="col-3 mt-4" style="text-align: center; background-color: #04b38c; height: 50px">
+              <span class="font-weight-bold text-white" style="font-size:2.5em;"><%= Weakness.human_attribute_name :state %></span>
+            </div>
+            <div class="col-1">
+              <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'key.png')), 
+                            width: 33, 
+                            height: 93 %>
+            </div>
+            <div class="col-2 mt-4 pl-0">
+              <span class="font-weight-bold <%= risk_style weakness %>" style="font-size:2.1em;"><%= weakness.state_text %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="alwaysbreak">
+  </div>
 </div>
