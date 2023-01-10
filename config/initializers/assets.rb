@@ -11,4 +11,4 @@ Rails.application.config.assets.paths << Rails.root.join('vendor', 'assets', 'ja
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
-Rails.application.config.assets.precompile += %w(number_pages.js pdf/watermarks.scss.erb)
+Rails.application.config.assets.precompile += %w(number_pages.js wicked_pdf/bic_pdf/set_background_image.js)
