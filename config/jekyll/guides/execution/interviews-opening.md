@@ -14,19 +14,19 @@ Seleccionamos **Ejecución -> Entrevistas -> Entrevistas de inicio**
 
 Nos muestra las entrevistas de inicio
 
-![]({% asset execution/interviews/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/interviews/2.png){: class="img-responsive"}
 
 Podemos seleccionar ¨Ver¨ y ¨Editar¨.
 
 Para crear una entrevista de inicio, seleccionamos **¨Nueva entrevista de inicio¨** y luego seleccionamos  el informe para el que necesitamos la entrevista, la mayoría de los campos se autocompletan en forma automática con los datos del informe.
 
-![]({% asset execution/interviews/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/interviews/3.png){: class="img-responsive"}
 
 Luego seleccionamos ¨Crear entrevista de inicio¨
 
-![]({% asset execution/interviews/4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/interviews/4.png){: class="img-responsive"}
 
-![]({% asset execution/interviews/5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/interviews/5.png){: class="img-responsive"}
 
 Tenemos la opción de seleccionar ¨Editar¨, ¨Descargar¨ y ¨Listado¨ nos lleva a la pantalla de inicio de entrevistas.
 
