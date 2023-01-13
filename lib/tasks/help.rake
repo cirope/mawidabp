@@ -12,9 +12,10 @@ namespace :help do
   task :create_bootstrap_symlinks do
     Dir.chdir('config/jekyll') do
       Bundler.with_unbundled_env do
-        bootstrap_path = `bundle show bootstrap`.chop
-        fonts_path = './assets/fonts'
+        bootstrap_path   = `bundle show bootstrap`.chop
+        fonts_path       = './assets/fonts'
         stylesheets_path = './_sass/stylesheets'
+
         File.symlink("#{bootstrap_path}/assets/fonts/bootstrap", fonts_path) unless File.exist?(fonts_path)
         File.symlink("#{bootstrap_path}/assets/stylesheets", stylesheets_path) unless File.exist?(stylesheets_path)
       end
