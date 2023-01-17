@@ -5,10 +5,15 @@ module ConclusionReviews::BicPdf
     { pdf: pdf_name,
       template: 'conclusion_reviews/bic_pdf/conclusion_review.html.erb',
       margin: {
-        top:    0,
+        top:    19,
         bottom: 0,
         left:   0,
         right:  0
+      },
+      header: {
+        html: {
+          template: 'conclusion_reviews/bic_pdf/header.html.erb'
+        }
       },
       orientation: 'Landscape',
       layout: 'pdf.html',
