@@ -75,7 +75,7 @@ module ConclusionReviews::NbcPdf
     def put_nbc_grid pdf
       column_data = [
         [
-          I18n.t('conclusion_review.nbc.cover.number_review') + ': ' + (review.identification),
+          "#{I18n.t('conclusion_review.nbc.cover.number_review')}: #{review.identification}",
           I18n.t('conclusion_review.nbc.cover.prepared_by')
         ]
       ]
