@@ -249,7 +249,11 @@ module ReviewsHelper
   end
 
   def show_external_review_options review
-    Review.list.map { |r| [r.identification, r.id] if r.conclusion_final_review }.compact
+    Review.list.map do |r|
+      if r.conclusion_final_review && r.type_review == Review::TYPES_REVIEW[:system_audit]
+        [r.identification, r.id]
+      end
+    end.compact
   end
 
   def subsidiaries_options
