@@ -6,13 +6,18 @@ module ConclusionReviews::BicPdf
       template: 'conclusion_reviews/bic_pdf/conclusion_review.html.erb',
       margin: {
         top:    19,
-        bottom: 0,
+        bottom: 5,
         left:   0,
         right:  0
       },
       header: {
         html: {
           template: 'conclusion_reviews/bic_pdf/header.html.erb'
+        }
+      },
+      footer: {
+        html: {
+          template: 'conclusion_reviews/bic_pdf/footer.html.erb'
         }
       },
       orientation: 'Landscape',
