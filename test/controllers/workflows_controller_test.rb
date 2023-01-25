@@ -45,6 +45,74 @@ class WorkflowsControllerTest < ActionController::TestCase
     assert_template 'workflows/index'
   end
 
+  test 'list workflows with search in review' do
+    workflow = workflows(:past_workflow)
+
+    login
+    get :index, params: {
+      search: {
+        query: workflow.review.identification,
+        columns: ['review', 'project']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:workflows)
+    assert_equal 1, assigns(:workflows).count
+    assert_template 'workflows/index'
+  end
+
+  test 'dont list workflows with search in review' do
+    workflow = workflows(:past_workflow)
+
+    login
+    get :index, params: {
+      search: {
+        query: workflow.review.identification * 4,
+        columns: ['review', 'project']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:workflows)
+    assert_equal 0, assigns(:workflows).count
+    assert_template 'workflows/index'
+  end
+
+  test 'list workflows with search in project' do
+    workflow = workflows(:past_workflow)
+
+    login
+    get :index, params: {
+      search: {
+        query: workflow.review.plan_item.project,
+        columns: ['review', 'project']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:workflows)
+    assert assigns(:workflows).count.positive?
+    assert_template 'workflows/index'
+  end
+
+  test 'dont list workflows with search in project' do
+    workflow = workflows(:past_workflow)
+
+    login
+    get :index, params: {
+      search: {
+        query: workflow.review.plan_item.project * 4,
+        columns: ['review', 'project']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:workflows)
+    assert_equal 0, assigns(:workflows).count
+    assert_template 'workflows/index'
+  end
+
   test 'show workflow' do
     login
     get :show, :params => { :id => workflows(:current_workflow).id }
