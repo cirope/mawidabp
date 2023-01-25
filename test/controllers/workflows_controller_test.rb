@@ -81,11 +81,12 @@ class WorkflowsControllerTest < ActionController::TestCase
 
   test 'list workflows with search in project' do
     workflow = workflows(:past_workflow)
+    project  = workflow.review.plan_item.project
 
     login
     get :index, params: {
       search: {
-        query: workflow.review.plan_item.project,
+        query: project,
         columns: ['review', 'project']
       }
     }
@@ -93,6 +94,7 @@ class WorkflowsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:workflows)
     assert assigns(:workflows).count.positive?
+    assert assigns(:workflows).all? { |w| w.review.plan_item.project.match(project) }
     assert_template 'workflows/index'
   end
 
