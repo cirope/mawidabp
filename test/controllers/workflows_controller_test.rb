@@ -46,12 +46,12 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'list workflows with search in review' do
-    workflow = workflows(:past_workflow)
+    past_workflow_identification = workflows(:past_workflow).review.identification
 
     login
     get :index, params: {
       search: {
-        query: workflow.review.identification,
+        query: past_workflow_identification,
         columns: ['review', 'project']
       }
     }
@@ -63,12 +63,12 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'dont list workflows with search in review' do
-    workflow = workflows(:past_workflow)
+    past_workflow_identification = workflows(:past_workflow).review.identification
 
     login
     get :index, params: {
       search: {
-        query: workflow.review.identification * 4,
+        query: past_workflow_identification * 4,
         columns: ['review', 'project']
       }
     }
@@ -80,13 +80,12 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'list workflows with search in project' do
-    workflow = workflows(:past_workflow)
-    project  = workflow.review.plan_item.project
+    past_workflow_project = workflows(:past_workflow).review.plan_item.project
 
     login
     get :index, params: {
       search: {
-        query: project,
+        query: past_workflow_project,
         columns: ['review', 'project']
       }
     }
@@ -94,17 +93,17 @@ class WorkflowsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:workflows)
     assert assigns(:workflows).count.positive?
-    assert assigns(:workflows).all? { |w| w.review.plan_item.project.match(project) }
+    assert assigns(:workflows).all? { |w| w.review.plan_item.project.match(past_workflow_project) }
     assert_template 'workflows/index'
   end
 
   test 'dont list workflows with search in project' do
-    workflow = workflows(:past_workflow)
+    past_workflow_project = workflows(:past_workflow).review.plan_item.project
 
     login
     get :index, params: {
       search: {
-        query: workflow.review.plan_item.project * 4,
+        query: past_workflow_project * 4,
         columns: ['review', 'project']
       }
     }

@@ -24,7 +24,7 @@ module Workflows::Search
       {
         column:            "LOWER(#{column})",
         operator:          'LIKE',
-        mask:              "%%%s%%",
+        mask:              '%%%s%%',
         conversion_method: :to_s,
         regexp:            /.*/
       }

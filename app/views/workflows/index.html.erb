@@ -6,10 +6,10 @@
 <table class="table table-sm table-striped table-hover">
   <thead id="column_headers">
     <tr>
-      <%= make_not_available_column Period.model_name.human, { :class => 'd-none d-md-table-cell' } %>
+      <%= make_not_available_column Period.model_name.human, { class: 'd-none d-md-table-cell' } %>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), nil, 'project' %>
-      <%= make_not_available_column Workflow.human_attribute_name(:created_at), { :class => 'd-none d-md-table-cell' } %>
+      <%= make_not_available_column Workflow.human_attribute_name(:created_at), { class: 'd-none d-md-table-cell' } %>
       <th colspan="4" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
