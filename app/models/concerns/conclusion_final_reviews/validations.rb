@@ -13,10 +13,6 @@ module ConclusionFinalReviews::Validations
 
   private
 
-    def is_nbc?
-      Current.conclusion_pdf_format == 'nbc'
-    end
-
     def review_must_be_approved
       if has_draft_review? && !review.conclusion_draft_review.approved?
         errors.add :review_id, :invalid
@@ -29,6 +25,10 @@ module ConclusionFinalReviews::Validations
 
     def has_draft_review?
       review && review.conclusion_draft_review
+    end
+
+    def is_nbc?
+      Current.conclusion_pdf_format == 'nbc'
     end
 
     def external_review_must_be_earlier
