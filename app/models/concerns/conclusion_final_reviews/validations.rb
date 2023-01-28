@@ -8,10 +8,14 @@ module ConclusionFinalReviews::Validations
       allow_nil: true, allow_blank: true, on: :create
     validate :review_must_be_approved
     validate :review_must_have_draft
-    validate :external_review_must_be_earlier
+    validate :external_review_must_be_earlier, if: :is_nbc?
   end
 
   private
+
+    def is_nbc?
+      Current.conclusion_pdf_format == 'nbc'
+    end
 
     def review_must_be_approved
       if has_draft_review? && !review.conclusion_draft_review.approved?

@@ -11,7 +11,7 @@ module Reviews::Approval
 
     errors  = control_objective_items_errors
     errors += finding_review_assignment_errors
-    errors += alternative_reviews_errors
+    errors += alternative_reviews_errors if Current.conclusion_pdf_format == 'nbc'
 
     errors << [Review.model_name.human, review_errors] if review_errors.present?
 
