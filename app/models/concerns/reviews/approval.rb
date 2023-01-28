@@ -162,6 +162,8 @@ module Reviews::Approval
         end
       end
 
+      self.can_be_approved_by_force = false if errors.present?
+
       errors
     end
 end
