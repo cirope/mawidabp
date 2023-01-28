@@ -152,7 +152,9 @@ module Reviews::Approval
       errors = []
 
       external_reviews.map(&:alternative_review).each do |alt_review|
-        if alt_review.conclusion_final_review.issue_date > conclusion_draft_review.issue_date
+        alt_issue_date = alt_review.conclusion_final_review.issue_date
+
+        if conclusion_draft_review && alt_issue_date > conclusion_draft_review.issue_date
           errors << [
             "#{ExternalReview.model_name.human}: #{alt_review.identification}",
             [I18n.t('external_review.errors.issue_date_after_review_issue_date', date: alt_review.issue_date)]
