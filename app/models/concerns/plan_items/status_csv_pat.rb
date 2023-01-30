@@ -26,6 +26,24 @@ module PlanItems::StatusCsvPat
     end
   end
 
+  def status_color_pat
+    if completed_early?
+      'text-secondary'
+    elsif completed?
+      'text-primary'
+    elsif in_early_progress?
+      'text-info'
+    elsif in_progress_no_delayed?
+      'text-success'
+    elsif overdue?
+      'text-danger'
+    elsif not_started_no_delayed?
+      'text-white bg-success rounded-circle border border-success'
+    elsif delayed_pat?
+      'text-warning'
+    end
+  end
+
   def completed_early? on: Time.zone.today
     conclusion_final_review &&
       conclusion_final_review.issue_date < self.end && self.end >= on
@@ -36,22 +54,22 @@ module PlanItems::StatusCsvPat
   end
 
   def in_early_progress? on: Time.zone.today
-    review && self.start > on
+    review && start && start > on
   end
 
   def in_progress_no_delayed? on: Time.zone.today
-    review && self.start <= on && self.end >= on
+    review && start && start <= on && self.end >= on
   end
 
   def overdue? on: Time.zone.today
-    self.start <= on && self.end < on
+    start && start <= on && self.end < on
   end
 
   def not_started_no_delayed? on: Time.zone.today
-    self.start > on && self.end >= on
+    start && start > on && self.end >= on
   end
 
   def delayed_pat? on: Time.zone.today
-    self.start <= on && self.end >= on
+    start && start <= on && self.end >= on
   end
 end

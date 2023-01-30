@@ -15,15 +15,15 @@ Seleccionando ¨Editar¨ nos permite realizar las tareas previstas en este módu
 
 **Seleccionamos Ejecución -> Oportunidades de mejora**
 
-![]({% asset execution/oportunities/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/oportunities/1.png){: class="img-responsive"}
 
 Nos muestra las oportunidades de mejora ordenadas por Informe.
 
-![]({% asset execution/oportunities/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/oportunities/2.png){: class="img-responsive"}
 
 Si necesitamos encontrar en forma rápida tenemos la opción de **Buscar** por Informe, Proyecto, Código, Título y Etiquetas, y además ¨Ordenar por¨.
 
-![]({% asset execution/oportunities/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/oportunities/3.png){: class="img-responsive"}
 
 En el caso de las búsquedas se pueden "desactivar" las columnas por las que no se quiere buscar.
 
@@ -31,6 +31,6 @@ Si hacen clic sobre el nombre de la columna, van a ver que cambia a un tono más
 
 Para el siguiente ejemplo, desactivamos las columnas Informe, Proyecto y Título, es decir que buscamos por ¨Etiqueta¨ (en este caso Normativo).
 
-![]({% asset execution/oportunities/4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/oportunities/4.png){: class="img-responsive"}
 
 

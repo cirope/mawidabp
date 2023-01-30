@@ -14,7 +14,6 @@ class ActiveSupport::TestCase
   fixtures :all
 
   setup do
-    create_carrierwave_dir
     change_dir_to_upload_files
   end
 
@@ -25,10 +24,6 @@ class ActiveSupport::TestCase
     try :clear_performed_jobs
 
     FileUtils.rm_rf(Dir[PRIVATE_PATH])
-  end
-
-  def create_carrierwave_dir
-    FileUtils.mkdir_p PRIVATE_PATH if !Dir.exist?(PRIVATE_PATH)
   end
 
   def change_dir_to_upload_files
@@ -43,7 +38,7 @@ class ActiveSupport::TestCase
               '%08d' % (model.organization_id || Current.organization&.id || 0)
             ).scan(/\d{4}/).join('/')
 
-            "#{PRIVATE_PATH}#{organization_id}/#{model.class.to_s.underscore.pluralize}/#{id}"
+            File.join PRIVATE_PATH, organization_id, model.class.to_s.underscore.pluralize, id
           end
         end
       end
@@ -86,13 +81,13 @@ class ActiveSupport::TestCase
 
   def backup_file file_name
     if File.exist?(file_name)
-      FileUtils.cp file_name, "#{TEMP_PATH}#{File.basename(file_name)}"
+      FileUtils.cp file_name, "#{TEMP_PATH}/#{File.basename(file_name)}"
     end
   end
 
   def restore_file file_name
-    if File.exist?("#{TEMP_PATH}#{File.basename(file_name)}")
-      FileUtils.mv "#{TEMP_PATH}#{File.basename(file_name)}", file_name
+    if File.exist?("#{TEMP_PATH}/#{File.basename(file_name)}")
+      FileUtils.mv "#{TEMP_PATH}/#{File.basename(file_name)}", file_name
     end
   end
 

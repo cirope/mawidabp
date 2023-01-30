@@ -49,6 +49,7 @@
 //= require memos
 //= require needs_confirm_form
 //= require news
+//= require number_pages
 //= require opening_interviews
 //= require permalinks
 //= require plan_items
