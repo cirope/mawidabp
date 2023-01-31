@@ -549,6 +549,25 @@ class ReviewTest < ActiveSupport::TestCase
       )
     end
 
+    # alternative_reviews_errors method
+    @review.external_reviews_attributes = [
+      { alternative_review_id: reviews(:past_review).id }
+    ]
+
+    @review.external_reviews.map(&:alternative_review).each do |alt_review|
+      alt_issue_date = 1.week.from_now.to_date.to_formatted_s(:db)
+
+      alt_review.conclusion_final_review.issue_date = alt_issue_date
+
+      refute @review.must_be_approved?
+      assert @review.approval_errors.flatten.include?(
+        I18n.t('external_review.errors.issue_date_after_review_issue_date', date: alt_issue_date)
+      )
+    end
+
+    assert @review.reload.must_be_approved?
+    assert @review.approval_errors.blank?
+
     @review.review_user_assignments.each { |rua| rua.audited? && rua.delete }
     refute @review.reload.must_be_approved?
     assert @review.approval_errors.present?
