@@ -16,6 +16,22 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     names.join '; '
   end
 
+  def review_version_text draft
+    I18n.t "conclusion_review.bic.cover.versions.#{draft ? 'draft' : 'final'}"
+  end
+
+  def put_bic_cover_note_on conclusion_review
+    note = if conclusion_review.is_a?(ConclusionDraftReview) && conclusion_review.review.weaknesses.any?
+             'draft_with_weaknesses'
+           elsif conclusion_review.is_a?(ConclusionFinalReview) && conclusion_review.review.weaknesses.any?
+             'final_with_weaknesses'
+           elsif conclusion_review.is_a? ConclusionFinalReview
+             'final_without_weaknesses'
+           end
+
+    note.present? ? I18n.t("conclusion_review.bic.cover.#{note}") : ''
+  end
+
   def bic_previous_review_text conclusion_review
     if conclusion_review.previous_identification.present? && conclusion_review.previous_date.present?
       [
