@@ -529,7 +529,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
 
     final_findings_count =
-      @conclusion_review.review.final_weaknesses.count + @conclusion_review.review.final_oportunities.count 
+      @conclusion_review.review.final_weaknesses.count + @conclusion_review.review.final_oportunities.count
 
     assert final_findings_count > 0
 
