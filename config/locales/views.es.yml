@@ -636,6 +636,7 @@ es:
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
     hours_of_work_per_day: 'Horas de trabajo por día'
     conclusion_review_receiver: 'Receptor/es del informe'
+    temporary_polls: 'Encuestas temporales, para finalizar una deben estar completas todas las preguntas.'
 
   tags:
     edit:
