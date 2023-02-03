@@ -1556,6 +1556,8 @@ es:
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
+            issue_date:
+              less_than_alt_issue_date: 'debe ser mayor o igual a la fecha de emisión %{date} del informe anexado %{name}'
         file_model:
           attributes:
             file_file_name:

@@ -380,6 +380,8 @@ class WeaknessTest < ActiveSupport::TestCase
   test 'must be approved on required attributes' do
     error_messages = if HIDE_WEAKNESS_EFFECT || USE_SCOPE_CYCLE
                        [I18n.t('weakness.errors.without_audit_comments')]
+                     elsif Current.conclusion_pdf_format == 'bic'
+                       [I18n.t('weakness.errors.without_effect')]
                      else
                        [
                          I18n.t('weakness.errors.without_effect'),
@@ -706,7 +708,7 @@ class WeaknessTest < ActiveSupport::TestCase
     review      = reviews :current_review
     repeated_of = findings :being_implemented_weakness_on_final
 
-    review.finding_review_assignments << FindingReviewAssignment.new(review: review, 
+    review.finding_review_assignments << FindingReviewAssignment.new(review: review,
                                                                      finding: repeated_of)
 
     @weakness.repeated_of = repeated_of
@@ -724,7 +726,7 @@ class WeaknessTest < ActiveSupport::TestCase
     review      = reviews :current_review
     repeated_of = findings :being_implemented_weakness_on_final
 
-    review.finding_review_assignments << FindingReviewAssignment.new(review: review, 
+    review.finding_review_assignments << FindingReviewAssignment.new(review: review,
                                                                      finding: repeated_of)
 
     repeated_of.update_attribute('risk_justification', nil)
