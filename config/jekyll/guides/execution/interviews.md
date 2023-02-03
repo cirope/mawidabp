@@ -14,6 +14,6 @@ Permite documentar las entrevistas de inicio y cierre realizadas con los usuario
 
 **Seleccionamos Ejecución -> Entrevistas**
 
-![]({% asset execution/interviews/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/interviews/1.png){: class="img-responsive"}
 
 

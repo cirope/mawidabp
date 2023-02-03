@@ -75,13 +75,12 @@ module ConclusionReviews::NbcPdf
     def put_nbc_grid pdf
       column_data = [
         [
-          I18n.t('conclusion_review.nbc.cover.number_review'),
-          review.identification,
+          "#{I18n.t('conclusion_review.nbc.cover.number_review')}: #{review.identification}",
           I18n.t('conclusion_review.nbc.cover.prepared_by')
         ]
       ]
 
-      w_c = pdf.bounds.width / 3
+      w_c = pdf.bounds.width / 2
 
       pdf.table(column_data, cell_style: { size: (PDF_FONT_SIZE * 0.75).round, inline_format: true },
                 column_widths: w_c)
@@ -219,7 +218,7 @@ module ConclusionReviews::NbcPdf
       pdf.move_down PDF_FONT_SIZE
       pdf.text applied_procedures, align: :justify, inline_format: true
 
-      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages'), align: :justify
 
       pdf.move_down PDF_FONT_SIZE
@@ -246,6 +245,14 @@ module ConclusionReviews::NbcPdf
         fra.state == Finding::STATUS[:implemented_audited]
       end
 
+      alt_reviews = review.external_reviews.map(&:alternative_review).select do |ar|
+        ar.type_review == Review::TYPES_REVIEW[:system_audit]
+      end
+
+      alt_weaknesses = alt_reviews.map do |ar|
+        ar.has_final_review? ? ar.final_weaknesses : ar.weaknesses
+      end.select { |weakness| weakness.being_implemented }.flatten
+
       if repeated.any? || finding_assignments.any?
         pdf.start_new_page
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.repeated'), *title_options
@@ -256,6 +263,17 @@ module ConclusionReviews::NbcPdf
           weakness_partial pdf, weakness
 
           pdf.start_new_page if idx < repeated_findings.size - 1
+        end
+      end
+
+      if alt_weaknesses.any?
+        pdf.start_new_page
+        pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.external'), *title_options
+
+        alt_weaknesses.each_with_index do |weakness, idx|
+          weakness_partial pdf, weakness
+
+          pdf.start_new_page if idx < alt_weaknesses.size - 1
         end
       end
 

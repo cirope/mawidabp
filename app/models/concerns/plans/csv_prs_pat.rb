@@ -48,7 +48,7 @@ module Plans::CsvPrsPat
     end
 
     def put_csv_rows_on_prs csv, business_unit_type, totals_row_data
-      plan_items = Array(grouped_plan_items[business_unit_type]).sort
+      plan_items = plan_items_for_but_and_abut business_unit_type&.id
       pi_status  = Hash.new(0)
 
       if plan_items.present?

@@ -11,7 +11,7 @@ article_order: 4
 
 Seleccionamos **Seguimiento -> Hallazgos reiterados**, muestra la siguiente pantalla.
 
-![]({% asset follow_up/repeated-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/repeated-1.png){: class="img-responsive"}
 
 Podemos ¨**Descargar CSV**¨ y ¨**Resumen en PDF**¨ todos los hallazgos reiterados.
 
