@@ -32,6 +32,7 @@
 //= require date_pickers
 //= require documents
 //= require dynamic_form
+//= require enable_disable_card_fieldset
 //= require endless_pagination
 //= require extensions
 //= require fetch
@@ -50,7 +51,6 @@
 //= require news
 //= require number_pages
 //= require opening_interviews
-//= require organizations
 //= require permalinks
 //= require plan_items
 //= require plans
