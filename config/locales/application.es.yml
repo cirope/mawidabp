@@ -1485,6 +1485,17 @@ es:
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
+      saml_provider:
+        provider: 'Proveedor'
+        idp_homepage: 'Dirección URL de metadatos de federación de aplicación'
+        idp_entity_id: 'Identificador de Azure AD'
+        idp_sso_target_url: 'Dirección URL de inicio de sesión'
+        sp_entity_id: 'Identificador (id. de entidad)'
+        assertion_consumer_service_url: 'Dirección URL de respuesta (URL del Servicio de consumidor de aserciones)'
+        name_identifier_format: 'name identifier format'
+        assertion_consumer_service_binding: 'assertion consumer service binding'
+        idp_cert: 'Certificado (Base64)'
+        default_role_for_users: 'Role por defecto para usuarios'
       work_paper:
         name: "Nombre"
         code: "Código"
