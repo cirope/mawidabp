@@ -12,7 +12,7 @@ Permite la carga y gestión de documentos, los cuales pueden ser accedidos sin n
 
 Seleccionamos **Administración -> Documentos**.
 
-![]({% asset administration/documents/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/documents/1.png){: class="img-responsive"}
 
 En este caso tenemos generados 4 documentos Normativos y 1 de Modelos.
 
@@ -30,18 +30,18 @@ Cuando carguemos documentos (y solo para los usuarios que tengan permisos de lec
 
 Seleccionamos **Nuevo Documento**
 
-![]({% asset administration/documents/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/documents/2.png){: class="img-responsive"}
 
 Completamos los campos obligatorios identificados con *, el resto son opcionales. Para este ejemplo completamos todos los campos subiendo el archivo en formato .pdf de la comunicación respectiva.
 
-![]({% asset administration/documents/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/documents/3.png){: class="img-responsive"}
 
 Paga guardar, seleccionamos **Crear Documento**, muestra la siguiente pantalla
 
-![]({% asset administration/documents/4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/documents/4.png){: class="img-responsive"}
 
 Seleccionamos **Listado** para que nos muestre los documentos generados a la fecha, podemos ver que ahora muestra 5 Normativos (se agregó el recientemente incorporado)
 
-![]({% asset administration/documents/5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/documents/5.png){: class="img-responsive"}
 
 

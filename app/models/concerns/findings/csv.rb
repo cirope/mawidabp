@@ -56,7 +56,7 @@ module Findings::Csv
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text.to_s if Finding.show_commitment_support?),
+      (commitment_date_required_level_text_csv if Finding.show_commitment_support?),
       (supervisor_review if USE_SCOPE_CYCLE),
       (I18n.t "label.#{extension ? 'yes' : 'no'}" if USE_SCOPE_CYCLE),
       (follow_up_date_last_changed.to_s if USE_SCOPE_CYCLE),
@@ -71,6 +71,10 @@ module Findings::Csv
   end
 
   private
+
+    def commitment_date_required_level_text_csv
+      being_implemented? ? commitment_date_required_level_text.to_s : ''
+    end
 
     def supervisor_review
       supervisors = review.review_user_assignments.select do |rua|

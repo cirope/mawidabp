@@ -13,5 +13,5 @@ Seleccionamos **Seguimiento -> Reportes**, muestra la siguiente pantalla, en cad
 
 A esta opción los usuarios **auditados** no tienen acceso.
 
-![]({% asset follow_up/reports-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/reports-1.png){: class="img-responsive"}
 
