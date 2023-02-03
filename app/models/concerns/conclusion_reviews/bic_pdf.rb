@@ -43,7 +43,7 @@ module ConclusionReviews::BicPdf
       width     = pdf.bounds.width
 
       pdf.repeat :all do
-        pdf.add_organization_image organization, font_size, factor: 0.7
+        pdf.add_organization_image organization, font_size, factor: 0.9
         pdf.add_organization_co_brand_image organization, factor: 1
 
         pdf.canvas do

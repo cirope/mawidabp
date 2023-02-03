@@ -10,7 +10,7 @@ article_order: 1
 
 El sistema cuenta con los módulos de Administración, Planificación, Ejecución, Conclusión y Seguimiento.
 
-![]({% asset basic_process_flow/main.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/main.png){: class="img-responsive"}
 
 En este documento vemos el flujo de trabajo mínimo en cada una de las etapas para generar un informe con observaciones:
 

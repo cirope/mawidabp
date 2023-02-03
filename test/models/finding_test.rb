@@ -1443,29 +1443,608 @@ class FindingTest < ActiveSupport::TestCase
     refute finding.require_commitment_support?(finding.follow_up_date)
   end
 
-  test 'commitment date required level' do
-    finding              = findings :being_implemented_weakness
-    first_follow_up_date = finding.first_follow_up_date
-    finding_answer       = finding.finding_answers.create!(
-      answer:          'New answer',
-      user:            users(:audited),
-      commitment_date: first_follow_up_date + 10.days,
-      notify_users:    false
-    )
+  test 'not commitment date required level when dont have first follow up date' do
+    assert_nil (findings :unconfirmed_for_notification_weakness).commitment_date_required_level
+  end
 
-    assert_equal :manager, finding.commitment_date_required_level
+  test 'not commitment date required level when dont have finding answers' do
+    assert_nil (findings :being_implemented_weakness).commitment_date_required_level
+  end
 
-    finding_answer.update_column :commitment_date, first_follow_up_date + 4.months
+  test 'commitment date required level by comittee when high risk and first follow up date at end of month' do
+    finding = findings :being_implemented_weakness
 
-    assert_equal :management, finding.commitment_date_required_level
+    set_first_follow_update_at_end_of_month finding
 
-    finding_answer.update_column :commitment_date, first_follow_up_date + 11.months
+    assert_equal :committee,
+                 finding.commitment_date_required_level(one_day_later_of_required_level_if_is_end_of_month(finding, :high, :ceo))
+  end
 
-    assert_equal :ceo, finding.commitment_date_required_level
+  test 'commitment date required level by comittee when high risk and first follow up date at beginning of month' do
+    finding = findings :being_implemented_weakness
 
-    finding_answer.update_column :commitment_date, first_follow_up_date + 13.months
+    set_first_follow_update_at_beginning_of_month finding
+
+    assert_equal :committee,
+                 finding.commitment_date_required_level(one_day_later_of_required_level(finding, :high, :ceo))
+  end
+
+  test 'commitment date required level by comittee when high risk, first follow up date at end of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :high, :ceo)
 
     assert_equal :committee, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by comittee when high risk, first follow up date at beginning of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level(finding, :high, :ceo)
+
+    assert_equal :committee, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by ceo when high risk and first follow up date at end of month' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    assert_equal :ceo,
+                 finding.commitment_date_required_level(one_day_later_of_required_level_if_is_end_of_month(finding, :high, :management))
+  end
+
+  test 'commitment date required level by ceo when high risk and first follow up date at beginning of month' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    assert_equal :ceo,
+                 finding.commitment_date_required_level(one_day_later_of_required_level(finding, :high, :management))
+  end
+
+  test 'commitment date required level by ceo when high risk, first follow up date at end of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :high, :management)
+
+    assert_equal :ceo, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by ceo when high risk, first follow up date at beginning of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level(finding, :high, :management)
+
+    assert_equal :ceo, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by management when high risk and first follow up date at end of month' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    assert_equal :management,
+                 finding.commitment_date_required_level(one_day_later_of_required_level_if_is_end_of_month(finding, :high, :manager))
+  end
+
+  test 'commitment date required level by management when high risk and first follow up date at beginning of month' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    assert_equal :management,
+                 finding.commitment_date_required_level(one_day_later_of_required_level(finding, :high, :manager))
+  end
+
+  test 'commitment date required level by management when high risk, first follow up date at end of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :high, :manager)
+
+    assert_equal :management, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by management when high risk, first follow up date at beginning of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :high, :manager)
+
+    assert_equal :management, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by manager when high risk and first follow up date at end of month' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    commitment_date = (finding.first_follow_up_date +
+                       Finding::COMMITMENT_REQUIREMENTS[:high].invert[:manager].months).at_end_of_month
+
+    assert_equal :manager, finding.commitment_date_required_level(commitment_date)
+  end
+
+  test 'commitment date required level by manager when high risk and first follow up date at beginning of month' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    commitment_date = finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:high].invert[:manager].months
+
+    assert_equal :manager, finding.commitment_date_required_level(commitment_date)
+  end
+
+  test 'commitment date required level by manager when high risk, first follow up date at end of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    commitment_date = (finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:high].invert[:manager].months).at_end_of_month
+
+    create_finding_answer_with_commitment_date finding, commitment_date
+
+    assert_equal :manager, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by manager when high risk, first follow up date at beginning of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    commitment_date = finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:high].invert[:manager].months
+
+    create_finding_answer_with_commitment_date finding, commitment_date
+
+    assert_equal :manager, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by comittee when medium risk and first follow up date at end of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_end_of_month finding
+
+    assert_equal :committee,
+                 finding.commitment_date_required_level(one_day_later_of_required_level_if_is_end_of_month(finding, :medium, :ceo))
+  end
+
+  test 'commitment date required level by comittee when medium risk and first follow up date at beginning of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    assert_equal :committee,
+                 finding.commitment_date_required_level(one_day_later_of_required_level(finding, :medium, :ceo))
+  end
+
+  test 'commitment date required level by comittee when medium risk, first follow up date at end of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_end_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :medium, :ceo)
+
+    assert_equal :committee, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by comittee when medium risk, first follow up date at beginning of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level(finding, :medium, :ceo)
+
+    assert_equal :committee, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by ceo when medium risk and first follow up date at end of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_end_of_month finding
+
+    assert_equal :ceo,
+                 finding.commitment_date_required_level(one_day_later_of_required_level_if_is_end_of_month(finding, :medium, :management))
+  end
+
+  test 'commitment date required level by ceo when medium risk and first follow up date at beginning of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    assert_equal :ceo,
+                 finding.commitment_date_required_level(one_day_later_of_required_level(finding, :medium, :management))
+  end
+
+  test 'commitment date required level by ceo when medium risk, first follow up date at end of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_end_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :medium, :management)
+
+    assert_equal :ceo, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by ceo when medium risk, first follow up date at beginning of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level(finding, :medium, :management)
+
+    assert_equal :ceo, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by management when medium risk and first follow up date at end of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_end_of_month finding
+
+    assert_equal :management,
+                 finding.commitment_date_required_level(one_day_later_of_required_level_if_is_end_of_month(finding, :medium, :manager))
+  end
+
+  test 'commitment date required level by management when medium risk and first follow up date at beginning of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    assert_equal :management,
+                 finding.commitment_date_required_level(one_day_later_of_required_level(finding, :medium, :manager))
+  end
+
+  test 'commitment date required level by management when medium risk, first follow up date at end of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_end_of_month finding
+
+    create_finding_answer_with_commitment_date finding, 
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :medium, :manager)
+
+    assert_equal :management, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by management when medium risk, first follow up date at beginning of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    create_finding_answer_with_commitment_date finding, 
+                                               one_day_later_of_required_level(finding, :medium, :manager)
+
+    assert_equal :management, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by manager when medium risk and first follow up date at end of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_end_of_month finding
+
+    commitment_date = (finding.first_follow_up_date +
+                       Finding::COMMITMENT_REQUIREMENTS[:medium].invert[:manager].months).at_end_of_month
+
+    assert_equal :manager, finding.commitment_date_required_level(commitment_date)
+  end
+
+  test 'commitment date required level by manager when medium risk and first follow up date at beginning of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    commitment_date = finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:medium].invert[:manager].months
+
+    assert_equal :manager, finding.commitment_date_required_level(commitment_date)
+  end
+
+  test 'commitment date required level by manager when medium risk, first follow up date at end of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_end_of_month finding
+
+    commitment_date = (finding.first_follow_up_date +
+                       Finding::COMMITMENT_REQUIREMENTS[:medium].invert[:manager].months).at_end_of_month
+
+    create_finding_answer_with_commitment_date finding, commitment_date
+
+    assert_equal :manager, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by manager when medium risk, first follow up date at beginning of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:medium]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    commitment_date = finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:medium].invert[:manager].months
+
+    create_finding_answer_with_commitment_date finding, commitment_date
+
+    assert_equal :manager, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by management when low risk and first follow up date at end of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:low]
+
+    set_first_follow_update_at_end_of_month finding
+
+    assert_equal :management,
+                 finding.commitment_date_required_level(one_day_later_of_required_level_if_is_end_of_month(finding, :low, :manager))
+  end
+
+  test 'commitment date required level by management when low risk and first follow up date at beginning of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:low]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    assert_equal :management,
+                 finding.commitment_date_required_level(one_day_later_of_required_level(finding, :low, :manager))
+  end
+
+  test 'commitment date required level by management when low risk, first follow up date at end of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:low]
+
+    set_first_follow_update_at_end_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :low, :manager)
+
+    assert_equal :management, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by management when low risk, first follow up date at beginning of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:low]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level(finding, :low, :manager)
+
+    assert_equal :management, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by manager when low risk and first follow up date at end of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:low]
+
+    set_first_follow_update_at_end_of_month finding
+
+    commitment_date = (finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:low].invert[:manager].months).at_end_of_month
+
+    assert_equal :manager, finding.commitment_date_required_level(commitment_date)
+  end
+
+  test 'commitment date required level by manager when low risk and first follow up date at beginning of month' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:low]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    commitment_date = finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:low].invert[:manager].months
+
+    assert_equal :manager, finding.commitment_date_required_level(commitment_date)
+  end
+
+  test 'commitment date required level by manager when low risk, first follow up date at end of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:low]
+
+    set_first_follow_update_at_end_of_month finding
+
+    commitment_date = (finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:low].invert[:manager].months).at_end_of_month
+
+    create_finding_answer_with_commitment_date finding, commitment_date
+
+    assert_equal :manager, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by manager when low risk, first follow up date at beginning of month and have last commitment date' do
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:low]
+
+    set_first_follow_update_at_beginning_of_month finding
+
+    commitment_date = finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:low].invert[:manager].months
+
+    create_finding_answer_with_commitment_date finding, commitment_date
+
+    assert_equal :manager, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level by committee when none risk' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:none]
+
+    assert_equal :committee,
+                 finding.commitment_date_required_level(finding.first_follow_up_date)
+
+    assert_equal :committee,
+                 finding.commitment_date_required_level(finding.first_follow_up_date + 1000.months)
+  end
+
+  test 'commitment date required level by committee when none risk and have commitment date' do
+    skip unless USE_SCOPE_CYCLE
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_column :risk, Finding.risks[:none]
+
+    create_finding_answer_with_commitment_date finding, finding.first_follow_up_date
+
+    assert_equal :committee, finding.commitment_date_required_level
+
+    create_finding_answer_with_commitment_date finding, (finding.first_follow_up_date + 1000.months)
+
+    assert_equal :committee, finding.commitment_date_required_level
+  end
+
+  test 'commitment date required level text by comittee when pass date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    assert_equal I18n.t('finding.commitment_date_required_level.committee'),
+                 finding.commitment_date_required_level_text(one_day_later_of_required_level_if_is_end_of_month(finding, :high, :ceo))
+  end
+
+  test 'commitment date required level text by comittee when have commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :high, :ceo)
+
+    assert_equal I18n.t('finding.commitment_date_required_level.committee'),
+                 finding.commitment_date_required_level_text
+  end
+
+  test 'commitment date required level text by ceo when pass date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    assert_equal I18n.t('finding.commitment_date_required_level.ceo'),
+                 finding.commitment_date_required_level_text(one_day_later_of_required_level_if_is_end_of_month(finding, :high, :management))
+  end
+
+  test 'commitment date required level text by ceo when have commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :high, :management)
+
+    assert_equal I18n.t('finding.commitment_date_required_level.ceo'),
+                 finding.commitment_date_required_level_text
+  end
+
+  test 'commitment date required level text by management when pass date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    assert_equal I18n.t('finding.commitment_date_required_level.management'),
+                 finding.commitment_date_required_level_text(one_day_later_of_required_level_if_is_end_of_month(finding, :high, :manager))
+  end
+
+  test 'commitment date required level text by management when have commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    create_finding_answer_with_commitment_date finding,
+                                               one_day_later_of_required_level_if_is_end_of_month(finding, :high, :manager)
+
+    assert_equal I18n.t('finding.commitment_date_required_level.management'),
+                 finding.commitment_date_required_level_text
+  end
+
+  test 'commitment date required level text by manager when pass date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    commitment_date = (finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:high].invert[:manager].months).at_end_of_month
+
+    assert_equal I18n.t('finding.commitment_date_required_level.manager'),
+                 finding.commitment_date_required_level_text(commitment_date)
+  end
+
+  test 'commitment date required level text by manager when have commitment date' do
+    finding = findings :being_implemented_weakness
+
+    set_first_follow_update_at_end_of_month finding
+
+    commitment_date = (finding.first_follow_up_date +
+                      Finding::COMMITMENT_REQUIREMENTS[:high].invert[:manager].months).at_end_of_month
+
+    create_finding_answer_with_commitment_date finding, commitment_date
+
+    assert_equal I18n.t('finding.commitment_date_required_level.manager'),
+                 finding.commitment_date_required_level_text
+  end
+
+  test 'get show commitment support' do
+    assert_equal %w(true weak).include?(FINDING_ANSWER_COMMITMENT_SUPPORT),
+                 Finding.show_commitment_support?
   end
 
   test 'commitment limit date message' do
@@ -2050,6 +2629,34 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(follow_up_date_last_changed_expected, format: :minimal)
   end
 
+  test 'should notify findings with follow_up_date_last_changed greater than 90 days' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    finding                             = findings :being_implemented_weakness
+    finding.state                       = Finding::STATUS[:implemented]
+    finding.follow_up_date_last_changed = Time.zone.today - 91.days
+
+    finding.save!
+
+    assert_enqueued_emails 1 do
+      Finding.notify_implemented_findings_with_follow_up_date_last_changed_greater_than_90_days
+    end
+  end
+
+  test 'should notify not findings with follow_up_date_last_changed greater than 90 days' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    finding                             = findings :being_implemented_weakness
+    finding.state                       = Finding::STATUS[:implemented]
+    finding.follow_up_date_last_changed = Time.zone.today - 90.days
+
+    finding.save!
+
+    assert_enqueued_emails 0 do
+      Finding.notify_implemented_findings_with_follow_up_date_last_changed_greater_than_90_days
+    end
+  end
+
   test 'should return suggestion to add days follow up date depending on the risk' do
     expected = {
       0 => 180,
@@ -2237,5 +2844,37 @@ class FindingTest < ActiveSupport::TestCase
         users_by_level_for_notification: users_by_level_for_notification,
         finding_ids:                     finding_ids
       }
+    end
+
+    def set_first_follow_update_at_end_of_month finding
+      finding.update_column :first_follow_up_date, finding.first_follow_up_date.at_end_of_month
+    end
+
+    def set_first_follow_update_at_beginning_of_month finding
+      finding.update_column :first_follow_up_date, finding.first_follow_up_date.beginning_of_month
+    end
+
+    def create_finding_answer_with_commitment_date finding, commitment_date
+      finding.finding_answers
+             .build(
+               answer:          'New answer',
+               user:            users(:audited),
+               commitment_date: commitment_date,
+               notify_users:    false)
+             .save validate: false
+    end
+
+    def one_day_later_of_required_level_if_is_end_of_month finding, risk, previous_level
+      (
+        finding.first_follow_up_date +
+        Finding::COMMITMENT_REQUIREMENTS[risk].invert[previous_level].months +
+        1.month
+      ).beginning_of_month
+    end
+
+    def one_day_later_of_required_level finding, risk, previous_level
+      finding.first_follow_up_date +
+      Finding::COMMITMENT_REQUIREMENTS[risk].invert[previous_level].months +
+      1.days
     end
 end

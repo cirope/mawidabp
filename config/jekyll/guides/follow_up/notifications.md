@@ -13,4 +13,4 @@ Seleccionamos **Seguimiento -> Notificaciones**
 
 Muestra la siguiente pantalla, podemos ver el estado de las notificaciones enviadas.
 
-![]({% asset follow_up/notifications-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/notifications-1.png){: class="img-responsive"}

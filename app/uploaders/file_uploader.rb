@@ -21,7 +21,7 @@ class FileUploader < CarrierWave::Uploader::Base
     def path_for organization_id
       id = ('%08d' % model.id).scan(/\d{4}/).join '/'
 
-      "private/#{organization_id_path(organization_id)}/#{model.class.to_s.underscore.pluralize}/#{id}"
+      File.join RELATIVE_PRIVATE_PATH, organization_id_path(organization_id), model.class.to_s.underscore.pluralize, id
     end
 
     def try_corporate_path

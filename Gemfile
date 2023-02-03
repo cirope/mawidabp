@@ -29,7 +29,7 @@ gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jbuilder'
-gem 'sidekiq'
+gem 'sidekiq', '< 7'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns

@@ -8,4 +8,4 @@ article_order: 4
 
 Seleccionamos **Ejecución**
 
-![]({% asset system_modules/18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/system_modules/18.png){: class="img-responsive"}

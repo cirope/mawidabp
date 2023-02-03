@@ -10,11 +10,11 @@ article_order: 5
 
 Seleccionamos **Seguimiento**, nos muestra la siguiente pantalla
 
-![]({% asset basic_process_flow/follow_up.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/follow_up.png){: class="img-responsive"}
 
 Seleccionamos **Hallazgos pendientes**
 
-![]({% asset basic_process_flow/list_follow_up.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/list_follow_up.png){: class="img-responsive"}
 
 
 Podemos observar los hallazgos que quedaron en estado pendiente **(En proceso de implementación, Implementada)** del informe definitivo cerrado en la etapa conclusión.

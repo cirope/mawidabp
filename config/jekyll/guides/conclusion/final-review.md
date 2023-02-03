@@ -13,15 +13,15 @@ Para cada Informe borrador, se genera un Informe definitivo.
 
 Seleccionamos **Conclusión -> Informes Definitivos**
 
-![]({% asset conclusion/final-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-1.png){: class="img-responsive"}
 
 Muestra todos los informes generados.
 
-![]({% asset conclusion/final-2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-2.png){: class="img-responsive"}
 
 Seleccionamos **Nuevo**
 
-![]({% asset conclusion/final-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-3.png){: class="img-responsive"}
 
 Seleccionamos de Informe (la lista desplegable) el informe borrador que necesitamos generar el informe definitivo.
 
@@ -29,25 +29,25 @@ Luego se completan en forma automática los campos Unidad de negocio, Proyecto, 
 
 Muestra la siguiente pantalla.
 
-![]({% asset conclusion/final-4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-4.png){: class="img-responsive"}
 
 Completamos el campo Conclusión, Fecha de emisión (puedo colocar cualquier fecha) y Fecha de cierre (puede ser igual o mayor a la fecha de emisión) , el campo Acta es opcional y se puede cargar luego de emitido el definitivo.
 
-![]({% asset conclusion/final-5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-5.png){: class="img-responsive"}
 
 Seleccionamos **Crear informe definitivo**, muestra la siguiente pantalla.
 
-![]({% asset conclusion/final-6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-6.png){: class="img-responsive"}
 
 Una vez creado el informe definitivo no se pueden editar los campos del informe (solo se puede agregar el número de acta y cargar papeles de trabajo hasta la fecha de cierre).
 
 Se puede enviar por correo electrónico a los usuarios que necesitemos, seleccionamos **Editar** en el informe correspondiente.
 
-![]({% asset conclusion/final-7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-7.png){: class="img-responsive"}
 
 Seleccionamos **Enviar por correo electrónico.**
 
-![]({% asset conclusion/final-8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-8.png){: class="img-responsive"}
 
 Podemos seleccionar: Informe completo, Informe resumido, Informe sin calificación.
 
@@ -59,15 +59,15 @@ Podemos sacar o agregar usuarios para enviar el informe.
 
 Luego de completar los campos muestra la siguiente pantalla.
 
-![]({% asset conclusion/final-9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-9.png){: class="img-responsive"}
 
 Luego seleccionamos **Enviar,** aparece la siguiente pantalla.
 
-![]({% asset conclusion/final-10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-10.png){: class="img-responsive"}
 
 Luego llega a los usuarios seleccionados el correo electrónico enviado por el sistema, a continuación mostramos el correo recibido por un usuario auditado.
 
-![]({% asset conclusion/final-11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-11.png){: class="img-responsive"}
 
 <hr>
 
@@ -85,7 +85,7 @@ Podemos cargar el número de acta del comité de auditoría (en el caso de un Ba
 
 Es el único dato que puede agregarse luego de haber emitido el informe definitivo.
 
-![]({% asset conclusion/final-12.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-12.png){: class="img-responsive"}
 
 <hr>
 
@@ -99,11 +99,11 @@ Incorporamos nuevos formatos de informes, **¨Sin calificación¨** y **¨Resumi
 
 Seleccionamos **Conclusión -> Informe definitivo**
 
-![]({% asset conclusion/final-13.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-13.png){: class="img-responsive"}
 
 Luego seleccionamos ¨Editar¨ del informe que necesitamos descargar un informe.
 
-![]({% asset conclusion/final-14.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-14.png){: class="img-responsive"}
 
 Seleccionar **"Descargar sin calificación"** y  **“Descargar resumido”**
 
@@ -127,7 +127,7 @@ En caso que quieran enviar la misma encuesta sin distinguir el auditor y otra pa
 
 En ese caso le llegarán al auditado tantos correos con encuestas como filas tenga (cada una independiente e indicando en caso de ser para un auditor en particular de quien se trata). El informe llega solo una vez, independiente de la cantidad de veces que se lo haya agregado.
 
-![]({% asset conclusion/final-15.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-15.png){: class="img-responsive"}
 
 Seleccionamos **Administración -> Cuestionarios -> Reportes**
 
@@ -139,7 +139,7 @@ Por el lado de los reportes pusimos unas opciones al lado del usuario que funcio
 
 > **"Asignadas y por informe"** muestra las encuestas directamente asignadas al usuario y en las que participó como integrante en el informe (siempre que haya un usuario seleccionado).
 
-![]({% asset conclusion/final-16.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-16.png){: class="img-responsive"}
 
 <hr>
 
@@ -155,7 +155,7 @@ Seleccionamos **Conclusión -> Informe definitivo**
 
 Posibilidad de emitir informe definitivo sin una buena práctica asociada (objetivo de control y proceso de negocio).
 
-![]({% asset conclusion/final-17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-17.png){: class="img-responsive"}
 
 <hr>
 
@@ -171,7 +171,7 @@ Seleccionamos **Conclusión -> Informes definitivos**
 
 Ahora permite ordenar la firma que se muestra al final del documento pdf de los informes por "Rol" de izquierda a derecha (Auditados [], Auditor, Supervisor, Gerente de auditoría).
 
-![]({% asset conclusion/final-18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-18.png){: class="img-responsive"}
 
 <hr>
 
@@ -187,7 +187,7 @@ Seleccionamos **Conclusión -> Informes definitivos**
 
 Seleccionamos ¨Editar¨ de un informe (en este caso seleccionamos el primer informe de la lista 2018 PC 003).
 
-![]({% asset conclusion/final-19.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/final-19.png){: class="img-responsive"}
 
 Luego seleccionamos ¨Descargar¨, ¨Descargar papeles de trabajo¨
 

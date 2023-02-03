@@ -127,8 +127,8 @@ es:
         cc: "<b>CC</b>"
         to_label: "Miembros del Comité de Auditoría del Nuevo Banco del Chaco S.A."
         from_label: "Gerencia Auditoría Interna – Nuevo Banco del Chaco S.A"
-        number_review: "<b>Numero de Informe</b>"
-        prepared_by: "<b>Preparado por</b> Auditoría Interna - NBCH"
+        number_review: "Numero de Informe"
+        prepared_by: "Preparado por Auditoría Interna - NBCH"
         audit_date: "<b>Fecha de Auditoría</b>"
       weaknesses:
         title: "<b>RESUMEN EJECUTIVO</b>"
@@ -140,7 +140,7 @@ es:
         organization: "<b>Nuevo Banco del Chaco S.A.</b>"
         detailed_review: "INFORME DETALLADO"
         introduction_and_scope: "<b>INTRODUCCION Y ALCANCE DEL TRABAJO</b>"
-        full_name: "<b>Responsables/s del Proceso</b>"
+        full_name: "<b>Responsable/s del Proceso</b>"
         responsible_name: "<b>Nombre del Responsable de Regularización</b>"
         follow_up_date: "<b>Fecha Estimada de Regularización</b>"
         messages: "Los procedimientos llevados a cabo incluyeron tareas de consulta, evaluación de documentación y observación de actividades y operaciones realizadas durante la revisión.\n\nLos funcionarios entrevistados fueron:"
@@ -165,6 +165,7 @@ es:
       weaknesses_detected:
         name: "OBSERVACIONES DE LA PRESENTE REVISIÓN"
         repeated: "OBSERVACIONES DE SEGUIMIENTO"
+        external: "OBSERVACIONES DEL INFORME ALTERNATIVO"
         title: "<b>Título</b>"
         description: "<b>Descripción</b>"
         state: "<b>Estado</b>"

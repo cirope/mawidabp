@@ -956,6 +956,10 @@ es:
     review_identification: "Número de informe"
     draft: "Borrador"
 
+  plan_item:
+    errors:
+      cannot_edit_business_unit_for_memos_too: 'o un memo'
+
   review:
     index_title: "Listado de informes"
     show_title: "Detalles del informes"
@@ -1541,6 +1545,8 @@ es:
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
+            issue_date:
+              less_than_alt_issue_date: 'debe ser mayor o igual a la fecha de emisión %{date} del informe anexado %{name}'
         file_model:
           attributes:
             file_file_name:
