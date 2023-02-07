@@ -45,6 +45,75 @@ class WorkflowsControllerTest < ActionController::TestCase
     assert_template 'workflows/index'
   end
 
+  test 'list workflows with search in review' do
+    past_workflow_identification = workflows(:past_workflow).review.identification
+
+    login
+    get :index, params: {
+      search: {
+        query: past_workflow_identification,
+        columns: ['review', 'project']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:workflows)
+    assert_equal 1, assigns(:workflows).count
+    assert_template 'workflows/index'
+  end
+
+  test 'dont list workflows with search in review' do
+    past_workflow_identification = workflows(:past_workflow).review.identification
+
+    login
+    get :index, params: {
+      search: {
+        query: past_workflow_identification * 4,
+        columns: ['review', 'project']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:workflows)
+    assert_equal 0, assigns(:workflows).count
+    assert_template 'workflows/index'
+  end
+
+  test 'list workflows with search in project' do
+    past_workflow_project = workflows(:past_workflow).review.plan_item.project
+
+    login
+    get :index, params: {
+      search: {
+        query: past_workflow_project,
+        columns: ['review', 'project']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:workflows)
+    assert assigns(:workflows).count.positive?
+    assert assigns(:workflows).all? { |w| w.review.plan_item.project.match(past_workflow_project) }
+    assert_template 'workflows/index'
+  end
+
+  test 'dont list workflows with search in project' do
+    past_workflow_project = workflows(:past_workflow).review.plan_item.project
+
+    login
+    get :index, params: {
+      search: {
+        query: past_workflow_project * 4,
+        columns: ['review', 'project']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:workflows)
+    assert_equal 0, assigns(:workflows).count
+    assert_template 'workflows/index'
+  end
+
   test 'show workflow' do
     login
     get :show, :params => { :id => workflows(:current_workflow).id }
