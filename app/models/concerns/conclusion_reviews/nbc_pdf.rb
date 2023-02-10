@@ -105,15 +105,25 @@ module ConclusionReviews::NbcPdf
         ar.final_weaknesses.select(&:being_implemented?)
       end.flatten
 
-      all_weaknesses = weaknesses + alt_weaknesses
-
-      if all_weaknesses.any?
+      if weaknesses.any? || alt_weaknesses.any?
         pdf.move_down PDF_FONT_SIZE * 2
         pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
-
         pdf.move_down PDF_FONT_SIZE
-        all_weaknesses.each do |weakness|
-          pdf.text "• #{weakness.title}"
+
+        if weaknesses.any?
+          weaknesses.each do |weakness|
+            pdf.text "• #{weakness.title}"
+          end
+        end
+
+        if alt_weaknesses.any?
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text I18n.t('conclusion_review.nbc.weaknesses.external_reviews'), inline_format: true
+          pdf.move_down PDF_FONT_SIZE
+
+          alt_weaknesses.each do |alt_weakness|
+            pdf.text "• #{alt_weakness.title}"
+          end
         end
 
         pdf.start_new_page
