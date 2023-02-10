@@ -245,11 +245,10 @@ module ConclusionReviews::NbcPdf
         fra.state == Finding::STATUS[:implemented_audited]
       end
 
-      alt_reviews = review.external_reviews.map(&:alternative_review).select do |ar|
-        ar.type_review == Review::TYPES_REVIEW[:system_audit]
-      end
+      alt_weaknesses = review.external_reviews.map(&:alternative_review).map do |ar|
+        ar.final_weaknesses.select(&:being_implemented?)
+      end.flatten
 
-      alt_weaknesses = alt_reviews.map { |ar| ar.final_weaknesses.being_implemented }.flatten
 
       if repeated.any? || finding_assignments.any?
         pdf.start_new_page
