@@ -124,20 +124,12 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
+    options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
+
+    @conclusion_final_review.to_pdf(current_organization, options)
+
     respond_to do |format|
-      format.html do
-        options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
-
-        @conclusion_final_review.to_pdf(current_organization, options)
-
-        redirect_to @conclusion_final_review.relative_pdf_path
-      end
-      format.pdf do
-        @conclusion_review = @conclusion_final_review
-        @draft             = false
-
-        render @conclusion_review.to_pdf
-      end
+      format.html { redirect_to @conclusion_final_review.relative_pdf_path }
     end
   end
 

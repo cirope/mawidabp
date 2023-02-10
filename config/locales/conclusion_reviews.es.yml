@@ -16,6 +16,7 @@ es:
         final_with_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia conteniendo las respuestas de cada una de las áreas.'
         final_without_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia, el que no contiene observaciones de relevancia que formular.'
         recipients: 'Destinatarios'
+        review_period_description: "%{plan_item_start} al %{plan_item_end}"
       scope: 'ALCANCE'
       audit_comments: 'COMENTARIOS DE AUDITORIA'
       weaknesses:
