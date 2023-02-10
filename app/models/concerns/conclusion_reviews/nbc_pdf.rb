@@ -114,10 +114,11 @@ module ConclusionReviews::NbcPdf
           weaknesses.each do |weakness|
             pdf.text "• #{weakness.title}"
           end
+
+          pdf.move_down PDF_FONT_SIZE
         end
 
         if alt_weaknesses.any?
-          pdf.move_down PDF_FONT_SIZE
           pdf.text I18n.t('conclusion_review.nbc.weaknesses.external_reviews'), inline_format: true
           pdf.move_down PDF_FONT_SIZE
 
