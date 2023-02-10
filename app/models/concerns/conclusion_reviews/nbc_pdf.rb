@@ -249,9 +249,7 @@ module ConclusionReviews::NbcPdf
         ar.type_review == Review::TYPES_REVIEW[:system_audit]
       end
 
-      alt_weaknesses = alt_reviews.map do |ar|
-        ar.has_final_review? ? ar.final_weaknesses : ar.weaknesses
-      end.select { |weakness| weakness.being_implemented }.flatten
+      alt_weaknesses = alt_reviews.map { |ar| ar.final_weaknesses.being_implemented }.flatten
 
       if repeated.any? || finding_assignments.any?
         pdf.start_new_page
