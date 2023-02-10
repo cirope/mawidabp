@@ -99,16 +99,21 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_on pdf
-      use_finals = kind_of? ConclusionFinalReview
-      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+      weaknesses = (has_final_review? ? review.final_weaknesses : review.weaknesses).select(&:being_implemented?)
 
-      if weaknesses.select(&:being_implemented?).any?
+      alt_weaknesses = review.external_reviews.map(&:alternative_review).map do |ar|
+        ar.final_weaknesses.select(&:being_implemented?)
+      end.flatten
+
+      all_weaknesses = weaknesses + alt_weaknesses
+
+      if all_weaknesses.any?
         pdf.move_down PDF_FONT_SIZE * 2
         pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
 
         pdf.move_down PDF_FONT_SIZE
-        weaknesses.each do |weakness|
-          pdf.text "• #{weakness.title}" if weakness.being_implemented?
+        all_weaknesses.each do |weakness|
+          pdf.text "• #{weakness.title}"
         end
 
         pdf.start_new_page
