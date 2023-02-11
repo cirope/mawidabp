@@ -99,7 +99,8 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_on pdf
-      weaknesses = (has_final_review? ? review.final_weaknesses : review.weaknesses).select(&:being_implemented?)
+      use_finals = kind_of? ConclusionFinalReview
+      weaknesses = (use_finals ? review.final_weaknesses : review.weaknesses).select(&:being_implemented?)
 
       alt_weaknesses = review.external_reviews.map(&:alternative_review).map do |ar|
         ar.final_weaknesses.select(&:being_implemented?)
