@@ -100,15 +100,32 @@ module ConclusionReviews::NbcPdf
 
     def put_nbc_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
-      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+      weaknesses = (use_finals ? review.final_weaknesses : review.weaknesses).select(&:being_implemented?)
 
-      if weaknesses.select(&:being_implemented?).any?
+      alt_weaknesses = review.external_reviews.map(&:alternative_review).map do |ar|
+        ar.final_weaknesses.select(&:being_implemented?)
+      end.flatten
+
+      if weaknesses.any? || alt_weaknesses.any?
         pdf.move_down PDF_FONT_SIZE * 2
         pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
-
         pdf.move_down PDF_FONT_SIZE
-        weaknesses.each do |weakness|
-          pdf.text "• #{weakness.title}" if weakness.being_implemented?
+
+        if weaknesses.any?
+          weaknesses.each do |weakness|
+            pdf.text "• #{weakness.title}"
+          end
+
+          pdf.move_down PDF_FONT_SIZE
+        end
+
+        if alt_weaknesses.any?
+          pdf.text I18n.t('conclusion_review.nbc.weaknesses.external_reviews'), inline_format: true
+          pdf.move_down PDF_FONT_SIZE
+
+          alt_weaknesses.each do |alt_weakness|
+            pdf.text "• #{alt_weakness.title}"
+          end
         end
 
         pdf.start_new_page
@@ -245,13 +262,9 @@ module ConclusionReviews::NbcPdf
         fra.state == Finding::STATUS[:implemented_audited]
       end
 
-      alt_reviews = review.external_reviews.map(&:alternative_review).select do |ar|
-        ar.type_review == Review::TYPES_REVIEW[:system_audit]
-      end
-
-      alt_weaknesses = alt_reviews.map do |ar|
-        ar.has_final_review? ? ar.final_weaknesses : ar.weaknesses
-      end.select { |weakness| weakness.being_implemented }.flatten
+      alt_weaknesses = review.external_reviews.map(&:alternative_review).map do |ar|
+        ar.final_weaknesses.select(&:being_implemented?)
+      end.flatten
 
       if repeated.any? || finding_assignments.any?
         pdf.start_new_page
