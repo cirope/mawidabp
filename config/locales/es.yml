@@ -346,7 +346,8 @@
         title: '<b><u>INFORME DETALLADO</u></b>'
         introduction_and_scope_title: '<b><u>INTRODUCCION Y ALCANCE DEL TRABAJO REALIZADO</u></b>'
         classification_methodology: 'La metodología de calificación de ciclos utilizada en el período 2019 fue aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, la cual exponemos a continuación:'
-        classification_title: '<i><b>Cuadro I: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        classification_with_final_weaknesses_title: '<i><b>Cuadro I: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        classification_with_not_final_weaknesses_title: '<i><b>Cuadro II: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
         conclusions_title: '<u><b>CONCLUSIONES</b></u>'
         conclusions_body: 'Partiendo del Cuadro I <i>“Calificación del Control Interno del NCHB S.A.”</i>, se observa que la calificación del control interno de la Entidad, de acuerdo a los parámetros utilizados, es <b>“%{calification}”.</b>'
       cycle_qualification:
