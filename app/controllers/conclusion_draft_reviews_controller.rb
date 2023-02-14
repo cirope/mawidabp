@@ -111,20 +111,12 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * GET /conclusion_draft_reviews/export_to_pdf/1
   def export_to_pdf
+    options = params[:export_options]&.to_unsafe_h
+
+    @conclusion_draft_review.to_pdf(current_organization, options)
+
     respond_to do |format|
-      format.html do
-        options = params[:export_options]&.to_unsafe_h
-
-        @conclusion_draft_review.to_pdf(current_organization, options)
-
-        redirect_to @conclusion_draft_review.relative_pdf_path
-      end
-      format.pdf do
-        @conclusion_review = @conclusion_draft_review
-        @draft             = true
-
-        render @conclusion_review.to_pdf
-      end
+      format.html { redirect_to @conclusion_draft_review.relative_pdf_path }
     end
   end
 

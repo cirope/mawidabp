@@ -16,6 +16,22 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     names.join '; '
   end
 
+  def review_version_text draft
+    I18n.t "conclusion_review.bic.cover.versions.#{draft ? 'draft' : 'final'}"
+  end
+
+  def put_bic_cover_note_on conclusion_review
+    note = if conclusion_review.draft? && conclusion_review.review.weaknesses.any?
+             'draft_with_weaknesses'
+           elsif !conclusion_review.draft? && conclusion_review.review.weaknesses.any?
+             'final_with_weaknesses'
+           elsif !conclusion_review.draft?
+             'final_without_weaknesses'
+           end
+
+    note.present? ? I18n.t("conclusion_review.bic.cover.#{note}") : ''
+  end
+
   def bic_previous_review_text conclusion_review
     if conclusion_review.previous_identification.present? && conclusion_review.previous_date.present?
       [
@@ -35,7 +51,12 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
   end
 
   def bic_review_period conclusion_review
-    "#{I18n.l conclusion_review.plan_item.start, format: :minimal} al #{I18n.l conclusion_review.plan_item.end, format: :minimal}"
+    plan_item_start = I18n.l conclusion_review.plan_item.start, format: :minimal
+    plan_item_end   = I18n.l conclusion_review.plan_item.end, format: :minimal
+
+    I18n.t 'conclusion_review.bic.cover.review_period_description',
+           plan_item_start: plan_item_start,
+           plan_item_end: plan_item_end
   end
 
   def bic_weakness_responsible weakness
@@ -53,10 +74,10 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
   end
 
   def conclusion_review_weaknesses conclusion_review
-    weaknesses = if conclusion_review.kind_of?(ConclusionFinalReview)
-                   conclusion_review.review.final_weaknesses
-                 else
+    weaknesses = if conclusion_review.draft?
                    conclusion_review.review.weaknesses
+                 else
+                   conclusion_review.review.final_weaknesses
                  end
 
     conclusion_review.bic_exclude_regularized_findings weaknesses

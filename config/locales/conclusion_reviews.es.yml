@@ -3,19 +3,28 @@ es:
     bic:
       cover:
         review_identification: "Informe de Auditoria N°: %{identification}"
-        auditors: "Auditores:"
-        owners: "Responsables:"
-        review_period: "Periodo de Revisión:"
-        cycle_qualification: "Calificación del Ciclo:"
-        signature: "Firma:"
-      scope: "ALCANCE"
-      audit_comments: "COMENTARIOS DE AUDITORIA"
+        auditors: 'Auditores:'
+        owners: 'Responsables:'
+        review_period: 'Periodo de Revisión:'
+        cycle_qualification: 'Calificación del Ciclo:'
+        signature: 'Firma:'
+        version: 'Version:'
+        versions:
+          draft: 'BORRADOR'
+          final: 'FINAL'
+        draft_with_weaknesses: 'Adjunto al presente distribuimos el informe de referencia en versión borrador, solicitando tenga a bien considerar las observaciones y <span class="font-weight-bold">responder</span>, conforme lo requerido por el Directorio (*).'
+        final_with_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia conteniendo las respuestas de cada una de las áreas.'
+        final_without_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia, el que no contiene observaciones de relevancia que formular.'
+        recipients: 'Destinatarios'
+        review_period_description: "%{plan_item_start} al %{plan_item_end}"
+      scope: 'ALCANCE'
+      audit_comments: 'COMENTARIOS DE AUDITORIA'
       weaknesses:
         plan: "Plan de acción correctiva N° %{index}"
-        responsible: "Responsable:"
-        audit_recommendations: "Recomendación:"
-        follow_up_date: "Implementación:"
-        repeated: "OBSERVACIÓN REITERADA"
+        responsible: 'Responsable:'
+        audit_recommendations: 'Recomendación:'
+        follow_up_date: 'Implementación:'
+        repeated: 'OBSERVACIÓN REITERADA'
     cro:
       header:
         legend_html: "<b>Bértora y Asociados</b>\r\nBernardo de Irigoyen 330 Piso 3\r\n\r\nCiudad Autónoma de Buenos Aires\r\nC1072AAF\r\nTeléfono +54 (11)4342 2544\r\n\r\nwww.crowe.com.ar"
