@@ -9,7 +9,6 @@ module Organizations::Validations
     validates :logo_style, inclusion: {
       in: %w(default success info warning danger)
     }
-    validates :saml_provider, inclusion: { in: %w(azure) }, allow_nil: true, allow_blank: true
     validates :prefix,
       format: { with: /\A[A-Za-z0-9][A-Za-z0-9\-]+\z/ },
       uniqueness: { case_sensitive: false },

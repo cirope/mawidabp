@@ -8,4 +8,4 @@ article_order: 6
 
 Seleccionamos **Seguimiento**
 
-![]({% asset system_modules/20.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/system_modules/20.png){: class="img-responsive"}

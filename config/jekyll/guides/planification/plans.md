@@ -15,7 +15,7 @@ Tenemos los tiempos para cada proyecto (cronograma), estadísticas y reportes co
 
 Seleccionamos **Planificación -> Planes de trabajo**, muestra los planes de trabajo generados hasta el momento.
 
-![]({% asset planification/plans/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/1.png){: class="img-responsive"}
 
 Podemos observar que no hemos generado un plan de trabajo para el período generado en el paso anterior (2018).
 
@@ -23,21 +23,21 @@ A continuación vamos a generar un plan de trabajo para el período 2018
 
 Seleccionamos **Nuevo**, muestra la siguiente pantalla.
 
-![]({% asset planification/plans/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/2.png){: class="img-responsive"}
 
 Seleccionamos el **período** (Por favor seleccione).
 
-![]({% asset planification/plans/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/3.png){: class="img-responsive"}
 
 Seleccionamos **Crear Plan de trabajo**.
 
-![]({% asset planification/plans/4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/4.png){: class="img-responsive"}
 
 Luego tenemos que seleccionar la **unidad organizativa** para a la cual necesitamos agregar un proyecto.
 
 Seleccionamos la unidad organizativa Procesos Centrales
 
-![]({% asset planification/plans/5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/5.png){: class="img-responsive"}
 
 Luego seleccionamos **Agregar proyecto**, a continuación ingresamos:
 
@@ -61,15 +61,15 @@ Si seleccionamos la flecha azul, nos permite agregar:
 
 Muestra la siguiente pantalla.
 
-![]({% asset planification/plans/6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/6.png){: class="img-responsive"}
 
 Para generar el proyecto seleccionamos **Actualizar Plan de trabajo.**
 
-![]({% asset planification/plans/7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/7.png){: class="img-responsive"}
 
 Muestra los datos actualizados con el costo estimado en horas de recursos humanos.
 
-![]({% asset planification/plans/8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/8.png){: class="img-responsive"}
 
 Si seleccionamos **Descargar plan de auditoría global**, descarga un documento en formato pdf, mostrando los proyectos con el costo estimado de los recursos humanos (en unidades) y de recursos materiales (en unidades), y el costo total (en unidades), ordenado por período y unidad organizativa (Procesos Centrales, Sucursales, etc.).
 
@@ -89,15 +89,15 @@ Ahora el costo se muestra en unidades para RRHH (recursos humanos) y RRMM (recur
 
 **Planificación -> Planes de trabajo**
 
-![]({% asset planification/plans/9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/9.png){: class="img-responsive"}
 
 Seleccionamos ¨Editar¨ en el periodo que necesitamos, por ejemplo 2019
 
 Nos muestra el costo estimado para RRHH (recursos humanos) y RRMM (recursos materiales)
 
-![]({% asset planification/plans/10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/10.png){: class="img-responsive"}
 
-![]({% asset planification/plans/11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/11.png){: class="img-responsive"}
 
 <hr>
 
@@ -111,13 +111,13 @@ Incorporamos la funcionalidad **¨Estadísticas¨** para mostrar el grado de ava
 
 **Planificación -> Planes de trabajo-> Estadísticas (tercer ícono de izquierda a derecha)**
 
-![]({% asset planification/plans/12.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/12.png){: class="img-responsive"}
 
 Seleccionamos **¨Estadísticas¨** del periodo 2018, nos muestra la situación actual.
 
 Podemos movernos en los distintos meses seleccionando el que necesitamos y los datos se van actualizando de manera automática.
 
-![]({% asset planification/plans/13.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/13.png){: class="img-responsive"}
 
 Seleccionando ¨Listado¨ volvemos a la pantalla principal de Planes de trabajo
 
@@ -133,11 +133,11 @@ Mejoramos la funcionalidad **¨Editar¨**, muestra el Periodo, Costo estimado y 
 
 **Planificación -> Planes de trabajo-> Editar (sexto ícono de izquierda a derecha)**
 
-![]({% asset planification/plans/14.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/14.png){: class="img-responsive"}
 
 Seleccionamos **Editar** (cuarto ícono de izquierda a derecha) Ejercicio 2017, muestra el Periodo, Costo estimado y la cantidad de proyectos por Unidad organizativa
 
-![]({% asset planification/plans/15.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/15.png){: class="img-responsive"}
 
 .
 
@@ -145,13 +145,13 @@ En el fondo a la derecha de la pantalla tenemos las opciones "Ver¨, ¨Cronogram
 
 Si seleccionamos ¨Procesos Centrales¨ nos muestra todos los proyectos de esta Unidad organizativa
 
-![]({% asset planification/plans/16.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/16.png){: class="img-responsive"}
 
 En el fondo a la derecha de la pantalla tenemos las opciones: "Ver¨, ¨Cronograma¨, “Estadśiticas", ¨Listado¨ (volvemos a la pantalla principal de ¨Planes de trabajo¨) y  “Descargas”.
 
 Si seleccionamos ¨Descargas¨, tenemos distintas alternativas.
 
-![]({% asset planification/plans/17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/17.png){: class="img-responsive"}
 
 <hr>
 
@@ -165,13 +165,13 @@ Incorporamos la funcionalidad **¨Recursos¨**, está orientada al recurso human
 
 **Planificación -> Planes de trabajo-> Recursos (segundo ícono de izquierda a derecha)**
 
-![]({% asset planification/plans/18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/18.png){: class="img-responsive"}
 
 Seleccionamos **¨Recursos¨** del periodo 2018
 
-![]({% asset planification/plans/19.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/19.png){: class="img-responsive"}
 
-![]({% asset planification/plans/20.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/20.png){: class="img-responsive"}
 
 Al final de la pantalla a la derecha, tenemos la opción ¨Ver¨, ¨Editar¨, ¨Descargar¨ y seleccionado ¨Listado¨ volvemos a la pantalla principal de ¨Planes de trabajo¨.
 
@@ -189,17 +189,17 @@ Incorporamos la funcionalidad **¨Cronograma¨**, permite tener una visión más
 
 Icono con el calendario, si posicionamos el mouse muestra el mensaje ¨Cronograma¨
 
-![]({% asset planification/plans/21.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/21.png){: class="img-responsive"}
 
 Si seleccionamos el cronograma para el periodo ¨2018¨ segunda fila del listado, muestra el cronograma para ese periodo separado por unidad de negocio y proyecto.
 
-![]({% asset planification/plans/22.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/22.png){: class="img-responsive"}
 
 Al final de la pantalla a la derecha, tenemos la opción de ¨Ver¨, ¨Estadísticas¨, ¨Editar¨, ¨Ver calendario por proyecto¨ y seleccionado ¨Listado¨ volvemos a la pantalla principal de ¨Planes de trabajo¨
 
 Si seleccionamos ¨Ver calendario por proyecto¨, nos muestra las fechas por proyecto
 
-![]({% asset planification/plans/23.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/plans/23.png){: class="img-responsive"}
 
 Al final de la pantalla a la derecha, tenemos la opción de la ¨Ver¨, ¨Estadísticas¨, ¨Editar¨, ¨Ver calendario por unidad de negocio¨ y seleccionado ¨Listado¨ volvemos a la pantalla principal de ¨Planes de trabajo¨
 

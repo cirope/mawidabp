@@ -36,7 +36,7 @@ module Weaknesses::Score
   end
 
   def state_weight
-    being_implemented? ? 1 : 0
+    (implemented_audited? || being_implemented?) ? 1 : 0
   end
 
   def age_weight date: Time.zone.today
