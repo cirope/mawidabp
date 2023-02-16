@@ -268,10 +268,6 @@ module ConclusionReviews::NbcPdf
         fra.state == Finding::STATUS[:implemented_audited]
       end
 
-      alt_weaknesses = review.external_reviews.map(&:alternative_review).map do |ar|
-        ar.final_weaknesses.select(&:being_implemented?)
-      end.flatten
-
       if repeated.any? || finding_assignments.any?
         pdf.start_new_page
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.repeated'), *title_options
@@ -282,17 +278,6 @@ module ConclusionReviews::NbcPdf
           weakness_partial pdf, weakness
 
           pdf.start_new_page if idx < repeated_findings.size - 1
-        end
-      end
-
-      if alt_weaknesses.any?
-        pdf.start_new_page
-        pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.external'), *title_options
-
-        alt_weaknesses.each_with_index do |weakness, idx|
-          weakness_partial pdf, weakness
-
-          pdf.start_new_page if idx < alt_weaknesses.size - 1
         end
       end
 
