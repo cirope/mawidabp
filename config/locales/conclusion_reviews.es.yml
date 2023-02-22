@@ -134,7 +134,7 @@ es:
         title: "<b>RESUMEN EJECUTIVO</b>"
         subtitle: "<b>OBJETIVO</b>"
         main_observations: "<b>OBSERVACIONES EN PROCESO DE REGULARIZACIÓN</b>"
-        external_reviews: "<i>De informes alternativos:</i>"
+        from_external_review: "De Informe"
         audit_conclusion: "<b>CONCLUSIÓN GENERAL DE LA AUDITORÍA</b>"
         highest_responsible: "<b>%{responsible}</b>"
         signature_label: "<b>Gerente a/c interino de Auditoría Interna</b>"
