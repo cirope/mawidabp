@@ -123,7 +123,7 @@ module ConclusionReviews::NbcPdf
 
         if alt_weaknesses_by_review.any?
           alt_weaknesses_by_review.each do |review_name, alt_weaknesses|
-            pdf.text "De Informe #{review_name}:", style: :italic
+            pdf.text "#{I18n.t('conclusion_review.nbc.weaknesses.from_external_review')} #{review_name}:", style: :italic
             pdf.move_down PDF_FONT_SIZE
 
             alt_weaknesses.each do |alt_weakness|
