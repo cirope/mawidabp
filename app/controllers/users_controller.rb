@@ -3,6 +3,7 @@
 class UsersController < ApplicationController
   include Users::Finders
   include Users::Params
+  include AutoCompleteFor::Tagging
 
   respond_to :html
 
