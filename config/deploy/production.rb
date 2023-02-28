@@ -1,4 +1,4 @@
-set :branch,    'master'
+set :branch,    'c-mariva-testing'
 set :stage,     :production
 set :rails_env, 'production'
 
@@ -8,8 +8,8 @@ set :default_env, {
   'LC_ALL':   'en_US.UTF-8'
 }
 
-role :web, %w{deployer@app.mawidabp.com}
-role :app, %w{deployer@app.mawidabp.com}
-role :db,  %w{deployer@app.mawidabp.com}
+role :web, %w{deployer@mariva-test.mawidabp.com}
+role :app, %w{deployer@mariva-test.mawidabp.com}
+role :db,  %w{deployer@mariva-test.mawidabp.com}
 
-server 'app.mawidabp.com', user: 'deployer', roles: %w{web app db}
+server 'mariva-test.mawidabp.com', user: 'deployer', roles: %w{web app db}
