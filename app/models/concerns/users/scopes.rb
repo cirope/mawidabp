@@ -35,6 +35,9 @@ module Users::Scopes
         }
       )
     }
+    scope :include_tags, -> {
+      includes('tags').references('tags')
+    }
   end
 
   def recovery?
