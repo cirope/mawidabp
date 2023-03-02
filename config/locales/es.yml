@@ -111,7 +111,7 @@
   business_unit:
     edit_title: "Modificar unidad de negocio"
     correctly_updated: "Unidad de negocio actualizada correctamente."
-  
+
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"
@@ -1344,6 +1344,10 @@
     review_identification: "Número de informe %{review}"
     draft: "Borrador"
 
+  plan_item:
+    errors:
+      cannot_edit_business_unit_for_memos_too: 'o un memo'
+
   questionnaire:
     index_title: "Listado de cuestionarios"
     edit_title: "Modificar cuestionario"
@@ -1462,6 +1466,10 @@
       without_close_date: "Sin fecha de cierre"
     pdf:
       pdf_name: 'informe_%{identification}.pdf'
+
+  external_review:
+    errors:
+      issue_date_after_review_issue_date: "su fecha de emisión (%{date}) es mayor a la fecha de emisión del informe"
 
   review_user_assignment:
     responsibility_modification:

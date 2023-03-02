@@ -22,28 +22,28 @@ Seleccionamos "Administración" -> "Plantillas evaluación de riesgo"
 
 Muestra las plantillas generadas
 
-![]({% asset administration/risk_assessment_templates/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/risk_assessment_templates/1.png){: class="img-responsive"}
 
 Si necesitamos generar una nueva, seleccionamos "Nueva plantilla de evaluación de riesgo", cargamos los datos requeridos y seleccionamos ¨Crear Plantilla de evaluación de riesgo¨.
 
-![]({% asset administration/risk_assessment_templates/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/risk_assessment_templates/2.png){: class="img-responsive"}
 
 **Copiar una plantilla evaluación de riesgos**
 
 Seleccionamos copiar (icono con la carpeta), para este ejemplo la evaluación que se encuentra en la primera fila ¨Conocimiento¨.
 
-![]({% asset administration/risk_assessment_templates/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/risk_assessment_templates/3.png){: class="img-responsive"}
 
-![]({% asset administration/risk_assessment_templates/4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/risk_assessment_templates/4.png){: class="img-responsive"}
 
 Cambiamos el nombre y el resto de los datos que necesitemos.
 
 Seleccionamos ¨Crear Plantilla de evaluación de riesgo¨, nos muestra la siguiente pantalla.
 
-![]({% asset administration/risk_assessment_templates/5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/risk_assessment_templates/5.png){: class="img-responsive"}
 
 Si seleccionamos ¨Listado¨, muestra la nueva plantilla de evaluación de riesgo generada ¨Conocimiento 1¨
 
-![]({% asset administration/risk_assessment_templates/6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/risk_assessment_templates/6.png){: class="img-responsive"}
 
 

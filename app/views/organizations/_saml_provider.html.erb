@@ -1,0 +1,50 @@
+<% @organization.build_saml_provider unless @organization.saml_provider %>
+<%= f.simple_fields_for :saml_provider do |s_p_f| %>
+  <div class="card my-3">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-10">
+          <h5 class="mb-0">
+            <a class="dropdown-toggle text-reset text-decoration-none d-block" href="#saml_provider" data-toggle="collapse">
+              <%= SamlProvider.model_name.human count: 1 %>
+            </a>
+          </h5>
+        </div>
+        <div class="col-md-2">
+          <%= link_to_remove_authentication_configuration s_p_f %>
+        </div>
+      </div>
+    </div>
+
+    <% collapse_in = s_p_f.object.persisted? || s_p_f.object.errors.present? %>
+    <div id="saml_provider" class="card-body collapse<%= ' show' if collapse_in %>" data-enable-disable-card-fieldset=<%= SHARED_SESSION ? 'false' : 'true'%>>
+      <% if s_p_f.object.errors[:base].present? %>
+        <div class="alert alert-danger">
+          <%= s_p_f.object.errors[:base].to_sentence %>
+        </div>
+      <% end %>
+      <fieldset <%= 'disabled' unless collapse_in %>>
+        <div class="row">
+          <div class="col-md-6">
+            <%= s_p_f.input :provider, collection: providers %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <%= s_p_f.input :idp_homepage %>
+            <%= s_p_f.input :idp_sso_target_url %>
+            <%= s_p_f.input :assertion_consumer_service_url %>
+            <%= s_p_f.input :assertion_consumer_service_binding %>
+            <%= s_p_f.input :idp_cert, input_html: { rows: 5 } %>
+            <%= s_p_f.input :default_role_for_users_id, collection: default_roles_for_users(@organization) %>
+          </div>
+          <div class="col-md-6">
+            <%= s_p_f.input :idp_entity_id %>
+            <%= s_p_f.input :sp_entity_id %>
+            <%= s_p_f.input :name_identifier_format %>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+<% end %>

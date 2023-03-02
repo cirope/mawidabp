@@ -6,6 +6,8 @@ class MemosHelperTest < ActionView::TestCase
   end
 
   test 'Should return group by business_unit in plan item unused' do
+    set_organization
+
     business_unit                      = business_units :business_unit_three
     plan_item_without_id               = plan_items :current_plan_item_4_without_business_unit
     plan_item_without_id.business_unit = business_unit
