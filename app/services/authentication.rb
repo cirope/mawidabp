@@ -183,9 +183,9 @@ class Authentication
     end
 
     def authenticate
-      if @current_organization.try(:ldap_config)
+      if @current_organization.try(:ldap_config) && !is_user_recovery?
         ldap_auth
-      elsif @current_organization&.saml_provider.present?
+      elsif @current_organization&.saml_provider.present? && !is_user_recovery?
         saml_auth
       else
         local_auth
@@ -342,5 +342,9 @@ class Authentication
 
     def default_saml_roles
       Role.where organization_id: @current_organization.id, name: DEFAULT_SAML_ROLES
+    end
+
+    def is_user_recovery?
+      @valid_user&.recovery?
     end
 end

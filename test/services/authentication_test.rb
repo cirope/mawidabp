@@ -31,6 +31,46 @@ class AuthenticationTest < ActionController::TestCase
     assert_valid_authentication
   end
 
+  test 'should authenticate with ldap config and recovery user' do
+    tag = tags :recovery
+
+    @organization = organizations :google
+    @organization.ldap_config.update_column :hostname, 'wrong_hostname'
+
+    @params = { user: @user.user, password: 'admin123' }
+
+    Current.organization = @organization
+
+    assert !@user.recovery?
+    assert_invalid_authentication message: 'message.ldap_error'
+
+    @user.taggings.create! tag: tag
+
+    assert @user.recovery?
+    assert_valid_authentication
+  end
+
+  test 'should authenticate with saml config and recovery user' do
+    tag = tags :recovery
+
+    @organization = organizations :google
+    @organization.ldap_config.destroy!
+    @organization.reload.saml_provider = 'azure'
+    @organization.save!
+
+    @params = { user: @user.user, password: 'admin123', SAMLResponse: '' }
+
+    Current.organization = @organization
+
+    assert !@user.recovery?
+    assert_invalid_authentication redirect_url: Hash[controller: 'sessions', action: 'new', saml_error: true]
+
+    @user.taggings.create! tag: tag
+
+    assert @user.recovery?
+    assert_valid_authentication
+  end
+
   test 'should authenticate via ldap using the proper config' do
     role = roles :admin_second_alphabet_role
     ldap_config = ldap_configs :google_ldap
