@@ -44,10 +44,6 @@ module Users::Scopes
     tags.with_option('recovery').exists?
   end
 
-  def recovery?
-    tags.with_option('recovery').exists?
-  end
-
   module ClassMethods
     def by_email email
       where(
