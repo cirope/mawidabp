@@ -31,6 +31,56 @@ class AuthenticationTest < ActionController::TestCase
     assert_valid_authentication
   end
 
+  test 'should authenticate with ldap config and recovery user' do
+    tag = tags :recovery
+
+    @organization = organizations :google
+    @organization.ldap_config.update_column :hostname, 'wrong_hostname'
+
+    @params = { user: @user.user, password: 'admin123' }
+
+    Current.organization = @organization
+
+    assert !@user.recovery?
+    assert_invalid_authentication message: 'message.ldap_error'
+
+    @user.taggings.create! tag: tag
+
+    assert @user.recovery?
+    assert_valid_authentication
+  end
+
+  test 'should authenticate with saml config and recovery user' do
+    tag = tags :recovery
+
+    @organization = organizations :google
+    @organization.ldap_config.destroy!
+
+    saml_provider = SamlProvider.create! provider: 'azure',
+                                      idp_homepage: 'https://login.microsoftonline.com/test/federationmetadata/2007-06/federationmetadata.xml',
+                                      idp_entity_id: 'https://sts.windows.net/test/',
+                                      idp_sso_target_url: 'https://login.microsoftonline.com/test/saml2',
+                                      sp_entity_id: 'https://test.com/saml/metadata',
+                                      assertion_consumer_service_url: 'https://test.com/saml/callback',
+                                      name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
+                                      assertion_consumer_service_binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+                                      idp_cert: 'cert_test',
+                                      organization: @organization
+
+    @organization.reload
+    @params = { user: @user.user, password: 'admin123', SAMLResponse: '' }
+
+    Current.organization = @organization
+
+    assert !@user.recovery?
+    assert_invalid_authentication redirect_url: Hash[controller: 'sessions', action: 'new', saml_error: true]
+
+    @user.taggings.create! tag: tag
+
+    assert @user.recovery?
+    assert_valid_authentication
+  end
+
   test 'should authenticate via ldap using the proper config' do
     role = roles :admin_second_alphabet_role
     ldap_config = ldap_configs :google_ldap
