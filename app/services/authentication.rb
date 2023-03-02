@@ -342,10 +342,6 @@ class Authentication
       end
     end
 
-    def default_saml_roles
-      Role.where organization_id: @current_organization.id, name: DEFAULT_SAML_ROLES
-    end
-
     def is_user_recovery?
       @valid_user&.recovery?
     end
