@@ -157,7 +157,7 @@ module Reviews::Score
 
     assigned_findings.each { |w| weaknesses_total << w }
 
-    scores = weaknesses_total.select { |w| w.state_weight > 0 }.group_by do |w|
+    scores = weaknesses_total.select { |w| w.being_implemented? || w.implemented_audited? }.group_by do |w|
       [w.risk_weight, w.state_weight, w.age_weight(date: date)]
     end
 
