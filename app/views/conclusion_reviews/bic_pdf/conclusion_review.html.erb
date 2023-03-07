@@ -16,8 +16,8 @@
         </div>
         <div class="row">
           <div class="col-10 offset-1">
-            <p class="text-left font-weight-bold" style="font-size:2.7em;"><%= I18n.t 'conclusion_review.bic.cover.review_identification', identification: conclusion_review.review.identification %></p>
-            <p class="text-left font-weight-bold" style="font-size:2.7em;"><%= conclusion_review.review.plan_item.project %></p>
+            <p class="text-left font-weight-bold" style="font-size:2.5em;"><%= I18n.t 'conclusion_review.bic.cover.review_identification', identification: conclusion_review.review.identification %></p>
+            <p class="text-left font-weight-bold" style="font-size:2.5em;"><%= conclusion_review.review.plan_item.project %></p>
             <p class="text-left pt-4" style="font-size:1.8em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.auditors' %></span> <%= bic_review_auditors_text conclusion_review %></p>
             <p class="text-left pt-4" style="font-size:1.8em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.owners' %></span> <%= bic_review_owners_text conclusion_review %></p>
           </div>
@@ -39,12 +39,12 @@
             <p style="font-size:1.9em;"><%= (put_bic_cover_note_on conclusion_review).html_safe %></p>
           </div>
         </div>
-        <div class="row pt-5 pb-5">
+        <div class="row pt-5" style="padding-bottom: 160px;">
           <div class="col-10 offset-1">
             <p class="font-weight-bold" style="font-size:1.9em;"><%= I18n.t 'conclusion_review.bic.cover.signature' %></p>
           </div>
         </div>
-        <div class="row pt-5">
+        <div class="row">
           <div class="col-10 offset-1">
             <p class="font-weight-bold" style="font-size:1.9em;"><%= I18n.t 'conclusion_review.bic.cover.recipients' %></p>
           </div>
@@ -71,15 +71,15 @@
         </div>
         <div class="row">
           <div class="col-10 offset-1">
-            <p class="text-left font-weight-bold" style="font-size:2.7em;"><%= I18n.t 'conclusion_review.bic.cover.review_identification', identification: conclusion_review.review.identification %></p>
-            <p class="text-left font-weight-bold" style="font-size:2.7em;"><%= conclusion_review.review.plan_item.project %></p>
+            <p class="text-left font-weight-bold" style="font-size:2.5em;"><%= I18n.t 'conclusion_review.bic.cover.review_identification', identification: conclusion_review.review.identification %></p>
+            <p class="text-left font-weight-bold" style="font-size:2.5em;"><%= conclusion_review.review.plan_item.project %></p>
             <p class="text-left pt-4" style="font-size:1.8em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.auditors' %></span> <%= bic_review_auditors_text conclusion_review %></p>
             <p class="text-left pt-4" style="font-size:1.8em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.owners' %></span> <%= bic_review_owners_text conclusion_review %></p>
           </div>
         </div>
       </div>
       <div class="col-9">
-        <div class="row">
+        <div class="row pb-5">
           <div class="col-10 offset-1">
             <p class="pt-3" style="font-size:1.9em;"><span class="font-weight-bold"><%= ConclusionReview.human_attribute_name :previous_identification %></span> <%= bic_previous_review_text conclusion_review %></p>
             <p class="pt-3" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.review_period' %></span> <%= bic_review_period conclusion_review %></p>
@@ -87,7 +87,7 @@
         </div>
         <div class="row">
           <div class="col-10 offset-1 border-left">
-            <p class="pt-5 font-weight-bold" style="font-size:1.9em;"><%= Review.human_attribute_name :description %></p>
+            <p class="font-weight-bold" style="font-size:1.9em;"><%= Review.human_attribute_name :description %></p>
             <%= simple_format conclusion_review.review.description, style: "font-size:1.9em;", class: "pt-5" %>
           </div>
         </div>
@@ -98,14 +98,14 @@
                           height: 53,
                           class: 'mt-4' %>
           </div>
-          <div class="col-7">
-            <p class="pt-5 font-weight-bold aqua-text" style="font-size:2.2em;"><%= "#{I18n.t 'conclusion_review.bic.cover.cycle_qualification'} #{I18n.t("score_types.#{conclusion_review_score}")}" %></p>
+          <div class="col-6">
+            <p class="pt-5 font-weight-bold" style="font-size:2.2em;"><%= I18n.t 'conclusion_review.bic.cover.cycle_qualification' %> <span class="aqua-text"><%= I18n.t("score_types.#{conclusion_review_score}") %></span></p>
           </div>
           <div class="col-1">
             <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'emojis', "#{conclusion_review_score}.png")), 
                           width: 79, 
                           height: 76,
-                          class: 'mt-4' %>
+                          class: 'mt-3' %>
           </div>
         </div>
       </div>
