@@ -159,6 +159,7 @@ module ConclusionReviews::NbcPdf
 
           data << [risk_text] + row + [weight]
         end
+
         data << [I18n.t('conclusion_review.nbc.scores.total'), total_sum, '', '', '', sum_weight]
         data << nbc_footer_scores(review.score_array)
 
