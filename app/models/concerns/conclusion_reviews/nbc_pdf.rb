@@ -100,10 +100,10 @@ module ConclusionReviews::NbcPdf
 
     def put_nbc_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
-      weaknesses = (use_finals ? review.final_weaknesses : review.weaknesses).select(&:being_implemented?)
+      weaknesses = (use_finals ? review.final_weaknesses : review.weaknesses).select { |w| w.being_implemented? || w.implemented_audited? }
 
       alt_weaknesses_by_review = review.external_reviews.map(&:alternative_review).map do |ar|
-        alt_weaknesses = ar.final_weaknesses.select(&:being_implemented?)
+        alt_weaknesses = ar.final_weaknesses.select { |w| w.being_implemented? || w.implemented_audited? }
 
         [ar.identification, alt_weaknesses] if alt_weaknesses.any?
       end.compact.to_h
