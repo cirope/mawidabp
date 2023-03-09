@@ -103,7 +103,7 @@
           <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
         </div>
         <% if Current.conclusion_pdf_format == 'nbc' %>
-          <%= f.input :type_review, collection: type_review, include_blank: t('helpers.select.prompt') %>
+          <%= f.input :type_review, collection: type_review, include_blank: t('helpers.select.prompt'), input_html: { disabled: readonly } %>
         <% end %>
       </div>
     </div>
