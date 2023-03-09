@@ -348,9 +348,11 @@
           <%= render 'external_review', f: er, readonly: readonly %>
         <% end %>
       </div>
-      <div>
-        <%= link_to_add_fields((t 'review.external_reviews_title'), f, :external_reviews) %>
-      </div>
+      <% unless readonly %>
+        <div>
+          <%= link_to_add_fields((t 'review.external_reviews_title'), f, :external_reviews) %>
+        </div>
+      <% end %>
     </div>
   <% end %>
 
