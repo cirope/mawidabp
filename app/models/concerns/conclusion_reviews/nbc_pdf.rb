@@ -100,15 +100,38 @@ module ConclusionReviews::NbcPdf
 
     def put_nbc_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
-      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+      weaknesses = (use_finals ? review.final_weaknesses : review.weaknesses).select { |w| w.being_implemented? || w.implemented_audited? }
 
-      if weaknesses.select(&:being_implemented?).any?
+      alt_weaknesses_by_review = review.external_reviews.map(&:alternative_review).map do |ar|
+        alt_weaknesses = ar.final_weaknesses.select { |w| w.being_implemented? || w.implemented_audited? }
+
+        [ar.identification, alt_weaknesses] if alt_weaknesses.any?
+      end.compact.to_h
+
+      if weaknesses.any? || alt_weaknesses_by_review.any?
         pdf.move_down PDF_FONT_SIZE * 2
         pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
-
         pdf.move_down PDF_FONT_SIZE
-        weaknesses.each do |weakness|
-          pdf.text "• #{weakness.title}" if weakness.being_implemented?
+
+        if weaknesses.any?
+          weaknesses.each do |weakness|
+            pdf.text "• #{weakness.title}"
+          end
+
+          pdf.move_down PDF_FONT_SIZE
+        end
+
+        if alt_weaknesses_by_review.any?
+          alt_weaknesses_by_review.each do |review_name, alt_weaknesses|
+            pdf.text "#{I18n.t('conclusion_review.nbc.weaknesses.from_external_review')} #{review_name}:", style: :italic
+            pdf.move_down PDF_FONT_SIZE
+
+            alt_weaknesses.each do |alt_weakness|
+              pdf.text "• #{alt_weakness.title}"
+            end
+
+            pdf.move_down PDF_FONT_SIZE
+          end
         end
 
         pdf.start_new_page
@@ -123,6 +146,7 @@ module ConclusionReviews::NbcPdf
 
         data       = [nbc_header_scores]
         sum_weight = 0
+        total_sum  = 0
 
         review.score_by_weakness_reviews(issue_date).each do |row, weaknesses|
           risk_text = weaknesses.first.risk_text
@@ -131,10 +155,12 @@ module ConclusionReviews::NbcPdf
 
           weight      = row.inject &:*
           sum_weight += weight
+          total_sum  += weaknesses.count
 
           data << [risk_text] + row + [weight]
         end
-        data << ['', '', '', '', '', sum_weight]
+
+        data << [I18n.t('conclusion_review.nbc.scores.total'), total_sum, '', '', '', sum_weight]
         data << nbc_footer_scores(review.score_array)
 
         pdf.move_down PDF_FONT_SIZE
@@ -245,14 +271,6 @@ module ConclusionReviews::NbcPdf
         fra.state == Finding::STATUS[:implemented_audited]
       end
 
-      alt_reviews = review.external_reviews.map(&:alternative_review).select do |ar|
-        ar.type_review == Review::TYPES_REVIEW[:system_audit]
-      end
-
-      alt_weaknesses = alt_reviews.map do |ar|
-        ar.has_final_review? ? ar.final_weaknesses : ar.weaknesses
-      end.select { |weakness| weakness.being_implemented }.flatten
-
       if repeated.any? || finding_assignments.any?
         pdf.start_new_page
         pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.repeated'), *title_options
@@ -263,17 +281,6 @@ module ConclusionReviews::NbcPdf
           weakness_partial pdf, weakness
 
           pdf.start_new_page if idx < repeated_findings.size - 1
-        end
-      end
-
-      if alt_weaknesses.any?
-        pdf.start_new_page
-        pdf.add_title I18n.t('conclusion_review.nbc.weaknesses_detected.external'), *title_options
-
-        alt_weaknesses.each_with_index do |weakness, idx|
-          weakness_partial pdf, weakness
-
-          pdf.start_new_page if idx < alt_weaknesses.size - 1
         end
       end
 

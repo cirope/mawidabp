@@ -3,6 +3,7 @@
 class UsersController < ApplicationController
   include Users::Finders
   include Users::Params
+  include AutoCompleteFor::Tagging
 
   respond_to :html
 
@@ -75,7 +76,7 @@ class UsersController < ApplicationController
                 User.not_hidden
               end
 
-      scope.list.search(**search_params).order(
+      scope.list.include_tags.search(**search_params).order(
         Arel.sql "#{User.quoted_table_name}.#{User.qcn('user')} ASC"
       ).page params[:page]
     end
