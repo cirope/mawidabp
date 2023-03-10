@@ -100,10 +100,10 @@ module ConclusionReviews::NbcPdf
 
     def put_nbc_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
-      weaknesses = (use_finals ? review.final_weaknesses : review.weaknesses).select(&:being_implemented?)
+      weaknesses = (use_finals ? review.final_weaknesses : review.weaknesses).select { |w| w.being_implemented? || w.implemented_audited? }
 
       alt_weaknesses_by_review = review.external_reviews.map(&:alternative_review).map do |ar|
-        alt_weaknesses = ar.final_weaknesses.select(&:being_implemented?)
+        alt_weaknesses = ar.final_weaknesses.select { |w| w.being_implemented? || w.implemented_audited? }
 
         [ar.identification, alt_weaknesses] if alt_weaknesses.any?
       end.compact.to_h
@@ -146,6 +146,7 @@ module ConclusionReviews::NbcPdf
 
         data       = [nbc_header_scores]
         sum_weight = 0
+        total_sum  = 0
 
         review.score_by_weakness_reviews(issue_date).each do |row, weaknesses|
           risk_text = weaknesses.first.risk_text
@@ -154,10 +155,12 @@ module ConclusionReviews::NbcPdf
 
           weight      = row.inject &:*
           sum_weight += weight
+          total_sum  += weaknesses.count
 
           data << [risk_text] + row + [weight]
         end
-        data << ['', '', '', '', '', sum_weight]
+
+        data << [I18n.t('conclusion_review.nbc.scores.total'), total_sum, '', '', '', sum_weight]
         data << nbc_footer_scores(review.score_array)
 
         pdf.move_down PDF_FONT_SIZE

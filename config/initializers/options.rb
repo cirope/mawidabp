@@ -132,6 +132,9 @@ TAGS_READONLY = [
 TAG_OPTIONS = {
   'review' => {
     'Requerida en informes `Trabajo especial`' => 'required_on_special_reviews'
+  },
+  'user' => {
+    'Usuario de recuperación' => 'recovery'
   }
 }
 

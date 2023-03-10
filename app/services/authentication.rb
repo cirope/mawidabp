@@ -185,9 +185,9 @@ class Authentication
     end
 
     def authenticate
-      if @current_organization.try(:ldap_config)
+      if @current_organization.try(:ldap_config) && !is_user_recovery?
         ldap_auth
-      elsif @current_organization&.saml_provider.present?
+      elsif @current_organization&.saml_provider.present? && !is_user_recovery?
         saml_auth
       else
         local_auth
@@ -340,5 +340,9 @@ class Authentication
         login_record = LoginRecord.list.create!(user: @valid_user, request: @request)
         @session[:record_id] = login_record.id
       end
+    end
+
+    def is_user_recovery?
+      @valid_user&.recovery?
     end
 end
