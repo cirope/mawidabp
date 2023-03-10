@@ -24,6 +24,8 @@ es:
         objective: 'Objetivo'
         conclusion: 'Conclusion'
         introduction_and_scope: 'Introduccion y Alcance'
+        business_unit_type_id: 'Unidad organizativa'
+        previous_period_id: 'Periodo previo'
 
   activerecord:
     models:

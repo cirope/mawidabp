@@ -236,6 +236,13 @@ Rails.application.routes.draw do
     as: 'create_nbc_annual_report_conclusion_reports',
     to: 'conclusion_reports#create_nbc_annual_report'
 
+  get 'conclusion_reports/nbc_internal_control_qualification_as_group_of_companies',
+      as: 'nbc_internal_control_qualification_as_group_of_companies_conclusion_reports',
+      to: 'conclusion_reports#nbc_internal_control_qualification_as_group_of_companies'
+  post 'conclusion_reports/create_nbc_internal_control_qualification_as_group_of_companies',
+       as: 'create_nbc_internal_control_qualification_as_group_of_companies_conclusion_reports',
+       to: 'conclusion_reports#create_nbc_internal_control_qualification_as_group_of_companies'
+
   get 'conclusion_reports/cost_analysis',
     as: 'cost_analysis_conclusion_reports',
     to: 'conclusion_reports#cost_analysis'
