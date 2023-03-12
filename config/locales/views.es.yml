@@ -20,7 +20,7 @@ es:
     stats: 'Estadísticas'
     warning: 'Advertencia'
     upload: 'Adjuntar'
-    _yes: 'Si'
+    _yes: 'Sí'
     _no: 'No'
 
   activity_groups:
@@ -68,9 +68,9 @@ es:
     show:
       title: 'Detalle buenas prácticas'
     new:
-      title: 'Agregar buenas prácticas'
+      title: 'Agregar buenas prácticas' # ASD singular?
     edit:
-      title: 'Modificar buenas prácticas'
+      title: 'Modificar buenas prácticas' # ASD singular?
     process_controls:
       new: 'Agregar proceso'
     control_objectives:
@@ -163,11 +163,11 @@ es:
     form:
       show_status_change_history: 'Ver historial de cambios de estado'
       follow_up_date_label_append: ' - Sugerida: '
-      confirm_finding_without_extension: '¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo.'
+      confirm_finding_without_extension: '¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo'
     auditor_form:
       origin: 'origen'
     edit_bic_sigen_fields:
-      title: 'Editar campos sigen de observacion.'
+      title: 'Editar campos sigen de observación'
     current_user_filters:
       pending_to_endorsement: 'Pendientes de aprobación'
       as_owner: '%{kind} como responsable'
@@ -216,14 +216,14 @@ es:
       cancelled: 'Cancelado'
     blocked:
       show:
-        body: 'Su organización está inhabilitada, contacte sopore@mawidabp.com'
+        body: 'Su organización está inhabilitada, contacte soporte@mawidabp.com'
         check: 'Volver a comprobar pago'
     license:
       check: 'Volver a comprobar pago'
       approve: 'Ir a Paypal'
       authorize_new_plan:
         title: 'Autorizar nuevo plan'
-        body: |-
+        body: |- # ASD párrafo de mail? Sino sacar punto final
           Para cambiar de plan, deberá autorizar el nuevo plan mensual.
           El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios auditores en el momento.'
     authorizations:
@@ -233,7 +233,7 @@ es:
         title: 'Licencia'
     paypal_button:
       create: 'Suscribirse'
-      create_error: 'Ha ocurrido un problema, por favor comuníquese con soporte@mawidabp.com para comprobar si el pago está acreditado.'
+      create_error: 'Ha ocurrido un problema, por favor comuníquese con soporte@mawidabp.com para comprobar si el pago está acreditado'
 
   login_records:
     choose:
@@ -313,7 +313,7 @@ es:
       title: 'Agregar organización'
     edit:
       title: 'Modificar organización'
-    new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de haberla creado'
+    new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de crearla'
     logo_styles:
       default: 'Por defecto'
       success: 'Exitoso'
@@ -491,7 +491,7 @@ es:
       success: 'Tus datos se actualizaron correctamente'
 
   polls:
-    access_denied: 'La encuesta ya ha sido contestada.'
+    access_denied: 'La encuesta ya ha sido contestada'
     already_exists: 'Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente'
     answer_poll: '¿Contestar encuesta?'
     about: 'Acerca de'
@@ -514,7 +514,7 @@ es:
       other: 'Tiene %{count} encuestas pendientes por responder'
     new:
       title: 'Agregar encuesta'
-    not_found: 'No se encontró la encuesta o la misma ya ha sido contestada.'
+    not_found: 'No se encontró la encuesta o ya ha sido contestada'
     pdf:
       name: 'resumen_encuestas_del_%{from_date}_al_%{to_date}.pdf'
     questionnaires:
@@ -551,7 +551,7 @@ es:
       title: 'Nueva Organización'
     show:
       title: 'Organización creada'
-      body: 'Su registro está completo, recibirá un correo con instrucciones para ingresar.'
+      body: 'Su registro está completo, recibirá un correo con instrucciones para ingresar'
 
   report:
     index_title: 'Listado de reportes'

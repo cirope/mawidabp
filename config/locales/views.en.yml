@@ -1,0 +1,917 @@
+en:
+  messages:
+    confirmation: 'Are you sure?'
+    not_authorized: 'Must be logged in to view content'
+    truncated: 'Truncated, maximum number of characters %{count}'
+
+  navigation:
+    back: 'Back'
+    copy: 'Copy'
+    destroy: 'Delete'
+    download: 'Download'
+    edit: 'Edit'
+    index: 'List'
+    loading: 'Loading...'
+    logout: 'Logout'
+    new: 'New'
+    show: 'Show'
+    calendar: 'Calendar'
+    resources: 'Resources'
+    stats: 'Stats'
+    warning: 'Warning'
+    upload: 'Upload'
+    _yes: 'Yes'
+    _no: 'No'
+
+  activity_groups:
+    edit:
+      title: 'Edit activity group'
+    index:
+      new: 'New activity group'
+      title: 'Activity group list'
+      empty_html: 'There are no activity groups, you can create one with the <span class="badge badge-primary">New activity group</span> button'
+    new:
+      title: 'Create activity group'
+    show:
+      title: 'Show activity group'
+    form:
+      add_activity: 'Add activity group'
+
+  answer_options:
+    not_apply: 'Not apply' # ASD dond sale?
+    strongly_disagree: 'Strongly disagree'
+    disagree: 'Disagree'
+    neither_agree_nor_disagree: 'Neither agree nor disagree'
+    agree: 'Agree'
+    strongly_agree: 'Strongly agree'
+    'yes': 'Yes'
+    'no': 'No'
+
+  benefits:
+    index:
+      title: 'Benefit / Harm list'
+    kinds:
+      benefit_tangible: 'Tangible benefit'
+      benefit_intangible: 'Intangible benefit'
+      damage_tangible: 'Tangible harm'
+      damage_intangible: 'Intangible harm'
+    show:
+      title: 'Benefit / Harm details'
+    new:
+      title: 'Add benefit / harm'
+    edit:
+      title: 'Edit benefit / harm'
+
+  best_practices:
+    index:
+      title: 'Best practice list'
+    show:
+      title: 'Best practice details'
+    new:
+      title: 'Add best practice'
+    edit:
+      title: 'Edit best practice'
+    process_controls:
+      new: 'Add process'
+    control_objectives:
+      new: 'Add objective'
+
+  business_unit_kinds:
+    index:
+      empty_html: 'There are no business unit types, you can create one with the <span class="badge badge-primary">New</span> button' #bussiness unit kind = organizational unit??
+  closing_interviews:
+    edit:
+      title: 'Edit closing interview'
+    index:
+      new: 'New closing interview'
+      title: 'Closing interview list'
+      empty_html: 'There are no closing interviews, you can create one with the <span class="badge badge-primary">New closing interview</span> button'
+      empty_search_html: 'There are no closing interviews that match the search criteria'
+    new:
+      title: 'Create closing interview'
+    form:
+      add_responsible: 'Add responsible'
+      add_auditor: 'Add auditor'
+      add_assistant: 'Add assistant'
+    show:
+      title: 'Show closing interview'
+      auditeds: 'Responsible for the cycle' # ASD donde?
+      auditors: 'Assigned auditors'
+      download_pdf: 'Download PDF'
+    pdf:
+      pdf_name: 'closing_interview_%{name}.pdf'
+
+  control_objectives:
+    index:
+      title: 'Control objective list'
+    show:
+      title: 'Control objective details'
+    new:
+      tagging: 'Add tag'
+      add_control_objective_auditor: 'Add auditor in charge'
+    score_type:
+      option: 'Options'
+      percentage: 'Percentage'
+
+  documents:
+    edit:
+      title: 'Edit document'
+    index:
+      new: 'New document'
+      title: 'Document list'
+      empty_html: 'There are no documents, you can create one with the <span class="badge badge-primary">New document</span> button'
+      empty_search_html: 'There are no documents that match the search criteria'
+    new:
+      title: 'Create document'
+      tagging: 'Add tag'
+    show:
+      title: 'Show document'
+
+  e_mails:
+    index:
+      title: 'Mailing list'
+    show:
+      title: 'Mail details'
+
+  error_records:
+    error_on_login: 'Error on login' # ASD donde?
+    error_on_password_change: 'Error on password change' # ASD donde?
+    error_user_disabled: 'User disabled'
+    index:
+      title: 'Error logs'
+    pdf_list_name: 'error_logs_%{from_date}_%{to_date}.pdf'
+    period:
+      title: 'Interval'
+      range: 'from %{from_date} to %{to_date}'
+    show:
+      title: 'Record details'
+      list: 'Show error logs'
+    void_user: 'Void user' # ASD donde?
+
+  findings:
+    index:
+      title: 'Finding list'
+      current_user_answers_count: 'Own comments'
+      unread_answers_filter: 'Unread comments'
+      unread_answers:
+        one: 'You have an unread comment'
+        other: 'You have %{count} unread comments'
+    show:
+      title: 'Finding details'
+    edit:
+      title: 'Edit finding'
+    form:
+      show_status_change_history: 'Show status change history'
+      follow_up_date_label_append: ' - Suggested: '
+      confirm_finding_without_extension: "Are you sure you want to remove %{extension}? Remember that you will not be able to use it again."
+    auditor_form:
+      origin: 'origin'
+    edit_bic_sigen_fields:
+      title: 'Edit finding sigen fields'
+    current_user_filters:
+      pending_to_endorsement: 'Pending approval'
+      as_owner: '%{kind} as owner'
+      incomplete: 'Pending'
+      complete: 'Fixed'
+      repeated: 'Repeated'
+    state:
+      confirmed: 'Confirmed'
+      unconfirmed: 'Unconfirmed'
+      unanswered: 'Unanswered'
+      awaiting: 'Awaiting' # ASD To regularize?
+      failure: 'Failure'
+      being_implemented: 'Being implemented'
+      being_implemented_current: 'Current' # ASD Current no me suena como antónimo de overdue.
+      being_implemented_current_rescheduled: 'Currently rescheduled'
+      being_implemented_stale: 'Overdue' # ASD Stale se utiliza más para productos vencidos/expirados. Overdue se usa para algo que tenía deadline y ya pasó.
+      being_implemented_stale_rescheduled: 'Rescheduled overdue'
+      implemented: 'Implemented'
+      implemented_audited: 'Implemented / Audited'
+      assumed_risk: 'Assumed risk'
+      notify: 'Notify'
+      incomplete: 'Incomplete'
+      repeated: 'Repeated'
+      revoked: 'Revoked'
+      criteria_mismatch: 'Criteria mismatch'
+      expired: 'Dismissed / Not apply' # ASD Not valid?
+    work_papers:
+      create:
+        from_comment: 'From comment by %{user} on %{date}' # ASD Donde sale?
+    endorsements:
+      status:
+        pending: 'Pending'
+        approved: 'Approved'
+        rejected: 'Rejected'
+    endorsement_item:
+      approve: 'Approve'
+      reject: 'Reject'
+
+  licenses:
+    trial_valid_until: 'End of trial period'
+    price_per_month: 'Price per month'
+    statuses:
+      unpaid: 'Unpaid'
+      active: 'Active'
+      trial: 'In trial period'
+      cancelled: 'Cancelled'
+    blocked:
+      show:
+        body: 'Your organization is disabled, contact soporte@mawidabp.com'
+        check: 'Recheck payment' # ASD Check payment?
+    license:
+      check: 'Recheck payment' # ASD Check payment?
+      approve: 'Go to Paypal'
+      authorize_new_plan:
+        title: 'Authorize new plan'
+        body: |- # ASD se refiere a cambiar de planes ya armados, cierto? Ej: cambiar de plan base a premium || Quizás debería referirste más a utilizar/operar/tener disponible los usuarios que a "verlos"
+          To switch plans, you must authorize the new monthly plan.
+          The new plan will be invoiced in the next cycle, but you will see the desired number of audit users now.'
+    authorizations:
+      new:
+        title: 'License'
+      create:
+        title: 'License'
+    paypal_button:
+      create: 'Subscribe'
+      create_error: 'A problem has occurred, please contact soporte@mawidabp.com to check if the payment is credited' # ASD No se si es buena idea hablar de problema...
+
+  login_records:
+    choose:
+      title: 'Security reports'
+    index:
+      title: 'Login records' # ASD logs?
+    pdf_list_name: 'list_of_login_records_%{from_date}_%{to_date}.pdf'
+    period:
+      title: 'Interval'
+      range: 'from %{from_date} to %{to_date}'
+    show:
+      title: 'Login record details'
+      list: 'Show login records'
+
+  memos:
+    edit:
+      title: 'Edit external report'
+    index:
+      new: 'New external report'
+      title: 'External report list'
+      empty_html: 'There are no external reports, you can create one with the <span class="badge badge-primary">New memo</span> button' # ASD New memo?
+      empty_search_html: 'There are no external reports that match the search criteria'
+    new:
+      title: 'Create external report'
+    form:
+      markdown_help_html: '<span class="badge badge-info">Attention</span> within the content you can use %{link}' # ASD donde sale?
+      add_file_model: 'Add file'
+      download_cover: 'Download cover'
+    show:
+      title: 'Show external report'
+
+  news:
+    edit:
+      title: 'Edit news'
+    index:
+      new: 'New news'
+      title: 'News list'
+      empty_html: 'There is no news, you can create one with the <span class="badge badge-primary">New news</span> button'
+      empty_search_html: 'There are no news that match the search criteria'
+    new:
+      title: 'Create news'
+      tagging: 'Add tag'
+      image_model: 'Add image'
+    form:
+      markdown_help_html: '<span class="badge badge-info">Attention</span> within the content you can use %{link}'
+    show:
+      title: 'Show news'
+
+  opening_interviews:
+    edit:
+      title: 'Edit opening interview'
+    index:
+      new: 'New opening interview'
+      title: 'Opening interview list'
+      empty_html: 'There are no opening interviews, you can create one with the <span class="badge badge-primary">New opening interview</span> button'
+      empty_search_html: 'There are no opening interviews that match the search criteria'
+    new:
+      title: 'Create opening interview'
+    form:
+      add_responsible: 'Add responsible'
+      add_auditor: 'Add auditor'
+      add_assistant: 'Add assistant'
+    show:
+      title: 'Show opening interview'
+      auditeds: 'Responsible for the cycle' # ASD donde?
+      auditors: 'Assigned auditors'
+      download_pdf: 'Download PDF'
+    pdf:
+      pdf_name: 'opening_interview_%{name}.pdf'
+
+  organizations:
+    index:
+      title: 'Organization list'
+    show:
+      title: 'Organization details'
+    new:
+      title: 'Add organization'
+    edit:
+      title: 'Edit organization'
+    new_organization_can_not_have_image: 'You will be able to load an organization logo after creating it' # ASD isologotipo? logo? / Tenía haberla creado pero el infinitivo compuesto se usa para arrepentimiento
+    logo_styles:
+      default: 'Default'
+      success: 'Successful'
+      info: 'Informative' # ASD info?
+      warning: 'Warning'
+      danger: 'Danger'
+    saml_providers:
+      azure: 'Azure'
+
+  periods:
+    edit:
+      title: 'Edit period'
+    errors:
+      can_not_be_destroyed: 'Period cannot be deleted'
+      plan:
+        one: 'Has an associated plan'
+        other: 'Has %{count} associated plans'
+      reviews:
+        one: 'Has an associated review'
+        other: 'Has %{count} associated reviews'
+      workflows:
+        one: 'Has an associated workflow'
+        other: 'Has %{count} associated workflows'
+    index:
+      title: 'Period list'
+    new:
+      title: 'Add period'
+    show:
+      title: 'Period details'
+
+  plan_items:
+    best_practice:
+      best_practice_projects:
+        save: 'Attach best practice' # ASD donde sale?
+        done: 'Save'
+    control_objective:
+      control_objective_projects:
+        save: 'Attach control objective' # ASD donde sale?
+        done: 'Save'
+
+  plans:
+    index:
+      title: 'Work plan list'
+      copy: 'Copy'
+    show:
+      title: 'Work plan details'
+    new:
+      title: 'Add work plan'
+    edit:
+      title: 'Edit work plan'
+    plan_item:
+      add_human_resource_utilization: 'Add human resource'
+      add_material_resource_utilization: 'Add material resource'
+      add_tagging: 'Add tag'
+      add_auxiliar_business_unit_type: 'Add auxiliary organizational unit'
+    plan_items:
+      add_plan_item: 'Add project'
+    duplication_or_overload_form:
+      allow_duplication: 'Allow duplicates?'
+      allow_overload: 'Allow overload?'
+    cost:
+      human_resources_abbr: 'HR'
+      human_resources: 'Human resources'
+      material_resources_abbr: 'MR'
+      material_resources: 'Material resources'
+    item_status: # ASD Quizás los estados podrían ser como las issues, in progress, done, etc
+      note: 'Status must be read as: C = Concluded; E = Executing in time; E (FP) = Executing overtime; R = Delayed'
+      concluded:
+        long: 'Concluded'
+        short: 'C'
+      executing_in_time:
+        long: 'Executing (in time)'
+        short: 'E'
+      executing_overtime:
+        long: 'Executing (overtime)'
+        short: 'E (O)'
+      delayed:
+        long: 'Delayed'
+        short: 'D'
+    item_status_csv_pat:
+      completed:
+        long: 'Completed (Blue)'
+        short: 'Completed'
+      completed_early:
+        long: 'Completed early (Grey)'
+        short: 'Completed early'
+      in_early_progress:
+        long: 'In early progress (Celeste)'
+        short: 'In early progress'
+      not_started_no_delayed:
+        long: 'No started no delayed (Light Green)'
+        short: 'No started no delayed'
+      in_progress_no_delayed:
+        long: 'In progress no delayed (Dark Green)'
+        short: 'In progress no delayed'
+      delayed_pat:
+        long: 'Delayed (Yellow)'
+        short: 'Delayed'
+      overdue:
+        long: 'Overdue (Red)'
+        short: 'Overdue'
+    period:
+      title: 'Period (%{name})'
+      range: 'from %{from_date} to %{to_date}'
+    pdf:
+      title: 'Audit plan'
+      pdf_name: 'plan_period_%{period}.pdf'
+      resource_utilization: 'Resources used'
+    csv:
+      title: 'Audit Plan'
+      csv_name: 'plan_period_%{period}.csv'
+      csv_name_pat_im: 'internal_management_progress_report_%{current_date}.csv'
+      csv_name_pat_dprh: 'detailed_progress_report_in_hours_%{current_date}.csv'
+      number_observations_per_risk: 'Number of observations by risk'
+      annual_plan_hours: 'Annual plan hours'
+      auditor: 'Auditor (User)'
+      time_summary_hours: 'Time Summary Hours'
+    csv_prs_pat:
+      csv_name: 'progress_report_by_status_%{current_date}.csv'
+      business_unit: 'Sector' # ASD donde?
+      totals: 'Totals'
+      total_plan_items: 'Total Planned Works' # ASD revisar donde salía
+    csv_prh_pat:
+      csv_name: 'totalizing_progress_report_in_hours_%{current_date}.csv'
+      business_unit: 'Sector' # ASD donde?
+      budgeted_hours: 'Budgeted Hours'
+      progress: 'Total Progress'
+      percentage: 'Percentage'
+      total_hours: 'Total Hours'
+      period_name: 'Period'
+      period_start: 'Period Start'
+      period_end: 'Period End'
+    calendar:
+      show:
+        title: 'Calendar'
+        empty: 'There are no projects in the selected plan'
+        empty_with_no_business_units: 'No business units selected'
+        detail: 'Details' # ASD Plural? Sería para obtener información la cosa, cierto?
+        by_business_unit: 'Show calendar by business unit'
+        by_project: 'Show calendar by project'
+    resources:
+      show:
+        title: 'Summary by resource'
+        empty: 'There are no human resources used in the selected plan'
+    stats:
+      show:
+        title: 'Audit plan stats'
+        now: 'Now'
+        total: 'Total'
+        planned: 'Planned'
+        concluded: 'Concluded'
+        on_time: 'On time'
+        progress: 'Total progress'
+        compliance: 'Compliance'
+    business_unit_type_plan_items:
+      associate_control_objective: 'Associate control objective' # ASD Add / Atach?
+      associate_best_practice: 'Associate best practice' # ASD Add / Atach?
+    download_progress_report_with_statuses_pat: 'Download progress statuses of work'
+    download_totalizer_progress_report_in_hours_of_work_pat: 'Download totalizing progress report in hours of work'
+    download_detailed_progress_report_in_hours_of_work_pat: 'Download detailed progress report in hours of work'
+    download_progress_report_internal_management_pat: 'Download internal management progress report'
+    download_global_plan: 'Download global audit plan'
+    download_detailed_plan: 'Download detailed audit plan'
+    download_business_unit_type_plan: 'Download %{business_unit_type} plan'
+    download_detailed_business_unit_type_plan: 'Download detailed %{business_unit_type} plan'
+    download_detailed_business_unit_type_plan_csv: 'Download %{business_unit_type} plan in CSV'
+    download_business_unit_type_plan_csv: 'Download plan in CSV'
+    without_business_unit_type: 'Without business unit' # ASD donde sale?
+
+  profiles:
+    edit:
+      title: 'My profile' # ASD donde?
+      submit: 'Update my profile' # ASD donde?
+    update:
+      success: 'Your profile was updated successfully'
+
+  polls:
+    access_denied: 'The poll has already been answered'
+    already_exists: 'Some of the polls for %{user} already exist and were not resubmitted'
+    answer_poll: 'Answer poll?'
+    about: 'About'
+    about_html: 'About <strong>%{entity}</strong>'
+    answers:
+      index:
+        title: 'Answers summary'
+    business_units:
+      index:
+        title: 'Summary by organizational unit'
+    reviews:
+      index:
+        title: 'Summary by review'
+    index:
+      title: 'Poll list'
+    edit:
+      title: 'Edit poll'
+    has_unanswered:
+      one: 'You have a pending poll to answer'
+      other: 'You have %{count} pending polls to answer'
+    new:
+      title: 'Add poll'
+    not_found: 'The poll was not found or it has already been answered'
+    pdf:
+      name: 'poll_summary_from_%{from_date}_to_%{to_date}.pdf'
+    questionnaires:
+      index:
+        title: 'Summary by questionnaire type'
+    reports:
+      title: 'Poll reports'
+    show:
+      title: 'Poll details'
+    total_answered: 'Total answered polls'
+    total_unanswered: 'Total unanswered polls'
+    without_data: 'Without data for the entered filters' # ASD donde?
+    score: 'Average level of satisfaction'
+
+  questionnaires:
+    index:
+      title: 'Questionnaire list'
+    edit:
+      title: 'Edit questionnaire'
+    new:
+      title: 'Add questionnaire'
+    show:
+      title: 'Questionnaire details'
+    questions:
+      new: 'Add question' # ASD pregunta en :es?
+
+  readings:
+    reading:
+      mark_as_read: 'Mark as read'
+      readed_on: 'Marked as read on %{on}'
+
+  registrations:
+    new:
+      title: 'New Organization'
+    show:
+      title: 'Organization created'
+      body: 'Your registration is complete, you will receive an email with instructions to login'
+
+  report:
+    index_title: 'Report list'
+
+  reports:
+    customization_titles: 'Title customization'
+    generating: 'Generating report...' # ASD Creating?
+    file_will_be_sent: "We will send you the report by email, please review it in a few minutes"
+
+  resource_classes:
+    edit:
+      title: 'Edit resource class'
+    index:
+      title: 'Resource class list'
+    new:
+      title: 'Add resource class'
+    show:
+      title: 'Resource class details'
+    resources:
+      new: 'Add resource'
+    types:
+      human: 'People'
+      material: 'Materials'
+
+  reviews:
+    auxiliar_business_unit_types:
+      title: 'Auxiliary organizational units'
+    index:
+      control_objective_items_open:
+        title: 'Open control objectives'
+        label: 'OCO'
+      control_objective_items_finished:
+        title: 'Completed control objectives' # ASD completados en vez de finalizados?
+        label: 'CCO'
+    form:
+      add_business_unit_type: 'Add organizational unit'
+      operational_audit: 'Operational audit'
+      system_audit: 'System audit'
+
+  sessions:
+    new:
+      title: 'Login' # ASD Donde sale?
+      log_in: 'Login'
+      email: 'Email'
+      user: 'User'
+      password: 'Password'
+      remember_me: 'Remember me'
+      try_again: 'Try again' # ASD Donde sale?
+      forgot_password: 'Forgot your password?'
+    create:
+      invalid: 'Your email and/or password are incorrect =('
+      logged_in: 'Welcome'
+    destroy:
+      logged_out: 'See you next time'
+
+  settings:
+    index:
+      title: 'Setting list'
+    show:
+      title: 'Setting details'
+    new:
+      title: 'Add settings'
+    edit:
+      title: 'Edit settings'
+    finding_stale_confirmed_days: 'Number of days before an unanswered finding is considered unattended'
+    review_code_expresion: 'Review identification code format' # ASD key review_code_expression?
+    account_expire_time: 'Days to delete inactive accounts'
+    allow_concurrent_sessions: 'Allow simultaneous sessions for the same user'
+    attempts_count: 'Number of failed connection attempts'
+    expire_notification: 'Password expiration notice'
+    password_constraint: 'Password composition control'
+    password_count: 'Password history'
+    password_expire_time: 'Password expire time'
+    password_minimum_length: 'Minimum password length'
+    password_minimum_time: 'Minimum password time'
+    session_expire_time: 'Disconnect due to inactivity'
+    exchange_directory_path: 'File exchange directory'
+    show_print_date_on_pdfs: 'Show print date on PDFs'
+    brief_period_in_weeks: '"Brief of findings" reporting period in weeks'
+    show_follow_up_timestamps: 'Show follow-up timestamps'
+    require_manager_on_findings: 'Require audit manager on findings'
+    hide_import_from_ldap: 'Show "Import from LDAP" only to users with approval permissions'
+    skip_function_and_manager_from_ldap_sync: 'Do not sync "Position" and "Superior" fields with LDAP values' # ASD como se llaman los campos en LDAP?
+    hide_obsolete_best_practices: 'Hide obsolete best practices'
+    hours_of_work_per_day: 'Hours of work per day'
+    conclusion_review_receiver: 'Review receiver(s)'
+    temporary_polls: 'Temporarily save poll responses. A poll is complete when all of its questions are answered. '
+
+  tags:
+    edit:
+      title: 'Edit tag'
+    form:
+      children: 'Subtags'
+      add_child: 'Add Subtag'
+    index:
+      new: 'New tag'
+      title: 'Tag list'
+      empty_html: 'No tags, you can create one with the <span class="badge badge-primary">New tag</span> button'
+    list:
+      childless: 'No subtags'
+    new:
+      title: 'Create tag'
+    show:
+      title: 'Show tag'
+    styles:
+      secondary: 'Default'
+      primary: 'Important'
+      success: 'Successful'
+      info: 'Informative' # ASD info?
+      warning: 'Warning'
+      danger: 'Danger'
+
+  tasks:
+    on_time: 'On time, without rescheduling'
+    rescheduled: 'On time, rescheduled'
+    expired: 'Out of time'
+    status:
+      pending: 'Pending'
+      in_progress: 'In progress'
+      finished: 'Finished'
+
+  time_summary:
+    index:
+      title: 'Time summary'
+      period: 'From %{start} to %{end}'
+      current_week: 'Current week'
+      empty: 'No records'
+      add: 'Add activity'
+      edit: 'Edit activity'
+      destroy: 'Delete activity'
+      total_amount:
+        one: 'Total accumulated hours: %{amount}'
+        other: 'Total hours accumulated by %{count} people: %{amount}'
+    new:
+      title: 'New activity'
+    form:
+      add_business_unit_type: 'Add organizational unit'
+      activity: 'Activity'
+      review: 'Review'
+      workflow_amount: 'Amount of scheduled hours:'
+      time_consumption_amount: 'Amount of hours allocated:'
+    auxiliar_business_unit_types:
+      title: 'Auxiliary organizational units'
+      activity: 'Activity'
+      review: 'Review'
+      workflow_amount: 'Amount of scheduled hours'
+      time_consumption_amount: 'Amount of hours allocated'
+    downloads:
+      current_week: "Download current week"
+      current_month: "Download current month"
+      current_year: "Download current year"
+      csv:
+        date: "Date"
+        quantity_hours_per_day: "Number of hours per day"
+        task: "Task"
+        user: "User"
+        business_unit_types: "Organizational units"
+        detail: "Details" # ASD Plural? Sería para obtener información la cosa, cierto?
+        organization: "Organization"
+        period: "Period"
+        period_start: "Period Start"
+        period_end: "Period End"
+        plan_item: "Project"
+        plan_item_start: "Project Start"
+        plan_item_end: "Project End"
+
+  users:
+    index:
+      title: 'User list'
+      import_from_ldap: 'Import from LDAP'
+      show_hidden: 'Show hidden'
+    show:
+      title: 'User details'
+      profiles: 'Profiles'
+      organizations: 'Organizations'
+    new:
+      title: 'New user'
+    edit:
+      title: 'Edit user'
+      other_actions: 'Actions'
+    form:
+      unlink_manager: 'Unlink'
+      children: 'Staff in charge'
+      add_child: 'Add person in charge'
+      add_business_unit_type: 'Add organizational units'
+      add_related_user_relations: 'Add related user'
+      add_organization_role: 'Add new profile'
+      add_tagging: 'Add tag'
+    create:
+      correctly_created_with_count: 'User created, number of auditors remaining for your license: %{count}'
+    imports:
+      new:
+        title: 'Import users from LDAP'
+        credentials: 'Credentials'
+        import: 'Import'
+      create:
+        title: 'Import results'
+        empty: 'No user imported'
+        connection: 'Could not connect to server, please check username and password'
+        record_invalid: 'Import failed, some users have invalid fields'
+        created: 'Created'
+        updated: 'Updated'
+        deleted: 'Deleted'
+        unchanged: 'Unchanged'
+        errored: 'Errored'
+        deprecated_users: 'Users deprecated in LDAP server'
+    passwords:
+      edit:
+        title: 'Change password'
+        update: 'Update password'
+        new_password: 'New password'
+      update:
+        success: 'Password changed successfully'
+        expired: 'The link has expired, please ask for instructions again'
+      new:
+        title: 'Reset password'
+        email: 'Email'
+        send_instructions: 'Send instructions'
+        back: 'Back'
+        note: 'To reset your password, please enter your email address'
+      create:
+        success: 'An email was sent with instructions to reset the password'
+        not_found: 'The email entered is not registered, please check for typing error'
+    profiles:
+      edit:
+        title: 'Edit personal information'
+    reassignments:
+      edit:
+        title: 'Reassign responsibilities'
+        new_user: 'New responsible'
+        old_user: 'Old responsible'
+        with_findings: 'Include pending findings?'
+        with_reviews: 'Include executing reviews?'
+        submit: 'Reassign'
+      must_select_a_user: 'You must select a user' # ASD donde?
+
+    registrations:
+      new:
+        title: 'Register new user'
+
+    releases:
+      edit:
+        title: 'Release responsibilities'
+        with_findings: 'Include pending findings?'
+        with_reviews: 'Include executing reviews?'
+        submit: 'Release responsibilities'
+
+    status:
+      status_controls:
+        add: 'Add user to the follow-up status list'
+        remove: 'Remove user from the follow-up status list'
+        list: 'Show pending findings list of the selected users'
+        user_findings: "Show user pending findings list and their hierarchy"
+      show:
+        title: 'Status'
+        table: 'Show table'
+        graph: 'Show graph'
+        pending_weaknesses:
+          one: '**One** weakness **pending**'
+          other: '**%{count}** weaknesses **pending**'
+        high_risk_weaknesses:
+          one: '**One** weakness of **high risk**'
+          other: '**%{count}** **high risk** weaknesses'
+        weaknesses:
+          pending:
+            one: '**One** pending weakness'
+            other: '**%{count}** pending weaknesses'
+          complete:
+            one: '**One** weakness fixed'
+            other: '**%{count}** weaknesses fixed'
+          repeated:
+            one: '**One** repeated weakness'
+            other: '**%{count}** repeated weaknesses'
+
+  risk_assessments:
+    edit:
+      title: 'Edit risk assessment'
+      other_actions: 'Actions'
+      sort_by_risk: 'Sort by descending risk'
+    index:
+      new: 'New risk assessment'
+      title: 'Risk assessment list'
+      empty_html: 'There are no risk assessments, you can create one with the <span class="badge badge-primary">New risk assessment</span> button'
+      empty_search_html: 'There are no risk assessments that match the search criteria'
+      merge_to_plan: 'Create projects in plan from evaluation'
+    new:
+      title: 'Create risk assessment'
+    show:
+      title: 'Show risk assessment'
+      download_pdf: 'Download PDF'
+      download_csv: 'Download CSV'
+    form:
+      new_risk_assessment_items: 'After creating the risk assessment you will be able to add items to it'
+      cloned_risk_assessment_items: 'After creating the risk assessment you will see the copied items and can edit them or add new ones'
+      add_risk_assessment_item: 'Add item'
+      add_best_practice: 'Add best practice'
+      add_business_unit_type: 'Add organizational unit'
+      apply: 'Apply'
+    risk_weight_risks:
+      none: 'None'
+      low: 'Low'
+      medium_low: 'Medium low'
+      medium: 'Medium'
+      medium_high: 'Medium high'
+      high: 'High'
+    status:
+      draft: 'Draft'
+      final: 'Final'
+      merged: 'Scheduled'
+    pdf:
+      title: 'Risk assessment'
+      pdf_name: 'risk_assessment_%{name}.pdf'
+      period:
+        title: "Period (%{name})"
+        range: "%{from_date} to %{to_date}"
+
+  risk_assessment_templates:
+    edit:
+      title: 'Edit risk assessment template'
+    index:
+      new: 'New risk assessment template'
+      title: 'Risk assessment template list'
+      empty_html: 'There are no risk assessment templates, you can create one with the <span class="badge badge-primary">New risk assessment template</span> button'
+      empty_search_html: 'There are no risk assessment templates that match the search criteria'
+    new:
+      title: 'Create risk assessment template'
+    show:
+      title: 'Show risk assessment template'
+    form:
+      add_risk_assessment_weight: 'Add weight'
+
+  versions:
+    index:
+      title: 'Show security change report'
+    security_changes_report:
+      title: 'Security change report'
+    show:
+      title: 'Change log details'
+    events:
+      create: 'Create'
+      update: 'Update'
+      destroy: 'Delete'
+    changes: 'Changes'
+    column_attribute: 'Attribute'
+    column_new_value: 'New value'
+    column_old_value: 'Old value'
+    without_changes: 'No changes'
+    pdf_list_name: 'security_change_report_%{from_date}_%{to_date}.pdf'
+
+  weakness_templates:
+    edit:
+      title: 'Edit weakness template'
+    index:
+      new: 'New weakness template'
+      title: 'Weakness template list'
+      empty_html: 'There are no weakness templates, you can create one with the <span class="badge badge-primary">New weakness template</span> button'
+      empty_search_html: 'There are no weakness templates that match the search criteria'
+    new:
+      title: 'Create weakness template'
+    show:
+      title: 'Show weakness template'
+    form:
+      add_control_objective: 'Add control objective'
