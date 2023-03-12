@@ -68,9 +68,9 @@ es:
     show:
       title: 'Detalle buenas prácticas'
     new:
-      title: 'Agregar buenas prácticas' # ASD singular?
+      title: 'Agregar buenas prácticas' # REVIEW singular?
     edit:
-      title: 'Modificar buenas prácticas' # ASD singular?
+      title: 'Modificar buenas prácticas' # REVIEW singular?
     process_controls:
       new: 'Agregar proceso'
     control_objectives:
@@ -223,7 +223,7 @@ es:
       approve: 'Ir a Paypal'
       authorize_new_plan:
         title: 'Autorizar nuevo plan'
-        body: |- # ASD párrafo de mail? Sino sacar punto final
+        body: |- # REVIEW párrafo de mail? Sino sacar punto final
           Para cambiar de plan, deberá autorizar el nuevo plan mensual.
           El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios auditores en el momento.'
     authorizations:
@@ -539,7 +539,7 @@ es:
     show:
       title: 'Detalles del cuestionario'
     questions:
-      new: 'Agregar cuestión'
+      new: 'Agregar cuestión' # REVIEW no sería "pregunta"?
 
   readings:
     reading:
