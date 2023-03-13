@@ -227,6 +227,23 @@ class PlanItemTest < ActiveSupport::TestCase
     assert reponse.include?(new_free_plan_item)
   end
 
+  test 'should return all plan items when user does not have business unit types' do
+    assert_equal PlanItem.allowed_by_auxiliar_business_units_types,
+                 PlanItem.all
+  end
+
+  test 'should return plan item when user have business unit type' do
+    Current.user.business_unit_types << business_unit_types(:consolidated_substantive)
+
+    assert_equal PlanItem.allowed_by_auxiliar_business_units_types.count, 1
+  end
+
+  test 'should return blank plan item when user does not have business unit type' do
+    Current.user.business_unit_types << business_unit_types(:cycle)
+
+    assert_equal PlanItem.allowed_by_auxiliar_business_units_types.count, 0
+  end
+
   test 'completed_early status' do
     @plan_item.start                              = 1.day.from_now.to_date
     @plan_item.end                                = 2.day.from_now.to_date
