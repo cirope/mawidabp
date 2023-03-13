@@ -142,10 +142,10 @@ class PlanItemTest < ActiveSupport::TestCase
     assert PlanItem.list_unused((periods :current_period).id).blank?
   end
 
-  test 'should return blank unused because current user dont have business_unit' do
+  test 'should return blank unused because the user does not have business unit and auxiliary business unit type of this' do
     Current.user = users :poll
 
-    PlanItem.create!(
+    new_free_plan_item = PlanItem.create!(
       project: 'free plan item',
       start: 10.days.ago.to_date.to_s(:db),
       end: 10.days.from_now.to_date.to_s(:db),
@@ -156,11 +156,61 @@ class PlanItemTest < ActiveSupport::TestCase
       business_unit: business_units(:business_unit_three)
     )
 
+    AuxiliarBusinessUnitType.create!(
+      plan_item: new_free_plan_item,
+      business_unit_type: business_unit_types(:bcra_google)
+    )
+
     assert PlanItem.list_unused((periods :current_period).id).blank?
   end
 
-  test 'should return unused plan item' do
-    new_plan_item = PlanItem.create!(
+  test 'should return unused because user have auxiliary business unit type' do
+    Current.user = users :poll
+
+    new_free_plan_item = PlanItem.create!(
+      project: 'free plan item',
+      start: 10.days.ago.to_date.to_s(:db),
+      end: 10.days.from_now.to_date.to_s(:db),
+      order_number: 7,
+      scope: users(:committee),
+      risk_exposure: 'high',
+      plan: plans(:current_plan),
+      business_unit: business_units(:business_unit_three)
+    )
+
+    AuxiliarBusinessUnitType.create!(
+      plan_item: new_free_plan_item,
+      business_unit_type: business_unit_types(:cycle)
+    )
+
+    reponse = PlanItem.list_unused((periods :current_period).id)
+
+    assert reponse.present?
+    assert reponse.include?(new_free_plan_item)
+  end
+
+  test 'should return unused because user have business unit' do
+    Current.user = users :poll
+
+    new_free_plan_item = PlanItem.create!(
+      project: 'free plan item',
+      start: 10.days.ago.to_date.to_s(:db),
+      end: 10.days.from_now.to_date.to_s(:db),
+      order_number: 7,
+      scope: users(:committee),
+      risk_exposure: 'high',
+      plan: plans(:current_plan),
+      business_unit: business_units(:business_unit_one)
+    )
+
+    reponse = PlanItem.list_unused((periods :current_period).id)
+
+    assert reponse.present?
+    assert reponse.include?(new_free_plan_item)
+  end
+
+  test 'should return unused plan item because user does not have business units' do
+    new_free_plan_item = PlanItem.create!(
       project: 'free plan item',
       start: 10.days.ago.to_date.to_s(:db),
       end: 10.days.from_now.to_date.to_s(:db),
@@ -174,7 +224,7 @@ class PlanItemTest < ActiveSupport::TestCase
     reponse = PlanItem.list_unused((periods :current_period).id)
 
     assert reponse.present?
-    assert reponse.include?(new_plan_item)
+    assert reponse.include?(new_free_plan_item)
   end
 
   test 'completed_early status' do
