@@ -110,7 +110,7 @@ jobs:
             ${{ contains(github.ref_name, 'master')
             || contains(github.ref_name, 'galicia')
             || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'galicia')
+            || contains(github.event.pull_request.base.ref, 'galicia') }}
         use_normal:
           - >-
             ${{ contains(github.ref_name, 'master')
