@@ -61,35 +61,31 @@ jobs:
           - >-
             ${{ contains(github.ref_name, 'master')
             || contains(github.ref_name, 'bancotdf')
-            || endsWith(github.ref_name, 'bi')
             || contains(github.ref_name, 'bica')
-            || contains(github.ref_name, 'bice')
-            || contains(github.ref_name, 'bvalores')
-            || contains(github.ref_name, 'galicia')
-            || contains(github.ref_name, 'hipotecario')
-            || contains(github.ref_name, 'naranja')
-            || contains(github.ref_name, 'nbch')
             || contains(github.ref_name, 'petersen')
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
-            || endsWith(github.event.pull_request.base.ref, 'bi')
             || contains(github.event.pull_request.base.ref, 'bica')
-            || contains(github.event.pull_request.base.ref, 'bice')
-            || contains(github.event.pull_request.base.ref, 'bvalores')
-            || contains(github.event.pull_request.base.ref, 'galicia')
-            || contains(github.event.pull_request.base.ref, 'hipotecario')
-            || contains(github.event.pull_request.base.ref, 'naranja')
-            || contains(github.event.pull_request.base.ref, 'nbch')
             || contains(github.event.pull_request.base.ref, 'petersen') }}
         use_v27:
           - >-
             ${{ contains(github.ref_name, 'master')
             || contains(github.ref_name, 'bna')
+            || contains(github.ref_name, 'bice')
+            || contains(github.ref_name, 'bvalores')
             || contains(github.ref_name, 'dino')
+            || contains(github.ref_name, 'galicia')
+            || contains(github.ref_name, 'hipotecario')
+            || contains(github.ref_name, 'nbch')
             || contains(github.ref_name, 'patagonia')
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'bna')
+            || contains(github.event.pull_request.base.ref, 'bice')
+            || contains(github.event.pull_request.base.ref, 'bvalores')
             || contains(github.event.pull_request.base.ref, 'dino')
+            || contains(github.event.pull_request.base.ref, 'galicia')
+            || contains(github.event.pull_request.base.ref, 'hipotecario')
+            || contains(github.event.pull_request.base.ref, 'nbch')
             || contains(github.event.pull_request.base.ref, 'patagonia') }}
         use_bh:
           - >-
@@ -113,15 +109,12 @@ jobs:
           - >-
             ${{ contains(github.ref_name, 'master')
             || contains(github.ref_name, 'galicia')
-            || contains(github.ref_name, 'naranja')
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'galicia')
-            || contains(github.event.pull_request.base.ref, 'naranja') }}
         use_normal:
           - >-
             ${{ contains(github.ref_name, 'master')
             || contains(github.ref_name, 'bancotdf')
-            || endsWith(github.ref_name, 'bi')
             || contains(github.ref_name, 'bica')
             || contains(github.ref_name, 'bvalores')
             || contains(github.ref_name, 'nbch')
@@ -130,7 +123,6 @@ jobs:
             || contains(github.ref_name, 'dino')
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
-            || endsWith(github.event.pull_request.base.ref, 'bi')
             || contains(github.event.pull_request.base.ref, 'bica')
             || contains(github.event.pull_request.base.ref, 'bvalores')
             || contains(github.event.pull_request.base.ref, 'nbch')
