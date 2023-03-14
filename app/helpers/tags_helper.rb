@@ -6,7 +6,8 @@ module TagsHelper
       finding:           Finding.model_name.human(count: 0),
       news:              News.model_name.human(count: 0),
       plan_item:         PlanItem.model_name.human(count: 0),
-      review:            Review.model_name.human(count: 0)
+      review:            Review.model_name.human(count: 0),
+      user:              User.model_name.human(count: 0)
     }.with_indifferent_access
   end
 

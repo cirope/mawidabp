@@ -141,15 +141,23 @@ module Reviews::Score
 
     _weaknesses = conclusion_final_review ? final_weaknesses : weaknesses
 
+    _weaknesses.each { |w| weaknesses_total << w }
+
     if external_reviews.any?
       external_reviews.each do |er|
         er.alternative_review.final_weaknesses.each { |w| weaknesses_total << w }
+
+        ar_assigned_findings = er.alternative_review.get_assigned_findings
+
+        ar_assigned_findings.each { |w| weaknesses_total << w }
       end
     end
 
-    _weaknesses.each { |w| weaknesses_total << w }
+    assigned_findings = get_assigned_findings
 
-    scores = weaknesses_total.select { |w| w.state_weight > 0 }.group_by do |w|
+    assigned_findings.each { |w| weaknesses_total << w }
+
+    scores = weaknesses_total.select { |w| w.being_implemented? || w.implemented_audited? }.group_by do |w|
       [w.risk_weight, w.state_weight, w.age_weight(date: date)]
     end
 
@@ -163,6 +171,14 @@ module Reviews::Score
   def scored_by_splitted_effectiveness?
     score_type == 'splitted_effectiveness'
   end
+
+  protected
+
+    def get_assigned_findings
+      finding_review_assignments.map(&:finding).select do |fra|
+        fra if (fra.implemented_audited? || fra.being_implemented?)
+      end
+    end
 
   private
 

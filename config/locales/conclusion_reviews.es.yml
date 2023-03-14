@@ -149,6 +149,7 @@ es:
         status: 'Estado'
         age_parameter: 'Parámetro Antigüedad'
         weighing: 'Ponderación'
+        total: 'Total'
         footer_table: 'Calificación de ciclo'
       results_by_weighting:
         adequate: 'Adecuado'
