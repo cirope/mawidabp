@@ -1,6 +1,6 @@
 es:
   app_name: "Mawidabp"
-  app_copyright: "Copyright © 2008-%{year} Cirope S.A. Todos los derechos reservados."
+  app_copyright: "Copyright © 2008-%{year} Hullop Solutions S.A. Todos los derechos reservados."
 
   label:
     'yes': "Sí"
@@ -34,7 +34,7 @@ es:
     insert_item: "Insertar ítem"
     insert_record_item: "Insertar nuevo"
     list: "Listado"
-    modify: "Modificar"
+    modify: "Actualizar"
     move: "Mover"
     new: "Nuevo"
     next: "Siguiente"
@@ -61,7 +61,7 @@ es:
     loading: "Cargando"
     must_be_authenticated: "Debe autenticarse"
     must_change_the_password: "Debe cambiar su contraseña"
-    no_organization: "No existe la organización, compruebe la dirección"
+    no_organization: "No existe la organización, compruebe la dirección URL"
     password_expire_in_x:
       one: "Su contraseña expira mañana"
       other: "Su contraseña expira dentro de %{count} días"
@@ -76,7 +76,7 @@ es:
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
     rejected_data_format: "Algún campo contiene la cadena <code>../</code>. Por favor, elimínela antes de realizar la acción. Revise los campos resaltados" # REVIEW donde? realizar la acción? Agregué html
     validation_failed_message: "Los datos introducidos no son válidos, revise los campos resaltados"
-    you_are_already_logged: "Este usuario ya ha iniciado sesión"
+    you_are_already_logged: "Este usuario ya ha iniciado sesión en otro navegador"
     empty_result: "Sin resultados, modifique el criterio"
     automatic_by_the_system: "Realizado de forma automática por el sistema"
     compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="https://browsehappy.com/">actualizarlo</a>'
@@ -136,7 +136,7 @@ es:
   conclusion_report:
     index_title: "Reportes de conclusión"
     cost_analysis_title: "Análisis de costos"
-    cost_summary_title: "Análisis de costos"
+    cost_summary_title: "Resumen de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
