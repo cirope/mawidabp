@@ -1,0 +1,9 @@
+en:
+  code_prefixes:
+    oportunities: 'IO'
+    weaknesses: 'W'
+    revoked: 'R'
+    work_papers_in_control_objectives: 'COWP'
+    work_papers_in_oportunities: 'IOWP'
+    work_papers_in_weaknesses: 'WWP'
+    work_papers_in_weaknesses_follow_up: 'WFWP'
