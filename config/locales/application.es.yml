@@ -3,7 +3,7 @@ es:
   app_copyright: "Copyright © 2008-%{year} Cirope S.A. Todos los derechos reservados."
 
   label:
-    'yes': "Si"
+    'yes': "Sí"
     'no': "No"
     total: "Total"
     by: "por"
@@ -18,8 +18,8 @@ es:
     close: "Cerrar"
     create: "Crear"
     day:
-      one: "1 dia"
-      other: "%{count} dias"
+      one: "1 día"
+      other: "%{count} días"
     delete: "Baja"
     delete_file: "Eliminar archivo"
     descendant: "Descendente"
@@ -74,7 +74,7 @@ es:
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
     sort_by: "Ordenar por..."
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
-    rejected_data_format: "Algún campo contiene la cadena ../ debe eliminarla para poder realizar la acción. Revise los campos resaltados"
+    rejected_data_format: "Algún campo contiene la cadena <code>../</code>. Por favor, elimínela antes de realizar la acción. Revise los campos resaltados" # REVIEW donde? realizar la acción? Agregué html
     validation_failed_message: "Los datos introducidos no son válidos, revise los campos resaltados"
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
@@ -104,7 +104,7 @@ es:
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
     errors:
-      can_not_be_destroyed: "El unidad organizativa no puede ser eliminada"
+      can_not_be_destroyed: "La unidad organizativa no puede ser eliminada"
       business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
 
   conclusion_draft_review:
@@ -373,7 +373,7 @@ es:
       oportunities: "Oportunidades"
       without_weaknesses: "Sin observaciones"
       pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
-      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
+      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA" # REVIEW DE INFORMES DEFINITIVOS?
       total: "TOTAL"
 
   conclusion_final_review:
@@ -499,7 +499,7 @@ es:
 
   control_objective_item:
     index_title: "Listado de objetivos de control"
-    show_title: "Detalle objetivo de control"
+    show_title: "Detalle objetivo de control" # REVIEW Detalle de objetivo de control? Detalles de?
     edit_title: "Modificar objetivo de control"
     correctly_created: "Objetivo de control agregado correctamente."
     correctly_updated: "Objetivo de control actualizado correctamente."
@@ -564,10 +564,10 @@ es:
       column_month: "Mes"
       column_estimated_amount: "Unidades estimadas"
     planned_cost_summary_title: "Análisis de costos planificados"
-    reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor"
+    reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor" # REVIEW del auditor?
     reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión supervisor"
     reviews_with_incomplete_work_papers_report:
-      empty_incomplete: "No hay informes cerrados sin conformidad auditor en papeles de trabajo"
+      empty_incomplete: "No hay informes cerrados sin conformidad auditor en papeles de trabajo" # REVIEW del auditor?
       empty_revised: "No hay informes cerrados sin revisión supervisor en papeles de trabajo"
     index_title: "Reportes de ejecución"
     findings_type_external: "Observaciones Auditorías Externas"
@@ -875,7 +875,7 @@ es:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
       confirm: "Confirmar notificación"
-      the_following_findings_are_still_unconfirmed: "Las siguientes observaciones / oportunidades han sido notificadas pero no han recibido una confirmación"
+      the_following_findings_are_still_unconfirmed: "Las siguientes observaciones / oportunidades han sido notificadas pero no han recibido una confirmación" # REVIEW oportunidades de mejora?
     reassigned_findings:
       new_responsibles:
         one: "Usuario actual: %{responsible}"
@@ -907,7 +907,7 @@ es:
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
-        one: "La siguiente observación / oportunidad de mejora han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+        one: "La siguiente observación / oportunidad de mejora ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
         other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
@@ -1090,9 +1090,9 @@ es:
     show_title: "Detalles del perfil"
     new_title: "Agregar perfil"
     edit_title: "Modificar perfil"
-    correctly_created: "Perfil agregado correctamente."
-    correctly_updated: "Perfil actualizado correctamente."
-    stale_object_error: "El perfil no fue actualizado, intente nuevamente."
+    correctly_created: "Perfil agregado correctamente"
+    correctly_updated: "Perfil actualizado correctamente"
+    stale_object_error: "El perfil no fue actualizado, intente nuevamente"
     type_admin: "Administrador"
     type_supervisor: "Supervisor"
     type_auditor: "Auditor"
@@ -1102,7 +1102,7 @@ es:
     type_executive_manager: "Gerente"
 
   user:
-    will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha observaciones / oportunidades pendientes, deberá reasignarlas primero"
+    will_be_orphan_findings: "No se eliminó el usuario, tiene observaciones / oportunidades pendientes, deberá reasignarlas primero"
     disabled: "Deshabilitado"
     without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"
     responsibility_modification:
@@ -1114,10 +1114,10 @@ es:
         other: "Se han reasignado la responsabilidad de los informes en ejecución %{reviews}"
       reassigned_to_findings_from_reviews:
         one: "Se han reasignado los hallazgos pendientes del informe %{reviews}"
-        other: "Se han reasignado las hallazgos pendientes de los informes %{reviews}"
+        other: "Se han reasignado los hallazgos pendientes de los informes %{reviews}"
     responsibility_release:
       title: "Liberación de responsabilidades"
-    unconfirmed_findings: "Observaciones sin confirmar a la fecha"
+    unconfirmed_findings: "Observaciones sin confirmar a la fecha" # REVIEW es necesario el "a la fecha"?
     pdf:
       pdf_name: "listado_de_usuarios.pdf"
       users_count: "Cantidad de usuarios: %{count}"
@@ -1130,9 +1130,9 @@ es:
     show_title: "Detalles de la observación"
     new_title: "Agregar observación"
     edit_title: "Modificar observación"
-    correctly_created: "Observación agregada correctamente."
-    correctly_updated: "Observación actualizada correctamente."
-    stale_object_error: "La observación no fue actualizada, intente nuevamente."
+    correctly_created: "Observación agregada correctamente"
+    correctly_updated: "Observación actualizada correctamente"
+    stale_object_error: "La observación no fue actualizada, intente nuevamente"
     see_all: "Ver todas"
     edit_control_objective: "Editar objetivo de control"
     previous_follow_up_dates: "Fechas de implementación anteriores"
@@ -1152,7 +1152,7 @@ es:
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
       without_audit_recommendations: "no tiene recomendaciones de auditoria"
-      cannot_update_sigen_fields_in_repeated_of: "No se pudieron actualizar los campos sigen en el finding con id: %{id} debido a los errores: %{messages}"
+      cannot_update_sigen_fields_in_repeated_of: "No se pudieron actualizar los campos sigen en el finding con id: %{id} debido a los errores: %{messages}" # REVIEW hallazgo?
 
   welcome:
     index_title: "Bienvenido"
@@ -1168,9 +1168,9 @@ es:
     show_title: "Detalles del programa de trabajo"
     new_title: "Agregar programa de trabajo"
     edit_title: "Modificar programa de trabajo"
-    correctly_created: "Programa de trabajo agregado correctamente."
-    correctly_updated: "Programa de trabajo actualizado correctamente."
-    stale_object_error: "El programa de trabajo no fue actualizado, intente nuevamente."
+    correctly_created: "Programa de trabajo agregado correctamente"
+    correctly_updated: "Programa de trabajo actualizado correctamente"
+    stale_object_error: "El programa de trabajo no fue actualizado, intente nuevamente"
     save_as_new_version: "¿Guardar como nueva versión?"
     column_estimated: "Estimado"
     column_real: "Real"
@@ -1210,7 +1210,7 @@ es:
       control: "Control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      finding_answer: "Respuesta a observación"
+      finding_answer: "Respuesta a observación" # REVIEW de la observación?
       finding_review_assignment: "Asignación de observación a informe"
       group: "Grupo"
       notification: "Notificación"
@@ -1280,7 +1280,7 @@ es:
         observations: "Otras consideraciones"
         main_weaknesses_text: "Principales debilidades"
         corrective_actions: "Acciones correctivas"
-        affects_compliance: "Afecta compliance"
+        affects_compliance: "Afecta cumplimiento"
         collapse_control_objectives: "Agrupar objetivos de control"
         scope: "Limitación al alcance"
         reference: "Marco de referencia"
@@ -1492,8 +1492,8 @@ es:
         idp_sso_target_url: 'Dirección URL de inicio de sesión'
         sp_entity_id: 'Identificador (id. de entidad)'
         assertion_consumer_service_url: 'Dirección URL de respuesta (URL del Servicio de consumidor de aserciones)'
-        name_identifier_format: 'name identifier format'
-        assertion_consumer_service_binding: 'assertion consumer service binding'
+        name_identifier_format: 'name identifier format' # REVIEW formato de identificador de nombre? donde?
+        assertion_consumer_service_binding: 'assertion consumer service binding' # REVIEW enlace de servicio de consumidor de aserción? donde?
         idp_cert: 'Certificado (Base64)'
         default_role_for_users: 'Role por defecto para usuarios'
       work_paper:
