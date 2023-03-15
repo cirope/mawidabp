@@ -422,7 +422,7 @@ en:
     responsibles: "Responsibles"
     issue_date_title: "DATE"
     new_origination_date: "New"
-    estimated_follow_up_date: "Estimated follow up date" # REVIEW Estimated month of normalization?
+    estimated_follow_up_date: "Estimated follow-up date" # REVIEW Estimated month of normalization?
     audit_period: "%{start} to %{end}"
     audit_period_title: "AUDIT PERIOD"
     objectives_and_scopes: "OBJECTIVES AND SCOPE OF WORK"
@@ -579,7 +579,7 @@ en:
     weaknesses_by_state:
       pdf_name: "weaknesses_in_run_by_state_%{from_date}_to_%{to_date}.pdf"
       title: "DETAILED MANAGEMENT REPORT\nWEAKNESSES/IMPROVEMENT OPPORTUNITIES IN EXECUTION\nTOTALS BY REPORT AND STATUS" # REVIEW Excecution? Status (in progress) / State (in disarray)?
-      clarification: "Note: the Weaknesses / Improvement Opportunities shown in this follow up are not final (the follow ups are in the Execution stage)"
+      clarification: "Note: the Weaknesses / Improvement Opportunities shown in this follow-up are not final (the follow-ups are in the Execution stage)"
       weaknesses_column: "Weaknesses"
       oportunities_column: "Improvement Opportunities" # REVIEW key opportunities_column?
       total: "TOTAL"
