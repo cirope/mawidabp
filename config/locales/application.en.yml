@@ -182,7 +182,7 @@ en:
     index_title: "Conclusion reports"
     control_objective_stats_title: 'Observations by control objective' # REVIEW weaknesses or findings?
     control_objective_stats_by_review_title: 'Observations by control objective without scores' # REVIEW weaknesses or findings? scores?
-    benefits_title: 'Benefits / Harms' # REVIEW Damages?
+    benefits_title: 'Benefits / Detriments'
     process_control_stats_title: 'Observations by business process' # REVIEW weaknesses or findings?
     synthesis_report_title: "Executive summary"
     review_stats_report_title: "Review statistics"
@@ -214,10 +214,10 @@ en:
       one: "The following filter has been applied to this report: %{filters}"
       other: "The following filters have been applied to this report: %{filters}"
     benefits:
-      pdf_name: 'benefits_harms_%{from_date}_to_%{to_date}.pdf'
-      title: "Benefits / Harms" # REVIEW Damages?
+      pdf_name: 'benefits_detriments_%{from_date}_to_%{to_date}.pdf'
+      title: "Benefits / Detriments"
       subtitle: "FINAL REPORTS"
-      without_audits_in_the_period: 'No audits with benefits / harms in the period'
+      without_audits_in_the_period: 'No audits with benefits / detriments in the period'
       total: 'Total amount: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'weaknesses_by_control_objective_%{from_date}_to_%{to_date}.pdf'
@@ -655,7 +655,7 @@ en:
     index_title: "Committee reports"
     control_objective_stats_title: 'Weaknesses by control objective' # REVIEW Weaknesses?
     control_objective_stats_by_review_title: 'Weaknesses by control objective without score' # REVIEW qualification? Weaknesses?
-    benefits_title: 'Benefits / Harms' # REVIEW harm o losses?
+    benefits_title: 'Benefits / Detriments' # REVIEW harm o losses?
     process_control_stats_title: 'Weaknesses by business process'
     control_effectiveness: "Control effectiveness"
     pending_findings: "Pending observations follow-up"
@@ -698,10 +698,10 @@ en:
       one: "The following filter has been applied to this report: %{filters}"
       other: "The following filters have been applied to this report: %{filters}"
     benefits:
-      pdf_name: 'benefits_harms_%{from_date}_to_%{to_date}.pdf'
-      title: "Benefits / Harms" # REVIEW harms?
+      pdf_name: 'benefits_detriments_%{from_date}_to_%{to_date}.pdf'
+      title: "Benefits / Detriments"
       subtitle: "FINAL REPORTS"
-      without_audits_in_the_period: 'No audits with benefits / harms in the period' # REVIEW harms?
+      without_audits_in_the_period: 'No audits with benefits / detriments in the period'
       total: 'Total amount: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'weaknesses_by_control_objective_%{from_date}_to_%{to_date}.pdf' # REVIEW weaknesses?
