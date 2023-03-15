@@ -18,7 +18,7 @@ TEMP_PATH = File.join(Rails.root, 'tmp').freeze
 APP_ADMIN_PREFIXES = ['admin', 'www'].freeze
 # Variable con los idiomas disponibles (Debería reemplazarse con
 # I18.available_locales cuando se haya completado la traducción a Inglés)
-AVAILABLE_LOCALES = [:es].freeze
+AVAILABLE_LOCALES = [:es, :en].freeze
 # Cantidad de días en los que es posible cambiar la contraseña luego de un
 # blanqueo
 BLANK_PASSWORD_STALE_DAYS = 3
