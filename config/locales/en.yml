@@ -1,0 +1,1958 @@
+'es':
+  label:
+    yes: "Yes"
+    no: "No"
+    total: "Total"
+    by: "by"
+    add: "Add"
+    add_item: "Add item"
+    apply_filter: "Apply filter"
+    ascendant: "Ascendant"
+    back: "Back"
+    optional: "Optional"
+    cancel: "Cancel"
+    close: "Close"
+    create: "Create"
+    day:
+      one: "1 day"
+      other: "%{count} days"
+    delete: "Delete"
+    delete_file: "Delete file"
+    descendant: "Descendant"
+    details: "Details"
+    disable: "Disable"
+    download: "Download"
+    download_csv: "Download CSV"
+    download_rtf: "Download RTF"
+    create_permalink: "Create permalink"
+    edit: "Edit"
+    greater_or_equal_than: "Greater or equal than" # NOTE: no existe en application.en.yml
+    import: "Import"
+    insert_item: "Insert item"
+    insert_record_item: "Insert new" # REVIEW donde? qué se inserta?
+    list: "List"
+    modify: "Modify" # REVIEW Edit? donde?
+    move: "Move"
+    new: "New"
+    next: "Next"
+    "or": 'or'
+    previous: "Previous"
+    save: "Save"
+    search: "Search"
+    send: "Send"
+    show: "Show"
+    downloads: "Downloads"
+    update: "Update"
+    without_data: "Without data"
+
+  lang:
+    es: 'Spanish' # REVIEW donde se usaría esto? Deberíamos cambiarlo a English?
+
+  message:
+    ldap_error: 'Authentication server is not available, please try again later'
+    change_weakness_risk: "The risk of the observation has changed"
+    confirmation_question: "Are you sure?"
+    download: "Download"
+    insufficient_privileges: "You do not have permissions to perform the operation" # REVIEW operation? Donde?
+    invalid_user_or_password: "Invalid user/password"
+    loading: "Loading"
+    must_be_authenticated: "You must be authenticated" # REVIEW va el sujeto, cierto? o se concatena con algún modelo?
+    must_change_the_password: "You must change your password"
+    no_organization: "No such organization, check URL" # REVIEW URL cierto?
+    password_expire_in_x:
+      one: "Your password expires tomorrow"
+      other: "Your password expires in %{count} days"
+    password_expired_x_days_ago:
+      one: "Your password expired yesterday"
+      other: "Your password expired %{count} days ago"
+    search_link_title: "Filter listing (Ctrl + Spacebar)" # REVIEW donde?
+    session_closed_correctly: "Session closed correctly" # REVIEW Signed out successfully?
+    session_expires_in_less_than_two_minutes: "Your session expires in less than two minutes"
+    session_time_expired: "Your session has expired, you need to authenticate again" # REVIEW Donde? please authenticate again? please authenticate again?
+    sort_by: "Sort by..."
+    unsaved_data_warning: "You have modified the content, if you leave the page you will lose all changes" # REVIEW content?
+    rejected_data_format: "Some field contains the string <code>../</code>. Please remove it before performing the action. Check the highlighted fields" # REVIEW Donde sale? Sino podemos usar el <ins>.
+    validation_failed_message: "The data entered is invalid, please check the highlighted fields" # REVIEW entered?
+    you_are_already_logged: "This user is already logged in" # REVIEW You are already logged in?
+    empty_result: "No results, please modify the criteria" # REVIEW Donde? search criteria? selection criterion?
+    automatic_by_the_system: "Done automatically by the system" # REVIEW Donde?
+    compatibility_warning_html: 'You are using an <strong>outdated</strong> browser. Please consider <a href="https://browsehappy.com/">upgrading it</a>'
+
+  error:
+    title: "Error"
+    download_the_following_file: "Please download the following file:"
+    error_file: "error_file"
+    header_message: "A problem has been found" # REVIEW Donde sale?
+    hide_details: "Hide details"
+    or_send_it_to_the_following_email: "Or to the following email address:" # REVIEW Donde sale? Debe comenzar con may?
+    send_it_to_the_administrator: "And send it to the system administrator via the website:" # REVIEW Donde sale? Debe comenzar con may?
+    show_details: "Show details"
+    thank_you_and_apologies_for_the_inconvenience: "Thank you very much and sorry for the inconvenience" # REVIEW Donde sale? Thanks a lot?
+
+  business_unit_kind: # NOTE: no existe en application.en.yml
+    errors:
+      business_unit_kind_related: "The organizational unit cannot be deleted, it is related to at least one business unit"
+
+  business_unit_type:
+    index_title: "Organizational units list"
+    show_title: "Organizational unit detail"
+    new_title: "Add organizational unit"
+    edit_title: "Edit organizational unit"
+    correctly_created: "Organizational unit was successfully created."
+    correctly_updated: "Organizational unit was successfully updated."
+    stale_object_error: "The organizational unit was not updated, please try again."
+    add_business_unit: "Add business unit"
+    internal_audit: "Audits performed by the entity"
+    external_audit: "Audits performed by other entities"
+    errors:
+      can_not_be_destroyed: "The organizational unit cannot be deleted"
+      business_unit_related: "The business unit cannot be deleted, it is related to at least one plan item" # REVIEW plan item? work plan?
+
+  business_unit: # NOTE: no existe en application.en.yml
+    edit_title: "Modify business unit"
+    correctly_updated: "Business unit correctly updated."
+
+  conclusion_draft_review:
+    index_title: "Draft review list"
+    show_title: "Draft review detail"
+    new_title: "Add draft review"
+    edit_title: "Edit draft review"
+    bundle_title: "Generate bundle" # REVIEW cual es la diferencia con create_bundle?
+    correctly_created: "Draft review was successfully created."
+    correctly_updated: "Draft review was successfully updated."
+    stale_object_error: "The draft review could not be updated, please try again."
+    new_conclusion_final_review: "New conclusion final review"
+    approved: "Approved"
+    not_approved: "Not approved"
+    check_for_approval: "Check now"
+    generate_score_sheet: "Download detailed score sheet"
+    generate_global_score_sheet: "Download global score sheet"
+    download_work_papers: "Download work papers"
+    download_without_score: "Download without score"
+    download_brief: "Download brief"
+    download_rtf: "Descargar RTF" # NOTE: no existe en application.en.yml no esá en el otro archivo
+    create_bundle: "Create bundle" # REVIEW cual es la diferencia con bundle_title?
+    send_by_email: "Send by email"
+    last_verified_date: "Last verification was performed on %{date}"
+    has_final_review: "A final review has already been issued and therefore it is not possible to continue working with the draft review"
+    add_annex: "Add annex" # NOTE: no existe en application.en.yml
+    add_image: "Add image" # NOTE: no existe en application.en.yml
+    errors:
+      without_corrective_actions: "has no corrective actions"
+
+  conclusion_report:
+    index_title: "Conclusion reports"
+    cost_analysis_title: "Cost Analysis" # REVIEW cual es la diferencia con cost_summary_title
+    cost_summary_title: "Cost Analysis"
+    detailed_cost_analysis_title: "Detailed cost analysis"
+    weaknesses_by_state_title: "Total Weaknesses / Improvement Opportunities by state"
+    weaknesses_by_risk_title: "Total Weaknesses / Improvement Opportunities by risk"
+    weaknesses_by_risk_and_business_unit_title: "Weaknesses by risk and business unit" # NOTE: no existe en application.en.yml
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
+    weaknesses_by_risk_report_title: "Weaknesses by risk" # NOTE: no existe en application.en.yml
+    weaknesses_by_month_title: "Weaknesses by month" # NOTE: no existe en application.en.yml
+    weaknesses_current_situation_title: "Global report - Quarterly" # NOTE: no existe en application.en.yml
+    weaknesses_by_control_objective_title: "Control objective result" # NOTE: no existe en application.en.yml
+    weaknesses_by_user_title: "Weaknesses by user" # NOTE: no existe en application.en.yml
+    weaknesses_by_business_unit_title: "Weaknesses per cycle" # NOTE: no existe en application.en.yml
+    fixed_weaknesses_report_title: "Fixed risk weaknesses" # NOTE: no existe en application.en.yml
+    cost_analysis:
+      detailed_column_resource: "Resource"
+      detailed_column_estimated_amount: "Estimated cost (planned)"
+      detailed_column_real_amount: "Actual cost (executed)"
+      detailed_column_deviation: "Deviation"
+      general_column_business_unit: "Business unit"
+      general_column_review: "Report"
+      general_column_estimated_amount: "Estimated cost (planned)"
+      general_column_real_amount: "Actual cost (executed)"
+      general_column_deviation: "Deviation"
+      pdf_name: "cost_analysis_%{from_date}_to_%{to_date}.pdf"
+      detailed_title: "DETAILED COST ANALYSIS\nBY INTERNAL AUDIT REPORT" # REVIEW Puede contener solo un salto de línea? en :es tiene 2.
+      general_title: "INTERNAL AUDIT\nCOST ANALYSIS"
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+    cost_summary:
+      pdf_name: "cost_summary_%{from_date}_to_%{to_date}.pdf"
+      title: "INTERNAL AUDIT\nCOST SUMMARY"
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      column_month: "Month"
+      column_estimated_amount: "Estimated units"
+      column_real_amount: "Real Units"
+      column_deviation: "Deviation"
+      column_interval: "Interval" # NOTE: no existe en application.en.yml
+
+  conclusion_committee_report:
+    index_title: "Conclusion reports"
+    control_objective_stats_title: 'Observations by control objective' # REVIEW weaknesses or findings?
+    control_objective_stats_by_review_title: 'Observations by control objective without scores' # REVIEW weaknesses or findings? scores?
+    control_objective_counts_title: "Control objective analysis" # NOTE: no existe en application.en.yml
+    benefits_title: 'Beneficios / Perjuicios'
+    process_control_stats_title: 'Observaciones por proceso de negocio'
+    synthesis_report_title: "Resumen ejecutivo"
+    review_stats_report_title: "Estadísticas de informes"
+    review_scores_report_title: "Calificaciones de informes"
+    review_score_details_report_title: "Calificaciones de informes detallado"
+    nbc_annual_report_title: "Resumen anual"
+    weaknesses_by_risk_report_title: "Weaknesses by risk" # NOTE: no existe en application.en.yml
+    weaknesses_by_risk_and_business_unit_title: "Weaknesses by risk and business unit" # NOTE: no existe en application.en.yml
+    weaknesses_by_month_title: "Weaknesses by risk" # NOTE: no existe en application.en.yml
+    weaknesses_current_situation_title: "Global report - Quarterly" # NOTE: no existe en application.en.yml
+    weaknesses_by_control_objective_title: "Weaknesses by control objective" # NOTE: no existe en application.en.yml
+    weaknesses_by_user_title: "Weaknesses by use" # NOTE: no existe en application.en.yml
+    weaknesses_by_business_unit_title: "Weaknesses by business unit" # NOTE: no existe en application.en.yml
+    fixed_weaknesses_report_title: "Fixed high risk weaknesses"
+    qa_indicators_title: "Quality indicators"
+    weaknesses_by_state_title: "Total Weaknesses / Improvement Opportunities by state"
+    weaknesses_by_risk_title: "Total Weaknesses / Improvement Opportunities by risk"
+    weaknesses_by_audit_type_title: "Total Weaknesses / Improvement Opportunities by audit type"
+    findings_type_internal: "Findings / Opportunities for Improvement Internal Audit"
+    findings_type_external: "External Audit Findings"
+    weaknesses_type_internal: "Internal Audit Weaknesses"
+    weaknesses_type_external: "External Audit Weaknesses"
+    weaknesses_by_risk: "Weaknesses by risk" # NOTE: no existe en application.en.yml
+    fixed_weaknesses: "Fixed high risk weaknesses"
+    from_date: "From"
+    to_date: "To"
+    mid_date: "Mid" # REVIEW donde sale?
+    cut_date: "Old data closing date" # NOTE: no existe en application.en.yml
+    applied_filters:
+      one: "The following filter has been applied to this report: %{filters}"
+      other: "The following filters have been applied to this report: %{filters}"
+    benefits:
+      pdf_name: 'benefits_harms_%{from_date}_to_%{to_date}.pdf'
+      title: "Benefits / Harms" # REVIEW Damages?
+      subtitle: "FINAL REPORTS"
+      without_audits_in_the_period: 'No audits with benefits / harms in the period'
+      total: 'Total amount: <b>%{amount}</b>'
+    control_objective_stats:
+      pdf_name: 'weaknesses_by_control_objective_%{from_date}_to_%{to_date}.pdf'
+      title: "WEAKNESSES GROUPED BY CONTROL OBJECTIVE"
+      subtitle: "FINAL REPORTS"
+      average_effectiveness: 'Weighted average score'
+      average_effectiveness_resume:
+        one: '%{effectiveness} in a report'
+        other: '%{effectiveness} in %{count} reports'
+      reviews_with_weaknesses: # NOTE: no existe en application.en.yml
+        one: "%{count} review with weaknesses in the O.C"
+        other: "%{count} reviews with weaknesses in the O.C"
+      without_weaknesses: 'No weaknesses'
+      without_audits_in_the_period: 'No audits in the period'
+      review_effectiveness_average: 'Weighted average of control objective scores: <b>%{score}%</b>'
+    control_objective_stats_by_review:
+      pdf_name: 'weaknesses_by_control_objective_without_score_%{from_date}_to_%{to_date}.pdf' # REVIEW qualification / stast? x2
+      title: 'WEAKNESSES GROUPED BY CONTROL OBJECTIVE WITHOUT SCORE' # REVIEW QUALIFICATION / STATS? x2
+      subtitle: 'FINAL REPORTS'
+      without_weaknesses: 'No weaknesses'
+      without_audits_in_the_period: 'No audits in the period'
+    control_objective_counts: # NOTE: no existe en application.en.yml
+      pdf_name: "control_objectives_analysis_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "ANALYSIS OF CONTROL OBJECTIVES / FINAL REPORTS"
+      without_control_objective_items: "Without control objectives"
+    fixed_weaknesses_report:
+      pdf_name: "high_risk_weaknesses_solved_%{from_date}_al_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Weaknesses"
+      external_audit_weaknesses: "External Audit Weaknesses"
+      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      subtitle: "WEAKNESSES SOLVED - FINAL REPORTS"
+      without_audits_in_the_period: "No high risk audits fixed in the period"
+      without_audits_in_the_interval: "No high risk audits fixed in the selected interval"
+      without_weaknesses: "No weaknesses"
+    weaknesses_by_risk_report: # NOTE: no existe en application.en.yml
+      pdf_name: "weaknesses_by_risk_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal audit weaknesses"
+      external_audit_weaknesses: "External audit weaknesses"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "RISK WEAKNESSES - FINAL REPORTS"
+      without_audits_in_the_period: "Without audits in the period"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+    weaknesses_by_month: # NOTE: no existe en application.en.yml
+      pdf_name: "weaknesses_by_month_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "MONTHLY REPORT - FINAL REPORTS"
+      main_weaknesses: "Main weaknesses"
+      other_weaknesses: "Other weaknesses"
+      without_audits_in_the_month: "Without audits in the month"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      year: "Origin year"
+    weaknesses_by_control_objective: # NOTE: no existe en application.en.yml
+      pdf_name: "control_objectives_result_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "RESULTS OF CONTROL OBJECTIVES / FINAL REPORTS"
+      without_weaknesses: "Without weaknesses"
+      origination_year: "Origin year"
+    weaknesses_by_user: # NOTE: no existe en application.en.yml
+      pdf_name: "observations_by_user_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "USER FEEDBACK / FINAL REPORTS"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+    weaknesses_by_business_unit: # NOTE: no existe en application.en.yml
+      pdf_name: "observations_by_cycle_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "OBSERVATIONS PER CYCLE / FINAL REPORTS"
+      on_revision: "On revision"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      year: "Origin year"
+    period:
+      title: "Interval"
+      range: "from %{from_date} to %{to_date}"
+    process_control_stats:
+      pdf_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf'
+      csv_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf' # NOTE: no existe en application.en.yml
+      period_column: 'Period' # NOTE: no existe en application.en.yml
+      title: "WEAKNESSES GROUPED BY BUSINESS PROCESS"
+      subtitle: "FINAL REPORTS"
+      average_effectiveness: 'Weighted average score'
+      average_effectiveness_resume:
+        one: '%{effectiveness} with weaknesses in a report'
+        other: '%{effectiveness} with weaknesses in %{count} reports'
+      reviews_with_weaknesses: # NOTE: no existe en application.en.yml
+        one: "%{count} review with weaknesses in the O.C"
+        other: "%{count} reviews with weaknesses in the O.C"
+      without_weaknesses: 'No weaknesses'
+      without_audits_in_the_period: 'No audits in the period'
+      review_effectiveness_average: 'Weighted average of business process scores: <b>%{score}%</b>'
+      download_csv: 'Download CSV' # NOTE: no existe en application.en.yml
+    qa_indicators:
+      title: "Internal Audit Quality Management System - Quality Indicators"
+      subtitle: ""
+      indicator: "Indicator"
+      value: "Value"
+      pdf_name: "quality_indicators_%{from_date}_to_%{to_date}.pdf"
+      without_audits_in_the_period: 'No audits in the period'
+      indicators:
+        highest_solution_rate: "Highest Risk Weaknesses Solution"
+        medium_solution_rate: "Medium Risk Weaknesses Solution"
+        digitalized: "Digitization"
+    nbc_annual_report:
+      pdf_name: "annual_report_%{from_date}_to_%{to_date}.pdf"
+      front_page:
+        first_title: 'Internal Control Qualification of'
+        footer_title: 'Report:'
+        footer_prepared_by: 'Prepared by Internal Audit - NBCH'
+      executive_summary:
+        title: '<b><u>EXECUTIVE SUMMARY</u></b>'
+        objective_title: '<b><u>OBJECTIVE</u></b>'
+        general_conclusion_title: '<b><u>GENERAL CONCLUSION</u></b>'
+        first_footer: '<b>AUS. Alejandro Camnasio</b>' # REVIEW que es AUS?
+        second_footer: '<b>A/C int. Internal Audit Management</b>' # REVIEW Que es A/C?
+      detailed_report:
+        title: '<b><u>DETAILED REPORT</u></b>'
+        introduction_and_scope_title: '<b><u>INTRODUCTION AND SCOPE OF WORK DONE</u></b>' # REVIEW CARRIED OUT?
+        classification_methodology: 'The cycle qualification methodology used in the 2019 period was approved by the Audit Committee at its meeting on 05.14.2019 – Minutes No. 294, which we present below:' # REVIEW score?
+        classification_title: '<i><b>Table I: Internal Control Score of NCHB S.A. – %{period}</b></i>' # REVIEW Qualification?
+        conclusions_title: '<u><b>CONCLUSIONS</b></u>'
+        conclusions_body: "Based on Table I <i>“NCHB S.A. Internal Control Qualification.”</i>, it can be seen that the Entity's internal control qualification, according to the parameters used, is <b>“%{calification}”.</b>" # REVIEW score? voz pasiva?
+      cycle_qualification:
+        header_number: '<b>N°</b>' # REVIEW Quizásse pudiera usar numeral...
+        header_qualification: '<b>Qualification</b>' # REVIEW Score?
+        header_weight: '<b>Weight</b>'
+        header_high_risk_observations: '<b>Number of High Risk Observations</b>'
+      internal_control_qualification:
+        header_cycle: '<b>Cycle</b>'
+        header_count_findings: '<b>Number of Findings</b>'
+        header_weight: '<b>Weight as of Reporting date</b>'
+        header_qualification: '<b>Qualification</b>' # REVIEW Score?
+        count_weight: '<b>Total weight</b>'
+        count_cycles: '<b>Number of cycles</b>'
+        final_weight: '<b>Weight</b>'
+        final_qualification: '<b>Internal Control Qualification</b>'
+    synthesis_report:
+      pdf_name: "executive_summary_final_reports_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Weaknesses / Improvement Opportunities Internal Audit"
+      external_audit_weaknesses: "External Audit Weaknesses"
+      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      subtitle: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nOF FINAL REPORTS"
+      organization_score: "Organization Score: %{score}% (*)"
+      organization_score_note: "(*) The organization score is obtained as an average of the scores obtained in the audit types (%{audit_types})."
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      without_weaknesses: "No weaknesses"
+      references: "References:\n\n(1) Score: the score (weighted control effectiveness) of each report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their score from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Weaknesses: lists the titles of the detected weaknesses. If there are no weaknesses, the legend \"No weaknesses\" is displayed."
+      generic_score_average:
+        one: 'Average of %{audit_type} scores in a report'
+        other: 'Average of %{audit_type} scores in %{count} reports'
+    review_stats_report:
+      pdf_name: "final_report_statistics_%{from_date}_to_%{to_date}.pdf"
+      title: "REPORTING STATISTICS"
+      subtitle: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nOF FINAL REPORTS"
+      ratio: "Ratio"
+      review_count: "Number of reviews"
+      reviews_by_tag:
+        title: "Reviews by tag"
+        footnote: "The tag-review pair is counted. So, for example, a review with two tags will be counted twice and a review without tags will be ignored."
+      weaknesses_by_score:
+        title: "Weaknesses by risk, priority and report score"
+        total: "Total"
+    review_scores_report:
+      pdf_name: "final_scores_grades_%{from_date}_to_%{to_date}.pdf"
+      title: "REVIEW SCORES"
+      subtitle: "FINAL REVIEWS"
+      review_score: "Review score"
+      business_unit_score: "Business units score"
+      total_score: "Total score"
+      empty: "No scores for the applied filter"
+    review_score_details_report:
+      pdf_name: "Detailed_Final_Report_Qualifications_%{from_date}_to_%{to_date}.pdf"
+      title: "DETAILED REVIEW SCORES" # REVIEW REPORT?
+      subtitle: "FINAL REPORTS"
+      brief: "Summary"
+      details: "Details"
+      count: "Quantity"
+      share: "Share"
+      empty: "No scores for the applied filter"
+    weaknesses_by_state:
+      pdf_name: "weaknesses_definitive_reports_by_state_%{from_date}_to_%{to_date}.pdf"
+      title: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES FINAL REPORTS\nTOTALS BY STATE"
+      weaknesses_column: "Weaknesses"
+      oportunities_column: "Improvement Opportunities" # REVIEW key opportunities_column?
+      period_summary: "Period summary %{period}"
+      total: "TOTAL"
+    weaknesses_by_risk: # NOTE: hay otro weaknesses_by_risk en el mismo path (línea 213)
+      pdf_name: "weaknesses_definitive_reports_by_risk_%{from_date}_al_%{to_date}.pdf"
+      period_summary: "Period summary %{period}"
+      title: "FINAL REPORT OBSERVATIONS\nTOTALS BY RISK LEVEL" # REVIEW review?
+      total: "TOTAL"
+    weaknesses_by_risk_and_business_unit: # NOTE: no existe en application.en.yml
+      pdf_name: "weaknesses_definitive_reports_by_risk_and_business_units_%{from_date}_to_%{to_date}.pdf"
+      period_summary: "Period summary %{period}"
+      title: "WEAKNESSES FROM FINAL REPORTS\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
+      being_implemented: "'In process of implementation' as of %{date}"
+      created: "'Registered' between %{from_date} and %{to_date}"
+      implemented: "'Implemented' between %{from_date} and %{to_date}"
+      total: "TOTAL"
+      empty: "No comments for the applied filter."
+    weaknesses_by_audit_type:
+      weaknesses: "Weaknesses"
+      oportunities: "Opportunities" # REVIEW key opportunities?
+      without_weaknesses: "No weaknesses"
+      pdf_name: "weaknesses_definitive_reports_by_type_of_audit_%{from_date}_to_%{to_date}.pdf"
+      title: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES FINAL REPORTS\nTOTALS BY TYPE OF AUDIT" # REVIEW Revisar español
+      total: "TOTAL"
+
+  conclusion_final_review:
+    index_title: "Final reviews list"
+    show_title: "Detail of the final review"
+    new_title: "Add final review"
+    edit_title: "Edit final review"
+    bundle_title: "Generate bundle" # REVIEW
+    correctly_created: "Final review was successfully created."
+    correctly_updated: "Final review was successfully updated."
+    stale_object_error: "The final review could not be updated, please try again."
+    generate_score_sheet: "Download detailed score sheet"
+    generate_global_score_sheet: "Download global score sheet"
+    download_work_papers: "Download work papers"
+    create_bundle: "Generate bundle" # REVIEW
+    send_by_email: "Send by email"
+    download_without_control_objectives_excluded_from_score: "Download without control objectives excluded from score" # REVIEW unscored? La del key?
+    download_without_score: "Download without score"
+    download_brief: "Download brief"
+    download_rtf: "Download RTF" # NOTE: no existe en application.en.yml
+    global_effectiveness: "Global effectiveness" # NOTE: no existe en application.en.yml
+    hide_control_objectives_excluded_from_score: "Hide unscored control objectives" # REVIEW unscored? La del key?
+    send_type:
+      normal: "Full review"
+      brief: "Summary review"
+      without_score: "Review without score"
+    downloads: # NOTE: no existe en application.en.yml
+      review_objectives: "REVIEW OBJECTIVES"
+      review_objectives_description: "Carry out regularization follow-up to the weaknesses made by the Internal Audit (AI) in those branches classified as Unreasonable to an inadequate or unsatisfactory degree in the AML/FT aspect."
+      general_assistant_manager: 'Integrity and Compliance General Assistant Manager'
+      departmental_management: 'PLayFT Departmental Management'
+      departmental_assistant_manager: 'PLAyFT Departmental Assistant Manager in Branches'
+      page_number: "Page number"
+      pdf_page_footer_title: 'Encoding internal use'
+      pdf_page_footer_sheet: 'Sheet'
+    pdf:
+      pdf_name: "list_of_definitive_reviews.pdf"
+      filtered_by:
+        one: "The list was filtered with the query '%{query}' on the column %{columns}"
+        other: "The list was filtered with the query '%{query}' on the columns %{columns}"
+      sorted_by: "The list was sorted by column %{column}"
+
+  conclusion_management_report:
+    index_title: "Management reports"
+    weaknesses_by_state_title: "Total Weaknesses / Improvement Opportunities by state"
+    weaknesses_by_risk_title: "Total Weaknesses / Improvement Opportunities by risk"
+    weaknesses_by_audit_type_title: "Total Weaknesses / Improvement Opportunities by audit type"
+
+  conclusion_review:
+    include_global_score_sheet: "Include global score sheet?"
+    include_score_sheet: "Include detailed score sheet?"
+    score_sheet: "Detailed score sheet"
+    global_score_sheet: "Global score sheet"
+    email_note: "Note to include in the email"
+    responsibles: "Responsibles"
+    issue_date_title: "DATE"
+    audit_period: "%{start} to %{end}"
+    audit_period_title: "AUDIT PERIOD"
+    objectives_and_scopes: "OBJECTIVES AND SCOPE OF WORK"
+    applied_procedures: "APPLIED PROCEDURES"
+    conclusion: "CONCLUSION"
+    weaknesses_brief: "WEAKNESSES SUMMARY"
+    weaknesses_reschedules: "WEAKNESSES / RESCHEDULES SUMMARY"
+    weaknesses: "WEAKNESSES"
+    oportunities: "IMPROVEMENT OPPORTUNITIES" # REVIEW key opportunities?
+    finding_review_assignments: "FINDINGS / IMPROVEMENT OPPORTUNITIES REVIEWED"
+    repeated_findings: "Findings follow-up"
+    repeated_findings_empty: "No findings pending regularization are registred." # REVIEW No repeated findings?
+    present_findings: "New findings"
+    present_findings_empty: "There are no findings to mention."
+    add_recipient: "Add new recipient"
+    review_sended: "The review has been sent to all the indicated recipients"
+    review_not_approved: "The review was not submitted, it must be approved" # REVIEW Que tal un "Por favor, asegurese que antes esté aprobado"?
+    review_repeated_finding_label: "Review #" # REVIEW American english?
+    executive_summary:
+      title: "Executive Summary"
+      review_author: "Internal Audit Management"
+      project: "The audit carried out was circumscribed to the review of:"
+      project_alt: "In accordance with the provisions of the Professional Services Rental proposal, accepted in all its terms and conditions by Naranja Digital Compañía Financiera S.A.U. dated January 21, 2021, we present the Audit report corresponding to the following process:"
+      risk_exposure: "Risk exposure of the evaluated process: <b>%{risk}</b> (Risk Matrix algorithmic formula)"
+      score: "Score"
+      evolution: "EVOLUTION (*)"
+      main_weaknesses: "Main Weaknesses"
+      other_weaknesses: "Other weaknesses"
+      no_weaknesses: "No weaknesses"
+      assumed_risk_weaknesses: "Assumed risk weaknesses"
+    detailed_review:
+      title: "Informe detallado"
+      legend: "During the current month an Audit on the reference process has been carried out.\nIn compliance with the “Minimum Standards on Internal Controls”, the “Guidelines for Risk Management in Financial Institutions”, the “Guidelines for the Corporate Governance” in their respective texts ordered by the BCRA as of the date of this report, and of the “Minimum Requirements for Management, Implementation and Control of Risks Related to Information Technology, Information Systems and Associated Resources for Financial Entities” regulated by the BCRA, internal control has been evaluated as a process designed to provide reasonable assurance regarding the achievement of the following objectives: Objectives of the Entity, Effectiveness and Efficiency of operations, Reliability of the Accounting Information and Compliance with the laws and regulations applicable in the operation analyzed.\nThe implementation of the recommendations cited in this report will allow to fulfill: i) the requirements of the report prepared by the so-called Committee of Sponsoring Organizations of the Treadway Commission (COSO) on the evaluation of internal control, international methodology used for this Audit; ii) the requirements of the COBIT Control Model (Governance, Control and Audit for Information and Related Technology), an international methodology used for this Systems Audit and which includes, among others, ISO Technical Standards and ISO 9000 qualification criteria, which will allow the Bank to fit within International Safety and Quality Control Standards."
+    annex: # REVIEW arriba: lo entre comillas debería ir en español?
+      title: "Annex I"
+      legend: "The audit carried out consisted of different controls, which have been evaluated in relation to the associated risks, for which reason they are detailed below with their respective qualification, clarifying that these concepts may be linked to different assessments:"
+      workflow_text: "The work program prepared for this house, as well as its development and other elements, is part of the background information in the work folder of this report."
+      scope: "Task scope"
+      scope_column: "Task scope" # REVIEW Diferencia con el de arriba?
+      staff: "Intervening staff"
+      satisfactory_control_objective_items: "Other Control Objectives"
+    bundle:
+      zip_name: "file_%{identification}.zip"
+      control_objectives_dir: "%{prefix}_control_objectives"
+      findings_dir: "%{prefix}_findings_and_opportunities"
+      create: "Generate"
+    bundle_index:
+      title: "INDEX"
+      default_items: "GLOBAL SCORECARD\nDETAILED SCORECARD\nFINAL REPORT\nSURVEY\nFINDINGS FOLLOW-UP / IMPROVEMENT OPPORTUNITIES"
+      items_label: "Index entries"
+      pdf_name: "00_file_index.pdf"
+    findings_sheet:
+      title: "Findings - Work Papers"
+      pdf_name: "%{prefix}_cover_of_findings_and_work_papers.pdf"
+    findings_follow_up:
+      title: "FINDINGS FOLLOW-UP / IMPROVEMENT OPPORTUNITIES"
+      weakness_title_in_singular: "WEAKNESS FOLLOW-UP"
+      oportunity_title_in_singular: "IMPROVEMENT OPPORTUNITY FOLLOW-UP" # REVIEW Key opportunity_title_in_singular?
+      index_clarification: "* At the time of issuing the final report"
+      pdf_name: "%{prefix}_monitoring_of_weaknesses_opportunities_for_improvement.pdf"
+    workflow:
+      title: "Workflow documentation"
+      pdf_name: "workflow_documentation.pdf"
+      control_objective_work_papers: "Control Objective Work Papers"
+      control_objective_weaknesses: "Weaknesses"
+      control_objective_oportunities: "Opportunities"
+      finding_work_papers: "Finding Work Papers"
+
+  control_objective:
+    errors:
+      related: "Control objective cannot be removed, it is related in at least one control procedure and test"
+
+  control_objective_item:
+    index_title: "Control objectives list"
+    show_title: "Control objective detail"
+    edit_title: "Edit control objective"
+    correctly_created: "Control objective was successfully created."
+    correctly_updated: "Control objective was successfully updated."
+    stale_object_error: "The control objective was not updated, please try again."
+    no_weaknesses: "Control objective with no weaknesses"
+    no_oportunities: "Control objective with no improvement opportunities" # REVIEW key no_opportunities?
+    view_all_weaknesses: "Show weaknesses list"
+    view_all_oportunities: "Show improvement opportunities list"
+    add_oportunity: "Add new improvement opportunity"
+    add_weakness: "Add new weakness"
+    add_work_paper: "Add work paper"
+    add_business_unit_score: "Add business unit score"
+    add_business_unit_type: "Add business units by type"
+    readonly: "The control objective cannot be modified, the final report has already been issued"
+    without_work_papers: "No work papers"
+    not_rated: "Not rated"
+    not_apply_text: 'Does not apply rate' # REVIEW Donde sale?
+    excluded_from_score: "Not taken into account in the report score"
+    not_applicable: "Not applicable"
+    errors:
+      not_finished: "is not finished"
+      without_score: "without scoring"
+      without_relevance: "without relevance"
+      without_audit_date: "without audit date"
+      without_effects: "without effects"
+      without_controls: "without controls"
+      without_design_tests: "without design tests"
+      without_compliance_tests: "without compliance tests"
+      without_sustantive_tests: "without substantive tests" # REVIEW key without_substantive_tests?
+      without_auditor_comment: "without auditor conclusions"
+    review:
+      edit: 'Edit review'
+      show: 'Show review'
+
+  customize_report_form:
+    create: "Create"
+    title: "Title"
+    subtitle: "Subtitle"
+
+  execution_reports:
+    cost_analysis_title: "Cost Analysis"
+    weaknesses_current_situation_title: "Global Report - Quarterly" # NOTE: no existe en application.en.yml
+    detailed_management_report:
+      pdf_name: "detailed_management_report_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Weaknesses / Improvement Opportunities Internal Audit"
+      external_audit_weaknesses: "External Audit Weaknesses"
+      title: "MANAGEMENT REPORT\nASSESSMENT OF THE\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nOF REPORTS IN EXECUTION"
+      clarification: "Note: the Weaknesses / Improvement Opportunities shown in this report are not final (the reports are in the Execution stage)" # REVIEW Execution?
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      without_weaknesses: "No weaknesses"
+      without_oportunities: "No improvement opportunitiest" # REVIEW key without_opportunities?
+      references: "References:\n\n(1) Number of weaknesses: shows the number of weaknesses obtained in the report (not the final ones), ordered according to risk level (%{risk_types}). If there are no weaknesses, the legend \"No weaknesses\" appears.\n(2) Number of Improvement Opportunities: shows the number of improvement opportunities obtained in the report (not the final ones). If there are no improvement opportunities, the legend \"No improvement opportunities\" appears."
+    detailed_management_report_title: "Management report"
+    planned_cost_summary:
+      pdf_name: "summary_of_planned_costs_%{from_date}_to_%{to_date}.pdf"
+      title: "INTERNAL AUDIT\nPLANNED COSTS SUMMARY"
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      column_month: "Month"
+      column_estimated_amount: "Estimated units"
+    planned_cost_summary_title: "Planned cost summary"
+    reviews_with_incomplete_work_papers_report_incomplete_title: "Reviews closed without auditor compliance"
+    reviews_with_incomplete_work_papers_report_revised_title: "Reviews closed without supervisor review"
+    reviews_with_incomplete_work_papers_report:
+      empty_incomplete: "No reviews closed without auditor compliance in working papers" # REVIEW There are ... (No se cerraron informes sin ...)
+      empty_revised: "No reviews closed without supervisor review in work papers" # REVIEW There are ...
+    index_title: "Execution reports"
+    findings_type_external: "External Audit Findings"
+    findings_type_internal: "Findings / Improvement Opportunities Internal Audit"
+    period:
+      title: "Interval"
+      range: "from %{from_date} to %{to_date}"
+    weaknesses_by_state_title: "Total Weaknesses / Improvement Opportunities by report and state"
+    weaknesses_by_state:
+      pdf_name: "weaknesses_in_run_by_state_%{from_date}_to_%{to_date}.pdf"
+      title: "DETAILED MANAGEMENT REPORT\nWEAKNESSES/IMPROVEMENT OPPORTUNITIES IN EXECUTION\nTOTALS BY REPORT AND STATUS" # REVIEW Excecution? Status (in progress) / State (in disarray)?
+      clarification: "Note: the Weaknesses / Improvement Opportunities shown in this follow up are not final (the follow ups are in the Execution stage)"
+      weaknesses_column: "Weaknesses"
+      oportunities_column: "Improvement Opportunities" # REVIEW key opportunities_column?
+      total: "TOTAL"
+    without_weaknesses: "No weaknesses in the period"
+    without_weaknesses_in_the_interval: "No weaknesses in the interval"
+    without_findings: "No Weaknesses / Improvement Opportunities"
+
+  finding: # NOTE: no existe en application.en.yml
+    correctly_updated: "Finding correctly updated."
+    finding_relations: "Related to"
+    inverse_finding_relations: "Related in"
+    finding_answers: "Follow-up findings"
+    latest_answer: "Latest follow-up finding"
+    state_full: "Detailed state"
+    next_pending_task_date: "Next pending task date"
+    comments: "Justification of state changes"
+    costs: "So far **%{cost}** has been spent on finding tracking"
+    commitment_support_plans: "Action plan"
+    commitment_support_controls: "Mitigating controls"
+    commitment_support_reasons: "Rescheduling finding"
+    commitment_date_required_level_title: "Approval level"
+    download_csv: "Download CSV"
+    download_pdf: "Summary in PDF"
+    add_finding_relation: "Add relation"
+    add_task: "Add task"
+    add_issue: "Add issue"
+    add_tagging: "Add tag"
+    add_finding_answer: "Add finding"
+    add_user: "Add user"
+    add_endorsement: "Add reviewer"
+    show_commitment_date: "New commitment date"
+    add_work_paper: "Add work paper"
+    endorsements: "Reviewers"
+    recode_tasks: "Recode tasks"
+    create_work_paper: "Add as work paper"
+    follow_up_date_changed_warning: "Follow-up date changed to accommodate tasks"
+    follow_up_date_last_changed: "Last implementation date changed"
+    assignment_confirm_message: "You have not selected any reference auditors or managers. Do you want to continue?"
+    weakness_template_previous: 'Repeat weakness'
+    repeated_ancestors: "Repeated of"
+    repeated_children: "Repeated on"
+    undo_reiteration: 'Undo reiteration'
+    change_history: "Change history"
+    submit_answer: "Save comment"
+    supervisor: "Supervisor"
+    auditors:
+      one: "Auditor"
+      other: "Auditors"
+    auditor_users:
+      one: "Auditor file"
+      other: "Auditor files"
+    reviewers:
+      one: "Reviewer"
+      other: "Reviewers"
+    audited:
+      one: "Audited"
+      other: "Audited"
+    audited_users:
+      one: "Audited File"
+      other: "Audited files"
+    readonly: "The finding cannot be created or modified, the final report has already been issued"
+    responsibles:
+      one: "Responsible"
+      other: "Responsible"
+    responsible_users:
+      one: "Responsible file"
+      other: "Responsible files"
+    send_notification: "Send notification?"
+    status_change_history: "Status change history"
+    view_cost_details: "List of previous activities related to the finding"
+    without_conclusion_final_review: "Without final review"
+    without_work_papers: "Without work papers"
+    responsibility_removed: "Has been removed from the %{class_name} %{review_code} of the %{review} report"
+    commitment_date_required_level:
+      manager: "Headquarters"
+      management: "Management"
+      ceo: "CEO"
+      committee: "Committee"
+    important_dates:
+      title: "Dates to consider"
+      expiration_date: "Will go to _\"No Response\"_ state on **%{date}** if no auditee provides a response"
+      notification_date: "First notified on **%{date}**"
+      confirmation_date: "Notification was confirmed on **%{date}**"
+    follow_up_report:
+      weakness:
+        title: "WEAKNESS FOLLOW-UP"
+        subtitle: "Weakness data"
+      oportunity:
+        title: "MONITORING OF IMPROVEMENT OPPORTUNITIES"
+        subtitle: "Improvement opportunity data"
+      print_date: "Print date: %{date}"
+      download_brief: "Download brief"
+      download: "Download full trace"
+      follow_up_comments: "Follow-up Comments"
+      without_important_changes: "No major changes to date"
+      work_papers: "Work papers"
+      pdf_name: "track_finding_%{code}.pdf"
+    pdf:
+      filtered_by_html:
+        one: "The list was filtered with the query <span class=\"font-weight-bold\">'%{query}'</span> on the <span class=\"font-weight-bold\" column >'%{columns}'</span>"
+        other: "The list was filtered with the query <span class=\"font-weight-bold\">'%{query}'</span> on the <span class=\"font-weight-bold\" columns >'%{columns}'</span>"
+    user_assignment:
+      audit_team: "Audit"
+      others: "Users"
+
+  finding_relation:
+    types:
+      related: "Relacionada"
+      duplicated: "Duplicada"
+
+  follow_up_audited:
+    index_title: "General reports" # REVIEW Quizás pueda llevar otro nombre...
+    weaknesses_by_user_title: "Weaknesses by user" # NOTE: no existe en application.en.yml
+    status_user: "Status user" # NOTE: no existe en application.en.yml
+    process_control_stats_title: "Weaknesses per business process" # NOTE: no existe en application.en.yml
+    business_unit_type_title: "Organizational unit" # NOTE: no existe en application.en.yml
+    business_unit_title: "Business unit" # NOTE: no existe en application.en.yml
+    weaknesses_by_user: # NOTE: no existe en application.en.yml
+      pdf_name: "weaknesses_by_user.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "MONITORING WEAKNESSES BY USER / FINAL REPORTS"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+    process_control_stats: # NOTE: no existe en application.en.yml
+      average_effectiveness: 'Weighted average score'
+      average_effectiveness_resume:
+        one: "%{effectiveness} - %{count} report evaluated"
+        other: "%{effectiveness} - %{count} reports evaluated"
+      reviews_with_weaknesses: # NOTE: no existe en application.en.yml
+        one: "%{count} review with weaknesses in the O.C."
+        other: "%{count} reviews with weaknesses in the O.C."
+      pdf_name: "weaknesses_by_business_process.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "MONITORING WEAKNESSES BY BUSINESS PROCESS / FINAL REPORTS"
+      without_reviews_in_the_period: "Without reviews in the selected period"
+      without_weaknesses: "Without weaknesses"
+      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      review_effectiveness_average: 'Weighted average of control objective scores: <b>%{score}%</b>'
+
+  follow_up_audited_committee_report: # NOTE: no existe en application.en.yml
+    process_control_stats:
+      pdf_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf'
+    period:
+      title: "Interval"
+      range: "from %{from_date} to %{to_date}"
+
+  follow_up_audit:
+    index_title: "Audit reports"
+    cost_analysis_title: "Cost analysis"
+    weaknesses_by_state_title: "Total Weaknesses / Improvement Opportunities by state"
+    weaknesses_by_risk_title: "Total Weaknesses / Improvement Opportunities by risk"
+    weaknesses_by_risk_and_business_unit_title: "Total findings by risk and business Unit"
+    weaknesses_by_audit_type_title: "Total weaknesses by audit type" # NOTE: no existe en application.en.yml
+    weaknesses_by_risk_report_title: "Weaknesses by risk" # NOTE: no existe en application.en.yml
+    weaknesses_by_month_title: "Monthly report" # NOTE: no existe en application.en.yml
+    weaknesses_current_situation_title: "Global Report - Quarterly" # NOTE: no existe en application.en.yml
+    weaknesses_by_control_objective_title: "Control objective result" # NOTE: no existe en application.en.yml
+    weaknesses_by_user_title: "Weaknesses by user" # NOTE: no existe en application.en.yml
+    weaknesses_by_business_unit_title: "Weaknesses per cycle" # NOTE: no existe en application.en.yml
+    weaknesses_evolution_title: "Weaknesses evolution" # NOTE: no existe en application.en.yml
+    weaknesses_list_title: "List of weaknesses" # NOTE: no existe en application.en.yml
+    weaknesses_brief_title: "Summary of outstanding weaknesses" # NOTE: no existe en application.en.yml
+    weaknesses_repeated_title: "Weaknesses with status by last traced" # NOTE: no existe en application.en.yml
+    weaknesses_reschedules_title: "Summary of weaknesses and reschedules" # NOTE: no existe en application.en.yml
+    weaknesses_by_control_objective_process_title: "Report process by control objectives" # NOTE: no existe en application.en.yml
+    fixed_weaknesses_report_title: "Fixed risk weaknesses" # NOTE: no existe en application.en.yml
+    weaknesses_heatmap_title: "Weaknesses heat map" # NOTE: no existe en application.en.yml
+    cost_analysis:
+      column_business_unit: "Business Unit"
+      column_project: "Project"
+      column_review: "Review"
+      column_audit_cost: "Number of hours used (sum of follow-up hours by auditors)" # REVIEW total follow-up hours?
+      column_audited_cost: "Number of hours spent on the solution (sum of follow-up hours by auditee)" # REVIEW total follow-up hours?
+      title: "COST ANALYSIS OF\nFOLLOW-UP WEAKNESSES / IMPROVEMENT OPPORTUNITIES\nBY INTERNAL AUDIT REPORT" # REVIEW weaknesses / findings?
+      weaknesses: "WEAKNESSES"
+      oportunities: "IMPROVEMENT OPPORTUNITIES" # REVIEW key opportunities?
+      without_weaknesses: "No weaknesses in the period"
+      without_oportunities: "No Improvement Opportunities in the period" # REVIEW key without_opportunities?
+      pdf_name: "follow-up_costs_analysis_%{from_date}_to_%{to_date}.pdf"
+
+  execution_committee_report: # NOTE: no existe en application.en.yml
+    weaknesses_current_situation_title: "Global Report - Quarterly Drafts"
+    weaknesses_current_situation:
+      pdf_name: "weaknesses_current_situation_draft_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "GLOBAL REPORT MONITORING - QUARTERLY / DRAFT REPORTS"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      on_revision: "On revision"
+      origination_year: "Origin year"
+      control_objective_tags: "Control objective tags"
+      weakness_tags: "Weakness tags"
+      review_tags: "Review tags"
+      cut_date: "Computation date"
+
+  follow_up_committee_report: #En el otro archivo está como "follow_up_committee"
+    index_title: "Committee reports"
+    control_objective_stats_title: 'Weaknesses by control objective' # REVIEW Weaknesses?
+    control_objective_stats_by_review_title: 'Weaknesses by control objective without score' # REVIEW qualification? Weaknesses?
+    benefits_title: 'Benefits / Harms' # REVIEW harm o losses?
+    process_control_stats_title: 'Weaknesses by business process'
+    control_effectiveness: "Control effectiveness"
+    pending_findings: "Pending observations follow-up"
+    synthesis_report_title: "Executive summary"
+    review_stats_report_title: "Report statistics"
+    weaknesses_by_risk_report_title: "Weaknesses by risk" # NOTE: no existe en application.en.yml
+    weaknesses_by_risk_and_business_unit_title: "Total weaknesses by risk and business unit" # NOTE: no existe en application.en.yml
+    weaknesses_by_month_title: "Monthly report" # NOTE: no existe en application.en.yml
+    weaknesses_current_situation_title: "Global Report - Quarterly" # NOTE: no existe en application.en.yml
+    weaknesses_by_control_objective_title: "Control objective result" # NOTE: no existe en application.en.yml
+    weaknesses_by_user_title: "Weaknesses by user" # NOTE: no existe en application.en.yml
+    weaknesses_by_business_unit_title: "Weaknesses per cycle" # NOTE: no existe en application.en.yml
+    weaknesses_evolution_title: "Weaknesses evolution" # NOTE: no existe en application.en.yml
+    weaknesses_list_title: "List of weaknesses" # NOTE: no existe en application.en.yml
+    weaknesses_brief_title: "Summary of outstanding weaknesses" # NOTE: no existe en application.en.yml
+    weaknesses_repeated_title: "Weaknesses with status by last traced" # NOTE: no existe en application.en.yml
+    weaknesses_reschedules_title: "Summary of weaknesses and reschedules" # NOTE: no existe en application.en.yml
+    fixed_weaknesses_report_title: "Fixed risk weaknesses" # NOTE: no existe en application.en.yml
+    detailed_report: "Detailed report" # NOTE: no existe en application.en.yml
+    qa_indicators_title: "Quality indicators" # NOTE: no existe en application.en.yml
+    weakness_summary: "Summary of weaknesses" # NOTE: no existe en application.en.yml
+    weaknesses_by_risk: "Weaknesses by risk" # NOTE: no existe en application.en.yml
+    fixed_weaknesses: "Fixed risk weaknesses" # NOTE: no existe en application.en.yml
+    weaknesses_heatmap_title: "Weaknesses heat map" # NOTE: no existe en application.en.yml
+    weaknesses_by_control_objective_process_title: "Report process by control objectives" # NOTE: no existe en application.en.yml
+    weaknesses_being_implemented_current:
+      one: "Current"
+      other: "Current"
+    weaknesses_being_implemented_current_rescheduled:
+      one: "Current rescheduled"
+      other: "Current rescheduled"
+    weaknesses_being_implemented_stale:
+      one: "Stale" # REVIEW Overdue? Expired?
+      other: "Stale" # REVIEW Overdue? Expired?
+    weaknesses_being_implemented_stale_rescheduled:
+      one: "Stale rescheduled" # REVIEW donde sale?
+      other: "Stale rescheduled" # REVIEW donde sale?
+    weaknesses_by_state_title: "Total Weaknesses / Improvement Opportunities by state"
+    weaknesses_by_risk_title: "Total Weaknesses / Improvement Opportunities by risk"
+    weaknesses_by_audit_type_title: "Total Weaknesses / Improvement Opportunities by audit type"
+    without_oportunities: "No opportunities in the period" # REVIEW key without_opportunities?
+    without_weaknesses: "No weaknesses in the period"
+    repeated_count:
+      one: "A repeated weakness / improvement opportunity"
+      other: "%{count} repeated weaknesses / improvement opportunities"
+    expired: "Expired" # REVIEW Stale / Overdue?
+    not_expired: "Not expired" # REVIEW Stale / Overdue?
+    from_date: "From"
+    to_date: "To"
+    mid_date: "Cut" # REVIEW donde?
+    cut_date: "Old data cut date" # REVIEW Fecha cierre antigua data WTF?
+    print_date: "Print date: %{date}"
+    applied_filters:
+      one: "The following filter has been applied to this report: %{filters}"
+      other: "The following filters have been applied to this report: %{filters}"
+    benefits:
+      pdf_name: 'benefits_harms_%{from_date}_to_%{to_date}.pdf'
+      title: "Benefits / Harms" # REVIEW harms?
+      subtitle: "FINAL REPORTS"
+      without_audits_in_the_period: 'No audits with benefits / harms in the period' # REVIEW harms?
+      total: 'Total amount: <b>%{amount}</b>'
+    control_objective_stats:
+      pdf_name: 'weaknesses_by_control_objective_%{from_date}_to_%{to_date}.pdf' # REVIEW weaknesses?
+      title: "WEAKNESSES GROUPED BY CONTROL OBJECTIVE" # REVIEW WEAKNESSES / FINDINGS?
+      subtitle: "FOLLOW-UP REPORT"
+      average_effectiveness: 'Weighted average score' # REVIEW qualification?
+      average_effectiveness_resume:
+        one: '%{effectiveness} in a report'
+        other: '%{effectiveness} in %{count} reports'
+      reviews_with_weaknesses: # NOTE: no existe en application.en.yml
+        one: "%{count} review with weaknesses in the O.C."
+        other: "%{count} reviews with weaknesses in the O.C."
+      without_weaknesses: 'No weaknesses'
+      without_audits_in_the_period: "Without audits in the period" # NOTE: no existe en application.en.yml
+      review_effectiveness_average: 'Weighted average of control objective scores: <b>%{score}%</b>'
+    control_objective_stats_by_review:
+      pdf_name: 'weaknesses_by_control_objective_without_score_%{from_date}_to_%{to_date}.pdf' # REVIEW qualification / stast? x2
+      title: 'WEAKNESSES GROUPED BY CONTROL OBJECTIVE WITHOUT SCORE' # REVIEW QUALIFICATION / STATS? x2
+      subtitle: "FOLLOW-UP REPORTS"
+      without_weaknesses: 'No weaknesses'
+      without_audits_in_the_period: 'No audits in the period'
+    follow_up_cost_analysis: # NOTE: no existe en application.en.yml
+      pdf_name: "follow_up_cost_analysis_%{from_date}_to_%{to_date}.pdf"
+    fixed_weaknesses_report:
+      pdf_name: "high_risk_weaknesses_solved_%{from_date}_al_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Weaknesses"
+      external_audit_weaknesses: "External Audit Weaknesses"
+      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      subtitle: "WEAKNESSES SOLVED - FINAL REPORTS"
+      without_audits_in_the_period: "No high risk audits fixed in the period"
+      without_audits_in_the_interval: "No high risk audits fixed in the selected interval"
+      without_weaknesses: "No weaknesses"
+    weaknesses_by_risk_report: #en el otro archivo está como "high_risk_weaknesses_report"
+      pdf_name: "high_risk_weaknesses_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Weaknesses"
+      external_audit_weaknesses: "External Audit Weaknesses"
+      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      subtitle: "HIGH RISK WEAKNESSES FOLLOW-UP - FINAL REPORTS"
+      without_audits_in_the_period: "No high risk audits in the period"
+      without_audits_in_the_interval: "No high risk audits in the selected interval"
+      without_weaknesses: "No weaknesses"
+    weaknesses_by_month: # NOTE: no existe en application.en.yml
+      pdf_name: "weaknesses_by_month_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "FOLLOW-UP MONTHLY REPORT - FINAL REPORTS"
+      main_weaknesses: "Main weaknesses"
+      other_weaknesses: "Other weaknesses"
+      without_audits_in_the_month: "Without audits in the month"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      year: "Origin year"
+    weaknesses_current_situation: # NOTE: no existe en application.en.yml
+      pdf_name: "weaknesses_current_situation_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "GLOBAL REPORT MONITORING - FOUR-MONTHLY / FINAL REPORTS"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      on_revision: "On revision"
+      origination_year: "Origin year"
+      control_objective_tags: "Control objective tags"
+      weakness_tags: "Weakness tags"
+      negate_weakness_tags: "Exclude"
+      review_tags: "Report tags"
+      cut_date: "Computation date"
+    weaknesses_by_control_objective: # NOTE: no existe en application.en.yml
+      pdf_name: "control_objectives_result_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "MONITORING THE RESULTS OF THE CONTROL OBJECTIVES / FINAL REPORTS"
+      without_weaknesses: "Without weaknesses"
+      origination_year: "Origin year"
+    weaknesses_by_control_objective_process: # NOTE: no existe en application.en.yml
+      pdf_name: "process_report_by_control_objective_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "MONITORING PROCESS WEAKNESSES BY CONTROL OBJECTIVE / FINAL REPORTS"
+      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      without_weaknesses: "Without weaknesses"
+      origination_year: "Origin year"
+      control_objective_tags: "Control objective tags"
+      weakness_tags: "Weakness tags"
+      review_tags: "Report tags"
+    weaknesses_by_user: # NOTE: no existe en application.en.yml
+      pdf_name: "weaknesses_by_user_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "MONITORING WEAKNESSES BY USER / FINAL REPORTS"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+    weaknesses_by_business_unit: # NOTE: no existe en application.en.yml
+      pdf_name: "weaknesses_by_cycle_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "MONITORING WEAKNESSES PER CYCLE / FINAL REPORTS"
+      on_revision: "On revision"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      year: "Origin year"
+    weaknesses_heatmap: # NOTE: no existe en application.en.yml
+      pdf_name: "heatmap_by_weaknesses_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "HEAT MAP MONITORING WEAKNESSES / FINAL REPORTS"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      process_owner_parents: "Responsible line managers"
+      process_owner_intermediates: "Intermediate owners"
+      process_owner_roots: "Top owners"
+    weaknesses_evolution: # NOTE: no existe en application.en.yml
+      pdf_name: "weaknesses_evolution_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "MONITORING WEAKNESSES EVOLUTION / FINAL REPORTS"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      control_objective_tags: "Control objective tags"
+      weakness_tags: "Weakness tags"
+      review_tags: "Review tags"
+    weaknesses_list: # NOTE: no existe en application.en.yml
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      control_objective_tags: "Control objective tags"
+      weakness_tags: "Weakness tags"
+      review_tags: "Review Tags"
+    weaknesses_brief: # NOTE: no existe en application.en.yml
+      pdf_name: "summary_of_pending_weaknesses_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "SUMMARY OF PENDING WEAKNESSES / FINAL REPORTS"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      weakness_title: "Weakness title"
+      description: "Weakness detail"
+      audit_comments: "Audited response/Audit comment"
+      origination_date: "Weakness origin date"
+      reschedule_count: "Reschedule count"
+      follow_up_date: "Last proposed date"
+      distance_to_cut_date: "Days old data"
+      implemented_audited_count:
+        one: "A weakness was regularized between %{from_date} and %{to_date}."
+        other: "%{count} weaknesses were regularized between %{from_date} and %{to_date}."
+    weaknesses_reschedules: # NOTE: no existe en application.en.yml
+      pdf_name: "rescheduling_weaknesses_summary_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "SUMMARY OF WEAKNESSES / RESCHEDULES / FINAL REPORTS"
+      without_weaknesses: "Without weaknesses"
+      reschedule_count_manager: "Number of reschedules approved by headquarters"
+      reschedule_count_management: "Number of reschedules approved by management"
+      reschedule_count_ceo: "Number of reschedules approved by CEO"
+      reschedule_count_committee: "Number of reschedules approved by committee"
+    weaknesses_repeated: # NOTE: no existe en application.en.yml
+      pdf_name: "weaknesses_with_status_according_last_monitoring_%{from_date}_to_%{to_date}.pdf"
+      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      subtitle: "MONITORING OF WEAKNESSES WITH STATUS ACCORDING TO LAST MONITORING / FINAL REPORTS"
+      without_audits_in_the_interval: "Without audits in the selected interval"
+      without_weaknesses: "Without weaknesses"
+      origination_year: "Origin year"
+      weakness_tags: "Weakness tags"
+    period:
+      title: "Interval"
+      range: "from %{from_date} to %{to_date}"
+    process_control_stats:
+      pdf_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf'
+      title: "WEAKNESSES GROUPED BY BUSINESS PROCESS"
+      subtitle: "FOLLOW-UP REPORTS"
+      average_effectiveness: 'Weighted average score'
+      average_effectiveness_resume:
+        one: '%{effectiveness} with weaknesses in a report'
+        other: '%{effectiveness} with weaknesses in %{count} reports'
+      reviews_with_weaknesses: # NOTE: no existe en application.en.yml
+        one: "%{count} review with weaknesses in the O.C."
+        other: "%{count} reviews with weaknesses in the O.C."
+      without_weaknesses: 'No weaknesses'
+      without_audits_in_the_period: 'No audits in the period'
+      review_effectiveness_average: 'Weighted average of business process scores: <b>%{score}%</b>'
+    qa_indicators:
+      without_data: "No data for the entered date range"
+      title: "Internal Audit Quality Management System - Quality Indicators (Monitoring)"
+      subtitle: ""
+      indicator: "Indicator"
+      value: "Value"
+      pdf_name: "quality_indicators_%{from_date}_to_%{to_date}.pdf"
+      without_audits_in_the_period: 'No audits in the period'
+      indicators:
+        production_level: "Production Level"
+        highest_solution_rate: "Highest Risk Weaknesses Solution"
+        medium_solution_rate: "Medium Risk Weaknesses Solution"
+        score_average: "Report Score"
+        digitalized: "Digitization" # REVIEW key digitized?
+        oportunities_solution_rate: "Improvement opportunities solution" # NOTE: no existe en application.en.yml
+        ancient_medium_risk_weaknesses: "Aged Medium Risk Weaknesses"
+        ancient_highest_risk_weaknesses: "Ancient highest risk weaknesses" # NOTE: no existe en application.en.yml
+    synthesis_report:
+      pdf_name: "executive_summary_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Weaknesses / Improvement Opportunities Internal Audit"
+      external_audit_weaknesses: "External Audit Weaknesses"
+      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      subtitle: "FOLLOW-UP OF WEAKNESSES/IMPROVEMENT OPPORTUNITIES"
+      organization_score: "Organization score: %{score}% (*)"
+      organization_score_note: "(*) The organization score is obtained as an average of the scores obtained in the audit types (%{audit_types})."
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      without_weaknesses: "No weaknesses"
+      without_oportunities: "No improvement opportunities" # REVIEW key without_opportunities?
+      generic_score_average:
+        one: 'Average of %{audit_type} scores in a report'
+        other: 'Average of %{audit_type} scores in %{count} report'
+      repeated_count:
+        one: "A repeated weakness / improvement opportunity"
+        other: "%{count} repeated weaknesses / improvement opportunities"
+      total_score_average: "Total average scores (%{reference })"
+      references: "References:\n\n(1) Score: the score (weighted control effectiveness) of each report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their score from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Weaknesses: lists the titles of the detected weaknesses. If there are no weaknesses, the legend \"No weaknesses\" is displayed."
+    review_stats_report:
+      pdf_name: "final_report_statistics_%{from_date}_to_%{to_date}.pdf"
+      title: "REVIEW STATISTICS"
+      subtitle: "FOLLOW-UP OF WEAKNESSES/IMPROVEMENT OPPORTUNITIES"
+      ratio: "Proportion"
+      review_count: "Number of reviews"
+      reviews_by_tag:
+        title: "Reviews by label"
+        footnote: "The tag-review pair is counted. So, for example, a review with two tags will be counted twice and a review without tags will be ignored."
+      weaknesses_by_score:
+        title: "Weaknesses by risk, priority and review score"
+        total: "Total"
+    weaknesses_by_state:
+      pdf_name: "monitoring_findings_by_state_%{from_date}_to_%{to_date}.pdf"
+      period_summary: "Period summary %{period}"
+      title: "FOLLOW-UP OF WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nTOTALS BY STATE"
+      total: "TOTAL"
+    weaknesses_by_risk:
+      pdf_name: "weaknesses_monitoring_by_risk_%{from_date}_to_%{to_date}.pdf"
+      period_summary: "Period summary %{period}"
+      title: "FOLLOW-UP OF WEAKNESSES\nTOTALS BY RISK LEVEL"
+      total: "TOTAL"
+    weaknesses_by_risk_and_business_unit: # NOTE: no existe en application.en.yml
+      pdf_name: "monitoring_weaknesses_by_risk_and_business_units_%{from_date}_at_%{to_date}.pdf"
+      period_summary: "Period summary %{period}"
+      title: "MONITORING WEAKNESSES\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
+      being_implemented: "'In process of implementation' as of %{date}"
+      created: "'Registered' between %{from_date} and %{to_date}"
+      implemented: "'Implemented' between %{from_date} and %{to_date}"
+      total: "TOTAL"
+      empty: "No comments for the applied filter."
+    weaknesses_by_audit_type:
+      weaknesses: "Weaknesses"
+      oportunities: "Opportunities" # REVIEW key opportunities?
+      without_weaknesses: "No weaknesses"
+      pdf_name: "monitoring_weaknesses_by_audit_type_%{from_date}_to_%{to_date}.pdf"
+      title: "FOLLOW-UP OF WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nTOTALS BY TYPE OF AUDIT"
+      total: "TOTAL"
+
+  follow_up_management:
+    index_title: "Management reports"
+    weaknesses_by_state_title: "Total weaknesses / Improvement opportunities by state"
+    weaknesses_by_risk_title: "Total weaknesses / Improvement opportunities by risk"
+    weaknesses_by_audit_type_title: "Total weaknesses / Improvement opportunities by audit type"
+
+  group:
+    index_title: "Group list"
+    show_title: "Group details"
+    new_title: "Add group"
+    edit_title: "Edit group"
+    correctly_created: "Group was successfully created."
+    correctly_updated: "Group was successfully updated."
+    stale_object_error: "Group was not updated, please try again."
+    add_organization: "Add organization"
+
+  notification:
+    index_title: "Notifications list"
+    show_title: "Notification details"
+    edit_title: "Edit notification"
+    correctly_updated: "Notification was successfully updated."
+    stale_object_error: "Notification was not updated, please try again."
+    confirmed: "Notification was successfully confirmed."
+    rejected: "Notification was successfully rejected, please authenticate and enter a comment for it." # REVIEW enter?
+    confirm: "Confirm"
+    reject: "Reject"
+    status_unconfirmed: "Unconfirmed"
+    status_confirmed: "Confirmed"
+    status_rejected: "Rejected"
+    type: "Type"
+
+  notifier:
+    notify_new_finding:
+      title: "You have a new finding / improvement opportunity"
+      created_title: "New finding / improvement opportunity"
+    notify_new_oportunity: # NOTE: no existe en application.en.yml
+      title: "You have a new opportunity to improve"
+      oportunity_link: "See improvement opportunity" # REVIEW key opportunity_link?
+    notify_new_finding_answer:
+      title: "New comment in review %{review}"
+      finding_data: "A comment has been added to the finding / improvement opportunity **%{finding_code}** of the review **%{review}**"
+      finding_link: "Show finding / improvement opportunity"
+    notify_action_not_found: # NOTE: no existe en application.en.yml
+      title: "Your mail was not processed"
+      warning: "No action was taken with the mail received."
+      reply_receive: "Response received"
+    change_password: "Change password"
+    changes_notification:
+      title: "Notification of changes"
+    conclusion_review_notification:
+      title: "Audit report %{type} %{review}"
+      body_title: "The following documents are attached: %{elements}"
+      final: "final"
+      draft: "draft"
+    conclusion_final_review_close_date_warning: # NOTE: no existe en application.en.yml
+      title: "Notification of reports close to closure"
+      body_title: "The following reports are close to closing"
+    findings_expiration_warning: # NOTE: no existe en application.en.yml
+      title: "Notification of findings near expiration"
+      body_title: # NOTE: no existe en application.en.yml
+        one: "The following find is about to expire"
+        other: "The following findings are about to expire"
+    findings_expired_warning: # NOTE: no existe en application.en.yml
+      title: "Notification of expired findings"
+      body_title: # NOTE: no existe en application.en.yml
+        one: "The following finding is expired"
+        other: "The following findings are expired"
+    findings_unanswered_warning: # NOTE: no existe en application.en.yml
+      title: "Unattended without response finding notification"
+      body_title: # NOTE: no existe en application.en.yml
+        one: "The following finding is unanswered"
+        other: "The following findings are unanswered"
+    new_admin_user: # NOTE: no existe en application.en.yml
+      title: "New admin"
+      body_title: "A new administrator was assigned to the organization"
+      body: "%{name} (%{user}) is now an administrator"
+    new_endorsement: # NOTE: no existe en application.en.yml
+      title: "Approval required"
+      body_title: "A new commitment date has been proposed that requires your approval"
+    endorsement_update: # NOTE: no existe en application.en.yml
+      title: "Approval Update"
+      body_title: "Approval request status updated"
+    tasks_expiration_warning: # NOTE: no existe en application.en.yml
+      title: "Notification of tasks close to due"
+      body_title: # NOTE: no existe en application.en.yml
+        one: "The next task is close to due"
+        other: "The following tasks are close to due"
+    tasks_expired_warning: # NOTE: no existe en application.en.yml
+      title: "Notification of overdue tasks"
+      body_title: # NOTE: no existe en application.en.yml
+        one: "The following task is overdue"
+        other: "The following tasks are overdue"
+    notification: # NOTE: no existe en application.en.yml
+      pending: "Pending notifications"
+      unconfirmed: "Unconfirmed notifications"
+      confirm: "Confirm notification"
+      the_following_findings_are_still_unconfirmed: "The following findings have been reported but have not received a confirmation"
+    reassigned_findings: # NOTE: no existe en application.en.yml
+      new_responsibles: # NOTE: no existe en application.en.yml
+        one: "Current user: %{responsible}"
+        other: "Current users: %{responsible}"
+      old_responsibles:
+        one: "Previous user: %{responsible}"
+        other: "Previous users: %{responsible}"
+      the_following_findings_are_now_reassigned:
+        one: "The following finding / improvement opportunity has been reassigned"
+        other: "The following findings / improvement opportunities have been reassigned"
+      title:
+        one: "Finding / Improvement opportunity reassigned"
+        other: "Findings / Improvement opportunities reassigned"
+    restore_password:
+      title: "Reset password"
+      body_title: "%{user_name}, to reset the password of your user (%{user}) use the following link:"
+      valid_until: "%{link} (You will be able to use this link until the day **%{date}** inclusive"
+      clarification: "If you **did not request** the reset **do nothing**, your username and password are still valid"
+    being_implemented_and_stale_finding_to_manager: # NOTE: no existe en application.en.yml
+      title: "Notification of findings in the process of implementation due"
+      the_following_finding_is_being_implemented_and_stale: "The following finding implementation date has passed and is still in the process of being implemented"
+    pending_poll_email: # NOTE: no existe en application.en.yml
+      about_html: "Survey about <strong>%{entity}</strong>"
+    unanswered_finding_to_manager:
+      subject: "Inactivity notification [#%{finding_id}]" # NOTE: no existe en application.en.yml
+      title: "Inactivity notification"
+      the_following_finding_is_stale_and_unanswered: "No response from users of the following finding / improvement opportunity has been received"
+      managers_clarification: "Users can change if the users of the finding / improvement opportunity are changed or if the organization chart is altered"
+    expired_finding_to_manager:
+      subject: "Expired finding [#%{finding_id}]" # NOTE: no existe en application.en.yml
+      title: "Expired finding"
+      the_following_finding_is_expired: "No new implementation / improvement opportunity date has been proposed for the following finding"
+      managers_clarification: "Users can change if the users of the finding / improvement opportunity are changed or if the organization chart is altered"
+    notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days: # NOTE: no existe en application.en.yml
+      title: "Deployed finding expiration"
+      finding_follow_up_date_last_changed_is_grerater_90_days: "90 days have passed since the last change in the finding implementation date"
+      follow_up_date_last_changed: "Last changed implementation date: %{follow_up_date_last_changed}"
+    unanswered_finding:
+      subject: Notification of changes to findings [#%{finding_id}]" # NOTE: no existe en application.en.yml
+      title: "Notification of changes"
+      the_following_finding_are_now_unanswered: "The following finding / improvement opportunity has its status changed to **No response**, due to not receiving a response"
+      if_no_answer_is_given_the_following_users_will_be_notified: "DIf it continue in the same status (No response) the following notifications will be generated"
+    group_welcome_email:
+      title: "The group %{name} has been created"
+      initial_user: "To start using the system you must first create a user"
+      create_user: "Create user"
+      clarification: "You have received this email because you have been assigned a group in the 'Mawidabp' system" # REVIEW no sería más como "usted ha sido agregado a un grupo"?
+    welcome_email:
+      title: "%{name}, your account has been created"
+      initial_password: "To start using the system you must first set your password"
+      change_password: "Set password"
+      clarification: "You have received this email because you have been registered in the 'Mawidabp' system."
+      organizations_sites:
+        one: "Then you can log in at the following URL:" # REVIEW luego de realizar una accoón? O tipo "a continiación"?
+        other: "Then you can log in at any of the following URLs (depending on the organization you select):"
+
+  oportunity: # REVIEW key opportunity?
+    index_title: "Opportunities list"
+    show_title: "Opportunity details"
+    new_title: "Add opportunity"
+    edit_title: "Edit opportunity"
+    correctly_created: "Opportunity was successfully created."
+    correctly_updated: "Opportunity was successfully updated."
+    stale_object_error: "Opportunity was not updated, please try again."
+    edit_control_objective: "Edit control objective"
+    show_follow_up: 'Show follow-up'
+    edit_follow_up: 'Edit follow-up'
+    errors:
+      is_unconfirmed: "is in 'Unconfirmed' status"
+      not_valid_state: "has a not valid status"
+      with_expired_tasks: "has expired pending or in-process tasks" # REVIEW in-progress?
+      with_solution_date: "has solution date (and it should not)"
+      without_answer: "has no answer"
+      without_audited: "has no auditee" # REVIEW entiendo que es un sistantivo, por lo que sería auditee
+      without_auditor: "has no auditor"
+      without_solution_date: "has no solution date"
+      without_audit_comments: "has no audit comments"
+      without_audit_recommendations: "has no audit recommendations"
+
+  organization: # NOTE: no existe en application.en.yml
+    index_title: "List of organizations"
+    show_title: "Organization details"
+    new_title: "Add organization"
+    edit_title: "Modify organization"
+    correctly_created: "Organization successfully added."
+    correctly_updated: "Organization updated correctly."
+    stale_object_error: "Organization was not updated, please try again."
+    new_organization_can_not_have_image: "You will be able to upload an organization logo after creating it"
+
+  pdf:
+    export: "Export"
+    page_pattern: "Page <PAGENUM> of <TOTALPAGENUM>"
+    period_description: "Period"
+    review_identification: "Review number"
+    draft: "Draft"
+
+  plan_item:
+    errors:
+      cannot_edit_business_unit_for_memos_too: 'or a memo'
+
+  questionnaire: # NOTE: no existe en application.en.yml
+    index_title: "List of questionnaires"
+    edit_title: "Edit questionnaire"
+    new_title: "Add questionnaire"
+    show_title: "Questionnaire Details"
+    correctly_created: "The questionnaire has been successfully added."
+    correctly_updated: "The questionnaire has been updated correctly."
+    stale_object_error: "The questionnaire was not updated, please try again."
+    add_question: "Add question"
+    not_found: "Questionnaire not found"
+    monthly_committee: "Monthly committee"
+    general: "General"
+  report:
+    index_title: "List of reports"
+
+  review:
+    index_title: "Reviews list"
+    show_title: "Review details"
+    new_title: "Add review"
+    edit_title: "Edit review"
+    correctly_created: "Review was successfully created."
+    correctly_updated: "Review was successfully updated."
+    stale_object_error: "The review was not updated, please try again."
+    control_objective_items_label: "Control objectives"
+    show_excluded_control_objectives: "Show control objectives loaded in the best practice and absent in the review"
+    no_excluded_control_objectives: "All control objectives for this process are in the review"
+    add_control_objective: "Add a new control objective"
+    add_process_control: "Add a new process"
+    add_best_practice: "Add a new best practice"
+    add_tagging: "Add tag"
+    associated: "Associates"
+    available: "Available"
+    bundle: "Bundle"
+    copy: "Copy"
+    findings_label: "Pending findings / improvement opportunities"
+    external_reviews_label: "Alternative reviews" # NOTE: no existe en application.en.yml
+    external_reviews_title: "Add alternative review" # NOTE: no existe en application.en.yml
+    add_finding_assignment: "Add pending finding / improvement opportunity"
+    add_user_assignment: "Add related user"
+    add_past_findings: "Add recent fixed finding" # NOTE: no existe en application.en.yml
+    suggest_findings: 'Suggest pending findings / improvement opportunities'
+    suggest_past_findings: 'Suggest recent findings / improvement opportunities solved' # REVIEW fixed?
+    without_suggested_findings: 'No pending findings / improvement opportunities'
+    without_past_implemented_audited_findings: 'No recent findings / improvement opportunities solved'
+    suggested_findings_for: 'Suggested findings for %{process_control}'
+    readonly: "The report cannot be modified, the final report has already been issued"
+    with_final_review: "With final review"
+    without_final_review: "Without final review"
+    without_score: "Without score" # REVIEW Do not score?
+    weakness_from_template: "Weakness created from template"
+    repeated_weaknesses: "Repeated"
+    old_weaknesses: "Old data"
+    new_weaknesses: "New"
+    taken_work_paper_code:
+      one: "%{duplicated_work_papers} work paper code is duplicated"
+      other: "The following work paper codes are duplicated: %{duplicated_work_papers}"
+    user_assignment:
+      type_viewer: "Viewer"
+      type_auditor: "Auditor"
+      type_supervisor: "Supervisor"
+      type_manager: "Manager"
+      type_responsible: "Head of internal audit"
+      type_audited: "Auditee"
+      audit_team: "Audit Team" # REVIEW donde sale?
+      others: "Users"
+      readonly: "The members cannot be modified, the final report has already been issued"
+    score_sheet_title: "DETAILED SCORE PROCESS SHEET"
+    global_score_sheet_title: "GLOBAL SCORE PROCESS SHEET" # REVIEW Worksheet?
+    score_sheet_filename: "detailed_score_sheet"
+    global_score_sheet_filename: "global_score_sheet"
+    draft_score_sheet: "Draft"
+    audit_period: "%{start} to %{end}"
+    audit_period_title: "AUDITING PERIOD"
+    auditors: "AUDITORS"
+    score: "SCORE"
+    control_objectives_effectiveness: "Control effectiveness"
+    control_objectives_previous_effectiveness: "Control previous effectiveness" # NOTE: no existe en application.en.yml
+    control_objectives_relevance: "Weight"
+    oportunities_summary: "Improvement opportunities sorted by status" # REVIEW key opportunities_summary?
+    oportunities_count_summary: "Number of improvement opportunities sorted by status" # REVIEW key opportunities_count_summary?
+    weaknesses_summary: "Summary of weaknesses that support the score given (ordered by risk importance (%{risks}) and then by weakness status)"
+    weaknesses_count_summary: "Number of weaknesses that support the given score (ordered by risk importance (%{risks}) and then by weakness status)"
+    weaknesses_count: "Number of Weaknesses"
+    weaknesses_count_by_state: "Number of Weaknesses (Pending/Resolved-Repeated)" # NOTE: no existe en application.en.yml
+    oportunities_count: "Number of Improvement Opportunities" # REVIEW key opportunities_count?
+    control_objectives_work_papers: "Control objectives"
+    show_control_objective: "Show control objective details"
+    hide_control_objective: "Hide control objective details"
+    weaknesses_work_papers: "Weaknesses"
+    oportunities_work_papers: "Opportunities" # REVIEW key opportunities_work_papers?
+    follow_up_work_papers: "Follow-up weakenesses"
+    download_work_papers: "Download work papers"
+    finished_work_papers: "Work papers - Auditor approved" # REVIEW conforme auditor?
+    revise_work_papers: "Work Papers - Supervisor revised" # REVIEW conforme supervisor?
+    notes: "Notes"
+    estimated_amount: "Estimated cost in workplan" # REVIEW seguro que no es costo estimado del plan de trabajo?
+    review_qualification_explanation: "The review qualification is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight is added and the result is divided by the sum of the weights."
+    process_control_qualification_explanation: "The business process qualification is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are summed and the result is divided by the sum of the weights."
+    errors:
+      can_not_be_destroyed: "Report cannot be deleted"
+      without_score: "has no audit score"
+      without_survey: "has no survey"
+      without_audited: "has no audited user"
+      without_file_model: "has no attachment"
+      without_control_objectives: "has no control objectives"
+      related_finding_incomplete: "is pending and has not been marked as repeated or fixed"
+    survey:
+      with_attachment:
+        one: "With an attachment" # NOTE: no existe en application.en.yml
+        other: "Con %{count} attachments" # NOTE: no existe en application.en.yml
+      without_attachment: "Without attachments"
+      download: "Download survey"
+      download_attachment: "Download attachment"
+    review_data:
+      close_date: "Close date: %{date}"
+      without_close_date: "Without close date"
+    pdf:
+      pdf_name: 'report_%{identification}.pdf'
+
+  external_review: # NOTE: no existe en application.en.yml
+    errors:
+      issue_date_after_review_issue_date: "issue date (%{date}) is greater than the report issue date"
+
+  review_user_assignment:
+    responsibility_modification:
+      title: "Modification of responsibilities in %{review} review"
+      old_responsible: "Old responsible: %{responsible}"
+      new_responsible: "Current responsible: %{responsible}"
+    responsibility_removed: "Have been removed from the %{review} review" # REVIEW donde?
+    cannot_be_reassigned: "User cannot be reassigned, has observations that depend on them" # REVIEW observations: findings / weaknesses?
+    cannot_be_destroyed: "User cannot be deleted, it has observations that depend on them" # REVIEW observations: findings / weaknesses?
+
+  role:
+    index_title: "Profile list"
+    show_title: "Profile details"
+    new_title: "Add profile"
+    edit_title: "Edit profile"
+    correctly_created: "Profile was successfully created"
+    correctly_updated: "Profile was successfully updated"
+    stale_object_error: "Profile was not updated, please try again"
+    type_admin: "Admin"
+    type_supervisor: "Supervisor"
+    type_auditor: "Auditor"
+    type_audited: "Auditee"
+    type_committee: "Committee"
+    type_manager: "Audit manager"
+    type_executive_manager: "Manager"
+
+  user:
+    will_be_orphan_findings: "The user was not deleted because it has pending findings / opportunities, please reassign them first"
+    disabled: "Disabled"
+    without_organization: "The user has no profile assigned, therefore it does not belong to any organization and cannot enter the system"
+    responsibility_modification:
+      title: "Modification of responsibilities"
+      old_responsible: "Old Responsible: %{responsible}"
+      new_responsible: "Current responsible: %{responsible}"
+      reassigned_to_reviews:
+        one: "Responsibility for executing review %{reviews} has been reassigned" # REVIEW revisar executing
+        other: "Responsibility for executing reviews %{reviews} has been reassigned" # REVIEW revisar executing
+      reassigned_to_findings_from_reviews:
+        one: "Pending findings from the %{reviews} review have been reassigned"
+        other: "Pending findings from reviews %{reviews} have been reassigned"
+    responsibility_release:
+      title: "Disclaimer" # REVIEW Release of responsibilities?
+    unconfirmed_findings: "Unconfirmed findings to this date"
+    pdf:
+      pdf_name: "user_list.pdf"
+      users_count: "Number of users: %{count}"
+      filtered_by:
+        one: "The list was filtered with the query '%{query}' on the column %{columns}"
+        other: "The list was filtered with the query '%{query}' on the columns %{columns}"
+
+  weakness:
+    index_title: "Weaknesses list"
+    show_title: "Weakness details"
+    new_title: "Add weakness"
+    edit_title: "Edit weakness"
+    correctly_created: "Weakness was successfully created"
+    correctly_updated: "Weakness was successfully updated"
+    stale_object_error: "Weakness was not updated, please try again"
+    see_all: "Show all"
+    edit_control_objective: "Edit control objective"
+    previous_follow_up_dates: "Previous follow-up dates"
+    show_follow_up: 'Show follow-up'
+    edit_follow_up: 'Edit follow-up'
+    errors:
+      is_unconfirmed: "is in 'Unconfirmed' state"
+      not_valid_state: "has a not allowed state" # REVIEW not valid?
+      with_expired_tasks: "has expired pending or in-process tasks"
+      with_follow_up_date: "has a follow-up date (and should not)"
+      with_solution_date: "has solution date (and should not)"
+      without_answer: "has no answer"
+      without_audited: "has no auditee"
+      without_auditor: "has no auditor"
+      without_effect: "has no effect"
+      without_follow_up_date: "has no follow-up date"
+      without_solution_date: "has no solution date"
+      without_audit_comments: "has no audit comments"
+      without_audit_recommendations: "has no audit recommendations"
+      cannot_update_sigen_fields_in_repeated_of: "Sigen fields cannot be updated in finding with id: %{id} due to errors: %{messages}"
+
+  welcome:
+    index_title: "Welcome"
+
+  wicked_pdf: # NOTE: no existe en application.en.yml
+    number_pages_html: 'Page <span class="page"></span> of <span class="topage"></span>'
+
+  work_paper:
+    cover_name: "%{prefix}%{filename}-cover.pdf"
+    number_of_pages:
+      one: "one sheet"
+      other: "%{count} sheets"
+
+  workflow:
+    index_title: "Workflow list"
+    show_title: "Workflow details"
+    new_title: "Add workflow"
+    edit_title: "Edit workflow"
+    correctly_created: "Workflow was successfully created"
+    correctly_updated: "Workflow was successfully updated"
+    stale_object_error: "Workflow was not updated, please try again"
+    save_as_new_version: "Save as new version?"
+    column_estimated: "Estimated"
+    column_real: "Real"
+    row_cost: "Cost"
+    row_time: "Time"
+    human_resources_abbr: "HR"
+    human_resources: "Human resources"
+    material_resources_abbr: "MR"
+    material_resources: "Material resources"
+    allow_overload: "Allow overload?"
+    copy: "Copy"
+    readonly: "The workflow cannot be modified, the final report has already been issued"
+    add_human_resource_utilization: "Add human resource"
+    add_material_resource_utilization: "Add material resource"
+    show_resource_utilization: "Show resources"
+    hide_resource_utilization: "Hide resources"
+    download_global_workflow: "Download global workflow"
+    download_detailed_workflow: "Download detailed workflow"
+    maximum_exceeded_by_human_resource: "%{user} has exceeded the maximum time for task: %{item}" # NOTE: no existe en application.en.yml
+    period:
+      title: "Period (%{name})"
+      range: "%{from_date} to %{to_date}"
+    pdf:
+      pdf_name: "workflow_%{review}.pdf"
+      resources_utilization: "Resources used"
+      planned_resources_utilization: "Estimated resources in the workflow (*)"
+      planned_resources_utilization_explanation: "(*) They are not part of the total cost of the workflow"
+
+  activerecord:
+    models:
+      business_unit: "Business unit"
+      business_unit_type: "Organizational unit"
+      business_unit_type_user: "Organizational unit"
+      business_unit_type_review: "Organizational unit review" # NOTE: no existe en application.en.yml
+      comment: "Comment"
+      conclusion_review: "Review"
+      conclusion_final_review: "Final review"
+      conclusion_draft_review: "Draft review"
+      control: "Control"
+      control_objective_item: "Control objective"
+      cost: "Cost"
+      finding_answer: "Finding answer"
+      finding_review_assignment: "Finding review assignment"
+      group: "Group"
+      notification: "Notification"
+      old_password: "Old password"
+      privilege: "Privilege"
+      review:
+        one: "Review"
+        other: "Reviews"
+      review_user_assignment: "Review user assignment"
+      role: "Profile" # REVIEW role??
+      workflow: "Workflow"
+      workflow_item: "Workflow record"
+      work_paper: "Work paper"
+
+    attributes:
+      answer:
+        attached: 'Attached'
+      business_unit:
+        name: "Name"
+      business_unit_type_user:
+        user_id: "User"
+        business_unit_type_id: "Organizational unit"
+      business_unit_type_review:
+        review_id: "Review"
+        business_unit_type_id: "Organizational unit"
+      comment:
+        comment: "Comment"
+        user_id: "User"
+        created_at: "Comment date"
+      conclusion_draft_review:
+        force_approval: "Force approval"
+      conclusion_review:
+        type: "Type"
+        review_id: "Review"
+        issue_date: "Issue date"
+        close_date: "Closing date"
+        applied_procedures: "Applied procedures"
+        conclusion: "Conclusion"
+        business_unit: "Business unit"
+        project: "Project"
+        approved: "Approved"
+        summary: "Summary"
+        recipients: "Review recipients"
+        sectors: "Sectors/departments involved"
+        evolution: "Score evolution"
+        evolution_justification: "Evolution justification"
+        observations: "Other considerations"
+        main_weaknesses_text: "Main weaknesses"
+        corrective_actions: "Corrective actions"
+        affects_compliance: "Affects compliance"
+        collapse_control_objectives: "Group control objectives"
+        scope: "Scope limitation"
+        reference: "Frame of reference"
+        previous_identification: "Previous review"
+        previous_date: "Previous issue date"
+        main_recommendations: "Main Audit Recommendations"
+        effectiveness_notes: "Effectiveness notes" # NOTE: no existe en application.en.yml
+        additional_comments: "Additional comments"
+      control:
+        order: "Order"
+        control: "Controls"
+        effects: "Effects"
+        design_tests: "Design tests"
+        compliance_tests: "Compliance tests"
+        sustantive_tests: "Substantive tests" # REVIEW key substantive_tests?
+      control_objective_item:
+        control_objective_id: "Control objective"
+        control_objective_text: "Control objective"
+        relevance: "Importance"
+        design_score: "Design test score"
+        compliance_score: "Compliance test score"
+        sustantive_score: "Substantive evidence score" # REVIEW key substantive_score?
+        audit_date: "Audit date"
+        auditor_comment: "Auditor comments"
+        finished: "Finished"
+        exclude_from_score: "Do not score"
+        issues_count: "Observed cases"
+        alerts_count: "Number of alerts"
+        process_control_id: "Business process"
+        effectiveness: "Control effectiveness"
+        support: "Support"
+        weaknesses: "Weaknesses"
+        oportunities: "Improvement opportunities" # REVIEW key opportunities?
+        work_papers: "Work papers"
+        scored_business_unit_type_id: "Business unit type scored" # NOTE: no existe en application.en.yml
+      control_objective_item/control:
+        order: "Control objective (order)"
+        control: "Control objective (controls)"
+        effects: "Control objective (effects)"
+        design_tests: "Control objective (design tests)"
+        compliance_tests: "Control objective (compliance tests)"
+        sustantive_tests: "Control objective (substantive tests)" # REVIEW key substantive_tests?
+      control_objective_item/work_papers:
+        one: "Work papers"
+        other: "Work papers"
+        name: "Work paper (name)"
+        code: "Work paper (code)"
+        description: "Work paper (description)"
+        number_of_pages: "Work paper (pages)"
+      control_objective_item/work_papers/file_model:
+        one: "Work paper (file)"
+        file_file_name: "Work paper (file name)"
+        file_content_type: "Work paper (file type)"
+        file_file_size: "Work paper (file size)"
+      control_objective_item/business_unit_scores:
+        business_unit_id: 'Business unit score (business unit)'
+        design_score: 'Business unit score (design tests)'
+        compliance_score: 'Business unit score (compliance tests)'
+        sustantive_score: 'Business unit score (substantive tests)' # REVIEW key substantive_score?
+      cost:
+        cost: "Time spent"
+        description: "Description of the activities carried out"
+        user_id: "User"
+        item_id: "Item"
+        item_type: "Item (type)"
+      file_model:
+        uploaded_data: "File"
+        content_type: "File (type)"
+        size: "File (size)"
+        file: "File" # NOTE: no existe en application.en.yml
+      finding_answer:
+        answer: "Comment"
+        commitment_date: "Commitment date"
+        finding_id: "Finding / Opportunity"
+        user_id: "User"
+        file_model: "Attachment" # REVIEW Annex? donde?
+        notify_users: "Send notification"
+        created_at: "Comment date"
+        skip_commitment_support: 'Check if the finding is fixed'
+      finding_relation:
+        finding_id: 'Finding / Improvement opportunity'
+        related_finding_id: 'Finding / Related improvement opportunity'
+        description: 'Description'
+      finding_review_assignment:
+        finding_id: 'Finding / Improvement opportunity'
+        finding: 'Finding / Improvement opportunity'
+        review_id: 'Review'
+        review: 'Review'
+      finding_user_assignment:
+        finding_id: 'Finding / Improvement opportunity'
+        user_id: 'User'
+        user: 'User'
+        process_owner: 'Owner'
+        responsible_auditor: 'Referring auditor'
+      group:
+        name: "Name"
+        description: "Description"
+        admin_email: "Admin email"
+        send_notification_email: "Send notification"
+        organizations:
+          one: "Organization"
+          name: "Organization (name)"
+          prefix: "Organization (prefix)"
+          description: "Organization (description)"
+      notification:
+        status: "Status"
+        confirmation_hash: "Confirmation string" # REVIEW hash?
+        notes: "Notes"
+        findings: "Findings"
+        conclusion_reviews: "Reviews"
+        user_who_confirm: "Confirmed by"
+        created_at: "Created at" # REVIEW Sent date?
+        updated_at: "Updated at" # REVIEW Updated date?
+        confirmation_date: "Confirmation date"
+      notification_relation:
+        model: "Model"
+        notification: "Notification"
+      old_password:
+        password: "Password"
+      organization_role:
+        user_id: "User"
+        organization_id: "Organization"
+        role_id: "Profile" # REVIEW role??
+      privilege:
+        module: "Module"
+        read: "Read"
+        modify: "Modify" # REVIEW Edit? donde?
+        erase: "Erase"
+        approval: "Approval"
+      related_user_relation:
+        user_id: 'User'
+        related_user_id: 'Related user'
+      role:
+        name: "Profile"
+        role_type: "Profile type"
+        privileges: "Privileges"
+      work_paper:
+        name: "Name"
+        code: "Code"
+        description: "Description"
+        file_model: "File"
+        number_of_pages: "Pages"
+      workflow:
+        organization_id: "Organization"
+        period_id: "Period"
+        review_id: "Review"
+        cost: "Cost"
+        units: "Units"
+        file_model_id: "Attachment" # REVIEW Annex?
+        workflow_items_resources: "Resources"
+        workflow_items:
+          one: "Task"
+          other: "Tasks"
+          base: "" # REVIEW nil?
+          task: "Task"
+          start: "Task (start)"
+          end: "Task (end)"
+          order_number: "Task (order)"
+          resources: "Task (resources)"
+          resource_utilizations:
+            one: "Resource"
+            other: "Resources"
+            units: "Resource (number of units)"
+            cost_per_unit: "Resource (cost per unit)"
+            cost: "Resource (cost)"
+            resource_id: "Resource"
+      workflow_item:
+        task: "Task"
+        start: "Start"
+        end: "End"
+        order_number: "Order"
+        resources: "Resources"
+        resource_ids: "Resources"
+        human_resource_units: "Human resource cost"
+        material_resource_units: "Material resource cost"
+        total_resource_units: "Total cost"
+
+    errors:
+      # Append your own errors here or at the model/attributes scope.
+      models:
+        best_practice:
+          attributes:
+            process_controls:
+              locked: "cannot be removed, they have already been used in at least one report" # REVIEW review?
+        business_unit_type:
+          attributes:
+            business_units:
+              locked: "cannot be removed, already used in at least one work plan"
+        conclusion_final_review:
+          attributes:
+            review_id:
+              taken: "has already created a final review"
+              invalid: "is not approved"
+              without_draft: "has no draft"
+        control_objective_auditor:
+          attributes:
+            user_id:
+              invalid: "Must be auditor" # NOTE: no existe en application.en.yml
+        file_model:
+          attributes:
+            file:
+              without_extension: 'must have extension'
+        finding:
+          attributes:
+            tag_ids:
+              too_short:
+                one: "must be at least one"
+                other: "must be at least %{count}"
+        image_model:
+          attributes:
+            image_content_type:
+              invalid: "is not valid"
+            image_file_size:
+        organization_role:
+          attributes:
+            role_id:
+              invalid: "must be only the audited type or another type but not both" # REVIEW auditee?
+        process_control:
+          attributes:
+            control_objectives:
+              locked: "cannot be removed, they have already been used in at least one report" # REVIEW review?
+        question:
+          attributes:
+            question:
+              answered: 'already has answers'
+            answer_type:
+              used: 'has already been submitted in at least one questionnaire'
+        review:
+          attributes:
+            review_user_assignments:
+              invalid: "must have at least %{required_roles}"
+            plan_item:
+              invalid: "must have a business unit assigned in planning"
+              required: "must select one"
+        review_user_assignment:
+          attributes:
+            user_id:
+              invalid: "must have a profile according to your role within the review"
+        user:
+          attributes:
+            organization_roles:
+              blank: "must have at least one"
+              invalid: "cannot be modified, user has pending observations (must reassign or detach them)" # REVIEW observations??
+            password:
+              invalid: "must meet the restrictions set by the administrator"
+              already_used: "already used before"
+              too_short: "is too short (%{count} characters minimum)"
+              too_soon:
+                one: "cannot be modified, must wait at least one day between changes"
+                other: "cannot be modified, must wait at least %{count} days between changes"
+        weakness: # NOTE: no existe en application.en.yml
+          attributes:
+            year:
+              frozen: 'Cannot be modified since the state of the weakness is repeated'
+              different_from_repeated_of: 'Year cannot be different from that of the repeated weakness'
+            nsisio:
+              frozen: 'Cannot be modified since the state of the weakness is repeated'
+              different_from_repeated_of: 'NSISIO cannot be different from the repeated weakness'
+            nobs:
+              frozen: 'Cannot be modified since the state of the weakness is repeated'
+              different_from_repeated_of: 'N OBS cannot be different from the repeated weakness'
+        workflow_item:
+          attributes:
+            start:
+              resource_overload: "overloads with another item that occupies the same resource"
+            end:
+              resource_overload: "overloads with another item that occupies the same resource"
+
+  actioncontroller:
+    best_practices: "Best practices"
+    business_unit_types: "Organizational unit"
+    follow_up_audit: "Follow-up reports"
+    conclusion_reports: "Conclusion reports"
+    conclusion_draft_reviews: "Draft reviews"
+    conclusion_final_reviews: "Final reviews"
+    control_objective_items: "Control objectives"
+    error_records: "Error logs"
+    execution_reports: "Execution reports"
+    findings: "Findings" # NOTE: no existe en application.en.yml
+    groups: "Groups"
+    licenses: "license" # NOTE: no existe en application.en.yml
+    login_records: "Login records"
+    notifications: "Notifications"
+    oportunities: "Improvement opportunities" # REVIEW key opportunities?
+    organizations: "Organizations"
+    periods: "Periods"
+    plans: "Work plans"
+    resource_classes: "Resources"
+    reviews: "Reviews"
+    roles: "Profiles" # REVIEW roles?
+    users: "Users"
+    versions: "Versions"
+    weaknesses: "Weaknesses"
+    welcome: "Welcome"
+    workflows: "Workflows"
