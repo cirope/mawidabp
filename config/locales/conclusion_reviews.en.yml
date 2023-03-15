@@ -1,0 +1,179 @@
+# En caso de uso, revisar las traducciones
+en:
+  conclusion_review:
+    bic:
+      header: "INTERNAL AUDIT REPORT\nN° %{identification}"
+      cover:
+        title_html: "\n<b><i>DISTRIBUTION REPORT N° %{identification}</i></b>\n%{space}"
+        to_html: "\n<i><b>A =</b> View Distribution list</i>"
+        date_html: "<i><b>Date</b>:\n%{date}</i>"
+        from_html: "\n<i><b>From =</b> Internal Audit</i>"
+        draft_html: "<color rgb='ffffff'><b>Version\nDRAFT</b></color>"
+        final_html: "<color rgb='ffffff'><b>Version\nFINAL</b></color>"
+        ref_html: "\n<i><b>Ref =</b> Audit Report N° %{identification}: \"%{project}\"</i>"
+        legend: "We are at your disposal to clarify any issue you deem necessary.\n\nSincerely,"
+        draft_with_weaknesses: "Attached herewith we distribute the reference report in draft version, requesting that you kindly consider the weaknesses and <b>respond</b>, as required by the Board of Directors (*)."
+        final_with_weaknesses: "Attached herewith we distribute the Final version of the Reference Report containing the responses from each of the areas." # ASD review?
+        final_without_weaknesses: "Attached herewith we distribute the Final version of the Reference Report, which does not contain relevant weaknesses to make." # ASD review?
+        footer: "(*) Each Audited Management must respond to the reports within a period of 10 business days of receipt. The responses must include the course of action committed by each Management, to regularize the weaknesses indicated. In addition, Management must inform the term in which they will proceed to the committed regularization."
+      review:
+        subject: "Subject"
+        previous: "Previous report\n%{review}"
+        revision: "Internal Audit Review:\nStarted: %{start} - Completed: %{end}"
+        applied_procedures: "Scope"
+        observations: "Preliminary clarifications"
+        conclusion: "Audit comments"
+        score: "Cycle evaluation"
+      weaknesses:
+        title: "DETAIL OF WEAKNESSES - ACTION PLANS"
+        plan: "Corrective action plan N° %{number}"
+        responsible: "MANAGEMENT RESPONSIBLE"
+      repeated_weaknesses:
+        title: "DETAIL OF REPEATED WEAKNESSES - ACTION PLANS"
+      images:
+        plan: "Evidence corrective action plan N° %{number}"
+    cro:
+      header:
+        legend_html: "<b>Bértora y Asociados</b>\r\nBernardo de Irigoyen 330 Piso 3\r\n\r\nCiudad Autónoma de Buenos Aires\r\nC1072AAF\r\nTeléfono +54 (11)4342 2544\r\n\r\nwww.crowe.com.ar"
+      cover:
+        date: "Ciudad Autónoma de Buenos Aires, %{date}"
+        to_html: "Gentlemen:\r\nMembers of the Audit Committee of\r\n<b><u>%{organization}</u></b>"
+        reference: "REF. CYCLE REPORT %{business_unit}\r\n– %{business_unit_type}"
+        text: "From my highest consideration:\r\n\r\nI have the pleasure of writing to you, in order to submit this report on the reference cycle.\r\n\r\nThis review was carried out for the purposes of comply with the planning of Internal Audit, in accordance with the requirements of Communication “A” 5042 of the Central Bank of the Argentine Republic (BCRA).\r\n\r\nWithout any other particular and remaining at your disposal, greetings to you respectfully."
+        sign: "Federico Miguel Mazzei\r\nBertora y Asociados S.R.L.\r\nInternal Audit"
+      index:
+        title: "INDEX"
+      section:
+        objective: "I.%{space}%{space}%{space}OBJECTIVE"
+        applied_procedures: "II.%{space}%{space}APPLIED PROCEDURES – SCOPE"
+        findings: "III.%{space}FINDINGS AND RECOMMENDATIONS"
+        follow_up: "IV.%{space}FOLLOW UP FINDINGS FROM PREVIOUS REPORTS"
+        conclusion: "V.%{space}%{space}CONCLUSION"
+      objective:
+        text: "The tasks carried out were aimed at evaluating and verifying compliance with the provisions of the BCRA, the inherent risks and the controls associated with the cycle “%{business_unit}”.\r\n\r\nThe reference framework applied was defined taking into account the current BCRA regulations on internal control, as well as the internal regulations issued by the authorities of the Entity."
+      findings:
+        empty: "No findings."
+        answer: "Entity findings"
+        user_ids: "Responsible for the finding"
+        origination_date: "Origin"
+        estimated_follow_up_date: "Estimated follow-up date"
+        new_description: "New entity finding"
+        new_estimated_follow_up_date: "New estimated follow-up date"
+
+      follow_up:
+        empty: "No follow-up findings in previous reports."
+      weakness:
+        risk: "Importance"
+        effect: "Risk"
+        audit_recommendations: "Recommendation"
+    pat:
+      cover:
+        from: "Banco Patagonia S.A.\nInternal Audit Management\n%{business_unit_types}"
+        to: "To: %{receiver}"
+        audit_committee: 'Audit Committee'
+        gpat_company: "GPAT Compañía Financiera S.A.U."
+        scope:
+          cycle: "%{prefix} Tasks and Scope."
+          sustantive: "%{prefix} Scope of Tasks."
+        conclusion: "%{prefix} Conclusion."
+        objective: "%{prefix} Objective."
+        additional_comments: "Additional comments."
+        owners:
+          cycle: "Observations arising from our work, detailed in Attachment I attached, were discussed with %{owners}."
+          sustantive: "Annex I describes the weaknesses arising from the review, as well as their implications. These weaknesses have been discussed with %{owners}"
+        auditors: "Intervening auditors:"
+        supervisors: "Supervised by:"
+        organization: "Banco Patagonia S.A."
+        brief:
+          title: "Ref: %{description}\nAudit Report %{review}"
+          notice:
+            one: "The following report summarizes the points observed in the benchmark audit. It is intended to allow quick reading at the highest levels. The full report, which will be copied to books under the %{review}, consists of %{count} page ."
+            other: "The following report summarizes the points noted in the benchmark audit. It is intended to allow quick reading at the highest levels. The full report, which will be copied to books under the %{review}, consists of %{count} pages ."
+          details_title: "The main weaknesses observed are detailed below, as well as their situation at the time of issuing the respective report:"
+          weaknesses_title: "Weaknesses of the current period:"
+      weaknesses:
+        title: "Annex I"
+        previous_title: "%{prefix} Tracking cycle weaknesses based on our previous report."
+        current_title:
+          cycle: "%{prefix} Weaknesses raised during the %{year} review."
+          sustantive: "%{prefix} Cycle weaknesses from the %{year} review."
+        follow_up: "%{prefix} Follow-up on aspects observed in other inspections."
+        external: "%{prefix} Follow-up on aspects observed in other inspections."
+        current_situation: "Current Situation:"
+        risk: "<b>Risk level</b>: %{risk}"
+        follow_up_date: "Estimated date of regularization:"
+        follow_up_date_failure: "Failure with semi-annual report to CDA"
+        follow_up_date_implemented_audited: "Regularized"
+        effect: "Effect:"
+        answer: "Sector Comment:"
+        audit_recommendations: "Recommendation:"
+      workflow:
+        title: "Appendix %{number}"
+        subtitle: "Work Program"
+      footer:
+        text: "Audit"
+      rtf:
+        cover:
+          bank: "Banco Patagonia S.A."
+          department: "Internal Audit Management"
+          to: "To: %{receiver}"
+        weaknesses:
+          risk: "Risk level:"
+    nbc:
+      cover:
+        title: "<b>Internal Audit Review</b>"
+        issue_date: "<b>Date</b>"
+        to: "<b>A</b>"
+        from: "<b>FROM</b>"
+        cc: "<b>CC</b>"
+        to_label: "Members of the Audit Committee of Nuevo Banco del Chaco S.A."
+        from_label: "Internal Audit Management – ​​Nuevo Banco del Chaco S.A"
+        number_review: "Review Number"
+        prepared_by: "Prepared by Internal Audit - NBCH"
+        audit_date: "<b>Audit Date</b>"
+      weaknesses:
+        title: "<b>EXECUTIVE SUMMARY</b>"
+        subtitle: "<b>OBJECTIVE</b>"
+        main_observations: "<b>WEAKNESSES IN THE PROCESS OF REGULARIZATION</b>"
+        from_external_review: "From Review"
+        audit_conclusion: "<b>OVERALL AUDIT CONCLUSION</b>"
+        highest_responsible: "<b>%{responsible}</b>"
+        signature_label: "<b>Interim Internal Audit a/c Manager</b>"
+        organization: "<b>Nuevo Banco del Chaco S.A.</b>"
+        detailed_review: "DETAILED REVIEW"
+        introduction_and_scope: "<b>INTRODUCTION AND SCOPE OF WORK</b>"
+        full_name: "<b>Responsible for the Process</b>"
+        responsible_name: "<b>Name of the Regularization Manager</b>"
+        follow_up_date: "<b>Estimated Regularization Date</b>"
+        messages: "The procedures carried out included consultation tasks, evaluation of documentation and observation of activities and operations carried out during the review.\n\nThe officials interviewed were:"
+      scores:
+        cycle: '<b>CYCLE SCORE</b>'
+        description: 'In accordance with the cycle score methodology approved by the Audit Committee at its meeting on 05.14.2019 – Minutes No. 294, we present the corresponding score below: '
+        legend_score: "To determine this score we have evaluated:\n • the level of criticality of our weaknesses and their impact on the Entity's internal control structure;\n • the responses to our weaknesses that were sent to us by those responsible and the action plan developed in order to regularize the situations observed;\n • the considerations on the application systems and their automatic controls, the conclusions of which are detailed in the Systems Audit report;\n • the compensatory manual controls and the sufficiency of the supporting documentation stored; and\n • the age of the weaknesses"
+        risk: 'Risk'
+        amount_weaknesses: 'Amount of Weaknesses'
+        level_risk: 'Risk level'
+        status: 'Status'
+        age_parameter: 'Age Parameter'
+        weighing: 'Weighting'
+        total: 'Total'
+        footer_table: 'Cycle score'
+      results_by_weighting:
+        adequate: 'Adequate'
+        require_some_improvements: 'Requires some improvements'
+        require_improvements: 'Adjusted'
+        require_lots_of_improvements: 'Requires significant improvements'
+        inadequate: 'Inadequate'
+
+      weaknesses_detected:
+        name: "WEAKNESSES FROM THIS REVIEW"
+        repeated: "FOLLOW-UP WEAKNESSES"
+        external: "ALTERNATE REPORT WEAKNESSES"
+        title: "<b>Title</b>"
+        description: "<b>Description</b>"
+        state: "<b>State</b>"
+        risk: "<b>Risk level</b>"
+        origination_date: '<b>Origination Date</b>'
+        origination_author: '<b>Origination author</b>'
+        audit_recommendations: "<b>Improvement Suggestions</b>"
+        audit_comments: "<b>Action plan proposed by the manager</b>"
