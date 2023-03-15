@@ -228,20 +228,63 @@ class PlanItemTest < ActiveSupport::TestCase
   end
 
   test 'should return all plan items when user does not have business unit types' do
-    assert_equal PlanItem.allowed_by_auxiliar_business_units_types,
-                 PlanItem.all
+    assert_equal PlanItem.allowed_by_business_units_and_auxiliar_business_units_types.count,
+                 PlanItem.all.count
   end
 
-  test 'should return plan item when user have business unit type' do
-    Current.user.business_unit_types << business_unit_types(:consolidated_substantive)
-
-    assert_equal PlanItem.allowed_by_auxiliar_business_units_types.count, 1
-  end
-
-  test 'should return blank plan item when user does not have business unit type' do
+  test 'should return plan items of a business unit types' do
     Current.user.business_unit_types << business_unit_types(:cycle)
 
-    assert_equal PlanItem.allowed_by_auxiliar_business_units_types.count, 0
+    expected_count = PlanItem.where(business_unit: Current.user.business_units)
+                             .count
+
+    assert_equal PlanItem.allowed_by_business_units_and_auxiliar_business_units_types.count, 
+                 expected_count
+  end
+
+  test 'should return plan items of a auxiliar business unit types' do
+    Current.user.business_unit_types << business_unit_types(:bcra_google)
+
+    AuxiliarBusinessUnitType.create!(
+      plan_item: plan_items(:current_plan_item_1),
+      business_unit_type: business_unit_types(:bcra_google)
+    )
+
+    expected_count = PlanItem.left_joins(:auxiliar_business_unit_types)
+                             .where(auxiliar_business_unit_types: {
+                                      business_unit_type: Current.user.business_unit_types
+                                    })
+                             .count
+
+    assert_equal PlanItem.allowed_by_business_units_and_auxiliar_business_units_types.count, 
+                 expected_count
+  end
+
+  test 'should return plan items of a auxiliar business unit types and business units' do
+    Current.user.business_unit_types << business_unit_types(:consolidated_substantive)
+    Current.user.business_unit_types << business_unit_types(:bcra_google)
+
+    AuxiliarBusinessUnitType.create!(
+      plan_item: plan_items(:current_plan_item_2),
+      business_unit_type: business_unit_types(:bcra_google)
+    )
+
+    expected_count = PlanItem.left_joins(:auxiliar_business_unit_types)
+                             .where(auxiliar_business_unit_types: {
+                                      business_unit_type: Current.user.business_unit_types
+                                    })
+                             .or(PlanItem.where(business_unit_id: Current.user.business_units))
+                             .count
+
+    assert_equal PlanItem.allowed_by_business_units_and_auxiliar_business_units_types.count, 
+                 expected_count
+  end
+
+  test 'should return blank plan items when any have same business unit or auxiliar business unit' do
+    Current.user.business_unit_types << business_unit_types(:bcra_google)
+
+    assert_equal PlanItem.allowed_by_business_units_and_auxiliar_business_units_types.count, 
+                 0
   end
 
   test 'completed_early status' do
