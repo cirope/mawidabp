@@ -113,9 +113,7 @@ module Reviews::Score
     medium_score    = 50
     hundred_percent = 100
 
-    scores = weaknesses.select { |w| w.state_weight > 0 }.group_by do |w|
-      [w.risk_weight, w.state_weight, w.age_weight(date: date)]
-    end
+    scores = score_by_weakness_reviews date
 
     total = scores.sum do |row, weaknesses|
       row.unshift weaknesses.size
@@ -126,7 +124,7 @@ module Reviews::Score
     if total <= medium_score
       self.score = hundred_percent - total
     elsif total <= high_score
-      min = ((hundre_percent - medium_score.next) / 3).to_i
+      min = ((hundred_percent - medium_score.next) / 3).to_i
       max = hundred_percent - medium_score.next
 
       self.score = max - ((total * min) / high_score)
@@ -138,6 +136,34 @@ module Reviews::Score
     end
   end
 
+  def score_by_weakness_reviews date
+    weaknesses_total = []
+
+    _weaknesses = conclusion_final_review ? final_weaknesses : weaknesses
+
+    _weaknesses.each { |w| weaknesses_total << w }
+
+    if external_reviews.any?
+      external_reviews.each do |er|
+        er.alternative_review.final_weaknesses.each { |w| weaknesses_total << w }
+
+        ar_assigned_findings = er.alternative_review.get_assigned_findings
+
+        ar_assigned_findings.each { |w| weaknesses_total << w }
+      end
+    end
+
+    assigned_findings = get_assigned_findings
+
+    assigned_findings.each { |w| weaknesses_total << w }
+
+    scores = weaknesses_total.select { |w| w.being_implemented? || w.implemented_audited? }.group_by do |w|
+      [w.risk_weight, w.state_weight, w.age_weight(date: date)]
+    end
+
+    scores
+  end
+
   def scored_by_weaknesses?
     score_type == 'weaknesses'
   end
@@ -145,6 +171,14 @@ module Reviews::Score
   def scored_by_splitted_effectiveness?
     score_type == 'splitted_effectiveness'
   end
+
+  protected
+
+    def get_assigned_findings
+      finding_review_assignments.map(&:finding).select do |fra|
+        fra if (fra.implemented_audited? || fra.being_implemented?)
+      end
+    end
 
   private
 

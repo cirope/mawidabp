@@ -13,11 +13,36 @@ class ActiveSupport::TestCase
 
   fixtures :all
 
+  setup do
+    change_dir_to_upload_files
+  end
+
   teardown do
     clear_current_attributes
 
     try :clear_enqueued_jobs
     try :clear_performed_jobs
+
+    FileUtils.rm_rf(Dir[PRIVATE_PATH])
+  end
+
+  def change_dir_to_upload_files
+    if defined?(CarrierWave)
+      CarrierWave::Uploader::Base.descendants.each do |klass|
+        next if klass.anonymous?
+        klass.class_eval do
+          def store_dir
+            id = ('%08d' % model.id).scan(/\d{4}/).join('/')
+
+            organization_id = (
+              '%08d' % (model.organization_id || Current.organization&.id || 0)
+            ).scan(/\d{4}/).join('/')
+
+            File.join PRIVATE_PATH, organization_id, model.class.to_s.underscore.pluralize, id
+          end
+        end
+      end
+    end
   end
 
   def set_organization organization = organizations(:cirope)
@@ -55,14 +80,14 @@ class ActiveSupport::TestCase
   end
 
   def backup_file file_name
-    if File.exists?(file_name)
-      FileUtils.cp file_name, "#{TEMP_PATH}#{File.basename(file_name)}"
+    if File.exist?(file_name)
+      FileUtils.cp file_name, "#{TEMP_PATH}/#{File.basename(file_name)}"
     end
   end
 
   def restore_file file_name
-    if File.exists?("#{TEMP_PATH}#{File.basename(file_name)}")
-      FileUtils.mv "#{TEMP_PATH}#{File.basename(file_name)}", file_name
+    if File.exist?("#{TEMP_PATH}/#{File.basename(file_name)}")
+      FileUtils.mv "#{TEMP_PATH}/#{File.basename(file_name)}", file_name
     end
   end
 
@@ -107,6 +132,6 @@ class ActiveSupport::TestCase
   end
 
   def ldap_port
-    ENV['TRAVIS'] ? 3389 : 389
+    ENV['GH_ACTIONS'] ? 3389 : 389
   end
 end

@@ -34,6 +34,7 @@ class Finding < ApplicationRecord
   include Findings::FollowUpLastChanged
   include Findings::FollowUpPdf
   include Findings::ImportantDates
+  include Findings::ImplementedNotifications
   include Findings::Issues
   include Findings::Json
   include Findings::NotificationLevel
@@ -55,6 +56,7 @@ class Finding < ApplicationRecord
   include Findings::SortColumns
   include Findings::State
   include Findings::StateDates
+  include Findings::SuggestionAddDaysFollowUpDate
   include Findings::Taggable
   include Findings::Tasks
   include Findings::Unanswered

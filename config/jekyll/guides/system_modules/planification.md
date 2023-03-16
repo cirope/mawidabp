@@ -8,4 +8,4 @@ article_order: 3
 
 Seleccionamos **Planificación**
 
-![]({% asset system_modules/17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/system_modules/17.png){: class="img-responsive"}

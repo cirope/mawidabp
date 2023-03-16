@@ -48,7 +48,12 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def duplicate_review_findings
-    findings  = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
+    findings = Finding.list
+                      .left_joins(:control_objective_item)
+                      .where(control_objective_items: { review_id: review_id }, final: false)
+                      .where.not(state: Finding::STATUS[:revoked])
+                      .order(:order_number, :id)
+
     last_code = latest_final_weakness_review_code if Current.global_weakness_code
 
     begin
@@ -109,11 +114,19 @@ class ConclusionFinalReview < ConclusionReview
           ).check_code_prefix = false
         end
 
+        unless finding.review_code.size == 8 && finding.draft_review_code.blank?
+          final_finding.draft_review_code ||= finding.draft_review_code ||= finding.review_code
+        end
+
         if Current.global_weakness_code && finding.kind_of?(Weakness)
           if finding.repeated_of.present?
             code = finding.repeated_of.review_code
           else
-            code = last_code = last_code.next
+            if finding.review_code.size == 8 && !review_code_final_exist?(finding.review_code)
+              code = finding.review_code
+            else
+              code = last_code = last_code.next
+            end
           end
 
           final_finding.review_code = finding.review_code = code
@@ -127,6 +140,11 @@ class ConclusionFinalReview < ConclusionReview
 
       revoked_findings.each do |rf|
         rf.final = true
+
+        unless rf.review_code.size == 8 && rf.draft_review_code.blank?
+          rf.draft_review_code ||= rf.review_code
+        end
+
         rf.save! validate: false
       end
     rescue ActiveRecord::RecordInvalid => ex
@@ -135,6 +153,10 @@ class ConclusionFinalReview < ConclusionReview
       Rails.logger.error ex.inspect
       raise ActiveRecord::Rollback
     end
+  end
+
+  def review_code_final_exist? code
+    Weakness.list.finals(true).where(review_code: code).exists?
   end
 
   def last_final_weakness

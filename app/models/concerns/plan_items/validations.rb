@@ -15,9 +15,24 @@ module PlanItems::Validations
     validate :dates_are_included_in_period
     validate :not_overloaded_or_allowed
     validate :related_plan_item_dates
+    validate :uniqueness_auxiliar_business_unit_types
+    validate :edit_business_unit
   end
 
     private
+
+      def uniqueness_auxiliar_business_unit_types
+        business_unit_types = []
+      
+        auxiliar_business_unit_types.each do |auxiliar_business_unit_type|
+          if business_unit_types.include?(auxiliar_business_unit_type.business_unit_type.id)
+            auxiliar_business_unit_type.errors.add(:business_unit_type_id, :taken)
+            errors.add(:auxiliar_business_unit_types, :taken)
+          else
+            business_unit_types.push(auxiliar_business_unit_type.business_unit_type.id)
+          end
+        end
+      end
 
       def project_is_unique
         unless plan&.allow_duplication?
@@ -109,5 +124,13 @@ module PlanItems::Validations
 
       def validate_business_unit_type?
         Current.user&.business_unit_types&.list&.any?
+      end
+
+      def edit_business_unit
+        if business_unit_id_changed? && !can_edit_business_unit?
+          errors.add :business_unit,
+                     :cannot_edit_business_unit,
+                     memo_condition: SHOW_MEMOS ? I18n.t('plan_item.errors.cannot_edit_business_unit_for_memos_too') : ''
+        end
       end
 end

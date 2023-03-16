@@ -10,10 +10,6 @@ module PlanItems::Scopes
 
   module ClassMethods
     def list_unused period_id
-      allowed_by_business_units_and_auxiliar_business_units_types_ids =
-        allowed_by_auxiliar_business_units_types.or(allowed_by_business_units)
-                                                .pluck :id
-
       left_joins(:review, :plan, :memo)
         .where(plans: { period_id: period_id },
                reviews: { plan_item_id: nil },
@@ -24,14 +20,8 @@ module PlanItems::Scopes
         .order(project: :asc)
     end
 
-    def allowed_by_business_units
-      business_units = Current.user.business_units
-
-      if business_units.any?
-        where business_unit_id: business_units
-      else
-        all
-      end
+    def allowed_by_business_units_and_auxiliar_business_units_types
+      where id: allowed_by_business_units_and_auxiliar_business_units_types_ids
     end
 
     def allowed_by_auxiliar_business_units_types
@@ -72,5 +62,21 @@ module PlanItems::Scopes
 
       where condition, start: _start, end: _end
     end
+
+    private
+
+      def allowed_by_business_units_and_auxiliar_business_units_types_ids
+        business_unit_types = Current.user.business_unit_types
+
+        (if business_unit_types.any?
+           left_joins(:auxiliar_business_unit_types)
+             .where(auxiliar_business_unit_types: {
+                      business_unit_type: business_unit_types
+                    })
+             .or(where(business_unit_id: Current.user.business_units))
+         else
+           all
+         end).pluck :id
+      end
   end
 end

@@ -122,6 +122,8 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'create weakness' do
+    set_organization
+
     counts_array = [
       'Weakness.count',
       'ImageModel.count',
@@ -152,19 +154,26 @@ class WeaknessesControllerTest < ActionController::TestCase
             solution_date: '',
             audit_recommendations: 'New proposed action',
             effect: 'New effect',
-            risk: Weakness.risks_values.first,
+            risk: Weakness.risks_values.last,
             priority: Weakness.priorities_values.first,
             follow_up_date: 2.days.from_now.to_date,
             business_unit_ids: [business_units(:business_unit_three).id],
-            compliance: 'no',
+            compliance: 'yes',
+            compliance_observations: 'test',
+            compliance_susceptible_to_sanction: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values.first,
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
-            impact_risk: Finding.impact_risks[:small],
-            probability: Finding.probabilities[:rare],
             extension: false,
-            manual_risk: '1',
-            risk_justification: 'Test',
+            manual_risk: (USE_SCOPE_CYCLE || Current.conclusion_pdf_format == 'bic' ? '0' : '1'),
+            impact_risk: USE_SCOPE_CYCLE ? Finding.impact_risks[:critical] : (SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.impact_risks_bic[:high] : ''),
+            probability: USE_SCOPE_CYCLE ? Finding.probabilities[:almost_certain] : (SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.frequencies[:high] : ''),
+            state_regulations: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.state_regulations[:not_exist] : '',
+            degree_compliance: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.degree_compliance[:fails] : '',
+            observation_originated_tests: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.observation_origination_tests[:design] : '',
+            sample_deviation: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.sample_deviation[:most_expected] : '',
+            external_repeated: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.external_repeated[:repeated_without_action_plan] : '',
+            risk_justification: '',
             image_model_attributes: {
               image: Rack::Test::UploadedFile.new(
                 "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
@@ -249,11 +258,16 @@ class WeaknessesControllerTest < ActionController::TestCase
                 comment: 'Test',
                 user_id: users(:administrator).id
               }
-            ]
+            ],
+            year: '2022',
+            nsisio: '1234',
+            nobs: '9876'
           }
         }
       end
     end
+
+    clear_current_attributes
   end
 
   test 'edit weakness' do
@@ -267,6 +281,12 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'update weakness' do
+    set_organization
+
+    finding                 = findings :unanswered_weakness
+    last_risk               = finding.risk
+    last_risk_justification = finding.risk_justification
+
     counts_array = ['WorkPaper.count', 'FindingRelation.count', 'Task.count']
 
     login
@@ -274,7 +294,7 @@ class WeaknessesControllerTest < ActionController::TestCase
       assert_difference 'Issue.count', 2 do
         assert_difference counts_array do
           patch :update, params: {
-            id: findings(:unanswered_weakness).id,
+            id: finding.id,
             weakness: {
               control_objective_item_id:
                 control_objective_items(:impact_analysis_item).id,
@@ -288,17 +308,25 @@ class WeaknessesControllerTest < ActionController::TestCase
               solution_date: '',
               audit_recommendations: 'Updated proposed action',
               effect: 'Updated effect',
-              risk: Weakness.risks_values.first,
+              risk: Weakness.risks_values.last,
               priority: Weakness.priorities_values.first,
               follow_up_date: '',
-              compliance: 'no',
+              compliance: 'yes',
+              compliance_observations: 'test',
+              compliance_susceptible_to_sanction: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values.first,
               operational_risk: ['internal fraud'],
               impact: ['econimic', 'regulatory'],
               internal_control_components: ['risk_evaluation', 'monitoring'],
-              impact_risk: Finding.impact_risks[:small],
-              probability: Finding.probabilities[:rare],
               extension: false,
-              manual_risk: '1',
+              manual_risk: (USE_SCOPE_CYCLE || Current.conclusion_pdf_format == 'bic' ? '0' : '1'),
+              impact_risk: USE_SCOPE_CYCLE ? Finding.impact_risks[:critical] : (SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.impact_risks_bic[:high] : ''),
+              probability: USE_SCOPE_CYCLE ? Finding.probabilities[:almost_certain] : (SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.frequencies[:high] : ''),
+              state_regulations: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.state_regulations[:not_exist] : '',
+              degree_compliance: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.degree_compliance[:fails] : '',
+              observation_originated_tests: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.observation_origination_tests[:design] : '',
+              sample_deviation: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.sample_deviation[:most_expected] : '',
+              external_repeated: SHOW_CONCLUSION_ALTERNATIVE_PDF['cirope'] == 'bic' ? Finding.external_repeated[:repeated_without_action_plan] : '',
+              risk_justification: '',
               finding_user_assignments_attributes: [
                 {
                   id: finding_user_assignments(:unanswered_weakness_bare).id,
@@ -341,7 +369,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               finding_relations_attributes: [
                 {
                   description: 'Duplicated',
-                  related_finding_id: findings(:unanswered_weakness).id
+                  related_finding_id: finding.id
                 }
               ],
               issues_attributes: [
@@ -371,7 +399,10 @@ class WeaknessesControllerTest < ActionController::TestCase
                   status: 'pending',
                   due_on: I18n.l(Time.zone.tomorrow)
                 }
-              ]
+              ],
+              year: '2022',
+              nsisio: '1234',
+              nobs: '9876'
             }
           }
         end
@@ -381,6 +412,10 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_not_nil assigns(:weakness)
     assert_redirected_to edit_weakness_url(assigns(:weakness))
     assert_equal 'O020', assigns(:weakness).review_code
+    assert_not_equal last_risk, finding.reload.risk
+    assert_not_equal last_risk_justification, finding.reload.risk_justification
+
+    clear_current_attributes
   end
 
   test 'undo reiteration' do
@@ -406,7 +441,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
 
     get :weakness_template_changed, xhr: true, params: {
-      id: weakness_templates(:security).id
+      id: weakness_templates(:security).id,
+      control_objective_item_id: control_objective_items(:management_dependency_item).id
     }, as: :js
 
     assert_response :success

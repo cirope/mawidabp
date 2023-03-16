@@ -9,6 +9,12 @@ module Findings::Tasks
     accepts_nested_attributes_for :tasks, allow_destroy: true
   end
 
+  def next_task_expiration
+    tasks.where(status: [Task.statuses['pending'], Task.statuses['in_progress']])
+         .first
+         &.due_on
+  end
+
   private
 
     def mark_tasks_as_finished

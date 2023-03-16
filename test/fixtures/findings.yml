@@ -4,6 +4,7 @@ being_implemented_weakness:
   control_objective_item: management_dependency_item
   title: Title 1w
   review_code: O001
+  draft_review_code: O001
   description: Description 1w
   brief: Brief 1w
   answer: Answer 1w
@@ -31,11 +32,42 @@ being_implemented_weakness:
   notification_level: 0
   organization: cirope
   extension: false
-  state_regulations: <%= Finding.state_regulations[:exist] %>
-  degree_compliance: <%= Finding.degree_compliance[:comply] %>
-  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
-  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
-  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
+
+being_implemented_weakness_final:
+  type: Weakness
+  control_objective_item: management_dependency_item
+  title: Title 1w
+  review_code: O001
+  draft_review_code: O001
+  description: Description 1w
+  brief: Brief 1w
+  answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
+  audit_comments: Audit comments 1w
+  state: <%= Finding::STATUS[:being_implemented] %>
+  origination_date:
+  solution_date:
+  audit_recommendations: Proposed action 1w
+  effect: Effect 1w
+  risk: <%= Finding.risks_values.last %>
+  priority: <%= Finding.priorities_values.last %>
+  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date.to_s(:db) %>
+  first_follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date.to_s(:db) %>
+  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
+  final: true
+  parent: being_implemented_weakness
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
+  notification_level: 0
+  organization: cirope
+  extension: false
   risk_justification: 'Test'
 
 unconfirmed_for_notification_weakness:
@@ -68,11 +100,6 @@ unconfirmed_for_notification_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
-  state_regulations: <%= Finding.state_regulations[:exist] %>
-  degree_compliance: <%= Finding.degree_compliance[:comply] %>
-  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
-  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
-  external_repeated: <%= Finding.external_repeated[:repeated] %>
   risk_justification: 'Test'
 
 <% (1..4).each do |level| %>
@@ -107,11 +134,6 @@ unanswered_for_level_<%= level %>_notification:
   manual_risk: true
   notification_level: <%= level - 1 %>
   organization: cirope
-  state_regulations: <%= Finding.state_regulations[:exist] %>
-  degree_compliance: <%= Finding.degree_compliance[:comply] %>
-  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
-  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
-  external_repeated: <%= Finding.external_repeated[:repeated] %>
   risk_justification: 'Test'
 
 <% end %>
@@ -146,11 +168,6 @@ incomplete_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
-  state_regulations: <%= Finding.state_regulations[:exist] %>
-  degree_compliance: <%= Finding.degree_compliance[:comply] %>
-  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
-  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
-  external_repeated: <%= Finding.external_repeated[:repeated] %>
   risk_justification: 'Test'
 
 other_unconfirmed_for_notification_weakness:
@@ -183,11 +200,6 @@ other_unconfirmed_for_notification_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
-  state_regulations: <%= Finding.state_regulations[:exist] %>
-  degree_compliance: <%= Finding.degree_compliance[:comply] %>
-  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
-  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
-  external_repeated: <%= Finding.external_repeated[:repeated] %>
   risk_justification: 'Test'
 
 notify_oportunity:
@@ -195,6 +207,7 @@ notify_oportunity:
   control_objective_item: management_dependency_item
   title: Title 1o
   review_code: OM001
+  draft_review_code: OM001
   description: Description 1o
   brief: Brief 1o
   answer: Answer 1o
@@ -205,6 +218,26 @@ notify_oportunity:
   origination_date:
   solution_date:
   final: false
+  notification_level: 0
+  organization: cirope
+
+notify_oportunity_final:
+  type: Oportunity
+  control_objective_item: management_dependency_item
+  title: Title 1o
+  review_code: OM001
+  draft_review_code: OM001
+  description: Description 1o
+  brief: Brief 1o
+  answer: Answer 1o
+  current_situation:
+  current_situation_verified: false
+  audit_comments: Audit comments 1o
+  state: <%= Finding::STATUS[:notify] %>
+  origination_date:
+  solution_date:
+  final: true
+  parent: notify_oportunity
   notification_level: 0
   organization: cirope
 
@@ -257,11 +290,6 @@ being_implemented_weakness_on_draft:
   manual_risk: true
   notification_level: 0
   organization: cirope
-  state_regulations: <%= Finding.state_regulations[:exist] %>
-  degree_compliance: <%= Finding.degree_compliance[:comply] %>
-  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
-  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
-  external_repeated: <%= Finding.external_repeated[:repeated] %>
   risk_justification: 'Test'
 
 unanswered_weakness:
@@ -269,6 +297,7 @@ unanswered_weakness:
   control_objective_item: impact_analysis_item
   title: Title 2w bcra
   review_code: O002
+  draft_review_code: O002
   description: Description 2w bcra
   brief: Brief 2w bcra
   answer: Answer 2w
@@ -293,11 +322,39 @@ unanswered_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
-  state_regulations: <%= Finding.state_regulations[:exist] %>
-  degree_compliance: <%= Finding.degree_compliance[:comply] %>
-  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
-  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
-  external_repeated: <%= Finding.external_repeated[:repeated] %>
+  risk_justification: 'Test'
+
+unanswered_weakness_final:
+  type: Weakness
+  control_objective_item: impact_analysis_item
+  title: Title 2w bcra
+  review_code: O002
+  draft_review_code: O002
+  description: Description 2w bcra
+  brief: Brief 2w bcra
+  answer: Answer 2w
+  current_situation:
+  current_situation_verified: false
+  audit_comments: Audit comments 2w
+  state: <%= Finding::STATUS[:unanswered] %>
+  origination_date:
+  solution_date:
+  audit_recommendations: Proposed action 2w
+  effect: Effect 2w
+  risk: <%= Finding.risks_values.first %>
+  priority: <%= Finding.priorities_values.first %>
+  follow_up_date:
+  final: true
+  parent: unanswered_weakness
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
+  impact_risk: <%= USE_SCOPE_CYCLE ? Finding.impact_risks[:small] : nil %>
+  probability: <%= USE_SCOPE_CYCLE ? Finding.probabilities[:rare] : nil %>
+  manual_risk: true
+  notification_level: 0
+  organization: cirope
   risk_justification: 'Test'
 
 unconfirmed_weakness:
@@ -329,11 +386,6 @@ unconfirmed_weakness:
   manual_risk: true
   notification_level: 0
   organization: cirope
-  state_regulations: <%= Finding.state_regulations[:exist] %>
-  degree_compliance: <%= Finding.degree_compliance[:comply] %>
-  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
-  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
-  external_repeated: <%= Finding.external_repeated[:repeated] %>
   risk_justification: 'Test'
 
 unconfirmed_oportunity:
@@ -380,6 +432,7 @@ confirmed_oportunity:
   control_objective_item: impact_analysis_item
   title: Title 2o
   review_code: OM002
+  draft_review_code: OM002
   description: Description 2o
   brief: Brief 2o
   answer: Answer 2o
@@ -392,6 +445,28 @@ confirmed_oportunity:
   confirmation_date: <%= 1.day.ago.to_s(:db) %>
   first_notification_date: <%= stale_confirmed_days.next.business_days.ago.to_s(:db) %>
   final: false
+  notification_level: 0
+  organization: cirope
+
+confirmed_oportunity_final:
+  type: Oportunity
+  control_objective_item: impact_analysis_item
+  title: Title 2o
+  review_code: OM002
+  draft_review_code: OM002
+  description: Description 2o
+  brief: Brief 2o
+  answer: Answer 2o
+  current_situation:
+  current_situation_verified: false
+  audit_comments: Audit comments 2o
+  state: <%= Finding::STATUS[:confirmed] %>
+  origination_date:
+  solution_date:
+  confirmation_date: <%= 1.day.ago.to_s(:db) %>
+  first_notification_date: <%= stale_confirmed_days.next.business_days.ago.to_s(:db) %>
+  final: true
+  parent: confirmed_oportunity
   notification_level: 0
   organization: cirope
 
@@ -424,11 +499,6 @@ being_implemented_weakness_on_final:
   manual_risk: true
   notification_level: 0
   organization: cirope
-  state_regulations: <%= Finding.state_regulations[:exist] %>
-  degree_compliance: <%= Finding.degree_compliance[:comply] %>
-  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
-  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
-  external_repeated: <%= Finding.external_repeated[:repeated] %>
   risk_justification: 'Test'
 
 being_implemented_weakness_on_approved_draft:
@@ -460,9 +530,4 @@ being_implemented_weakness_on_approved_draft:
   manual_risk: true
   notification_level: 0
   organization: cirope
-  state_regulations: <%= Finding.state_regulations[:exist] %>
-  degree_compliance: <%= Finding.degree_compliance[:comply] %>
-  observation_originated_tests: <%= Finding.observation_origination_tests[:design] %>
-  sample_deviation: <%= Finding.sample_deviation[:most_expected] %>
-  external_repeated: <%= Finding.external_repeated[:repeated] %>
   risk_justification: 'Test'

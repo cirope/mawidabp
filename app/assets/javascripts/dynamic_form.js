@@ -53,19 +53,29 @@
       })
     },
 
-    hideItemAttr: function ($e) {
+    hideItembutton: function ($e) {
       $e.prev('input[type=hidden].destroy').val('1')
 
       var target = $e.data('dynamic-target')
 
-      $(target).next().remove('small')
+      $e.remove()
+      $(target).remove()
     },
 
     removeItem: function ($e) {
       EffectHelper.remove($e.closest('fieldset'), function () {
         $e.trigger('dynamic-item:removed', $e)
       })
-    }
+    },
+
+    hideCard: function ($e) {
+      $e.prev('input[type=hidden].destroy').val('1')
+
+      var target = $e.data('dynamic-target')
+
+      $e.remove()
+      $(target).hide(300)
+    },
   }
 
   var DynamicFormHelper = {

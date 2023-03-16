@@ -3,6 +3,11 @@ COMPLIANCE_OPTIONS = {
   'no'  => { data: { tag: 'Compliance', select: 'no' } }
 }
 
+COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS = {
+  'no'  => false,
+  'yes' => true
+}
+
 CONCLUSION_OPTIONS = [
   'Satisfactorio',
   'Satisfactorio con salvedades',
@@ -127,6 +132,9 @@ TAGS_READONLY = [
 TAG_OPTIONS = {
   'review' => {
     'Requerida en informes `Trabajo especial`' => 'required_on_special_reviews'
+  },
+  'user' => {
+    'Usuario de recuperación' => 'recovery'
   }
 }
 

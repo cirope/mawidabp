@@ -107,6 +107,11 @@
     errors:
       can_not_be_destroyed: "La unidad organizativa no puede ser eliminada"
       business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
+
+  business_unit:
+    edit_title: "Modificar unidad de negocio"
+    correctly_updated: "Unidad de negocio actualizada correctamente."
+
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"
@@ -188,6 +193,7 @@
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
     review_score_details_report_title: "Calificaciones de informes detallado"
+    nbc_annual_report_title: "Resumen anual"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
     weaknesses_by_month_title: "Observaciones por riesgo"
@@ -324,6 +330,39 @@
         highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
         digitalized: "Digitalización"
+    nbc_annual_report:
+      pdf_name: "resumen_anual_%{from_date}_al_%{to_date}.pdf"
+      front_page:
+        first_title: 'Calificación del Control Interno de'
+        footer_title: 'Informe:'
+        footer_prepared_by: 'Preparado por Auditoría Interna - NBCH'
+      executive_summary:
+        title: '<b><u>RESUMEN EJECUTIVO</u></b>'
+        objective_title: '<b><u>OBJETIVO</u></b>'
+        general_conclusion_title: '<b><u>CONCLUSIÓN GENERAL</u></b>'
+        first_footer: '<b>AUS. Alejandro Camnasio</b>'
+        second_footer: '<b>A/C int. Gerencia de Auditoria Interna</b>'
+      detailed_report:
+        title: '<b><u>INFORME DETALLADO</u></b>'
+        introduction_and_scope_title: '<b><u>INTRODUCCION Y ALCANCE DEL TRABAJO REALIZADO</u></b>'
+        classification_methodology: 'La metodología de calificación de ciclos utilizada en el período 2019 fue aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, la cual exponemos a continuación:'
+        classification_title: '<i><b>Cuadro I: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        conclusions_title: '<u><b>CONCLUSIONES</b></u>'
+        conclusions_body: 'Partiendo del Cuadro I <i>“Calificación del Control Interno del NCHB S.A.”</i>, se observa que la calificación del control interno de la Entidad, de acuerdo a los parámetros utilizados, es <b>“%{calification}”.</b>'
+      cycle_qualification:
+        header_number: '<b>N°</b>'
+        header_qualification: '<b>Calificación</b>'
+        header_weight: '<b>Ponderador</b>'
+        header_high_risk_observations: '<b>Cantidad de Observaciones de Riesgo Alto</b>'
+      internal_control_qualification:
+        header_cycle: '<b>Ciclo</b>'
+        header_count_findings: '<b>Cantidad de Observaciones</b>'
+        header_weight: '<b>Ponderador a fecha de los Informes</b>'
+        header_qualification: '<b>Calificación</b>'
+        count_weight: '<b>Total ponderación</b>'
+        count_cycles: '<b>Cantidad de ciclos</b>'
+        final_weight: '<b>Ponderación</b>'
+        final_qualification: '<b>Calificación Control Interno</b>'
     synthesis_report:
       pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"
@@ -613,6 +652,7 @@
     without_findings: "Sin Hallazgos"
 
   finding:
+    correctly_updated: "Observación actualizada correctamente."
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
@@ -702,9 +742,9 @@
       work_papers: "Papeles de trabajo"
       pdf_name: "seguimiento_de_hallazgo_%{code}.pdf"
     pdf:
-      filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
+      filtered_by_html:
+        one: "El listado fue filtrado con la consulta <span class=\"font-weight-bold\">'%{query}'</span> en la columna <span class=\"font-weight-bold\">'%{columns}'</span>"
+        other: "El listado fue filtrado con la consulta <span class=\"font-weight-bold\">'%{query}'</span> en las columnas <span class=\"font-weight-bold\">'%{columns}'</span>"
     user_assignment:
       audit_team: "Auditoría"
       others: "Usuarios"
@@ -1241,6 +1281,10 @@
       title: "Hallazgo vencido"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
+    notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
+      title: "Vencimiento de observación implementada"
+      finding_follow_up_date_last_changed_is_grerater_90_days: "Han pasado 90 días desde el último cambio en la fecha de implementación de la observación"
+      follow_up_date_last_changed: "Último cambio en fecha de implementación: %{follow_up_date_last_changed}"
     unanswered_finding:
       subject: "Notificación de cambio a hallazgo [#%{finding_id}]"
       title: "Notificación de cambio"
@@ -1300,6 +1344,10 @@
     review_identification: "Número de informe %{review}"
     draft: "Borrador"
 
+  plan_item:
+    errors:
+      cannot_edit_business_unit_for_memos_too: 'o un memo'
+
   questionnaire:
     index_title: "Listado de cuestionarios"
     edit_title: "Modificar cuestionario"
@@ -1335,6 +1383,8 @@
     bundle: "Legajo"
     copy: "Copiar"
     findings_label: "Hallazgos pendientes"
+    external_reviews_label: "Informes alternativos"
+    external_reviews_title: "Agregar informe alternativo"
     add_finding_assignment: "Agregar hallazgo pendiente"
     add_user_assignment: "Agregar usuario relacionado"
     add_past_findings: "Agregar hallazgo solucionado reciente"
@@ -1417,6 +1467,10 @@
     pdf:
       pdf_name: 'informe_%{identification}.pdf'
 
+  external_review:
+    errors:
+      issue_date_after_review_issue_date: "su fecha de emisión (%{date}) es mayor a la fecha de emisión del informe"
+
   review_user_assignment:
     responsibility_modification:
       title: "Modificación de responsabilidades en el informe %{review}"
@@ -1493,9 +1547,13 @@
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
       without_audit_recommendations: "no tiene recomendaciones de auditoria"
+      cannot_update_sigen_fields_in_repeated_of: "No se pudieron actualizar los campos sigen en el finding con id: %{id} debido a los errores: %{messages}"
 
   welcome:
     index_title: "Bienvenido"
+
+  wicked_pdf:
+    number_pages_html: 'Pagina <span class="page"></span> de <span class="topage"></span>'
 
   work_paper:
     cover_name: "%{prefix}%{filename}-portada.pdf"
@@ -1568,6 +1626,8 @@
       work_paper: "Papel de trabajo"
 
     attributes:
+      answer:
+        attached: 'Adjunto'
       business_unit:
         name: "Nombre"
       business_unit_type_user:
@@ -1795,6 +1855,10 @@
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
+        control_objective_auditor:
+          attributes:
+            user_id:
+              invalid: "Debe ser auditor"
         file_model:
           attributes:
             file:
@@ -1847,6 +1911,17 @@
               too_soon:
                 one: "no se puede modificar, debe esperar al menos un día entre cambios"
                 other: "no se puede modificar, debe esperar al menos %{count} días entre cambios"
+        weakness:
+          attributes:
+            year:
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
+              different_from_repeated_of: 'Año no puede ser diferente a la de la observacion repetida'
+            nsisio:
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
+              different_from_repeated_of: 'NSISIO no puede ser diferente a la de la observacion repetida'
+            nobs:
+              frozen: 'No se puede modificar ya que el estado de la observacion es repetida'
+              different_from_repeated_of: 'N OBS no puede ser diferente a la de la observacion repetida'
         workflow_item:
           attributes:
             start:
