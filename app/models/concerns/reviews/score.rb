@@ -153,18 +153,18 @@ module Reviews::Score
   end
 
   def ia_or_bi_weaknesses
-    weaknesses_and_findings = []
+    total_weaknesses = []
 
     if conclusion_final_review
-      weaknesses_and_findings << final_weaknesses
+      total_weaknesses << final_weaknesses
     else
-      weaknesses_and_findings << weaknesses
+      total_weaknesses << weaknesses
     end
 
     assigned_findings = finding_review_assignments.map(&:finding)
-    weaknesses_and_findings << assigned_findings
+    total_weaknesses << assigned_findings
 
-    weaknesses_and_findings.flatten.select do |w|
+    total_weaknesses.flatten.select do |w|
       w.being_implemented? || w.implemented_audited?
     end
   end
