@@ -4,11 +4,16 @@ module ActiveStorage::HasOneFile
   extend ActiveSupport::Concern
 
   included do
+    # attr_accessor :cache_file_blob_id
+
+    # has_one_attached :file_cache
+
     has_one_attached :file
 
     accepts_nested_attributes_for :file_attachment, allow_destroy: true
 
-    after_save :purge_unattacheds
+    # lo vamos a tener que mover a un rake que se ejecute en alguna hora de inactividad
+    # after_save :purge_unattacheds
   end
 
   private
