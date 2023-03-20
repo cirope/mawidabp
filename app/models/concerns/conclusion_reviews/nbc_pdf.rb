@@ -109,7 +109,9 @@ module ConclusionReviews::NbcPdf
 
         if alt_weaknesses.any?(&:being_implemented?)
           bi_alt_weaknesses << [ar.identification, alt_weaknesses.select(&:being_implemented?)]
-        elsif alt_weaknesses.any?(&:implemented_audited?)
+        end
+
+        if alt_weaknesses.any?(&:implemented_audited?)
           ia_alt_weaknesses << [ar.identification, alt_weaknesses.select(&:implemented_audited?)]
         end
       end
