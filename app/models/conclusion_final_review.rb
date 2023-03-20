@@ -74,9 +74,9 @@ class ConclusionFinalReview < ConclusionReview
             finding.follow_up_date
         end
 
-        final_finding.build_image_model(
-          image: File.open(finding.image_model.image.path)
-        ) if finding.respond_to?(:image_model) && finding.image_model
+        if finding.is_a?(Weakness) && finding.image.attached?
+          final_finding.image.attach finding.blob
+        end
 
         finding.business_unit_findings.each do |buf|
           final_finding.business_unit_findings.build(
@@ -109,9 +109,13 @@ class ConclusionFinalReview < ConclusionReview
         end
 
         finding.work_papers.each do |wp|
-          final_finding.work_papers.build(
-            wp.attributes.dup.merge('id' => nil)
-          ).check_code_prefix = false
+          final_finding.work_papers
+                       .build(wp.attributes.dup.merge('id' => nil))
+                       .check_code_prefix = false
+
+          if wp.file.attached?
+            final_finding.work_papers.last.file.attach wp.file.blob
+          end
         end
 
         unless finding.review_code.size == 8 && finding.draft_review_code.blank?

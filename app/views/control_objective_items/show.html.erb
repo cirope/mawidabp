@@ -139,7 +139,7 @@
         <th><%= WorkPaper.human_attribute_name :code %></th>
         <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
         <th><%= WorkPaper.human_attribute_name :description %></th>
-        <th><%= WorkPaper.human_attribute_name :file_model %></th>
+        <th><%= WorkPaper.human_attribute_name :file %></th>
       </tr>
     </thead>
     <tbody>
@@ -149,8 +149,7 @@
           <td><%= wp.code %></td>
           <td><%= wp.number_of_pages %></td>
           <td><%= simple_format wp.description, class: 'mb-1' %></td>
-          <td><%= wp.file_model.try(:file?) ?
-            link_to(t('label.download'), wp.file_model.file.url) : '-' %></td>
+          <td><%= wp.file.attached? ? link_to_download_file(wp.file) : '' %></td>
         </tr>
       <% end %>
     </tbody>

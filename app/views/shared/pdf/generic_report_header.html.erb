@@ -1,8 +1,8 @@
 <div class="container">
   <div class="row">
     <div class="col-2">
-      <% if Current.organization.image_model.present? %>
-        <%= image_tag image_to_base_64(Current.organization.image_model.image.thumb.path), 
+      <% if Current.organization.image.attached? %>
+        <%= image_tag image_to_base_64(ActiveStorage::Blob.service.path_for(Current.organization.image.key)),
                       width: 80, 
                       height: 60 %>
       <% end %>

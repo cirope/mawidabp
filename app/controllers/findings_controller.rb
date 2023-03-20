@@ -107,12 +107,11 @@ class FindingsController < ApplicationController
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],
         work_papers_attributes: [
-          :id, :name, :code, :number_of_pages, :description, :_destroy, :lock_version,
-          file_model_attributes: [:id, :file, :file_cache]
+          :id, :name, :code, :number_of_pages, :description, :_destroy,
+          :file, :lock_version
         ],
         finding_answers_attributes: [
-          :id, :answer, :user_id, :notify_users,
-          file_model_attributes: [:file, :file_cache],
+          :id, :answer, :user_id, :notify_users, :file, 
           endorsements_attributes: [:id, :status, :user_id, :_destroy]
         ],
         finding_relations_attributes: [
@@ -146,7 +145,7 @@ class FindingsController < ApplicationController
         :id, :lock_version,
         finding_answers_attributes: [
           :answer, :user_id, :commitment_date, :notify_users, :skip_commitment_support,
-          file_model_attributes: [:file, :file_cache],
+          :file, 
           commitment_support_attributes: [:id, :reason, :plan, :controls]
         ],
         costs_attributes: [

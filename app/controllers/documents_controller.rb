@@ -51,12 +51,6 @@ class DocumentsController < ApplicationController
     respond_with @document
   end
 
-  def download
-    flash[:allow_path] = @document.file_model&.file&.path
-
-    redirect_to @document.file_model&.file&.url || root_url
-  end
-
   private
 
     def set_document
@@ -68,8 +62,7 @@ class DocumentsController < ApplicationController
     end
 
     def document_params
-      params.require(:document).permit :name, :description, :shared, :lock_version,
-        file_model_attributes: [:id, :file, :file_cache, :_destroy],
+      params.require(:document).permit :name, :description, :shared, :file, :lock_version,
         taggings_attributes:   [:id, :tag_id, :_destroy]
     end
 

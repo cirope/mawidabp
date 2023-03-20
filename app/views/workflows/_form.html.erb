@@ -57,25 +57,9 @@
     </tbody>
   </table>
 
-  <% f.object.build_file_model unless f.object.file_model %>
-
   <div class="row">
-    <div class="col-md-12 text-right">
-      <p class="mb-1 mr-3"><%= Workflow.human_attribute_name 'file_model_id' %></p>
-      <div class="clearfix float-right">
-        <%= f.simple_fields_for :file_model do |fm_f| %>
-          <div class="file-container float-left">
-            <%= link_to_upload(fm_f.object) %>
-            <% if fm_f.object.file_cache %>
-              <%= fm_f.input :file_cache, as: :hidden %>
-              <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
-            <% else %>
-              <%= fm_f.input :file, label: false %>
-            <% end %>
-          </div>
-        <% end %>
-        <%= link_to_download f.object %>
-      </div>
+    <div class="col-md-1 offset-md-11">
+      <%= render 'active_storage/file', f: f, label: Workflow.human_attribute_name('file'), allow_upload: true, allow_purge: false %>
     </div>
   </div>
 

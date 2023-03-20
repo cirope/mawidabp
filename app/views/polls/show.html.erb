@@ -50,10 +50,10 @@
     </p>
   <% end %>
 
-  <% if answer.attached.present? %>
+  <% if answer.file.attached? %>
     <p class="mb-1">
-      <%= Answer.human_attribute_name 'attached' %>:
-      <%= link_to_download_answer_attached answer %>
+      <%= Answer.human_attribute_name 'file' %>:
+      <%= link_to_download_file answer.file, class: 'btn btn-outline-secondary mb-3 mt-3' %>
     </p>
   <% end %>
 <% end %>

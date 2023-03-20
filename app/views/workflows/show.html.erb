@@ -5,10 +5,10 @@
   <%= @workflow.period.inspect %>
 </p>
 
-<% if @workflow.file_model %>
+<% if @workflow.file.attached? %>
   <p class="mb-1">
-    <strong><%= Workflow.human_attribute_name :file_model_id %>:</strong>
-    <%= link_to_download @workflow, extra_classes: 'btn-sm ml-1' %>
+    <strong><%= Workflow.human_attribute_name :file %>:</strong>
+    <%= link_to_download_file @workflow.file, class: 'btn btn-outline-secondary mb-2' %>
   </p>
 <% end %>
 

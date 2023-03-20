@@ -1,4 +1,5 @@
 class WorkflowItem < ApplicationRecord
+  include ActiveStorage::HasOneFile
   include Auditable
   include Comparable
   include ParameterSelector

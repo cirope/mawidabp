@@ -20,20 +20,24 @@
       <%= simple_format @organization.description, class: 'mb-1' unless @organization.description.blank? %>
     </div>
 
-    <% if @organization.image_model %>
+    <% if @organization.image.attached? %>
       <p class="mb-2">
-        <strong><%= Organization.human_attribute_name 'image_model' %></strong>:
+        <strong><%= Organization.human_attribute_name 'image' %></strong>:
       </p>
 
-      <div><%= organization_image_tag %></div>
+      <div>
+        <%= image_tag @organization.thumb_image, alt: 'Logo' %>
+      </div>
     <% end %>
 
-    <% if @organization.co_brand_image_model %>
+    <% if @organization.co_brand_image.attached? %>
       <p class="my-2">
-        <strong><%= Organization.human_attribute_name 'co_brand_image_model' %></strong>:
+        <strong><%= Organization.human_attribute_name 'co_brand_image' %></strong>:
       </p>
 
-      <div><%= organization_image_tag model: :co_brand_image_model %></div>
+      <div>
+        <%= image_tag @organization.thumb_co_brand_image, alt: 'Logo' %>
+      </div>
     <% end %>
   </div>
 

@@ -30,7 +30,7 @@
       <div class="col-md-2">
         <div class="row">
           <div class="col-8">
-            <%= render 'process_controls/support', f: f %>
+            <%= render 'active_storage/file', f: f, label: ControlObjective.human_attribute_name('file'), allow_upload: true, allow_purge: true %>
           </div>
           <div class="col-4 text-right">
             <div class="mt-3">

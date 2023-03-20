@@ -24,28 +24,15 @@
       <% end %>
     </div>
     <div class="col-md-2">
-      <% if !finding_answer.file_model.try(:file?) || finding_answer.file_model.new_record? %>
-        <% if finding_answer.new_record? %>
-          <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
-            <div class="file-container float-left">
-              <%= link_to_upload(fm_f.object) %>
-              <% if fm_f.object.file_cache %>
-                <%= fm_f.input :file, label: false %>
-                <%= fm_f.input :file_cache, as: :hidden %>
-              <% else %>
-                <%= fm_f.input :file, label: false %>
-              <% end %>
-            </div>
-            <%= link_to '#', class: 'float-left', hidden: fm_f.object.file_cache.blank?, data: { clear_file: 'file' } do %>
-              <%= icon 'fas', 'times' %>
-            <% end %>
-          <% end %>
-        <% else %>
-          -
-        <% end %>
-      <% else %>
-        <%= link_to_download finding_answer %>
+      <% if finding_answer.new_record? %>
+        <div class="ml-2">
+          <%= render 'active_storage/file', f: f, label: '', allow_upload: true, allow_purge: false %>
+        </div>
+      <% elsif finding_answer.file.attached? %>
+        <%= link_to_download_file finding_answer.file %>
         <%= link_to_create_work_paper finding_answer %>
+      <% else %>
+        -
       <% end %>
     </div>
     <div class="col-md-2 text-right">

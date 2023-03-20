@@ -17,22 +17,6 @@ module MemosHelper
                                    { class: 'form-control', disabled: false }
   end
 
-  def show_file_model_memos memo
-    out = '<ul>'
-
-    memo.file_model_memos.each do |fm_m|
-      link_for_download_attachment = link_to(
-        fm_m.file_model.file_file_name, fm_m.file_model.file.url
-      )
-
-      out << "<li>#{link_for_download_attachment}</li>"
-    end
-
-    out << '</ul>'
-
-    raw out
-  end
-
   def required_by_options
     Memo::REQUIRED_BY_OPTIONS.map do |option|
       [option, option]

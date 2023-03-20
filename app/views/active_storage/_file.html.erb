@@ -1,0 +1,34 @@
+<% if label.present? %>
+  <div class="row">
+    <label>
+      <%= label %>
+    </label>
+  </div>
+<% end %>
+
+<div class="row">
+  <% if allow_upload %>
+    <div class="file-container float-left">
+      <% if f.object.file.attached? %>
+        <%= f.hidden_field :file, value: f.object.file.signed_id %>
+      <% end %>
+      <%= link_to_upload_file %>
+      <%= f.input :file, label: false, multiple: false, input_html: { direct_upload: true, data: { div_with_progress: "file_to_upload_#{f.object.object_id}" } } %>
+    </div>
+  <% end %>
+  <% if f.object.file.attached? %>
+    <%= link_to_download_file f.object.file %>
+    <% if allow_purge %>
+      <div class="ml-2 mt-1">
+        <%= f.simple_fields_for :file_attachment do |f_a| %>
+          <%= link_to_purge_file(f_a) %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<% if allow_upload %>
+  <div id="file_to_upload_<%= f.object.object_id %>">
+  </div> 
+<% end %>

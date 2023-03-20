@@ -1,4 +1,5 @@
 class Document < ApplicationRecord
+  include ActiveStorage::HasOneFile
   include Auditable
   include Documents::AttributeTypes
   include Documents::Defaults

@@ -105,9 +105,6 @@ es:
       finding:
         one: 'Hallazgo'
         other: 'Hallazgos'
-      image_model:
-        one: 'Imagen'
-        other: 'Imágenes'
       issue:
         one: 'Caso'
         other: 'Casos'
@@ -227,7 +224,7 @@ es:
       annex:
         title: 'Título'
         description: 'Descripción'
-        image_models: 'Imágenes'
+        images: 'Imágenes'
       activity:
         name: 'Nombre'
         require_detail: 'Require detalle'
@@ -297,6 +294,7 @@ es:
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
         support: 'Soporte'
+        file: 'Soporte'
         score_type: 'Tipo de calificación'
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
@@ -417,12 +415,6 @@ es:
         reason: 'Motivo reprogramación'
         plan: 'Nuevo plan de acción'
         controls: 'Controles mitigantes'
-      finding/finding_answers/file_model:
-        one: 'Anexo (archivo)'
-        file: 'Anexo (archivo)'
-        file_file_name: 'Anexo (nombre de archivo)'
-        file_content_type: 'Anexo (tipo de archivo)'
-        file_file_size: 'Anexo (tamaño de archivo)'
       finding/work_papers:
         one: 'Papel de trabajo'
         other: 'Papeles de trabajo'
@@ -430,15 +422,6 @@ es:
         code: 'Papel de trabajo (código)'
         description: 'Papel de trabajo (descripción)'
         number_of_pages: 'Papel de trabajo (páginas)'
-      finding/work_papers/file_model:
-        one: 'Papel de trabajo (archivo)'
-        file_file_name: 'Papel de trabajo (nombre de archivo)'
-        file_content_type: 'Papel de trabajo (tipo de archivo)'
-        file_file_size: 'Papel de trabajo (tamaño de archivo)'
-      image_model:
-        uploaded_data: 'Imagen'
-        content_type: 'Imagen (tipo)'
-        size: 'Imagen (tamaño)'
       issue:
         customer: 'Cliente'
         entry: 'Rubro'
@@ -483,7 +466,7 @@ es:
       memo:
         name: 'Nombre'
         description: 'Descripción'
-        file_model_memos: 'Archivos'
+        files: 'Archivos'
         period_id: 'Periodo'
         plan_item_id: 'Proyecto'
         period: 'Periodo'
@@ -498,6 +481,7 @@ es:
         title: 'Título'
         description: 'Descripción'
         body: 'Cuerpo'
+        images: 'Imágenes'
         shared: 'Compartida'
         published_at: 'Fecha de publicación'
       opening_interview:
@@ -532,19 +516,9 @@ es:
         prefix: 'Prefijo'
         logo_style: 'Estilo de logo'
         corporate: 'Corporativa'
-        image_model: 'Imagen'
-        co_brand_image_model: 'Imagen secundaria'
+        image: 'Imagen'
+        co_brand_image: 'Imagen secundaria'
         saml_provider: 'Proveedor SAML'
-      organization/image_model:
-        image_file_name: 'Isologotipo (nombre de archivo)'
-        image_content_type: 'Isologotipo (tipo de archivo)'
-        image_file_size: 'Isologotipo (tamaño)'
-        one: 'Isologotipo'
-      organization/co_brand_image_model:
-        image_file_name: 'Isologotipo secundario (nombre de archivo)'
-        image_content_type: 'Isologotipo secundario (tipo de archivo)'
-        image_file_size: 'Isologotipo secundario (tamaño)'
-        one: 'Isologotipo secundario'
       setting:
         name: 'Nombre'
         value: 'Valor'
@@ -707,7 +681,7 @@ es:
         risk_assessment_template: 'Plantilla de evaluación de riesgo'
         status: 'Estado'
         shared: 'Compartida'
-        file_model: "Anexo"
+        file: "Anexo"
         risk_assessment_weights: 'Ponderadores'
         risk_assessment_items: 'Ítems'
       risk_assessment/risk_assessment_items:
@@ -763,6 +737,7 @@ es:
         compliance_observations: 'Norma que impacta'
         compliance_susceptible_to_sanction: 'Suceptible a sanción'
         operational_risk: 'Riesgo operacional'
+        image: 'Imagen'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
         weakness_template: 'Buscar plantilla por título'
@@ -777,8 +752,6 @@ es:
         year: 'Año'
         nsisio: 'N_SISAC'
         nobs: 'N_Obs'
-      weakness/image_model:
-        image: 'Imagen'
       weakness_template:
         reference: 'Referencia'
         subreference: 'Subreferencia'
@@ -874,7 +847,7 @@ es:
         memo:
           attributes:
             base:
-              file_model_memos_blank: 'Debe tener al menos un archivo'
+              files_blank: 'Debe tener al menos un archivo'
               cant_change_fields: 'No puede cambiar ningun campo debido a que supero la fecha de cierre'
             plan_item_id:
               used: 'El proyecto ya esta siendo utilizado por otro Informe o Informe externo'

@@ -13,5 +13,17 @@ module Organizations::Validations
       format: { with: /\A[A-Za-z0-9][A-Za-z0-9\-]+\z/ },
       uniqueness: { case_sensitive: false },
       exclusion: { in: APP_ADMIN_PREFIXES }
+
+    validate :images_extension
   end
+
+  private
+
+    def images_extension
+      %i[image co_brand_image].each do |attribute|
+        if send(attribute).attached? && %w[image/jpg image/jpeg image/gif image/png].exclude?(send(attribute).content_type)
+          errors.add attribute, :extension_whitelist_error
+        end
+      end
+    end
 end

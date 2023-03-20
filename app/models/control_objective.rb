@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ControlObjective < ApplicationRecord
+  include ActiveStorage::HasOneFile
   include Auditable
   include ControlObjectives::AffectedSectorGal
   include ControlObjectives::AttributeTypes
@@ -47,4 +48,29 @@ class ControlObjective < ApplicationRecord
   def identifier
     support.identifier || support_identifier
   end
+
+  # def support_aux=(attachable)
+  #   byebug
+  #   support_aux.attach(create_blob(attachable))
+  #   byebug
+  # end
+
+  # def attachable_storage_path
+  #   # [
+  #   #   Apartment::Tenant.current.parameterize,
+  #   #   'users',
+  #   #   id,
+  #   #   ActiveStorage::Blob.generate_unique_secure_token
+  #   # ].compact.join('/')
+
+  #   id_aux = ('%08d' % id).scan(/\d{4}/).join '/'
+
+  #   File.join organization_id_path(organization_id), self.class.to_s.underscore.pluralize, id_aux
+  # end
+
+  # private
+
+  #   def organization_id_path organization_id = Current.organization&.id
+  #     ('%08d' % (organization_id || 0)).scan(/\d{4}/).join('/')
+  #   end
 end

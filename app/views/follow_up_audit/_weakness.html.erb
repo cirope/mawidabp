@@ -128,7 +128,7 @@
           <tr>
             <th><%= User.model_name.human %></th>
             <th><%= FindingAnswer.human_attribute_name 'answer' %></th>
-            <th><%= FindingAnswer.human_attribute_name 'file_model' %></th>
+            <th><%= FindingAnswer.human_attribute_name 'file' %></th>
             <th><%= FindingAnswer.human_attribute_name 'created_at' %></th>
           </tr>
         </thead>
@@ -137,10 +137,7 @@
             <tr>
               <td><%= finding_answer.user.full_name %></td>
               <td><%= simple_format finding_answer.answer, class: 'mb-1' %></td>
-              <td>
-                <%= finding_answer.file_model&.file? ?
-                  link_to(t('label.download'), finding_answer.file_model.file.url) : '-' %>
-              </td>
+              <td><%= finding_answer.file.attached? ? link_to(t('label.download'), url_for(finding_answer.file)) : '-' %></td>
               <td>
                 <%= l finding_answer.created_at, format: :long if finding_answer.created_at %>
                 <% if finding_answer.commitment_date %>

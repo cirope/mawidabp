@@ -18,21 +18,7 @@
       <%= f.input :description, as: :string, label: false, input_html: { data: { work_paper_description: true } } %>
     </div>
     <div class="col-md-2">
-      <% unless frozen %>
-        <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
-          <div class="file-container float-left">
-            <%= link_to_upload fm_f.object %>
-            <% if fm_f.object.file_cache %>
-              <%= fm_f.input :file_cache, as: :hidden %>
-              <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
-            <% else %>
-              <%= fm_f.input :file, label: false %>
-            <% end %>
-          </div>
-        <% end %>
-      <% end %>
-      <%= link_to_download f.object %>
-      <%= link_to_file f.object.description.to_s %>
+      <%= render 'active_storage/file', f: f, label: '', allow_upload: !frozen, allow_purge: false %>
     </div>
     <div class="col-md-1">
       <div class="mt-2 text-right">

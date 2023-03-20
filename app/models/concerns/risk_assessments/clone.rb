@@ -26,7 +26,6 @@ module RiskAssessments::Clone
         'period_id',
         'plan_id',
         'organization_id',
-        'file_model_id',
         'shared',
         'created_at',
         'updated_at',

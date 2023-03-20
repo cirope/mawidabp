@@ -4,6 +4,7 @@ module WorkPapers::LocalFiles
   FILE_REGEX = /local:\/\/((?:[\w-]+\/?)+\.\w+)/
 
   included do
+    ####### SACAMOS ESTE CALLBACK?
     before_save :check_for_local_file
   end
 

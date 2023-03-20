@@ -64,17 +64,9 @@
       </div>
     </div>
 
-    <div class="col-md-6">
-      <p class="mb-1"><%= Memo.human_attribute_name 'file_model_memos' %></p>
-
-      <div class="clearfix">
-        <%= f.simple_fields_for :file_model_memos do |fm_m| %>
-          <%= render 'file_model_memo', f: fm_m, readonly: readonly %>
-        <% end %>
-
-        <% unless readonly %>
-          <%= link_to_add_fields t('.add_file_model'), f, :file_model_memos, 'file_model_memo'%>
-        <% end %>
+    <div class="row">
+      <div class="col-md-6">
+        <%= render 'active_storage/many_files', f: f, label: Memo.human_attribute_name('files'), show_filename: true, allow_upload: !readonly, allow_purge: !readonly %>
       </div>
     </div>
   </div>

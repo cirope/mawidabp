@@ -1,11 +1,13 @@
-<div class="card">
-  <div class="card-header">
-    <h5 class="mb-0">
-      <%= @title %>
-    </h5>
-  </div>
+<%= simple_form_for @organization do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
 
-  <%= simple_form_for @organization do |f| %>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">
+        <%= @title %>
+      </h5>
+    </div>
+
     <div class="card-body">
       <div class="row">
         <div class="col-md-6">
@@ -38,5 +40,5 @@
       <%= f.submit class: 'btn btn-primary' %>
       <div class="float-right"><%= yield :form_actions %></div>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>

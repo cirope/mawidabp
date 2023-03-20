@@ -58,12 +58,10 @@ module ConclusionReviews::PatRtf
     end
 
     def add_organization_image document, organization
-      organization_image = organization.image_model&.image&.thumb&.path
-
-      if organization_image && File.exist?(organization_image)
+      if organization.image.attached?
         header = RTF::HeaderNode.new document
 
-        header.paragraph { |n| n.image(organization_image) }
+        header.paragraph { |n| n.image(ActiveStorage::Blob.service.path_for(organization.thumb_image.processed.key)) }
 
         document.header = header
       end
@@ -477,9 +475,9 @@ module ConclusionReviews::PatRtf
         p1.line_break
       end
 
-      if weakness.image_model
+      if weakness.image.attached?
         document.paragraph(@styles['P_ALIGN_CENTER']) do |p1|
-          p1.image weakness.image_model.image.path
+          p1.image ActiveStorage::Blob.service.path_for(weakness.image.key)
           p1.line_break
         end
       end
@@ -678,15 +676,15 @@ module ConclusionReviews::PatRtf
             end
           end
 
-          if annex.image_models.any?
+          if annex.images.attached?
             document.paragraph(description_style) do |p1|
               p1.line_break
             end
 
-            annex.image_models.each do |image_model|
+            annex.images.each do |image|
               document.paragraph(@styles['P_ALIGN_CENTER']) do |p1|
                 p1.line_break
-                p1.image image_model.image.path
+                p1.image ActiveStorage::Blob.service.path_for image.variant(resize_to_fit: [600, 600], format: :png).processed.key
               end
             end
           end

@@ -180,7 +180,8 @@ class WeaknessesController < ApplicationController
         :use_suggested_probability, :impact_amount, :probability_amount,
         :lock_version, :extension, :state_regulations, :degree_compliance,
         :observation_originated_tests, :sample_deviation, :external_repeated,
-        :risk_justification, :year, :nsisio, :nobs,
+        :risk_justification, :year, :nsisio, :nobs, :image,
+        image_attachment_attributes: [:id, :_destroy],
         operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [], tag_ids: [],
         achievements_attributes: [
@@ -191,11 +192,7 @@ class WeaknessesController < ApplicationController
         ],
         work_papers_attributes: [
           :id, :name, :code, :number_of_pages, :description, :_destroy,
-          file_model_attributes: [:id, :file, :file_cache]
-        ],
-        finding_answers_attributes: [
-          :answer, :commitment_date, :user_id,
-          :notify_users, :_destroy, file_model_attributes: [:file, :file_cache]
+          :file
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
@@ -212,9 +209,6 @@ class WeaknessesController < ApplicationController
         ],
         comments_attributes: [
           :user_id, :comment
-        ],
-        image_model_attributes: [
-          :id, :image, :image_cache, :_destroy
         ]
       )
 

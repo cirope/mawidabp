@@ -30,6 +30,10 @@
 //= require conclusion_draft_reviews
 //= require control_objective_items
 //= require date_pickers
+
+//= require activestorage
+//= require direct_upload
+
 //= require documents
 //= require dynamic_form
 //= require enable_disable_card_fieldset

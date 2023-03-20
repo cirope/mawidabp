@@ -101,17 +101,14 @@ module ReviewsHelper
     out = "<b>#{Review.human_attribute_name(:survey)}</b>"
 
     out << " | #{link_for_download}" unless review.survey.blank?
-    out << "<ul>"
 
-    review.file_models.each do |fm|
-      link_for_download_attachment = link_to(
-        fm.file_file_name, fm.file.url
-      )
+    out << '<ul>'
 
-      out << "<li>#{link_for_download_attachment}</li>"
+    review.files.each do |f_a|
+      out << "<li>#{link_to_download_file_attachment f_a, class: 'btn btn-outline-secondary mb-1'}<span class='ml-2'>#{f_a.blob.filename}</span></li>"
     end
 
-    out << "</ul>"
+    out << '</ul>'
 
     raw(out + simple_format(review.survey, class: 'mb-1'))
   end

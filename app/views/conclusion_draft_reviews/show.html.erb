@@ -90,6 +90,29 @@ end %>
   </table>
 <% end %>
 
+<% if USE_SCOPE_CYCLE %>
+  <h5 class="mt-3"><%= Annex.model_name.human count: 0 %></h5>
+
+  <table class="table table-sm table-hover table-bordered">
+    <% @conclusion_draft_review.annexes.each do |annex| %>
+      <tr>
+        <td>
+          <div><strong><%= Annex.human_attribute_name :title %></strong>: <%= annex.title %></div>
+          <div><strong><%= Annex.human_attribute_name :description %></strong>: <%= annex.description %></div>
+          <div>
+            <strong><%= Annex.human_attribute_name :images %></strong>:
+            <ul>
+              <% annex.images.each do |i_a| %>
+                <li><%= link_to_download_image_attachment i_a, class: 'btn btn-outline-secondary mb-1' %><span class='ml-2'><%= i_a.blob.filename %></span></li>
+              <% end %>
+            </ul>
+          </div>
+        <td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
 <hr />
 
 <div>

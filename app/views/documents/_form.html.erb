@@ -7,20 +7,11 @@
     <%= f.input :shared, input_html: { disabled: @document.persisted? && @document.shared } %>
     <%= f.input :lock_version, as: :hidden %>
 
-    <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
-      <div class="file-container text-right <%= 'form-group-invalid' if file_model_error f.object %>">
-        <%= link_to_upload fm_f.object %>
-
-        <% if fm_f.object.file_cache %>
-          <%= fm_f.input :file_cache, as: :hidden %>
-          <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
-        <% else %>
-          <%= fm_f.input :file, label: false %>
-        <% end %>
-
-        <small class="form-text text-muted"><%= file_model_error f.object %></small>
+    <div class="row">
+      <div class="col-md-1 offset-md-11">
+        <%= render 'active_storage/file', f: f, label: '', allow_upload: true, allow_purge: false %>
       </div>
-    <% end %>
+    </div>
 
     <div class="card mb-3 <%= 'border-danger' if @document.errors[:tags].present? %>">
       <div class="card-header <%= 'bg-danger text-light' if @document.errors[:tags].present? %>">

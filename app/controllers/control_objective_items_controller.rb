@@ -138,8 +138,8 @@ class ControlObjectiveItemsController < ApplicationController
           :id, :control, :effects, :design_tests, :compliance_tests,
           :sustantive_tests
         ], work_papers_attributes: [
-          :id, :name, :code, :number_of_pages, :description, :_destroy, :lock_version,
-          file_model_attributes: [:id, :file, :file_cache]
+          :id, :name, :code, :number_of_pages, :description, :_destroy,
+          :file, :lock_version
         ], business_unit_scores_attributes: [
           :id, :business_unit_id, :design_score, :compliance_score, :sustantive_score, :_destroy
         ],

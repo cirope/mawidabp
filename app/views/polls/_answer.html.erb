@@ -28,7 +28,7 @@
         <%= f.input :question_id, as: :hidden, input_html: { value: question.id } %>
         <%= f.input :lock_version, as: :hidden %>
       <% end %>
-      <%= render 'attached', f: f %>
+      <%= render 'active_storage/file', f: f, label: Answer.human_attribute_name('file'), allow_upload: true, allow_purge: true %>
     </div>
   </div>
 </div>

@@ -31,26 +31,9 @@
             <%= f.input :status, as: :boolean, label: t('risk_assessments.status.final'), checked_value: 'final', unchecked_value: 'draft' %>
           </div>
         </div>
-
-        <p class="mb-1"><%= RiskAssessment.human_attribute_name 'file_model' %></p>
-
-        <div class="clearfix">
-          <% f.object.build_file_model unless f.object.file_model %>
-
-          <%= f.simple_fields_for :file_model do |fm_f| %>
-            <div class="file-container float-left">
-              <%= link_to_upload fm_f.object %>
-
-              <% if fm_f.object.file_cache %>
-                <%= fm_f.input :file_cache, as: :hidden %>
-                <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
-              <% else %>
-                <%= fm_f.input :file, label: false %>
-              <% end %>
-            </div>
-          <% end %>
-
-          <%= link_to_download f.object %>
+        
+        <div class="ml-2 mt-4">
+          <%= render 'active_storage/file', f: f, label: RiskAssessment.human_attribute_name('file'), allow_upload: true, allow_purge: false %>
         </div>
       </div>
     </div>

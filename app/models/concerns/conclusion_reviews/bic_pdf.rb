@@ -19,10 +19,10 @@ module ConclusionReviews::BicPdf
 
     if sort_by_risk_start && created_at >= sort_by_risk_start
       put_bic_weaknesses_by_risk_and_repetition_on pdf if weaknesses.not_revoked.any?
-      put_bic_images_by_risk_and_repetition_on     pdf if weaknesses.not_revoked.any? &:image_model
+      put_bic_images_by_risk_and_repetition_on     pdf if weaknesses.not_revoked.any? { |weakness| weakness.image.attached? }
     else
       put_bic_weaknesses_on pdf if weaknesses.not_revoked.any?
-      put_bic_images_on     pdf if weaknesses.not_revoked.any? &:image_model
+      put_bic_images_on     pdf if weaknesses.not_revoked.any? { |weakness| weakness.image.attached? }
     end
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
@@ -53,8 +53,8 @@ module ConclusionReviews::BicPdf
     end
 
     def put_bic_header_text_on pdf, organization, width
-      logo_geometry    = organization.image_model&.image_geometry :pdf_thumb
-      co_logo_geometry = organization.co_brand_image_model&.image_geometry :pdf_thumb
+      logo_geometry    = organization.pdf_thumb_image_geometry
+      co_logo_geometry = organization.pdf_thumb_co_brand_image_geometry
       max_logo_width   = [
         Hash(logo_geometry)[:width].to_i,
         Hash(co_logo_geometry)[:width].to_i
@@ -260,7 +260,7 @@ module ConclusionReviews::BicPdf
     end
 
     def put_bic_image_on pdf, weakness, number
-      if weakness.image_model
+      if weakness.image.attached?
         pdf.start_new_page
 
         pdf.text I18n.t(
@@ -269,8 +269,9 @@ module ConclusionReviews::BicPdf
 
         pdf.move_down PDF_FONT_SIZE
 
-        pdf.image weakness.image_model.image.path, position: :center,
-          fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
+        pdf.image StringIO.open(weakness.image.download),
+                  position: :center,
+                  fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
       end
     end
 

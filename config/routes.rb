@@ -41,7 +41,6 @@ Rails.application.routes.draw do
   resources :readings, only: [:create]
 
   resources :documents do
-    get :download, on: :member
     get :auto_complete_for_tagging, on: :collection
   end
 
@@ -453,10 +452,6 @@ Rails.application.routes.draw do
   resources :best_practices do
     resources :process_controls, only: [:new, :edit]
 
-    resources :control_objectives, only: [] do
-      get :download, on: :member, controller: 'best_practices/control_objectives'
-    end
-
     get :auto_complete_for_tagging, on: :collection
   end
 
@@ -528,6 +523,4 @@ Rails.application.routes.draw do
   root 'sessions#new'
 
   post 'paypal', to: 'paypal#create'
-
-  get 'private/:path', to: 'file_models#download', constraints: { path: /.+/ }
 end

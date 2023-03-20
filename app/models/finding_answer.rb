@@ -1,4 +1,5 @@
 class FindingAnswer < ApplicationRecord
+  include ActiveStorage::HasOneFile
   include Auditable
   include FindingAnswers::AttributeTypes
   include FindingAnswers::CommitmentDate

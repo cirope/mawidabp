@@ -263,7 +263,7 @@ module FindingsHelper
       path    = finding_work_papers_path finding_id:        @finding,
                                          finding_answer_id: finding_answer
       options = {
-        class: 'btn btn-outline-secondary',
+        class: 'btn btn-outline-secondary mb-3',
         title: t('finding.create_work_paper'),
         data: {
           add_param: 'last_work_paper_code',

@@ -33,6 +33,7 @@ module Reports::WeaknessesReport
   private
 
     def set_weaknesses_for_report
+      ######## ESTE INCLUDE LO DEBERIAMOS SACAR TAMBIEN
       report_params = params[:weaknesses_report]
 
       if report_params.present?
