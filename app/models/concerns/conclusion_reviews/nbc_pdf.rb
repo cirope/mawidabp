@@ -99,42 +99,56 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_on pdf
-      use_finals = kind_of? ConclusionFinalReview
-      weaknesses = (use_finals ? review.final_weaknesses : review.weaknesses).select { |w| w.being_implemented? || w.implemented_audited? }
+      weaknesses_bi, weaknesses_ia = review.ia_or_bi_weaknesses_and_findings.partition(&:being_implemented?)
 
-      alt_weaknesses_by_review = review.external_reviews.map(&:alternative_review).map do |ar|
-        alt_weaknesses = ar.final_weaknesses.select { |w| w.being_implemented? || w.implemented_audited? }
+      alt_weaknesses_bi = []
+      alt_weaknesses_ia = []
 
-        [ar.identification, alt_weaknesses] if alt_weaknesses.any?
-      end.compact.to_h
+      review.external_reviews.map(&:alternative_review).map do |ar|
+        alt_weaknesses = ar.ia_or_bi_weaknesses_and_findings
 
-      if weaknesses.any? || alt_weaknesses_by_review.any?
-        pdf.move_down PDF_FONT_SIZE * 2
-        pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
+        if alt_weaknesses.any?(&:being_implemented?)
+          alt_weaknesses_bi << [ar.identification, alt_weaknesses.select(&:being_implemented?)]
+        elsif alt_weaknesses.any?(&:implemented_audited?)
+          alt_weaknesses_ia << [ar.identification, alt_weaknesses.select(&:implemented_audited?)]
+        end
+      end
+
+      if weaknesses_bi.any? || alt_weaknesses_bi.any?
+        main_weaknesses_partial pdf, weaknesses_bi, alt_weaknesses_bi, 'being_implemented'
+      end
+
+      if weaknesses_ia.any? || alt_weaknesses_ia.any?
+        main_weaknesses_partial pdf, weaknesses_ia, alt_weaknesses_ia, 'implemented_audited'
+      end
+
+      pdf.start_new_page
+    end
+
+    def main_weaknesses_partial pdf, weaknesses, alt_weaknesses, status
+      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.text I18n.t("conclusion_review.nbc.weaknesses.main_#{status}"), inline_format: true
+      pdf.move_down PDF_FONT_SIZE
+
+      if weaknesses.any?
+        weaknesses.each do |weakness|
+          pdf.text "• #{weakness.title}"
+        end
+
         pdf.move_down PDF_FONT_SIZE
+      end
 
-        if weaknesses.any?
-          weaknesses.each do |weakness|
-            pdf.text "• #{weakness.title}"
+      if alt_weaknesses.any?
+        alt_weaknesses.each do |review_name, alt_w|
+          pdf.text "#{I18n.t('conclusion_review.nbc.weaknesses.from_external_review')} #{review_name}:", style: :italic
+          pdf.move_down PDF_FONT_SIZE
+
+          alt_w.each do |alt_weakness|
+            pdf.text "• #{alt_weakness.title}"
           end
 
           pdf.move_down PDF_FONT_SIZE
         end
-
-        if alt_weaknesses_by_review.any?
-          alt_weaknesses_by_review.each do |review_name, alt_weaknesses|
-            pdf.text "#{I18n.t('conclusion_review.nbc.weaknesses.from_external_review')} #{review_name}:", style: :italic
-            pdf.move_down PDF_FONT_SIZE
-
-            alt_weaknesses.each do |alt_weakness|
-              pdf.text "• #{alt_weakness.title}"
-            end
-
-            pdf.move_down PDF_FONT_SIZE
-          end
-        end
-
-        pdf.start_new_page
       end
     end
 
@@ -199,7 +213,7 @@ module ConclusionReviews::NbcPdf
 
     def nbc_footer_scores score
       [
-        { content: I18n.t('conclusion_review.nbc.scores.footer_table'), colspan: 5},
+        { content: I18n.t('conclusion_review.nbc.scores.footer_table'), colspan: 5 },
         I18n.t("conclusion_review.nbc.results_by_weighting.#{score.first}")
       ]
     end

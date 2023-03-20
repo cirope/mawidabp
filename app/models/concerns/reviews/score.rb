@@ -139,29 +139,34 @@ module Reviews::Score
   def score_by_weakness_reviews date
     weaknesses_total = []
 
-    _weaknesses = conclusion_final_review ? final_weaknesses : weaknesses
+    weaknesses_total << ia_or_bi_weaknesses_and_findings
 
-    _weaknesses.each { |w| weaknesses_total << w }
-
-    if external_reviews.any?
-      external_reviews.each do |er|
-        er.alternative_review.final_weaknesses.each { |w| weaknesses_total << w }
-
-        ar_assigned_findings = er.alternative_review.get_assigned_findings
-
-        ar_assigned_findings.each { |w| weaknesses_total << w }
-      end
+    weaknesses_total << external_reviews.flat_map do |er|
+      er.alternative_review.ia_or_bi_weaknesses_and_findings
     end
 
-    assigned_findings = get_assigned_findings
-
-    assigned_findings.each { |w| weaknesses_total << w }
-
-    scores = weaknesses_total.select { |w| w.being_implemented? || w.implemented_audited? }.group_by do |w|
+    scores = weaknesses_total.flatten.group_by do |w|
       [w.risk_weight, w.state_weight, w.age_weight(date: date)]
     end
 
     scores
+  end
+
+  def ia_or_bi_weaknesses_and_findings
+    weaknesses_and_findings = []
+
+    if conclusion_final_review
+      weaknesses_and_findings << final_weaknesses
+    else
+      weaknesses_and_findings << weaknesses
+    end
+
+    assigned_findings = finding_review_assignments.map(&:finding)
+    weaknesses_and_findings << assigned_findings
+
+    weaknesses_and_findings.flatten.select do |w|
+      w.being_implemented? || w.implemented_audited?
+    end
   end
 
   def scored_by_weaknesses?
@@ -171,14 +176,6 @@ module Reviews::Score
   def scored_by_splitted_effectiveness?
     score_type == 'splitted_effectiveness'
   end
-
-  protected
-
-    def get_assigned_findings
-      finding_review_assignments.map(&:finding).select do |fra|
-        fra if (fra.implemented_audited? || fra.being_implemented?)
-      end
-    end
 
   private
 
