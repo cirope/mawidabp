@@ -139,10 +139,10 @@ module Reviews::Score
   def score_by_weakness_reviews date
     weaknesses_total = []
 
-    weaknesses_total << ia_or_bi_weaknesses_and_findings
+    weaknesses_total << ia_or_bi_weaknesses
 
     weaknesses_total << external_reviews.flat_map do |er|
-      er.alternative_review.ia_or_bi_weaknesses_and_findings
+      er.alternative_review.ia_or_bi_weaknesses
     end
 
     scores = weaknesses_total.flatten.group_by do |w|
@@ -152,7 +152,7 @@ module Reviews::Score
     scores
   end
 
-  def ia_or_bi_weaknesses_and_findings
+  def ia_or_bi_weaknesses
     weaknesses_and_findings = []
 
     if conclusion_final_review

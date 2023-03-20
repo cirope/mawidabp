@@ -99,13 +99,13 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_on pdf
-      weaknesses_bi, weaknesses_ia = review.ia_or_bi_weaknesses_and_findings.partition(&:being_implemented?)
+      weaknesses_bi, weaknesses_ia = review.ia_or_bi_weaknesses.partition(&:being_implemented?)
 
       alt_weaknesses_bi = []
       alt_weaknesses_ia = []
 
       review.external_reviews.map(&:alternative_review).map do |ar|
-        alt_weaknesses = ar.ia_or_bi_weaknesses_and_findings
+        alt_weaknesses = ar.ia_or_bi_weaknesses
 
         if alt_weaknesses.any?(&:being_implemented?)
           alt_weaknesses_bi << [ar.identification, alt_weaknesses.select(&:being_implemented?)]
