@@ -13,4 +13,4 @@ Permite la creación de informes para cada uno de los proyectos generados en la 
 
 Seleccionamos **Ejecución**, nos muestra la siguiente pantalla.
 
-![]({% asset execution/main.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/main.png){: class="img-responsive"}

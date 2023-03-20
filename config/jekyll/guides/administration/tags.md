@@ -14,25 +14,25 @@ Seleccionamos **Administración -> Etiquetas**.
 
 Nos muestra por defecto las Etiquetas creadas para Hallazgos
 
-![]({% asset administration/tags/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/tags/1.png){: class="img-responsive"}
 
 Si seleccionamos Objetivos de control nos muestra:
 
-![]({% asset administration/tags/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/tags/2.png){: class="img-responsive"}
 
 Podemos agregar etiquetas con el botón **Nueva etiqueta** para Objetivos de control, Documentos, Hallazgos, Noticias, Proyectos en plan e Informe.
 
 Para agregar una etiqueta seleccionamos **Nueva etiqueta**, muestra la siguiente pantalla.
 
-![]({% asset administration/tags/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/tags/3.png){: class="img-responsive"}
 
 Agregamos un nombre para identificación, el Estilo (por defecto, importante, exitosa, informativa, advertencia, peligro), y un Icono para identificación.
 
-![]({% asset administration/tags/4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/tags/4.png){: class="img-responsive"}
 
 Para guardar seleccionamos **Crear Etiqueta**, luego muestra la siguiente pantalla.
 
-![]({% asset administration/tags/5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/tags/5.png){: class="img-responsive"}
 
 Luego podremos utilizar la etiqueta creada para etiquetar lo que creamos más conveniente para la organización respecto a Objetivos de control, Documentos, Hallazgos, Noticias, Proyectos en plan e Informe seleccionando **Agregar etiqueta**.
 

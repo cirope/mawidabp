@@ -108,6 +108,14 @@ private
                            description: I18n.t('settings.conclusion_review_receiver')
       end
     end
+
+    if add_temporary_polls? # 2023-02-01
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'temporary_polls',
+                           value:       DEFAULT_SETTINGS[:temporary_polls][:value],
+                           description: I18n.t('settings.temporary_polls')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -144,6 +152,10 @@ private
 
   def add_brief_period_in_weeks?
     Setting.where(name: 'brief_period_in_weeks').empty?
+  end
+
+  def add_temporary_polls?
+    Setting.where(name: 'temporary_polls').empty?
   end
 
   def add_new_answer_options

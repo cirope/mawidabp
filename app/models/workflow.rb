@@ -2,6 +2,7 @@ class Workflow < ApplicationRecord
   include ActiveStorage::HasOneFile
   include ParameterSelector
   include Workflows::Scopes
+  include Workflows::Search
 
   has_paper_trail meta: {
     organization_id: ->(model) { Current.organization&.id }

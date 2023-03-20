@@ -7,7 +7,8 @@ module ConclusionFinalReviews::Destroy
 
   def can_be_destroyed?
     ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION &&
-      has_not_repeated_in_weakness?
+      has_not_repeated_in_weakness? &&
+      has_not_a_review_as_external_review?
   end
 
   private
@@ -18,6 +19,10 @@ module ConclusionFinalReviews::Destroy
 
     def has_not_repeated_in_weakness?
       review.weaknesses.none?(&:repeated?)
+    end
+
+    def has_not_a_review_as_external_review?
+      is_nbc? ? ExternalReview.where(alternative_review_id: review.id).blank? : true
     end
 
     def undo_final_findings

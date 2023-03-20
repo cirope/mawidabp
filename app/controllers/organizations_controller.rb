@@ -64,14 +64,20 @@ class OrganizationsController < ApplicationController
       params.require(:organization).permit(
         :name, :prefix, :description, :corporate, :logo_style, :group_id,
         :image, :co_brand_image,
-        :saml_provider, :lock_version,
-        ldap_config_attributes: [
+        :saml_provider, :lock_version,ldap_config_attributes: [
           :id, :hostname, :port, :basedn, :filter, :login_mask,
           :username_attribute, :name_attribute, :last_name_attribute,
           :email_attribute, :function_attribute, :office_attribute,
           :roles_attribute, :manager_attribute, :tls, :ca_path, :test_user,
           :test_password, :user, :password, :alternative_hostname,
-          :alternative_port, :organizational_unit_attribute, :organizational_unit
+          :alternative_port, :organizational_unit_attribute, :organizational_unit,
+          :_destroy
+        ],
+        saml_provider_attributes: [
+          :id, :provider, :idp_homepage, :idp_entity_id, :idp_sso_target_url,
+          :sp_entity_id, :assertion_consumer_service_url, :name_identifier_format,
+          :assertion_consumer_service_binding, :idp_cert, :default_role_for_users_id,
+          :_destroy
         ]
       )
     end

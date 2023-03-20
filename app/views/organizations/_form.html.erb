@@ -13,7 +13,6 @@
         <div class="col-md-6">
           <%= f.input :name, autofocus: true %>
           <%= f.input :prefix unless @organization.persisted? %>
-          <%= f.input :saml_provider, collection: [['Azure', 'azure']], prompt: true %>
         </div>
         <div class="col-md-6">
           <%= f.input :description, input_html: { rows: @organization.persisted? ? 5 : 8 } %>
@@ -30,6 +29,8 @@
       </div>
 
       <%= render 'image_input', f: f %>
+
+      <%= render 'saml_provider', f: f %>
 
       <%= render 'ldap_config', f: f %>
     </div>

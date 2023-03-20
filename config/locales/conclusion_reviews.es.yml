@@ -127,20 +127,21 @@ es:
         cc: "<b>CC</b>"
         to_label: "Miembros del Comité de Auditoría del Nuevo Banco del Chaco S.A."
         from_label: "Gerencia Auditoría Interna – Nuevo Banco del Chaco S.A"
-        number_review: "<b>Numero de Informe</b>"
-        prepared_by: "<b>Preparado por</b> Auditoría Interna - NBCH"
+        number_review: "Numero de Informe"
+        prepared_by: "Preparado por Auditoría Interna - NBCH"
         audit_date: "<b>Fecha de Auditoría</b>"
       weaknesses:
         title: "<b>RESUMEN EJECUTIVO</b>"
         subtitle: "<b>OBJETIVO</b>"
         main_observations: "<b>OBSERVACIONES EN PROCESO DE REGULARIZACIÓN</b>"
+        from_external_review: "De Informe"
         audit_conclusion: "<b>CONCLUSIÓN GENERAL DE LA AUDITORÍA</b>"
         highest_responsible: "<b>%{responsible}</b>"
         signature_label: "<b>Gerente a/c interino de Auditoría Interna</b>"
         organization: "<b>Nuevo Banco del Chaco S.A.</b>"
         detailed_review: "INFORME DETALLADO"
         introduction_and_scope: "<b>INTRODUCCION Y ALCANCE DEL TRABAJO</b>"
-        full_name: "<b>Responsables/s del Proceso</b>"
+        full_name: "<b>Responsable/s del Proceso</b>"
         responsible_name: "<b>Nombre del Responsable de Regularización</b>"
         follow_up_date: "<b>Fecha Estimada de Regularización</b>"
         messages: "Los procedimientos llevados a cabo incluyeron tareas de consulta, evaluación de documentación y observación de actividades y operaciones realizadas durante la revisión.\n\nLos funcionarios entrevistados fueron:"
@@ -154,6 +155,7 @@ es:
         status: 'Estado'
         age_parameter: 'Parámetro Antigüedad'
         weighing: 'Ponderación'
+        total: 'Total'
         footer_table: 'Calificación de ciclo'
       results_by_weighting:
         adequate: 'Adecuado'
@@ -165,6 +167,7 @@ es:
       weaknesses_detected:
         name: "OBSERVACIONES DE LA PRESENTE REVISIÓN"
         repeated: "OBSERVACIONES DE SEGUIMIENTO"
+        external: "OBSERVACIONES DEL INFORME ALTERNATIVO"
         title: "<b>Título</b>"
         description: "<b>Descripción</b>"
         state: "<b>Estado</b>"

@@ -80,7 +80,7 @@ Rails.application.routes.draw do
 
   resources :time_summary
 
-  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
+  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review|user/ do
     resources :tags
   end
 
@@ -498,7 +498,9 @@ Rails.application.routes.draw do
     resources :imports, only: [:new, :create]
   end
 
-  resources :users
+  resources :users do
+    get :auto_complete_for_tagging, on: :collection
+  end
 
   resource :registration, only: [:show, :new, :create]
 
