@@ -82,7 +82,8 @@
         <div class="row pb-5">
           <div class="col-10 offset-1">
             <p class="pt-3" style="font-size:1.9em;"><span class="font-weight-bold"><%= ConclusionReview.human_attribute_name :previous_identification %></span> <%= bic_previous_review_text conclusion_review %></p>
-            <p class="pt-3" style="font-size:1.9em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.review_period' %></span> <%= bic_review_period conclusion_review %></p>
+            <p class="pt-3 font-weight-bold" style="font-size:1.9em;"><%= I18n.t 'conclusion_review.bic.cover.review_period_title' %></p>
+            <p style="font-size:1.9em;"><%= bic_review_period conclusion_review %></p>
           </div>
         </div>
         <div class="row">
