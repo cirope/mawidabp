@@ -146,7 +146,7 @@ module Findings::CurrentUserScopes
         includes(*current_user_includes).
         left_joins(current_user_left_joins).
         merge(
-          PlanItem.allowed_by_business_units
+          PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
         )
       if @extra_query_values
         # Evitamos el `includes` para no tener los alias de tablas relacionadas

@@ -21,7 +21,7 @@ class ConclusionFinalReviewsController < ApplicationController
     ).references(
       :periods, :reviews, :business_units
     ).merge(
-      PlanItem.allowed_by_business_units
+      PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
     )
     respond_to do |format|
       format.html
