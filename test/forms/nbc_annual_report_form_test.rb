@@ -28,6 +28,8 @@ class NbcAnnualReportFormTest < ActiveSupport::TestCase
       }
     )
 
+    refute @form.valid?
+
     assert_error @form, :period_id, :blank
     assert_error @form, :date, :blank
     assert_error @form, :cc, :blank

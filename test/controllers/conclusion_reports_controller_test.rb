@@ -1433,4 +1433,49 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         'nbc_annual_report', 
         0)
   end
+
+  test 'nbc internal control qualification as group of companies' do
+    set_organization
+
+    skip unless Current.conclusion_pdf_format == 'nbc'
+
+    login
+
+    get :nbc_internal_control_qualification_as_group_of_companies
+    assert_response :success
+    assert_template 'conclusion_reports/nbc_internal_control_qualification_as_group_of_companies'
+  end
+
+  test 'create nbc internal control qualification as group of companies' do
+    set_organization
+
+    skip unless Current.conclusion_pdf_format == 'nbc'
+
+    login
+
+    period = periods(:current_period)
+
+    assert_nothing_raised do
+      post :create_nbc_internal_control_qualification_as_group_of_companies, params: {
+        nbc_internal_control_qualification_as_group_of_companies: {
+          period_id: period.id,
+          date: Date.today.to_s,
+          cc: 'cc',
+          name: 'name',
+          objective: 'objective',
+          conclusion: 'conclusion',
+          introduction_and_scope: 'introduction and scope',
+          business_unit_type_id: business_unit_types(:cycle),
+          previous_period_id: periods(:past_period).id
+        }
+      }
+    end
+    
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.nbc_internal_control_qualification_as_group_of_companies_report.pdf_name',
+        from_date: period.start,
+        to_date: period.end),
+        'nbc_internal_control_qualification_as_group_of_companies_report', 
+        0)
+  end
 end
