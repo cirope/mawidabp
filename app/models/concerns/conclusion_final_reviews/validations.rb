@@ -32,12 +32,14 @@ module ConclusionFinalReviews::Validations
     end
 
     def external_review_must_be_earlier
-      review.external_reviews.map(&:alternative_review).each do |alt_review|
-        alt_issue_date = alt_review.conclusion_final_review.issue_date
+      if review && review.external_reviews.present?
+        review.external_reviews.map(&:alternative_review).each do |alt_review|
+          alt_issue_date = alt_review.conclusion_final_review.issue_date
 
-        if issue_date && alt_issue_date > issue_date
-          errors.add :issue_date, :less_than_alt_issue_date,
-            date: alt_issue_date, name: alt_review.identification
+          if issue_date && alt_issue_date > issue_date
+            errors.add :issue_date, :less_than_alt_issue_date,
+              date: alt_issue_date, name: alt_review.identification
+          end
         end
       end
     end
