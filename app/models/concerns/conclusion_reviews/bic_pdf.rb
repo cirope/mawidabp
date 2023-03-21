@@ -13,7 +13,7 @@ module ConclusionReviews::BicPdf
       },
       pdf: pdf_name,
       margin: {
-        top:    19,
+        top:    20,
         bottom: 5,
         left:   0,
         right:  0
