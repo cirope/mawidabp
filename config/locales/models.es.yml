@@ -26,6 +26,14 @@ es:
         introduction_and_scope: 'Introduccion y Alcance'
         business_unit_type_id: 'Unidad organizativa'
         previous_period_id: 'Periodo previo'
+    errors:
+      models:
+        nbc_internal_control_qualification_as_group_of_companies:
+          attributes:
+            period_id:
+              must_be_different: 'debe ser distinto a Periodo previo'
+            previous_period_id:
+              must_be_different: 'debe ser distinto a Periodo'
 
   activerecord:
     models:

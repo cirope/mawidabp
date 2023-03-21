@@ -7,6 +7,7 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
   validates :business_unit_type_id,
             :previous_period_id,
             presence: true
+  validate :periods_not_equal
 
   def business_unit_type
     BusinessUnitType.find business_unit_type_id
@@ -18,5 +19,10 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
 
   private
 
-    #HACER ALGUN TIPO DE VALIDACION PARA QUE NO SEA EL MISMO O QUE LA FECHA DE FIN SEA MENOR
+    def periods_not_equal
+      if period_id == previous_period_id
+        errors.add :period_id, :must_be_different
+        errors.add :previous_period_id, :must_be_different
+      end
+    end
 end
