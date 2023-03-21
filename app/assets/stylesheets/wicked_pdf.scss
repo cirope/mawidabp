@@ -34,5 +34,9 @@ div.nobreak:before { clear:both; }
 div.nobreak { page-break-inside: avoid; }
 .page-break { display:block; clear:both; page-break-after:always; }
 
+@media print {
+  p { page-break-inside: avoid; }
+}
+
 //customs scss
 @import "pdf/bic_pdf";
