@@ -48,7 +48,6 @@ jobs:
     strategy:
       matrix:
         ruby-version:
-          - 2.6
           - 2.7
         config-type:
           - normal
@@ -57,16 +56,6 @@ jobs:
           - bh
           - cycle_score
           - reviews_scored_by_weakness
-        use_v26:
-          - >-
-            ${{ contains(github.ref_name, 'master')
-            || contains(github.ref_name, 'bancotdf')
-            || contains(github.ref_name, 'bica')
-            || contains(github.ref_name, 'petersen')
-            || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'bancotdf')
-            || contains(github.event.pull_request.base.ref, 'bica')
-            || contains(github.event.pull_request.base.ref, 'petersen') }}
         use_v27:
           - >-
             ${{ contains(github.ref_name, 'master')
@@ -78,6 +67,9 @@ jobs:
             || contains(github.ref_name, 'hipotecario')
             || contains(github.ref_name, 'nbch')
             || contains(github.ref_name, 'patagonia')
+            || contains(github.ref_name, 'bancotdf')
+            || contains(github.ref_name, 'bica')
+            || contains(github.ref_name, 'petersen')
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'bna')
             || contains(github.event.pull_request.base.ref, 'bice')
@@ -86,6 +78,10 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'galicia')
             || contains(github.event.pull_request.base.ref, 'hipotecario')
             || contains(github.event.pull_request.base.ref, 'nbch')
+            || contains(github.event.pull_request.base.ref, 'master')
+            || contains(github.event.pull_request.base.ref, 'bancotdf')
+            || contains(github.event.pull_request.base.ref, 'bica')
+            || contains(github.event.pull_request.base.ref, 'petersen')
             || contains(github.event.pull_request.base.ref, 'patagonia') }}
         use_bh:
           - >-
@@ -134,8 +130,6 @@ jobs:
             ${{ contains(github.ref_name, 'master')
             || contains(github.event.pull_request.base.ref, 'master') }}
         exclude:
-          - use_v26: false
-            ruby-version: 2.6
           - use_v27: false
             ruby-version: 2.7
           - use_bh: false
@@ -178,6 +172,8 @@ jobs:
       SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
       APP_HOST: 'lvh.me'
     steps:
+      - name: update ubuntu packages
+        run: sudo apt-get update && sudo apt-get upgrade -y
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install sldap
