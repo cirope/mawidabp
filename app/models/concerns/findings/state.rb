@@ -109,7 +109,6 @@ module Findings::State
         scope :assumed_risk,     -> { where     state: STATUS[:assumed_risk] }
         scope :not_assumed_risk, -> { where.not state: STATUS[:assumed_risk] }
 
-        scope :being_implemented, -> { where state: STATUS[:being_implemented] }
         scope :implemented_audited, -> { where state: STATUS[:implemented_audited] }
       end
 

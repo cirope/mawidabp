@@ -14,6 +14,6 @@ module Users::Searches
         columns: ::User::COLUMNS_FOR_SEARCH.keys
       )[:conditions]
 
-      @users = User.list_with_corporate.not_hidden.where(conditions).limit(10)
+      @users = User.list_with_corporate.not_hidden.include_tags.where(conditions).limit(10)
     end
 end

@@ -24,7 +24,7 @@ class ConclusionDraftReviewsController < ApplicationController
     ).references(
       :reviews, :business_units
     ).merge(
-      PlanItem.allowed_by_business_units
+      PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
     ).order_by.page params[:page]
 
     respond_to do |format|
