@@ -8,6 +8,6 @@ class WorkPapersController < ApplicationController
   private
 
     def set_work_paper
-      @work_paper = WorkPaper.new(description: params[:file_url])
+      @work_paper = WorkPaper.new description: params[:file_url]
     end
 end
