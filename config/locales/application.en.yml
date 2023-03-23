@@ -34,7 +34,7 @@ en:
     insert_item: "Insert item"
     insert_record_item: "Insert new" # REVIEW donde? qué se inserta? parece que no se usa
     list: "List"
-    modify: "Actualizar" # REVIEW Submit de prfile
+    modify: "Actualizar" # REVIEW Submit de profile
     move: "Move"
     new: "New"
     next: "Next"
