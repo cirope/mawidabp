@@ -10,11 +10,10 @@ $(function() {
       type: "HEAD",
       async: true,
       url: remoteUrl,
-      success: function() {
+      complete: function() {
         $(".work-paper-container").attr("src", remoteUrl);
       },
       error: function(response) {
-        $(".work-paper-container").attr("src", remoteUrl);
         $(".work-paper-alert").show();
       }
   });
