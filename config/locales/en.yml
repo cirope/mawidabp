@@ -840,7 +840,7 @@
       review_tags: "Review tags"
       cut_date: "Computation date"
 
-  follow_up_committee_report: #En el otro archivo está como "follow_up_committee"
+  follow_up_committee_report: # NOTE En application.es.yml figura como "follow_up_committee"
     index_title: "Committee reports"
     control_objective_stats_title: 'Weaknesses by control objective' # REVIEW Weaknesses?
     control_objective_stats_by_review_title: 'Weaknesses by control objective without score' # REVIEW qualification? Weaknesses?
