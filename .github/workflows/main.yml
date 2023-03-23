@@ -4,7 +4,6 @@ on:
     branches:
       - master
       - c-bancotdf
-      - c-bi
       - c-bica
       - c-bice-production
       - c-bna-aud
@@ -15,7 +14,6 @@ on:
       - c-galicia-production
       - c-galicia-test
       - c-hipotecario
-      - c-naranja
       - c-nbch
       - c-patagonia-production
       - c-patagonia-test
@@ -25,7 +23,6 @@ on:
     branches:
       - master
       - c-bancotdf
-      - c-bi
       - c-bica
       - c-bice-production
       - c-bna-aud
@@ -36,7 +33,6 @@ on:
       - c-galicia-production
       - c-galicia-test
       - c-hipotecario
-      - c-naranja
       - c-nbch
       - c-patagonia-production
       - c-patagonia-test
