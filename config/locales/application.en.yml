@@ -655,7 +655,7 @@ en:
     index_title: "Committee reports"
     control_objective_stats_title: 'Weaknesses by control objective' # REVIEW Weaknesses?
     control_objective_stats_by_review_title: 'Weaknesses by control objective without score' # REVIEW qualification? Weaknesses?
-    benefits_title: 'Benefits / Detriments' # REVIEW harm o losses?
+    benefits_title: 'Benefits / Detriments'
     process_control_stats_title: 'Weaknesses by business process'
     control_effectiveness: "Control effectiveness"
     pending_findings: "Pending observations follow-up"
