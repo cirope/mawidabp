@@ -74,7 +74,6 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'galicia')
             || contains(github.event.pull_request.base.ref, 'hipotecario')
             || contains(github.event.pull_request.base.ref, 'nbch')
-            || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
             || contains(github.event.pull_request.base.ref, 'bica')
             || contains(github.event.pull_request.base.ref, 'petersen')
