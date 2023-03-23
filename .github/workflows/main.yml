@@ -107,7 +107,6 @@ jobs:
             ${{ contains(github.ref_name, 'master')
             || contains(github.ref_name, 'bancotdf')
             || contains(github.ref_name, 'bica')
-            || contains(github.ref_name, 'nbch')
             || contains(github.ref_name, 'bna')
             || contains(github.ref_name, 'bvalores')
             || contains(github.ref_name, 'dino')
@@ -115,7 +114,6 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
             || contains(github.event.pull_request.base.ref, 'bica')
-            || contains(github.event.pull_request.base.ref, 'nbch')
             || contains(github.event.pull_request.base.ref, 'bna')
             || contains(github.event.pull_request.base.ref, 'bvalores')
             || contains(github.event.pull_request.base.ref, 'dino')
@@ -123,7 +121,9 @@ jobs:
         use_reviews_scored_by_weakness:
           - >-
             ${{ contains(github.ref_name, 'master')
-            || contains(github.event.pull_request.base.ref, 'master') }}
+            || contains(github.ref_name, 'nbch')
+            || contains(github.event.pull_request.base.ref, 'master')
+            || contains(github.event.pull_request.base.ref, 'nbch') }}
         exclude:
           - use_v27: false
             ruby-version: 2.7
