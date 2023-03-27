@@ -54,7 +54,6 @@ gem 'unicorn-rails'
 gem 'unicorn-worker-killer'
 
 gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary'
 
 group :development do
   gem 'web-console'
