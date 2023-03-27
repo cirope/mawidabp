@@ -111,7 +111,7 @@
   business_unit:
     edit_title: "Modificar unidad de negocio"
     correctly_updated: "Unidad de negocio actualizada correctamente."
-  
+
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"
@@ -1281,6 +1281,10 @@
       title: "Hallazgo vencido"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
+    notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
+      title: "Vencimiento de observación implementada"
+      finding_follow_up_date_last_changed_is_grerater_90_days: "Han pasado 90 días desde el último cambio en la fecha de implementación de la observación"
+      follow_up_date_last_changed: "Último cambio en fecha de implementación: %{follow_up_date_last_changed}"
     unanswered_finding:
       subject: "Notificación de cambio a hallazgo [#%{finding_id}]"
       title: "Notificación de cambio"
@@ -1339,6 +1343,10 @@
     period_description: "Periodo %{period}"
     review_identification: "Número de informe %{review}"
     draft: "Borrador"
+
+  plan_item:
+    errors:
+      cannot_edit_business_unit_for_memos_too: 'o un memo'
 
   questionnaire:
     index_title: "Listado de cuestionarios"
@@ -1458,6 +1466,10 @@
       without_close_date: "Sin fecha de cierre"
     pdf:
       pdf_name: 'informe_%{identification}.pdf'
+
+  external_review:
+    errors:
+      issue_date_after_review_issue_date: "su fecha de emisión (%{date}) es mayor a la fecha de emisión del informe"
 
   review_user_assignment:
     responsibility_modification:

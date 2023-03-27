@@ -41,9 +41,5 @@ module MawidaBP
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
-
-    # Just needed for SAML + Azure AD
-    config.middleware.use ActionDispatch::Cookies # Required for all session management
-    config.middleware.use ActionDispatch::Session::CookieStore, key: '_mbp_session', domain: ".#{ENV['APP_HOST'].sub /:.*/, ''}", same_site: :lax
   end
 end

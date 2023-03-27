@@ -40,6 +40,6 @@ module Reviews::SurveyPdf
       pdf.text survey, font_size: PDF_FONT_SIZE, align: :justify
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.add_footnote "<i>#{footnote_text}</i>"
+      pdf.add_footnote footnote_text, 8, :italic
     end
 end

@@ -17,6 +17,11 @@ module Polls::Defaults
     end
 
     def set_answered
-      self.answered = answers.all? &:completed?
+      self.answered = temporary_polls_setting.value == '1' ? answers.all?(&:completed?) : true
+    end
+
+    def temporary_polls_setting
+      Current.organization.settings.find_by(name: 'temporary_polls') ||
+        OpenStruct.new(DEFAULT_SETTINGS[:temporary_polls])
     end
 end

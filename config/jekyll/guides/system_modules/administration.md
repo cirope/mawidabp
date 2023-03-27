@@ -8,4 +8,4 @@ article_order: 2
 
 Seleccionamos **Administración**
 
-![]({% asset system_modules/16.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/system_modules/16.png){: class="img-responsive"}

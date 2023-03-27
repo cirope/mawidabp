@@ -94,3 +94,13 @@ risk_evaluation:
   options: "{}"
   organization: cirope
   group: main_group
+
+recovery:
+  name: Recovery User
+  kind: user
+  style: primary
+  shared: false
+  obsolete: false
+  options: ["recovery"]
+  organization: google
+  group: main_group
