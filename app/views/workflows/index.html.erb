@@ -1,11 +1,16 @@
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: search_columns_for_model(Workflow)
+} %>
+
 <table class="table table-sm table-striped table-hover">
-  <thead>
+  <thead id="column_headers">
     <tr>
-      <th><%= Period.model_name.human %></th>
-      <th><%= Review.model_name.human %></th>
-      <th class="d-none d-sm-table-cell"><%= PlanItem.human_attribute_name :project %></th>
-      <th class="d-none d-sm-table-cell"><%= Workflow.human_attribute_name :created_at %></th>
-      <th colspan="4"></th>
+      <%= make_not_available_column Period.model_name.human, { class: 'd-none d-md-table-cell' } %>
+      <%= make_filterable_column Review.model_name.human, nil, 'review' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), nil, 'project' %>
+      <%= make_not_available_column Workflow.human_attribute_name(:created_at), { class: 'd-none d-md-table-cell' } %>
+      <th colspan="4" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
 

@@ -1,31 +1,19 @@
 class IdpSettingsAdapter
-  def self.saml_settings(idp_entity_id)
-    case idp_entity_id
-    when config.azure[:idp_entity_id]
-      return OneLogin::RubySaml::Settings.new config.azure
-    else
-      return OneLogin::RubySaml::Settings.new config.azure
-    end
+  def self.saml_settings saml_provider
+    return OneLogin::RubySaml::Settings.new saml_provider_attributes(saml_provider)
   end
 
-  def self.get_idp_name(idp_entity_id)
-    case idp_entity_id
-    when config.azure[:idp_entity_id]
-      return 'azure'
-    else
-      return 'azure'
-    end
-  end
-
-  def self.get_idp_homepage(idp_entity_id)
-    idp_name = self.get_idp_name(idp_entity_id)
-
-    return eval("config.#{idp_name}[:idp_homepage]")
+  def self.get_idp_homepage saml_provider
+    return saml_provider_attributes(saml_provider)[:idp_homepage]
   end
 
   private
 
-    def self.config
-      OpenStruct.new Rails.application.credentials.identity_providers
+    def self.saml_provider_attributes saml_provider
+      saml_provider.attributes
+                   .symbolize_keys
+                   .slice :idp_homepage, :idp_entity_id, :idp_sso_target_url,
+                          :sp_entity_id, :assertion_consumer_service_url, :name_identifier_format,
+                          :assertion_consumer_service_binding, :idp_cert
     end
 end

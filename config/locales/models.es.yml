@@ -189,6 +189,8 @@ es:
       risk_weight:
         one: 'Valor de evaluación de riesgo'
         other: 'Valores de evaluación de riesgo'
+      saml_provider:
+        one: 'Configuración SAML'
       setting:
         one: 'Configuración'
         other: 'Configuraciones'
