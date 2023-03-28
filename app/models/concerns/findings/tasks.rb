@@ -16,6 +16,6 @@ module Findings::Tasks
         state_changed? &&
         (state.presence_in(Finding::FINAL_STATUS) || repeated?)
 
-      tasks.each &:finished! if finish_tasks
+      tasks.each { |t| t.finished! unless t.finished? } if finish_tasks
     end
 end
