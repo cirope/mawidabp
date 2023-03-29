@@ -105,6 +105,6 @@ class UserPdf < Prawn::Document
     end
 
     def pdf_name
-      I18n.t 'user.pdf.pdf_name'
+      "#{I18n.t 'user.pdf_csv.pdf_csv_name'}.pdf"
     end
 end
