@@ -106,6 +106,8 @@ class UsersController < ApplicationController
         User.human_attribute_name('email'),
         User.human_attribute_name('function'),
         User.human_attribute_name('roles'),
+        User.human_attribute_name('manager_id'),
+        I18n.t('user.pdf_csv.children'),
         User.human_attribute_name('enable'),
         User.human_attribute_name('password_changed'),
         User.human_attribute_name('last_access')
@@ -121,6 +123,8 @@ class UsersController < ApplicationController
           user.email,
           user.function,
           user.roles(@current_organization.id).map(&:name).join('; '),
+          user.parent&.full_name,
+          user.children.not_hidden.enabled.map(&:full_name).join(' / '),
           I18n.t(user.enable? ? 'label.yes' : 'label.no'),
           user.password_changed ? I18n.l(user.password_changed, format: :minimal) : '-',
           user.last_access ? I18n.l(user.last_access, format: :minimal) : '-'
@@ -135,7 +139,7 @@ class UsersController < ApplicationController
       if columns.present? || query.present?
         filter_columns = columns.map { |c| "#{User.human_attribute_name c}" }
         query = query.flatten.map { |q| "#{q}" }
-        text = I18n.t 'user.pdf.filtered_by', query: query.to_sentence,
+        text = I18n.t 'user.pdf_csv.filtered_by', query: query.to_sentence,
           columns: filter_columns.to_sentence, count: columns.size
       end
     end

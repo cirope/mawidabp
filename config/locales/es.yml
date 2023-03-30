@@ -1515,6 +1515,7 @@
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar a la fecha"
     pdf_csv:
+      children: 'Personal a cargo'
       pdf_csv_name: "listado_de_usuarios"
       users_count: "Cantidad de usuarios: %{count}"
       filtered_by:

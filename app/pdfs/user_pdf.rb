@@ -38,7 +38,7 @@ class UserPdf < Prawn::Document
       if @columns.present? || @query.present?
         filter_columns = @columns.map { |c| "<b>#{User.human_attribute_name c}</b>" }
         query = @query.flatten.map { |q| "<b>#{q}</b>" }
-        text = I18n.t 'user.pdf.filtered_by', query: query.to_sentence,
+        text = I18n.t 'user.pdf_csv.filtered_by', query: query.to_sentence,
           columns: filter_columns.to_sentence, count: @columns.size
 
         pdf.move_down PDF_FONT_SIZE
@@ -65,7 +65,7 @@ class UserPdf < Prawn::Document
       end
 
       pdf.move_down PDF_FONT_SIZE
-      pdf.text I18n.t('user.pdf.users_count', count: @users.size)
+      pdf.text I18n.t('user.pdf_csv.users_count', count: @users.size)
     end
 
     def make_column_data
@@ -77,6 +77,8 @@ class UserPdf < Prawn::Document
           user.email,
           user.function,
           user.roles(@current_organization.id).map(&:name).join('; '),
+          user.parent&.full_name,
+          user.children.not_hidden.enabled.map(&:full_name).join(' / '),
           I18n.t(user.enable? ? 'label.yes' : 'label.no'),
           user.password_changed ? I18n.l(user.password_changed, format: :minimal) : '-',
           user.last_access ? I18n.l(user.last_access, format: :minimal) : '-'
@@ -86,14 +88,20 @@ class UserPdf < Prawn::Document
 
     def column_order
       [
-        ['user', 10], ['name', 10], ['last_name', 10], ['email', 17],
-        ['function', 14], ['roles', 10], ['enable', 8],
-        ['password_changed', 10], ['last_access', 11]
+        ['user', 7], ['name', 7], ['last_name', 7], ['email', 13],
+        ['function', 13], ['roles', 10], ['manager_id', 7], ['children', 13],
+        ['enable', 6], ['password_changed', 7], ['last_access', 10]
       ]
     end
 
     def column_headers
-      column_order.map { |name, _| User.human_attribute_name name }
+      column_order.map { |name, _|
+        if name == 'children'
+          I18n.t('user.pdf_csv.children')
+        else
+          User.human_attribute_name(name)
+        end
+      }
     end
 
     def column_widths
