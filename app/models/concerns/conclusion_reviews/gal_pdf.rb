@@ -66,17 +66,22 @@ module ConclusionReviews::GalPdf
     end
 
     def put_executive_summary_on pdf, organization
-      title           = I18n.t 'conclusion_review.executive_summary.title'
-      use_alt_project = review.business_unit_type.independent_identification
-      project_label   = use_alt_project ? 'project_alt' : 'project'
-      project_title   = I18n.t "conclusion_review.executive_summary.#{project_label}"
-      project         = review.plan_item.project
+      title              = I18n.t 'conclusion_review.executive_summary.title'
+      exec_summary_intro = review.business_unit_type.exec_summary_intro
+      project            = review.plan_item.project
+      params             = { informe: review.identification }
+
+      full_exec_summary_intro = if exec_summary_intro
+                                  exec_summary_intro % params
+                                else
+                                  I18n.t "conclusion_review.executive_summary.project"
+                                end
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.text "#{project_title} <b>#{project}</b>", inline_format: true
+      pdf.text "#{full_exec_summary_intro} <b>#{project}</b>", inline_format: true
 
       put_risk_exposure_on pdf
       put_gal_score_on     pdf
