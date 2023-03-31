@@ -134,12 +134,12 @@ class UsersController < ApplicationController
 
     def filter_text
       columns = search_params[:columns]
-      query = User.split_terms_in_query(search_params[:query])
+      query   = User.split_terms_in_query(search_params[:query])
 
       if columns.present? || query.present?
         filter_columns = columns.map { |c| "#{User.human_attribute_name c}" }
-        query = query.flatten.map { |q| "#{q}" }
-        text = I18n.t 'user.pdf_csv.filtered_by', query: query.to_sentence,
+        query          = query.flatten.map { |q| "#{q}" }
+        text           = I18n.t 'user.pdf_csv.filtered_by', query: query.to_sentence,
           columns: filter_columns.to_sentence, count: columns.size
       end
     end

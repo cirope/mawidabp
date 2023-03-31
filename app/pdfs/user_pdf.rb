@@ -37,8 +37,8 @@ class UserPdf < Prawn::Document
     def add_filter_text
       if @columns.present? || @query.present?
         filter_columns = @columns.map { |c| "<b>#{User.human_attribute_name c}</b>" }
-        query = @query.flatten.map { |q| "<b>#{q}</b>" }
-        text = I18n.t 'user.pdf_csv.filtered_by', query: query.to_sentence,
+        query          = @query.flatten.map { |q| "<b>#{q}</b>" }
+        text           = I18n.t 'user.pdf_csv.filtered_by', query: query.to_sentence,
           columns: filter_columns.to_sentence, count: @columns.size
 
         pdf.move_down PDF_FONT_SIZE
