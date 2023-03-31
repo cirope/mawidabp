@@ -60,6 +60,9 @@
 
     <% if Current.conclusion_pdf_format == 'gal' %>
       <div class="row">
+        <div class="col-md-6">
+          <%= f.input :exec_summary_intro, input_html: { rows: 4 } %>
+        </div>
         <div class="col-md-3">
           <%= f.input :independent_identification %>
         </div>

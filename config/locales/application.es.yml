@@ -1239,6 +1239,7 @@ es:
         review_prefix: "Prefijo en el informe"
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
+        exec_summary_intro: 'Introducción de Resumen Ejecutivo'
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
         require_counts: "Requerir cantidades en objetivos de control"
