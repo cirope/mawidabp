@@ -107,7 +107,7 @@ class UsersController < ApplicationController
         User.human_attribute_name('function'),
         User.human_attribute_name('roles'),
         User.human_attribute_name('manager_id'),
-        I18n.t('user.pdf_csv.children'),
+        User.human_attribute_name('children'),
         User.human_attribute_name('enable'),
         User.human_attribute_name('password_changed'),
         User.human_attribute_name('last_access')

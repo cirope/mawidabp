@@ -95,13 +95,7 @@ class UserPdf < Prawn::Document
     end
 
     def column_headers
-      column_order.map { |name, _|
-        if name == 'children'
-          I18n.t('user.pdf_csv.children')
-        else
-          User.human_attribute_name(name)
-        end
-      }
+      column_order.map { |name, _| User.human_attribute_name(name) }
     end
 
     def column_widths
