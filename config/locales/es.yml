@@ -23,6 +23,7 @@
     disable: "Deshabilitar"
     download: "Descargar"
     download_csv: "Descargar CSV"
+    download_pdf: "Descargar PDF"
     download_rtf: "Descargar RTF"
     create_permalink: "Crear enlace permanente"
     edit: "Editar"
@@ -1513,8 +1514,8 @@
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar a la fecha"
-    pdf:
-      pdf_name: "listado_de_usuarios.pdf"
+    pdf_csv:
+      pdf_csv_name: "listado_de_usuarios"
       users_count: "Cantidad de usuarios: %{count}"
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
