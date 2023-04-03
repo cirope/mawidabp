@@ -69,6 +69,10 @@ module Users::Roles
     USE_SCOPE_CYCLE ? roles_audited? : (roles_audited? && !roles_auditors?)
   end
 
+  def can_act_as_auditor?
+    roles_auditors?
+  end
+
   def can_act_as_audited_on? organization_id
     (
       audited_on?(organization_id)           ||
