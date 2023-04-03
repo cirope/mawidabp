@@ -538,6 +538,7 @@ es:
         last_name: 'Apellido'
         logged_in: 'Conectado'
         manager_id: 'Superior'
+        children: 'Personal a cargo'
         name: 'Nombre'
         notes: 'Notas'
         organization_roles: 'Perfiles'

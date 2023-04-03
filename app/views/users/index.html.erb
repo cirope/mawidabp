@@ -43,6 +43,18 @@
     <%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %> |
   <% end %>
 
-  <%= link_to t('label.download'), users_path(params.permit(search: [:query, columns: []]).merge(_ts: Time.now.to_i, format: :pdf)) %> |
+  <div class="dropup d-inline">
+    <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
+      <%= t 'label.downloads' %>
+    <% end %>
+    <div class="dropdown-menu">
+      <%= link_to t('label.download_pdf'),
+        users_path(params.permit(search: [:query, columns: []]).merge(_ts: Time.now.to_i, format: :pdf)),
+        class: 'dropdown-item' %>
+      <%= link_to t('label.download_csv'),
+        users_path(params.permit(search: [:query, columns: []]).merge(_ts: Time.now.to_i, format: :csv)),
+        class: 'dropdown-item' %>
+    </div>
+  </div> |
   <%= link_to t('.show_hidden'), users_path(params.permit(search: [:query, columns: []]).merge(show_hidden: true)) %>
 </div>
