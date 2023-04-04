@@ -286,7 +286,6 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
 
     Current.user = users :supervisor
-
     review       = reviews :review_approved_with_conclusion
     weakness     = Weakness.find findings(:being_implemented_weakness_on_approved_draft).id
 
