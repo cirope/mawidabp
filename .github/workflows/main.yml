@@ -167,8 +167,6 @@ jobs:
       SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
       APP_HOST: 'lvh.me'
     steps:
-      - name: update ubuntu packages
-        run: sudo apt-get update && sudo apt-get upgrade -y
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install sldap
