@@ -286,10 +286,16 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
 
     Current.user = users :supervisor
+
     review       = reviews :review_approved_with_conclusion
     weakness     = Weakness.find findings(:being_implemented_weakness_on_approved_draft).id
 
     assert weakness.update_attribute :state, 7
+
+    if (method = has_extra_sort_method? Current.organization)
+      review.send method
+      review.reload
+    end
 
     findings_not_revoked = review.weaknesses.not_revoked + review.oportunities.not_revoked
     findings_revoked     = review.weaknesses.revoked + review.oportunities.revoked
