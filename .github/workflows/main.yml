@@ -42,7 +42,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         ruby-version:
           - 2.7
