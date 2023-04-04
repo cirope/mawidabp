@@ -291,6 +291,11 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert weakness.update_attribute :state, 7
 
+    if (method = has_extra_sort_method? Current.organization)
+      review.send method
+      review.reload
+    end
+
     findings_not_revoked = review.weaknesses.not_revoked + review.oportunities.not_revoked
     findings_revoked     = review.weaknesses.revoked + review.oportunities.revoked
 
