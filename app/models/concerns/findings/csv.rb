@@ -11,7 +11,7 @@ module Findings::Csv
     row = [
       review.identification,
       review.plan_item.project,
-      (review.score if USE_SCOPE_CYCLE),
+      ((review.score || '-') if USE_SCOPE_CYCLE),
       (final_created_at_text if USE_SCOPE_CYCLE),
       issue_date_text,
       review.conclusion_final_review&.summary || '-',
