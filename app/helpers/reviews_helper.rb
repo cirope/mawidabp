@@ -252,7 +252,8 @@ module ReviewsHelper
     Review.list.map do |r|
       if r.conclusion_final_review &&
         r.type_review == Review::TYPES_REVIEW[:system_audit] &&
-        r.period_id == review.period_id
+        r.period_id == review.period_id &&
+        r.id != review.id
           [r.identification, r.id]
       end
     end.compact

@@ -142,7 +142,7 @@ module Reviews::Scopes
     end
 
     def allowed_by_business_units
-      merge PlanItem.allowed_by_business_units
+      where plan_item: PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
     end
 
     private
