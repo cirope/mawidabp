@@ -1553,8 +1553,8 @@ es:
               locked: "no pueden ser eliminadas, ya se utilizaron en al menos un plan de trabajo"
             exec_summary_intro:
               missing_keys:
-                one: "contiene una clave no válida: %{invalid_keys}. Las opciones son: %{valid_keys}"
-                other: "contiene %{count} claves no válidas: %{invalid_keys}. Las opciones son: %{valid_keys}"
+                one: "contiene una clave no válida: %{invalid_keys}"
+                other: "contiene %{count} claves no válidas: %{invalid_keys}"
         conclusion_final_review:
           attributes:
             review_id:

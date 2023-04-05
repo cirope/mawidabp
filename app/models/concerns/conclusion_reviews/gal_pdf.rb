@@ -66,15 +66,19 @@ module ConclusionReviews::GalPdf
     end
 
     def put_executive_summary_on pdf, organization
-      title              = I18n.t 'conclusion_review.executive_summary.title'
-      exec_summary_intro = review.business_unit_type.exec_summary_intro
-      project            = review.plan_item.project
-      params             = { informe: review.identification }
+      title                      = I18n.t 'conclusion_review.executive_summary.title'
+      review_key                 = I18n.t "conclusion_review.executive_summary.keywords.review"
+      params                     = { "#{review_key}": review.identification }
+      exec_summary_intro         = review.business_unit_type.exec_summary_intro
+      independent_identification = review.business_unit_type.independent_identification
+      project                    = review.plan_item.project
 
       full_exec_summary_intro = if exec_summary_intro
                                   exec_summary_intro % params
+                                elsif independent_identification
+                                  I18n.t "conclusion_review.executive_summary.intro_alt"
                                 else
-                                  I18n.t "conclusion_review.executive_summary.project"
+                                  I18n.t "conclusion_review.executive_summary.intro_default"
                                 end
 
       pdf.start_new_page

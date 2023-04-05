@@ -61,7 +61,10 @@
     <% if Current.conclusion_pdf_format == 'gal' %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :exec_summary_intro, input_html: { rows: 4 } %>
+          <%= f.input :exec_summary_intro, input_html: { rows: 4 },
+            hint: t('simple_form.hints.business_unit_type.exec_summary_intro',
+              keywords: I18n.t("conclusion_review.executive_summary.keywords.review")
+            ).html_safe %>
         </div>
         <div class="col-md-3">
           <%= f.input :independent_identification %>

@@ -22,13 +22,14 @@ module BusinessUnitTypes::Validations
     end
 
     def exec_summary_intro_must_have_valid_keys
+      review_key   = I18n.t "conclusion_review.executive_summary.keywords.review"
+      valid_keys   = [review_key]
       field_keys   = exec_summary_intro.scan(/%\{(.*?)\}/).flatten
-      valid_keys   = ['informe']
       missing_keys = field_keys - valid_keys
 
       if missing_keys.any?
         errors.add :exec_summary_intro, :missing_keys, count: missing_keys.count,
-          valid_keys: valid_keys.to_sentence, invalid_keys: missing_keys.to_sentence
+          invalid_keys: missing_keys.to_sentence
       end
     end
 
