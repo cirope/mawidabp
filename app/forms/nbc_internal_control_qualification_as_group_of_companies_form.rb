@@ -10,11 +10,11 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
   validate :periods_not_equal
 
   def business_unit_type
-    BusinessUnitType.find business_unit_type_id
+    BusinessUnitType.list.find business_unit_type_id
   end
 
   def previous_period
-    Period.find previous_period_id
+    Period.list.find previous_period_id
   end
 
   private
