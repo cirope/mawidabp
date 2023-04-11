@@ -73,7 +73,7 @@ module ConclusionReviews::GalPdf
       independent_identification = review.business_unit_type.independent_identification
       project                    = review.plan_item.project
 
-      full_exec_summary_intro = if exec_summary_intro
+      full_exec_summary_intro = if exec_summary_intro.present?
                                   exec_summary_intro % params
                                 elsif independent_identification
                                   I18n.t "conclusion_review.executive_summary.intro_alt"
