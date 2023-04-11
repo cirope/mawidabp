@@ -85,7 +85,7 @@ module ConclusionReviews::GalPdf
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.text "#{full_exec_summary_intro} <b>#{project}</b>", inline_format: true
+      pdf.text "#{full_exec_summary_intro} <b>#{project}</b>", align: :justify, inline_format: true
 
       put_risk_exposure_on pdf
       put_gal_score_on     pdf
