@@ -295,7 +295,8 @@ es:
         title: '<b><u>INFORME DETALLADO</u></b>'
         introduction_and_scope_title: '<b><u>INTRODUCCION Y ALCANCE DEL TRABAJO REALIZADO</u></b>'
         classification_methodology: 'La metodología de calificación de ciclos utilizada en el período 2019 fue aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, la cual exponemos a continuación:'
-        classification_title: '<i><b>Cuadro I: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        classification_with_final_weaknesses_title: '<i><b>Cuadro I: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        classification_with_not_final_weaknesses_title: '<i><b>Cuadro II: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
         conclusions_title: '<u><b>CONCLUSIONES</b></u>'
         conclusions_body: 'Partiendo del Cuadro I <i>“Calificación del Control Interno del NCHB S.A.”</i>, se observa que la calificación del control interno de la Entidad, de acuerdo a los parámetros utilizados, es <b>“%{calification}”.</b>'
       cycle_qualification:
@@ -1239,6 +1240,7 @@ es:
         review_prefix: "Prefijo en el informe"
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
+        exec_summary_intro: 'Introducción de Resumen Ejecutivo'
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
         require_counts: "Requerir cantidades en objetivos de control"
@@ -1485,6 +1487,17 @@ es:
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
+      saml_provider:
+        provider: 'Proveedor'
+        idp_homepage: 'Dirección URL de metadatos de federación de aplicación'
+        idp_entity_id: 'Identificador de Azure AD'
+        idp_sso_target_url: 'Dirección URL de inicio de sesión'
+        sp_entity_id: 'Identificador (id. de entidad)'
+        assertion_consumer_service_url: 'Dirección URL de respuesta (URL del Servicio de consumidor de aserciones)'
+        name_identifier_format: 'name identifier format'
+        assertion_consumer_service_binding: 'assertion consumer service binding'
+        idp_cert: 'Certificado (Base64)'
+        default_role_for_users: 'Role por defecto para usuarios'
       work_paper:
         name: "Nombre"
         code: "Código"
@@ -1539,12 +1552,18 @@ es:
           attributes:
             business_units:
               locked: "no pueden ser eliminadas, ya se utilizaron en al menos un plan de trabajo"
+            exec_summary_intro:
+              missing_keys:
+                one: "contiene una clave no válida: %{invalid_keys}"
+                other: "contiene %{count} claves no válidas: %{invalid_keys}"
         conclusion_final_review:
           attributes:
             review_id:
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
+            issue_date:
+              less_than_alt_issue_date: 'debe ser mayor o igual a la fecha de emisión %{date} del informe anexado %{name}'
         file_model:
           attributes:
             file_file_name:

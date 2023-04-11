@@ -10,7 +10,6 @@ gem 'jquery-ui-rails'
 gem 'responders'
 gem 'mini_magick'
 gem 'simple_form'
-gem 'newrelic_rpm'
 gem 'validates_timeliness', git: 'https://github.com/adzap/validates_timeliness.git', tag: 'v6.0.0.beta2'
 gem 'redcarpet'
 gem 'whenever'
@@ -56,7 +55,6 @@ gem 'unicorn-rails'
 gem 'unicorn-worker-killer'
 
 gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary'
 
 group :development do
   gem 'web-console'

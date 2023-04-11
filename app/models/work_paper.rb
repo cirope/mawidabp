@@ -3,6 +3,7 @@ class WorkPaper < ApplicationRecord
   include ParameterSelector
   include Comparable
   include WorkPapers::LocalFiles
+  include WorkPapers::RemoteFiles
   include WorkPapers::Review
 
   # Named scopes

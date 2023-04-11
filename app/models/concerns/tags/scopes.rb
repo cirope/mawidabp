@@ -4,6 +4,10 @@ module Tags::Scopes
   included do
     scope :ordered,   -> { order name: :asc }
     scope :non_roots, -> { where.not parent_id: nil }
+
+    Tag::KINDS.each do |kind|
+      define_method("#{kind}?") { self.kind == kind }
+    end
   end
 
   module ClassMethods

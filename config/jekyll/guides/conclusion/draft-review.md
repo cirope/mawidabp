@@ -13,13 +13,13 @@ Para cada Informe creado en **Ejecución**, tenemos que generar un informe borra
 
 Seleccionamos **Conclusión**** -> Informes Borradores**
 
-![]({% asset conclusion/draft-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-1.png){: class="img-responsive"}
 
-![]({% asset conclusion/draft-2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-2.png){: class="img-responsive"}
 
 Seleccionamos **Nuevo**
 
-![]({% asset conclusion/draft-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-3.png){: class="img-responsive"}
 
 Seleccionamos de Informe (la lista desplegable) el proyecto que necesitamos generar el informe borrador.
 
@@ -27,17 +27,17 @@ Luego se completan en forma automática los campos Unidad de negocio y Proyecto,
 
 Muestra la siguiente pantalla.
 
-![]({% asset conclusion/draft-4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-4.png){: class="img-responsive"}
 
 Completamos el campo Procedimientos aplicados.
 
 Seleccionamos **Crear informe borrador**, muestra la siguiente pantalla.
 
-![]({% asset conclusion/draft-5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-5.png){: class="img-responsive"}
 
 Si queremos ver las tareas faltantes, seleccionamos **Comprobar ahora**, luego **Ver detalles.**
 
-![]({% asset conclusion/draft-6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-6.png){: class="img-responsive"}
 
 Para poder pasar a tener un informe definitivo, tenemos que lograr tener **Aprobado** el informe borrador, (para lo cual tenemos que realizar las tareas faltantes, las mismas se completan en la etapa de Ejecución, editando el informe o también podemos ir a las opciones Observaciones y/o Objetivos de control usando editar).
 
@@ -45,11 +45,11 @@ Seleccionamos **Actualizar informe borrador**, para que se almacenen los datos a
 
 Vemos que el informe borrador no se encuentra aprobado
 
-![]({% asset conclusion/draft-7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-7.png){: class="img-responsive"}
 
 Realizamos las tareas falantes, verificamos nuevamente con **Comprobar ahora**, **Ver Detalles**, muestra la siguiente pantalla (informando que está aprobado).
 
-![]({% asset conclusion/draft-8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-8.png){: class="img-responsive"}
 
 Seleccionamos **Actualizar informe borrador.**
 
@@ -67,11 +67,11 @@ Incorporamos nuevos formatos de informes, **¨Sin calificación¨** y **¨Resumi
 
 Seleccionamos **Conclusión ****-> Informes borradores**
 
-![]({% asset conclusion/draft-9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-9.png){: class="img-responsive"}
 
 Luego seleccionamos ¨Editar¨ del informe que necesitamos descargar un informe.
 
-![]({% asset conclusion/draft-10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-10.png){: class="img-responsive"}
 
 Seleccionar **"Descargar sin calificación" **y  **“Descargar resumido”**
 
@@ -95,7 +95,7 @@ En caso que quieran enviar la misma encuesta sin distinguir el auditor y otra pa
 
 En ese caso le llegarán al auditado tantos correos con encuestas como filas tenga (cada una independiente e indicando en caso de ser para un auditor en particular de quien se trata). El informe llega solo una vez, independiente de la cantidad de veces que se lo haya agregado.
 
-![]({% asset conclusion/draft-11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-11.png){: class="img-responsive"}
 
 <hr>
 
@@ -111,7 +111,7 @@ Seleccionamos **Conclusión -> Informes borradores**
 
 Posibilidad de emitir informe borrador sin una buena práctica asociada (objetivo de control y proceso de negocio).
 
-![]({% asset conclusion/draft-12.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-12.png){: class="img-responsive"}
 
 <hr>
 
@@ -131,11 +131,11 @@ Seleccionamos "Comprobar ahora" para ver si está o no aprobado.
 
 Luego seleccionamos "Ver detalles", vamos a ver el mensaje “la fecha de auditoría es mayor a la fecha de emisión del informe” identificando el objetivo de control.
 
-![]({% asset conclusion/draft-13.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-13.png){: class="img-responsive"}
 
 Luego seleccionamos "Ver detalles", vamos a ver el mensaje “la fecha de auditoría es mayor a la fecha de emisión del informe” identificando el objetivo de control.
 
-![]({% asset conclusion/draft-14.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-14.png){: class="img-responsive"}
 
 <hr>
 
@@ -151,7 +151,7 @@ Seleccionamos **Conclusión -> Informes borradores**
 
 Ahora permite ordenar la firma que se muestra al final del documento pdf de los informes por "Rol" de izquierda a derecha primero Auditados [si los incluyen], Auditor, Supervisor, Gerente de auditoría).
 
-![]({% asset conclusion/draft-15.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-15.png){: class="img-responsive"}
 
 <hr>
 
@@ -167,16 +167,16 @@ Seleccionamos **Conclusión -> Informes borradores**
 
 Seleccionamos ¨Editar¨ de un informe (en este caso seleccionamos el primer informe de la lista 2018 PC 12 1).
 
-![]({% asset conclusion/draft-16.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-16.png){: class="img-responsive"}
 
 Luego seleccionamos ¨Descargar¨, ¨Descargar papeles de trabajo¨
 
 Genera un documento con la extensión .zip, el cual si lo abrimos en observaciones por ejemplo, nos muestra lo siguiente:
 
-![]({% asset conclusion/draft-17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-17.png){: class="img-responsive"}
 
 También podemos seleccionar ¨Generar Legajo¨ (esta opción es para aquellas organizaciones que emiten la documentación en papel), nos muestra la siguiente pantalla, donde podemos ingresar los datos que necesitamos para los títulos de las carátulas:
 
-![]({% asset conclusion/draft-18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/draft-18.png){: class="img-responsive"}
 
 Si seleccionamos ¨Generar¨, nos genera un documento .zip con los papeles de trabajo para el informe seleccionado.

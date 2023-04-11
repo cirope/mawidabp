@@ -320,6 +320,8 @@ es:
       info: 'Informativo'
       warning: 'Advertencia'
       danger: 'Peligro'
+    saml_providers:
+      azure: 'Azure'
 
   periods:
     edit:
@@ -441,6 +443,9 @@ es:
       progress: 'Avance Total'
       percentage: 'Porcentaje'
       total_hours: 'Total de Horas'
+      period_name: 'Periodo'
+      period_start: 'Periodo Inicio'
+      period_end: 'Periodo Fin'
     calendar:
       show:
         title: 'Cronograma'
@@ -686,6 +691,10 @@ es:
       add_business_unit_type: 'Agregar sector'
       operational_audit: 'Auditoría operativa'
       system_audit: 'Auditoría de sistema'
+      activity: 'Actividad'
+      review: 'Informe'
+      workflow_amount: 'Cantidad de horas programadas:'
+      time_consumption_amount: 'Cantidad de horas asignadas:'
     auxiliar_business_unit_types:
       title: 'Unidades organizativas auxiliares'
       activity: 'Actividad'
@@ -704,6 +713,12 @@ es:
         business_unit_types: "Unidades organizativas"
         detail: "Detalle"
         organization: "Organización"
+        period: "Periodo"
+        period_start: "Periodo Inicio"
+        period_end: "Periodo Fin"
+        plan_item: "Proyecto"
+        plan_item_start: "Proyecto Inicio"
+        plan_item_end: "Proyecto Fin"
 
   users:
     index:
@@ -726,6 +741,7 @@ es:
       add_business_unit_type: 'Agregar unidades organizativas'
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
+      add_tagging: 'Agregar etiqueta'
     create:
       correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
     imports:
@@ -901,3 +917,8 @@ es:
       title: 'Ver plantilla de observación'
     form:
       add_control_objective: 'Agregar objetivo de control'
+
+  work_papers:
+    show:
+      title: 'Papel de trabajo'
+      error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'

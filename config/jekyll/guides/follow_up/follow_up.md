@@ -14,4 +14,4 @@ Para realizar el seguimiento podemos editar cada hallazgo escribiendo comentario
 
 Seleccionamos **Seguimiento**, nos muestra la siguiente pantalla.
 
-![]({% asset follow_up/main.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/main.png){: class="img-responsive"}
