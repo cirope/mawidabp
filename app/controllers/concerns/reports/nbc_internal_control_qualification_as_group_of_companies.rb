@@ -95,7 +95,7 @@ module Reports::NbcInternalControlQualificationAsGroupOfCompanies
                                             findings: {
                                               control_objective_items:
                                               {
-                                                reviews: reviews_and_external_reviews 
+                                                reviews: reviews_and_external_reviews
                                               },
                                               type: 'Weakness',
                                               state: Finding::STATUS[:being_implemented],

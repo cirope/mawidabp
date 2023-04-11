@@ -19,6 +19,6 @@ Rails.application.config.active_record.belongs_to_required_by_default = true
 
 # Configure SSL options to enable HSTS with subdomains. Previous versions had false.
 Rails.application.config.ssl_options = {
-  hsts:     false,
+  hsts:     { subdomains: true, preload: true },
   redirect: { exclude: -> request { /healthy/.match? request.path } }
 }

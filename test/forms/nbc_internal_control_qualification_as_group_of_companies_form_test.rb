@@ -55,10 +55,10 @@ class NbcInternalControlQualificationAsGroupOfCompaniesFormTest < ActiveSupport:
   end
 
   test 'should return business unit type' do
-    assert_equal @form.business_unit_type, business_unit_types(:cycle)
+    assert_equal @form.business_unit_type_id, business_unit_types(:cycle).id
   end
 
   test 'should return previous period' do
-    assert_equal @form.previous_period, periods(:past_period)
+    assert_equal @form.previous_period_id, periods(:past_period).id
   end
 end

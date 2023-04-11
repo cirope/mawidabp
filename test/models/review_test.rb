@@ -373,6 +373,17 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal 'splitted_effectiveness', @review.score_type
   end
 
+  test 'implemented audited or being_implemented weaknesses' do
+    @review = reviews(:current_review)
+
+    @review.finding_review_assignments_attributes = [{ finding_id: findings(:being_implemented_weakness_on_final).id }]
+
+    states       = @review.implemented_audited_or_being_implemented_w.pluck(:state)
+    valid_states = [:implemented_audited, :being_implemented].map { |s| Finding::STATUS[s] }
+
+    assert states.all? { |state| valid_states.include?(state) }
+  end
+
   test 'must be approved function' do
     @review = reviews(:review_approved_with_conclusion)
 
