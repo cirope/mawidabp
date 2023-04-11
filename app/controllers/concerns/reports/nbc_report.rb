@@ -204,7 +204,7 @@ module Reports::NbcReport
     end
 
     def calculate_total_weight weaknesses, count_reviews
-      (weaknesses.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / count_reviews.count).round
+      (weaknesses.sum { |w| w.risk_weight * w.state_weight * w.age_weight } / count_reviews).round
     end
 
     def calculate_qualification total_weight

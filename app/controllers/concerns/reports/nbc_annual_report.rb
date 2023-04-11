@@ -282,7 +282,7 @@ module Reports::NbcAnnualReport
       array << {
         name: unit.name,
         count: weaknesses.count,
-        total_weight: calculate_total_weight(weaknesses, reviews)
+        total_weight: calculate_total_weight(weaknesses, reviews.count)
       }
     end
   end
