@@ -114,21 +114,24 @@ class UsersController < ApplicationController
     end
 
     def users_data_csv
-      @users.preload(organization_roles: :role).map do |user|
-        [
-          user.user,
-          user.name,
-          user.last_name,
-          user.email,
-          user.function,
-          user.roles(@current_organization.id).map(&:name).join('; '),
-          user.parent&.full_name,
-          user.children.not_hidden.enabled.map(&:full_name).join(' / '),
-          I18n.t(user.enable? ? 'label.yes' : 'label.no'),
-          user.password_changed ? I18n.l(user.password_changed, format: :minimal) : '-',
-          user.last_access ? I18n.l(user.last_access, format: :minimal) : '-'
-        ]
-      end
+      @users
+        .unscope(:limit, :offset)
+        .preload(organization_roles: :role)
+        .map do |user|
+          [
+            user.user,
+            user.name,
+            user.last_name,
+            user.email,
+            user.function,
+            user.roles(@current_organization.id).map(&:name).join('; '),
+            user.parent&.full_name,
+            user.children.not_hidden.enabled.map(&:full_name).join(' / '),
+            I18n.t(user.enable? ? 'label.yes' : 'label.no'),
+            user.password_changed ? I18n.l(user.password_changed, format: :minimal) : '-',
+            user.last_access ? I18n.l(user.last_access, format: :minimal) : '-'
+          ]
+        end
     end
 
     def filter_text
