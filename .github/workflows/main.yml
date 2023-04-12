@@ -4,7 +4,6 @@ on:
     branches:
       - master
       - c-bancotdf
-      - c-bi
       - c-bica
       - c-bice-production
       - c-bna-aud
@@ -15,7 +14,6 @@ on:
       - c-galicia-production
       - c-galicia-test
       - c-hipotecario
-      - c-naranja
       - c-nbch
       - c-patagonia-production
       - c-patagonia-test
@@ -25,7 +23,6 @@ on:
     branches:
       - master
       - c-bancotdf
-      - c-bi
       - c-bica
       - c-bice-production
       - c-bna-aud
@@ -36,7 +33,6 @@ on:
       - c-galicia-production
       - c-galicia-test
       - c-hipotecario
-      - c-naranja
       - c-nbch
       - c-patagonia-production
       - c-patagonia-test
@@ -48,7 +44,6 @@ jobs:
     strategy:
       matrix:
         ruby-version:
-          - 2.6
           - 2.7
         config-type:
           - normal
@@ -57,40 +52,32 @@ jobs:
           - bh
           - cycle_score
           - reviews_scored_by_weakness
-        use_v26:
-          - >-
-            ${{ contains(github.ref_name, 'master')
-            || contains(github.ref_name, 'bancotdf')
-            || endsWith(github.ref_name, 'bi')
-            || contains(github.ref_name, 'bica')
-            || contains(github.ref_name, 'bice')
-            || contains(github.ref_name, 'bvalores')
-            || contains(github.ref_name, 'galicia')
-            || contains(github.ref_name, 'hipotecario')
-            || contains(github.ref_name, 'naranja')
-            || contains(github.ref_name, 'nbch')
-            || contains(github.ref_name, 'petersen')
-            || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'bancotdf')
-            || endsWith(github.event.pull_request.base.ref, 'bi')
-            || contains(github.event.pull_request.base.ref, 'bica')
-            || contains(github.event.pull_request.base.ref, 'bice')
-            || contains(github.event.pull_request.base.ref, 'bvalores')
-            || contains(github.event.pull_request.base.ref, 'galicia')
-            || contains(github.event.pull_request.base.ref, 'hipotecario')
-            || contains(github.event.pull_request.base.ref, 'naranja')
-            || contains(github.event.pull_request.base.ref, 'nbch')
-            || contains(github.event.pull_request.base.ref, 'petersen') }}
         use_v27:
           - >-
             ${{ contains(github.ref_name, 'master')
+            || contains(github.ref_name, 'bancotdf')
+            || contains(github.ref_name, 'bica')
+            || contains(github.ref_name, 'bice')
             || contains(github.ref_name, 'bna')
+            || contains(github.ref_name, 'bvalores')
             || contains(github.ref_name, 'dino')
+            || contains(github.ref_name, 'galicia')
+            || contains(github.ref_name, 'hipotecario')
+            || contains(github.ref_name, 'nbch')
             || contains(github.ref_name, 'patagonia')
+            || contains(github.ref_name, 'petersen')
             || contains(github.event.pull_request.base.ref, 'master')
+            || contains(github.event.pull_request.base.ref, 'bancotdf')
+            || contains(github.event.pull_request.base.ref, 'bica')
+            || contains(github.event.pull_request.base.ref, 'bice')
             || contains(github.event.pull_request.base.ref, 'bna')
+            || contains(github.event.pull_request.base.ref, 'bvalores')
             || contains(github.event.pull_request.base.ref, 'dino')
-            || contains(github.event.pull_request.base.ref, 'patagonia') }}
+            || contains(github.event.pull_request.base.ref, 'galicia')
+            || contains(github.event.pull_request.base.ref, 'hipotecario')
+            || contains(github.event.pull_request.base.ref, 'nbch')
+            || contains(github.event.pull_request.base.ref, 'patagonia')
+            || contains(github.event.pull_request.base.ref, 'petersen') }}
         use_bh:
           - >-
             ${{ contains(github.ref_name, 'master')
@@ -113,37 +100,31 @@ jobs:
           - >-
             ${{ contains(github.ref_name, 'master')
             || contains(github.ref_name, 'galicia')
-            || contains(github.ref_name, 'naranja')
             || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'galicia')
-            || contains(github.event.pull_request.base.ref, 'naranja') }}
+            || contains(github.event.pull_request.base.ref, 'galicia') }}
         use_normal:
           - >-
             ${{ contains(github.ref_name, 'master')
             || contains(github.ref_name, 'bancotdf')
-            || endsWith(github.ref_name, 'bi')
             || contains(github.ref_name, 'bica')
-            || contains(github.ref_name, 'bvalores')
-            || contains(github.ref_name, 'nbch')
-            || contains(github.ref_name, 'petersen')
             || contains(github.ref_name, 'bna')
+            || contains(github.ref_name, 'bvalores')
             || contains(github.ref_name, 'dino')
+            || contains(github.ref_name, 'petersen')
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
-            || endsWith(github.event.pull_request.base.ref, 'bi')
             || contains(github.event.pull_request.base.ref, 'bica')
-            || contains(github.event.pull_request.base.ref, 'bvalores')
-            || contains(github.event.pull_request.base.ref, 'nbch')
-            || contains(github.event.pull_request.base.ref, 'petersen')
             || contains(github.event.pull_request.base.ref, 'bna')
-            || contains(github.event.pull_request.base.ref, 'dino') }}
+            || contains(github.event.pull_request.base.ref, 'bvalores')
+            || contains(github.event.pull_request.base.ref, 'dino')
+            || contains(github.event.pull_request.base.ref, 'petersen') }}
         use_reviews_scored_by_weakness:
           - >-
             ${{ contains(github.ref_name, 'master')
-            || contains(github.event.pull_request.base.ref, 'master') }}
+            || contains(github.ref_name, 'nbch')
+            || contains(github.event.pull_request.base.ref, 'master')
+            || contains(github.event.pull_request.base.ref, 'nbch') }}
         exclude:
-          - use_v26: false
-            ruby-version: 2.6
           - use_v27: false
             ruby-version: 2.7
           - use_bh: false
@@ -160,7 +141,7 @@ jobs:
             config-type: reviews_scored_by_weakness
     services:
       postgres:
-        image: postgres:13
+        image: postgres
         ports:
           - '5432:5432'
         env:
@@ -190,6 +171,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Install sldap
         run: sudo apt -y install slapd ldap-utils
+      - name: Install wkhtmltopdf
+        run: sudo apt -y install wkhtmltopdf
       - name: Install ruby and gems
         uses: ruby/setup-ruby@v1
         with:

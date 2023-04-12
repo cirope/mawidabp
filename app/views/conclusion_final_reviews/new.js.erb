@@ -12,8 +12,8 @@
   $('#conclusion_final_review_collapse_control_objectives').prop('checked', <%= @conclusion_final_review.collapse_control_objectives.inspect %>)
   $('#conclusion_final_review_business_unit').val('<%= j @conclusion_final_review.review.business_unit.name %>')
   $('#conclusion_final_review_project').val('<%= j @conclusion_final_review.review.plan_item.project %>')
-  $('#conclusion_final_review_score').val('<%= j @conclusion_final_review.review.score_text %>')
-  $('#conclusion_final_review_score_alt').val('<%= j @conclusion_final_review.review.score_alt_text %>')
+  $('#conclusion_final_review_score').val('<%= j score_text_for(@conclusion_final_review) %>')
+  $('#conclusion_final_review_score_alt').val('<%= j score_alt_text_for(@conclusion_final_review) %>')
   $('#conclusion_final_review_previous_identification').val('<%== j @conclusion_final_review.previous_identification %>')
   $('#conclusion_final_review_previous_date').val('<%== l @conclusion_final_review.previous_date if @conclusion_final_review.previous_date %>')
   $('#conclusion_final_review_reference').val('<%== j @conclusion_final_review.reference %>')
@@ -23,7 +23,7 @@
 
   $('#conclusion_final_review_review_attributes_description').val('<%== j @conclusion_final_review.review.description %>')
   $('#conclusion_final_review_review_attributes_id').val('<%= @conclusion_final_review.review.id %>')
-  
+
   $('#conclusion_final_review_exclude_regularized_findings').prop('checked', <%= @conclusion_final_review.exclude_regularized_findings %>)
 
   $('#best_practice_comments_container').html('<%= j best_practice_comments_form(@conclusion_final_review) %>')

@@ -14,3 +14,8 @@ config/application.yml
 
 # Ignore ./vscode
 .vscode/
+
+# Ignore jekyll bundle and symlinked folders
+config/jekyll/_vendor/bundle/
+config/jekyll/_sass/stylesheets
+config/jekyll/assets/fonts

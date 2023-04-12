@@ -18,11 +18,11 @@ Las unidades organizativas están compuestas por unidades de negocio (por ejempl
 
 A continuación mostramos un ejemplo de las unidades organizativas necesarias para el área de auditoría interna de un Banco:
 
-![]({% asset administration/organization/bu-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-1.png){: class="img-responsive"}
 
 Para agregar una unidad organizativa, seleccionamos **Nuevo**, muestra la siguiente pantalla (los datos indicados con * son obligatorios)
 
-![]({% asset administration/organization/bu-2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-2.png){: class="img-responsive"}
 
 Para guardar los cambios seleccionamos **Crear Tipo de unidad de negocio**
 
@@ -62,13 +62,13 @@ A continuación mostramos como se agrega una unidad de negocio:
 > Unidad organizativa: Sucursales<br>
 > Unidad de negocio: 1 - SUCURSAL BUENOS AIRES.
 
-![]({% asset administration/organization/bu-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-3.png){: class="img-responsive"}
 
 A continuación agregamos otra unidad de negocio a la unidad organizativa Sucursales:
 
 > Unidad de negocio: 2 - SUCURSAL SAN JUAN
 
-![]({% asset administration/organization/bu-4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-4.png){: class="img-responsive"}
 
 Para que se guarden los cambios hay que seleccionar **Actualizar Tipo de unidad de negocio**
 
@@ -78,17 +78,17 @@ Si seleccionamos **Volver**: vuelve a la pantalla anterior.
 
 Las unidades organizativas se pueden **Editar** (lápiz).
 
-![]({% asset administration/organization/bu-5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-5.png){: class="img-responsive"}
 
 A continuación editamos la unidad organizativa Procesos Centrales, la misma está compuesta por varias unidades de negocio.
 
-![]({% asset administration/organization/bu-6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-6.png){: class="img-responsive"}
 
 También podemos **Ver** (lupa) las unidades organizativas.
 
 A continuación mostramos la unidad de organizativa Tecnología Informática, con sus correspondientes unidades de negocio.
 
-![]({% asset administration/organization/bu-7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-7.png){: class="img-responsive"}
 
 <hr>
 
@@ -104,11 +104,11 @@ Seleccionamos ¨Organización¨.
 
 > Nos muestra todas las organizaciones creadas para este grupo (Demo, Demo 1, Demo 2 y Demo BI), para este caso "Demo 2" es la organización corporativa.
 
-![]({% asset administration/organization/bu-8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-8.png){: class="img-responsive"}
 
 Luego seleccionamos ¨Editar¨ de la organización que tiene en la columna ¨Corporativa¨ Si.
 
-![]({% asset administration/organization/bu-9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-9.png){: class="img-responsive"}
 
 En la organización corporativa, se darán de alta a los usuarios corporativos y a quién designe la organización.
 
@@ -124,11 +124,11 @@ A continuación mostramos un ejemplo para estas opciones.
 
 Seleccionar Seguimiento -> Hallazgos pendientes¨, muestra los hallazgos pendientes de todas las organizaciones.
 
-![]({% asset administration/organization/bu-10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-10.png){: class="img-responsive"}
 
 Si necesitamos ver solo de una organización, seleccionamos ¨Buscar¨, ingresamos el prefijo de la Organización que deseamos consultar (por ejemplo Demo-bi) y luego volvemos a seleccionar ¨Buscar¨.
 
-![]({% asset administration/organization/bu-11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-11.png){: class="img-responsive"}
 
 <hr>
 
@@ -142,4 +142,4 @@ Campo **¨Requerir etiqueta en informe¨**
 
 Se agregó el campo "Requerir etiqueta en informe". Cuando lo seleccionen, todos los informes de unidades de ese tipo van a requerir al menos una etiqueta al momento de la creación/modificación.
 
-![]({% asset administration/organization/bu-12.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/bu-12.png){: class="img-responsive"}

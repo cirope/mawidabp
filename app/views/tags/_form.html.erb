@@ -14,7 +14,7 @@
     <%= f.input :shared, input_html: { disabled: @tag.shared_was } %>
     <%= f.input :obsolete %>
 
-    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES && tags_options_collection(kind: @tag.kind).any? %>
+    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES && tags_options_collection(kind: @tag.kind).any? || @tag.user? %>
       <%= f.input :options,
         label: '',
         as: :check_boxes,

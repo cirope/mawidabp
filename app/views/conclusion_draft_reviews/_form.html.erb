@@ -19,11 +19,11 @@
           value: (@conclusion_draft_review.review.plan_item.project if @conclusion_draft_review.review&.persisted?),
           readonly: true } %>
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
-          value: (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review&.persisted?),
+          value: (score_text_for(@conclusion_draft_review) if @conclusion_draft_review.review&.persisted?),
           readonly: true } %>
         <% if USE_SCOPE_CYCLE %>
           <%= f.input :score_alt, label: Review.human_attribute_name(:score_alt), input_html: {
-            value: (@conclusion_draft_review.review.score_alt_text if @conclusion_draft_review.review&.persisted?),
+            value: (score_alt_text_for(@conclusion_draft_review) if @conclusion_draft_review.review&.persisted?),
             readonly: true } %>
         <% end %>
         <% if %(default pat nbc).include? Current.conclusion_pdf_format %>
