@@ -206,6 +206,8 @@ module Findings::Scopes
     def review_sort_options
       if ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
         [risk: :desc, review_code: :asc]
+      elsif ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk_origination_date'
+        [risk: :desc, origination_date: :asc, review_code: :asc]
       else
         [risk: :desc, priority: :desc, review_code: :asc]
       end
