@@ -107,7 +107,7 @@ module ConclusionReviews::DefaultPdf
     def put_default_findings_on pdf, type, options
       title              = I18n.t "conclusion_review.#{type}"
       use_finals         = kind_of? ConclusionFinalReview
-      ordered_by_risk    = ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
+      ordered_by_risk    = %w(risk risk_origination_date).include? ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY
       grouped_objectives = grouped_control_objectives options
 
       review_has_findings = grouped_objectives.any? do |_, cois|
