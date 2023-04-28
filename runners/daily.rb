@@ -23,4 +23,6 @@ end
 
 CarrierWave.clean_cached_files!
 
+%x{ find uploads/tmp -type f -mtime +1 -delete; find uploads/tmp -type d -empty -mtime +1 -delete }
+
 Rails.logger.info "Daily runner finished (version #{APP_REVISION[0,8]})"
