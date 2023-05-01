@@ -1,6 +1,6 @@
 set :application, 'c-supervielle-test'
 set :user, 'deployer'
-set :repo_url, 'https://github.com/cirope/mawidabp.git'
+set :repo_url, 'git@github.com:cirope/mawidabp.git'
 
 set :format, :pretty
 set :log_level, :info
