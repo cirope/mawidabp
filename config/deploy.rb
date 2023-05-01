@@ -1,4 +1,4 @@
-set :application, 'c-supervielle-test'
+set :application, 'mawidabp.com'
 set :user, 'deployer'
 set :repo_url, 'git@github.com:cirope/mawidabp.git'
 
