@@ -57,7 +57,9 @@ class ConclusionFinalReview < ConclusionReview
     last_code = latest_final_weakness_review_code if Current.global_weakness_code
 
     begin
-      findings.all? do |finding|
+      findings.all? do |f|
+        finding = f.paper_trail.version_at(self.issue_date)
+
         final_finding = finding.dup
         final_finding.final = true
         final_finding.parent = finding
