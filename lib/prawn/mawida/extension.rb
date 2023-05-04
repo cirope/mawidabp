@@ -4,7 +4,7 @@ module Prawn
   module Mawida
     module ClassExtension
       def relative_path(filename, sub_directory, id = 0)
-        "/private/#{path_without_root(filename, sub_directory, id).join('/')}"
+        File.join File::SEPARATOR, RELATIVE_PRIVATE_PATH, path_without_root(filename, sub_directory, id)
       end
 
       def absolute_path(filename, sub_directory, id = 0)
@@ -101,7 +101,7 @@ module Prawn
       def add_organization_image(organization, font_size = 10, factor: PDF_LOGO_FACTOR)
         organization_image = organization.try(:image_model).try(:image).try(
           :thumb).try(:path)
-        if organization_image && File.exists?(organization_image)
+        if organization_image && File.exist?(organization_image)
           image_geometry = organization.image_model.image_geometry(:pdf_thumb)
           image_geometry[:height] = image_geometry[:height] * factor
           image_geometry[:width] = image_geometry[:width] * factor

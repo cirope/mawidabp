@@ -4,7 +4,7 @@ module Reviews::WorkPapersZip
   def zip_all_work_papers organization = nil
     filename = absolute_work_papers_zip_path
 
-    FileUtils.rm filename if File.exists?(filename)
+    FileUtils.rm filename if File.exist?(filename)
     FileUtils.makedirs File.dirname(filename)
 
     Zip::File.open(filename, Zip::File::CREATE) do |zipfile|
@@ -21,7 +21,7 @@ module Reviews::WorkPapersZip
   end
 
   def relative_work_papers_zip_path
-    "/private/#{work_papers_zip_path}"
+    File.join File::SEPARATOR, RELATIVE_PRIVATE_PATH, work_papers_zip_path
   end
 
   def work_papers_zip_path

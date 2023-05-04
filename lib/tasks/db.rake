@@ -17,7 +17,7 @@ namespace :db do
       update_finding_state_dates                 # 2020-01-16
       update_finding_parent_ids                  # 2020-01-22
       collapse_extended_risks                    # 2020-02-04
-      remove_finding_awaiting_state              # 2020-02-05
+      #remove_finding_awaiting_state             # 2020-02-05
       add_repeated_findings_privilege            # 2020-02-07
       update_latest_on_findings                  # 2020-02-08
       update_review_scopes                       # 2020-02-20
@@ -28,6 +28,7 @@ namespace :db do
       remove_auditor_junior_role                 # 2020-11-04
       add_commitment_data_on_findings            # 2020-12-01
       update_finding_follow_up_date_last_changed # 2021-12-22
+      update_draft_review_code                   # 2022-07-20
     end
   end
 end
@@ -106,6 +107,14 @@ private
                            description: I18n.t('settings.conclusion_review_receiver')
       end
     end
+
+    if add_temporary_polls? # 2023-02-01
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'temporary_polls',
+                           value:       DEFAULT_SETTINGS[:temporary_polls][:value],
+                           description: I18n.t('settings.temporary_polls')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -142,6 +151,10 @@ private
 
   def add_brief_period_in_weeks?
     Setting.where(name: 'brief_period_in_weeks').empty?
+  end
+
+  def add_temporary_polls?
+    Setting.where(name: 'temporary_polls').empty?
   end
 
   def add_new_answer_options
@@ -648,4 +661,70 @@ private
     Finding
       .where(follow_up_date_last_changed: nil)
       .where.not(follow_up_date: nil).exists?
+  end
+
+  def update_draft_review_code
+    if update_draft_review_code?
+      Organization.all.each do |org|
+        if USE_GLOBAL_WEAKNESS_REVIEW_CODE.include? org.prefix
+
+          Weakness.where(organization_id: org.id, parent_id: nil).each do |w|
+            w.versions.each do |version|
+              break if created_with_final_review_code?(version)
+
+              next if version.object_changes.blank?
+
+              if version_was_in_a_final_review? version
+                finding_and_children_update_draft_review_code w, version.object.dig('review_code')
+
+                break
+              end
+            end
+          end
+
+          Oportunity.where(organization_id: org.id, parent_id: nil).each do |o|
+            if o.review.has_final_review?
+              finding_and_children_update_draft_review_code o, o.review_code
+
+              next
+            end
+
+            o.versions.each do |version|
+              next if version.object_changes.blank?
+
+              if version_was_in_a_final_review? version
+                o.update_column :draft_review_code, version.object.dig('review_code')
+
+                break
+              end
+            end
+          end
+        else
+          Finding.where(organization_id: org.id).each do |f|
+            f.update_column :draft_review_code, f.review_code if f.review.has_final_review?
+          end
+        end
+      end
+    end
+  end
+
+  def created_with_final_review_code? version
+    version.event == 'create' && version.object_changes.dig('review_code')&.second&.size == 8
+  end
+
+  def version_was_in_a_final_review? version
+    version.object_changes.dig('final')&.second == true ||
+      version.object_changes.dig('review_code')&.second&.size == 8
+  end
+
+  def finding_and_children_update_draft_review_code finding, new_draft_review_code
+    finding.update_column :draft_review_code, new_draft_review_code
+
+    if finding.children.present?
+      finding.children.take.update_column :draft_review_code, new_draft_review_code
+    end
+  end
+
+  def update_draft_review_code?
+    Finding.where.not(draft_review_code: nil).blank?
   end

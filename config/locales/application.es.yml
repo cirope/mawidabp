@@ -188,6 +188,7 @@ es:
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
     review_score_details_report_title: "Calificaciones de informes detallado"
+    nbc_annual_report_title: "Resumen anual"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -278,6 +279,40 @@ es:
         highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
         digitalized: "Digitalización"
+    nbc_annual_report:
+      pdf_name: "resumen_anual_%{from_date}_al_%{to_date}.pdf"
+      front_page:
+        first_title: 'Calificación del Control Interno de'
+        footer_title: 'Informe:'
+        footer_prepared_by: 'Preparado por Auditoría Interna - NBCH'
+      executive_summary:
+        title: '<b><u>RESUMEN EJECUTIVO</u></b>'
+        objective_title: '<b><u>OBJETIVO</u></b>'
+        general_conclusion_title: '<b><u>CONCLUSIÓN GENERAL</u></b>'
+        first_footer: '<b>AUS. Alejandro Camnasio</b>'
+        second_footer: '<b>A/C int. Gerencia de Auditoria Interna</b>'
+      detailed_report:
+        title: '<b><u>INFORME DETALLADO</u></b>'
+        introduction_and_scope_title: '<b><u>INTRODUCCION Y ALCANCE DEL TRABAJO REALIZADO</u></b>'
+        classification_methodology: 'La metodología de calificación de ciclos utilizada en el período 2019 fue aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, la cual exponemos a continuación:'
+        classification_with_final_weaknesses_title: '<i><b>Cuadro I: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        classification_with_not_final_weaknesses_title: '<i><b>Cuadro II: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        conclusions_title: '<u><b>CONCLUSIONES</b></u>'
+        conclusions_body: 'Partiendo del Cuadro I <i>“Calificación del Control Interno del NCHB S.A.”</i>, se observa que la calificación del control interno de la Entidad, de acuerdo a los parámetros utilizados, es <b>“%{calification}”.</b>'
+      cycle_qualification:
+        header_number: '<b>N°</b>'
+        header_qualification: '<b>Calificación</b>'
+        header_weight: '<b>Ponderador</b>'
+        header_high_risk_observations: '<b>Cantidad de Observaciones de Riesgo Alto</b>'
+      internal_control_qualification:
+        header_cycle: '<b>Ciclo</b>'
+        header_count_findings: '<b>Cantidad de Observaciones</b>'
+        header_weight: '<b>Ponderador a fecha de los Informes</b>'
+        header_qualification: '<b>Calificación</b>'
+        count_weight: '<b>Total ponderación</b>'
+        count_cycles: '<b>Cantidad de ciclos</b>'
+        final_weight: '<b>Ponderación</b>'
+        final_qualification: '<b>Calificación Control Interno</b>'
     synthesis_report:
       pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -798,6 +833,12 @@ es:
     stale_object_error: "El grupo no fue actualizado, intente nuevamente."
     add_organization: "Agregar organización"
 
+  memo:
+    correctly_created: "Informe externo agregado correctamente."
+    correctly_updated: "Informe externo actualizado correctamente."
+    stale_object_error: "El Informe externo no fue actualizado, intente nuevamente."
+    description_pdf: "COMENTARIOS"
+
   notification:
     index_title: "Listado de notificaciones"
     show_title: "Detalles de la notificación"
@@ -915,6 +956,10 @@ es:
     period_description: "Periodo"
     review_identification: "Número de informe"
     draft: "Borrador"
+
+  plan_item:
+    errors:
+      cannot_edit_business_unit_for_memos_too: 'o un memo'
 
   review:
     index_title: "Listado de informes"
@@ -1108,6 +1153,7 @@ es:
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
       without_audit_recommendations: "no tiene recomendaciones de auditoria"
+      cannot_update_sigen_fields_in_repeated_of: "No se pudieron actualizar los campos sigen en el finding con id: %{id} debido a los errores: %{messages}"
 
   welcome:
     index_title: "Bienvenido"
@@ -1181,9 +1227,12 @@ es:
       work_paper: "Papel de trabajo"
 
     attributes:
+      answer:
+        attached: 'Adjunto'
       business_unit:
         name: "Nombre"
         business_unit_kind_id: 'Tipo de unidad de negocio'
+        business_unit_type_id: 'Unidad organizativa'
       business_unit_type:
         name: "Nombre"
         business_unit_label: "Etiqueta de la unidad de negocio en el informe"
@@ -1191,6 +1240,7 @@ es:
         review_prefix: "Prefijo en el informe"
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
+        exec_summary_intro: 'Introducción de Resumen Ejecutivo'
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
         require_counts: "Requerir cantidades en objetivos de control"
@@ -1200,6 +1250,7 @@ es:
         without_number: "Sin número"
         reviews_for: "Informes para"
         detailed_review: "Informe detallado"
+        grouped_by_business_unit_annual_report: "Agrupado por unidad de negocio en reporte anual"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
@@ -1402,6 +1453,11 @@ es:
         taggings: "Etiquetas"
         review_objective: "Objectivo del informe"
         type_review: "Tipo de informe"
+        subsidiary_id: "Sucursal"
+        subsidiary: "Sucursal"
+      review/external_reviews:
+        alternative_review: 'Informe externo'
+        alternative_review_id: 'Informe externo'
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"
@@ -1431,6 +1487,17 @@ es:
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
+      saml_provider:
+        provider: 'Proveedor'
+        idp_homepage: 'Dirección URL de metadatos de federación de aplicación'
+        idp_entity_id: 'Identificador de Azure AD'
+        idp_sso_target_url: 'Dirección URL de inicio de sesión'
+        sp_entity_id: 'Identificador (id. de entidad)'
+        assertion_consumer_service_url: 'Dirección URL de respuesta (URL del Servicio de consumidor de aserciones)'
+        name_identifier_format: 'name identifier format'
+        assertion_consumer_service_binding: 'assertion consumer service binding'
+        idp_cert: 'Certificado (Base64)'
+        default_role_for_users: 'Role por defecto para usuarios'
       work_paper:
         name: "Nombre"
         code: "Código"
@@ -1485,12 +1552,18 @@ es:
           attributes:
             business_units:
               locked: "no pueden ser eliminadas, ya se utilizaron en al menos un plan de trabajo"
+            exec_summary_intro:
+              missing_keys:
+                one: "contiene una clave no válida: %{invalid_keys}"
+                other: "contiene %{count} claves no válidas: %{invalid_keys}"
         conclusion_final_review:
           attributes:
             review_id:
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
+            issue_date:
+              less_than_alt_issue_date: 'debe ser mayor o igual a la fecha de emisión %{date} del informe anexado %{name}'
         file_model:
           attributes:
             file_file_name:

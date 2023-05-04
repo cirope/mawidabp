@@ -33,4 +33,8 @@ class EMailTest < ActiveSupport::TestCase
     assert_error @email, :to, :blank
     assert_error @email, :subject, :blank
   end
+
+  test 'email method?' do
+    assert_equal ENV['EMAIL_METHOD'], EMail.email_method?
+  end
 end

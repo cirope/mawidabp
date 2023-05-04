@@ -20,51 +20,61 @@ class FileModelTest < ActiveSupport::TestCase
   # Prueba la creación de un modelo de archivo
   test 'create' do
     assert_difference 'FileModel.count' do
-      @file_model = FileModel.new
+      file = Rack::Test::UploadedFile.new(
+        "#{self.class.fixture_path}files/test.txt", 'text/plain'
+      )
 
-      @file_model.id = rand 1000
-      @file_model.file_file_name = 'new_file.jpg'
-      @file_model.file_content_type = 'image/jpeg'
-      @file_model.file_file_size = 2000
+      new_file_model      = FileModel.new
+      new_file_model.file = file
 
-      assert @file_model.save
+      new_file_model.save!
+
+      assert new_file_model.file_file_name, 'test.txt'
+      assert new_file_model.file_content_type, 'text/plain'
+      assert_equal File.size(new_file_model.file.path), new_file_model.file_file_size
+      assert Dir.exist?(new_file_model.file.store_dir)
+      assert File.exist?(new_file_model.file.path)
     end
   end
 
   # Prueba de actualización de un modelo de archivo
-  test 'update' do
-    @file_model.file_file_name = 'updated_name.txt'
-    assert @file_model.save, @file_model.errors.full_messages.join('; ')
+  test 'update and delete file' do
+    file = Rack::Test::UploadedFile.new(
+      "#{self.class.fixture_path}files/test.pdf", 'application/pdf'
+    )
+
+    assert @file_model.update(file: file)
+
     @file_model.reload
-    assert_equal 'updated_name.txt', @file_model.file_file_name
+
+    assert @file_model.file_file_name, 'test.pdf'
+    assert @file_model.file_content_type, 'application/pdf'
+    assert_equal File.size(@file_model.file.path), @file_model.file_file_size
+    assert Dir.exist?(@file_model.file.store_dir)
+    assert File.exist?(@file_model.file.path)
+
+    @file_model.file.remove!
+
+    @file_model.reload
+
+    refute @file_model.file?
+    refute Dir.exist?(@file_model.file.store_dir)
+
+    parent_dir = File.dirname @file_model.file.store_dir
+
+    refute Dir.exist?(parent_dir)
   end
 
   # Prueba de eliminación de un modelo de archivo
-  test 'delete' do
+  test 'destroy' do
     assert_difference 'FileModel.count', -1 do
       @file_model.destroy
     end
   end
 
-  test 'delete file when remove_file is one' do
-    assert_difference 'FileModel.count' do
-      file = Rack::Test::UploadedFile.new(
-        "#{self.class.fixture_path}/files/test.txt", 'text/plain'
-      )
-
-      @file_model = FileModel.create(:file => file)
-    end
-
-    assert @file_model.file?
-    assert @file_model.update(:remove_file => '1')
-    assert !@file_model.file?
-
-    FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
-  end
-
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates lenght attributes' do
-    @file_model.file_file_name = "#{'abc' * 100}.txt"
+    @file_model.file_file_name    = "#{'abc' * 100}.txt"
     @file_model.file_content_type = 'abc' * 100
 
     assert @file_model.invalid?

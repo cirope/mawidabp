@@ -160,7 +160,7 @@ class WorkPaperTest < ActiveSupport::TestCase
 
   test 'add a zip attachment' do
     zip_filename = '/tmp/test.zip'
-    FileUtils.rm zip_filename if File.exists?(zip_filename)
+    FileUtils.rm zip_filename if File.exist?(zip_filename)
 
     Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
       zipfile.get_output_stream('test.txt') { |f| f << 'test file' }
@@ -180,7 +180,7 @@ class WorkPaperTest < ActiveSupport::TestCase
 
   test 'modify a zip attachment repeatedly' do
     zip_filename = '/tmp/test.zip'
-    FileUtils.rm zip_filename if File.exists?(zip_filename)
+    FileUtils.rm zip_filename if File.exist?(zip_filename)
 
     Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
       zipfile.get_output_stream('test.txt') { |f| f << 'test file' }

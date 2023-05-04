@@ -10,6 +10,11 @@
       <%= make_filterable_column User.human_attribute_name('user'), nil, 'user' %>
       <%= make_filterable_column User.human_attribute_name('name'), nil, 'name', 'last_name' %>
       <%= make_filterable_column User.human_attribute_name('function'), { :class => 'd-none d-sm-table-cell'}, 'function' %>
+      <% if POSTGRESQL_ADAPTER  %>
+        <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'd-none d-sm-table-cell' }, 'tags' %>
+      <% else %>
+        <%= make_not_available_column Tag.model_name.human(count: 0), { :class => 'd-none d-sm-table-cell' } %>
+      <% end %>
       <%= make_not_available_column User.human_attribute_name('last_access'), :class => 'd-none d-sm-table-cell' %>
       <%= make_not_available_column User.human_attribute_name('failed_attempts'), :class => 'd-none d-sm-table-cell' %>
       <th colspan="4" class="text-right"><%= link_to_search %></th>
@@ -22,6 +27,7 @@
         <td><%= show_user_with_email_as_abbr(user) %></td>
         <td><%= user.full_name %></td>
         <td class="d-none d-sm-table-cell"><%= super_truncate user.function || '-', 40 %></td>
+        <td class="d-none d-sm-table-cell"><%= tags user.tags %></td>
         <td class="d-none d-sm-table-cell"><%= l user.last_access, format: :minimal if user.last_access %></td>
         <td class="d-none d-sm-table-cell"><%= user.failed_attempts %></td>
         <td class="text-right"><%= link_to_stats users_status_path(user, graph: true) %></td>
@@ -38,11 +44,27 @@
 <div>
   <%= paginate @users %>
   <% if current_organization.ldap_config && show_import_from_ldap? %>
+    <% if ENABLE_USER_CREATION_WHEN_LDAP %>
+      <%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %> |
+    <% end %>
+
     <%= link_to t('.import_from_ldap'), new_users_import_path %> |
   <% elsif current_organization.ldap_config.blank? %>
     <%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %> |
   <% end %>
 
-  <%= link_to t('label.download'), users_path(params.permit(search: [:query, columns: []]).merge(_ts: Time.now.to_i, format: :pdf)) %> |
+  <div class="dropup d-inline">
+    <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
+      <%= t 'label.downloads' %>
+    <% end %>
+    <div class="dropdown-menu">
+      <%= link_to t('label.download_pdf'),
+        users_path(params.permit(search: [:query, columns: []]).merge(_ts: Time.now.to_i, format: :pdf)),
+        class: 'dropdown-item' %>
+      <%= link_to t('label.download_csv'),
+        users_path(params.permit(search: [:query, columns: []]).merge(_ts: Time.now.to_i, format: :csv)),
+        class: 'dropdown-item' %>
+    </div>
+  </div> |
   <%= link_to t('.show_hidden'), users_path(params.permit(search: [:query, columns: []]).merge(show_hidden: true)) %>
 </div>

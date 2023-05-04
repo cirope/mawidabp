@@ -87,11 +87,12 @@ class Authentication
           end
         end
 
-        if user.organization_roles.empty? && USE_SCOPE_CYCLE
-            default_saml_roles.each do |default_role|
-              user.organization_roles.create! organization_id: default_role.organization_id,
-                                              role_id:         default_role.id
-          end
+        default_role = @current_organization.saml_provider.default_role_for_users
+
+        if user.organization_roles.where(organization_id: @current_organization.id).empty? &&
+           default_role.present?
+          user.organization_roles.create! organization_id: default_role.organization_id,
+                                          role_id:         default_role.id
         end
 
         user.update! user:      attributes[:user],
@@ -105,10 +106,11 @@ class Authentication
     end
 
     def create_user attributes
-      roles = Role.where organization_id: @current_organization.id, name: attributes[:roles]
-      roles = default_saml_roles if roles.empty? && USE_SCOPE_CYCLE
+      roles = Role.where(organization_id: @current_organization.id, name: attributes[:roles]).to_a
 
-      if roles.any?
+      roles << @current_organization.saml_provider.default_role_for_users if roles.empty?
+
+      if roles.compact.any?
         User.create!(
           name:                          attributes[:name],
           last_name:                     attributes[:last_name],
@@ -147,8 +149,17 @@ class Authentication
     end
 
     def set_valid_user
-      conditions = ["LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user"]
-      parameters = { user: unmasked_user.to_s.downcase.strip }
+      conditions = [
+        [
+          "LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user",
+          "LOWER(#{User.quoted_table_name}.#{User.qcn('email')}) = :email"
+        ].join(' OR ')
+      ]
+
+      parameters = {
+        user: unmasked_user.to_s.downcase.strip,
+        email: unmasked_user.to_s.downcase.strip
+      }
 
       if @admin_mode
         conditions << "#{User.quoted_table_name}.#{User.qcn('group_admin')} = :true"
@@ -174,9 +185,9 @@ class Authentication
     end
 
     def authenticate
-      if @current_organization.try(:ldap_config)
+      if @current_organization.try(:ldap_config) && !is_user_recovery?
         ldap_auth
-      elsif @current_organization&.saml_provider.present?
+      elsif @current_organization&.saml_provider.present? && !is_user_recovery?
         saml_auth
       else
         local_auth
@@ -331,7 +342,7 @@ class Authentication
       end
     end
 
-    def default_saml_roles
-      Role.where organization_id: @current_organization.id, name: DEFAULT_SAML_ROLES
+    def is_user_recovery?
+      @valid_user&.recovery?
     end
 end

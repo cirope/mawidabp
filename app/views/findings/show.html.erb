@@ -43,6 +43,24 @@
     <strong><%= Weakness.human_attribute_name :audit_recommendations %></strong>:
     <%= simple_format @finding.audit_recommendations, class: 'mb-1' %>
   </div>
+
+  <% if %w(bic).include? Current.conclusion_pdf_format %>
+    <div>
+      <strong><%= Weakness.human_attribute_name :year %>:</strong>
+      <%= @finding.year.to_s %>
+    </div>
+
+    <div>
+      <strong><%= Weakness.human_attribute_name :nsisio %>:</strong>
+      <%= @finding.nsisio.to_s %>
+    </div>
+
+    <div>
+      <strong><%= Weakness.human_attribute_name :nobs %>:</strong>
+      <%= @finding.nobs.to_s %>
+    </div>
+  <% end %>
+
   <p class="mb-1">
     <strong><%= Weakness.human_attribute_name :risk %></strong>:
     <%= @finding.risk_text %>
@@ -238,7 +256,9 @@
   </table>
 <% end %>
 
-<%= render 'issues' %>
+<h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
+
+<%= render 'findings/read_only_issues' %>
 
 <h5 class="my-3">
   <%= t('finding.finding_answers') %>
@@ -267,7 +287,7 @@
         <%= render 'findings/finding_answer', f: f, show: true, readonly: true %>
 
         <div class="text-right">
-          <%= f.submit t('finding.submit_answer'), class: 'btn btn-outline-secondary' %>
+          <%= f.submit t('finding.submit_answer'), class: 'btn btn-outline-secondary', data: { disable_with: false } %>
         </div>
       <% end %>
     <% end %>

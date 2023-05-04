@@ -5,7 +5,7 @@ module ConclusionReviews::GalPdf
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
-    put_gal_tmp_reviews_code
+    put_gal_tmp_reviews_code organization
     put_default_watermark_on pdf
     put_gal_header_on        pdf, organization
     put_gal_cover_on         pdf
@@ -66,17 +66,26 @@ module ConclusionReviews::GalPdf
     end
 
     def put_executive_summary_on pdf, organization
-      title           = I18n.t 'conclusion_review.executive_summary.title'
-      use_alt_project = review.business_unit_type.independent_identification
-      project_label   = use_alt_project ? 'project_alt' : 'project'
-      project_title   = I18n.t "conclusion_review.executive_summary.#{project_label}"
-      project         = review.plan_item.project
+      title                      = I18n.t 'conclusion_review.executive_summary.title'
+      review_key                 = I18n.t "conclusion_review.executive_summary.keywords.review"
+      params                     = { "#{review_key}": review.identification }
+      exec_summary_intro         = review.business_unit_type.exec_summary_intro
+      independent_identification = review.business_unit_type.independent_identification
+      project                    = review.plan_item.project
+
+      full_exec_summary_intro = if exec_summary_intro.present?
+                                  exec_summary_intro % params
+                                elsif independent_identification
+                                  I18n.t "conclusion_review.executive_summary.intro_alt"
+                                else
+                                  I18n.t "conclusion_review.executive_summary.intro_default"
+                                end
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.text "#{project_title} <b>#{project}</b>", inline_format: true
+      pdf.text "#{full_exec_summary_intro} <b>#{project}</b>", align: :justify, inline_format: true
 
       put_risk_exposure_on pdf
       put_gal_score_on     pdf
@@ -606,13 +615,19 @@ module ConclusionReviews::GalPdf
       gal_sort_weaknesses_by_review_code _weaknesses
     end
 
-    def put_gal_tmp_reviews_code
+    def put_gal_tmp_reviews_code organization
       @__tmp_review_codes ||= {}
 
-      weaknesses.not_revoked.reorder(risk: :desc, priority: :desc).each do |weakness|
-        @__tmp_review_code ||= "#{weakness.prefix}#{'%.3d' % 0}"
-
-        @__tmp_review_codes[weakness.id] ||= (@__tmp_review_code = @__tmp_review_code.next)
+      if organization&.prefix == 'filiales'
+        control_objective_items.order(:order_number).each do |coi|
+          coi.weaknesses.not_revoked.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
+            @__tmp_review_codes[weakness.id] = weakness.review_code
+          end
+        end
+      else
+        weaknesses.not_revoked.reorder(risk: :desc, priority: :desc, review_code: :asc).each do |weakness|
+          @__tmp_review_codes[weakness.id] = weakness.review_code
+        end
       end
     end
 

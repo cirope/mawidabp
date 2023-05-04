@@ -30,7 +30,6 @@ module AutoCompleteFor::BusinessUnit
         "#{::BusinessUnit.quoted_table_name}.#{::BusinessUnit.qcn('name')} ASC",
         "#{::BusinessUnitType.quoted_table_name}.#{::BusinessUnitType.qcn('name')} ASC"
       ].map { |o| Arel.sql o }
-    ).merge(PlanItem.allowed_by_business_units
     ).references(:business_unit_type).limit(10)
 
     respond_to do |format|

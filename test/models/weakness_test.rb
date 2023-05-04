@@ -7,6 +7,10 @@ class WeaknessTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    clear_current_attributes
+  end
+
   test 'create' do
     state = if USE_SCOPE_CYCLE
               Finding::STATUS[:incomplete]
@@ -35,8 +39,6 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
-        impact_risk: Finding.impact_risks[:small],
-        probability: Finding.probabilities[:rare],
         manual_risk: true,
         risk_justification: 'Test',
         finding_user_assignments_attributes: {
@@ -92,8 +94,6 @@ class WeaknessTest < ActiveSupport::TestCase
         operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
-        impact_risk: Finding.impact_risks[:small],
-        probability: Finding.probabilities[:rare],
         manual_risk: true,
         risk_justification: 'Test',
         finding_user_assignments_attributes: {
@@ -230,6 +230,8 @@ class WeaknessTest < ActiveSupport::TestCase
 
   test 'should allow revoked prefixed codes' do
     revoked_prefix = I18n.t 'code_prefixes.revoked'
+
+    @weakness.children.clear
 
     @weakness.review_code = "#{revoked_prefix}#{@weakness.review_code}"
 
@@ -378,6 +380,8 @@ class WeaknessTest < ActiveSupport::TestCase
   test 'must be approved on required attributes' do
     error_messages = if HIDE_WEAKNESS_EFFECT || USE_SCOPE_CYCLE
                        [I18n.t('weakness.errors.without_audit_comments')]
+                     elsif Current.conclusion_pdf_format == 'bic'
+                       [I18n.t('weakness.errors.without_effect')]
                      else
                        [
                          I18n.t('weakness.errors.without_effect'),
@@ -531,76 +535,24 @@ class WeaknessTest < ActiveSupport::TestCase
     assert @weakness.valid?
   end
 
-  test 'invalid if not same sigen fields from repeated of' do
-    repeated_of        = findings :being_implemented_weakness
-    repeated_of.year   = 'year test'
-    repeated_of.nsisio = 'nsisio test'
-    repeated_of.nobs   = 'nobs test'
-
-    repeated_of.save!
-
-    @weakness.year        = 'test year'
-    @weakness.nsisio      = 'test nsisio'
-    @weakness.nobs        = 'test nobs'
-    @weakness.repeated_of = repeated_of
+  test 'invalid when sigen fields are not numbers and superate max lenght' do
+    @weakness.year        = '2022a'
+    @weakness.nsisio      = '12a34'
+    @weakness.nobs        = 'a9876'
 
     assert @weakness.invalid?
-    assert_error @weakness, :year, :different_from_repeated_of
-    assert_error @weakness, :nsisio, :different_from_repeated_of
-    assert_error @weakness, :nobs, :different_from_repeated_of
+    assert_error @weakness, :year, :not_a_number
+    assert_error @weakness, :nsisio, :not_a_number
+    assert_error @weakness, :nobs, :not_a_number
+    assert_error @weakness, :year, :too_long, count: 4
+    assert_error @weakness, :nsisio, :too_long, count: 4
+    assert_error @weakness, :nobs, :too_long, count: 4
   end
 
-  test 'valid if same sigen fields from repeated of' do
-    repeated_of        = findings :being_implemented_weakness
-    repeated_of.year   = 'year test'
-    repeated_of.nsisio = 'nsisio test'
-    repeated_of.nobs   = 'nobs test'
-
-    repeated_of.save!
-
-    @weakness.year        = 'year test'
-    @weakness.nsisio      = 'nsisio test'
-    @weakness.nobs        = 'nobs test'
-    @weakness.repeated_of = repeated_of
-
-    assert @weakness.valid?
-  end
-
-  test 'invalid if change sigen field when frozen final review' do
-    conclusion_final_review            = @weakness.review.conclusion_final_review
-    conclusion_final_review.close_date = Time.zone.today - 1.days
-
-    conclusion_final_review.save!
-
-    @weakness.year   = 'year test'
-    @weakness.nsisio = 'nsisio test'
-    @weakness.nobs   = 'nobs test'
-
-    assert @weakness.invalid?
-    assert_error @weakness, :year, :frozen
-    assert_error @weakness, :nsisio, :frozen
-    assert_error @weakness, :nobs, :frozen
-  end
-
-  test 'invalid if change sigen field when repeated state' do
-    @weakness.state = Finding::STATUS[:repeated]
-
-    @weakness.save!
-
-    @weakness.year   = 'year test'
-    @weakness.nsisio = 'nsisio test'
-    @weakness.nobs   = 'nobs test'
-
-    assert @weakness.invalid?
-    assert_error @weakness, :year, :frozen
-    assert_error @weakness, :nsisio, :frozen
-    assert_error @weakness, :nobs, :frozen
-  end
-
-  test 'valid if change sigen field when no frozen final review and no repeated state' do
-    @weakness.year   = 'year test'
-    @weakness.nsisio = 'nsisio test'
-    @weakness.nobs   = 'nobs test'
+  test 'valid if change sigen field when no repeated state' do
+    @weakness.year   = '2022'
+    @weakness.nsisio = '1234'
+    @weakness.nobs   = '9876'
 
     assert @weakness.valid?
   end
@@ -614,10 +566,31 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :risk_justification, :blank
   end
 
+  test 'invalid when manual risk and have attributes for automatic risks' do
+    skip if Current.conclusion_pdf_format != 'bic'
+
+    @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
+    @weakness.probability                  = Finding.frequencies[:low]
+    @weakness.state_regulations            = Finding.state_regulations[:exist]
+    @weakness.degree_compliance            = Finding.degree_compliance[:comply]
+    @weakness.observation_originated_tests = Finding.observation_origination_tests[:design]
+    @weakness.sample_deviation             = Finding.sample_deviation[:most_expected]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
+
+    refute @weakness.valid?
+    assert_error @weakness, :impact_risk, :present
+    assert_error @weakness, :probability, :present
+    assert_error @weakness, :state_regulations, :present
+    assert_error @weakness, :degree_compliance, :present
+    assert_error @weakness, :observation_originated_tests, :present
+    assert_error @weakness, :sample_deviation, :present
+    assert_error @weakness, :external_repeated, :present
+  end
+
   test 'invalid when automatic risk and present justification' do
     skip if Current.conclusion_pdf_format != 'bic'
 
-    @weakness.manual_risk = false
+    @weakness.manual_risk        = false
     @weakness.risk_justification = 'Test'
 
     refute @weakness.valid?
@@ -636,7 +609,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
     @weakness.probability                  = Finding.frequencies[:low]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     assert @weakness.valid?
   end
@@ -654,7 +627,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:most_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:low]
     @weakness.probability                  = Finding.frequencies[:low]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     refute @weakness.valid?
   end
@@ -707,7 +680,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:high]
     @weakness.probability                  = Finding.frequencies[:high]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     assert @weakness.valid?
   end
@@ -724,9 +697,66 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.sample_deviation             = Finding.sample_deviation[:less_expected]
     @weakness.impact_risk                  = Finding.impact_risks_bic[:high]
     @weakness.probability                  = Finding.frequencies[:high]
-    @weakness.external_repeated            = Finding.external_repeated[:repeated]
+    @weakness.external_repeated            = Finding.external_repeated[:repeated_without_action_plan]
 
     refute @weakness.valid?
+  end
+
+  test 'update sigen fields in repeated of when is valid' do
+    skip unless Current.conclusion_pdf_format == 'bic'
+
+    review      = reviews :current_review
+    repeated_of = findings :being_implemented_weakness_on_final
+
+    review.finding_review_assignments << FindingReviewAssignment.new(review: review,
+                                                                     finding: repeated_of)
+
+    @weakness.repeated_of = repeated_of
+
+    @weakness.update!(year: '2022', nsisio: '1234', nobs: '4321')
+
+    assert_equal repeated_of.year, @weakness.year
+    assert_equal repeated_of.nsisio, @weakness.nsisio
+    assert_equal repeated_of.nobs, @weakness.nobs
+  end
+
+  test 'not update sigen fields in repeated of when is invalid' do
+    skip unless Current.conclusion_pdf_format == 'bic'
+
+    review      = reviews :current_review
+    repeated_of = findings :being_implemented_weakness_on_final
+
+    review.finding_review_assignments << FindingReviewAssignment.new(review: review,
+                                                                     finding: repeated_of)
+
+    repeated_of.update_attribute('risk_justification', nil)
+
+    @weakness.repeated_of = repeated_of
+
+    @weakness.update!(year: '2022', nsisio: '1234', nobs: '4321')
+
+    refute repeated_of.valid?
+    assert_equal @weakness.year, '2022'
+    assert_equal @weakness.nsisio, '1234'
+    assert_equal @weakness.nobs, '4321'
+    assert_not_equal repeated_of.year, @weakness.year
+    assert_not_equal repeated_of.nsisio, @weakness.nsisio
+    assert_not_equal repeated_of.nobs, @weakness.nobs
+  end
+
+  test 'invalid because not same draft review code parent' do
+    children                   = findings :unanswered_weakness_final
+    children.draft_review_code = 'different code'
+
+    refute children.valid?
+    assert_error children, :draft_review_code, :not_same_draft_review_code_parent
+  end
+
+  test 'invalid because not same draft review code children' do
+    @weakness.draft_review_code = 'different code'
+
+    refute @weakness.valid?
+    assert_error @weakness, :draft_review_code, :not_same_draft_review_code_children
   end
 
   private

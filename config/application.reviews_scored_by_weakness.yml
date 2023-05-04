@@ -18,18 +18,18 @@ NEW_RELIC_LICENSE_KEY: 'REPLACE with the one provided by NewRelic'
 RAILS_MASTER_KEY: 'REPLACE with THE master key'
 
 # Extra application options
-ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION: 'false'
+ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION: 'true'
 ALLOW_FINDING_ASSUMED_RISK_TO_PENDING: 'false'
 ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION: 'false'
 AUTOMATICALLY_SORT_FINDINGS_ON_CONCLUSION: '{"cirope":"recode_weaknesses_by_repetition_and_risk"}' # In JSON
 COMMITMENT_DATE_LIMITS: '{"first_date": {"high": {"1.year": "Una observación de riesgo alto, no puede tener una fecha estimada de solución mayor a 1 año."}}, "reschedule": {"default": { "6.months": "No se puede reprogramar con una fecha mayor a 6 meses"}}}'
 CONCLUSION_REVIEW_SORT_BY_RISK_START: ''
 DEFAULT_LDAP_ROLES: ''
-DEFAULT_SAML_ROLES: ''
 DISABLE_COI_AUDIT_DATE_VALIDATION: 'false'
 DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION: 'false'
 DISABLE_FINDINGS_EXPIRATION_NOTIFICATION: 'false'
 DISABLE_REVIEW_AUDITED_VALIDATION: 'false'
+ENABLE_USER_CREATION_WHEN_LDAP: 'false'
 ENABLE_PUBLIC_REGISTRATION: 'false'
 EXTRA_USERS_INFO: '{}' # Example '{"path": "/some/path.csv", "format": "peoplesoft_txt"}'
 FINDING_ANSWER_COMMITMENT_DATE_LIMITS: '{}'
@@ -53,15 +53,18 @@ ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS: ''
 ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS: ''
 ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS: 'cirope'
 PLAN_ITEM_REVIEW_CONCLUDED_ON: 'created_at'
+REQUIRED_BY_OPTIONS_MEMO: '[]'
 REVIEW_SCORES: '{}' # In JSON and must be sorted by date in descending order
 RISK_WEIGHTS: '{}'
-SCORE_BY_WEAKNESS: '{}' # In JSON
+SCORE_BY_WEAKNESS: '{"adequate": 98, "require_some_improvements": 85, "require_improvements": 50, "require_lots_of_improvements": 32.66, "inadequate": 0}' # In JSON
+SHARED_SESSION: 'true'
 SHOW_ALTERNATIVE_QUESTIONNAIRES: 'false'
 SHOW_ASSUMED_RISK_AS_REVIEW_PENDING: 'false'
-SHOW_CONCLUSION_ALTERNATIVE_PDF: '{}' # In JSON
+SHOW_CONCLUSION_ALTERNATIVE_PDF: '{"cirope": "nbc"}' # In JSON
 SHOW_CONCLUSION_AS_OPTIONS: 'false'
 SHOW_CONDENSED_PRIORITIES: 'false'
 SHOW_FINDING_CURRENT_SITUATION: 'false'
+SHOW_MEMOS: 'false'
 SHOW_ORGANIZATION_PREFIX_ON_REVIEW_NOTIFICATION: ''
 SHOW_REVIEW_AUTOMATIC_IDENTIFICATION: 'false'
 SHOW_REVIEW_BEST_PRACTICE_COMMENTS: 'false'

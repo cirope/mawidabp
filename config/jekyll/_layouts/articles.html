@@ -4,9 +4,8 @@
     <meta charset="utf-8">
     <title>{{ page.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{% asset favicon.ico @path %}" type="image/x-icon">
-    {% asset application.css %}
-    {% asset application.js %}
+    <link rel="icon" href="{{ site.baseurl }}/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/stylesheets/main.css">
   </head>
   <body>
     <div class="container">
@@ -24,10 +23,12 @@
   </body>
 
   <script charset="utf-8">
-    $(document).ready(function () {
-      $('h2,h3,h4,h5,h6').filter('[id]').each(function () {
-        $(this).html('<a href="#'+$(this).attr('id')+'">'+ $(this).text() + '</a>')
-      })
-    })
+    document.addEventListener("DOMContentLoaded", function(event) {
+      Array.from(document.querySelectorAll("h2, h3, h4, h5, h6"))
+        .filter(element => element.id != '')
+        .forEach(function callback(currentValue) {
+        currentValue.innerHTML = `<a href="#${currentValue.id}">${currentValue.textContent}</a>`
+      });
+    });
   </script>
 </html>

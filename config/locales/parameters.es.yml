@@ -79,7 +79,8 @@ es:
     less_expected: 'Menos esperado'
     most_expected: 'Mas esperado'
   external_repeated_types:
-    repeated: 'Si'
+    repeated_without_action_plan: 'Si, sin plan de acción'
+    repeated_with_action_plan: 'Si, con plan de acción'
     no_repeated: 'No'
   suggested_type_risks:
     representativeness: 'Representatividad'

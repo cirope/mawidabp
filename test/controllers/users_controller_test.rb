@@ -40,10 +40,22 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'can not get new when ldap' do
+    skip if ENABLE_USER_CREATION_WHEN_LDAP
+
     login prefix: organizations(:google).prefix
 
     get :new
     assert_redirected_to login_url
+  end
+
+  test 'can get new when ldap and ENABLE_USER_CREATION_WHEN_LDAP' do
+    skip unless ENABLE_USER_CREATION_WHEN_LDAP
+
+    login prefix: organizations(:google).prefix
+
+    get :new
+    assert_response :success
+    assert_not_nil assigns(:user)
   end
 
   test 'create user' do
@@ -232,6 +244,12 @@ class UsersControllerTest < ActionController::TestCase
   test 'index as pdf' do
     get :index, as: :pdf
     assert_redirected_to UserPdf.new.relative_path
+  end
+
+  test 'should download user list as csv' do
+    get :index, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'export with search' do

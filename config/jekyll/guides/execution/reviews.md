@@ -14,11 +14,11 @@ Seleccionamos **Ejecución -> Informes**
 
 Muestra los informes generados hasta el momento.
 
-![]({% asset execution/reviews/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/1.png){: class="img-responsive"}
 
 Seleccionamos **Nuevo** para dar el alta un informe, aparece la siguiente pantalla para completar.
 
-![]({% asset execution/reviews/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/2.png){: class="img-responsive"}
 
 Identificación: podemos utilizar la nomenclatura adoptada por la organización (letras, números, guiones, etc.)
 
@@ -82,8 +82,8 @@ Opcionalmente podemos completar el campo relevamiento y/o subir algún archivo q
 
 A continuación mostramos la pantalla con los datos cargados para un informe.
 
-![]({% asset execution/reviews/3.png @path %}){: class="img-responsive"}
-![]({% asset execution/reviews/4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/3.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/4.png){: class="img-responsive"}
 
 <hr>
 
@@ -97,7 +97,7 @@ A continuación mostramos la pantalla con los datos cargados para un informe.
 
 * Responsable (podemos seleccionar, es opcional, al tillar seleccionamos los integrantes que aparecen en la primera hoja del informe borrador y/o definitivo indicando que son responsables)
 
-![]({% asset execution/reviews/5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/5.png){: class="img-responsive"}
 
 <hr>
 
@@ -109,15 +109,15 @@ A continuación mostramos la pantalla con los datos cargados para un informe.
 
 Incorporamos la posibilidad de seleccionar etiquetas, se pueden agregar etiquetas para identificar alguna característica que nos interese del informe.
 
-![]({% asset execution/reviews/6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/6.png){: class="img-responsive"}
 
 Para guardar los datos seleccionamos **¨Crear informe**¨, si todo está bien nos muestra la siguiente pantalla (en caso de inconvenientes nos da un mensaje con los errores encontrados, los cuales podemos ir solucionando hasta que nos permite crear el informe).
 
-![]({% asset execution/reviews/7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/7.png){: class="img-responsive"}
 
 Luego podemos ver el informe generado seleccionado **Ejecución -> Informes**, es el primero que aparece en la lista.
 
-![]({% asset execution/reviews/8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/8.png){: class="img-responsive"}
 
 Luego de crear el informe, podemos iniciar las siguientes actividades para cada uno de los objetivos de control que se encuentran en el informe creado (en este caso tenemos 2 objetivos de control: 5.2 Inventario tecnológico y 5.1 Responsabilidad del área):
 
@@ -146,7 +146,7 @@ Incorporamos la funcionalidad "Hallazgos pendientes".
 
 Seleccionamos "Editar" en un informe.
 
-![]({% asset execution/reviews/41.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/41.png){: class="img-responsive"}
 
 **"Agregar hallazgo pendiente"**, se ingresan caracteres, muestra un listado de observaciones, seleccionamos una. Luego podemos seguir agregando observaciones realizando los mismos pasos. Para cambiar el estado de la observación, seleccionamos la "Lupa", luego podemos editar la misma.
 
@@ -192,9 +192,9 @@ Los usuarios de un informe se pueden marcar como **"Responsable"**.
 
 Si tiene responsables se muestran bajo el título "Responsables" al final en la carátula (primera hoja del informe), si no se marcan responsables el informe se muestra sin estos datos
 
-![]({% asset execution/reviews/42.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/42.png){: class="img-responsive"}
 
-![]({% asset execution/reviews/43.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/43.png){: class="img-responsive"}
 
 <hr>
 
@@ -226,7 +226,7 @@ Hay una nueva opción para recodificar hallazgos desde los informes: "Recodifica
 
 Seleccionamos "Editar" en un informe, al final de la pantalla seleccionamos “Acciones”.
 
-![]({% asset execution/reviews/44.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/44.png){: class="img-responsive"}
 
 <hr>
 
@@ -242,13 +242,13 @@ Incorporamos la funcionalidad que permite ordenar los informes de una manera má
 
 El orden de los informes en ejecución muestra primero los sin definitivo, luego los que tienen definitivo, ordenados por identificación en cada caso.
 
-![]({% asset execution/reviews/45.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/45.png){: class="img-responsive"}
 
 Luego podemos seleccionar "Buscar", para que les permita ordenar tanto de forma ascendente como descendente.
 
 Seleccionamos "Buscar", muestra “Ordenar por”, seleccionamos esta opción y muestra: Identificación Ascendente, Identificación descendente, Período Ascendente, Período Descendente”, seleccionamos “Identificación Ascendente”, luego  “Buscar”.
 
-![]({% asset execution/reviews/46.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/46.png){: class="img-responsive"}
 
 <hr>
 
@@ -264,7 +264,7 @@ Incorporamos la funcionalidad que permite separar por roles **¨Auditoría** ((a
 
 En los informes en ejecución ahora se separa el equipo de auditoría del resto de los roles "Auditoría" y “Usuarios”. Además, cuando se selecciona un usuario, el “Rol” que se despliega es solo posible para la persona elegida.
 
-![]({% asset execution/reviews/47.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/47.png){: class="img-responsive"}
 
 <hr>
 
@@ -288,29 +288,29 @@ Esto "marca" al informe para indicar que se finalizó la carga de los papeles de
 
 Es opcional su uso, pero en caso que lo hagan se muestra un icono "clip"en la primera columna del listado indicando que el informe tiene dicha marca.
 
-![]({% asset execution/reviews/48.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/48.png){: class="img-responsive"}
 
 Si seleccionamos "Papeles de trabajo - Conforme Auditor", nos muestra la siguiente pantalla
 
-![]({% asset execution/reviews/49.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/49.png){: class="img-responsive"}
 
 Si seleccionamos OK, muestra la siguiente pantalla
 
-![]({% asset execution/reviews/50.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/50.png){: class="img-responsive"}
 
 Una vez realizada, en el listado de informes figura un icono "clip", pasando sobre el mismo está la leyenda "Papeles de trabajo marcados como conforme auditor".
 
-![]({% asset execution/reviews/51.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/51.png){: class="img-responsive"}
 
 Lo mismo cuando se edita o visualiza desde la lupa el informe, la leyenda se muestra al final de la página en un recuadro celeste.
 
-![]({% asset execution/reviews/52.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/52.png){: class="img-responsive"}
 
 **Ejecución -> Informes -> "Papeles de trabajo - Revisado auditor"**
 
 En conjunto con la anterior se agregó una opción en los informes en ejecución dentro de "Acciones", "Papeles de trabajo - Revisado supervisor" (**solo visible para los usuarios supervisores cuando está marcado con la opción anterior**).
 
-![]({% asset execution/reviews/53.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/53.png){: class="img-responsive"}
 
 En caso que agreguemos o modifiquemos un papel de trabajo existente, se "desmarca" el conforme auditor (incluso si estaba supervisado).
 
@@ -318,11 +318,11 @@ En caso que agreguemos o modifiquemos un papel de trabajo existente, se "desmarc
 
 También en conjunto con lo anterior, se agregó un nuevo reporte en "Ejecución" -> "Reportes" -> "Informes cerrados sin conformidad auditor" (lista los "informes cerrados sin conformidad auditor" e “informes cerrados sin revisión supervisor”).
 
-![]({% asset execution/reviews/54.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/54.png){: class="img-responsive"}
 
 Si seleccionamos "Informes cerrados sin conformidad auditor", se pueden listar los "informes cerrados sin conformidad auditor" e “informes cerrados sin revisión supervisor”.
 
-![]({% asset execution/reviews/55.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/55.png){: class="img-responsive"}
 
 <hr>
 
@@ -338,7 +338,7 @@ Incorporamos la funcionalidad que permite tener en cuenta el estado **¨Riesgo a
 
 Para la sugerencia de observaciones pendientes dentro de  "Ejecución" -> "Informes" ahora se tienen en cuenta el estado "Riesgo asumido".
 
-![]({% asset execution/reviews/56.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/56.png){: class="img-responsive"}
 
 <hr>
 
@@ -354,7 +354,7 @@ Para mostrar datos, agregamos el campo **"Auditoría"**, el cual nos muestra a l
 
 Seleccionamos "Informes" nos muestra los informes.
 
-![]({% asset execution/reviews/57.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/57.png){: class="img-responsive"}
 
 <hr>
 
@@ -370,7 +370,7 @@ Muestra los informes que tienen **¨informe definitivos tachados¨**.
 
 Los informes que se encuentran tachados tienen informe definitivo.
 
-![]({% asset execution/reviews/58.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/58.png){: class="img-responsive"}
 
 <hr>
 
@@ -386,11 +386,11 @@ Se agregó la opción "Sugerir hallazgos relacionados recientes" en los informes
 
 Se agregó la opción "Sugerir hallazgos relacionados recientes" en los informes de ejecución. Esta opción busca los hallazgos en estado "Implementada/Auditada" de los últimos tres años.
 
-![]({% asset execution/reviews/59.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/59.png){: class="img-responsive"}
 
 En caso que no existan hallazgos muestra la siguiente pantalla:
 
-![]({% asset execution/reviews/60.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/60.png){: class="img-responsive"}
 
 <hr>
 
@@ -410,7 +410,7 @@ Las observaciones se pueden recodificar por riesgo dentro de la edición en "Acc
 
 Seleccionamos "Editar" en un informe, al final de la pantalla seleccionamos “Acciones”. “Recodificar hallazgos por riesgo”.
 
-![]({% asset execution/reviews/61.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/61.png){: class="img-responsive"}
 
 El tema de recodificar por riesgo funciona ordenando todas las observaciones por riesgo (y como segundo campo el código de la observación) de mayor a menor.
 
@@ -458,7 +458,7 @@ En los informes ahora se pueden agregar todos los objetivos de control de una bu
 
 Si seleccionamos "buena práctica" nos muestra la siguiente pantalla:
 
-![]({% asset execution/reviews/62.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/62.png){: class="img-responsive"}
 
 <hr>
 
@@ -476,15 +476,15 @@ Dentro de la edición de un informe, a la derecha del título "Objetivos de cont
 
 Seleccionamos "Ejecución" -> "Informes".
 
-![]({% asset execution/reviews/63.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/63.png){: class="img-responsive"}
 
 Luego "Editar" por ejemplo “Ejercicio 2017” “2017 TI 01 5”.
 
-![]({% asset execution/reviews/64.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/64.png){: class="img-responsive"}
 
 Seleccionamos la **"Tijera"** (en la parte superior de la pantalla a la derecha) nos muestra los objetivos de control por proceso en color celeste que no fueron incorporados en el informe (los cuales se encuentran cargados en la buena práctica).
 
-![]({% asset execution/reviews/65.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/65.png){: class="img-responsive"}
 
 <hr>
 
@@ -504,15 +504,15 @@ Permite reasignar los códigos de observaciones por reiteración y riesgo. Toma 
 
 Seleccionamos "Editar" en un informe, al final de la pantalla seleccionamos “Acciones”.
 
-![]({% asset execution/reviews/66.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/66.png){: class="img-responsive"}
 
 Seleccionamos "Recodificar observaciones por reiteración y riesgo"
 
-![]({% asset execution/reviews/67.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/67.png){: class="img-responsive"}
 
 Seleccionamos "Aceptar", nos muestra el mensaje “Hallazgos recodificados correctamente” y las observaciones ordenadas primero por reiterada teniendo en cuenta el riesgo (alto, medio, bajo) y luego las observaciones nuevas teniendo en cuenta el riesgo (alto, medio, bajo).
 
-![]({% asset execution/reviews/68.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/68.png){: class="img-responsive"}
 
 <hr>
 
@@ -532,15 +532,15 @@ Toma el orden en el que están definidos los objetivos de control dentro del inf
 
 Seleccionamos "Editar" en un informe, al final de la pantalla seleccionamos “Acciones”.
 
-![]({% asset execution/reviews/69.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/69.png){: class="img-responsive"}
 
 Seleccionamos "Recodificar observaciones por orden objetivos de control"
 
-![]({% asset execution/reviews/70.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/70.png){: class="img-responsive"}
 
 Seleccionamos "Aceptar", nos muestra el mensaje “Hallazgos recodificados correctamente”  y las observaciones ordenadas por objetivos de control como están en el informe y por riesgo (alto, medio, bajo).
 
-![]({% asset execution/reviews/71.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/71.png){: class="img-responsive"}
 
 <hr>
 
@@ -568,23 +568,23 @@ A continuación mostramos un ejemplo:
 
 Este es el informe (tiene una observación en estado "No confirmada" con los integrantes:
 
-![]({% asset execution/reviews/72.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/72.png){: class="img-responsive"}
 
 Esta es la observación correspondiente al informe en estado "No Confirmada".
 
-![]({% asset execution/reviews/73.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/73.png){: class="img-responsive"}
 
 Vamos a cambiar el integrante: Moralejo Raúl (Auditor) por Martinez Jose (Auditor). En este caso va generar una notificación a ambos auditores:
 
-![]({% asset execution/reviews/74.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/74.png){: class="img-responsive"}
 
 Seleccionamos "Actualizar informe"
 
-![]({% asset execution/reviews/75.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/75.png){: class="img-responsive"}
 
 Luego nos llega un correo, con la reasignación de las observaciones del informe al nuevo miembro y se desafecta al anterior.
 
-![]({% asset execution/reviews/76.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/76.png){: class="img-responsive"}
 
 <hr>
 
@@ -600,7 +600,7 @@ Incorporamos un nuevo reporte **"Resumen de costos planificados"**.
 
 Seleccionamos **"Resumen de costos planificados"**.
 
-![]({% asset execution/reviews/77.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/77.png){: class="img-responsive"}
 
 Muestra las unidades estimadas por recurso y período (según el rango de fecha ingresado en el filtro).
 
@@ -608,7 +608,7 @@ Toma la cantidad de días del intervalo, ve proporcionalmente cuanto corresponde
 
 La fecha que se utiliza en el filtro es la de inicio de proyecto (la que se carga en el plan, en la columna "Inicio").
 
-![]({% asset execution/reviews/78.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/78.png){: class="img-responsive"}
 
 <hr>
 
@@ -630,25 +630,25 @@ Es un reporte completo para poder ver de una manera rápida todo lo realizado pa
 
 Seleccionamos **Ejecución -> Informes**
 
-![]({% asset execution/reviews/79.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/79.png){: class="img-responsive"}
 
 Seleccionamos la  **"Lupa"** del informe que necesitamos los datos.
 
-![]({% asset execution/reviews/80.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/80.png){: class="img-responsive"}
 
 Luego van al final de la pantalla tenemos la opción ¨Descargar¨ para verlo en formato PDF.
 
-![]({% asset execution/reviews/81.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/81.png){: class="img-responsive"}
 
 Si seleccionamos ¨Descargar¨
 
 En la primera página nos muestra la identificación y proyecto.
 
-![]({% asset execution/reviews/82.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/82.png){: class="img-responsive"}
 
 Y a partir de la segunda el detalle de los datos de cada uno de los campos
 
-![]({% asset execution/reviews/83.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/83.png){: class="img-responsive"}
 
 <hr>
 
@@ -668,19 +668,19 @@ Seleccionamos **Ejecución -> Informes**
 
 Seleccionamos ¨Editar¨ de un informe, en aquellos objetivos de control que hay un cambio nos muestra una advertencia (el triángulo).
 
-![]({% asset execution/reviews/84.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/84.png){: class="img-responsive"}
 
 Si posicionamos el mouse encima del triángulo (para el objetivo de control 3.1.1 - Dependencia del Responsable de área) informa el siguiente mensaje **¨El nombre del objetivo de control ha cambiado respecto el definido en la buena práctica, haga click para restaurarlo¨**.
 
 Si hacemos click en el triángulo nos muestra el siguiente mensaje:
 
-![]({% asset execution/reviews/85.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/85.png){: class="img-responsive"}
 
 Si seleccionamos ¨Aceptar¨ nos trae el texto original del objetivo tal cual está definido en la buena práctica.
 
 En este caso lo hicimos para el objetivo de control 3.1.1 - Dependencia del Responsable del área.
 
-![]({% asset execution/reviews/86.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/86.png){: class="img-responsive"}
 
 <hr>
 
@@ -698,19 +698,19 @@ Cuando no se ha seleccionado a nadie como responsable y/o referente van a ver un
 
 Seleccionamos "Informes", luego ¨Editar¨ en un informe, seleccionamos un objetivo de control, luego  agregar una observación.
 
-![]({% asset execution/reviews/87.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/87.png){: class="img-responsive"}
 
 Seleccionamos ¨Crear observación¨.
 
-![]({% asset execution/reviews/88.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/88.png){: class="img-responsive"}
 
 Seleccionamos cancelar, agregamos el auditor referente y el auditado responsable.
 
-![]({% asset execution/reviews/89.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/89.png){: class="img-responsive"}
 
 Seleccionamos ¨Crear observación¨.
 
-![]({% asset execution/reviews/90.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/90.png){: class="img-responsive"}
 
 <hr>
 
@@ -730,4 +730,4 @@ En la actualidad se toma el rol que figura cuando agregan un usuario dentro de �
 
 Ahora, muestra un desplegable con la opción ¨Responsable máximo de auditoría¨ tanto para supervisores como para gerentes.
 
-![]({% asset execution/reviews/91.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/91.png){: class="img-responsive"}

@@ -27,7 +27,7 @@ module MawidaBP
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake time:zones:all" for a time zone names list. Default is UTC.
-    config.time_zone = ENV['TRAVIS'] ? 'UTC' : 'Buenos Aires'
+    config.time_zone = ENV['GH_ACTIONS'] ? 'UTC' : 'Buenos Aires'
 
     # Be sure to have the adapter's gem in your Gemfile
     # and follow the adapter's specific installation
@@ -41,9 +41,5 @@ module MawidaBP
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
-
-    # Just needed for SAML + Azure AD
-    config.middleware.use ActionDispatch::Cookies # Required for all session management
-    config.middleware.use ActionDispatch::Session::CookieStore, key: '_mbp_session', domain: ".#{ENV['APP_HOST'].sub /:.*/, ''}", same_site: :strict
   end
 end

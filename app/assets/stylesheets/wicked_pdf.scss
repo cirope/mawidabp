@@ -1,0 +1,38 @@
+@import "bootstrap";
+
+html {
+  font-size: 12px;
+}
+
+.border-print-0 {
+  border: none;
+}
+
+.card-body {
+  padding: 1.25rem 0.25rem;
+}
+
+.container-fluid {
+  max-width: 300px;
+  float: left;
+}
+
+.d-print-table-cell {
+  display: table-cell;
+}
+
+.d-print-none {
+  display: none;
+}
+
+.row {
+  display: -webkit-box;
+}
+
+div.alwaysbreak { page-break-before: always; }
+div.nobreak:before { clear:both; }
+div.nobreak { page-break-inside: avoid; }
+.page-break { display:block; clear:both; page-break-after:always; }
+
+//customs scss
+@import "pdf/bic_pdf";

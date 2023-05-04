@@ -48,6 +48,19 @@ module FindingsHelper
     end
   end
 
+  def next_task_expiration finding
+    next_expiration = finding.next_task_expiration
+
+    if next_expiration.present?
+      next_expiration_text = " / #{l finding.next_task_expiration, format: :short}"
+      html_class           = (next_expiration < Date.today ? 'strike bg-danger' : 'text-success')
+
+      content_tag :span, next_expiration_text, class: html_class
+    else
+      ''
+    end
+  end
+
   def finding_updated_at_text finding
     text = Finding.human_attribute_name 'updated_at'
     date = l finding.updated_at, format: :minimal
@@ -294,29 +307,21 @@ module FindingsHelper
   end
 
   def extension_enabled? finding
-    first_version_in_being_implementation?(finding) ||
-      (finding.being_implemented? && finding.extension)
-  end
-
-  def first_version_in_being_implementation? finding
-    finding.new_record? ||
-      (!finding.had_version_with_being_implemented? && !finding.being_implemented?)
+    finding.review.conclusion_final_review.blank? || finding.extension
   end
 
   def data_for_submit finding
     if USE_SCOPE_CYCLE
       {
         data: {
-          confirm_message: I18n.t('findings.weakness.confirm_first_version_being_implemented_withou_extension',
-                                  {
-                                    state: I18n.t('findings.state.being_implemented'),
-                                    extension: Finding.human_attribute_name(:extension)
-                                  }),
+          confirm_message: I18n.t('findings.form.confirm_finding_without_extension',
+                                  extension: Finding.human_attribute_name(:extension)),
           checkbox_target: '#finding_extension',
           target_value_checkbox: false,
-          state_target: Finding::STATUS[:being_implemented],
+          states_target: Finding.states_that_allow_extension,
           input_with_state: '#finding_state',
-          condition_to_receive_confirm: first_version_in_being_implementation?(finding) }
+          condition_to_receive_confirm: finding.review.conclusion_final_review.present? && finding.extension
+        }
       }
     else
       {}
@@ -325,6 +330,46 @@ module FindingsHelper
 
   def finding_has_issues? finding
     USE_SCOPE_CYCLE ? finding.issues.any? : false
+  end
+
+  def data_options_for_suggested_follow_up_date type_form
+    if USE_SCOPE_CYCLE
+      {
+        target_input_with_origination_date: "##{type_form}_origination_date",
+        target_input_with_risk: "##{type_form}_risk",
+        target_input_with_state: "##{type_form}_state",
+        target_values_states_change_label: Finding.states_that_suggest_follow_up_date,
+        days_to_add: Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk.to_json,
+        suffix: I18n.t('findings.form.follow_up_date_label_append'),
+        target_input_with_label: "##{type_form}_follow_up_date"
+      }
+    else
+      {}
+    end
+  end
+
+  def link_to_edit_finding finding, auth_user
+    if !auth_user.can_act_as_audited? || finding.users.reload.include?(auth_user)
+      if finding.pending?
+        link_to_edit(edit_finding_path('incomplete', finding, user_id: params[:user_id]))
+      elsif !finding.repeated? && %w(bic).include?(Current.conclusion_pdf_format)
+        link_to_edit(edit_bic_sigen_fields_finding_path('complete', finding))
+      end
+    end
+  end
+
+  def translate_filter_columns columns
+    translated_columns = {
+      'organization' => Finding.human_attribute_name('organization'),
+      'review'       => Review.model_name.human,
+      'project'      => PlanItem.human_attribute_name('project'),
+      'review_code'  => Finding.human_attribute_name('review_code'),
+      'title'        => Finding.human_attribute_name('title'),
+      'updated_at'   => Finding.human_attribute_name('updated_at'),
+      'tags'         => Tag.model_name.human(count: 0)
+    }
+
+    columns.map { |c| translated_columns[c] }.compact.to_sentence
   end
 
   private
@@ -462,29 +507,5 @@ module FindingsHelper
 
     def finding_bic_risks_types finding
       finding.bic_risks_types.invert.reverse_each.to_json
-    end
-
-    def suggestion_to_add_days_follow_up_date_depending_on_the_risk
-      Finding.suggestion_to_add_days_follow_up_date_depending_on_the_risk.to_json
-    end
-
-    def states_that_suggest_follow_up_date
-      Finding.states_that_suggest_follow_up_date
-    end
-
-    def data_options_for_suggested_follow_up_date
-      if USE_SCOPE_CYCLE
-        {
-          target_input_with_origination_date: '#weakness_origination_date',
-          target_input_with_risk: '#weakness_risk',
-          target_input_with_state: '#weakness_state',
-          target_values_states_change_label: states_that_suggest_follow_up_date,
-          days_to_add: suggestion_to_add_days_follow_up_date_depending_on_the_risk,
-          suffix: I18n.t('findings.weakness.follow_up_date_label_append'),
-          target_input_with_label: '#weakness_follow_up_date'
-        }
-      else
-        {}
-      end
     end
 end

@@ -11,6 +11,7 @@ class Review < ApplicationRecord
   include Reviews::ControlObjectiveItems
   include Reviews::Counts
   include Reviews::DestroyValidation
+  include Reviews::ExternalReviews
   include Reviews::FileModelReviews
   include Reviews::FindingAssignments
   include Reviews::FindingCode
@@ -31,6 +32,7 @@ class Review < ApplicationRecord
   include Reviews::ScoreSheetGlobal
   include Reviews::Search
   include Reviews::SortColumns
+  include Reviews::Subsidiary
   include Reviews::SurveyPdf
   include Reviews::TypeReview
   include Reviews::UpdateCallbacks
