@@ -373,7 +373,7 @@ es:
       oportunities: "Oportunidades"
       without_weaknesses: "Sin observaciones"
       pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
-      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA" # REVIEW DE INFORMES DEFINITIVOS?
+      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
       total: "TOTAL"
 
   conclusion_final_review:
@@ -564,8 +564,8 @@ es:
       column_month: "Mes"
       column_estimated_amount: "Unidades estimadas"
     planned_cost_summary_title: "Análisis de costos planificados"
-    reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor" # REVIEW del auditor?
-    reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión supervisor"
+    reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad del auditor"
+    reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión del supervisor"
     reviews_with_incomplete_work_papers_report:
       empty_incomplete: "No hay informes cerrados sin conformidad auditor en papeles de trabajo" # REVIEW del auditor?
       empty_revised: "No hay informes cerrados sin revisión supervisor en papeles de trabajo"
@@ -875,7 +875,7 @@ es:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
       confirm: "Confirmar notificación"
-      the_following_findings_are_still_unconfirmed: "Las siguientes observaciones / oportunidades han sido notificadas pero no han recibido una confirmación" # REVIEW oportunidades de mejora?
+      the_following_findings_are_still_unconfirmed: "Las siguientes observaciones / oportunidades de mejora han sido notificadas pero no han recibido una confirmación"
     reassigned_findings:
       new_responsibles:
         one: "Usuario actual: %{responsible}"

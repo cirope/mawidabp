@@ -66,11 +66,11 @@ es:
     index:
       title: 'Listado de buenas prácticas'
     show:
-      title: 'Detalle buenas prácticas'
+      title: 'Detalles de la buena práctica'
     new:
-      title: 'Agregar buenas prácticas' # REVIEW singular?
+      title: 'Agregar buena práctica'
     edit:
-      title: 'Modificar buenas prácticas' # REVIEW singular?
+      title: 'Modificar buena práctica'
     process_controls:
       new: 'Agregar proceso'
     control_objectives:
@@ -105,7 +105,7 @@ es:
     index:
       title: 'Listado de objetivos de control'
     show:
-      title: 'Detalle objetivo de control'
+      title: 'Detalles del objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
       add_control_objective_auditor: 'Agregar auditor a cargo'
@@ -223,7 +223,7 @@ es:
       approve: 'Ir a Paypal'
       authorize_new_plan:
         title: 'Autorizar nuevo plan'
-        body: |- # REVIEW párrafo de mail? Sino sacar punto final
+        body: |-
           Para cambiar de plan, deberá autorizar el nuevo plan mensual.
           El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios auditores en el momento.'
     authorizations:
@@ -539,7 +539,7 @@ es:
     show:
       title: 'Detalles del cuestionario'
     questions:
-      new: 'Agregar cuestión' # REVIEW no sería "pregunta"?
+      new: 'Agregar pregunta'
 
   readings:
     reading:
@@ -724,7 +724,7 @@ es:
       import_from_ldap: 'Importar desde LDAP'
       show_hidden: 'Mostrar ocultos'
     show:
-      title: 'Detalles de usuario'
+      title: 'Detalles del usuario'
       profiles: 'Perfiles'
       organizations: 'Organizaciones'
     new:

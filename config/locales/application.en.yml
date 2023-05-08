@@ -564,11 +564,11 @@ en:
       column_month: "Month"
       column_estimated_amount: "Estimated units"
     planned_cost_summary_title: "Planned cost summary"
-    reviews_with_incomplete_work_papers_report_incomplete_title: "Reviews closed without auditor compliance"
-    reviews_with_incomplete_work_papers_report_revised_title: "Reviews closed without supervisor review"
+    reviews_with_incomplete_work_papers_report_incomplete_title: "Reviews closed without auditor's approval"
+    reviews_with_incomplete_work_papers_report_revised_title: "Reviews closed without supervisor's review"
     reviews_with_incomplete_work_papers_report:
-      empty_incomplete: "No reviews closed without auditor compliance in working papers" # REVIEW There are ... (No se cerraron informes sin ...)
-      empty_revised: "No reviews closed without supervisor review in work papers" # REVIEW There are ...
+      empty_incomplete: "No reviews closed without auditor's approval in working papers" # REVIEW There are ... (No se cerraron informes sin ...)
+      empty_revised: "No reviews closed without supervisor's review in working papers" # REVIEW There are ...
     index_title: "Execution reports"
     findings_type_external: "External Audit Findings"
     findings_type_internal: "Findings / Improvement Opportunities Internal Audit"
