@@ -58,8 +58,8 @@ en:
         one: 'Benefit / Harm'
         other: 'Benefits / Detriments'
       best_practice:
-        one: 'Good practice'
-        other: 'Good practices'
+        one: 'Best practice'
+        other: 'Best practices'
       best_practice_comment:
         one: 'Auditor comment (good practice)'
         other: 'Auditor comments (good practice)'
