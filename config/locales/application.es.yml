@@ -567,8 +567,8 @@ es:
     reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad del auditor"
     reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión del supervisor"
     reviews_with_incomplete_work_papers_report:
-      empty_incomplete: "No hay informes cerrados sin conformidad auditor en papeles de trabajo" # REVIEW del auditor?
-      empty_revised: "No hay informes cerrados sin revisión supervisor en papeles de trabajo"
+      empty_incomplete: "No hay informes cerrados sin conformidad del auditor en papeles de trabajo"
+      empty_revised: "No hay informes cerrados sin revisión del supervisor en papeles de trabajo"
     index_title: "Reportes de ejecución"
     findings_type_external: "Observaciones Auditorías Externas"
     findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -1117,7 +1117,7 @@ es:
         other: "Se han reasignado los hallazgos pendientes de los informes %{reviews}"
     responsibility_release:
       title: "Liberación de responsabilidades"
-    unconfirmed_findings: "Observaciones sin confirmar a la fecha" # REVIEW es necesario el "a la fecha"?
+    unconfirmed_findings: "Observaciones sin confirmar"
     pdf:
       pdf_name: "listado_de_usuarios.pdf"
       users_count: "Cantidad de usuarios: %{count}"
@@ -1152,7 +1152,7 @@ es:
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
       without_audit_recommendations: "no tiene recomendaciones de auditoria"
-      cannot_update_sigen_fields_in_repeated_of: "No se pudieron actualizar los campos sigen en el finding con id: %{id} debido a los errores: %{messages}" # REVIEW hallazgo?
+      cannot_update_sigen_fields_in_repeated_of: "No se pudieron actualizar los campos sigen en el hallazgo con id: %{id} debido a los errores: %{messages}"
 
   welcome:
     index_title: "Bienvenido"
@@ -1210,7 +1210,7 @@ es:
       control: "Control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      finding_answer: "Respuesta a observación" # REVIEW de la observación?
+      finding_answer: "Respuesta a hallazgo" # REVIEW Se usa en algún lado? No lo encontré. Consideré el texto de es.yml
       finding_review_assignment: "Asignación de observación a informe"
       group: "Grupo"
       notification: "Notificación"
@@ -1492,8 +1492,8 @@ es:
         idp_sso_target_url: 'Dirección URL de inicio de sesión'
         sp_entity_id: 'Identificador (id. de entidad)'
         assertion_consumer_service_url: 'Dirección URL de respuesta (URL del Servicio de consumidor de aserciones)'
-        name_identifier_format: 'name identifier format' # REVIEW formato de identificador de nombre? donde?
-        assertion_consumer_service_binding: 'assertion consumer service binding' # REVIEW enlace de servicio de consumidor de aserción? donde?
+        name_identifier_format: 'Formato del identificador de nombre'
+        assertion_consumer_service_binding: 'Enlace de Servicio de consumidor de aserciones'
         idp_cert: 'Certificado (Base64)'
         default_role_for_users: 'Role por defecto para usuarios'
       work_paper:

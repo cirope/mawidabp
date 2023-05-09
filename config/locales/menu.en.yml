@@ -11,7 +11,7 @@ en:
       security:
         reports: 'Security reports'
         users: 'Users'
-        roles: 'Profiles and Privileges' # REVIEW Roles?
+        roles: 'Profiles and Privileges'
       best_practices_title: 'Best practices'
       best_practices:
         best_practices: 'Management'

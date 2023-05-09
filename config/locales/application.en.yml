@@ -1492,8 +1492,8 @@ en:
         idp_sso_target_url: 'Login URL'
         sp_entity_id: 'Identifier (entity ID)'
         assertion_consumer_service_url: 'Response URL (Assertion consumer service URL)'
-        name_identifier_format: 'name identifier format'
-        assertion_consumer_service_binding: 'assertion consumer service binding'
+        name_identifier_format: 'Name identifier format'
+        assertion_consumer_service_binding: 'Assertion consumer service binding'
         idp_cert: 'Certificate (Base64)'
         default_role_for_users: 'Default role for users'
       work_paper:
