@@ -14,7 +14,7 @@ class FindingsController < ApplicationController
                                      :edit_bic_sigen_fields,
                                      :update_bic_sigen_fields]
   before_action :check_if_editable, only: [:edit, :update]
-  before_action :check_if_editable_bic_sigen_fields, only: [:edit_bic_sigen_fields, 
+  before_action :check_if_editable_bic_sigen_fields, only: [:edit_bic_sigen_fields,
                                                             :update_bic_sigen_fields]
   before_action :set_title, except: [:destroy]
 
@@ -72,7 +72,7 @@ class FindingsController < ApplicationController
   private
 
     def finding_params
-      casted_params = if @auth_user.can_act_as_audited?
+      casted_params = if @auth_user.can_act_as_audited? || @auth_user.committee?
                         audited_finding_params
                       else
                         auditor_finding_params
