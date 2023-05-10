@@ -1,5 +1,5 @@
-# REVIEW Algunos salen como "agregadas correctamente" y otro como "ha sido agregada correctamente", se debería unificar.
-# REVIEW Se deberían unificar los tiempos verbales a presente.
+# FIXME Algunos salen como "agregadas correctamente" y otro como "ha sido agregada correctamente", se debería unificar.
+# FIXME Se deberían unificar los tiempos verbales a presente.
 es:
   flash:
     actions:
