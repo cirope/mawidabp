@@ -13,8 +13,8 @@ en:
         ref_html: "\n<i><b>Ref =</b> Audit Report N° %{identification}: \"%{project}\"</i>"
         legend: "We are at your disposal to clarify any issue you deem necessary.\n\nSincerely,"
         draft_with_weaknesses: "Attached herewith we distribute the reference report in draft version, requesting that you kindly consider the weaknesses and <b>respond</b>, as required by the Board of Directors (*)."
-        final_with_weaknesses: "Attached herewith we distribute the Final version of the Reference Report containing the responses from each of the areas." # REVIEW review o report?
-        final_without_weaknesses: "Attached herewith we distribute the Final version of the Reference Report, which does not contain relevant weaknesses to make." # REVIEW review o report?
+        final_with_weaknesses: "Attached herewith we distribute the Final version of the Reference Report containing the responses from each of the areas."
+        final_without_weaknesses: "Attached herewith we distribute the Final version of the Reference Report, which does not contain relevant weaknesses to make."
         footer: "(*) Each Audited Management must respond to the reports within a period of 10 business days of receipt. The responses must include the course of action committed by each Management, to regularize the weaknesses indicated. In addition, Management must inform the term in which they will proceed to the committed regularization."
       review:
         subject: "Subject"
