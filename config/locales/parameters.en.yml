@@ -1,8 +1,8 @@
 en:
   approach_types:
     control: 'Control'
-    sustantive: 'Substantive' # REVIEW key substantive?
-    control_sustantive: 'Control/Substantive' # REVIEW key control_substantive?
+    sustantive: 'Substantive' # KEY_TO_FIX substantive?
+    control_sustantive: 'Control/Substantive' # KEY_TO_FIX control_substantive?
   frequency_types:
     monthly: 'Monthly'
     biyearly: 'Biannual'
@@ -74,7 +74,7 @@ en:
   observation_originated_tests_types:
     design: 'Design'
     compliance: 'Compliance'
-    sustantive: 'Substantive' # REVIEW key substantive?
+    sustantive: 'Substantive' # KEY_TO_FIX substantive?
   sample_deviation_types:
     less_expected: 'Less expected'
     most_expected: 'Most expected'

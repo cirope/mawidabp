@@ -43,7 +43,7 @@ en:
       time_summary: 'Time summary'
       control_objectives: 'Control objectives'
       weaknesses: 'Weaknesses'
-      oportunities: 'Improvement opportunities' # REVIEW key opportunity?
+      oportunities: 'Improvement opportunities' # KEY_TO_FIX opportunity?
       interviews_title: 'Interviews'
       interviews:
         opening_interviews: 'Opening interviews'
@@ -52,7 +52,7 @@ en:
       findings_title: 'Findings'
       findings:
         weaknesses: 'Weaknesses'
-        oportunities: 'Improvement opportunities'  # REVIEW key opportunity?
+        oportunities: 'Improvement opportunities'  # KEY_TO_FIX opportunity?
       memos: 'External reports'
     conclusion_title: 'Conclusion'
     conclusion:

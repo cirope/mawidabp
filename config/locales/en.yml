@@ -411,7 +411,7 @@
       pdf_name: "weaknesses_definitive_reports_by_state_%{from_date}_to_%{to_date}.pdf"
       title: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES FINAL REPORTS\nTOTALS BY STATE"
       weaknesses_column: "Weaknesses"
-      oportunities_column: "Improvement Opportunities" # REVIEW key opportunities_column?
+      oportunities_column: "Improvement Opportunities" # KEY_TO_FIX opportunities_column?
       period_summary: "Period summary %{period}"
       total: "TOTAL"
     weaknesses_by_risk: # NOTE: hay otro weaknesses_by_risk en el mismo path (línea 213)
@@ -430,7 +430,7 @@
       empty: "No comments for the applied filter."
     weaknesses_by_audit_type:
       weaknesses: "Weaknesses"
-      oportunities: "Opportunities" # REVIEW key opportunities?
+      oportunities: "Opportunities" # KEY_TO_FIX opportunities?
       without_weaknesses: "No weaknesses"
       pdf_name: "weaknesses_definitive_reports_by_type_of_audit_%{from_date}_to_%{to_date}.pdf"
       title: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES FINAL REPORTS\nTOTALS BY TYPE OF AUDIT" # REVIEW Revisar español
@@ -498,7 +498,7 @@
     weaknesses_brief: "WEAKNESSES SUMMARY"
     weaknesses_reschedules: "WEAKNESSES / RESCHEDULES SUMMARY"
     weaknesses: "WEAKNESSES"
-    oportunities: "IMPROVEMENT OPPORTUNITIES" # REVIEW key opportunities?
+    oportunities: "IMPROVEMENT OPPORTUNITIES" # KEY_TO_FIX opportunities?
     finding_review_assignments: "FINDINGS / IMPROVEMENT OPPORTUNITIES REVIEWED"
     repeated_findings: "Findings follow-up"
     repeated_findings_empty: "No findings pending regularization are registred." # REVIEW No repeated findings?
@@ -570,7 +570,7 @@
     correctly_updated: "Control objective was successfully updated."
     stale_object_error: "The control objective was not updated, please try again."
     no_weaknesses: "Control objective with no weaknesses"
-    no_oportunities: "Control objective with no improvement opportunities" # REVIEW key no_opportunities?
+    no_oportunities: "Control objective with no improvement opportunities" # KEY_TO_FIX no_opportunities?
     view_all_weaknesses: "Show weaknesses list"
     view_all_oportunities: "Show improvement opportunities list"
     add_oportunity: "Add new improvement opportunity"
@@ -593,7 +593,7 @@
       without_controls: "without controls"
       without_design_tests: "without design tests"
       without_compliance_tests: "without compliance tests"
-      without_sustantive_tests: "without substantive tests" # REVIEW key without_substantive_tests?
+      without_sustantive_tests: "without substantive tests" # KEY_TO_FIX without_substantive_tests?
       without_auditor_comment: "without auditor conclusions"
     review:
       edit: 'Edit review'
@@ -617,7 +617,7 @@
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
       without_weaknesses: "No weaknesses"
-      without_oportunities: "No improvement opportunitiest" # REVIEW key without_opportunities?
+      without_oportunities: "No improvement opportunitiest" # KEY_TO_FIX without_opportunities?
       references: "References:\n\n(1) Number of weaknesses: shows the number of weaknesses obtained in the report (not the final ones), ordered according to risk level (%{risk_types}). If there are no weaknesses, the legend \"No weaknesses\" appears.\n(2) Number of Improvement Opportunities: shows the number of improvement opportunities obtained in the report (not the final ones). If there are no improvement opportunities, the legend \"No improvement opportunities\" appears."
     detailed_management_report_title: "Management report"
     planned_cost_summary:
@@ -645,7 +645,7 @@
       title: "DETAILED MANAGEMENT REPORT\nWEAKNESSES/IMPROVEMENT OPPORTUNITIES IN EXECUTION\nTOTALS BY REPORT AND STATUS" # REVIEW Excecution? Status (in progress) / State (in disarray)?
       clarification: "Note: the Weaknesses / Improvement Opportunities shown in this follow up are not final (the follow ups are in the Execution stage)"
       weaknesses_column: "Weaknesses"
-      oportunities_column: "Improvement Opportunities" # REVIEW key opportunities_column?
+      oportunities_column: "Improvement Opportunities" # KEY_TO_FIX opportunities_column?
       total: "TOTAL"
     without_weaknesses: "No weaknesses in the period"
     without_weaknesses_in_the_interval: "No weaknesses in the interval"
@@ -820,9 +820,9 @@
       column_audited_cost: "Number of hours spent on the solution (sum of follow-up hours by auditee)" # REVIEW total follow-up hours?
       title: "COST ANALYSIS OF\nFOLLOW-UP WEAKNESSES / IMPROVEMENT OPPORTUNITIES\nBY INTERNAL AUDIT REPORT" # REVIEW weaknesses / findings?
       weaknesses: "WEAKNESSES"
-      oportunities: "IMPROVEMENT OPPORTUNITIES" # REVIEW key opportunities?
+      oportunities: "IMPROVEMENT OPPORTUNITIES" # KEY_TO_FIX opportunities?
       without_weaknesses: "No weaknesses in the period"
-      without_oportunities: "No Improvement Opportunities in the period" # REVIEW key without_opportunities?
+      without_oportunities: "No Improvement Opportunities in the period" # KEY_TO_FIX without_opportunities?
       pdf_name: "follow-up_costs_analysis_%{from_date}_to_%{to_date}.pdf"
 
   execution_committee_report: # NOTE: no existe en application.en.yml
@@ -885,7 +885,7 @@
     weaknesses_by_state_title: "Total Weaknesses / Improvement Opportunities by state"
     weaknesses_by_risk_title: "Total Weaknesses / Improvement Opportunities by risk"
     weaknesses_by_audit_type_title: "Total Weaknesses / Improvement Opportunities by audit type"
-    without_oportunities: "No opportunities in the period" # REVIEW key without_opportunities?
+    without_oportunities: "No opportunities in the period" # KEY_TO_FIX without_opportunities?
     without_weaknesses: "No weaknesses in the period"
     repeated_count:
       one: "A repeated weakness / improvement opportunity"
@@ -1088,7 +1088,7 @@
         highest_solution_rate: "Highest Risk Weaknesses Solution"
         medium_solution_rate: "Medium Risk Weaknesses Solution"
         score_average: "Report Score"
-        digitalized: "Digitization" # REVIEW key digitized?
+        digitalized: "Digitization"
         oportunities_solution_rate: "Improvement opportunities solution" # NOTE: no existe en application.en.yml
         ancient_medium_risk_weaknesses: "Aged Medium Risk Weaknesses"
         ancient_highest_risk_weaknesses: "Ancient highest risk weaknesses" # NOTE: no existe en application.en.yml
@@ -1103,7 +1103,7 @@
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
       without_weaknesses: "No weaknesses"
-      without_oportunities: "No improvement opportunities" # REVIEW key without_opportunities?
+      without_oportunities: "No improvement opportunities" # KEY_TO_FIX without_opportunities?
       generic_score_average:
         one: 'Average of %{audit_type} scores in a report'
         other: 'Average of %{audit_type} scores in %{count} report'
@@ -1145,7 +1145,7 @@
       empty: "No comments for the applied filter."
     weaknesses_by_audit_type:
       weaknesses: "Weaknesses"
-      oportunities: "Opportunities" # REVIEW key opportunities?
+      oportunities: "Opportunities" # KEY_TO_FIX opportunities?
       without_weaknesses: "No weaknesses"
       pdf_name: "monitoring_weaknesses_by_audit_type_%{from_date}_to_%{to_date}.pdf"
       title: "FOLLOW-UP OF WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nTOTALS BY TYPE OF AUDIT"
@@ -1188,7 +1188,7 @@
       created_title: "New finding / improvement opportunity"
     notify_new_oportunity: # NOTE: no existe en application.en.yml
       title: "You have a new opportunity to improve"
-      oportunity_link: "See improvement opportunity" # REVIEW key opportunity_link?
+      oportunity_link: "See improvement opportunity" # KEY_TO_FIX opportunity_link?
     notify_new_finding_answer:
       title: "New comment in review %{review}"
       finding_data: "A comment has been added to the finding / improvement opportunity **%{finding_code}** of the review **%{review}**"
@@ -1304,7 +1304,7 @@
         one: "Then you can log in at the following URL:" # REVIEW luego de realizar una accoón? O tipo "a continiación"?
         other: "Then you can log in at any of the following URLs (depending on the organization you select):"
 
-  oportunity: # REVIEW key opportunity?
+  oportunity: # KEY_TO_FIX opportunity?
     index_title: "Opportunities list"
     show_title: "Opportunity details"
     new_title: "Add opportunity"
@@ -1426,18 +1426,18 @@
     control_objectives_effectiveness: "Control effectiveness"
     control_objectives_previous_effectiveness: "Control previous effectiveness" # NOTE: no existe en application.en.yml
     control_objectives_relevance: "Weight"
-    oportunities_summary: "Improvement opportunities sorted by status" # REVIEW key opportunities_summary?
-    oportunities_count_summary: "Number of improvement opportunities sorted by status" # REVIEW key opportunities_count_summary?
+    oportunities_summary: "Improvement opportunities sorted by status" # KEY_TO_FIX opportunities_summary?
+    oportunities_count_summary: "Number of improvement opportunities sorted by status" # KEY_TO_FIX opportunities_count_summary?
     weaknesses_summary: "Summary of weaknesses that support the score given (ordered by risk importance (%{risks}) and then by weakness status)"
     weaknesses_count_summary: "Number of weaknesses that support the given score (ordered by risk importance (%{risks}) and then by weakness status)"
     weaknesses_count: "Number of Weaknesses"
     weaknesses_count_by_state: "Number of Weaknesses (Pending/Resolved-Repeated)" # NOTE: no existe en application.en.yml
-    oportunities_count: "Number of Improvement Opportunities" # REVIEW key opportunities_count?
+    oportunities_count: "Number of Improvement Opportunities" # KEY_TO_FIX opportunities_count?
     control_objectives_work_papers: "Control objectives"
     show_control_objective: "Show control objective details"
     hide_control_objective: "Hide control objective details"
     weaknesses_work_papers: "Weaknesses"
-    oportunities_work_papers: "Opportunities" # REVIEW key opportunities_work_papers?
+    oportunities_work_papers: "Opportunities" # KEY_TO_FIX opportunities_work_papers?
     follow_up_work_papers: "Follow-up weakenesses"
     download_work_papers: "Download work papers"
     finished_work_papers: "Work papers - Auditor approved" # REVIEW conforme auditor?
@@ -1675,14 +1675,14 @@
         effects: "Effects"
         design_tests: "Design tests"
         compliance_tests: "Compliance tests"
-        sustantive_tests: "Substantive tests" # REVIEW key substantive_tests?
+        sustantive_tests: "Substantive tests" # KEY_TO_FIX substantive_tests?
       control_objective_item:
         control_objective_id: "Control objective"
         control_objective_text: "Control objective"
         relevance: "Importance"
         design_score: "Design test score"
         compliance_score: "Compliance test score"
-        sustantive_score: "Substantive evidence score" # REVIEW key substantive_score?
+        sustantive_score: "Substantive evidence score" # KEY_TO_FIX substantive_score?
         audit_date: "Audit date"
         auditor_comment: "Auditor comments"
         finished: "Finished"
@@ -1693,7 +1693,7 @@
         effectiveness: "Control effectiveness"
         support: "Support"
         weaknesses: "Weaknesses"
-        oportunities: "Improvement opportunities" # REVIEW key opportunities?
+        oportunities: "Improvement opportunities" # KEY_TO_FIX opportunities?
         work_papers: "Work papers"
         scored_business_unit_type_id: "Business unit type scored" # NOTE: no existe en application.en.yml
       control_objective_item/control:
@@ -1702,7 +1702,7 @@
         effects: "Control objective (effects)"
         design_tests: "Control objective (design tests)"
         compliance_tests: "Control objective (compliance tests)"
-        sustantive_tests: "Control objective (substantive tests)" # REVIEW key substantive_tests?
+        sustantive_tests: "Control objective (substantive tests)" # KEY_TO_FIX substantive_tests?
       control_objective_item/work_papers:
         one: "Work papers"
         other: "Work papers"
@@ -1719,7 +1719,7 @@
         business_unit_id: 'Business unit score (business unit)'
         design_score: 'Business unit score (design tests)'
         compliance_score: 'Business unit score (compliance tests)'
-        sustantive_score: 'Business unit score (substantive tests)' # REVIEW key substantive_score?
+        sustantive_score: 'Business unit score (substantive tests)' # KEY_TO_FIX substantive_score?
       cost:
         cost: "Time spent"
         description: "Description of the activities carried out"
@@ -1944,7 +1944,7 @@
     licenses: "license" # NOTE: no existe en application.en.yml
     login_records: "Login records"
     notifications: "Notifications"
-    oportunities: "Improvement opportunities" # REVIEW key opportunities?
+    oportunities: "Improvement opportunities" # KEY_TO_FIX opportunities?
     organizations: "Organizations"
     periods: "Periods"
     plans: "Work plans"

@@ -132,7 +132,7 @@ en:
       opening_interview_user:
         one: 'Interview participant'
         other: 'Interview participant'
-      oportunity: # REVIEW key opportunity?
+      oportunity: # KEY_TO_FIX opportunity?
         one: 'Improvement opportunity'
         other: 'Improvement opportunities'
       organization:
@@ -513,7 +513,7 @@ en:
         review_id: 'Review'
       opening_interview_user:
         user: 'User'
-      oportunity: # REVIEW key opportunity?
+      oportunity: # KEY_TO_FIX opportunity?
         control_objective_item_id: 'Control objective'
         title: 'Title'
         description: 'Improvement opportunity'

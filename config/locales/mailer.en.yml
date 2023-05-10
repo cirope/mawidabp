@@ -12,7 +12,7 @@ en:
         updated: 'Updated:'
 
   common_mailer:
-    header_repĺy: # REVIEW key header_reply?
+    header_repĺy: # KEY_TO_FIX reply_header
       reply_delimiter: '-- TO ADD A COMMENT, REPLY TO THIS EMAIL WITHOUT MODIFYING THE SUBJECT. AFTER THE COMMENT, WRITE THE PHRASE %{regex_reply_email} --'
     alt_footer:
       warning: "Please, **do not reply** to this email. To perform any interaction, please login into the system."
