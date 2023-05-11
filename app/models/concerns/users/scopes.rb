@@ -9,10 +9,16 @@ module Users::Scopes
         where(organizations: { id: Current.organization&.id }).
         references :organizations
     }
+    scope :sync_list, -> {
+      list.where organization_roles: { sync_ad: true }
+    }
     scope :group_list, -> {
       includes(:group).
         where(groups: { id: Current.group&.id }).
         references :groups
+    }
+    scope :sync_group_list, -> {
+      group_list.where organization_roles: { sync_ad: true }
     }
     scope :without_organization, -> {
       includes(:organizations).
@@ -110,6 +116,11 @@ module Users::Scopes
       User.group_list.by_email(data[:email])             ||
         User.without_organization.by_email(data[:email]) ||
         User.list.by_user(data[:user])
+    end
+
+    def sync_find_user data
+      User.sync_group_list.by_email(data[:email]) ||
+        User.sync_list.by_user(data[:user])
     end
 
     private

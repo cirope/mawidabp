@@ -52,7 +52,7 @@ module LdapConfigs::LdapImport
         role_names = role_data entry
         roles      = clean_roles Role.list_with_corporate.where(name: role_names)
         data       = trivial_data entry
-        user       = User.find_user data
+        user       = User.sync_find_user data
 
         if user&.roles.blank? && roles.blank?
           false
