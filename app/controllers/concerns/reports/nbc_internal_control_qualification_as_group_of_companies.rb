@@ -128,7 +128,7 @@ module Reports::NbcInternalControlQualificationAsGroupOfCompanies
     def put_nbc_internal_control_qualification_and_conclusion_group_of_companies_report pdf, period, results_period_with_final_weaknesses
       pdf.move_down PDF_FONT_SIZE * 3
 
-      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.classification_title',
+      pdf.text I18n.t('conclusion_committee_report.nbc_internal_control_qualification_as_group_of_companies_report.internal_control_qualification.classification_title',
                       period: period.name),
                inline_format: true
 

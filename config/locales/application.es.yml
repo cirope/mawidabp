@@ -345,6 +345,8 @@ es:
       front_page:
         first_title: 'Subsidiarias'
         second_title: 'Calificación del Ciclo'
+      internal_control_qualification:
+        classification_title: '<i><b>Cuadro I: Resumen de Calificación del Control Interno Subsidiarias – %{period}</b></i>'
       comparision_to_previous_period:
         classification_title: '<i><b>Cuadro II: Comparación con la calificación del año anterior (%{period})</b></i>'
         header_cycle: '<b>Ciclo</b>'
