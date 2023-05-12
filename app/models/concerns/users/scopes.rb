@@ -25,9 +25,6 @@ module Users::Scopes
         where(organizations: { id: nil }).
         references :organizations
     }
-    scope :ldap_import_without_organization, -> {
-      without_organization.where organization_roles: { sync_ldap: true }
-    }
     scope :not_hidden, -> { where hidden: false }
     scope :enabled, -> { where enable: true }
     scope :managers, -> {
@@ -122,8 +119,8 @@ module Users::Scopes
     end
 
     def ldap_import_find data
-      User.ldap_import_group_list.by_email(data[:email])             ||
-        User.ldap_import_without_organization.by_email(data[:email]) ||
+      User.ldap_import_group_list.by_email(data[:email]) ||
+        User.without_organization.by_email(data[:email]) ||
         User.ldap_import_list.by_user(data[:user])
     end
 

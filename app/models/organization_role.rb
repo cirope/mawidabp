@@ -49,6 +49,9 @@ class OrganizationRole < ApplicationRecord
   belongs_to :organization, -> { readonly }
   belongs_to :role, -> { readonly }
 
+  # Atributos
+  attribute :sync_ldap, :boolean
+
   def to_s
     "#{self.role.name} (#{self.organization.name})"
   end
