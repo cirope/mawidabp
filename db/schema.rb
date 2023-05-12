@@ -2046,6 +2046,7 @@ ActiveRecord::Schema.define(version: 2022_09_05_172357) do
     t.integer "role_id", precision: 38
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "sync_ldap", default: true, null: false
     t.index ["organization_id"], name: "i_org_rol_org_id"
     t.index ["role_id"], name: "i_organization_roles_role_id"
     t.index ["user_id"], name: "i_organization_roles_user_id"

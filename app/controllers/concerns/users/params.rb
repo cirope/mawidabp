@@ -28,7 +28,7 @@ module Users::Params
         :hidden, :function, :send_notification_email, :confirmation_hash,
         :lock_version,
         child_ids: [],
-        organization_roles_attributes: [:id, :organization_id, :role_id, :_destroy],
+        organization_roles_attributes: [:id, :organization_id, :role_id, :sync_ldap, :_destroy],
         related_user_relations_attributes: [:id, :related_user_id, :_destroy]
       ]
     end

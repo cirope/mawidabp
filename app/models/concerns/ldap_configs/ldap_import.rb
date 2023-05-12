@@ -80,9 +80,9 @@ module LdapConfigs::LdapImport
     end
 
     def find_user data
-      User.group_list.by_email(data[:email])             ||
+      User.ldap_import_group_list.by_email(data[:email]) ||
         User.without_organization.by_email(data[:email]) ||
-        User.list.by_user(data[:user])
+        User.ldap_import_list.by_user(data[:user])
     end
 
     def role_data entry
