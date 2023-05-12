@@ -30,7 +30,7 @@ module Users::Params
         :hidden, :function, :office, :send_notification_email,
         :confirmation_hash, :lock_version,
         child_ids: [],
-        organization_roles_attributes: [:id, :organization_id, :role_id, :sync_ad, :_destroy],
+        organization_roles_attributes: [:id, :organization_id, :role_id, :sync_ldap, :_destroy],
         related_user_relations_attributes: [:id, :related_user_id, :notify, :_destroy],
         business_unit_type_users_attributes: [:id, :business_unit_type_id, :_destroy],
         taggings_attributes: [:id, :tag_id, :_destroy]

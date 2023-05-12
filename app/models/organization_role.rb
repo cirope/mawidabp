@@ -17,7 +17,7 @@ class OrganizationRole < ApplicationRecord
   validates :user_id, :organization_id, :role_id,
     :numericality => {:only_integer => true}, :allow_nil => true,
     :allow_blank => true
-  validates :sync_ad, inclusion: { in: [true, false] }
+  validates :sync_ldap, inclusion: { in: [true, false] }
   validates_each :role_id do |record, attr, value|
     organization_roles = record.user.try(:organization_roles) || []
     same_organization_roles = organization_roles.select do |o_r|

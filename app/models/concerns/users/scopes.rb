@@ -9,21 +9,24 @@ module Users::Scopes
         where(organizations: { id: Current.organization&.id }).
         references :organizations
     }
-    scope :sync_list, -> {
-      list.where organization_roles: { sync_ad: true }
+    scope :ldap_import_list, -> {
+      list.where organization_roles: { sync_ldap: true }
     }
     scope :group_list, -> {
       includes(:group).
         where(groups: { id: Current.group&.id }).
         references :groups
     }
-    scope :sync_group_list, -> {
-      group_list.where organization_roles: { sync_ad: true }
+    scope :ldap_import_group_list, -> {
+      group_list.where organization_roles: { sync_ldap: true }
     }
     scope :without_organization, -> {
       includes(:organizations).
         where(organizations: { id: nil }).
         references :organizations
+    }
+    scope :ldap_import_without_organization, -> {
+      without_organization.where organization_roles: { sync_ldap: true }
     }
     scope :not_hidden, -> { where hidden: false }
     scope :enabled, -> { where enable: true }
@@ -118,9 +121,10 @@ module Users::Scopes
         User.list.by_user(data[:user])
     end
 
-    def sync_find_user data
-      User.sync_group_list.by_email(data[:email]) ||
-        User.sync_list.by_user(data[:user])
+    def ldap_import_find data
+      User.ldap_import_group_list.by_email(data[:email])             ||
+        User.ldap_import_without_organization.by_email(data[:email]) ||
+        User.ldap_import_list.by_user(data[:user])
     end
 
     private

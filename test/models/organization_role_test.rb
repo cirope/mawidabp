@@ -97,9 +97,9 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   end
 
   test 'included attributes' do
-    @organization_role.sync_ad = nil
+    @organization_role.sync_ldap = nil
 
     assert @organization_role.invalid?
-    assert_error @organization_role, :sync_ad, :inclusion
+    assert_error @organization_role, :sync_ldap, :inclusion
   end
 end

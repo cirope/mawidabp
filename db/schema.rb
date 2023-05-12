@@ -815,7 +815,7 @@ ActiveRecord::Schema.define(version: 2023_05_11_175652) do
     t.integer "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean "sync_ad", default: true, null: false
+    t.boolean "sync_ldap", default: true, null: false
     t.index ["organization_id"], name: "index_organization_roles_on_organization_id"
     t.index ["role_id"], name: "index_organization_roles_on_role_id"
     t.index ["user_id"], name: "index_organization_roles_on_user_id"
