@@ -1,4 +1,4 @@
-set :branch,    'c-smg-test'
+set :branch,    'c-smg-production'
 set :stage,     :production
 set :rails_env, 'production'
 
@@ -8,8 +8,8 @@ set :default_env, {
   'LC_ALL':   'en_US.UTF-8'
 }
 
-role :web, %w{deployer@smg-test.mawidabp.com}
-role :app, %w{deployer@smg-test.mawidabp.com}
-role :db,  %w{deployer@smg-test.mawidabp.com}
+role :web, %w{deployer@smg.mawidabp.com}
+role :app, %w{deployer@smg.mawidabp.com}
+role :db,  %w{deployer@smg.mawidabp.com}
 
-server 'smg-test.mawidabp.com', user: 'deployer', roles: %w{web app db}
+server 'smg.mawidabp.com', user: 'deployer', roles: %w{web app db}
