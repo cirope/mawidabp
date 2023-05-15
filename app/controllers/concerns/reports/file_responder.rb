@@ -94,10 +94,14 @@ module Reports::FileResponder
       if (where_clause = values.delete :where)
         wheres       = []
         where_tables = []
+        havings      = []
 
         where_clause.send(:predicates).map do |predicate|
           if predicate.is_a? String
             wheres << predicate
+          elsif predicate.is_a?(Arel::Nodes::Grouping)
+            byebug
+            wheres << predicate.to_sql
           else
             where_tables << predicate.left.relation.name
           end
@@ -110,6 +114,7 @@ module Reports::FileResponder
 
         wheres << where_hash if where_hash.any?
 
+        values[:having] = havings
         values[:where] = wheres
       end
 
