@@ -28,7 +28,6 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
     end
 
     def organization_units_must_have_same_name
-      byebug
       organization_ids = Organization.where(prefix: ORGANIZATIONS_WITH_INTERNAL_CONTROL_QUALIFICATION_REPORT).pluck(:id)
 
       business_unit_types_per_organization = BusinessUnitType
