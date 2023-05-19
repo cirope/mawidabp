@@ -12,7 +12,7 @@ module Reports::NbcInternalControlQualificationAsGroupOfCompanies
       @controller        = 'conclusion'
       period             = @form.period
       previous_period    = @form.previous_period
-      business_unit_type = @form.business_unit_type
+      organization_ids   = Organization.where(prefix: ORGANIZATIONS_WITH_INTERNAL_CONTROL_QUALIFICATION_REPORT).pluck(:id)
       organization       = Current.organization
       pdf                = Prawn::Document.create_generic_pdf :portrait,
                                                               margins: [30, 20, 20, 25]
@@ -26,9 +26,9 @@ module Reports::NbcInternalControlQualificationAsGroupOfCompanies
       put_nbc_executive_summary      pdf, organization, @form
       put_nbc_introduction_and_scope pdf, @form
 
-      results_period_with_final_weaknesses          = qualification_results period, business_unit_type, true
-      results_previous_period_with_final_weaknesses = qualification_results previous_period, business_unit_type, true
-      results_period_with_not_final_weaknesses      = qualification_results period, business_unit_type, false
+      results_period_with_final_weaknesses          = qualification_results organization_ids, period, true
+      results_previous_period_with_final_weaknesses = qualification_results organization_ids, previous_period, true
+      results_period_with_not_final_weaknesses      = qualification_results organization_ids, period, false
 
       put_nbc_internal_control_qualification_and_conclusion_group_of_companies_report pdf, period, results_period_with_final_weaknesses
 
@@ -58,67 +58,40 @@ module Reports::NbcInternalControlQualificationAsGroupOfCompanies
       )
     end
 
-    def qualification_results period, business_unit_type, final
-      result = []
+    def qualification_results organization_ids, period, final
+      result              = []
+      business_unit_types = BusinessUnitType.where(organization: organization_ids).pluck(:name).uniq
 
-      reviews_and_external_reviews = ConclusionFinalReview.left_joins(:review)
-                                                          .where(reviews: {
-                                                                  type_review: Review::TYPES_REVIEW[:operational_audit],
-                                                                  period: period
-                                                                 })
-                                                          .includes(review: :external_reviews)
-                                                          .map { |cfr| [cfr.review.id, cfr.review.external_reviews.map(&:alternative_review_id)]}
-                                                          .flatten
+      business_unit_types.each do |business_unit_type|
+        statuses = [
+          Finding::STATUS[:being_implemented],
+          Finding::STATUS[:implemented_audited]
+        ]
 
-      if business_unit_type.grouped_by_business_unit_annual_report
-        business_unit_type.business_units.each do |but|
-          add_unit_qualification result,
-                                 but,
-                                 reviews_and_external_reviews,
-                                 but.name,
-                                 final
-        end
-      else
-        add_unit_qualification result,
-                               business_unit_type.business_units,
-                               reviews_and_external_reviews,
-                               business_unit_type.name,
-                               final
+        weaknesses = Weakness
+          .joins(:business_unit_type)
+          .joins(control_objective_item: { review: :period })
+          .where(
+            business_unit_type: { name: business_unit_type },
+            reviews: { periods: { name: period.name } },
+            state: statuses,
+            final: final
+          )
+
+        add_unit_qualification result, weaknesses, business_unit_type
       end
 
       result
     end
 
-    def add_unit_qualification array, business_units, reviews_and_external_reviews, unit_name, final
-      weaknesses_ids = BusinessUnitFinding.left_joins(finding: :control_objective_item)
-                                          .where(
-                                            findings: {
-                                              control_objective_items:
-                                              {
-                                                reviews: reviews_and_external_reviews
-                                              },
-                                              type: 'Weakness',
-                                              state: Finding::STATUS[:being_implemented],
-                                              final: final
-                                            },
-                                            business_unit: business_units
-                                          )
-                                          .pluck(:finding_id)
+    def add_unit_qualification result, weaknesses, business_unit_type
+      if weaknesses.present?
+        reviews_count = weaknesses.pluck('reviews.id').uniq.count
+        total_weight  = calculate_total_weight(weaknesses, reviews_count)
 
-      if weaknesses_ids.present?
-        weaknesses = Weakness.where(id: weaknesses_ids)
-
-        count_reviews = Weakness.left_joins(control_objective_item: :review)
-                                .where(id: weaknesses_ids)
-                                .distinct
-                                .pluck(:review_id)
-                                .count
-
-        total_weight = calculate_total_weight(weaknesses, count_reviews)
-
-        array << {
-          name: unit_name,
-          count: weaknesses_ids.count,
+        result << {
+          name: business_unit_type,
+          count: weaknesses.count,
           total_weight: total_weight,
           qualification: calculate_qualification(total_weight)
         }
