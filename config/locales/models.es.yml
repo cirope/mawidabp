@@ -26,6 +26,8 @@ es:
         introduction_and_scope: 'Introduccion y Alcance'
         business_unit_type_id: 'Unidad organizativa'
         previous_period_id: 'Periodo previo'
+        organizations: Organizaciones
+        periods: Periodos
     errors:
       models:
         nbc_internal_control_qualification_as_group_of_companies:
@@ -34,7 +36,10 @@ es:
               must_be_different: 'debe ser distinto a Periodo previo'
             previous_period_id:
               must_be_different: 'debe ser distinto a Periodo'
-
+            organizations:
+              must_have_the_same_business_unit_types: 'deben tener la misma cantidad de unidades organizativas con los mismos nombres'
+            periods:
+              must_be_the_same: 'deben tener los mismos nombres en las tres organizaciones'
   activerecord:
     models:
       achievement:
