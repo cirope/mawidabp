@@ -52,6 +52,7 @@ ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY: 'control_objective_items'
 ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS: ''
 ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS: ''
 ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS: ''
+ORGANIZATIONS_WITH_INTERNAL_CONTROL_QUALIFICATION_REPORT: '[]'
 PLAN_ITEM_REVIEW_CONCLUDED_ON: 'created_at'
 REQUIRED_BY_OPTIONS_MEMO: '["Sindicatura General de la Nación", "Auditoria General de la Nación", "Banco Central de la República Argentina", "Auditor Externo"]'
 REVIEW_SCORES: '{"2019-01-01": {"satisfactory": 90, "improve": 50, "regular": 20, "unsatisfactory": 0}}' # In JSON and must be sorted by date in descending order
