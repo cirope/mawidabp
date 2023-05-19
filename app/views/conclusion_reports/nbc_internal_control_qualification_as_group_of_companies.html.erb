@@ -7,8 +7,8 @@
   <%= f.input :previous_period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, 
                                    prompt: false %>
 
-  <%= f.input :business_unit_type_id, collection: BusinessUnitType.list.map { |b_u_t| [b_u_t.name, b_u_t.id] },
-                                      prompt: false %>
+  <%= f.hidden_field :organizations %>
+  <%= f.hidden_field :periods %>
 
   <hr />
 

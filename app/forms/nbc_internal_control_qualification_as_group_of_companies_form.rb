@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportForm
-  property :business_unit_type_id
   property :previous_period_id
+  property :organizations
+  property :periods
 
-  validates :business_unit_type_id,
-            :previous_period_id,
-            presence: true
+  validates :previous_period_id, presence: true
   validate :periods_not_equal
 
   def business_unit_type
