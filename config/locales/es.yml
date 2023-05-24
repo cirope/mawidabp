@@ -1,6 +1,6 @@
 'es':
   label:
-    yes: "Si"
+    yes: "Sí"
     no: "No"
     total: "Total"
     by: "por"
@@ -14,8 +14,8 @@
     close: "Cerrar"
     create: "Crear"
     day:
-      one: "1 dia"
-      other: "%{count} dias"
+      one: "1 día"
+      other: "%{count} días"
     delete: "Baja"
     delete_file: "Eliminar archivo"
     descendant: "Descendente"
