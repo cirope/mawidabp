@@ -221,7 +221,7 @@
       other: "The following filters have been applied to this report: %{filters}"
     benefits:
       pdf_name: 'benefits_harms_%{from_date}_to_%{to_date}.pdf'
-      title: "Benefits / Harms" # REVIEW Damages?
+      title: "Benefits / Detriments"
       subtitle: "FINAL REPORTS"
       without_audits_in_the_period: 'No audits with benefits / harms in the period'
       total: 'Total amount: <b>%{amount}</b>'
@@ -844,7 +844,7 @@
     index_title: "Committee reports"
     control_objective_stats_title: 'Weaknesses by control objective' # REVIEW Weaknesses?
     control_objective_stats_by_review_title: 'Weaknesses by control objective without score' # REVIEW qualification? Weaknesses?
-    benefits_title: 'Benefits / Harms' # REVIEW harm o losses?
+    benefits_title: 'Benefits / Detriments'
     process_control_stats_title: 'Weaknesses by business process'
     control_effectiveness: "Control effectiveness"
     pending_findings: "Pending observations follow-up"
@@ -902,7 +902,7 @@
       other: "The following filters have been applied to this report: %{filters}"
     benefits:
       pdf_name: 'benefits_harms_%{from_date}_to_%{to_date}.pdf'
-      title: "Benefits / Harms" # REVIEW harms?
+      title: "Benefits / Detriments"
       subtitle: "FINAL REPORTS"
       without_audits_in_the_period: 'No audits with benefits / harms in the period' # REVIEW harms?
       total: 'Total amount: <b>%{amount}</b>'
