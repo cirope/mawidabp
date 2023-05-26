@@ -210,7 +210,6 @@
     findings_type_external: "Hallazgos Auditorías Externas"
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Observaciones Auditorías Externas"
-    weaknesses_by_risk: "Observaciones por riesgo"
     fixed_weaknesses: "Observaciones por riesgo solucionadas"
     from_date: "Desde"
     to_date: "Hasta"

@@ -210,7 +210,6 @@
     findings_type_external: "External Audit Findings"
     weaknesses_type_internal: "Internal Audit Weaknesses"
     weaknesses_type_external: "External Audit Weaknesses"
-    weaknesses_by_risk: "Weaknesses by risk" # NOTE: no existe en application.en.yml
     fixed_weaknesses: "Fixed high risk weaknesses"
     from_date: "From"
     to_date: "To"
@@ -414,7 +413,7 @@
       oportunities_column: "Improvement Opportunities" # KEY_TO_FIX opportunities_column?
       period_summary: "Period summary %{period}"
       total: "TOTAL"
-    weaknesses_by_risk: # NOTE: hay otro weaknesses_by_risk en el mismo path (línea 213)
+    weaknesses_by_risk:
       pdf_name: "weaknesses_definitive_reports_by_risk_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Period summary %{period}"
       title: "FINAL REPORT OBSERVATIONS\nTOTALS BY RISK LEVEL" # REVIEW review?
