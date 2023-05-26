@@ -58,7 +58,7 @@
     loading: "Cargando"
     must_be_authenticated: "Debe autenticarse"
     must_change_the_password: "Debe cambiar su contraseña"
-    no_organization: "No existe la organización, compruebe la dirección"
+    no_organization: "No existe la organización. Por favor, verifique la dirección URL"
     password_expire_in_x:
       one: "Su contraseña expira mañana"
       other: "Su contraseña expira dentro de %{count} días"

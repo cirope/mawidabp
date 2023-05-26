@@ -61,7 +61,7 @@ en:
     loading: "Loading"
     must_be_authenticated: "You must be authenticated" # REVIEW ver de cambiar a logueado
     must_change_the_password: "You must change your password"
-    no_organization: "No such organization, check URL address"
+    no_organization: "The organization does not exist, please check the URL"
     password_expire_in_x:
       one: "Your password expires tomorrow"
       other: "Your password expires in %{count} days"

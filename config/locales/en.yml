@@ -58,7 +58,7 @@
     loading: "Loading"
     must_be_authenticated: "You must be authenticated" # REVIEW va el sujeto, cierto? o se concatena con algún modelo?
     must_change_the_password: "You must change your password"
-    no_organization: "No such organization, check URL" # REVIEW URL cierto?
+    no_organization: "The organization does not exist, please check the URL"
     password_expire_in_x:
       one: "Your password expires tomorrow"
       other: "Your password expires in %{count} days"
