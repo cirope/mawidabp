@@ -1787,7 +1787,7 @@
         module: "Module"
         read: "Read"
         modify: "Modify" # REVIEW Edit? donde?
-        erase: "Erase"
+        erase: "Erase" # REVIEW Delete? Remove? donde?
         approval: "Approval"
       related_user_relation:
         user_id: 'User'
