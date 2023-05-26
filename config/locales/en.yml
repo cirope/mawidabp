@@ -31,7 +31,7 @@
     insert_item: "Insert item"
     insert_record_item: "Insert new" # REVIEW donde? qué se inserta?
     list: "List"
-    modify: "Modify" # REVIEW Edit? donde?
+    modify: "Modify"
     move: "Move"
     new: "New"
     next: "Next"

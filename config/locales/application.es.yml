@@ -34,7 +34,7 @@ es:
     insert_item: "Insertar ítem"
     insert_record_item: "Insertar nuevo"
     list: "Listado"
-    modify: "Actualizar"
+    modify: "Modificar" # REVIEW Se usa en el submit de Modificar información personal, se podría unificar con Update? Porque básicamente actualiza un form
     move: "Mover"
     new: "Nuevo"
     next: "Siguiente"
