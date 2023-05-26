@@ -564,7 +564,7 @@
 
   control_objective_item:
     index_title: "Control objectives list"
-    show_title: "Control objective detail"
+    show_title: "Control objective details"
     edit_title: "Edit control objective"
     correctly_created: "Control objective was successfully created."
     correctly_updated: "Control objective was successfully updated."

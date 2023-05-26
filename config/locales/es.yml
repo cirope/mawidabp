@@ -564,7 +564,7 @@
 
   control_objective_item:
     index_title: "Listado de objetivos de control"
-    show_title: "Detalle objetivo de control"
+    show_title: "Detalles del objetivo de control"
     edit_title: "Modificar objetivo de control"
     correctly_created: "Objetivo de control agregado correctamente."
     correctly_updated: "Objetivo de control actualizado correctamente."
