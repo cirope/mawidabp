@@ -1659,7 +1659,7 @@
         observations: "Otras consideraciones"
         main_weaknesses_text: "Principales debilidades"
         corrective_actions: "Acciones correctivas"
-        affects_compliance: "Afecta compliance"
+        affects_compliance: "Afecta cumplimiento"
         collapse_control_objectives: "Agrupar objetivos de control"
         scope: "Limitación al alcance"
         reference: "Marco de referencia"
