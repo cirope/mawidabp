@@ -15,7 +15,7 @@
   <%= t "label.#{@tag.obsolete ? 'yes' : 'no'}" %>
 </p>
 
-<% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+<% if SHOW_REVIEW_EXTRA_ATTRIBUTES || tags_options_collection(kind: @tag.kind).any? %>
   <% Array(TAG_OPTIONS[@tag.kind]).each do |title, value| %>
     <p class="mb-1">
       <strong><%= title %></strong>:

@@ -14,12 +14,10 @@
     <%= f.input :shared, input_html: { disabled: @tag.shared_was } %>
     <%= f.input :obsolete %>
 
-    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES && tags_options_collection(kind: @tag.kind).any? || @tag.user? %>
-      <%= f.input :options,
-        label: '',
-        as: :check_boxes,
-        item_wrapper_class: 'custom-control custom-checkbox',
-        collection: tags_options_collection(kind: @tag.kind) %>
+    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES || tags_options_collection(kind: @tag.kind).any? %>
+      <% tags_options_collection(kind: @tag.kind).each do |tag| %>
+        <%= tag_input_option f, tag %>
+      <% end %>
     <% end %>
 
     <h5><%= t '.children' %></h5>
