@@ -71,7 +71,7 @@
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
     sort_by: "Ordenar por..."
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
-    rejected_data_format: "Algún campo contiene la cadena ../ debe eliminarla para poder realizar la acción. Revise los campos resaltados"
+    rejected_data_format: Algún campo contiene la cadena <code>../</code>. Por favor, elimínela antes de realizar la acción. Revise los campos resaltados REVIEW donde? realizar la acción? Agregué html
     validation_failed_message: "Los datos introducidos no son válidos, revise los campos resaltados"
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
@@ -648,7 +648,7 @@
       total: "TOTAL"
     without_weaknesses: "Sin hallazgos en el periodo"
     without_weaknesses_in_the_interval: "Sin hallazgos en el intervalo"
-    without_findings: "Sin Hallazgos"
+    without_findings: "Sin hallazgos"
 
   finding:
     correctly_updated: "Observación actualizada correctamente."
@@ -1507,8 +1507,8 @@
         one: "Se ha reasignado la responsabilidad del informe en ejecución %{reviews}"
         other: "Se han reasignado la responsabilidad de los informes en ejecución %{reviews}"
       reassigned_to_findings_from_reviews:
-        one: "Se han reasignado las hallazgos pendientes del informe %{reviews}"
-        other: "Se han reasignado las hallazgos pendientes de los informes %{reviews}"
+        one: "Se han reasignado los hallazgos pendientes del informe %{reviews}"
+        other: "Se han reasignado los hallazgos pendientes de los informes %{reviews}"
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar"
@@ -1609,7 +1609,7 @@
       control: "Control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      finding_answer: "Respuesta a hallazgo" # REVIEW Se usa en algún lado? No lo encontré
+      finding_answer: Respuesta a hallazgo REVIEW Se usa en algún lado? No lo encontré
       finding_review_assignment: "Asignación de observación a informe"
       group: "Grupo"
       notification: "Notificación"
