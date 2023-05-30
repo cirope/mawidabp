@@ -1,51 +1,51 @@
 'en':
   label:
-    greater_or_equal_than: "Greater or equal than" # NOTE: no existe en application.en.yml
+    greater_or_equal_than: "Greater or equal than"
 
-  business_unit_kind: # NOTE: no existe en application.en.yml
+  business_unit_kind:
     errors:
       business_unit_kind_related: "The organizational unit cannot be deleted, it is related to at least one business unit"
 
-  business_unit: # NOTE: no existe en application.en.yml
+  business_unit:
     edit_title: "Modify business unit"
     correctly_updated: "Business unit correctly updated."
 
   conclusion_draft_review:
-    download_rtf: "Descargar RTF" # NOTE: no existe en application.en.yml no esá en el otro archivo
-    add_annex: "Add annex" # NOTE: no existe en application.en.yml
-    add_image: "Add image" # NOTE: no existe en application.en.yml
+    download_rtf: "Descargar RTF"
+    add_annex: "Add annex"
+    add_image: "Add image"
 
   conclusion_report:
-    weaknesses_by_risk_and_business_unit_title: "Total weaknesses by risk and business unit" # NOTE: no existe en application.en.yml
-    weaknesses_by_risk_report_title: "Weaknesses by risk" # NOTE: no existe en application.en.yml
-    weaknesses_by_month_title: "Weaknesses by month" # NOTE: no existe en application.en.yml
-    weaknesses_current_situation_title: "Global report - Quarterly" # NOTE: no existe en application.en.yml
-    weaknesses_by_control_objective_title: "Control objective result" # NOTE: no existe en application.en.yml
-    weaknesses_by_user_title: "Weaknesses by user" # NOTE: no existe en application.en.yml
-    weaknesses_by_business_unit_title: "Weaknesses per cycle" # NOTE: no existe en application.en.yml
+    weaknesses_by_risk_and_business_unit_title: "Total weaknesses by risk and business unit"
+    weaknesses_by_risk_report_title: "Weaknesses by risk"
+    weaknesses_by_month_title: "Weaknesses by month"
+    weaknesses_current_situation_title: "Global report - Quarterly"
+    weaknesses_by_control_objective_title: "Control objective result"
+    weaknesses_by_user_title: "Weaknesses by user"
+    weaknesses_by_business_unit_title: "Weaknesses per cycle"
     cost_summary:
-      column_interval: "Interval" # NOTE: no existe en application.en.yml
+      column_interval: "Interval"
 
   conclusion_committee_report:
-    control_objective_counts_title: "Control objective analysis" # NOTE: no existe en application.en.yml
-    weaknesses_by_risk_report_title: "Weaknesses by risk" # NOTE: no existe en application.en.yml
-    weaknesses_by_risk_and_business_unit_title: "Weaknesses by risk and business unit" # NOTE: no existe en application.en.yml
-    weaknesses_by_month_title: "Weaknesses by risk" # NOTE: no existe en application.en.yml
-    weaknesses_current_situation_title: "Global report - Quarterly" # NOTE: no existe en application.en.yml
-    weaknesses_by_control_objective_title: "Weaknesses by control objective" # NOTE: no existe en application.en.yml
-    weaknesses_by_user_title: "Weaknesses by use" # NOTE: no existe en application.en.yml
-    weaknesses_by_business_unit_title: "Weaknesses by business unit" # NOTE: no existe en application.en.yml
+    control_objective_counts_title: "Control objective analysis"
+    weaknesses_by_risk_report_title: "Weaknesses by risk"
+    weaknesses_by_risk_and_business_unit_title: "Weaknesses by risk and business unit"
+    weaknesses_by_month_title: "Weaknesses by risk"
+    weaknesses_current_situation_title: "Global report - Quarterly"
+    weaknesses_by_control_objective_title: "Weaknesses by control objective"
+    weaknesses_by_user_title: "Weaknesses by use"
+    weaknesses_by_business_unit_title: "Weaknesses by business unit"
     control_objective_stats:
-      reviews_with_weaknesses: # NOTE: no existe en application.en.yml
+      reviews_with_weaknesses:
         one: "%{count} review with weaknesses in the O.C"
         other: "%{count} reviews with weaknesses in the O.C"
 
-    control_objective_counts: # NOTE: no existe en application.en.yml
+    control_objective_counts:
       pdf_name: "control_objectives_analysis_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "ANALYSIS OF CONTROL OBJECTIVES / FINAL REPORTS"
       without_control_objective_items: "Without control objectives"
-    weaknesses_by_risk_report: # NOTE: no existe en application.en.yml
+    weaknesses_by_risk_report:
       pdf_name: "weaknesses_by_risk_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal audit weaknesses"
       external_audit_weaknesses: "External audit weaknesses"
@@ -54,7 +54,7 @@
       without_audits_in_the_period: "Without audits in the period"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without weaknesses"
-    weaknesses_by_month: # NOTE: no existe en application.en.yml
+    weaknesses_by_month:
       pdf_name: "weaknesses_by_month_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "MONTHLY REPORT - FINAL REPORTS"
@@ -64,20 +64,20 @@
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without weaknesses"
       year: "Origin year"
-    weaknesses_by_control_objective: # NOTE: no existe en application.en.yml
+    weaknesses_by_control_objective:
       pdf_name: "control_objectives_result_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "RESULTS OF CONTROL OBJECTIVES / FINAL REPORTS"
       without_weaknesses: "Without weaknesses"
       origination_year: "Origin year"
-    weaknesses_by_user: # NOTE: no existe en application.en.yml
+    weaknesses_by_user:
       pdf_name: "observations_by_user_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "USER FEEDBACK / FINAL REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without weaknesses"
       weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
-    weaknesses_by_business_unit: # NOTE: no existe en application.en.yml
+    weaknesses_by_business_unit:
       pdf_name: "observations_by_cycle_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "OBSERVATIONS PER CYCLE / FINAL REPORTS"
@@ -86,13 +86,13 @@
       without_weaknesses: "Without weaknesses"
       year: "Origin year"
     process_control_stats:
-      csv_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf' # NOTE: no existe en application.en.yml
-      period_column: 'Period' # NOTE: no existe en application.en.yml
-      reviews_with_weaknesses: # NOTE: no existe en application.en.yml
+      csv_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf'
+      period_column: 'Period'
+      reviews_with_weaknesses:
         one: "%{count} review with weaknesses in the O.C"
         other: "%{count} reviews with weaknesses in the O.C"
-      download_csv: 'Download CSV' # NOTE: no existe en application.en.yml
-    weaknesses_by_risk_and_business_unit: # NOTE: no existe en application.en.yml
+      download_csv: 'Download CSV'
+    weaknesses_by_risk_and_business_unit:
       pdf_name: "weaknesses_definitive_reports_by_risk_and_business_units_%{from_date}_to_%{to_date}.pdf"
       period_summary: "Period summary %{period}"
       title: "WEAKNESSES FROM FINAL REPORTS\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
@@ -103,9 +103,9 @@
       empty: "No comments for the applied filter."
 
   conclusion_final_review:
-    download_rtf: "Download RTF" # NOTE: no existe en application.en.yml
-    global_effectiveness: "Global effectiveness" # NOTE: no existe en application.en.yml
-    downloads: # NOTE: no existe en application.en.yml
+    download_rtf: "Download RTF"
+    global_effectiveness: "Global effectiveness"
+    downloads:
       review_objectives: "REVIEW OBJECTIVES"
       review_objectives_description: "Carry out regularization follow-up to the weaknesses made by the Internal Audit (AI) in those branches classified as Unreasonable to an inadequate or unsatisfactory degree in the AML/FT aspect."
       general_assistant_manager: 'Integrity and Compliance General Assistant Manager'
@@ -116,9 +116,9 @@
       pdf_page_footer_sheet: 'Sheet'
 
   execution_reports:
-    weaknesses_current_situation_title: "Global Report - Quarterly" # NOTE: no existe en application.en.yml
+    weaknesses_current_situation_title: "Global Report - Quarterly"
 
-  finding: # NOTE: no existe en application.en.yml
+  finding:
     correctly_updated: "Finding correctly updated."
     finding_relations: "Related to"
     inverse_finding_relations: "Related in"
@@ -217,24 +217,24 @@
       others: "Users"
 
   follow_up_audited:
-    weaknesses_by_user_title: "Weaknesses by user" # NOTE: no existe en application.en.yml
-    status_user: "Status user" # NOTE: no existe en application.en.yml
-    process_control_stats_title: "Weaknesses per business process" # NOTE: no existe en application.en.yml
-    business_unit_type_title: "Organizational unit" # NOTE: no existe en application.en.yml
-    business_unit_title: "Business unit" # NOTE: no existe en application.en.yml
-    weaknesses_by_user: # NOTE: no existe en application.en.yml
+    weaknesses_by_user_title: "Weaknesses by user"
+    status_user: "Status user"
+    process_control_stats_title: "Weaknesses per business process"
+    business_unit_type_title: "Organizational unit"
+    business_unit_title: "Business unit"
+    weaknesses_by_user:
       pdf_name: "weaknesses_by_user.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "MONITORING WEAKNESSES BY USER / FINAL REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without weaknesses"
       weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
-    process_control_stats: # NOTE: no existe en application.en.yml
+    process_control_stats:
       average_effectiveness: 'Weighted average score'
       average_effectiveness_resume:
         one: "%{effectiveness} - %{count} evaluated report"
         other: "%{effectiveness} - %{count} evaluated reports"
-      reviews_with_weaknesses: # NOTE: no existe en application.en.yml
+      reviews_with_weaknesses:
         one: "%{count} review with weaknesses in the O.C."
         other: "%{count} reviews with weaknesses in the O.C."
       pdf_name: "weaknesses_by_business_process.pdf"
@@ -245,7 +245,7 @@
       weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
       review_effectiveness_average: 'Weighted average of control objective scores: <b>%{score}%</b>'
 
-  follow_up_audited_committee_report: # NOTE: no existe en application.en.yml
+  follow_up_audited_committee_report:
     process_control_stats:
       pdf_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf'
     period:
@@ -254,21 +254,21 @@
 
   follow_up_audit:
     weaknesses_by_risk_and_business_unit_title: "Total findings by risk and business Unit"
-    weaknesses_by_risk_report_title: "Weaknesses by risk" # NOTE: no existe en application.en.yml
-    weaknesses_by_month_title: "Monthly report" # NOTE: no existe en application.en.yml
-    weaknesses_current_situation_title: "Global Report - Quarterly" # NOTE: no existe en application.en.yml
-    weaknesses_by_control_objective_title: "Control objective result" # NOTE: no existe en application.en.yml
-    weaknesses_by_user_title: "Weaknesses by user" # NOTE: no existe en application.en.yml
-    weaknesses_by_business_unit_title: "Weaknesses per cycle" # NOTE: no existe en application.en.yml
-    weaknesses_evolution_title: "Weaknesses evolution" # NOTE: no existe en application.en.yml
-    weaknesses_list_title: "List of weaknesses" # NOTE: no existe en application.en.yml
-    weaknesses_brief_title: "Summary of outstanding weaknesses" # NOTE: no existe en application.en.yml
-    weaknesses_repeated_title: "Weaknesses with status by last traced" # NOTE: no existe en application.en.yml
-    weaknesses_reschedules_title: "Summary of weaknesses and reschedules" # NOTE: no existe en application.en.yml
-    weaknesses_by_control_objective_process_title: "Report process by control objectives" # NOTE: no existe en application.en.yml
-    weaknesses_heatmap_title: "Weaknesses heat map" # NOTE: no existe en application.en.yml
+    weaknesses_by_risk_report_title: "Weaknesses by risk"
+    weaknesses_by_month_title: "Monthly report"
+    weaknesses_current_situation_title: "Global Report - Quarterly"
+    weaknesses_by_control_objective_title: "Control objective result"
+    weaknesses_by_user_title: "Weaknesses by user"
+    weaknesses_by_business_unit_title: "Weaknesses per cycle"
+    weaknesses_evolution_title: "Weaknesses evolution"
+    weaknesses_list_title: "List of weaknesses"
+    weaknesses_brief_title: "Summary of outstanding weaknesses"
+    weaknesses_repeated_title: "Weaknesses with status by last traced"
+    weaknesses_reschedules_title: "Summary of weaknesses and reschedules"
+    weaknesses_by_control_objective_process_title: "Report process by control objectives"
+    weaknesses_heatmap_title: "Weaknesses heat map"
 
-  execution_committee_report: # NOTE: no existe en application.en.yml
+  execution_committee_report:
     weaknesses_current_situation_title: "Global Report - Quarterly Drafts"
     weaknesses_current_situation:
       pdf_name: "weaknesses_current_situation_draft_%{from_date}_to_%{to_date}.pdf"
@@ -284,29 +284,29 @@
       cut_date: "Computation date"
 
   follow_up_committee_report:
-    weaknesses_by_risk_report_title: "Weaknesses by risk" # NOTE: no existe en application.en.yml
-    weaknesses_by_risk_and_business_unit_title: "Total weaknesses by risk and business unit" # NOTE: no existe en application.en.yml
-    weaknesses_by_month_title: "Monthly report" # NOTE: no existe en application.en.yml
-    weaknesses_current_situation_title: "Global Report - Quarterly" # NOTE: no existe en application.en.yml
-    weaknesses_by_control_objective_title: "Control objective result" # NOTE: no existe en application.en.yml
-    weaknesses_by_user_title: "Weaknesses by user" # NOTE: no existe en application.en.yml
-    weaknesses_by_business_unit_title: "Weaknesses per cycle" # NOTE: no existe en application.en.yml
-    weaknesses_evolution_title: "Weaknesses evolution" # NOTE: no existe en application.en.yml
-    weaknesses_list_title: "List of weaknesses" # NOTE: no existe en application.en.yml
-    weaknesses_brief_title: "Summary of outstanding weaknesses" # NOTE: no existe en application.en.yml
-    weaknesses_repeated_title: "Weaknesses with status by last traced" # NOTE: no existe en application.en.yml
-    weaknesses_reschedules_title: "Summary of weaknesses and reschedules" # NOTE: no existe en application.en.yml
-    detailed_report: "Detailed report" # NOTE: no existe en application.en.yml
-    weaknesses_heatmap_title: "Weaknesses heat map" # NOTE: no existe en application.en.yml
-    weaknesses_by_control_objective_process_title: "Report process by control objectives" # NOTE: no existe en application.en.yml
+    weaknesses_by_risk_report_title: "Weaknesses by risk"
+    weaknesses_by_risk_and_business_unit_title: "Total weaknesses by risk and business unit"
+    weaknesses_by_month_title: "Monthly report"
+    weaknesses_current_situation_title: "Global Report - Quarterly"
+    weaknesses_by_control_objective_title: "Control objective result"
+    weaknesses_by_user_title: "Weaknesses by user"
+    weaknesses_by_business_unit_title: "Weaknesses per cycle"
+    weaknesses_evolution_title: "Weaknesses evolution"
+    weaknesses_list_title: "List of weaknesses"
+    weaknesses_brief_title: "Summary of outstanding weaknesses"
+    weaknesses_repeated_title: "Weaknesses with status by last traced"
+    weaknesses_reschedules_title: "Summary of weaknesses and reschedules"
+    detailed_report: "Detailed report"
+    weaknesses_heatmap_title: "Weaknesses heat map"
+    weaknesses_by_control_objective_process_title: "Report process by control objectives"
     control_objective_stats:
-      reviews_with_weaknesses: # NOTE: no existe en application.en.yml
+      reviews_with_weaknesses:
         one: "%{count} review with weaknesses in the O.C."
         other: "%{count} reviews with weaknesses in the O.C."
-      without_audits_in_the_period: "Without audits in the period" # NOTE: no existe en application.en.yml
-    follow_up_cost_analysis: # NOTE: no existe en application.en.yml
+      without_audits_in_the_period: "Without audits in the period"
+    follow_up_cost_analysis:
       pdf_name: "follow_up_cost_analysis_%{from_date}_to_%{to_date}.pdf"
-    weaknesses_by_risk_report: #en el otro archivo está como "high_risk_weaknesses_report"
+    weaknesses_by_risk_report:
       pdf_name: "high_risk_weaknesses_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Weaknesses"
       external_audit_weaknesses: "External Audit Weaknesses"
@@ -315,7 +315,7 @@
       without_audits_in_the_period: "No high risk audits in the period"
       without_audits_in_the_interval: "No high risk audits in the selected interval"
       without_weaknesses: "No weaknesses"
-    weaknesses_by_month: # NOTE: no existe en application.en.yml
+    weaknesses_by_month:
       pdf_name: "weaknesses_by_month_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "FOLLOW-UP MONTHLY REPORT - FINAL REPORTS"
@@ -325,7 +325,7 @@
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without weaknesses"
       year: "Origin year"
-    weaknesses_current_situation: # NOTE: no existe en application.en.yml
+    weaknesses_current_situation:
       pdf_name: "weaknesses_current_situation_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "GLOBAL REPORT MONITORING - FOUR-MONTHLY / FINAL REPORTS"
@@ -338,13 +338,13 @@
       negate_weakness_tags: "Exclude"
       review_tags: "Report tags"
       cut_date: "Computation date"
-    weaknesses_by_control_objective: # NOTE: no existe en application.en.yml
+    weaknesses_by_control_objective:
       pdf_name: "control_objectives_result_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "MONITORING THE RESULTS OF THE CONTROL OBJECTIVES / FINAL REPORTS"
       without_weaknesses: "Without weaknesses"
       origination_year: "Origin year"
-    weaknesses_by_control_objective_process: # NOTE: no existe en application.en.yml
+    weaknesses_by_control_objective_process:
       pdf_name: "process_report_by_control_objective_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "MONITORING PROCESS WEAKNESSES BY CONTROL OBJECTIVE / FINAL REPORTS"
@@ -354,14 +354,14 @@
       control_objective_tags: "Control objective tags"
       weakness_tags: "Weakness tags"
       review_tags: "Report tags"
-    weaknesses_by_user: # NOTE: no existe en application.en.yml
+    weaknesses_by_user:
       pdf_name: "weaknesses_by_user_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "MONITORING WEAKNESSES BY USER / FINAL REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without weaknesses"
       weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
-    weaknesses_by_business_unit: # NOTE: no existe en application.en.yml
+    weaknesses_by_business_unit:
       pdf_name: "weaknesses_by_cycle_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "MONITORING WEAKNESSES PER CYCLE / FINAL REPORTS"
@@ -369,7 +369,7 @@
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without weaknesses"
       year: "Origin year"
-    weaknesses_heatmap: # NOTE: no existe en application.en.yml
+    weaknesses_heatmap:
       pdf_name: "heatmap_by_weaknesses_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "HEAT MAP MONITORING WEAKNESSES / FINAL REPORTS"
@@ -379,7 +379,7 @@
       process_owner_parents: "Responsible line managers"
       process_owner_intermediates: "Intermediate owners"
       process_owner_roots: "Top owners"
-    weaknesses_evolution: # NOTE: no existe en application.en.yml
+    weaknesses_evolution:
       pdf_name: "weaknesses_evolution_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "MONITORING WEAKNESSES EVOLUTION / FINAL REPORTS"
@@ -388,13 +388,13 @@
       control_objective_tags: "Control objective tags"
       weakness_tags: "Weakness tags"
       review_tags: "Review tags"
-    weaknesses_list: # NOTE: no existe en application.en.yml
+    weaknesses_list:
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without weaknesses"
       control_objective_tags: "Control objective tags"
       weakness_tags: "Weakness tags"
       review_tags: "Review Tags"
-    weaknesses_brief: # NOTE: no existe en application.en.yml
+    weaknesses_brief:
       pdf_name: "summary_of_pending_weaknesses_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "SUMMARY OF PENDING WEAKNESSES / FINAL REPORTS"
@@ -410,7 +410,7 @@
       implemented_audited_count:
         one: "A weakness was regularized between %{from_date} and %{to_date}."
         other: "%{count} weaknesses were regularized between %{from_date} and %{to_date}."
-    weaknesses_reschedules: # NOTE: no existe en application.en.yml
+    weaknesses_reschedules:
       pdf_name: "rescheduling_weaknesses_summary_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "SUMMARY OF WEAKNESSES / RESCHEDULES / FINAL REPORTS"
@@ -419,7 +419,7 @@
       reschedule_count_management: "Number of reschedules approved by management"
       reschedule_count_ceo: "Number of reschedules approved by CEO"
       reschedule_count_committee: "Number of reschedules approved by committee"
-    weaknesses_repeated: # NOTE: no existe en application.en.yml
+    weaknesses_repeated:
       pdf_name: "weaknesses_with_status_according_last_monitoring_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "MONITORING OF WEAKNESSES WITH STATUS ACCORDING TO LAST MONITORING / FINAL REPORTS"
@@ -428,14 +428,14 @@
       origination_year: "Origin year"
       weakness_tags: "Weakness tags"
     process_control_stats:
-      reviews_with_weaknesses: # NOTE: no existe en application.en.yml
+      reviews_with_weaknesses:
         one: "%{count} review with weaknesses in the O.C."
         other: "%{count} reviews with weaknesses in the O.C."
     qa_indicators:
       indicators:
-        oportunities_solution_rate: "Improvement opportunities solution" # NOTE: no existe en application.en.yml
-        ancient_highest_risk_weaknesses: "Ancient highest risk weaknesses" # NOTE: no existe en application.en.yml
-    weaknesses_by_risk_and_business_unit: # NOTE: no existe en application.en.yml
+        oportunities_solution_rate: "Improvement opportunities solution"
+        ancient_highest_risk_weaknesses: "Ancient highest risk weaknesses"
+    weaknesses_by_risk_and_business_unit:
       pdf_name: "monitoring_weaknesses_by_risk_and_business_units_%{from_date}_at_%{to_date}.pdf"
       period_summary: "Period summary %{period}"
       title: "MONITORING WEAKNESSES\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
@@ -446,69 +446,69 @@
       empty: "No comments for the applied filter."
 
   notifier:
-    notify_new_oportunity: # NOTE: no existe en application.en.yml
+    notify_new_oportunity:
       title: "You have a new opportunity to improve"
       oportunity_link: "See improvement opportunity" # KEY_TO_FIX opportunity_link?
-    notify_action_not_found: # NOTE: no existe en application.en.yml
+    notify_action_not_found:
       title: "Your mail was not processed"
       warning: "No action was taken with the mail received."
       reply_receive: "Response received"
-    conclusion_final_review_close_date_warning: # NOTE: no existe en application.en.yml
+    conclusion_final_review_close_date_warning:
       title: "Notification of reports close to closure"
       body_title: "The following reports are close to closing"
-    findings_expiration_warning: # NOTE: no existe en application.en.yml
+    findings_expiration_warning:
       title: "Notification of findings near expiration"
-      body_title: # NOTE: no existe en application.en.yml
+      body_title:
         one: "The following find is about to expire"
         other: "The following findings are about to expire"
-    findings_expired_warning: # NOTE: no existe en application.en.yml
+    findings_expired_warning:
       title: "Notification of expired findings"
-      body_title: # NOTE: no existe en application.en.yml
+      body_title:
         one: "The following finding is expired"
         other: "The following findings are expired"
-    findings_unanswered_warning: # NOTE: no existe en application.en.yml
+    findings_unanswered_warning:
       title: "Unattended without response finding notification"
-      body_title: # NOTE: no existe en application.en.yml
+      body_title:
         one: "The following finding is unanswered"
         other: "The following findings are unanswered"
-    new_admin_user: # NOTE: no existe en application.en.yml
+    new_admin_user:
       title: "New admin"
       body_title: "A new administrator was assigned to the organization"
       body: "%{name} (%{user}) is now an administrator"
-    new_endorsement: # NOTE: no existe en application.en.yml
+    new_endorsement:
       title: "Approval required"
       body_title: "A new commitment date has been proposed that requires your approval"
-    endorsement_update: # NOTE: no existe en application.en.yml
+    endorsement_update:
       title: "Approval Update"
       body_title: "Approval request status updated"
-    tasks_expiration_warning: # NOTE: no existe en application.en.yml
+    tasks_expiration_warning:
       title: "Notification of tasks close to due"
-      body_title: # NOTE: no existe en application.en.yml
+      body_title:
         one: "The next task is close to due"
         other: "The following tasks are close to due"
-    tasks_expired_warning: # NOTE: no existe en application.en.yml
+    tasks_expired_warning:
       title: "Notification of overdue tasks"
-      body_title: # NOTE: no existe en application.en.yml
+      body_title:
         one: "The following task is overdue"
         other: "The following tasks are overdue"
-    being_implemented_and_stale_finding_to_manager: # NOTE: no existe en application.en.yml
+    being_implemented_and_stale_finding_to_manager:
       title: "Notification of findings in the process of implementation due"
       the_following_finding_is_being_implemented_and_stale: "The following finding implementation date has passed and is still in the process of being implemented"
     unanswered_finding_to_manager:
-      subject: "Inactivity notification [#%{finding_id}]" # NOTE: no existe en application.en.yml
+      subject: "Inactivity notification [#%{finding_id}]"
     expired_finding_to_manager:
-      subject: "Expired finding [#%{finding_id}]" # NOTE: no existe en application.en.yml
-    notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days: # NOTE: no existe en application.en.yml
+      subject: "Expired finding [#%{finding_id}]"
+    notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
       title: "Deployed finding expiration"
       finding_follow_up_date_last_changed_is_grerater_90_days: "90 days have passed since the last change in the finding implementation date"
       follow_up_date_last_changed: "Last changed implementation date: %{follow_up_date_last_changed}"
     unanswered_finding:
-      subject: Notification of changes to findings [#%{finding_id}]" # NOTE: no existe en application.en.yml
+      subject: Notification of changes to findings [#%{finding_id}]"
       title: "Notification of changes"
       the_following_finding_are_now_unanswered: "The following finding / improvement opportunity has its status changed to **No response**, due to not receiving a response"
       if_no_answer_is_given_the_following_users_will_be_notified: "DIf it continue in the same status (No response) the following notifications will be generated"
 
-  organization: # NOTE: no existe en application.en.yml
+  organization:
     index_title: "List of organizations"
     show_title: "Organization details"
     new_title: "Add organization"
@@ -518,7 +518,7 @@
     stale_object_error: "Organization was not updated, please try again."
     new_organization_can_not_have_image: "You will be able to upload an organization logo after creating it"
 
-  questionnaire: # NOTE: no existe en application.en.yml
+  questionnaire:
     index_title: "List of questionnaires"
     edit_title: "Edit questionnaire"
     new_title: "Add questionnaire"
@@ -535,25 +535,25 @@
     index_title: "List of reports"
 
   review:
-    external_reviews_label: "Alternative reviews" # NOTE: no existe en application.en.yml
-    external_reviews_title: "Add alternative review" # NOTE: no existe en application.en.yml
-    add_past_findings: "Add recent fixed finding" # NOTE: no existe en application.en.yml
-    control_objectives_previous_effectiveness: "Control previous effectiveness" # NOTE: no existe en application.en.yml
-    weaknesses_count_by_state: "Number of Weaknesses (Pending/Resolved-Repeated)" # NOTE: no existe en application.en.yml
+    external_reviews_label: "Alternative reviews"
+    external_reviews_title: "Add alternative review"
+    add_past_findings: "Add recent fixed finding"
+    control_objectives_previous_effectiveness: "Control previous effectiveness"
+    weaknesses_count_by_state: "Number of Weaknesses (Pending/Resolved-Repeated)"
 
-  external_review: # NOTE: no existe en application.en.yml
+  external_review:
     errors:
       issue_date_after_review_issue_date: "issue date (%{date}) is greater than the report issue date"
 
-  wicked_pdf: # NOTE: no existe en application.en.yml
+  wicked_pdf:
     number_pages_html: 'Page <span class="page"></span> of <span class="topage"></span>'
 
   workflow:
-    maximum_exceeded_by_human_resource: "%{user} has exceeded the maximum time for task: %{item}" # NOTE: no existe en application.en.yml
+    maximum_exceeded_by_human_resource: "%{user} has exceeded the maximum time for task: %{item}"
 
   activerecord:
     models:
-      business_unit_type_review: "Organizational unit review" # NOTE: no existe en application.en.yml
+      business_unit_type_review: "Organizational unit review"
 
     attributes:
       business_unit_type_user:
@@ -562,11 +562,11 @@
         review_id: "Review"
         business_unit_type_id: "Organizational unit"
       conclusion_review:
-        effectiveness_notes: "Effectiveness notes" # NOTE: no existe en application.en.yml
+        effectiveness_notes: "Effectiveness notes"
       control_objective_item:
-        scored_business_unit_type_id: "Business unit type scored" # NOTE: no existe en application.en.yml
+        scored_business_unit_type_id: "Business unit type scored"
       file_model:
-        file: "File" # NOTE: no existe en application.en.yml
+        file: "File"
       group:
         organizations:
           one: "Organization"
@@ -597,7 +597,7 @@
         control_objective_auditor:
           attributes:
             user_id:
-              invalid: "Must be auditor" # NOTE: no existe en application.en.yml
+              invalid: "Must be auditor"
         file_model:
           attributes:
             file:
@@ -615,5 +615,5 @@
               different_from_repeated_of: 'N OBS cannot be different from the repeated weakness'
 
   actioncontroller:
-    findings: "Findings" # NOTE: no existe en application.en.yml
-    licenses: "license" # NOTE: no existe en application.en.yml
+    findings: "Findings"
+    licenses: "license"

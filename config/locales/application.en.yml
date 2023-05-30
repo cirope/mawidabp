@@ -9,7 +9,7 @@ en:
     by: "by"
     add: "Add"
     add_item: "Add item"
-    all: "All" # NOTE: no existe en en.yml
+    all: "All"
     apply_filter: "Apply filter"
     ascendant: "Ascendant"
     back: "Back"
@@ -170,7 +170,7 @@ en:
       column_real_amount: "Real Units"
       column_deviation: "Deviation"
 
-  conclusion_reports: # NOTE: no existe en en.yml
+  conclusion_reports:
     weaknesses_graphs:
       empty: 'No weaknesses for the applied filter'
       hint: 'You must perform a search'
@@ -189,7 +189,7 @@ en:
     review_scores_report_title: "Review scores"
     review_score_details_report_title: "Detailed review scores"
     nbc_annual_report_title: "Annual summary"
-    high_risk_weaknesses_report_title: "High risk weaknesses" # NOTE: no existe en en.yml
+    high_risk_weaknesses_report_title: "High risk weaknesses"
     fixed_weaknesses_report_title: "Fixed weaknesses by risk"
     qa_indicators_title: "Quality indicators"
     weaknesses_by_state_title: "Total weaknesses by status"
@@ -201,15 +201,15 @@ en:
     weaknesses_type_external: "External Audit Weaknesses"
     high_risk_weaknesses: "High risk weaknesses"
     fixed_weaknesses: "Fixed weaknesses by risk"
-    weaknesses_graphs: "Weaknesses graph" # NOTE: no existe en en.yml
+    weaknesses_graphs: "Weaknesses graph"
     from_date: "From"
     to_date: "To"
     mid_date: "Mid" # REVIEW donde sale?
-    date_field: "Date to use" # NOTE: no existe en en.yml
-    created_at: "Created at" # REVIEW Creation date? # NOTE: no existe en en.yml
-    issue_date: "Issued at" # REVIEW Issue date? # NOTE: no existe en en.yml
-    origination_date: "Date of origin" # REVIEW # NOTE: no existe en en.yml
-    cut_date: "Old data closing date" # NOTE: no existe en en.yml
+    date_field: "Date to use"
+    created_at: "Created at" # REVIEW Creation date?
+    issue_date: "Issued at" # REVIEW Issue date?
+    origination_date: "Date of origin" # REVIEW diferencia con created_ad?
+    cut_date: "Old data closing date"
     applied_filters:
       one: "The following filter has been applied to this report: %{filters}"
       other: "The following filters have been applied to this report: %{filters}"
@@ -391,7 +391,7 @@ en:
     create_bundle: "Generate bundle" # REVIEW
     send_by_email: "Send by email"
     download_without_control_objectives_excluded_from_score: "Download without control objectives excluded from score" # REVIEW unscored? La del key?
-    download_expanded: "Download expanded" # NOTE: no existe en en.yml
+    download_expanded: "Download expanded"
     download_without_score: "Download without score"
     download_brief: "Download brief"
     hide_control_objectives_excluded_from_score: "Hide unscored control objectives" # REVIEW unscored? La del key?
@@ -399,7 +399,7 @@ en:
       normal: "Full review"
       brief: "Summary review"
       without_score: "Review without score"
-      expanded: "Extended review" # NOTE: no existe en en.yml
+      expanded: "Extended review"
     pdf:
       pdf_name: "list_of_definitive_reviews.pdf"
       filtered_by:
@@ -421,8 +421,8 @@ en:
     email_note: "Note to include in the email"
     responsibles: "Responsibles"
     issue_date_title: "DATE"
-    new_origination_date: "New" # NOTE: no existe en en.yml
-    estimated_follow_up_date: "Estimated follow up date" # REVIEW Estimated month of normalization? # NOTE: no existe en en.yml
+    new_origination_date: "New"
+    estimated_follow_up_date: "Estimated follow up date" # REVIEW Estimated month of normalization?
     audit_period: "%{start} to %{end}"
     audit_period_title: "AUDIT PERIOD"
     objectives_and_scopes: "OBJECTIVES AND SCOPE OF WORK"
@@ -490,7 +490,7 @@ en:
       control_objective_weaknesses: "Weaknesses"
       control_objective_oportunities: "Opportunities"
       finding_work_papers: "Finding Work Papers"
-    scope_detail: # NOTE: no existe en en.yml
+    scope_detail:
       title: "SCORE OF THE DIFFERENT ITEMS EVALUATED WITHIN THE SCOPE OF THIS AUDIT" # REVIEW QUALIFICATION?
 
   control_objective:
@@ -519,10 +519,10 @@ en:
     not_apply_text: 'Does not apply rate' # REVIEW Donde sale?
     excluded_from_score: "Not taken into account in the report score"
     not_applicable: "Not applicable"
-    previous_effectiveness: "Previous effectiveness %{effectiveness}%" # NOTE: no existe en en.yml
+    previous_effectiveness: "Previous effectiveness %{effectiveness}%"
     errors:
       not_finished: "is not finished"
-      audit_date_ahead_of_issue_date: "audit date is ahead than review issue date" # NOTE: no existe en en.yml
+      audit_date_ahead_of_issue_date: "audit date is ahead than review issue date"
       without_score: "without scoring"
       without_relevance: "without relevance"
       without_audit_date: "without audit date"
@@ -661,12 +661,12 @@ en:
     pending_findings: "Pending observations follow-up"
     synthesis_report_title: "Executive summary"
     review_stats_report_title: "Report statistics"
-    high_risk_weaknesses_report_title: "High risk weaknesses" # NOTE: no existe en en.yml
-    fixed_weaknesses_report_title: "Fixed weaknesses by risk" # NOTE: no existe en en.yml
-    qa_indicators_title: "Quality indicators" # NOTE: no existe en en.yml
-    weakness_summary: "Summary of weaknesses" # NOTE: no existe en en.yml
-    high_risk_weaknesses: "High risk weaknesses" # NOTE: no existe en en.yml
-    fixed_weaknesses: "Fixed weaknesses by risk" # NOTE: no existe en en.yml
+    high_risk_weaknesses_report_title: "High risk weaknesses"
+    fixed_weaknesses_report_title: "Fixed weaknesses by risk"
+    qa_indicators_title: "Quality indicators"
+    weakness_summary: "Summary of weaknesses"
+    high_risk_weaknesses: "High risk weaknesses"
+    fixed_weaknesses: "Fixed weaknesses by risk"
     weaknesses_being_implemented_current:
       one: "Current"
       other: "Current"
@@ -737,7 +737,7 @@ en:
       without_audits_in_the_period: "No high risk audits in the period"
       without_audits_in_the_interval: "No high risk audits in the selected interval"
       without_weaknesses: "No weaknesses"
-    period: # NOTE: no existe en en.yml
+    period:
       title: "Interval"
       range: "from %{from_date} to %{to_date}"
     process_control_stats:
@@ -832,7 +832,7 @@ en:
     stale_object_error: "Group was not updated, please try again."
     add_organization: "Add organization"
 
-  memo: # NOTE: no existe en en.yml
+  memo:
     correctly_created: "External report was successfully created."
     correctly_updated: "External report was successfully updated."
     stale_object_error: "External report was not updated, please try again."
@@ -854,7 +854,7 @@ en:
     type: "Type"
 
   notifier:
-    findings_brief: # NOTE: no existe en en.yml
+    findings_brief:
       title: "Pending findings summary"
     notify_new_finding:
       title: "You have a new finding [#%{finding_id}]"
@@ -939,7 +939,7 @@ en:
       is_unconfirmed: "is in 'Unconfirmed' status"
       not_valid_state: "has a not valid status"
       with_expired_tasks: "has expired pending or in-process tasks" # REVIEW in-progress?
-      with_follow_up_date: "has an implementation date (and it should not)" # NOTE: no existe en en.yml
+      with_follow_up_date: "has an implementation date (and it should not)"
       with_solution_date: "has solution date (and it should not)"
       without_answer: "has no answer"
       without_audited: "has no auditee" # REVIEW entiendo que es un sistantivo, por lo que sería auditee
@@ -974,8 +974,8 @@ en:
     add_control_objective: "Add a new control objective"
     add_process_control: "Add a new process"
     add_best_practice: "Add a new best practice"
-    control_objective_tag: "Objectives by tags" # NOTE: no existe en en.yml
-    add_control_objective_tag: "Add control objective tag" # NOTE: no existe en en.yml
+    control_objective_tag: "Objectives by tags"
+    add_control_objective_tag: "Add control objective tag"
     add_tagging: "Add tag"
     add_file_model: "Add attachment" # REVIEW es un adjunto, cierto?
     associated: "Associates"
