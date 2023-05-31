@@ -24,7 +24,7 @@ en:
         stale: 'Best practices were not updated, please try again'
       destroy:
         notice: 'Best practice deleted'
-        alert: 'Best practice cannot be deleted, it has already been used in reports'
+        alert: 'Best practice cannot be deleted, it has already been used in audit reports'
 
     closing_interviews:
       create:
@@ -83,7 +83,7 @@ en:
     plans:
       destroy:
         notice: 'Work plan deleted'
-        alert: 'Plan cannot be deleted, it is related to at least one report'
+        alert: 'Plan cannot be deleted, it is related to at least one audit report'
 
     polls:
       create:

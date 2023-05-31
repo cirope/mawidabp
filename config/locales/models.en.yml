@@ -100,8 +100,8 @@ en:
         one: 'Error record'
         other: 'Error records'
       external_review:
-        one: 'External Review'
-        other: 'External Reviews'
+        one: 'External audit report'
+        other: 'External audit reports'
       finding:
         one: 'Finding'
         other: 'Findings'
@@ -283,8 +283,8 @@ en:
         comments: 'Additional comments'
         audit_comments: 'Audit Comments'
         responsible_comments: 'Responsible comments'
-        review: 'Review'
-        review_id: 'Review'
+        review: 'Audit report'
+        review_id: 'Audit report'
       closing_interview_user:
         user: 'User'
       commitment_support:
@@ -323,9 +323,9 @@ en:
         error: 'Error'
         user_id: 'User'
       external_review:
-        review: 'Review'
-        review_id: 'Review'
-        alternative_review_id: 'External review'
+        review: 'Audit report'
+        review_id: 'Audit report'
+        alternative_review_id: 'External audit report'
       finding:
         control_objective_item_id: 'Control objective'
         title: 'Title'
@@ -509,8 +509,8 @@ en:
         scope: 'Audit scope'
         suggestions: 'Suggestions and concerns'
         comments: 'Additional comments'
-        review: 'Review'
-        review_id: 'Review'
+        review: 'Audit report'
+        review_id: 'Audit report'
       opening_interview_user:
         user: 'User'
       oportunity: # KEY_TO_FIX opportunity?
@@ -820,8 +820,8 @@ en:
             compliance_susceptible_to_sanction:
               inclusion: 'must be one of the list'
             draft_review_code:
-              not_same_draft_review_code_parent: 'Does not have the same draft review code as its original finding'
-              not_same_draft_review_code_children: 'Does not have the same draft review code as your final finding'
+              not_same_draft_review_code_parent: 'Does not have the same draft audit report code as its original finding'
+              not_same_draft_review_code_children: 'Does not have the same draft audit report code as your final finding'
         finding_user_assignment:
           attributes:
             user:
@@ -848,7 +848,7 @@ en:
         plan:
           attributes:
             plan_items:
-              locked: 'cannot be removed, already used in at least one review'
+              locked: 'cannot be removed, already used in at least one audit report'
         plan_item:
           attributes:
             auxiliar_business_unit_types:
@@ -877,7 +877,7 @@ en:
               file_model_memos_blank: 'Must have at least one file'
               cant_change_fields: 'You cannot change any field because the closing date has passed' # REVIEW va el sujeto?
             plan_item_id:
-              used: 'The project is already being used by another Review or External Review'
+              used: 'The project is already being used by another audit report or external audit report'
         subsidiary:
           attributes:
             identity:

@@ -38,7 +38,7 @@ en:
       plans: 'Work plans'
     execution_title: 'Execution'
     execution:
-      reviews: 'Reviews'
+      reviews: 'Audit reports'
       workflows: 'Workflows'
       time_summary: 'Time summary'
       control_objectives: 'Control objectives'
@@ -56,8 +56,8 @@ en:
       memos: 'External reports'
     conclusion_title: 'Conclusion'
     conclusion:
-      draft_reviews: 'Draft reviews'
-      final_reviews: 'Final reviews'
+      draft_reviews: 'Draft audit reports'
+      final_reviews: 'Final audit reports'
       reports: 'Other reports'
     follow_up_title: 'Follow Up'
     follow_up:

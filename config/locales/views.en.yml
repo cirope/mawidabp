@@ -332,8 +332,8 @@ en:
         one: 'Has an associated plan'
         other: 'Has %{count} associated plans'
       reviews:
-        one: 'Has an associated review'
-        other: 'Has %{count} associated reviews'
+        one: 'Has an associated audit report'
+        other: 'Has %{count} associated audit reports'
       workflows:
         one: 'Has an associated workflow'
         other: 'Has %{count} associated workflows'
@@ -504,7 +504,7 @@ en:
         title: 'Summary by organizational unit'
     reviews:
       index:
-        title: 'Summary by review'
+        title: 'Summary by audit report'
     index:
       title: 'Poll list'
     edit:
@@ -617,7 +617,7 @@ en:
     edit:
       title: 'Edit settings'
     finding_stale_confirmed_days: 'Number of days before an unanswered finding is considered unattended'
-    review_code_expresion: 'Review identification code format' # KEY_TO_FIX review_code_expression?
+    review_code_expresion: 'Audit report identification code format' # KEY_TO_FIX review_code_expression?
     account_expire_time: 'Days to delete inactive accounts'
     allow_concurrent_sessions: 'Allow simultaneous sessions for the same user'
     attempts_count: 'Number of failed connection attempts'
@@ -637,7 +637,7 @@ en:
     skip_function_and_manager_from_ldap_sync: 'Do not sync "Position" and "Superior" fields with LDAP values' # REVIEW como se llaman los campos en LDAP?
     hide_obsolete_best_practices: 'Hide obsolete best practices'
     hours_of_work_per_day: 'Hours of work per day'
-    conclusion_review_receiver: 'Review receiver(s)'
+    conclusion_review_receiver: 'Audit report receiver(s)'
     temporary_polls: 'Temporarily save poll responses. A poll is complete when all of its questions are answered. '
 
   tags:
@@ -690,13 +690,13 @@ en:
     form:
       add_business_unit_type: 'Add organizational unit'
       activity: 'Activity'
-      review: 'Review'
+      review: 'Audit report'
       workflow_amount: 'Amount of scheduled hours:'
       time_consumption_amount: 'Amount of hours allocated:'
     auxiliar_business_unit_types:
       title: 'Auxiliary organizational units'
       activity: 'Activity'
-      review: 'Review'
+      review: 'Audit report'
       workflow_amount: 'Amount of scheduled hours'
       time_consumption_amount: 'Amount of hours allocated'
     downloads:
@@ -784,7 +784,7 @@ en:
         new_user: 'New responsible'
         old_user: 'Old responsible'
         with_findings: 'Include pending findings?'
-        with_reviews: 'Include executing reviews?'
+        with_reviews: 'Include executing audit reports?'
         submit: 'Reassign'
       must_select_a_user: 'You must select a user' # REVIEW donde?
 
@@ -796,7 +796,7 @@ en:
       edit:
         title: 'Release responsibilities'
         with_findings: 'Include pending findings?'
-        with_reviews: 'Include executing reviews?'
+        with_reviews: 'Include executing audit reports?'
         submit: 'Release responsibilities'
 
     status:

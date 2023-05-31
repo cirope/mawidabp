@@ -13,7 +13,7 @@ en:
         user_option: 'Show'
         affected_only: 'Assigned'
         only_all: 'Only all'
-        include_reviews: 'Assigned and by report'
+        include_reviews: 'Assigned and by audit report'
       order_by:
         issue_date: 'Issue date'
         risk: 'Risk'
