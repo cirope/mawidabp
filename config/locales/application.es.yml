@@ -549,7 +549,7 @@ es:
       external_audit_weaknesses: "Hallazgos de Auditorías Externas"
       title: "RESUMEN GERENCIAL\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES EN EJECUCIÓN"
-      clarification: "Nota: los hallazgos mostrados en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
+      clarification: "Nota: los hallazgos mostrados en el presente reporte no son los definitivos (los informes se encuentran en la etapa de Ejecución)"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -579,7 +579,7 @@ es:
     weaknesses_by_state:
       pdf_name: "hallazgos_en_ejecucion_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME GERENCIAL DETALLADO\nHALLAZGOS EN EJECUCIÓN\nTOTALES POR INFORME Y ESTADO"
-      clarification: "Nota: los hallazgos mostrados en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
+      clarification: "Nota: los hallazgos mostrados en el presente reporte no son los definitivos (los informes se encuentran en la etapa de Ejecución)"
       weaknesses_column: "Observaciones"
       oportunities_column: "Oportunidades de Mejora"
       total: "TOTAL"
