@@ -553,7 +553,7 @@
 
   activerecord:
     models:
-      business_unit_type_review: "Organizational unit review"
+      business_unit_type_review: "Organizational unit"
 
     attributes:
       business_unit_type_user:
