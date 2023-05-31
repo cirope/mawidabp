@@ -867,10 +867,10 @@ en:
     changes_notification:
       title: "Notification of changes"
     conclusion_review_notification:
-      title: "Audit report %{type} %{review}"
+      title: "%{type} audit report %{review}"
       body_title: "The following documents are attached: %{elements}"
-      final: "final"
-      draft: "draft"
+      final: "Final"
+      draft: "Draft"
     notification:
       pending: "Pending notifications"
       unconfirmed: "Unconfirmed notifications"
