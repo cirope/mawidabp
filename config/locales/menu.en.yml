@@ -48,7 +48,7 @@ en:
       interviews:
         opening_interviews: 'Opening interviews'
         closing_interviews: 'Closing interviews'
-      reports: 'Reports'
+      reports: 'Other reports'
       findings_title: 'Findings'
       findings:
         weaknesses: 'Weaknesses'
@@ -58,14 +58,14 @@ en:
     conclusion:
       draft_reviews: 'Draft reviews'
       final_reviews: 'Final reviews'
-      reports: 'Reports'
+      reports: 'Other reports'
     follow_up_title: 'Follow Up'
     follow_up:
       pending_findings: 'Pending findings'
       complete_findings: 'Resolved findings'
       repeated_findings: 'Repeated findings'
       notifications: 'Notifications'
-      reports_title: 'Reports'
+      reports_title: 'Other reports'
       reports:
         audited: 'Generals'
         audit: 'Audit'
