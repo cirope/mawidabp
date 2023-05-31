@@ -100,8 +100,8 @@ es:
         one: 'Registro de error'
         other: 'Registros de errores'
       external_review:
-        one: 'Informe Externo'
-        other: 'Informes Externos'
+        one: 'Informe externo'
+        other: 'Informes externos'
       finding:
         one: 'Hallazgo'
         other: 'Hallazgos'
@@ -877,7 +877,7 @@ es:
               file_model_memos_blank: 'Debe tener al menos un archivo'
               cant_change_fields: 'No puede cambiar ningún campo debido a que superó la fecha de cierre'
             plan_item_id:
-              used: 'El proyecto ya está siendo utilizado por otro Informe o Informe externo'
+              used: 'El proyecto ya está siendo utilizado por otro informe o informe externo'
         subsidiary:
           attributes:
             identity:
