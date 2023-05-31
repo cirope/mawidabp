@@ -1575,6 +1575,7 @@ en:
             image_content_type:
               invalid: "is not valid"
             image_file_size:
+              invalid: "is not valid"
         organization_role:
           attributes:
             role_id:
