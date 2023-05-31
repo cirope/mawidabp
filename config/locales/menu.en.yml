@@ -62,7 +62,7 @@ en:
     follow_up_title: 'Follow Up'
     follow_up:
       pending_findings: 'Pending findings'
-      complete_findings: 'Findings fixed'
+      complete_findings: 'Resolved findings'
       repeated_findings: 'Repeated findings'
       notifications: 'Notifications'
       reports_title: 'Reports'
