@@ -354,7 +354,7 @@ en:
       brief: "Summary"
       details: "Details"
       count: "Quantity"
-      share: "Share"
+      share: "Participation"
       empty: "No scores for the applied filter"
     weaknesses_by_state:
       pdf_name: "final_report_weaknesses_by_status_%{from_date}_to_%{to_date}.pdf"
