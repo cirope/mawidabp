@@ -269,7 +269,7 @@
     weaknesses_heatmap_title: "Weaknesses heat map"
 
   execution_committee_report:
-    weaknesses_current_situation_title: "Global Report - Quarterly Drafts"
+    weaknesses_current_situation_title: "Global report - Quarterly drafts"
     weaknesses_current_situation:
       pdf_name: "weaknesses_current_situation_draft_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
