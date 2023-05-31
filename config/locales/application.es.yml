@@ -306,7 +306,7 @@ es:
       internal_control_qualification:
         header_cycle: '<b>Ciclo</b>'
         header_count_findings: '<b>Cantidad de Observaciones</b>'
-        header_weight: '<b>Ponderador a fecha de los Informes</b>'
+        header_weight: '<b>Ponderador por fecha de los Informes</b>' # REVIEW: Ponderador por fecha de los informes?
         header_qualification: '<b>Calificación</b>'
         count_weight: '<b>Total ponderación</b>'
         count_cycles: '<b>Cantidad de ciclos</b>'
@@ -329,7 +329,7 @@ es:
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
     review_stats_report:
       pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
-      title: "ESTADÍSTICAS DE INFORMES"
+      title: "ESTADÍSTICAS DE INFORMES" # REVIEW: en estos  casos habla de los informes definitivos o de los informes? No es redundante mencionar tanto en el título como en el subtítulo a los INFORMES? (hay varios)
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       ratio: "Proporción"
       review_count: "Cantidad de informes"
@@ -348,7 +348,7 @@ es:
       total_score: "Calificación total"
       empty: "Sin calificaciones para el filtro aplicado"
     review_score_details_report:
-      pdf_name: "calificaciones_de_informes_definitivos_detallado_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "calificaciones_de_informes_definitivos_detallado_%{from_date}_al_%{to_date}.pdf" # REVIEW: calificaciones_detalladas_de_informes_definitivos? O sea, entiendo que las calificaciones son las detalladas
       title: "CALIFICACIONES DE INFORMES DETALLADO"
       subtitle: "INFORMES DEFINITIVOS"
       brief: "Resumen"
@@ -833,7 +833,7 @@ es:
     add_organization: "Agregar organización"
 
   memo:
-    correctly_created: "Informe externo agregado correctamente."
+    correctly_created: "Informe externo agregado correctamente." # REVIEW: se refiere al Informe (audit report) o a otro informe/reporte?
     correctly_updated: "Informe externo actualizado correctamente."
     stale_object_error: "El Informe externo no fue actualizado, intente nuevamente."
     description_pdf: "COMENTARIOS"
