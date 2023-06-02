@@ -60,29 +60,19 @@ module TagsHelper
     Array(TAG_OPTIONS[kind])
   end
 
-  def tag_option_type option
-    if option.end_with?('_from') || option.end_with?('_to')
-      :date_picker
-    elsif option.end_with? '_count'
-      :integer
-    else
-      :boolean
-    end
-  end
-
-  def tag_input_option form, tag
-    tag_type   = tag_option_type(tag.last)
+  def tag_input_option form, tag, value
+    option     = value.last
     input_html = {
-      id:    "#{tag.last}_tag_options",
-      name:  "tag[options][#{tag.last}]",
-      value: @tag.options.to_h[tag.last],
+      id:    "#{option}_tag_options",
+      name:  "tag[options][#{option}]",
+      value: tag.option_value(option),
     }
 
-    input_html.merge!(checked: @tag.options.to_h[tag.last] == '1') if tag_type == :boolean
+    input_html.merge!(checked: tag.option_value(option)) if tag.is_boolean?(option)
 
     form.input :options,
-      as: tag_type,
-      label: tag.first,
+      as:         tag.option_type(option),
+      label:      value.first,
       input_html: input_html
   end
 end

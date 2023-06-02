@@ -15,8 +15,12 @@
     <%= f.input :obsolete %>
 
     <% if SHOW_REVIEW_EXTRA_ATTRIBUTES || tags_options_collection(kind: @tag.kind).any? %>
-      <% tags_options_collection(kind: @tag.kind).each do |tag| %>
-        <%= tag_input_option f, tag %>
+      <% tags_options_collection(kind: @tag.kind).each do |option| %>
+        <div class="row">
+          <div class="col-md-6">
+            <%= tag_input_option f, @tag, option %>
+          </div>
+        </div>
       <% end %>
     <% end %>
 
