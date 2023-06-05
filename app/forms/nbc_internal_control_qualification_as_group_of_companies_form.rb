@@ -35,7 +35,10 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
 
       unless business_unit_types_per_organization.values.all? { |names| names == first_organization } &&
         business_unit_types_per_organization.keys.length == organization_ids.length
-        errors.add :organizations, :must_have_the_same_business_unit_types
+          different_names = find_different_names(business_unit_types_per_organization)
+
+          errors.add :organizations, :must_have_the_same_business_unit_type_names,
+            different_names: different_names.to_sentence, count: different_names.count
       end
     end
 
@@ -52,8 +55,22 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
 
       unless periods_per_organization.values.all? { |names| names == first_period } &&
         periods_per_organization.keys.length == organization_ids.length
-        errors.add :periods, :must_be_the_same
+          different_names = find_different_names(periods_per_organization)
+
+          errors.add :periods, :must_have_the_same_names,
+            different_names: different_names.to_sentence, count: different_names.count
       end
+    end
+
+    def find_different_names(names_per_organization)
+      different_names    = []
+      first_organization = names_per_organization.values.first
+
+      names_per_organization.each do |organization_id, names|
+        different_names << names - first_organization
+      end
+
+      different_names.flatten.uniq
     end
 
 end
