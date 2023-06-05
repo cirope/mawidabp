@@ -10,10 +10,6 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
   validate :organization_units_must_have_same_name
   validate :periods_must_be_the_same
 
-  def business_unit_type
-    BusinessUnitType.list.find business_unit_type_id
-  end
-
   def previous_period
     Period.list.find previous_period_id
   end

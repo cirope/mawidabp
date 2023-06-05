@@ -53,8 +53,7 @@ module Reports::NbcInternalControlQualificationAsGroupOfCompanies
         name: '',
         objective: '',
         conclusion: '',
-        introduction_and_scope: '',
-        business_unit_type_id: ''
+        introduction_and_scope: ''
       )
     end
 

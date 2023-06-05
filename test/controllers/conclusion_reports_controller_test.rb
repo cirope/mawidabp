@@ -1465,7 +1465,6 @@ class ConclusionReportsControllerTest < ActionController::TestCase
           objective: 'objective',
           conclusion: 'conclusion',
           introduction_and_scope: 'introduction and scope',
-          business_unit_type_id: business_unit_types(:cycle),
           previous_period_id: periods(:past_period).id
         }
       }
