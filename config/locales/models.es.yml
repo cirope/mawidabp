@@ -31,10 +31,8 @@ es:
       models:
         nbc_internal_control_qualification_as_group_of_companies:
           attributes:
-            period_id:
-              must_be_different: 'debe ser distinto a Periodo previo'
             previous_period_id:
-              must_be_different: 'debe ser distinto a Periodo'
+              must_be_before_period: 'debe tener una fecha de inicio anterior a la fecha de inicio del Periodo'
             organizations:
               must_have_the_same_business_unit_types: 'deben tener la misma cantidad de unidades organizativas con los mismos nombres'
             periods:

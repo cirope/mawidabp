@@ -25,13 +25,12 @@ class NbcInternalControlQualificationAsGroupOfCompaniesFormTest < ActiveSupport:
     assert_error @form, :previous_period_id, :blank
   end
 
-  test 'should invalid because same period and previous period' do
-    @form.validate({ previous_period_id: periods(:current_period).id })
+  test 'previous_period must be before period' do
+    refute @form.validate({ previous_period_id: periods(:unused_period).id })
+    assert_error @form, :previous_period_id, :must_be_before_period
 
-    refute @form.valid?
-
-    assert_error @form, :period_id, :must_be_different
-    assert_error @form, :previous_period_id, :must_be_different
+    refute @form.validate({ previous_period_id: periods(:current_period).id })
+    assert_error @form, :previous_period_id, :must_be_before_period
   end
 
   test 'should attribute previous_period_id' do

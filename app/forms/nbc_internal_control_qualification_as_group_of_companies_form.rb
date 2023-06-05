@@ -6,7 +6,7 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
   property :periods
 
   validates :previous_period_id, presence: true
-  validate :periods_not_equal
+  validate :previous_period_must_be_before_period
   validate :organization_units_must_have_same_name
   validate :periods_must_be_the_same
 
@@ -16,10 +16,9 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
 
   private
 
-    def periods_not_equal
-      if period_id == previous_period_id
-        errors.add :period_id, :must_be_different
-        errors.add :previous_period_id, :must_be_different
+    def previous_period_must_be_before_period
+      if self.previous_period && self.period && self.previous_period.start >= self.period.start
+        errors.add :previous_period_id, :must_be_before_period
       end
     end
 
