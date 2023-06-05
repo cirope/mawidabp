@@ -18,7 +18,7 @@ class NbcAnnualReportFormTest < ActiveSupport::TestCase
   end
 
   test 'should require all fields' do
-    @form.validate(
+    refute @form.validate(
       {
         period_id: '',
         date: '',
@@ -29,8 +29,6 @@ class NbcAnnualReportFormTest < ActiveSupport::TestCase
         introduction_and_scope: ''
       }
     )
-
-    refute @form.valid?
 
     assert_error @form, :period_id, :blank
     assert_error @form, :date, :blank

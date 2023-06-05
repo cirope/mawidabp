@@ -21,10 +21,7 @@ class NbcInternalControlQualificationAsGroupOfCompaniesFormTest < ActiveSupport:
   end
 
   test 'should require previous period id' do
-    @form.validate({ previous_period_id: '' })
-
-    refute @form.valid?
-
+    refute @form.validate({ previous_period_id: '' })
     assert_error @form, :previous_period_id, :blank
   end
 
