@@ -5,7 +5,7 @@ important:
   icon: tag
   shared: false
   obsolete: false
-  options: "{}"
+  options: { 'required_min_count': 2 }
   organization: cirope
   group: main_group
 
@@ -16,7 +16,7 @@ pending:
   icon: tag
   shared: false
   obsolete: false
-  options: "{}"
+  options: {}
   organization: cirope
   group: main_group
 
@@ -27,7 +27,7 @@ follow_up:
   icon: tag
   shared: false
   obsolete: false
-  options: "{}"
+  options: {}
   organization: cirope
   group: main_group
 
@@ -38,7 +38,7 @@ extra:
   icon: tag
   shared: false
   obsolete: false
-  options: "{}"
+  options: {}
   organization: cirope
   group: main_group
 
@@ -49,7 +49,7 @@ high_priority:
   icon: tag
   shared: false
   obsolete: false
-  options: "{}"
+  options: {}
   organization: cirope
   group: main_group
 
@@ -60,7 +60,7 @@ for_revision:
   icon: tag
   shared: false
   obsolete: false
-  options: "{}"
+  options: {}
   organization: cirope
   group: main_group
 
@@ -71,7 +71,7 @@ manual:
   icon: tag
   shared: false
   obsolete: false
-  options: "{}"
+  options: {}
   organization: cirope
   group: main_group
 
@@ -81,7 +81,7 @@ breaking:
   style: secondary
   shared: false
   obsolete: false
-  options: "{}"
+  options: {}
   organization: cirope
   group: main_group
 
@@ -91,7 +91,7 @@ risk_evaluation:
   style: secondary
   shared: false
   obsolete: false
-  options: "{}"
+  options: {}
   organization: cirope
   group: main_group
 
@@ -101,6 +101,6 @@ recovery:
   style: primary
   shared: false
   obsolete: false
-  options: ["recovery"]
+  options: { 'recovery': '1' }
   organization: google
   group: main_group
