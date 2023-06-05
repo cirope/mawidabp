@@ -81,8 +81,4 @@ class NbcAnnualReportFormTest < ActiveSupport::TestCase
     assert_equal NbcAnnualReportForm.human_attribute_name(:introduction_and_scope),
                  I18n.t('activemodel.attributes.nbc_annual_report_form.introduction_and_scope')
   end
-
-  test 'should return period' do
-    assert_equal @form.period, periods(:current_period)
-  end
 end

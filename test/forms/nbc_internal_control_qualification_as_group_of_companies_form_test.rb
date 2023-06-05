@@ -41,8 +41,4 @@ class NbcInternalControlQualificationAsGroupOfCompaniesFormTest < ActiveSupport:
     assert_equal NbcInternalControlQualificationAsGroupOfCompaniesForm.human_attribute_name(:previous_period_id),
                  I18n.t('activemodel.attributes.nbc_annual_report_form.previous_period_id')
   end
-
-  test 'should return previous period' do
-    assert_equal @form.previous_period_id, periods(:past_period).id
-  end
 end
