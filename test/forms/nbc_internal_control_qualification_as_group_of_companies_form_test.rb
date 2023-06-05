@@ -4,6 +4,8 @@ require 'test_helper'
 
 class NbcInternalControlQualificationAsGroupOfCompaniesFormTest < ActiveSupport::TestCase
   setup do
+    set_organization
+
     @form = NbcInternalControlQualificationAsGroupOfCompaniesForm.new(
       OpenStruct.new(
         period_id: periods(:current_period).id,

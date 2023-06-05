@@ -4,6 +4,8 @@ require 'test_helper'
 
 class NbcAnnualReportFormTest < ActiveSupport::TestCase
   setup do
+    set_organization
+
     @form = NbcAnnualReportForm.new(OpenStruct.new(
                                       period_id: periods(:current_period).id,
                                       date: Date.today,
