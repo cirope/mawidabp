@@ -27,6 +27,6 @@ class NbcAnnualReportForm < Reform::Form
   end
 
   def period
-    Period.find period_id
+    Period.find_by_id period_id
   end
 end

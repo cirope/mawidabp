@@ -11,7 +11,7 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
   validate :periods_must_be_the_same
 
   def previous_period
-    Period.list.find previous_period_id
+    Period.list.find_by_id previous_period_id
   end
 
   private
