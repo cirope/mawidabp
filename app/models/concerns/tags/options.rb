@@ -44,21 +44,19 @@ module Tags::Options
   end
 
   def option_value option, human: false
-    value = Hash(options)[option]
-
-    case option_type(option)
-    when :date_picker
-      if value.present?
+    if value = Hash(options)[option]
+      case option_type(option)
+      when :date_picker
         human ? I18n.l(Date.parse(value)) : value
-      end
-    when :boolean
-      value = value == '1'
+      when :boolean
+        value = value == '1'
 
-      human ? I18n.t("label.#{value ? 'yes' : 'no'}") : value
-    when :integer
-      value.to_i if value.present?
-    else
-      value
+        human ? I18n.t("label.#{value ? 'yes' : 'no'}") : value
+      when :integer
+        value.to_i
+      else
+        value
+      end
     end
   end
 
