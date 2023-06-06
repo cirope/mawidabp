@@ -44,7 +44,7 @@ module Tags::Options
   end
 
   def option_value option, human: false
-    value = options.to_h[option]
+    value = Hash(options)[option]
 
     case option_type(option)
     when :date_picker
