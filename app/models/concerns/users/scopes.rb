@@ -47,7 +47,7 @@ module Users::Scopes
   end
 
   def recovery?
-    tags.with_option('recovery').exists?
+    tags.with_option('recovery', '1').exists?
   end
 
   module ClassMethods

@@ -29,6 +29,7 @@ namespace :db do
       add_commitment_data_on_findings            # 2020-12-01
       update_finding_follow_up_date_last_changed # 2021-12-22
       update_draft_review_code                   # 2022-07-20
+      update_options_tags                        # 2023-06-05
     end
   end
 end
@@ -727,4 +728,20 @@ private
 
   def update_draft_review_code?
     Finding.where.not(draft_review_code: nil).blank?
+  end
+
+  def update_options_tags
+    if POSTGRESQL_ADAPTER
+      tag = Tag.where.not(options: nil).take
+
+      if tag.options.kind_of? Array
+        Tag.find_each do |tag|
+          unless tag.options.nil?
+            options = tag.options.each_with_object({}) { |option, hsh| hsh[option] = '1' }
+
+            tag.update_column(:options, options)
+          end
+        end
+      end
+    end
   end

@@ -5,7 +5,7 @@ important:
   icon: tag
   shared: false
   obsolete: false
-  options: { 'required_min_count': 2 }
+  options: {}
   organization: cirope
   group: main_group
 
