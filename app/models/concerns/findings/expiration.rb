@@ -11,7 +11,9 @@ module Findings::Expiration
 
   module ClassMethods
     def expires_very_soon
-      date = if Time.zone.now < Time.zone.now.noon
+      date = if FINDING_VERY_NEAR_EXPIRATION_DAYS > 0
+               FINDING_VERY_NEAR_EXPIRATION_DAYS.business_day.from_now.to_date
+            elsif Time.zone.now < Time.zone.now.noon
                Time.zone.today
              else
                1.business_day.from_now.to_date
