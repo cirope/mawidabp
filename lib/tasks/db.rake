@@ -731,17 +731,21 @@ private
   end
 
   def update_options_tags
-    if POSTGRESQL_ADAPTER
-      current_tag = Tag.where.not(options: nil).take
-
-      if current_tag.options.kind_of? Array
-        Tag.find_each do |tag|
-          unless tag.options.nil?
-            options = tag.options.each_with_object({}) { |option, hsh| hsh[option] = '1' }
-
-            tag.update_column(:options, options)
-          end
+    if update_options_tags?
+      Tag.find_each do |tag|
+        options = Array(tag.options).each_with_object({}) do |option, hsh|
+          hsh[option] = '1'
         end
+
+        tag.update_column :options, options
       end
+    end
+  end
+
+  def update_options_tags?
+    if POSTGRESQL_ADAPTER
+      tag = Tag.where.not(options: nil).take
+
+      tag.options.kind_of? Array
     end
   end
