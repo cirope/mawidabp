@@ -4,6 +4,8 @@ require 'test_helper'
 
 class NbcInternalControlQualificationAsGroupOfCompaniesFormTest < ActiveSupport::TestCase
   setup do
+    skip unless Current.conclusion_pdf_format == 'nbc'
+
     set_organization
 
     other_organization = organizations(:google)
