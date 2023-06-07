@@ -648,7 +648,7 @@ en:
       weaknesses: "WEAKNESSES"
       oportunities: "IMPROVEMENT OPPORTUNITIES" # KEY_TO_FIX opportunities?
       without_weaknesses: "No weaknesses in the period"
-      without_oportunities: "No Improvement Opportunities in the period" # KEY_TO_FIX without_opportunities?
+      without_oportunities: "No improvement opportunities in the period" # KEY_TO_FIX without_opportunities?
       pdf_name: "follow-up_costs_analysis_%{from_date}_to_%{to_date}.pdf"
 
   follow_up_committee_report:

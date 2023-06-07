@@ -647,8 +647,8 @@ es:
       title: "ANALISIS DE COSTOS\nDE SEGUIMIENTO DE HALLAZGOS\nPOR INFORME DE AUDITORIA INTERNA"
       weaknesses: "OBSERVACIONES"
       oportunities: "OPORTUNIDADES DE MEJORA"
-      without_weaknesses: "Sin Observaciones en el periodo"
-      without_oportunities: "Sin Oportunidades de Mejora en el periodo"
+      without_weaknesses: "Sin observaciones en el periodo"
+      without_oportunities: "Sin oportunidades de mejora en el periodo"
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
 
   follow_up_committee_report:
@@ -1027,8 +1027,8 @@ es:
     oportunities_count_summary: "Cantidad de oportunidades de mejora ordenadas por estado"
     weaknesses_summary: "Resumen de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
     weaknesses_count_summary: "Cantidad de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
-    weaknesses_count: "Cantidad de Observaciones"
-    oportunities_count: "Cantidad de Oportunidades de Mejora"
+    weaknesses_count: "Cantidad de observaciones"
+    oportunities_count: "Cantidad de oportunidades de mejora"
     control_objectives_work_papers: "Objetivos de control"
     show_control_objective: "Ver detalles del objetivo de control"
     hide_control_objective: "Ocultar detalles del objetivo de control"
