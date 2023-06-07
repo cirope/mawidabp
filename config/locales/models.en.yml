@@ -210,11 +210,11 @@ en:
         one: 'User'
         other: 'Users'
       weakness:
-        one: 'Weakness'
-        other: 'Weaknesses'
+        one: 'Issue'
+        other: 'Issues'
       weakness_template:
-        one: 'Weakness template'
-        other: 'Weaknesses templates'
+        one: 'Issue template'
+        other: 'Issues templates'
       work_paper:
         one: 'Working paper'
         other: 'Working papers'
@@ -329,7 +329,7 @@ en:
       finding:
         control_objective_item_id: 'Control objective'
         title: 'Title'
-        description: 'Finding / Opportunity'
+        description: 'Issue / Opportunity'
         brief: 'Brief'
         type: 'Type'
         repeated_of_id: 'Repeated of'
@@ -389,7 +389,7 @@ en:
       finding/finding_relations:
         one: 'Relation'
         other: 'Relations'
-        related_finding_id: 'Relation (Related finding / improvement opportunity)'
+        related_finding_id: 'Relation (Related issue / improvement opportunity)'
         description: 'Relation (description)'
       finding/tasks:
         code: 'Code'
@@ -411,7 +411,7 @@ en:
         commitment_date: 'Commitment date'
         user_id: 'Comment (user)'
         notify_users: 'Comment (send notification)'
-        skip_commitment_support: 'Check if the observation is fixed' # REVIEW weakness / finding?
+        skip_commitment_support: 'Check if the issue is fixed' # REVIEW weakness / finding?
       finding/finding_answers/commitment_support:
         one: 'Support commitment' # REVIEW context?
         reason: 'Reschedule reason'
@@ -744,7 +744,7 @@ en:
       weakness:
         control_objective_item_id: 'Control objective'
         title: 'Title'
-        description: 'Weakness'
+        description: 'Issue'
         brief: 'Brief'
         review_code: 'Code'
         audit_recommendations: 'Audit recommendations'
@@ -783,7 +783,7 @@ en:
         reference: 'Reference'
         subreference: 'Subreference'
         title: 'Title'
-        description: 'Weakness'
+        description: 'Issue'
         brief: 'Brief'
         risk: 'Risk'
         operational_risk: 'Operational risk'
@@ -804,7 +804,7 @@ en:
               must_be_blank: 'must be blank for the selected status'
             state:
               must_have_a_comment: 'must have a comment attached for this transition'
-              can_not_be_revoked: 'cannot be "Revoked", possibly due to a repetition or because the observation is already included in a final report'
+              can_not_be_revoked: 'cannot be "Revoked", possibly due to a repetition or because the issue is already included in a final report'
               must_have_a_work_paper: 'must have at least one work paper associated with it'
               must_be_done_by_proper_role: 'can only be changed by a supervisor or manager user'
             finding_user_assignments:

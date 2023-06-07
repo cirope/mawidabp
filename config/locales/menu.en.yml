@@ -17,7 +17,7 @@ en:
         best_practices: 'Management'
         control_objectives: 'Control objectives'
       settings: 'Settings'
-      weakness_templates: 'Weakness templates'
+      weakness_templates: 'Issue templates'
       risk_assessment_templates: 'Risk assessment templates'
       tags: 'Labels'
       documents: 'Documents'
@@ -42,7 +42,7 @@ en:
       workflows: 'Workflows'
       time_summary: 'Time summary'
       control_objectives: 'Control objectives'
-      weaknesses: 'Weaknesses'
+      weaknesses: 'Issues'
       oportunities: 'Improvement opportunities' # KEY_TO_FIX opportunity?
       interviews_title: 'Interviews'
       interviews:
@@ -51,7 +51,7 @@ en:
       reports: 'Other reports'
       findings_title: 'Findings'
       findings:
-        weaknesses: 'Weaknesses'
+        weaknesses: 'Issues'
         oportunities: 'Improvement opportunities'  # KEY_TO_FIX opportunity?
       memos: 'External reports'
     conclusion_title: 'Conclusion'

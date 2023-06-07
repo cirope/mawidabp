@@ -40,7 +40,7 @@ en:
 
     finding_answers:
       create:
-        notice: 'Find answer created successfully.'
+        notice: 'Finding answer created successfully.'
         alert: 'Answer could not be created, please try again.'
 
     news:

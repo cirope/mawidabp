@@ -167,7 +167,7 @@ en:
     auditor_form:
       origin: 'origin'
     edit_bic_sigen_fields:
-      title: 'Edit finding sigen fields'
+      title: 'Edit issue sigen fields'
     current_user_filters:
       pending_to_endorsement: 'Pending approval'
       as_owner: '%{kind} as owner'
@@ -427,7 +427,7 @@ en:
       csv_name: 'plan_period_%{period}.csv'
       csv_name_pat_im: 'internal_management_progress_report_%{current_date}.csv'
       csv_name_pat_dprh: 'detailed_progress_report_in_hours_%{current_date}.csv'
-      number_observations_per_risk: 'Number of observations by risk'
+      number_observations_per_risk: 'Number of issues by risk'
       annual_plan_hours: 'Annual plan hours'
       auditor: 'Auditor (User)'
       time_summary_hours: 'Time Summary Hours'
@@ -616,7 +616,7 @@ en:
       title: 'Add settings'
     edit:
       title: 'Edit settings'
-    finding_stale_confirmed_days: 'Number of days before an unanswered finding is considered unattended'
+    finding_stale_confirmed_days: 'Number of days before an unanswered issue is considered unattended'
     review_code_expresion: 'Audit report identification code format' # KEY_TO_FIX review_code_expression?
     account_expire_time: 'Days to delete inactive accounts'
     allow_concurrent_sessions: 'Allow simultaneous sessions for the same user'
@@ -803,28 +803,28 @@ en:
       status_controls:
         add: 'Add user to the follow-up status list'
         remove: 'Remove user from the follow-up status list'
-        list: 'Show pending findings list of the selected users'
-        user_findings: "Show user pending findings list and their hierarchy"
+        list: 'Show pending issues list of the selected users'
+        user_findings: "Show user pending issues list and their hierarchy"
       show:
         title: 'Status'
         table: 'Show table'
         graph: 'Show graph'
         pending_weaknesses:
-          one: '**One** weakness **pending**'
-          other: '**%{count}** weaknesses **pending**'
+          one: '**One** issue **pending**'
+          other: '**%{count}** issues **pending**'
         high_risk_weaknesses:
-          one: '**One** weakness of **high risk**'
-          other: '**%{count}** **high risk** weaknesses'
+          one: '**One** issue of **high risk**'
+          other: '**%{count}** **high risk** issues'
         weaknesses:
           pending:
-            one: '**One** pending weakness'
-            other: '**%{count}** pending weaknesses'
+            one: '**One** pending issue'
+            other: '**%{count}** pending issues'
           complete:
-            one: '**One** weakness fixed'
-            other: '**%{count}** weaknesses fixed'
+            one: '**One** issue fixed'
+            other: '**%{count}** issues fixed'
           repeated:
-            one: '**One** repeated weakness'
-            other: '**%{count}** repeated weaknesses'
+            one: '**One** repeated issue'
+            other: '**%{count}** repeated issues'
 
   risk_assessments:
     edit:
@@ -903,15 +903,15 @@ en:
 
   weakness_templates:
     edit:
-      title: 'Edit weakness template'
+      title: 'Edit issue template'
     index:
-      new: 'New weakness template'
-      title: 'Weakness template list'
-      empty_html: 'There are no weakness templates, you can create one with the <span class="badge badge-primary">New weakness template</span> button'
-      empty_search_html: 'There are no weakness templates that match the search criteria'
+      new: 'New issue template'
+      title: 'Issue template list'
+      empty_html: 'There are no issue templates, you can create one with the <span class="badge badge-primary">New issue template</span> button'
+      empty_search_html: 'There are no issue templates that match the search criteria'
     new:
-      title: 'Create weakness template'
+      title: 'Create issue template'
     show:
-      title: 'Show weakness template'
+      title: 'Show issue template'
     form:
       add_control_objective: 'Add control objective'

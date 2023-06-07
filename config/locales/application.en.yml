@@ -53,7 +53,7 @@ en:
 
   message:
     ldap_error: 'Authentication server is not available, please try again later'
-    change_weakness_risk: "The risk of the observation has changed"
+    change_weakness_risk: "The risk of the issue has changed"
     confirmation_question: "Are you sure?"
     download: "Download"
     insufficient_privileges: "You do not have permissions to perform the operation" # REVIEW operation? Cuando intenas acceder a una pag sin estar authorizado
@@ -138,11 +138,11 @@ en:
     cost_analysis_title: "Cost Analysis"
     cost_summary_title: "Cost Summary"
     detailed_cost_analysis_title: "Detailed cost analysis"
-    weaknesses_by_state_title: "Total weaknesses by status"
-    weaknesses_by_risk_title: "Total weaknesses by risk"
-    weaknesses_by_audit_type_title: "Total weaknesses by audit type"
-    high_risk_weaknesses_report_title: "High risk weaknesses"
-    fixed_weaknesses_report_title: "Fixed weaknesses by risk"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
+    high_risk_weaknesses_report_title: "High risk issues"
+    fixed_weaknesses_report_title: "Fixed issues by risk"
     cost_analysis:
       detailed_column_resource: "Resource"
       detailed_column_estimated_amount: "Estimated cost (planned)"
@@ -172,7 +172,7 @@ en:
 
   conclusion_reports:
     weaknesses_graphs:
-      empty: 'No weaknesses for the applied filter'
+      empty: 'No issues for the applied filter'
       hint: 'You must perform a search'
       users: 'By user'
       business_units: 'By business unit'
@@ -180,28 +180,28 @@ en:
 
   conclusion_committee_report:
     index_title: "Conclusion reports"
-    control_objective_stats_title: 'Observations by control objective' # REVIEW weaknesses or findings?
-    control_objective_stats_by_review_title: 'Observations by control objective without scores' # REVIEW weaknesses or findings? scores?
+    control_objective_stats_title: 'Issues by control objective' # REVIEW weaknesses or findings?
+    control_objective_stats_by_review_title: 'Issues by control objective without scores' # REVIEW weaknesses or findings? scores?
     benefits_title: 'Benefits / Detriments'
-    process_control_stats_title: 'Observations by business process' # REVIEW weaknesses or findings?
+    process_control_stats_title: 'Issues by business process' # REVIEW weaknesses or findings?
     synthesis_report_title: "Executive summary"
     review_stats_report_title: "Audit report statistics"
     review_scores_report_title: "Audit report scores"
     review_score_details_report_title: "Detailed audit report scores"
     nbc_annual_report_title: "Annual summary"
-    high_risk_weaknesses_report_title: "High risk weaknesses"
-    fixed_weaknesses_report_title: "Fixed weaknesses by risk"
+    high_risk_weaknesses_report_title: "High risk issues"
+    fixed_weaknesses_report_title: "Fixed issues by risk"
     qa_indicators_title: "Quality indicators"
-    weaknesses_by_state_title: "Total weaknesses by status"
-    weaknesses_by_risk_title: "Total weaknesses by risk"
-    weaknesses_by_audit_type_title: "Total weaknesses by audit type"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
     findings_type_internal: "Internal Audit Findings"
     findings_type_external: "External Audit Findings"
-    weaknesses_type_internal: "Internal Audit Weaknesses"
-    weaknesses_type_external: "External Audit Weaknesses"
-    high_risk_weaknesses: "High risk weaknesses"
-    fixed_weaknesses: "Fixed weaknesses by risk"
-    weaknesses_graphs: "Weaknesses graph"
+    weaknesses_type_internal: "Internal Audit Issues"
+    weaknesses_type_external: "External Audit Issues"
+    high_risk_weaknesses: "High risk issues"
+    fixed_weaknesses: "Fixed issues by risk"
+    weaknesses_graphs: "Issues graph"
     from_date: "From"
     to_date: "To"
     mid_date: "Mid" # REVIEW donde sale?
@@ -220,52 +220,52 @@ en:
       without_audits_in_the_period: 'No audits with benefits / detriments in the period'
       total: 'Total amount: <b>%{amount}</b>'
     control_objective_stats:
-      pdf_name: 'weaknesses_by_control_objective_%{from_date}_to_%{to_date}.pdf'
-      title: "WEAKNESSES GROUPED BY CONTROL OBJECTIVE"
+      pdf_name: 'issues_by_control_objective_%{from_date}_to_%{to_date}.pdf'
+      title: "ISSUES GROUPED BY CONTROL OBJECTIVE"
       subtitle: "FINAL AUDIT REPORTS"
       average_effectiveness: 'Weighted average score'
       average_effectiveness_resume:
         one: '%{effectiveness} - %{count} evaluated audit report'
         other: '%{effectiveness} - %{count} evaluated audit reports'
-      without_weaknesses: 'No weaknesses'
+      without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
       review_effectiveness_average: 'Weighted average of control objective scores: <b>%{score}%</b>'
     control_objective_stats_by_review:
-      pdf_name: 'weaknesses_by_control_objective_without_score_%{from_date}_to_%{to_date}.pdf' # REVIEW qualification / stast? x2
-      title: 'WEAKNESSES GROUPED BY CONTROL OBJECTIVE WITHOUT SCORE' # REVIEW QUALIFICATION / STATS? x2
+      pdf_name: 'issues_by_control_objective_without_score_%{from_date}_to_%{to_date}.pdf' # REVIEW qualification / stast? x2
+      title: 'ISSUES GROUPED BY CONTROL OBJECTIVE WITHOUT SCORE' # REVIEW QUALIFICATION / STATS? x2
       subtitle: 'FINAL AUDIT REPORTS'
-      without_weaknesses: 'No weaknesses'
+      without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
     fixed_weaknesses_report:
-      pdf_name: "fixed_weaknesses_by_risk_from_%{from_date}_to_%{to_date}.pdf"
-      internal_audit_weaknesses: "Internal Audit Weaknesses"
-      external_audit_weaknesses: "External Audit Weaknesses"
+      pdf_name: "fixed_issues_by_risk_from_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Issues"
+      external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
-      subtitle: "WEAKNESSES SOLVED - FINAL AUDIT REPORTS"
+      subtitle: "ISSUES SOLVED - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
-      without_weaknesses: "No weaknesses"
+      without_weaknesses: "No issues"
     high_risk_weaknesses_report:
-      pdf_name: "high_risk_weaknesses_%{from_date}_to_%{to_date}.pdf"
-      internal_audit_weaknesses: "Internal Audit Weaknesses"
-      external_audit_weaknesses: "External Audit Weaknesses"
+      pdf_name: "high_risk_issues_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Issues"
+      external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
-      subtitle: "HIGH RISK WEAKNESSES - FINAL AUDIT REPORTS"
+      subtitle: "HIGH RISK ISSUES - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No high risk audits in the period"
       without_audits_in_the_interval: "No high risk audits in the selected interval"
-      without_weaknesses: "No weaknesses"
+      without_weaknesses: "No issues"
     period:
       title: "Interval"
       range: "from %{from_date} to %{to_date}"
     process_control_stats:
-      pdf_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf'
-      title: "WEAKNESSES GROUPED BY BUSINESS PROCESS"
+      pdf_name: 'issues_by_business_process_%{from_date}_to_%{to_date}.pdf'
+      title: "ISSUES GROUPED BY BUSINESS PROCESS"
       subtitle: "FINAL AUDIT REPORTS"
       average_effectiveness: 'Weighted average score'
       average_effectiveness_resume:
         one: '%{effectiveness} - %{count} evaluated audit report'
         other: '%{effectiveness} - %{count} evaluated audit reports'
-      without_weaknesses: 'No weaknesses'
+      without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
       review_effectiveness_average: 'Weighted average of business process scores: <b>%{score}%</b>'
     qa_indicators:
@@ -276,8 +276,8 @@ en:
       pdf_name: "quality_indicators_%{from_date}_to_%{to_date}.pdf"
       without_audits_in_the_period: 'No audits in the period'
       indicators:
-        highest_solution_rate: "Highest Risk Weaknesses Solution"
-        medium_solution_rate: "Medium Risk Weaknesses Solution"
+        highest_solution_rate: "Highest Risk Issues Solution"
+        medium_solution_rate: "Medium Risk Issues Solution"
         digitalized: "Digitization"
     nbc_annual_report:
       pdf_name: "annual_report_%{from_date}_to_%{to_date}.pdf"
@@ -302,10 +302,10 @@ en:
         header_number: '<b>N°</b>' # REVIEW Quizásse pudiera usar numeral...
         header_qualification: '<b>Qualification</b>' # REVIEW Score?
         header_weight: '<b>Weight</b>'
-        header_high_risk_observations: '<b>Number of High Risk Observations</b>' # REVIEW: weaknesses / findings?
+        header_high_risk_observations: '<b>Number of High Risk Issues</b>' # REVIEW: weaknesses / findings?
       internal_control_qualification:
         header_cycle: '<b>Cycle</b>'
-        header_count_findings: '<b>Number of Findings</b>'
+        header_count_findings: '<b>Number of Issues</b>'
         header_weight: '<b>Weighting by audit report date</b>'
         header_qualification: '<b>Qualification</b>' # REVIEW Score?
         count_weight: '<b>Total weight</b>'
@@ -314,30 +314,30 @@ en:
         final_qualification: '<b>Internal Control Qualification</b>'
     synthesis_report:
       pdf_name: "executive_summary_final_audit_reports_%{from_date}_to_%{to_date}.pdf"
-      internal_audit_weaknesses: "Internal Audit Weaknesses"
-      external_audit_weaknesses: "External Audit Weaknesses"
+      internal_audit_weaknesses: "Internal Audit Findings"
+      external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
-      subtitle: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nOF FINAL AUDIT REPORTS"
+      subtitle: "ISSUES/IMPROVEMENT OPPORTUNITIES\nOF FINAL AUDIT REPORTS"
       organization_score: "Organization Score: %{score}% (*)"
       organization_score_note: "(*) The organization score is obtained as an average of the scores obtained in the audit types (%{audit_types})."
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
-      without_weaknesses: "No weaknesses"
-      references: "References:\n\n(1) Score: the score (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their score from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Weaknesses: lists the titles of the detected weaknesses. If there are no weaknesses, the legend \"No weaknesses\" is displayed."
+      without_weaknesses: "No findings"
+      references: "References:\n\n(1) Score: the score (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their score from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Issues: lists the titles of the detected issues. If there are no issues, the legend \"No issues\" is displayed."
       generic_score_average:
         one: 'Average of %{audit_type} scores in a audit report'
         other: 'Average of %{audit_type} scores in %{count} audit reports'
     review_stats_report:
       pdf_name: "final_audit_report_statistics_%{from_date}_to_%{to_date}.pdf"
       title: "AUDIT REPORT STATISTICS"
-      subtitle: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nOF FINAL AUDIT REPORTS"
+      subtitle: "ISSUES/IMPROVEMENT OPPORTUNITIES\nOF FINAL AUDIT REPORTS"
       ratio: "Ratio"
       review_count: "Number of audit reports"
       reviews_by_tag:
         title: "Audit reports by tag"
         footnote: "The tag-audit report pair is counted. So, for example, a audit report with two tags will be counted twice and a audit report without tags will be ignored."
       weaknesses_by_score:
-        title: "Weaknesses by risk, priority and audit report score"
+        title: "Issues by risk, priority and audit report score"
         total: "Total"
     review_scores_report:
       pdf_name: "final_audit_report_scores_%{from_date}_to_%{to_date}.pdf"
@@ -357,23 +357,23 @@ en:
       share: "Participation"
       empty: "No scores for the applied filter"
     weaknesses_by_state:
-      pdf_name: "final_audit_report_weaknesses_by_status_%{from_date}_to_%{to_date}.pdf"
-      title: "FINAL AUDIT REPORT WEAKNESSES\nTOTALS BY STATUS"
-      weaknesses_column: "Weaknesses"
+      pdf_name: "final_audit_report_findings_by_status_%{from_date}_to_%{to_date}.pdf"
+      title: "FINAL AUDIT REPORT FINDINGS\nTOTALS BY STATUS"
+      weaknesses_column: "Issues"
       oportunities_column: "Improvement Opportunities" # KEY_TO_FIX opportunities_column?
       period_summary: "Period summary %{period}"
       total: "TOTAL"
     weaknesses_by_risk:
-      pdf_name: "final_audit_report_weaknesses_by_risk_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "final_audit_report_issues_by_risk_%{from_date}_to_%{to_date}.pdf"
       period_summary: "Period summary %{period}"
-      title: "FINAL AUDIT REPORT WEAKNESSES\nTOTALS BY RISK LEVEL"
+      title: "FINAL AUDIT REPORT ISSUES\nTOTALS BY RISK LEVEL"
       total: "TOTAL"
     weaknesses_by_audit_type:
-      weaknesses: "Weaknesses"
+      weaknesses: "Issues"
       oportunities: "Opportunities" # KEY_TO_FIX opportunities?
-      without_weaknesses: "No weaknesses"
-      pdf_name: "final_audit_reports_weaknesses_by_audit_type_%{from_date}_to_%{to_date}.pdf"
-      title: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES FINAL AUDIT REPORTS\nTOTALS BY TYPE OF AUDIT" # REVIEW Revisar español
+      without_weaknesses: "No findings"
+      pdf_name: "final_audit_reports_issues_by_audit_type_%{from_date}_to_%{to_date}.pdf"
+      title: "ISSUES/IMPROVEMENT OPPORTUNITIES FINAL AUDIT REPORTS\nTOTALS BY TYPE OF AUDIT" # REVIEW Revisar español
       total: "TOTAL"
 
   conclusion_final_review:
@@ -409,9 +409,9 @@ en:
 
   conclusion_management_report:
     index_title: "Management reports"
-    weaknesses_by_state_title: "Total weaknesses by status"
-    weaknesses_by_risk_title: "Total weaknesses by risk"
-    weaknesses_by_audit_type_title: "Total weaknesses by audit type"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
 
   conclusion_review:
     include_global_score_sheet: "Include global score sheet?"
@@ -428,15 +428,15 @@ en:
     objectives_and_scopes: "OBJECTIVES AND SCOPE OF WORK"
     applied_procedures: "APPLIED PROCEDURES"
     conclusion: "CONCLUSION"
-    weaknesses_brief: "WEAKNESSES SUMMARY"
-    weaknesses_reschedules: "WEAKNESSES / RESCHEDULES SUMMARY"
-    weaknesses: "WEAKNESSES"
+    weaknesses_brief: "ISSUES SUMMARY"
+    weaknesses_reschedules: "ISSUES / RESCHEDULES SUMMARY"
+    weaknesses: "ISSUES"
     oportunities: "IMPROVEMENT OPPORTUNITIES" # KEY_TO_FIX opportunities?
     finding_review_assignments: "REVIEWED FINDINGS"
-    repeated_findings: "Findings follow-up"
-    repeated_findings_empty: "No findings pending regularization are registred." # REVIEW No repeated findings?
-    present_findings: "New findings"
-    present_findings_empty: "There are no findings to mention."
+    repeated_findings: "Issues follow-up"
+    repeated_findings_empty: "No issues pending regularization are registred." # REVIEW No repeated findings?
+    present_findings: "New issues"
+    present_findings_empty: "There are no issues to mention."
     add_recipient: "Add new recipient"
     review_sended: "The audit report has been sent to all the indicated recipients"
     review_not_approved: "The audit report was not submitted, it must be approved" # REVIEW Que tal un "Por favor, asegurese que antes esté aprobado"?
@@ -450,8 +450,8 @@ en:
       score: "Score"
       evolution: "EVOLUTION (*)"
       main_weaknesses: "Main Weaknesses"
-      other_weaknesses: "Other weaknesses"
-      no_weaknesses: "No weaknesses"
+      other_weaknesses: "Other issues"
+      no_weaknesses: "No issues"
       assumed_risk_weaknesses: "Assumed risk weaknesses"
     detailed_review:
       title: "Detailed audit report"
@@ -467,7 +467,7 @@ en:
     bundle:
       zip_name: "file_%{identification}.zip"
       control_objectives_dir: "%{prefix}_control_objectives"
-      findings_dir: "%{prefix}_findings_and_opportunities"
+      findings_dir: "%{prefix}_issues_and_opportunities"
       create: "Generate"
     bundle_index:
       title: "INDEX"
@@ -475,19 +475,19 @@ en:
       items_label: "Index entries"
       pdf_name: "00_file_index.pdf"
     findings_sheet:
-      title: "Findings - Work Papers"
-      pdf_name: "%{prefix}_cover_of_findings_and_work_papers.pdf"
+      title: "Issues - Work Papers"
+      pdf_name: "%{prefix}_cover_of_issues_and_work_papers.pdf"
     findings_follow_up:
       title: "FINDINGS FOLLOW-UP"
-      weakness_title_in_singular: "WEAKNESS FOLLOW-UP"
+      weakness_title_in_singular: "ISSUE FOLLOW-UP"
       oportunity_title_in_singular: "IMPROVEMENT OPPORTUNITY FOLLOW-UP" # REVIEW Key opportunity_title_in_singular?
       index_clarification: "* At the time of issuing the final audit report"
-      pdf_name: "%{prefix}_monitoring_of_weaknesses_opportunities_for_improvement.pdf"
+      pdf_name: "%{prefix}_monitoring_of_issues_opportunities_for_improvement.pdf"
     workflow:
       title: "Workflow documentation"
       pdf_name: "workflow_documentation.pdf"
       control_objective_work_papers: "Control Objective Work Papers"
-      control_objective_weaknesses: "Weaknesses"
+      control_objective_weaknesses: "Issues"
       control_objective_oportunities: "Opportunities"
       finding_work_papers: "Finding Work Papers"
     scope_detail:
@@ -504,12 +504,12 @@ en:
     correctly_created: "Control objective was successfully created."
     correctly_updated: "Control objective was successfully updated."
     stale_object_error: "The control objective was not updated, please try again."
-    no_weaknesses: "Control objective with no weaknesses"
+    no_weaknesses: "Control objective with no issues"
     no_oportunities: "Control objective with no improvement opportunities" # KEY_TO_FIX no_opportunities?
-    view_all_weaknesses: "Show weaknesses list"
+    view_all_weaknesses: "Show issues list"
     view_all_oportunities: "Show improvement opportunities list"
     add_oportunity: "Add new improvement opportunity"
-    add_weakness: "Add new weakness"
+    add_weakness: "Add new issue"
     add_work_paper: "Add work paper"
     add_business_unit_score: "Add business unit score"
     add_business_unit_type: "Add business units by type"
@@ -545,16 +545,16 @@ en:
     cost_analysis_title: "Cost Analysis"
     detailed_management_report:
       pdf_name: "detailed_management_report_%{from_date}_to_%{to_date}.pdf"
-      internal_audit_weaknesses: "Internal Audit Weaknesses"
-      external_audit_weaknesses: "External Audit Weaknesses"
+      internal_audit_weaknesses: "Internal Audit Findings"
+      external_audit_weaknesses: "External Audit Findings"
       title: "MANAGEMENT REPORT\nASSESSMENT OF THE\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nOF AUDIT REPORTS IN EXECUTION"
-      clarification: "Note: the weaknesses shown in this report are not final (the audit reports are in the Execution stage)" # REVIEW Execution?
+      subtitle: "ISSUES/IMPROVEMENT OPPORTUNITIES\nOF AUDIT REPORTS IN EXECUTION"
+      clarification: "Note: the findings shown in this report are not final (the audit reports are in the Execution stage)" # REVIEW Execution?
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
-      without_weaknesses: "No weaknesses"
+      without_weaknesses: "No issues"
       without_oportunities: "No improvement opportunitiest" # KEY_TO_FIX without_opportunities?
-      references: "References:\n\n(1) Number of weaknesses: shows the number of weaknesses obtained in the audit report (not the final ones), ordered according to risk level (%{risk_types}). If there are no weaknesses, the legend \"No weaknesses\" appears.\n(2) Number of Improvement Opportunities: shows the number of improvement opportunities obtained in the audit report (not the final ones). If there are no improvement opportunities, the legend \"No improvement opportunities\" appears."
+      references: "References:\n\n(1) Number of Issues: shows the number of issues obtained in the audit report (not the final ones), ordered according to risk level (%{risk_types}). If there are no issues, the legend \"No issues\" appears.\n(2) Number of Improvement Opportunities: shows the number of improvement opportunities obtained in the audit report (not the final ones). If there are no improvement opportunities, the legend \"No improvement opportunities\" appears."
     detailed_management_report_title: "Management report"
     planned_cost_summary:
       pdf_name: "summary_of_planned_costs_%{from_date}_to_%{to_date}.pdf"
@@ -575,17 +575,17 @@ en:
     period:
       title: "Interval"
       range: "from %{from_date} to %{to_date}"
-    weaknesses_by_state_title: "Total weaknesses by audit report and status"
+    weaknesses_by_state_title: "Total findings by audit report and status"
     weaknesses_by_state:
-      pdf_name: "weaknesses_in_execution_by_status_%{from_date}_to_%{to_date}.pdf" # REVIEW Excecution? Status (in progress)?
-      title: "DETAILED MANAGEMENT REPORT\nWEAKNESSES IN EXECUTION\nTOTALS BY AUDIT REPORT AND STATUS" # REVIEW Excecution? Status (in progress)?
-      clarification: "Note: the weaknesses shown in this report are not final (the audit reports are in the Execution stage)" # REVIEW Execution?
-      weaknesses_column: "Weaknesses"
+      pdf_name: "findings_in_execution_by_status_%{from_date}_to_%{to_date}.pdf" # REVIEW Excecution? Status (in progress)?
+      title: "DETAILED MANAGEMENT REPORT\nFINDINGS IN EXECUTION\nTOTALS BY AUDIT REPORT AND STATUS" # REVIEW Excecution? Status (in progress)?
+      clarification: "Note: the findings shown in this report are not final (the audit reports are in the Execution stage)" # REVIEW Execution?
+      weaknesses_column: "Issues"
       oportunities_column: "Improvement Opportunities" # KEY_TO_FIX opportunities_column?
       total: "TOTAL"
-    without_weaknesses: "No weaknesses in the period"
-    without_weaknesses_in_the_interval: "No weaknesses in the interval"
-    without_findings: "No weaknesses"
+    without_weaknesses: "No findings in the period"
+    without_weaknesses_in_the_interval: "No findings in the interval"
+    without_findings: "No findings"
     tagged_findings_report:
       empty: 'No findings for the applied filter'
       findings_count: 'Number of findings that meet the criteria: %{count}'
@@ -594,11 +594,11 @@ en:
       tags_count_label: 'Maximum number of tags'
       title: 'Findings by maximum number of tags'
     weaknesses_report:
-      title: 'Weaknesses follow-up report'
-      empty: 'No weaknesses for the applied filter'
-      weaknesses_count: 'Number of weaknesses that meet the criteria: %{count}'
-      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
-      pdf_name: 'follow_up_report_of_observations_in_execution.pdf'
+      title: 'Issue follow-up report'
+      empty: 'No issues for the applied filter'
+      weaknesses_count: 'Number of issues that meet the criteria: %{count}'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      pdf_name: 'follow_up_report_of_issues_in_execution.pdf'
 
   finding_relation:
     types:
@@ -611,14 +611,14 @@ en:
   follow_up_audit:
     index_title: "Audit reports"
     cost_analysis_title: "Cost analysis"
-    weaknesses_by_state_title: "Total weaknesses by status"
-    weaknesses_by_risk_title: "Total weaknesses by risk"
-    weaknesses_by_audit_type_title: "Total weaknesses by audit type"
-    high_risk_weaknesses_report_title: "High risk weaknesses"
-    fixed_weaknesses_report_title: "Fixed weaknesses by risk"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
+    high_risk_weaknesses_report_title: "High risk issues"
+    fixed_weaknesses_report_title: "Fixed issues by risk"
     weaknesses_graphs:
-      title: 'Weaknesses graph'
-      empty: 'No weaknesses for the applied filter'
+      title: 'Issue graph'
+      empty: 'No issues for the applied filter'
       hint: 'Must perform a search'
       users: 'By user'
       business_units: 'By business unit'
@@ -631,11 +631,11 @@ en:
       tags_count_label: "Maximum number of tags"
       title: 'Findings by maximum number of labels'
     weaknesses_report:
-      title: 'Weaknesses follow-up report'
-      empty: 'No weaknesses for the applied filter'
-      weaknesses_count: 'Number of weaknesses that meet the criteria: %{count}'
-      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
-      pdf_name: 'weaknesses_follow-up_report.pdf'
+      title: 'Issue follow-up report'
+      empty: 'No issues for the applied filter'
+      weaknesses_count: 'Number of issues that meet the criteria: %{count}'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      pdf_name: 'issues_follow-up_report.pdf'
     others:
       title: 'Others'
     cost_analysis:
@@ -644,29 +644,29 @@ en:
       column_review: "Audit report"
       column_audit_cost: "Number of hours used (sum of follow-up hours by auditors)" # REVIEW total follow-up hours?
       column_audited_cost: "Number of hours spent on the solution (sum of follow-up hours by auditee)" # REVIEW total follow-up hours?
-      title: "COST ANALYSIS\nOF FOLLOW-UP WEAKNESSES\nBY INTERNAL AUDIT REPORT" # REVIEW weaknesses / findings?
-      weaknesses: "WEAKNESSES"
+      title: "COST ANALYSIS\nOF FOLLOW-UP FINDINGS\nBY INTERNAL AUDIT REPORT" # REVIEW weaknesses / findings?
+      weaknesses: "ISSUES"
       oportunities: "IMPROVEMENT OPPORTUNITIES" # KEY_TO_FIX opportunities?
-      without_weaknesses: "No weaknesses in the period"
+      without_weaknesses: "No issues in the period"
       without_oportunities: "No improvement opportunities in the period" # KEY_TO_FIX without_opportunities?
       pdf_name: "follow-up_costs_analysis_%{from_date}_to_%{to_date}.pdf"
 
   follow_up_committee_report:
     index_title: "Committee reports"
-    control_objective_stats_title: 'Weaknesses by control objective' # REVIEW Weaknesses?
-    control_objective_stats_by_review_title: 'Weaknesses by control objective without score' # REVIEW qualification? Weaknesses?
+    control_objective_stats_title: 'Issues by control objective' # REVIEW Weaknesses?
+    control_objective_stats_by_review_title: 'Issues by control objective without score' # REVIEW qualification? Weaknesses?
     benefits_title: 'Benefits / Detriments'
-    process_control_stats_title: 'Weaknesses by business process'
+    process_control_stats_title: 'Issues by business process'
     control_effectiveness: "Control effectiveness"
-    pending_findings: "Pending observations follow-up"
+    pending_findings: "Pending issues follow-up"
     synthesis_report_title: "Executive summary"
     review_stats_report_title: "Audit report statistics"
-    high_risk_weaknesses_report_title: "High risk weaknesses"
-    fixed_weaknesses_report_title: "Fixed weaknesses by risk"
+    high_risk_weaknesses_report_title: "High risk issues"
+    fixed_weaknesses_report_title: "Fixed issues by risk"
     qa_indicators_title: "Quality indicators"
-    weakness_summary: "Summary of weaknesses"
-    high_risk_weaknesses: "High risk weaknesses"
-    fixed_weaknesses: "Fixed weaknesses by risk"
+    weakness_summary: "Summary of issues"
+    high_risk_weaknesses: "High risk issues"
+    fixed_weaknesses: "Fixed issues by risk"
     weaknesses_being_implemented_current:
       one: "Current"
       other: "Current"
@@ -679,14 +679,14 @@ en:
     weaknesses_being_implemented_stale_rescheduled:
       one: "Stale rescheduled" # REVIEW donde sale?
       other: "Stale rescheduled" # REVIEW donde sale?
-    weaknesses_by_state_title: "Total weaknesses by status"
-    weaknesses_by_risk_title: "Total weaknesses by risk"
-    weaknesses_by_audit_type_title: "Total weaknesses by audit type"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
     without_oportunities: "No opportunities in the period" # KEY_TO_FIX without_opportunities?
-    without_weaknesses: "No weaknesses in the period"
+    without_weaknesses: "No issues in the period"
     repeated_count:
-      one: "A repeated weakness"
-      other: "%{count} repeated weaknesses"
+      one: "A repeated finding"
+      other: "%{count} repeated findings"
     expired: "Expired" # REVIEW Stale / Overdue?
     not_expired: "Not expired" # REVIEW Stale / Overdue?
     from_date: "From"
@@ -704,51 +704,51 @@ en:
       without_audits_in_the_period: 'No audits with benefits / detriments in the period'
       total: 'Total amount: <b>%{amount}</b>'
     control_objective_stats:
-      pdf_name: 'weaknesses_by_control_objective_%{from_date}_to_%{to_date}.pdf' # REVIEW weaknesses?
-      title: "WEAKNESSES GROUPED BY CONTROL OBJECTIVE" # REVIEW WEAKNESSES / FINDINGS?
+      pdf_name: 'issues_by_control_objective_%{from_date}_to_%{to_date}.pdf' # REVIEW weaknesses?
+      title: "ISSUES GROUPED BY CONTROL OBJECTIVE" # REVIEW WEAKNESSES / FINDINGS?
       subtitle: "AUDIT REPORT FOLLOW-UP"
       average_effectiveness: 'Weighted average score' # REVIEW qualification?
       average_effectiveness_resume:
         one: '%{effectiveness} - %{count} evaluated audit report'
         other: '%{effectiveness} - %{count} evaluated audit reports'
-      without_weaknesses: 'No weaknesses'
+      without_weaknesses: 'No issues'
       review_effectiveness_average: 'Weighted average of control objective scores: <b>%{score}%</b>'
     control_objective_stats_by_review:
-      pdf_name: 'weaknesses_by_control_objective_without_score_%{from_date}_to_%{to_date}.pdf' # REVIEW qualification / stast? x2
-      title: 'WEAKNESSES GROUPED BY CONTROL OBJECTIVE WITHOUT SCORE' # REVIEW QUALIFICATION / STATS? x2
+      pdf_name: 'issues_by_control_objective_without_score_%{from_date}_to_%{to_date}.pdf' # REVIEW qualification / stast? x2
+      title: 'ISSUES GROUPED BY CONTROL OBJECTIVE WITHOUT SCORE' # REVIEW QUALIFICATION / STATS? x2
       subtitle: "AUDIT REPORT FOLLOW-UP"
-      without_weaknesses: 'No weaknesses'
+      without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
     fixed_weaknesses_report:
-      pdf_name: "fixed_weaknesses_by_risk_from_%{from_date}_to_%{to_date}.pdf"
-      internal_audit_weaknesses: "Internal Audit Weaknesses"
-      external_audit_weaknesses: "External Audit Weaknesses"
+      pdf_name: "fixed_issues_by_risk_from_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Issues"
+      external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
-      subtitle: "WEAKNESSES SOLVED - FINAL AUDIT REPORTS"
+      subtitle: "ISSUES SOLVED - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
-      without_weaknesses: "No weaknesses"
+      without_weaknesses: "No issues"
     high_risk_weaknesses_report:
-      pdf_name: "high_risk_weaknesses_%{from_date}_to_%{to_date}.pdf"
-      internal_audit_weaknesses: "Internal Audit Weaknesses"
-      external_audit_weaknesses: "External Audit Weaknesses"
+      pdf_name: "high_risk_issues_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Issues"
+      external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
-      subtitle: "HIGH RISK WEAKNESSES FOLLOW-UP - FINAL AUDIT REPORTS"
+      subtitle: "HIGH RISK ISSUES FOLLOW-UP - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No high risk audits in the period"
       without_audits_in_the_interval: "No high risk audits in the selected interval"
-      without_weaknesses: "No weaknesses"
+      without_weaknesses: "No issues"
     period:
       title: "Interval"
       range: "from %{from_date} to %{to_date}"
     process_control_stats:
-      pdf_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf'
-      title: "WEAKNESSES GROUPED BY BUSINESS PROCESS"
+      pdf_name: 'issues_by_business_process_%{from_date}_to_%{to_date}.pdf'
+      title: "ISSUES GROUPED BY BUSINESS PROCESS"
       subtitle: "AUDIT REPORT FOLLOW-UP"
       average_effectiveness: 'Weighted average score'
       average_effectiveness_resume:
         one: '%{effectiveness} - %{count} evaluated audit report'
         other: '%{effectiveness} - %{count} evaluated audit reports'
-      without_weaknesses: 'No weaknesses'
+      without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
       review_effectiveness_average: 'Weighted average of business process scores: <b>%{score}%</b>'
     qa_indicators:
@@ -761,66 +761,66 @@ en:
       without_audits_in_the_period: 'No audits in the period'
       indicators:
         production_level: "Production Level"
-        highest_solution_rate: "Highest Risk Weaknesses Solution"
-        medium_solution_rate: "Medium Risk Weaknesses Solution"
+        highest_solution_rate: "Highest Risk Issues Solution"
+        medium_solution_rate: "Medium Risk Issues Solution"
         score_average: "Audit report score"
         digitalized: "Digitization"
-        ancient_medium_risk_weaknesses: "Aged Medium Risk Weaknesses"
+        ancient_medium_risk_weaknesses: "Aged Medium Risk Issues"
     synthesis_report:
       pdf_name: "executive_summary_%{from_date}_to_%{to_date}.pdf"
-      internal_audit_weaknesses: "Internal Audit Weaknesses"
-      external_audit_weaknesses: "External Audit Weaknesses"
+      internal_audit_weaknesses: "Internal Audit Findings"
+      external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
-      subtitle: "FOLLOW-UP OF WEAKNESSES/IMPROVEMENT OPPORTUNITIES"
+      subtitle: "FOLLOW-UP OF ISSUES/IMPROVEMENT OPPORTUNITIES"
       organization_score: "Organization score: %{score}% (*)"
       organization_score_note: "(*) The organization score is obtained as an average of the scores obtained in the audit types (%{audit_types})."
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
-      without_weaknesses: "No weaknesses"
+      without_weaknesses: "No issues"
       without_oportunities: "No improvement opportunities" # KEY_TO_FIX without_opportunities?
       generic_score_average:
         one: 'Average of %{audit_type} scores in a audit report'
         other: 'Average of %{audit_type} scores in %{count} audit report'
       repeated_count:
-        one: "A repeated weakness" # REVIEW: finding?
-        other: "%{count} repeated weaknesses" # REVIEW: findings?
+        one: "A repeated finding" # REVIEW: finding?
+        other: "%{count} repeated findings" # REVIEW: findings?
       total_score_average: "Total average scores (%{reference })"
-      references: "References:\n\n(1) Score: the score (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their score from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Weaknesses: lists the titles of the detected weaknesses. If there are no weaknesses, the legend \"No weaknesses\" is displayed."
+      references: "References:\n\n(1) Score: the score (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their score from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Issues: lists the titles of the detected issues. If there are no issues, the legend \"No issues\" is displayed."
     review_stats_report:
       pdf_name: "final_audit_report_statistics_%{from_date}_to_%{to_date}.pdf"
       title: "AUDIT REPORT STATISTICS"
-      subtitle: "FOLLOW-UP OF WEAKNESSES/IMPROVEMENT OPPORTUNITIES"
+      subtitle: "FOLLOW-UP OF ISSUES/IMPROVEMENT OPPORTUNITIES"
       ratio: "Proportion"
       review_count: "Number of audit reports"
       reviews_by_tag:
         title: "Audit reports by label"
         footnote: "The tag-audit report pair is counted. So, for example, a audit report with two tags will be counted twice and a audit report without tags will be ignored."
       weaknesses_by_score:
-        title: "Weaknesses by risk, priority and audit report score"
+        title: "Issues by risk, priority and audit report score"
         total: "Total"
     weaknesses_by_state:
-      pdf_name: "monitoring_findings_by_status_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "monitoring_issues_by_status_%{from_date}_to_%{to_date}.pdf"
       period_summary: "Period summary %{period}"
-      title: "FOLLOW-UP OF WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nTOTALS BY STATUS"
+      title: "FOLLOW-UP OF ISSUES/IMPROVEMENT OPPORTUNITIES\nTOTALS BY STATUS"
       total: "TOTAL"
     weaknesses_by_risk:
-      pdf_name: "weaknesses_monitoring_by_risk_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_monitoring_by_risk_%{from_date}_to_%{to_date}.pdf"
       period_summary: "Period summary %{period}"
-      title: "FOLLOW-UP OF WEAKNESSES\nTOTALS BY RISK LEVEL"
+      title: "FOLLOW-UP OF ISSUES\nTOTALS BY RISK LEVEL"
       total: "TOTAL"
     weaknesses_by_audit_type:
-      weaknesses: "Weaknesses"
+      weaknesses: "Issues"
       oportunities: "Opportunities" # KEY_TO_FIX opportunities?
-      without_weaknesses: "No weaknesses"
-      pdf_name: "monitoring_weaknesses_by_audit_type_%{from_date}_to_%{to_date}.pdf"
-      title: "FOLLOW-UP OF WEAKNESSES/IMPROVEMENT OPPORTUNITIES\nTOTALS BY TYPE OF AUDIT"
+      without_weaknesses: "No findings"
+      pdf_name: "monitoring_issues_by_audit_type_%{from_date}_to_%{to_date}.pdf"
+      title: "FOLLOW-UP OF ISSUES/IMPROVEMENT OPPORTUNITIES\nTOTALS BY TYPE OF AUDIT"
       total: "TOTAL"
 
   follow_up_management:
     index_title: "Management reports"
-    weaknesses_by_state_title: "Total weaknesses by status"
-    weaknesses_by_risk_title: "Total weaknesses by risk"
-    weaknesses_by_audit_type_title: "Total weaknesses by audit type"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
 
   group:
     index_title: "Group list"
@@ -901,14 +901,14 @@ en:
     expired_finding_to_manager:
       title: "Expired finding"
       the_following_finding_is_expired: "No new implementation date has been proposed for the following finding"
-      managers_clarification: "People can change if the users of the finding / improvement opportunity are modified or if the organizational structure is altered"
+      managers_clarification: "People can change if the users of the issue / improvement opportunity are modified or if the organizational structure is altered"
     pending_poll_email:
       about_html: "Survey about <strong>%{entity}</strong>"
     unanswered_findings:
       title: "Notification of changes"
       the_following_findings_are_now_unanswered:
-        one: "The following finding / improvement opportunity has its status changed to **No response**, due to not receiving a response"
-        other: "The following findings / improvement opportunities have their status changed to **No response**, due to not receiving a response"
+        one: "The following issue / improvement opportunity has its status changed to **No response**, due to not receiving a response"
+        other: "The following issues / improvement opportunities have their status changed to **No response**, due to not receiving a response"
       if_no_answer_is_given_the_following_users_will_be_notified: "If it continue in the same status (No response) the following notifications will be generated" # REVIEW produced queda como la chingada, quizás se deba cambiar también el :es
     group_welcome_email:
       title: "The group %{name} has been created"
@@ -994,7 +994,7 @@ en:
     with_final_review: "With final audit report"
     without_final_review: "Without final audit report"
     without_score: "Without score" # REVIEW Do not score?
-    weakness_from_template: "Weakness created from template"
+    weakness_from_template: "Issue created from template"
     repeated_weaknesses: "Repeated"
     old_weaknesses: "Old data"
     new_weaknesses: "New"
@@ -1025,16 +1025,16 @@ en:
     control_objectives_relevance: "Weight"
     oportunities_summary: "Improvement opportunities sorted by status" # KEY_TO_FIX opportunities_summary?
     oportunities_count_summary: "Number of improvement opportunities sorted by status" # KEY_TO_FIX opportunities_count_summary?
-    weaknesses_summary: "Summary of weaknesses that support the score given (ordered by risk importance (%{risks}) and then by weakness status)"
-    weaknesses_count_summary: "Number of weaknesses that support the given score (ordered by risk importance (%{risks}) and then by weakness status)"
-    weaknesses_count: "Number of Weaknesses"
+    weaknesses_summary: "Summary of issues that support the score given (ordered by risk importance (%{risks}) and then by issue status)"
+    weaknesses_count_summary: "Number of issues that support the given score (ordered by risk importance (%{risks}) and then by issue status)"
+    weaknesses_count: "Number of issues"
     oportunities_count: "Number of Improvement Opportunities" # KEY_TO_FIX opportunities_count?
     control_objectives_work_papers: "Control objectives"
     show_control_objective: "Show control objective details"
     hide_control_objective: "Hide control objective details"
-    weaknesses_work_papers: "Weaknesses"
+    weaknesses_work_papers: "Issues"
     oportunities_work_papers: "Opportunities" # KEY_TO_FIX opportunities_work_papers?
-    follow_up_work_papers: "Follow-up weakenesses"
+    follow_up_work_papers: "Follow-up issues"
     download_work_papers: "Download work papers"
     finished_work_papers: "Work papers - Auditor approved" # REVIEW conforme auditor?
     revise_work_papers: "Work Papers - Supervisor revised" # REVIEW conforme supervisor?
@@ -1042,10 +1042,10 @@ en:
     estimated_amount: "Estimated cost in workplan" # REVIEW seguro que no es costo estimado del plan de trabajo?
     other_actions: "Actions"
     recode_findings: "Recode findings"
-    recode_weaknesses_by_risk: "Recode weaknesses by risk"
-    recode_weaknesses_by_repetition_and_risk: "Recode weaknesses by repetition and risk"
-    recode_weaknesses_by_risk_and_repetition: "Recode weaknesses by risk and repetition"
-    recode_weaknesses_by_control_objective_order: "Recode weaknesses by control objective order"
+    recode_weaknesses_by_risk: "Recode issues by risk"
+    recode_weaknesses_by_repetition_and_risk: "Recode issues by repetition and risk"
+    recode_weaknesses_by_risk_and_repetition: "Recode issues by risk and repetition"
+    recode_weaknesses_by_control_objective_order: "Recode issues by control objective order"
     reorder: "Reorder processes by name"
     recode_work_papers: "Recode work papers"
     findings_recoded: "Findings were successfully recoded"
@@ -1084,8 +1084,8 @@ en:
       old_responsible: "Old responsible: %{responsible}"
       new_responsible: "Current responsible: %{responsible}"
     responsibility_removed: "Have been removed from the %{review} audit report" # REVIEW donde?
-    cannot_be_reassigned: "User cannot be reassigned, has observations that depend on them" # REVIEW observations: findings / weaknesses?
-    cannot_be_destroyed: "User cannot be deleted, it has observations that depend on them" # REVIEW observations: findings / weaknesses?
+    cannot_be_reassigned: "User cannot be reassigned, has issues that depend on them" # REVIEW observations: findings / weaknesses?
+    cannot_be_destroyed: "User cannot be deleted, it has issues that depend on them" # REVIEW observations: findings / weaknesses?
 
   role:
     index_title: "Profile list"
@@ -1119,7 +1119,7 @@ en:
         other: "Pending findings from audit reports %{reviews} have been reassigned"
     responsibility_release:
       title: "Disclaimer" # REVIEW Release of responsibilities?
-    unconfirmed_findings: "Unconfirmed findings to this date"
+    unconfirmed_findings: "Unconfirmed issues to this date"
     pdf:
       pdf_name: "user_list.pdf"
       users_count: "Number of users: %{count}"
@@ -1128,13 +1128,13 @@ en:
         other: "The list was filtered with the query '%{query}' on the columns %{columns}"
 
   weakness:
-    index_title: "Weaknesses list"
-    show_title: "Weakness details"
-    new_title: "Add weakness"
-    edit_title: "Edit weakness"
-    correctly_created: "Weakness was successfully created."
-    correctly_updated: "Weakness was successfully updated."
-    stale_object_error: "Weakness was not updated, please try again."
+    index_title: "Issue list"
+    show_title: "Issue details"
+    new_title: "Add issue"
+    edit_title: "Edit issue"
+    correctly_created: "Issue was successfully created."
+    correctly_updated: "Issue was successfully updated."
+    stale_object_error: "Issue was not updated, please try again."
     see_all: "Show all"
     edit_control_objective: "Edit control objective"
     previous_follow_up_dates: "Previous follow-up dates"
@@ -1213,7 +1213,7 @@ en:
       control_objective_item: "Control objective"
       cost: "Cost"
       finding_answer: "Finding answer"
-      finding_review_assignment: "Assignment of weakness to audit report"
+      finding_review_assignment: "Assignment of issue to audit report"
       group: "Group"
       notification: "Notification"
       old_password: "Old password"
@@ -1316,7 +1316,7 @@ en:
         process_control_id: "Business process"
         effectiveness: "Control effectiveness"
         support: "Support"
-        weaknesses: "Weaknesses"
+        weaknesses: "Issues"
         oportunities: "Improvement opportunities" # KEY_TO_FIX opportunities?
         work_papers: "Work papers"
       control_objective_item/control:
@@ -1362,7 +1362,7 @@ en:
         file_model: "Attachment" # REVIEW Annex? donde?
         notify_users: "Send notification"
         created_at: "Comment date"
-        skip_commitment_support: 'Check if the finding is fixed'
+        skip_commitment_support: 'Check if the issue is fixed'
       finding_relation:
         finding_id: 'Finding'
         related_finding_id: 'Related finding'
@@ -1392,7 +1392,7 @@ en:
         status: "Status"
         confirmation_hash: "Confirmation string" # REVIEW hash?
         notes: "Notes"
-        findings: "Findings"
+        findings: "Issues"
         conclusion_reviews: "Audit reports"
         user_who_confirm: "Confirmed by"
         created_at: "Created at" # REVIEW Sent date?
@@ -1464,10 +1464,10 @@ en:
         file_content_type: "Attachment (file type)" # REVIEW Annex?
         file_file_size: "Attachment (file size)" # REVIEW Annex?
       review/finding_review_assignments:
-        one: "Pending finding / improvement opportunity" # REVIEW igual que el punto de abajo
-        other: "Pending findings / improvement opportunities"
-        finding: "Pending finding / improvement opportunity"
-        finding_id: "Pending finding / improvement opportunity"
+        one: "Pending issue / improvement opportunity" # REVIEW igual que el punto de abajo
+        other: "Pending issues / improvement opportunities"
+        finding: "Pending issue / improvement opportunity"
+        finding_id: "Pending issue / improvement opportunity"
       review/review_user_assignments:
         one: "Member"
         other: "Members"
@@ -1605,7 +1605,7 @@ en:
           attributes:
             organization_roles:
               blank: "must have at least one"
-              invalid: "cannot be modified, user has pending observations (must reassign or detach them)" # REVIEW observations??
+              invalid: "cannot be modified, user has pending issues (must reassign or detach them)" # REVIEW observations??
             password:
               invalid: "must meet the restrictions set by the administrator"
               already_used: "already used before"
@@ -1642,6 +1642,6 @@ en:
     roles: "Profiles" # REVIEW roles?
     users: "Users"
     versions: "Versions"
-    weaknesses: "Weaknesses"
+    weaknesses: "Issues"
     welcome: "Welcome"
     workflows: "Workflows"

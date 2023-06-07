@@ -16,29 +16,29 @@
     add_image: "Add image"
 
   conclusion_report:
-    weaknesses_by_risk_and_business_unit_title: "Total weaknesses by risk and business unit"
-    weaknesses_by_risk_report_title: "Weaknesses by risk"
+    weaknesses_by_risk_and_business_unit_title: "Total findings by risk and business unit"
+    weaknesses_by_risk_report_title: "Issues by risk"
     weaknesses_by_month_title: "Monthly report"
     weaknesses_current_situation_title: "Global report - Quarterly"
     weaknesses_by_control_objective_title: "Control objective result"
-    weaknesses_by_user_title: "Weaknesses by user"
-    weaknesses_by_business_unit_title: "Weaknesses per cycle"
+    weaknesses_by_user_title: "Issues by user"
+    weaknesses_by_business_unit_title: "Issues per cycle"
     cost_summary:
       column_interval: "Interval"
 
   conclusion_committee_report:
     control_objective_counts_title: "Control objective analysis"
-    weaknesses_by_risk_report_title: "Weaknesses by risk"
-    weaknesses_by_risk_and_business_unit_title: "Weaknesses by risk and business unit"
-    weaknesses_by_month_title: "Weaknesses by risk"
+    weaknesses_by_risk_report_title: "Issues by risk"
+    weaknesses_by_risk_and_business_unit_title: "Findings by risk and business unit"
+    weaknesses_by_month_title: "Issues by risk"
     weaknesses_current_situation_title: "Global report - Quarterly"
-    weaknesses_by_control_objective_title: "Weaknesses by control objective"
-    weaknesses_by_user_title: "Weaknesses by use"
-    weaknesses_by_business_unit_title: "Weaknesses by business unit"
+    weaknesses_by_control_objective_title: "Issues by control objective"
+    weaknesses_by_user_title: "Issues by use"
+    weaknesses_by_business_unit_title: "Issues by business unit"
     control_objective_stats:
       reviews_with_weaknesses:
-        one: "%{count} audit report with weaknesses in the O.C"
-        other: "%{count} audit reports with weaknesses in the O.C"
+        one: "%{count} audit report with issues in the O.C"
+        other: "%{count} audit reports with issues in the O.C"
 
     control_objective_counts:
       pdf_name: "control_objectives_analysis_%{from_date}_to_%{to_date}.pdf"
@@ -46,68 +46,68 @@
       subtitle: "ANALYSIS OF CONTROL OBJECTIVES / FINAL AUDIT REPORTS"
       without_control_objective_items: "Without control objectives"
     weaknesses_by_risk_report:
-      pdf_name: "weaknesses_by_risk_%{from_date}_to_%{to_date}.pdf"
-      internal_audit_weaknesses: "Internal audit weaknesses"
-      external_audit_weaknesses: "External audit weaknesses"
+      pdf_name: "issues_by_risk_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal audit issues"
+      external_audit_weaknesses: "External audit issues"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "RISK WEAKNESSES - FINAL AUDIT REPORTS"
+      subtitle: "RISK ISSUES - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "Without audits in the period"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
     weaknesses_by_month:
-      pdf_name: "weaknesses_by_month_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_by_month_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "MONTHLY REPORT - FINAL AUDIT REPORTS"
-      main_weaknesses: "Main weaknesses"
-      other_weaknesses: "Other weaknesses"
+      main_weaknesses: "Main issues"
+      other_weaknesses: "Other issues"
       without_audits_in_the_month: "Without audits in the month"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       year: "Origin year"
     weaknesses_by_control_objective:
       pdf_name: "control_objectives_result_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "RESULTS OF CONTROL OBJECTIVES / FINAL AUDIT REPORTS"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       origination_year: "Origin year"
     weaknesses_by_user:
-      pdf_name: "observations_by_user_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_by_user_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "USER FEEDBACK / FINAL AUDIT REPORTS"
+      subtitle: "ISSUES BY USER / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
-      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      without_weaknesses: "Without issues"
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
     weaknesses_by_business_unit:
-      pdf_name: "observations_by_cycle_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_by_cycle_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "OBSERVATIONS PER CYCLE / FINAL AUDIT REPORTS"
+      subtitle: "ISSUES PER CYCLE / FINAL AUDIT REPORTS"
       on_revision: "On revision"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       year: "Origin year"
     process_control_stats:
-      csv_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf'
+      csv_name: 'issues_by_business_process_%{from_date}_to_%{to_date}.pdf'
       period_column: 'Period'
       reviews_with_weaknesses:
-        one: "%{count} audit report with weaknesses in the O.C" # REVIEW: que es O.C? como se traduciría? (hay varios)
-        other: "%{count} audit reports with weaknesses in the O.C"
+        one: "%{count} audit report with issues in the O.C" # REVIEW: que es O.C? como se traduciría? (hay varios)
+        other: "%{count} audit reports with issues in the O.C"
       download_csv: 'Download CSV'
     weaknesses_by_risk_and_business_unit:
-      pdf_name: "weaknesses_of_final_audit_reports_by_risk_and_business_units_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_of_final_audit_reports_by_risk_and_business_units_%{from_date}_to_%{to_date}.pdf"
       period_summary: "Period summary %{period}"
-      title: "WEAKNESSES FROM FINAL AUDIT REPORTS\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
+      title: "ISSUES FROM FINAL AUDIT REPORTS\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
       being_implemented: "'In process of implementation' as of %{date}"
       created: "'Registered' between %{from_date} and %{to_date}"
       implemented: "'Implemented' between %{from_date} and %{to_date}"
       total: "TOTAL"
-      empty: "No comments for the applied filter."
+      empty: "No issues for the applied filter."
 
   conclusion_final_review:
     download_rtf: "Download RTF"
     global_effectiveness: "Global effectiveness"
     downloads:
       review_objectives: "REVIEW OBJECTIVES"
-      review_objectives_description: "Carry out regularization follow-up to the weaknesses made by the Internal Audit (AI) in those branches classified as Unreasonable to an inadequate or unsatisfactory degree in the AML/FT aspect."
+      review_objectives_description: "Carry out regularization follow-up to the issues made by the Internal Audit (AI) in those branches classified as Unreasonable to an inadequate or unsatisfactory degree in the AML/FT aspect."
       general_assistant_manager: 'Integrity and Compliance General Assistant Manager'
       departmental_management: 'PLayFT Departmental Management'
       departmental_assistant_manager: 'PLAyFT Departmental Assistant Manager in Branches'
@@ -119,7 +119,7 @@
     weaknesses_current_situation_title: "Global Report - Quarterly"
 
   finding:
-    correctly_updated: "Finding correctly updated."
+    correctly_updated: "Issue correctly updated."
     finding_relations: "Related to"
     inverse_finding_relations: "Related in"
     finding_answers: "Follow-up findings"
@@ -127,7 +127,7 @@
     state_full: "Detailed status"
     next_pending_task_date: "Next pending task date"
     comments: "Justification of status changes"
-    costs: "So far **%{cost}** has been spent on finding tracking"
+    costs: "So far **%{cost}** has been spent on issue tracking"
     commitment_support_plans: "Action plan"
     commitment_support_controls: "Mitigating controls"
     commitment_support_reasons: "Rescheduling finding"
@@ -149,7 +149,7 @@
     follow_up_date_changed_warning: "Follow-up date changed to accommodate tasks"
     follow_up_date_last_changed: "Last implementation date changed"
     assignment_confirm_message: "You have not selected any reference auditors or managers. Do you want to continue?"
-    weakness_template_previous: 'Repeat weakness'
+    weakness_template_previous: 'Repeat issue'
     repeated_ancestors: "Repeated of"
     repeated_children: "Repeated on"
     undo_reiteration: 'Undo reiteration'
@@ -196,8 +196,8 @@
       confirmation_date: "Notification was confirmed on **%{date}**"
     follow_up_report:
       weakness:
-        title: "WEAKNESS FOLLOW-UP"
-        subtitle: "Weakness data"
+        title: "ISSUE FOLLOW-UP"
+        subtitle: "Issue data"
       oportunity:
         title: "MONITORING OF IMPROVEMENT OPPORTUNITIES"
         subtitle: "Improvement opportunity data"
@@ -217,124 +217,124 @@
       others: "Users"
 
   follow_up_audited:
-    weaknesses_by_user_title: "Weaknesses by user"
+    weaknesses_by_user_title: "Issues by user"
     status_user: "Status user"
-    process_control_stats_title: "Weaknesses per business process"
+    process_control_stats_title: "Issues per business process"
     business_unit_type_title: "Organizational unit"
     business_unit_title: "Business unit"
     weaknesses_by_user:
-      pdf_name: "weaknesses_by_user.pdf"
+      pdf_name: "issues_by_user.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "MONITORING WEAKNESSES BY USER / FINAL AUDIT REPORTS"
+      subtitle: "MONITORING ISSUES BY USER / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
-      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      without_weaknesses: "Without issues"
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
     process_control_stats:
       average_effectiveness: 'Weighted average score'
       average_effectiveness_resume:
         one: "%{effectiveness} - %{count} evaluated audit report"
         other: "%{effectiveness} - %{count} evaluated audit reports"
       reviews_with_weaknesses:
-        one: "%{count} audit report with weaknesses in the O.C."
-        other: "%{count} audit reports with weaknesses in the O.C."
-      pdf_name: "weaknesses_by_business_process.pdf"
+        one: "%{count} audit report with issues in the O.C."
+        other: "%{count} audit reports with issues in the O.C."
+      pdf_name: "issues_by_business_process.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "MONITORING WEAKNESSES BY BUSINESS PROCESS / FINAL AUDIT REPORTS"
+      subtitle: "MONITORING ISSUES BY BUSINESS PROCESS / FINAL AUDIT REPORTS"
       without_reviews_in_the_period: "Without audit reports in the selected period"
-      without_weaknesses: "Without weaknesses"
-      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      without_weaknesses: "Without issues"
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
       review_effectiveness_average: 'Weighted average of control objective scores: <b>%{score}%</b>'
 
   follow_up_audited_committee_report:
     process_control_stats:
-      pdf_name: 'weaknesses_by_business_process_%{from_date}_to_%{to_date}.pdf'
+      pdf_name: 'issues_by_business_process_%{from_date}_to_%{to_date}.pdf'
     period:
       title: "Interval"
       range: "from %{from_date} to %{to_date}"
 
   follow_up_audit:
     weaknesses_by_risk_and_business_unit_title: "Total findings by risk and business Unit"
-    weaknesses_by_risk_report_title: "Weaknesses by risk"
+    weaknesses_by_risk_report_title: "Issues by risk"
     weaknesses_by_month_title: "Monthly report"
     weaknesses_current_situation_title: "Global Report - Quarterly"
     weaknesses_by_control_objective_title: "Control objective result"
-    weaknesses_by_user_title: "Weaknesses by user"
-    weaknesses_by_business_unit_title: "Weaknesses per cycle"
-    weaknesses_evolution_title: "Weaknesses evolution"
-    weaknesses_list_title: "List of weaknesses"
-    weaknesses_brief_title: "Summary of outstanding weaknesses"
-    weaknesses_repeated_title: "Weaknesses with status by last traced"
-    weaknesses_reschedules_title: "Summary of weaknesses and reschedules"
+    weaknesses_by_user_title: "Issues by user"
+    weaknesses_by_business_unit_title: "Issues per cycle"
+    weaknesses_evolution_title: "Issues evolution"
+    weaknesses_list_title: "List of issues"
+    weaknesses_brief_title: "Summary of outstanding issues"
+    weaknesses_repeated_title: "Issues with status by last traced"
+    weaknesses_reschedules_title: "Summary of issues and reschedules"
     weaknesses_by_control_objective_process_title: "Report process by control objectives"
-    weaknesses_heatmap_title: "Weaknesses heat map"
+    weaknesses_heatmap_title: "Issues heat map"
 
   execution_committee_report:
     weaknesses_current_situation_title: "Global report - Quarterly drafts"
     weaknesses_current_situation:
-      pdf_name: "weaknesses_current_situation_draft_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_current_situation_draft_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "GLOBAL REPORT MONITORING - QUARTERLY / DRAFT AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       on_revision: "On revision"
       origination_year: "Origin year"
       control_objective_tags: "Control objective tags"
-      weakness_tags: "Weakness tags"
+      weakness_tags: "Issue tags"
       review_tags: "Audit report tags"
       cut_date: "Computation date"
 
   follow_up_committee_report:
-    weaknesses_by_risk_report_title: "Weaknesses by risk"
-    weaknesses_by_risk_and_business_unit_title: "Total weaknesses by risk and business unit"
+    weaknesses_by_risk_report_title: "Issues by risk"
+    weaknesses_by_risk_and_business_unit_title: "Total findings by risk and business unit"
     weaknesses_by_month_title: "Monthly report"
     weaknesses_current_situation_title: "Global Report - Quarterly"
     weaknesses_by_control_objective_title: "Control objective result"
-    weaknesses_by_user_title: "Weaknesses by user"
-    weaknesses_by_business_unit_title: "Weaknesses per cycle"
-    weaknesses_evolution_title: "Weaknesses evolution"
-    weaknesses_list_title: "List of weaknesses"
-    weaknesses_brief_title: "Summary of outstanding weaknesses"
-    weaknesses_repeated_title: "Weaknesses with status by last traced"
-    weaknesses_reschedules_title: "Summary of weaknesses and reschedules"
+    weaknesses_by_user_title: "Issues by user"
+    weaknesses_by_business_unit_title: "Issues per cycle"
+    weaknesses_evolution_title: "Issues evolution"
+    weaknesses_list_title: "List of issues"
+    weaknesses_brief_title: "Summary of outstanding issues"
+    weaknesses_repeated_title: "Issues with status by last traced"
+    weaknesses_reschedules_title: "Summary of issues and reschedules"
     detailed_report: "Detailed report"
-    weaknesses_heatmap_title: "Weaknesses heat map"
+    weaknesses_heatmap_title: "Issues heat map"
     weaknesses_by_control_objective_process_title: "Report process by control objectives"
     control_objective_stats:
       reviews_with_weaknesses:
-        one: "%{count} audit report with weaknesses in the O.C."
-        other: "%{count} audit reports with weaknesses in the O.C."
+        one: "%{count} audit report with issues in the O.C."
+        other: "%{count} audit reports with issues in the O.C."
       without_audits_in_the_period: "Without audits in the period"
     follow_up_cost_analysis:
       pdf_name: "follow_up_cost_analysis_%{from_date}_to_%{to_date}.pdf"
     weaknesses_by_risk_report:
-      pdf_name: "high_risk_weaknesses_%{from_date}_to_%{to_date}.pdf"
-      internal_audit_weaknesses: "Internal Audit Weaknesses"
-      external_audit_weaknesses: "External Audit Weaknesses"
+      pdf_name: "high_risk_issues_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Issues"
+      external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
-      subtitle: "HIGH RISK WEAKNESSES FOLLOW-UP - FINAL AUDIT REPORTS"
+      subtitle: "HIGH RISK ISSUES FOLLOW-UP - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No high risk audits in the period"
       without_audits_in_the_interval: "No high risk audits in the selected interval"
-      without_weaknesses: "No weaknesses"
+      without_weaknesses: "No issues"
     weaknesses_by_month:
-      pdf_name: "weaknesses_by_month_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_by_month_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "FOLLOW-UP MONTHLY REPORT - FINAL AUDIT REPORTS"
-      main_weaknesses: "Main weaknesses"
-      other_weaknesses: "Other weaknesses"
+      main_weaknesses: "Main issues"
+      other_weaknesses: "Other issues"
       without_audits_in_the_month: "Without audits in the month"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       year: "Origin year"
     weaknesses_current_situation:
-      pdf_name: "weaknesses_current_situation_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_current_situation_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "GLOBAL REPORT MONITORING - FOUR-MONTHLY / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       on_revision: "On revision"
       origination_year: "Origin year"
       control_objective_tags: "Control objective tags"
-      weakness_tags: "Weakness tags"
+      weakness_tags: "Issue tags"
       negate_weakness_tags: "Exclude"
       review_tags: "Audit report tags"
       cut_date: "Computation date"
@@ -342,108 +342,108 @@
       pdf_name: "control_objectives_result_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
       subtitle: "MONITORING THE RESULTS OF THE CONTROL OBJECTIVES / FINAL AUDIT REPORTS"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       origination_year: "Origin year"
     weaknesses_by_control_objective_process:
       pdf_name: "process_report_by_control_objective_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "MONITORING PROCESS WEAKNESSES BY CONTROL OBJECTIVE / FINAL AUDIT REPORTS"
-      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
-      without_weaknesses: "Without weaknesses"
+      subtitle: "MONITORING PROCESS ISSUES BY CONTROL OBJECTIVE / FINAL AUDIT REPORTS"
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      without_weaknesses: "Without issues"
       origination_year: "Origin year"
       control_objective_tags: "Control objective tags"
-      weakness_tags: "Weakness tags"
+      weakness_tags: "Issue tags"
       review_tags: "Audit report tags"
     weaknesses_by_user:
-      pdf_name: "weaknesses_by_user_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_by_user_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "MONITORING WEAKNESSES BY USER / FINAL AUDIT REPORTS"
+      subtitle: "MONITORING ISSUES BY USER / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
-      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      without_weaknesses: "Without issues"
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
     weaknesses_by_business_unit:
-      pdf_name: "weaknesses_by_cycle_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_by_cycle_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "MONITORING WEAKNESSES PER CYCLE / FINAL AUDIT REPORTS"
+      subtitle: "MONITORING ISSUES PER CYCLE / FINAL AUDIT REPORTS"
       on_revision: "On revision"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       year: "Origin year"
     weaknesses_heatmap:
-      pdf_name: "heatmap_by_weaknesses_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "heatmap_by_issues_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "HEAT MAP MONITORING WEAKNESSES / FINAL AUDIT REPORTS"
+      subtitle: "HEAT MAP MONITORING ISSUES / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
-      weaknesses_count_html: 'Number of weaknesses that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      without_weaknesses: "Without issues"
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
       process_owner_parents: "Responsible line managers"
       process_owner_intermediates: "Intermediate owners"
       process_owner_roots: "Top owners"
     weaknesses_evolution:
-      pdf_name: "weaknesses_evolution_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_evolution_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "MONITORING WEAKNESSES EVOLUTION / FINAL AUDIT REPORTS"
+      subtitle: "MONITORING ISSUES EVOLUTION / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       control_objective_tags: "Control objective tags"
-      weakness_tags: "Weakness tags"
+      weakness_tags: "Issue tags"
       review_tags: "Audit report tags"
     weaknesses_list:
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       control_objective_tags: "Control objective tags"
-      weakness_tags: "Weakness tags"
+      weakness_tags: "Issue tags"
       review_tags: "Audit report tags"
     weaknesses_brief:
-      pdf_name: "summary_of_pending_weaknesses_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "summary_of_pending_issues_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "SUMMARY OF PENDING WEAKNESSES / FINAL AUDIT REPORTS"
+      subtitle: "SUMMARY OF PENDING ISSUES / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
-      weakness_title: "Weakness title"
-      description: "Weakness detail"
+      without_weaknesses: "Without issues"
+      weakness_title: "Issue title"
+      description: "Issue detail"
       audit_comments: "Audited response/Audit comment"
-      origination_date: "Weakness origin date"
+      origination_date: "Issue origin date"
       reschedule_count: "Reschedule count"
       follow_up_date: "Last proposed date"
       distance_to_cut_date: "Days old data"
       implemented_audited_count:
-        one: "A weakness was regularized between %{from_date} and %{to_date}."
-        other: "%{count} weaknesses were regularized between %{from_date} and %{to_date}."
+        one: "A issue was regularized between %{from_date} and %{to_date}."
+        other: "%{count} issues were regularized between %{from_date} and %{to_date}."
     weaknesses_reschedules:
-      pdf_name: "rescheduling_weaknesses_summary_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "rescheduling_issues_summary_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "SUMMARY OF WEAKNESSES / RESCHEDULES / FINAL AUDIT REPORTS"
-      without_weaknesses: "Without weaknesses"
+      subtitle: "SUMMARY OF ISSUES / RESCHEDULES / FINAL AUDIT REPORTS"
+      without_weaknesses: "Without issues"
       reschedule_count_manager: "Number of reschedules approved by headquarters"
       reschedule_count_management: "Number of reschedules approved by management"
       reschedule_count_ceo: "Number of reschedules approved by CEO"
       reschedule_count_committee: "Number of reschedules approved by committee"
     weaknesses_repeated:
-      pdf_name: "weaknesses_with_status_according_last_monitoring_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "issues_with_status_according_last_monitoring_%{from_date}_to_%{to_date}.pdf"
       title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
-      subtitle: "MONITORING OF WEAKNESSES WITH STATUS ACCORDING TO LAST MONITORING / FINAL AUDIT REPORTS"
+      subtitle: "MONITORING OF ISSUES WITH STATUS ACCORDING TO LAST MONITORING / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
-      without_weaknesses: "Without weaknesses"
+      without_weaknesses: "Without issues"
       origination_year: "Origin year"
-      weakness_tags: "Weakness tags"
+      weakness_tags: "Issue tags"
     process_control_stats:
       reviews_with_weaknesses:
-        one: "%{count} audit report with weaknesses in the O.C."
-        other: "%{count} audit reports with weaknesses in the O.C."
+        one: "%{count} audit report with issues in the O.C."
+        other: "%{count} audit reports with issues in the O.C."
     qa_indicators:
       indicators:
         oportunities_solution_rate: "Improvement opportunities solution"
-        ancient_highest_risk_weaknesses: "Ancient highest risk weaknesses"
+        ancient_highest_risk_weaknesses: "Ancient highest risk issues"
     weaknesses_by_risk_and_business_unit:
-      pdf_name: "monitoring_weaknesses_by_risk_and_business_units_%{from_date}_at_%{to_date}.pdf"
+      pdf_name: "monitoring_issues_by_risk_and_business_units_%{from_date}_at_%{to_date}.pdf"
       period_summary: "Period summary %{period}"
-      title: "MONITORING WEAKNESSES\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
+      title: "MONITORING ISSUES\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
       being_implemented: "'In process of implementation' as of %{date}"
       created: "'Registered' between %{from_date} and %{to_date}"
       implemented: "'Implemented' between %{from_date} and %{to_date}"
       total: "TOTAL"
-      empty: "No comments for the applied filter."
+      empty: "No issues for the applied filter."
 
   notifier:
     notify_new_oportunity:
@@ -459,7 +459,7 @@
     findings_expiration_warning:
       title: "Notification of findings near expiration"
       body_title:
-        one: "The following find is about to expire"
+        one: "The following finding is about to expire"
         other: "The following findings are about to expire"
     findings_expired_warning:
       title: "Notification of expired findings"
@@ -492,15 +492,15 @@
         one: "The following task is overdue"
         other: "The following tasks are overdue"
     being_implemented_and_stale_finding_to_manager:
-      title: "Notification of findings in the process of implementation due"
-      the_following_finding_is_being_implemented_and_stale: "The following finding implementation date has passed and is still in the process of being implemented"
+      title: "Notification of issues in the process of implementation due"
+      the_following_finding_is_being_implemented_and_stale: "The following issue implementation date has passed and is still in the process of being implemented"
     unanswered_finding_to_manager:
       subject: "Inactivity notification [#%{finding_id}]"
     expired_finding_to_manager:
       subject: "Expired finding [#%{finding_id}]"
     notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
-      title: "Deployed finding expiration"
-      finding_follow_up_date_last_changed_is_grerater_90_days: "90 days have passed since the last change in the finding implementation date"
+      title: "Deployed issue expiration"
+      finding_follow_up_date_last_changed_is_grerater_90_days: "90 days have passed since the last change in the issue implementation date"
       follow_up_date_last_changed: "Last changed implementation date: %{follow_up_date_last_changed}"
     unanswered_finding:
       subject: Notification of changes to findings [#%{finding_id}]"
@@ -539,7 +539,7 @@
     external_reviews_title: "Add alternative audit report"
     add_past_findings: "Add recent fixed finding"
     control_objectives_previous_effectiveness: "Control previous effectiveness"
-    weaknesses_count_by_state: "Number of Weaknesses (Pending/Resolved-Repeated)"
+    weaknesses_count_by_state: "Number of Issues (Pending/Resolved-Repeated)"
 
   external_review:
     errors:
@@ -605,14 +605,14 @@
         weakness:
           attributes:
             year:
-              frozen: 'Cannot be modified since the status of the weakness is repeated'
-              different_from_repeated_of: 'Year cannot be different from that of the repeated weakness'
+              frozen: 'Cannot be modified since the status of the issue is repeated'
+              different_from_repeated_of: 'Year cannot be different from that of the repeated issue'
             nsisio:
-              frozen: 'Cannot be modified since the status of the weakness is repeated'
-              different_from_repeated_of: 'NSISIO cannot be different from the repeated weakness'
+              frozen: 'Cannot be modified since the status of the issue is repeated'
+              different_from_repeated_of: 'NSISIO cannot be different from the repeated issue'
             nobs:
-              frozen: 'Cannot be modified since the status of the weakness is repeated'
-              different_from_repeated_of: 'N OBS cannot be different from the repeated weakness'
+              frozen: 'Cannot be modified since the status of the issue is repeated'
+              different_from_repeated_of: 'N OBS cannot be different from the repeated issue'
 
   actioncontroller:
     findings: "Findings"

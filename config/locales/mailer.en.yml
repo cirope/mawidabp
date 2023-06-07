@@ -16,7 +16,7 @@ en:
       reply_delimiter: '-- TO ADD A COMMENT, REPLY TO THIS EMAIL WITHOUT MODIFYING THE SUBJECT. AFTER THE COMMENT, WRITE THE PHRASE %{regex_reply_email} --'
     alt_footer:
       warning: "Please, **do not reply** to this email. To perform any interaction, please login into the system."
-      title_html: "If you want to access your observations, click on the following link and enter your Windows ID and password: %{url}" # REVIEW que sería legajo?
+      title_html: "If you want to access your issues, click on the following link and enter your Windows ID and password: %{url}" # REVIEW que sería legajo?
     footer:
       email_label: "Email"
       warning: "Please, **do not reply** to this email. To perform any interaction, you must log in to the system."
