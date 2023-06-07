@@ -214,7 +214,7 @@ es:
         other: 'Observaciones'
       weakness_template:
         one: 'Plantilla de observación'
-        other: 'Plantillas de observaciones'
+        other: 'Plantillas de observación'
       work_paper:
         one: 'Papel de trabajo'
         other: 'Papeles de trabajo'

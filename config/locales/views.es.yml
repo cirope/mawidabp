@@ -906,9 +906,9 @@ es:
       title: 'Editar plantilla de observación'
     index:
       new: 'Nueva plantilla de observación'
-      title: 'Listado de plantillas de observaciones'
-      empty_html: 'No hay plantillas de observaciones, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de observación</span>'
-      empty_search_html: 'No hay plantillas de observaciones que coincidan con el criterio de búsqueda'
+      title: 'Listado de plantillas de observación'
+      empty_html: 'No hay plantillas de observación, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de observación</span>'
+      empty_search_html: 'No hay plantillas de observación que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear plantilla de observación'
     show:
