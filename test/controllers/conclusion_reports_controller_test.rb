@@ -1392,10 +1392,9 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   end
 
   test 'nbc annual report report' do
-    set_organization
-
     skip unless Current.conclusion_pdf_format == 'nbc'
 
+    set_organization
     login
 
     get :nbc_annual_report
@@ -1404,18 +1403,15 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   end
 
   test 'create nbc annual report report' do
-    set_organization
-
     skip unless Current.conclusion_pdf_format == 'nbc'
 
+    set_organization
     login
-
-    period = periods(:current_period)
 
     assert_nothing_raised do
       post :create_nbc_annual_report, params: {
         nbc_annual_report: {
-          period_id: period.id,
+          period_id: periods(:current_period).id,
           date: Date.today.to_s,
           cc: 'cc',
           name: 'name',
@@ -1425,20 +1421,19 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         }
       }
     end
-    
+
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.nbc_annual_report.pdf_name',
         from_date: period.start,
         to_date: period.end),
-        'nbc_annual_report', 
+        'nbc_annual_report',
         0)
   end
 
   test 'nbc internal control qualification as group of companies' do
-    set_organization
-
     skip unless Current.conclusion_pdf_format == 'nbc'
 
+    set_organization
     login
 
     get :nbc_internal_control_qualification_as_group_of_companies
@@ -1447,34 +1442,45 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   end
 
   test 'create nbc internal control qualification as group of companies' do
-    set_organization
-
     skip unless Current.conclusion_pdf_format == 'nbc'
 
+    set_organization
     login
 
-    period = periods(:current_period)
+    other_organization = organizations(:google)
+
+    BusinessUnitType.create([
+      { name: "Cycle", business_unit_label: 'C', organization: other_organization },
+      { name: "Consolidated Substantive", business_unit_label: 'CS', organization: other_organization }
+    ])
+
+    business_unit_types = [
+      business_unit_types(:bcra).name,
+      business_unit_types(:consolidated_substantive).name,
+      business_unit_types(:cycle).name
+    ]
 
     assert_nothing_raised do
       post :create_nbc_internal_control_qualification_as_group_of_companies, params: {
         nbc_internal_control_qualification_as_group_of_companies: {
-          period_id: period.id,
-          date: Date.today.to_s,
+          period_id: periods(:current_period).id,
+          date: Date.today,
           cc: 'cc',
           name: 'name',
           objective: 'objective',
           conclusion: 'conclusion',
           introduction_and_scope: 'introduction and scope',
-          previous_period_id: periods(:past_period).id
+          previous_period_id: periods(:past_period).id,
+          business_unit_types: business_unit_types
         }
       }
     end
-    
+
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.nbc_internal_control_qualification_as_group_of_companies_report.pdf_name',
         from_date: period.start,
         to_date: period.end),
-        'nbc_internal_control_qualification_as_group_of_companies_report', 
+        'nbc_internal_control_qualification_as_group_of_companies_report',
         0)
   end
 end
