@@ -85,3 +85,6 @@ WEAKNESS_WEIGHTS: '{}' # In JSON
 
 production:
   APP_PROTOCOL: 'https'
+
+test:
+  ORGANIZATIONS_WITH_INTERNAL_CONTROL_QUALIFICATION_REPORT: '["cirope", "google"]'
