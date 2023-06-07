@@ -9,15 +9,15 @@ module Reports::NbcInternalControlQualificationAsGroupOfCompanies
     @form = NbcInternalControlQualificationAsGroupOfCompaniesForm.new new_internal_control_qualification_as_group_of_companies_report
 
     if @form.validate(params[:nbc_internal_control_qualification_as_group_of_companies])
-      @controller        = 'conclusion'
-      period             = @form.period
-      previous_period    = @form.previous_period
-      organization_ids   = Organization.where(prefix: ORGANIZATIONS_WITH_INTERNAL_CONTROL_QUALIFICATION_REPORT).pluck(:id)
-      organization       = Current.organization
-      pdf                = Prawn::Document.create_generic_pdf :portrait,
+      @controller              = 'conclusion'
+      period                   = @form.period
+      previous_period          = @form.previous_period
+      business_unit_type_names = @form.business_unit_type_names
+      organization             = Current.organization
+      pdf                      = Prawn::Document.create_generic_pdf :portrait,
                                                               margins: [30, 20, 20, 25]
 
-      text_titles        = [
+      text_titles              = [
         I18n.t('conclusion_committee_report.nbc_internal_control_qualification_as_group_of_companies_report.front_page.first_title'),
         I18n.t('conclusion_committee_report.nbc_internal_control_qualification_as_group_of_companies_report.front_page.second_title')
       ]
@@ -26,9 +26,9 @@ module Reports::NbcInternalControlQualificationAsGroupOfCompanies
       put_nbc_executive_summary      pdf, organization, @form
       put_nbc_introduction_and_scope pdf, @form
 
-      results_period_with_final_weaknesses          = qualification_results organization_ids, period, true
-      results_previous_period_with_final_weaknesses = qualification_results organization_ids, previous_period, true
-      results_period_with_not_final_weaknesses      = qualification_results organization_ids, period, false
+      results_period_with_final_weaknesses          = qualification_results business_unit_type_names, period, true
+      results_previous_period_with_final_weaknesses = qualification_results business_unit_type_names, previous_period, true
+      results_period_with_not_final_weaknesses      = qualification_results business_unit_type_names, period, false
 
       put_nbc_internal_control_qualification_and_conclusion_group_of_companies_report pdf, period, results_period_with_final_weaknesses
 
@@ -57,11 +57,10 @@ module Reports::NbcInternalControlQualificationAsGroupOfCompanies
       )
     end
 
-    def qualification_results organization_ids, period, final
-      result              = []
-      business_unit_types = BusinessUnitType.where(organization: organization_ids).pluck(:name).uniq
+    def qualification_results business_unit_type_names, period, final
+      result = []
 
-      business_unit_types.each do |business_unit_type|
+      business_unit_type_names.each do |business_unit_type|
         statuses = [
           Finding::STATUS[:being_implemented],
           Finding::STATUS[:implemented_audited]

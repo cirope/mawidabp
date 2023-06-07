@@ -25,7 +25,7 @@ es:
         conclusion: 'Conclusion'
         introduction_and_scope: 'Introduccion y Alcance'
         previous_period_id: 'Periodo previo'
-        organizations: Organizaciones
+        business_unit_types: Unidades organizativas
         periods: Periodos
     errors:
       models:
@@ -33,10 +33,10 @@ es:
           attributes:
             previous_period_id:
               must_be_before_period: 'debe tener una fecha de inicio anterior a la fecha de inicio del Periodo'
-            organizations:
-              must_have_the_same_business_unit_type_names:
-                one: 'deben tener la misma cantidad de unidades organizativas con los mismos nombres. Actualmente la que difiere es: %{different_names}'
-                other: 'deben tener la misma cantidad de unidades organizativas con los mismos nombres. Actualmente las que difieren son: %{different_names}'
+            business_unit_types:
+              must_have_the_same_business_unit_type_names: # Cantidad?
+                one: 'deben tener los mismos nombres en las tres organizaciones. Actualmente la que difiere es: %{different_names}'
+                other: 'deben tener los mismos nombres en las tres organizaciones. Actualmente las que difieren son: %{different_names}'
             periods:
               must_have_the_same_names:
                 one: 'deben tener los mismos nombres en las tres organizaciones. Actualmente el que difiere es: %{different_names}'
