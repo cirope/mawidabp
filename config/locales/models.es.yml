@@ -35,7 +35,7 @@ es:
             previous_period_id:
               must_be_before_period: 'debe tener una fecha de inicio anterior a la fecha de inicio del Periodo'
             business_unit_types:
-              must_have_the_same_business_unit_type_names: # Cantidad?
+              must_have_the_same_business_unit_type_names:
                 one: 'deben tener los mismos nombres en las tres organizaciones. Actualmente la que difiere es: %{different_names}'
                 other: 'deben tener los mismos nombres en las tres organizaciones. Actualmente las que difieren son: %{different_names}'
             periods:
