@@ -47,6 +47,18 @@ class NbcInternalControlQualificationAsGroupOfCompaniesFormTest < ActiveSupport:
     assert_error @form, :previous_period_id, :must_be_before_period
   end
 
+  test 'previous_period_id must have the same name' do
+    refute @form.validate({ previous_period_id: periods(:third_period).id })
+    assert_error @form, :previous_period_id, :must_have_the_same_name,
+      organizations: [organizations(:google).name].to_sentence
+  end
+
+  test 'period_id must have the same name' do
+    refute @form.validate({ period_id: periods(:third_period).id })
+    assert_error @form, :period_id, :must_have_the_same_name,
+      organizations: [organizations(:google).name].to_sentence
+  end
+
   test 'business_unit_types must have the same name' do
     business_unit_types = [
       business_unit_types(:bcra).name,
