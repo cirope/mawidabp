@@ -15,17 +15,15 @@ module Tasks::Expiration
 
   module ClassMethods
     def expires_very_soon
-      date = if Time.zone.now < Time.zone.now.noon
-       Time.zone.today
-     else
-       1.day.business_days.from_now.to_date
-     end
+      setting = Current.organization.settings.find_by(name: 'finding_days_for_the_second_expiration_warning').to_i
 
-      expires_on date
+      expires_on setting.business_days.from_now.to_date
     end
 
     def next_to_expire
-      expires_on FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
+      setting = Current.organization.settings.find_by(name: 'finding_warning_expire_days').to_i
+
+      expires_on setting.business_days.from_now.to_date
     end
 
     def finals final
