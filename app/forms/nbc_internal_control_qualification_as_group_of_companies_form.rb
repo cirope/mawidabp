@@ -4,11 +4,14 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
   property :previous_period_id
   property :business_unit_types
   property :periods
+  property :organizations
 
   validates :previous_period_id, presence: true
   validate :previous_period_must_be_before_period
   validate :business_unit_types_must_have_the_same_name
   validate :periods_must_have_the_same_name
+  validate :organizations_must_be_configured
+
 
   def previous_period
     Period.list.find_by_id previous_period_id
@@ -26,6 +29,13 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
 
     def organization_ids
       Organization.where(prefix: ORGANIZATIONS_WITH_INTERNAL_CONTROL_QUALIFICATION_REPORT).pluck(:id)
+    end
+
+    def organizations_must_be_configured
+      unless organization_ids.present? &&
+        ORGANIZATIONS_WITH_INTERNAL_CONTROL_QUALIFICATION_REPORT.count == organization_ids.count
+          errors.add :organizations, :are_misconfigured
+      end
     end
 
     def previous_period_must_be_before_period
