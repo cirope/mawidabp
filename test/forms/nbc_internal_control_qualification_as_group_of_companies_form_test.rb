@@ -80,4 +80,9 @@ class NbcInternalControlQualificationAsGroupOfCompaniesFormTest < ActiveSupport:
     assert_equal NbcInternalControlQualificationAsGroupOfCompaniesForm.human_attribute_name(:business_unit_types),
                  I18n.t('activemodel.attributes.nbc_annual_report_form.business_unit_types')
   end
+
+  test 'should attribute organizations' do
+    assert_equal NbcInternalControlQualificationAsGroupOfCompaniesForm.human_attribute_name(:organizations),
+                 I18n.t('activemodel.attributes.nbc_annual_report_form.organizations')
+  end
 end
