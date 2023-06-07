@@ -11,11 +11,14 @@ module Findings::Expiration
 
   module ClassMethods
     def expires_very_soon
-      expires_on FINDING_DAYS_FOR_THE_SECOND_EXPIRATION_WARNING.business_days.from_now.to_date
+      setting = Organization.all_parameters('finding_days_for_the_second_expiration_warning').to_i
+      expires_on setting.business_days.from_now.to_date
     end
 
     def next_to_expire
-      expires_on FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
+      setting = Organization.all_parameters('finding_warning_expire_days').to_i
+
+      expires_on setting.business_days.from_now.to_date
     end
 
     def warning_users_about_expiration
