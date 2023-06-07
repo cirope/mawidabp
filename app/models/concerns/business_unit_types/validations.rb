@@ -12,9 +12,28 @@ module BusinessUnitTypes::Validations
       case_sensitive: false, scope: :organization_id
     }
     validate :all_units_marked_for_destruction_can_be_destroyed
+    validate :exec_summary_intro_must_have_valid_keys, if: :is_gal?
   end
 
   private
+
+    def is_gal?
+      Current.conclusion_pdf_format == 'gal'
+    end
+
+    def exec_summary_intro_must_have_valid_keys
+      if exec_summary_intro
+        review_key   = I18n.t "conclusion_review.executive_summary.keywords.review"
+        valid_keys   = [review_key]
+        field_keys   = exec_summary_intro.scan(/%\{(.*?)\}/).flatten
+        missing_keys = field_keys - valid_keys
+
+        if missing_keys.any?
+          errors.add :exec_summary_intro, :missing_keys, count: missing_keys.count,
+            invalid_keys: missing_keys.to_sentence
+        end
+      end
+    end
 
     def all_units_marked_for_destruction_can_be_destroyed
       locked = business_units.any? do |bu|

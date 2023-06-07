@@ -320,6 +320,8 @@ es:
       info: 'Informativo'
       warning: 'Advertencia'
       danger: 'Peligro'
+    saml_providers:
+      azure: 'Azure'
 
   periods:
     edit:
@@ -637,6 +639,7 @@ es:
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
     hours_of_work_per_day: 'Horas de trabajo por día'
     conclusion_review_receiver: 'Receptor/es del informe'
+    temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas. '
 
   tags:
     edit:
@@ -737,6 +740,7 @@ es:
       add_business_unit_type: 'Agregar unidades organizativas'
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
+      add_tagging: 'Agregar etiqueta'
     create:
       correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
     imports:
@@ -912,3 +916,8 @@ es:
       title: 'Ver plantilla de observación'
     form:
       add_control_objective: 'Agregar objetivo de control'
+
+  work_papers:
+    show:
+      title: 'Papel de trabajo'
+      error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'

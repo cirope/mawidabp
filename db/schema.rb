@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_05_172357) do
+ActiveRecord::Schema.define(version: 2023_03_31_034310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 2022_09_05_172357) do
     t.string "reviews_for"
     t.string "detailed_review"
     t.boolean "grouped_by_business_unit_annual_report", default: false
+    t.text "exec_summary_intro"
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
@@ -815,6 +816,7 @@ ActiveRecord::Schema.define(version: 2022_09_05_172357) do
     t.integer "role_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "sync_ldap", default: true, null: false
     t.index ["organization_id"], name: "index_organization_roles_on_organization_id"
     t.index ["role_id"], name: "index_organization_roles_on_role_id"
     t.index ["user_id"], name: "index_organization_roles_on_user_id"
@@ -1144,6 +1146,24 @@ ActiveRecord::Schema.define(version: 2022_09_05_172357) do
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_roles_on_name"
     t.index ["organization_id"], name: "index_roles_on_organization_id"
+  end
+
+  create_table "saml_providers", force: :cascade do |t|
+    t.string "provider", null: false
+    t.string "idp_homepage", null: false
+    t.string "idp_entity_id", null: false
+    t.string "idp_sso_target_url", null: false
+    t.string "sp_entity_id", null: false
+    t.string "assertion_consumer_service_url", null: false
+    t.string "name_identifier_format", null: false
+    t.string "assertion_consumer_service_binding", null: false
+    t.text "idp_cert", null: false
+    t.bigint "default_role_for_users_id"
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["default_role_for_users_id"], name: "index_saml_providers_on_default_role_for_users_id"
+    t.index ["organization_id"], name: "index_saml_providers_on_organization_id"
   end
 
   create_table "sectors", force: :cascade do |t|
@@ -1483,6 +1503,8 @@ ActiveRecord::Schema.define(version: 2022_09_05_172357) do
   add_foreign_key "risk_weights", "risk_assessment_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_weights", "risk_assessment_weights", on_update: :restrict, on_delete: :restrict
   add_foreign_key "roles", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "saml_providers", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "saml_providers", "roles", column: "default_role_for_users_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "sectors", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "settings", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "subsidiaries", "organizations", on_update: :restrict, on_delete: :restrict

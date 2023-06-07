@@ -16,4 +16,4 @@ Seleccionamos **Planificación**
 
 &nbsp;
 
-![]({% asset planification/main.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/planification/main.png){: class="img-responsive"}

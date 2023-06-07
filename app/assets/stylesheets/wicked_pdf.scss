@@ -33,3 +33,6 @@ div.alwaysbreak { page-break-before: always; }
 div.nobreak:before { clear:both; }
 div.nobreak { page-break-inside: avoid; }
 .page-break { display:block; clear:both; page-break-after:always; }
+
+//customs scss
+@import "pdf/bic_pdf";

@@ -13,7 +13,7 @@ Seleccionamos **Reportes.**
 
 Muestra los datos por tipo de cuestionario, por unidad organizativa y resumen de las respuestas.
 
-![]({% asset administration/questionnaires/report-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-1.png){: class="img-responsive"}
 
 <hr>
 
@@ -25,19 +25,19 @@ Muestra los datos por tipo de cuestionario, por unidad organizativa y resumen de
 
 Seleccionamos **Resumen por tipo de cuestionario**, luego tenemos la opción **Por favor seleccione**, en este caso muestra Comité para seleccionar, seleccionamos Comité (a medida que generemos cuestionarios, los mismos van aparecer en esta lista).
 
-![]({% asset administration/questionnaires/report-2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-2.png){: class="img-responsive"}
 
 Seleccionamos **aplicar filtro**, muestra el reporte con los siguientes datos.
 
-![]({% asset administration/questionnaires/report-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-3.png){: class="img-responsive"}
 
 Tenemos la opción de **Descargar** el reporte en formato pdf, personalizando el título y subtítulo,
 
-![]({% asset administration/questionnaires/report-4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-4.png){: class="img-responsive"}
 
 Seleccionamos **Generar**, luego nos muestra el reporte en formato pdf, en este caso para la empresa Cirope.
 
-![]({% asset administration/questionnaires/report-5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-5.png){: class="img-responsive"}
 
 <hr>
 
@@ -51,29 +51,29 @@ Seleccionamos **Resumen por unidad organizativa** (elegimos Procesos centrales),
 
 Seleccionamos **aplicar filtro**, muestra el reporte con los siguientes datos.
 
-![]({% asset administration/questionnaires/report-6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-6.png){: class="img-responsive"}
 
 Si en la opción **Ver** seleccionamos ¨Solo a todos¨.
 
 Seleccionamos **aplicar filtro**, muestra el reporte con los siguientes datos (en este caso no tiene datos para los campos seleccionados)
 
-![]({% asset administration/questionnaires/report-7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-7.png){: class="img-responsive"}
 
 Si en la opción **Ver** seleccionamos ¨Asignadas y por informe¨.
 
 Seleccionamos **aplicar filtro**, muestra el reporte con los siguientes datos.
 
-![]({% asset administration/questionnaires/report-8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-8.png){: class="img-responsive"}
 
 Para todos los casos tenemos la posibilidad de descargar el reporte en formato pdf.
 
 Seleccionamos **Descargar**, nos ofrece la posibilidad de personalizar el Título y Subtítulo.
 
-![]({% asset administration/questionnaires/report-9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-9.png){: class="img-responsive"}
 
 Luego seleccionamos **Generar** (genera el reporte en formato pdf), en este caso para la empresa Cirope.
 
-![]({% asset administration/questionnaires/report-10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-10.png){: class="img-responsive"}
 
 <hr>
 
@@ -85,11 +85,11 @@ Luego seleccionamos **Generar** (genera el reporte en formato pdf), en este caso
 
 Seleccionamos **Resumen de respuestas**, luego tenemos la opción **Cuestionario** (Por favor seleccione), en este caso muestra Comité para seleccionar, seleccionamos Comité (a medida que generemos cuestionarios, los mismos van aparecer en esta lista). Luego tenemos la opción **Contestada** (Por favor seleccione), tenemos por Si o No, seleccionamos Si.
 
-![]({% asset administration/questionnaires/report-11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-11.png){: class="img-responsive"}
 
 Seleccionamos **aplicar filtro**, muestra el reporte con los siguientes datos.
 
-![]({% asset administration/questionnaires/report-12.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-12.png){: class="img-responsive"}
 
 Seleccionamos **Descargar**, nos ofrece la posibilidad de personalizar el Título y Subtítulo y obtener el reporte en formato pdf.
 
@@ -109,19 +109,19 @@ En ¨Reportes¨ -> ¨Resumen de respuestas¨, agregamos un tilde ¨Mostrar únic
 
 Seleccionamos ¨Administración¨ -> ¨Cuestionarios¨
 
-![]({% asset administration/questionnaires/report-13.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-13.png){: class="img-responsive"}
 
 Seleccionamos ¨Reportes¨
 
-![]({% asset administration/questionnaires/report-14.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-14.png){: class="img-responsive"}
 
 Seleccionamos ¨Resumen de respuestas¨
 
-![]({% asset administration/questionnaires/report-15.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-15.png){: class="img-responsive"}
 
 Ingresamos los datos y seleccionamos ¨Mostrar únicamente respuestas coincidentes¨, para este ejemplo: ¨De acuerdo¨.
 
-![]({% asset administration/questionnaires/report-16.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-16.png){: class="img-responsive"}
 
 <hr>
 
@@ -139,19 +139,19 @@ El informe se muestra en los siguientes lugares:
 
 > **Mail que le llega al auditado:**
 
-![]({% asset administration/questionnaires/report-17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-17.png){: class="img-responsive"}
 
 **Pantalla en la que el auditado responde:**
 
-![]({% asset administration/questionnaires/report-18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-18.png){: class="img-responsive"}
 
 **Consulta de encuestas, muestra el informe en la columna ¨Sobre¨ y la columna ¨Acerca de¨ muestra si corresponde a Todos o al usuario auditor:**
 
-![]({% asset administration/questionnaires/report-19.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-19.png){: class="img-responsive"}
 
 Incorporamos la opción "No aplica" (para el tipo de respuesta ¨Múltiple opción¨ como uno de los valores posibles para que el auditado responda, a los efectos de evitar sesgos en la interpretación de los resultados).
 
-![]({% asset administration/questionnaires/report-20.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-20.png){: class="img-responsive"}
 
 <hr>
 
@@ -171,11 +171,11 @@ Cambios en los reportes para que discrimine las preguntas por tipo de respuesta.
 
 Seleccionamos ¨Definición¨.
 
-![]({% asset administration/questionnaires/report-21.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-21.png){: class="img-responsive"}
 
 Agregamos el tipo de respuestas (**Opción Si o No**) y cantidad de caracteres ilimitados para la carga de campos (Pregunta, Texto del correo, Aclaración del correo).
 
-![]({% asset administration/questionnaires/report-22.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-22.png){: class="img-responsive"}
 
 **Administración -> Cuestionarios**.
 
@@ -185,11 +185,11 @@ Cambios en los reportes para poder ver las respuestas de los usuarios a cada una
 
 Muestra las encuestas enviadas
 
-![]({% asset administration/questionnaires/report-23.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-23.png){: class="img-responsive"}
 
 Seleccionando la **lupa** (para el Cuestionario Relevamiento, segunda fila) podemos ver las respuestas de los usuarios a cada una de las preguntas.
 
-![]({% asset administration/questionnaires/report-24.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-24.png){: class="img-responsive"}
 
 **Administración -> Cuestionarios**.
 
@@ -197,33 +197,33 @@ Seleccionamos ¨Reportes¨.
 
 Cambios en los reportes para que discrimine las preguntas por tipo de respuesta.
 
-![]({% asset administration/questionnaires/report-25.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-25.png){: class="img-responsive"}
 
 Para mostrar un ejemplo, seleccionamos **Resumen por unidad organizativa** (elegimos Procesos centrales), luego tenemos la opción **Cuestionario** (Por favor seleccione), en este caso seleccionamos Comité (a medida que generemos cuestionarios, los mismos van aparecer en esta lista), en la opción **Ver** seleccionamos ¨Asignadas¨ (muestra las encuestas directamente asignadas al usuario, siempre que haya un usuario seleccionado). Además tenemos la posibilidad de seleccionar ¨Solo a todos¨, ¨Asignadas y por informe¨.
 
 Seleccionamos **aplicar filtro**, muestra el reporte con los siguientes datos.
 
-![]({% asset administration/questionnaires/report-26.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-26.png){: class="img-responsive"}
 
 Si en la opción **Ver** seleccionamos ¨Solo a todos¨ (muestra las encuestas enviadas con la opción "Todos", no tiene en cuenta el usuario seleccionado), luego seleccionamos **aplicar filtro**, muestra el reporte con los siguientes datos (para este filtro no existen datos para mostrar)
 
-![]({% asset administration/questionnaires/report-27.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-27.png){: class="img-responsive"}
 
 Si en la opción **Ver** seleccionamos ¨Asignadas y por informe¨(muestra las encuestas directamente asignadas al usuario y en las que participó como integrante en el informe ,siempre que haya un usuario seleccionado).
 
 Luego seleccionamos **aplicar filtro**, muestra el reporte con los siguientes datos.
 
-![]({% asset administration/questionnaires/report-28.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-28.png){: class="img-responsive"}
 
 Para todos los casos tenemos la posibilidad de descargar el reporte en formato pdf.
 
 Seleccionamos **Descargar**, nos ofrece la posibilidad de personalizar el Título y Subtítulo.
 
-![]({% asset administration/questionnaires/report-29.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-29.png){: class="img-responsive"}
 
 Luego seleccionamos **Generar** (genera el reporte en formato pdf).
 
-![]({% asset administration/questionnaires/report-30.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-30.png){: class="img-responsive"}
 
 Nivel de satisfacción promedio: calcula el promedio de las opciones seleccionadas por el usuario (el sistema tiene en cuenta los siguientes datos, Muy de acuerdo:100; De acuerdo: 75; Ni acuerdo ni desacuerdo: 50; En desacuerdo: 25: Muy desacuerdo: 0; Si: 100; No: 0; No aplica: no se tiene en cuenta en el cálculo del promedio).
 
@@ -251,23 +251,23 @@ Seleccionamos ¨Definición¨.
 
 El primer icono de izquierda a derecha tiene la opción para ¨**copiar**¨, si posicionamos el mouse nos muestra el mensaje Copiar.
 
-![]({% asset administration/questionnaires/report-31.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-31.png){: class="img-responsive"}
 
 Seleccionamos ¨Copiar¨, nos muestra la pantalla con los datos del cuestionario seleccionado.
 
-![]({% asset administration/questionnaires/report-32.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-32.png){: class="img-responsive"}
 
 Cambiamos los datos que necesitamos.
 
-![]({% asset administration/questionnaires/report-33.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-33.png){: class="img-responsive"}
 
 Luego seleccionamos ¨Crear cuestionario¨.
 
-![]({% asset administration/questionnaires/report-34.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-34.png){: class="img-responsive"}
 
 Seleccionamos ¨Listado¨, nos muestra el nuevo cuestionario ¨Comité prueba¨ generado con la opción ¨Copiar¨.
 
-![]({% asset administration/questionnaires/report-35.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-35.png){: class="img-responsive"}
 
 **Administración -> Cuestionarios**.
 
@@ -275,27 +275,27 @@ En ¨Encuestas¨ muestra un nuevo campo **¨Acerca de¨** para poder identificar
 
 Seleccionamos ¨Encuestas¨, nos muestra el listado con el campo ¨Acerca de¨
 
-![]({% asset administration/questionnaires/report-36.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-36.png){: class="img-responsive"}
 
 Seleccionamos ¨Nuevo¨,  nos muestra la pantalla para crear una nueva encuesta con el agregado del campo ¨Acerca de¨ (para poder identificar a qué corresponde la encuesta que luego enviamos).
 
-![]({% asset administration/questionnaires/report-37.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-37.png){: class="img-responsive"}
 
 Cargamos los datos requeridos, en este caso necesitamos enviar la encuesta al auditor, sobre el trabajo realizado en la 4 - Sucursal Mendoza.
 
-![]({% asset administration/questionnaires/report-38.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-38.png){: class="img-responsive"}
 
 Seleccionamos ¨Crear Encuesta¨, nos muestra la siguiente pantalla.
 
-![]({% asset administration/questionnaires/report-39.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-39.png){: class="img-responsive"}
 
 Si seleccionamos ¨Listado¨, nos muestra la nueva encuesta generada con el campo ¨Acerca de¨.
 
-![]({% asset administration/questionnaires/report-40.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-40.png){: class="img-responsive"}
 
 Además, al seleccionar esta opción, el sistema va enviar un correo a la cuenta del usuario seleccionado.
 
-![]({% asset administration/questionnaires/report-41.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-41.png){: class="img-responsive"}
 
 **Administración -> Cuestionarios**.
 
@@ -307,9 +307,9 @@ Agregamos el campo ¨Respuesta¨, es un desplegable que muestra los respuestas c
 
 En este ejemplo necesitamos saber para la respuesta ¨Muy de acuerdo¨.
 
-![]({% asset administration/questionnaires/report-42.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-42.png){: class="img-responsive"}
 
 Seleccionamos ¨Aplicar filtro¨, nos muestra los siguientes datos.
 
-![]({% asset administration/questionnaires/report-43.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/questionnaires/report-43.png){: class="img-responsive"}
 

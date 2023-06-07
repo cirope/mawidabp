@@ -5,6 +5,7 @@ namespace :deploy do
       within release_path do
         with rails_env: fetch(:rails_env) do
           rake 'help:install'
+          rake 'help:create_bootstrap_symlinks'
           rake 'help:generate'
         end
       end
