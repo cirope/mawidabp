@@ -44,7 +44,7 @@ module Tags::Options
   end
 
   def option_value option, human: false
-    if value = Hash(options)[option]
+    if (value = Hash(options)[option]).present?
       case option_type(option)
       when :date_picker
         human ? I18n.l(Date.parse(value)) : value
