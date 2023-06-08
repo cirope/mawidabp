@@ -180,10 +180,10 @@ en:
 
   conclusion_committee_report:
     index_title: "Conclusion reports"
-    control_objective_stats_title: 'Issues by control objective' # REVIEW weaknesses or findings?
-    control_objective_stats_by_review_title: 'Issues by control objective without scores' # REVIEW weaknesses or findings? scores?
+    control_objective_stats_title: 'Issues by control objective'
+    control_objective_stats_by_review_title: 'Issues by control objective without scores' # REVIEW scores?
     benefits_title: 'Benefits / Detriments'
-    process_control_stats_title: 'Issues by business process' # REVIEW weaknesses or findings?
+    process_control_stats_title: 'Issues by business process'
     synthesis_report_title: "Executive summary"
     review_stats_report_title: "Audit report statistics"
     review_scores_report_title: "Audit report scores"
@@ -302,7 +302,7 @@ en:
         header_number: '<b>N°</b>' # REVIEW Quizásse pudiera usar numeral...
         header_qualification: '<b>Qualification</b>' # REVIEW Score?
         header_weight: '<b>Weight</b>'
-        header_high_risk_observations: '<b>Number of High Risk Issues</b>' # REVIEW: weaknesses / findings?
+        header_high_risk_observations: '<b>Number of High Risk Issues</b>'
       internal_control_qualification:
         header_cycle: '<b>Cycle</b>'
         header_count_findings: '<b>Number of Issues</b>'
@@ -434,7 +434,7 @@ en:
     oportunities: "IMPROVEMENT OPPORTUNITIES" # KEY_TO_FIX opportunities?
     finding_review_assignments: "REVIEWED FINDINGS"
     repeated_findings: "Issues follow-up"
-    repeated_findings_empty: "No issues pending regularization are registred." # REVIEW No repeated findings?
+    repeated_findings_empty: "No issues pending regularization are registred." # REVIEW No repeated issues?
     present_findings: "New issues"
     present_findings_empty: "There are no issues to mention."
     add_recipient: "Add new recipient"
@@ -480,7 +480,7 @@ en:
     findings_follow_up:
       title: "FINDINGS FOLLOW-UP"
       weakness_title_in_singular: "ISSUE FOLLOW-UP"
-      oportunity_title_in_singular: "IMPROVEMENT OPPORTUNITY FOLLOW-UP" # REVIEW Key opportunity_title_in_singular?
+      oportunity_title_in_singular: "IMPROVEMENT OPPORTUNITY FOLLOW-UP" # KEY_TO_FIX opportunity_title_in_singular?
       index_clarification: "* At the time of issuing the final audit report"
       pdf_name: "%{prefix}_monitoring_of_issues_opportunities_for_improvement.pdf"
     workflow:
@@ -644,7 +644,7 @@ en:
       column_review: "Audit report"
       column_audit_cost: "Number of hours used (sum of follow-up hours by auditors)" # REVIEW total follow-up hours?
       column_audited_cost: "Number of hours spent on the solution (sum of follow-up hours by auditee)" # REVIEW total follow-up hours?
-      title: "COST ANALYSIS\nOF FOLLOW-UP FINDINGS\nBY INTERNAL AUDIT REPORT" # REVIEW weaknesses / findings?
+      title: "COST ANALYSIS\nOF FOLLOW-UP FINDINGS\nBY INTERNAL AUDIT REPORT"
       weaknesses: "ISSUES"
       oportunities: "IMPROVEMENT OPPORTUNITIES" # KEY_TO_FIX opportunities?
       without_weaknesses: "No issues in the period"
@@ -653,8 +653,8 @@ en:
 
   follow_up_committee_report:
     index_title: "Committee reports"
-    control_objective_stats_title: 'Issues by control objective' # REVIEW Weaknesses?
-    control_objective_stats_by_review_title: 'Issues by control objective without score' # REVIEW qualification? Weaknesses?
+    control_objective_stats_title: 'Issues by control objective'
+    control_objective_stats_by_review_title: 'Issues by control objective without score' # REVIEW qualification?
     benefits_title: 'Benefits / Detriments'
     process_control_stats_title: 'Issues by business process'
     control_effectiveness: "Control effectiveness"
@@ -704,8 +704,8 @@ en:
       without_audits_in_the_period: 'No audits with benefits / detriments in the period'
       total: 'Total amount: <b>%{amount}</b>'
     control_objective_stats:
-      pdf_name: 'issues_by_control_objective_%{from_date}_to_%{to_date}.pdf' # REVIEW weaknesses?
-      title: "ISSUES GROUPED BY CONTROL OBJECTIVE" # REVIEW WEAKNESSES / FINDINGS?
+      pdf_name: 'issues_by_control_objective_%{from_date}_to_%{to_date}.pdf'
+      title: "ISSUES GROUPED BY CONTROL OBJECTIVE"
       subtitle: "AUDIT REPORT FOLLOW-UP"
       average_effectiveness: 'Weighted average score' # REVIEW qualification?
       average_effectiveness_resume:
@@ -782,8 +782,8 @@ en:
         one: 'Average of %{audit_type} scores in a audit report'
         other: 'Average of %{audit_type} scores in %{count} audit report'
       repeated_count:
-        one: "A repeated finding" # REVIEW: finding?
-        other: "%{count} repeated findings" # REVIEW: findings?
+        one: "A repeated finding"
+        other: "%{count} repeated findings"
       total_score_average: "Total average scores (%{reference })"
       references: "References:\n\n(1) Score: the score (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their score from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Issues: lists the titles of the detected issues. If there are no issues, the legend \"No issues\" is displayed."
     review_stats_report:
@@ -1084,8 +1084,8 @@ en:
       old_responsible: "Old responsible: %{responsible}"
       new_responsible: "Current responsible: %{responsible}"
     responsibility_removed: "Have been removed from the %{review} audit report" # REVIEW donde?
-    cannot_be_reassigned: "User cannot be reassigned, has issues that depend on them" # REVIEW observations: findings / weaknesses?
-    cannot_be_destroyed: "User cannot be deleted, it has issues that depend on them" # REVIEW observations: findings / weaknesses?
+    cannot_be_reassigned: "User cannot be reassigned, has issues that depend on them"
+    cannot_be_destroyed: "User cannot be deleted, it has issues that depend on them"
 
   role:
     index_title: "Profile list"
@@ -1605,7 +1605,7 @@ en:
           attributes:
             organization_roles:
               blank: "must have at least one"
-              invalid: "cannot be modified, user has pending issues (must reassign or detach them)" # REVIEW observations??
+              invalid: "cannot be modified, user has pending issues (must reassign or detach them)"
             password:
               invalid: "must meet the restrictions set by the administrator"
               already_used: "already used before"

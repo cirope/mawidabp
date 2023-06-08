@@ -411,7 +411,7 @@ en:
         commitment_date: 'Commitment date'
         user_id: 'Comment (user)'
         notify_users: 'Comment (send notification)'
-        skip_commitment_support: 'Check if the issue is fixed' # REVIEW weakness / finding?
+        skip_commitment_support: 'Check if the issue is fixed'
       finding/finding_answers/commitment_support:
         one: 'Support commitment' # REVIEW context?
         reason: 'Reschedule reason'
