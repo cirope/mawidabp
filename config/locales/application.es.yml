@@ -52,16 +52,16 @@ es:
     es: 'Español'
 
   message:
-    ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
+    ldap_error: 'El servidor de autenticación no está disponible en este momento. Por favor, inténtelo de nuevo más tarde'
     change_weakness_risk: "El riesgo de la observación ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
-    insufficient_privileges: "No tiene permisos para realizar la operación"
+    insufficient_privileges: "No tiene permisos para realizar la acción"
     invalid_user_or_password: "Usuario/contraseña inválido"
     loading: "Cargando"
-    must_be_authenticated: "Debe autenticarse"
+    must_be_authenticated: "Debe iniciar sesión para continuar"
     must_change_the_password: "Debe cambiar su contraseña"
-    no_organization: "No existe la organización. Por favor, verifique la dirección URL"
+    no_organization: "La organización no existe. Por favor, verifique la dirección URL"
     password_expire_in_x:
       one: "Su contraseña expira mañana"
       other: "Su contraseña expira dentro de %{count} días"
@@ -69,15 +69,15 @@ es:
       one: "Su contraseña expiró ayer"
       other: "Su contraseña expiró hace %{count} días"
     search_link_title: "Filtrar listado (Ctrl + Espacio)"
-    session_closed_correctly: "Sesión cerrada correctamente"
+    session_closed_correctly: "Ha cerrado sesión correctamente"
     session_expires_in_less_than_two_minutes: "Su sesión expira en menos de dos minutos"
-    session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
+    session_time_expired: "Su sesión ha expirado. Por favor, inicie sesión nuevamente para continuar"
     sort_by: "Ordenar por..."
-    unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
-    rejected_data_format: Algún campo contiene la cadena <code>../</code>. Por favor, elimínela antes de realizar la acción. Revise los campos resaltados REVIEW donde? realizar la acción? Agregué html
-    validation_failed_message: "Los datos introducidos no son válidos, revise los campos resaltados"
+    unsaved_data_warning: "Ha modificado el contenido. Si abandona la página, perderá todos los cambios realizados"
+    rejected_data_format: Se ha detectado la presencia de la cadena <code>../</code> en uno o más campos. Antes de continuar, elimine esta cadena de texto en los campos resaltados
+    validation_failed_message: "Los datos ingresados no son válidos. Por favor, verifique los campos resaltados e intente nuevamente"
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
-    empty_result: "Sin resultados, modifique el criterio"
+    empty_result: "Sin resultados, modifique el criterio de búsqueda"
     automatic_by_the_system: "Realizado de forma automática por el sistema"
     compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="https://browsehappy.com/">actualizarlo</a>'
 

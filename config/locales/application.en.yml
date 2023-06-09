@@ -52,32 +52,32 @@ en:
     es: 'Spanish' # REVIEW donde se usaría esto? Deberíamos cambiarlo a English? Parece que no se usa
 
   message:
-    ldap_error: 'Authentication server is not available, please try again later'
+    ldap_error: 'The authentication server is currently unavailable. Please try again later'
     change_weakness_risk: "The risk of the issue has changed"
     confirmation_question: "Are you sure?"
     download: "Download"
-    insufficient_privileges: "You do not have permissions to perform the operation" # REVIEW operation? Cuando intenas acceder a una pag sin estar authorizado
+    insufficient_privileges: "You do not have permission to perform this action"
     invalid_user_or_password: "Invalid user/password"
     loading: "Loading"
-    must_be_authenticated: "You must be authenticated" # REVIEW ver de cambiar a logueado
+    must_be_authenticated: "You must log in to continue"
     must_change_the_password: "You must change your password"
-    no_organization: "The organization does not exist, please check the URL"
+    no_organization: "The organization does not exist. Please verify the URL address"
     password_expire_in_x:
       one: "Your password expires tomorrow"
       other: "Your password expires in %{count} days"
     password_expired_x_days_ago:
       one: "Your password expired yesterday"
       other: "Your password expired %{count} days ago"
-    search_link_title: "Filter listing (Ctrl + Spacebar)" # REVIEW probar html?
-    session_closed_correctly: "Session closed correctly" # REVIEW Cambiar a logout
+    search_link_title: "Filter listing (Ctrl + Spacebar)"
+    session_closed_correctly: "You have successfully logged out"
     session_expires_in_less_than_two_minutes: "Your session expires in less than two minutes"
-    session_time_expired: "Your session has expired, you need to authenticate again" # REVIEW cuando pasan 15min sin utilizar la app
+    session_time_expired: "Your session has expired. Please log in again to continue"
     sort_by: "Sort by..."
-    unsaved_data_warning: "You have modified the content, if you leave the page you will lose all changes" # REVIEW content? cuando salis de la pag sin guardar
-    rejected_data_format: "Some field contains the string <code>../</code>. Please remove it before performing the action. Check the highlighted fields" # REVIEW Sino podemos usar el <ins>. REVISAR DONDE SALE
-    validation_failed_message: "The data entered is invalid, please check the highlighted fields" # REVIEW entered? REVISAR DONDE SALE
+    unsaved_data_warning: "You have modified the content. If you leave the page, you will lose all the changes made"
+    rejected_data_format: "Some field contains the string <code>../</code>. Please remove it before performing the action. Check the highlighted fields"
+    validation_failed_message: "The entered data is not valid. Please check the highlighted fields and try again"
     you_are_already_logged: "This user is already logged in"
-    empty_result: "No results, please modify the criteria"
+    empty_result: "No results. Please modify your search criteria"
     automatic_by_the_system: "Done automatically by the system"
     compatibility_warning_html: 'You are using an <strong>outdated</strong> browser. Please consider <a href="https://browsehappy.com/">upgrading it</a>'
 
