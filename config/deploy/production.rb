@@ -1,4 +1,4 @@
-set :branch,    'master'
+set :branch,    'c-comafi-test'
 set :stage,     :production
 set :rails_env, 'production'
 
