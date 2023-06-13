@@ -599,4 +599,20 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     assert_equal 0, wts.size # No results
   end
+
+  test 'update weakness with required tags' do
+    set_organization
+    login
+
+    tag    = tags :important
+    subtag = tag.children.create!(name: 'Subtag')
+
+    assert tag.update!(options: { 'required_min_count': 1 })
+
+    weakness = Finding.find(findings(:unanswered_for_level_1_notification).id)
+    assert weakness.update(
+      title: 'New Title',
+      taggings_attributes: [ { tag_id: subtag.id } ]
+    )
+  end
 end
