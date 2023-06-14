@@ -744,8 +744,9 @@ private
 
   def update_options_tags?
     if POSTGRESQL_ADAPTER
-      tag = Tag.where.not(options: nil).take
+      if tag = Tag.where.not(options: nil).take
 
-      tag.options.kind_of? Array
+        tag.options.kind_of? Array
+      end
     end
   end
