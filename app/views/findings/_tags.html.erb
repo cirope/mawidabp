@@ -1,0 +1,29 @@
+<% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+  <div class="row">
+    <div class="col-md-12">
+      <%= f.input :tag_ids,
+        as: :check_boxes,
+        item_wrapper_class: 'custom-control custom-checkbox',
+        collection: finding_tag_options
+      %>
+    </div>
+  </div>
+<% else %>
+  <h5>
+    <%= Tag.model_name.human count: 0 %>
+  </h5>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5 class="h6"><%= Tag.human_attribute_name :name %></h5>
+    </div>
+  </div>
+
+  <div id="taggings">
+    <%= f.simple_fields_for :taggings do |t_f| %>
+      <%= render 'findings/tagging', f: t_f, parent: f %>
+    <% end %>
+
+    <%= link_to_add_fields(t('finding.add_tagging'), f, :taggings, 'findings/tagging') %>
+  </div>
+<% end %>
