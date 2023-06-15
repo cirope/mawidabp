@@ -244,7 +244,7 @@ module Findings::Validations
       required_tags.each do |tag, subtags|
         required_from = Date.parse(tag.required_from) if tag.required_from.present?
 
-        if !required_from || created_at >= required_from
+        if !required_from || !created_at || created_at >= required_from
           required_min  = tag.required_min
           required_max  = tag.required_max
           assigned_tags = taggings.reject(&:marked_for_destruction?).map &:tag
