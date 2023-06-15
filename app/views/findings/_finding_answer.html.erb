@@ -58,7 +58,7 @@
           <br /><%= l(finding_answer.commitment_date, format: :long) %>
         <% end %>
       <% else %>
-        <% if finding_answer.user.can_act_as_audited? %>
+        <% if finding_answer.user.can_act_as_audited? || bic_committee?(finding_answer) %>
           <% unless show_commitment_date?(finding_answer) %>
             <%= link_to t('finding.show_commitment_date'), '#commitment-date', data: { toggle: 'collapse' } %>
           <% end %>
@@ -85,7 +85,7 @@
           </div>
         <% end %>
         <div class="alert alert-warning" data-commitment-date-message hidden></div>
-        <%= finding_answer_notification_check(f) %>
+        <%= finding_answer_notification_check(f, finding_answer) %>
         <%= f.input :user_id, as: :hidden %>
       <% end %>
     </div>
