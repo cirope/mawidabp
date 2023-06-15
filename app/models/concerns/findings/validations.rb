@@ -243,12 +243,15 @@ module Findings::Validations
 
       required_tags.each do |tag, subtags|
         required_from = Date.parse(tag.required_from) if tag.required_from.present?
+        validate_from = created_at || Time.zone.now
+        required_min  = tag.required_min
+        required_max  = tag.required_max
 
-        if !required_from || !created_at || created_at >= required_from
-          required_min  = tag.required_min
-          required_max  = tag.required_max
+        if !required_from ||
+          validate_from >= required_from &&
+          (required_min.positive? || required_max.positive?)
+
           assigned_tags = taggings.reject(&:marked_for_destruction?).map &:tag
-
           subtags_count = (subtags & assigned_tags).count
 
           result = if required_min&.positive? && required_max&.positive?
