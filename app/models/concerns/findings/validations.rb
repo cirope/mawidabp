@@ -249,7 +249,7 @@ module Findings::Validations
 
         if !required_from ||
           validate_from >= required_from &&
-          (required_min.positive? || required_max.positive?)
+          (required_min&.positive? || required_max&.positive?)
 
           assigned_tags = taggings.reject(&:marked_for_destruction?).map &:tag
           subtags_count = (subtags & assigned_tags).count
