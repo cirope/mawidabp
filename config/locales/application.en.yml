@@ -112,7 +112,7 @@ en:
     show_title: "Draft audit report details"
     new_title: "Add draft audit report"
     edit_title: "Edit draft audit report"
-    bundle_title: "Generate bundle" # REVIEW Parece que no se utiliza
+    bundle_title: "Create file"
     correctly_created: "Draft audit report was successfully created."
     correctly_updated: "Draft audit report was successfully updated."
     stale_object_error: "The draft audit report could not be updated, please try again."
@@ -126,7 +126,7 @@ en:
     download_without_score: "Download without score"
     download_brief: "Download brief"
     download_expanded: "Download expanded"
-    create_bundle: "Create bundle"
+    create_bundle: "Create file"
     send_by_email: "Send by email"
     last_verified_date: "Last verification was performed on %{date}"
     has_final_review: "A final audit report has already been issued and therefore it is not possible to continue working with the draft audit report"
@@ -381,14 +381,14 @@ en:
     show_title: "Final audit report details"
     new_title: "Add final audit report"
     edit_title: "Edit final audit report"
-    bundle_title: "Generate bundle" # REVIEW
+    bundle_title: "Create file"
     correctly_created: "Final audit report was successfully created."
     correctly_updated: "Final audit report was successfully updated."
     stale_object_error: "The final audit report could not be updated, please try again."
     generate_score_sheet: "Download detailed score sheet"
     generate_global_score_sheet: "Download global score sheet"
     download_work_papers: "Download work papers"
-    create_bundle: "Generate bundle" # REVIEW
+    create_bundle: "Create file"
     send_by_email: "Send by email"
     download_without_control_objectives_excluded_from_score: "Download without control objectives excluded from score" # REVIEW unscored? La del key?
     download_expanded: "Download expanded"
@@ -468,7 +468,7 @@ en:
       zip_name: "file_%{identification}.zip"
       control_objectives_dir: "%{prefix}_control_objectives"
       findings_dir: "%{prefix}_issues_and_opportunities"
-      create: "Generate"
+      create: "Create"
     bundle_index:
       title: "INDEX"
       default_items: "GLOBAL SCORESHEET\nDETAILED SCORESHEET\nFINAL AUDIT REPORT\nSURVEY\nFINDINGS FOLLOW-UP"
@@ -980,7 +980,7 @@ en:
     add_file_model: "Add attachment" # REVIEW es un adjunto, cierto?
     associated: "Associates"
     available: "Available"
-    bundle: "Bundle"
+    bundle: "File"
     copy: "Copy"
     findings_label: "Pending findings"
     add_finding_assignment: "Add pending finding"

@@ -112,7 +112,7 @@ es:
     show_title: "Detalle del informe borrador"
     new_title: "Agregar informe borrador"
     edit_title: "Modificar informe borrador"
-    bundle_title: "Generar legajo"
+    bundle_title: "Generar legajo" # REVIEW Que sería esto? Diferencia con create_bundle? Parece que no se utiliza (hay varios)
     correctly_created: "Informe borrador agregado correctamente."
     correctly_updated: "Informe borrador actualizado correctamente."
     stale_object_error: "El informe borrador no pudo ser actualizado, intente nuevamente."
