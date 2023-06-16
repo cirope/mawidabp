@@ -1,0 +1,29 @@
+<h5 style="margin: 30px 0;"><strong><%= t 'findings.finding_answers' %> <%= finding.to_s %></strong></h5>
+
+<div class="row">
+  <div class="col-md-2">
+    <h5 class="h6"><%= User.model_name.human %></h5>
+  </div>
+  <div class="col-md-6">
+    <h5 class="h6"><%= FindingAnswer.human_attribute_name 'answer' %></h5>
+  </div>
+  <div class="col-md-2">
+    <h5 class="h6"><%= FindingAnswer.human_attribute_name 'file_model' %></h5>
+  </div>
+</div>
+
+<% finding.finding_answers.each do |fa| %>
+  <% if fa.persisted? %>
+    <%= render 'findings/finding_answer', finding_answer: fa, show: true, readonly: true %>
+  <% elsif params[:completion_state] == 'incomplete' %>
+    <%= simple_form_for fa, url: finding_answers_path(params[:completion_state], @finding) do |f| %>
+      <%= render 'findings/finding_answer', f: f, show: true, readonly: true %>
+
+      <div class="text-right">
+        <%= f.submit t('finding.submit_answer'), class: 'btn btn-outline-secondary', data: { disable_with: false } %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<hr>
