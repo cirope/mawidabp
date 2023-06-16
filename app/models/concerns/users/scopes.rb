@@ -9,10 +9,16 @@ module Users::Scopes
         where(organizations: { id: Current.organization&.id }).
         references :organizations
     }
+    scope :ldap_import_list, -> {
+      list.where organization_roles: { sync_ldap: true }
+    }
     scope :group_list, -> {
       includes(:group).
         where(groups: { id: Current.group&.id }).
         references :groups
+    }
+    scope :ldap_import_group_list, -> {
+      group_list.where organization_roles: { sync_ldap: true }
     }
     scope :without_organization, -> {
       includes(:organizations).
@@ -41,7 +47,7 @@ module Users::Scopes
   end
 
   def recovery?
-    tags.with_option('recovery').exists?
+    tags.with_option('recovery', '1').exists?
   end
 
   module ClassMethods
@@ -110,6 +116,12 @@ module Users::Scopes
       User.group_list.by_email(data[:email])             ||
         User.without_organization.by_email(data[:email]) ||
         User.list.by_user(data[:user])
+    end
+
+    def ldap_import_find data
+      User.ldap_import_group_list.by_email(data[:email]) ||
+        User.without_organization.by_email(data[:email]) ||
+        User.ldap_import_list.by_user(data[:user])
     end
 
     private

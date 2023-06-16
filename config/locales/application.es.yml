@@ -1284,6 +1284,7 @@ es:
         review_prefix: "Prefijo en el informe"
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
+        exec_summary_intro: 'Introducción de Resumen Ejecutivo'
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
         require_counts: "Requerir cantidades en objetivos de control"
@@ -1459,6 +1460,7 @@ es:
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
+        sync_ldap: '¿Sincronizar con LDAP?'
       privilege:
         module: "Módulo"
         read: "Lectura"
@@ -1595,6 +1597,10 @@ es:
           attributes:
             business_units:
               locked: "no pueden ser eliminadas, ya se utilizaron en al menos un plan de trabajo"
+            exec_summary_intro:
+              missing_keys:
+                one: "contiene una clave no válida: %{invalid_keys}"
+                other: "contiene %{count} claves no válidas: %{invalid_keys}"
         conclusion_final_review:
           attributes:
             review_id:
