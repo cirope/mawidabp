@@ -268,10 +268,10 @@
   <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
 
   <% @finding.repeated_ancestors.reverse.each do |finding| %>
-    <%= render 'findings/finding_answers', 'finding': finding %>
+    <%= render 'findings/finding_answers', finding: finding %>
   <% end %>
 
-  <%= render 'findings/finding_answers', 'finding': @finding %>
+  <%= render 'findings/finding_answers', finding: @finding %>
 </div>
 
 <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>

@@ -1,4 +1,8 @@
-<h5 style="margin: 30px 0;"><strong><%= t 'findings.finding_answers' %> <%= finding.to_s %></strong></h5>
+<% if @finding.repeated_ancestors.exists? %>
+  <h5 class="mb-4">
+    <strong><%= t 'findings.finding_answers' %> <%= finding.to_s %></strong>
+  </h5>
+<% end %>
 
 <div class="row">
   <div class="col-md-2">
@@ -16,7 +20,7 @@
   <% if fa.persisted? %>
     <%= render 'findings/finding_answer', finding_answer: fa, show: true, readonly: true %>
   <% elsif params[:completion_state] == 'incomplete' %>
-    <%= simple_form_for fa, url: finding_answers_path(params[:completion_state], @finding) do |f| %>
+    <%= simple_form_for fa, url: finding_answers_path(params[:completion_state], finding) do |f| %>
       <%= render 'findings/finding_answer', f: f, show: true, readonly: true %>
 
       <div class="text-right">
