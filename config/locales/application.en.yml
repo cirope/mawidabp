@@ -240,7 +240,7 @@ en:
       pdf_name: "fixed_issues_by_risk_from_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Issues"
       external_audit_weaknesses: "External Audit Issues"
-      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "ISSUES SOLVED - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
@@ -249,7 +249,7 @@ en:
       pdf_name: "high_risk_issues_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Issues"
       external_audit_weaknesses: "External Audit Issues"
-      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "HIGH RISK ISSUES - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No high risk audits in the period"
       without_audits_in_the_interval: "No high risk audits in the selected interval"
@@ -316,7 +316,7 @@ en:
       pdf_name: "executive_summary_final_audit_reports_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Findings"
       external_audit_weaknesses: "External Audit Issues"
-      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "ISSUES/IMPROVEMENT OPPORTUNITIES\nOF FINAL AUDIT REPORTS"
       organization_score: "Organization Score: %{score}% (*)"
       organization_score_note: "(*) The organization score is obtained as an average of the scores obtained in the audit types (%{audit_types})."
@@ -547,7 +547,7 @@ en:
       pdf_name: "detailed_management_report_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Findings"
       external_audit_weaknesses: "External Audit Findings"
-      title: "MANAGEMENT REPORT\nASSESSMENT OF THE\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "MANAGEMENT SUMMARY\n\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "ISSUES/IMPROVEMENT OPPORTUNITIES\nOF AUDIT REPORTS IN EXECUTION"
       clarification: "Note: the findings shown in this report are not final (the audit reports are in the Execution stage)" # REVIEW Execution?
       without_audits_in_the_period: "No audits in the period"
@@ -723,7 +723,7 @@ en:
       pdf_name: "fixed_issues_by_risk_from_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Issues"
       external_audit_weaknesses: "External Audit Issues"
-      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "ISSUES SOLVED - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
@@ -732,7 +732,7 @@ en:
       pdf_name: "high_risk_issues_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Issues"
       external_audit_weaknesses: "External Audit Issues"
-      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "HIGH RISK ISSUES FOLLOW-UP - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No high risk audits in the period"
       without_audits_in_the_interval: "No high risk audits in the selected interval"
@@ -770,7 +770,7 @@ en:
       pdf_name: "executive_summary_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Findings"
       external_audit_weaknesses: "External Audit Issues"
-      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "FOLLOW-UP OF ISSUES/IMPROVEMENT OPPORTUNITIES"
       organization_score: "Organization score: %{score}% (*)"
       organization_score_note: "(*) The organization score is obtained as an average of the scores obtained in the audit types (%{audit_types})."
