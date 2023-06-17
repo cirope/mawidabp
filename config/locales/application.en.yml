@@ -105,7 +105,7 @@ en:
     external_audit: "Audits performed by other entities"
     errors:
       can_not_be_destroyed: "The organizational unit cannot be deleted"
-      business_unit_related: "The business unit cannot be deleted, it is related to at least one work plan"
+      business_unit_related: "The business unit cannot be deleted, it is related to at least one workplan"
 
   conclusion_draft_review:
     index_title: "Draft audit report list"
@@ -1039,7 +1039,7 @@ en:
     finished_work_papers: "Work papers - Auditor approved" # REVIEW conforme auditor?
     revise_work_papers: "Work Papers - Supervisor revised" # REVIEW conforme supervisor?
     notes: "Notes"
-    estimated_amount: "Estimated cost in workplan" # REVIEW seguro que no es costo estimado del plan de trabajo?
+    estimated_amount: "Estimated cost in workplan"
     other_actions: "Actions"
     recode_findings: "Recode findings"
     recode_weaknesses_by_risk: "Recode issues by risk"
@@ -1197,7 +1197,7 @@ en:
     pdf:
       pdf_name: "workflow_%{review}.pdf"
       resources_utilization: "Resources used"
-      planned_resources_utilization: "Estimated resources in the workflow (*)"
+      planned_resources_utilization: "Estimated resources in the workplan (*)"
       planned_resources_utilization_explanation: "(*) They are not part of the total cost of the workflow"
 
   activerecord:
@@ -1551,7 +1551,7 @@ en:
         business_unit_type:
           attributes:
             business_units:
-              locked: "cannot be removed, already used in at least one work plan"
+              locked: "cannot be removed, already used in at least one workplan"
         conclusion_final_review:
           attributes:
             review_id:
@@ -1636,7 +1636,7 @@ en:
     oportunities: "Improvement opportunities" # KEY_TO_FIX opportunities?
     organizations: "Organizations"
     periods: "Periods"
-    plans: "Work plans"
+    plans: "Workplans"
     resource_classes: "Resources"
     reviews: "Audit reports"
     roles: "Profiles" # REVIEW roles?
