@@ -562,7 +562,7 @@
         review_id: "Audit report"
         business_unit_type_id: "Organizational unit"
       conclusion_review:
-        effectiveness_notes: "Effectiveness notes"
+        effectiveness_notes: "Effectiveness note"
       control_objective_item:
         scored_business_unit_type_id: "Evaluated organizational unit"
       file_model:
