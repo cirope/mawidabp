@@ -434,7 +434,7 @@ en:
     oportunities: "IMPROVEMENT OPPORTUNITIES"
     finding_review_assignments: "REVIEWED FINDINGS"
     repeated_findings: "Issues follow-up"
-    repeated_findings_empty: "No issues pending regularization are registred." # REVIEW No repeated issues?
+    repeated_findings_empty: "There are no issues pending regularization."
     present_findings: "New issues"
     present_findings_empty: "There are no issues to mention."
     add_recipient: "Add new recipient"
@@ -549,7 +549,7 @@ en:
       external_audit_weaknesses: "External Audit Findings"
       title: "MANAGEMENT SUMMARY\n\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "ISSUES/IMPROVEMENT OPPORTUNITIES\nOF AUDIT REPORTS IN EXECUTION"
-      clarification: "Note: the findings shown in this report are not final (the audit reports are in the Execution stage)" # REVIEW Execution?
+      clarification: "Note: the findings shown in this report are not final (the audit reports are in the Execution stage)"
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
       without_weaknesses: "No issues"
@@ -577,9 +577,9 @@ en:
       range: "from %{from_date} to %{to_date}"
     weaknesses_by_state_title: "Total findings by audit report and status"
     weaknesses_by_state:
-      pdf_name: "findings_in_execution_by_status_%{from_date}_to_%{to_date}.pdf" # REVIEW Excecution? Status (in progress)?
-      title: "DETAILED MANAGEMENT REPORT\nFINDINGS IN EXECUTION\nTOTALS BY AUDIT REPORT AND STATUS" # REVIEW Excecution? Status (in progress)?
-      clarification: "Note: the findings shown in this report are not final (the audit reports are in the Execution stage)" # REVIEW Execution?
+      pdf_name: "findings_in_execution_by_status_%{from_date}_to_%{to_date}.pdf"
+      title: "DETAILED MANAGEMENT REPORT\nFINDINGS IN EXECUTION\nTOTALS BY AUDIT REPORT AND STATUS"
+      clarification: "Note: the findings shown in this report are not final (the audit reports are in the Execution stage)"
       weaknesses_column: "Issues"
       oportunities_column: "Improvement Opportunities"
       total: "TOTAL"
@@ -668,17 +668,17 @@ en:
     high_risk_weaknesses: "High risk issues"
     fixed_weaknesses: "Fixed issues by risk"
     weaknesses_being_implemented_current:
-      one: "Current"
-      other: "Current"
+      one: "Active"
+      other: "Active"
     weaknesses_being_implemented_current_rescheduled:
-      one: "Current rescheduled"
-      other: "Current rescheduled"
+      one: "Re-scheduled active"
+      other: "Re-scheduled active"
     weaknesses_being_implemented_stale:
-      one: "Stale" # REVIEW Overdue? Expired?
-      other: "Stale" # REVIEW Overdue? Expired?
+      one: "Overdue"
+      other: "Overdue"
     weaknesses_being_implemented_stale_rescheduled:
-      one: "Stale rescheduled" # REVIEW donde sale?
-      other: "Stale rescheduled" # REVIEW donde sale?
+      one: "Re-scheduled overdue"
+      other: "Re-scheduled overdue"
     weaknesses_by_state_title: "Total findings by status"
     weaknesses_by_risk_title: "Total findings by risk"
     weaknesses_by_audit_type_title: "Total findings by audit type"
@@ -687,8 +687,8 @@ en:
     repeated_count:
       one: "A repeated finding"
       other: "%{count} repeated findings"
-    expired: "Expired" # REVIEW Stale / Overdue?
-    not_expired: "Not expired" # REVIEW Stale / Overdue?
+    expired: "Expired"
+    not_expired: "Not expired"
     from_date: "From"
     to_date: "To"
     mid_date: "Cut" # REVIEW donde?
@@ -938,7 +938,7 @@ en:
     errors:
       is_unconfirmed: "is in 'Unconfirmed' status"
       not_valid_state: "has a not valid status"
-      with_expired_tasks: "has expired pending or in-process tasks" # REVIEW in-progress?
+      with_expired_tasks: "has expired pending or in progress tasks"
       with_follow_up_date: "has an implementation date (and it should not)"
       with_solution_date: "has solution date (and it should not)"
       without_answer: "has no answer"
@@ -986,7 +986,7 @@ en:
     add_finding_assignment: "Add pending finding"
     add_user_assignment: "Add related user"
     suggest_findings: 'Suggest pending findings'
-    suggest_past_findings: 'Suggest recent findings' # REVIEW fixed?
+    suggest_past_findings: 'Suggest recent resolved findings'
     without_suggested_findings: 'No pending findings'
     without_past_implemented_audited_findings: 'No recent resolved findings'
     suggested_findings_for: 'Suggested findings for %{process_control}'
@@ -1112,11 +1112,11 @@ en:
       old_responsible: "Old Responsible: %{responsible}"
       new_responsible: "Current responsible: %{responsible}"
       reassigned_to_reviews:
-        one: "Responsibility for executing %{reviews} audit report has been reassigned" # REVIEW revisar executing
-        other: "Responsibility for executing audit reports %{reviews} has been reassigned" # REVIEW revisar executing
+        one: "The responsibility for the audit report in execution %{reviews} has been reassigned"
+        other: "The responsibility for the audit reports in execution %{reviews} has been reassigned"
       reassigned_to_findings_from_reviews:
-        one: "Pending findings from the %{reviews} audit report have been reassigned"
-        other: "Pending findings from audit reports %{reviews} have been reassigned"
+        one: "The pending findings from the audit report %{reviews} have been reassigned"
+        other: "The pending findings from the audit reports %{reviews} have been reassigned"
     responsibility_release:
       title: "Disclaimer" # REVIEW Release of responsibilities?
     unconfirmed_findings: "Unconfirmed issues to this date"
@@ -1142,7 +1142,7 @@ en:
     edit_follow_up: 'Edit follow-up'
     errors:
       is_unconfirmed: "is in 'Unconfirmed' status"
-      not_valid_state: "has a not allowed status" # REVIEW not valid?
+      not_valid_state: "has an invalid status"
       with_expired_tasks: "has expired pending or in-process tasks"
       with_follow_up_date: "has a follow-up date (and should not)"
       with_solution_date: "has solution date (and should not)"
@@ -1464,7 +1464,7 @@ en:
         file_content_type: "Attachment (file type)"
         file_file_size: "Attachment (file size)"
       review/finding_review_assignments:
-        one: "Pending issue / improvement opportunity" # REVIEW igual que el punto de abajo
+        one: "Pending issue / improvement opportunity"
         other: "Pending issues / improvement opportunities"
         finding: "Pending issue / improvement opportunity"
         finding_id: "Pending issue / improvement opportunity"
