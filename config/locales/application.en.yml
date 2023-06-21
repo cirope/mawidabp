@@ -204,11 +204,11 @@ en:
     weaknesses_graphs: "Issues graph"
     from_date: "From"
     to_date: "To"
-    mid_date: "Mid" # REVIEW donde sale?
+    mid_date: "Mid"
     date_field: "Date to use"
-    created_at: "Created at" # REVIEW Creation date?
-    issue_date: "Issued at" # REVIEW Issue date?
-    origination_date: "Date of origin" # REVIEW diferencia con created_ad?
+    created_at: "Creation date"
+    issue_date: "Issuance date"
+    origination_date: "Origin date"
     cut_date: "Old data closing date"
     applied_filters:
       one: "The following filter has been applied to this report: %{filters}"
@@ -422,7 +422,7 @@ en:
     responsibles: "Responsibles"
     issue_date_title: "DATE"
     new_origination_date: "New"
-    estimated_follow_up_date: "Estimated follow up date" # REVIEW Estimated month of normalization?
+    estimated_follow_up_date: "Estimated month of normalization"
     audit_period: "%{start} to %{end}"
     audit_period_title: "AUDIT PERIOD"
     objectives_and_scopes: "OBJECTIVES AND SCOPE OF WORK"
@@ -691,7 +691,7 @@ en:
     not_expired: "Not expired"
     from_date: "From"
     to_date: "To"
-    mid_date: "Cut" # REVIEW donde?
+    mid_date: "Cut"
     cut_date: "Old data closing date"
     print_date: "Print date: %{date}"
     applied_filters:
@@ -944,7 +944,7 @@ en:
       without_answer: "has no answer"
       without_audited: "has no auditee" # REVIEW entiendo que es un sistantivo, por lo que sería auditee
       without_auditor: "has no auditor"
-      without_follow_up_date: "has no implementation date" # REVIEW porque sale follow-up date en el key?
+      without_follow_up_date: "has no implementation date"
       without_solution_date: "has no solution date"
       without_audit_comments: "has no audit comments"
       without_audit_recommendations: "has no audit recommendations"
@@ -1395,8 +1395,8 @@ en:
         findings: "Issues"
         conclusion_reviews: "Audit reports"
         user_who_confirm: "Confirmed by"
-        created_at: "Created at" # REVIEW Sent date?
-        updated_at: "Updated at" # REVIEW Updated date?
+        created_at: "Sent date"
+        updated_at: "Update date"
         confirmation_date: "Confirmation date"
       notification_relation:
         model: "Model"
