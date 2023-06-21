@@ -59,7 +59,7 @@ en:
       draft_reviews: 'Draft audit reports'
       final_reviews: 'Final audit reports'
       reports: 'Other reports'
-    follow_up_title: 'Follow Up'
+    follow_up_title: 'Follow-Up'
     follow_up:
       pending_findings: 'Pending findings'
       complete_findings: 'Resolved findings'
