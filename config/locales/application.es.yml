@@ -439,7 +439,7 @@ es:
     present_findings_empty: "No se registran observaciones que mencionar."
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
-    review_not_approved: "El informe no fue enviado, debe estar aprobado"
+    review_not_approved: "El informe no fue enviado. Por favor, asegúrese de obtener la aprobación necesaria e inténtelo de nuevo"
     review_repeated_finding_label: "Informe nro."
     executive_summary:
       title: "Resumen ejecutivo"
@@ -909,7 +909,7 @@ es:
       the_following_findings_are_now_unanswered:
         one: "La siguiente observación / oportunidad de mejora ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
         other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
-      if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
+      if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta), se generarán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
@@ -917,12 +917,12 @@ es:
       clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'Mawidabp'"
     welcome_email:
       title: "%{name}, su cuenta ha sido creada"
-      initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
+      initial_password: "Para empezar a utilizar el sistema, primero debe establecer su contraseña"
       change_password: "Establecer contraseña"
       clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp'."
       organizations_sites:
-        one: "Luego puede ingresar en la siguiente dirección:"
-        other: "Luego puede ingresar en cualquiera de las siguientes direcciones (dependiendo de la organización que seleccione):"
+        one: "Luego puede acceder a la siguiente dirección URL:"
+        other: "Luego puede acceder a cualquiera de las siguientes direcciones URL (dependiendo de la organización que seleccione):"
 
   oportunity:
     index_title: "Listado de oportunidades"
@@ -1113,7 +1113,7 @@ es:
       new_responsible: "Responsable actual: %{responsible}"
       reassigned_to_reviews:
         one: "Se ha reasignado la responsabilidad del informe en ejecución %{reviews}"
-        other: "Se han reasignado la responsabilidad de los informes en ejecución %{reviews}"
+        other: "Se ha reasignado la responsabilidad de los informes en ejecución %{reviews}"
       reassigned_to_findings_from_reviews:
         one: "Se han reasignado los hallazgos pendientes del informe %{reviews}"
         other: "Se han reasignado los hallazgos pendientes de los informes %{reviews}"
