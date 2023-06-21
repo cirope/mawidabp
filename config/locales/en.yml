@@ -166,8 +166,8 @@
       one: "Reviewer"
       other: "Reviewers"
     audited:
-      one: "Audited"
-      other: "Audited"
+      one: "Auditee"
+      other: "Auditees"
     audited_users:
       one: "Audited File"
       other: "Audited files"
@@ -402,7 +402,7 @@
       without_weaknesses: "Without issues"
       weakness_title: "Issue title"
       description: "Issue detail"
-      audit_comments: "Audited response/Audit comment"
+      audit_comments: "Auditee response/Audit comment"
       origination_date: "Issue origin date"
       reschedule_count: "Reschedule count"
       follow_up_date: "Last proposed date"
