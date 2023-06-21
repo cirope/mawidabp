@@ -299,7 +299,7 @@ en:
         conclusions_title: '<u><b>CONCLUSIONS</b></u>'
         conclusions_body: "Based on Table I <i>“NCHB S.A. Internal Control Rating.”</i>, it can be seen that the Entity's internal control rating, according to the parameters used, is <b>“%{calification}”.</b>"
       cycle_qualification:
-        header_number: '<b>N°</b>' # REVIEW Quizásse pudiera usar numeral...
+        header_number: '<b>No.</b>'
         header_qualification: '<b>Rating</b>'
         header_weight: '<b>Weight</b>'
         header_high_risk_observations: '<b>Number of High Risk Issues</b>'
