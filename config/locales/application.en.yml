@@ -845,7 +845,7 @@ en:
     correctly_updated: "Notification was successfully updated."
     stale_object_error: "Notification was not updated, please try again."
     confirmed: "Notification was successfully confirmed."
-    rejected: "Notification was successfully rejected, please authenticate and enter a comment for it." # REVIEW enter?
+    rejected: "Notification was successfully rejected, please authenticate and enter a comment about it."
     confirm: "Confirm"
     reject: "Reject"
     status_unconfirmed: "Unconfirmed"
@@ -909,7 +909,7 @@ en:
       the_following_findings_are_now_unanswered:
         one: "The following issue / improvement opportunity has its status changed to **No response**, due to not receiving a response"
         other: "The following issues / improvement opportunities have their status changed to **No response**, due to not receiving a response"
-      if_no_answer_is_given_the_following_users_will_be_notified: "If it continue in the same status (No response) the following notifications will be generated" # REVIEW produced queda como la chingada, quizás se deba cambiar también el :es
+      if_no_answer_is_given_the_following_users_will_be_notified: "If it continues in the same status (No response), the following notifications will be generated"
     group_welcome_email:
       title: "The group %{name} has been created"
       initial_user: "To start using the system you must first create a user"
@@ -917,7 +917,7 @@ en:
       clarification: "You have received this email because you have been assigned a group in the 'Mawidabp' system" # REVIEW no sería más como "usted ha sido agregado a un grupo"?
     welcome_email:
       title: "%{name}, your account has been created"
-      initial_password: "To start using the system you must first set your password"
+      initial_password: "To start using the system, you must first set your password"
       change_password: "Set password"
       clarification: "You have received this email because you have been registered in the 'Mawidabp' system."
       organizations_sites:
