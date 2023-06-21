@@ -513,8 +513,10 @@
     executive_summary:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
-      project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
-      project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
+      intro_default: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      intro_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
+      keywords:
+        review: 'informe'
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
