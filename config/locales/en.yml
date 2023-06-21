@@ -107,7 +107,7 @@
     global_effectiveness: "Global effectiveness"
     downloads:
       review_objectives: "REVIEW OBJECTIVES"
-      review_objectives_description: "Carry out regularization follow-up to the issues made by the Internal Audit (AI) in those branches classified as Unreasonable to an inadequate or unsatisfactory degree in the AML/FT aspect."
+      review_objectives_description: "Perform the regularization follow-up of issues made by the Internal Audit (IA) in those branches classified as Unreasonable to an inadequate or unsatisfactory degree in the AML/FT aspect."
       general_assistant_manager: 'Integrity and Compliance General Assistant Manager'
       departmental_management: 'PLayFT Departmental Management'
       departmental_assistant_manager: 'PLAyFT Departmental Assistant Manager in Branches'
