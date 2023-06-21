@@ -1408,10 +1408,10 @@ en:
         prefix: "Prefix"
         description: "Description"
       organization/image_model:
-        one: "Isologotype" # REVIEW logo?
-        image_file_name: "Isologotype (filename)" # REVIEW logo?
-        image_content_type: "Isologotype (file type)" # REVIEW logo?
-        image_file_size: "Isologotype (size)" # REVIEW logo?
+        one: "Logo"
+        image_file_name: "Logo (filename)"
+        image_content_type: "Logo (file type)"
+        image_file_size: "Logo (size)"
       organization_role:
         user_id: "User"
         organization_id: "Organization"
