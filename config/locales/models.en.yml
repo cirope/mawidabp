@@ -139,11 +139,11 @@ en:
         one: 'Organization'
         other: 'Organizations'
       plan:
-        one: 'Work plan'
-        other: 'Work plans'
+        one: 'Workplan'
+        other: 'Workplans'
       plan_item:
-        one: 'Plan item' # REVIEW o "Project in Plan"
-        other: 'Plan item' # REVIEW o "Project in Plan"
+        one: 'Project in workplan'
+        other: 'Projects in workplan'
       paper_trail/version:
         one: 'Version'
         other: 'Versions'
