@@ -617,7 +617,7 @@ en:
     edit:
       title: 'Edit settings'
     finding_stale_confirmed_days: 'Number of days before an unanswered issue is considered unattended'
-    review_code_expresion: 'Audit report identification code format' # KEY_TO_FIX review_code_expression?
+    review_code_expresion: 'Audit report identification code format'
     account_expire_time: 'Days to delete inactive accounts'
     allow_concurrent_sessions: 'Allow simultaneous sessions for the same user'
     attempts_count: 'Number of failed connection attempts'

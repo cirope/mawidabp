@@ -448,7 +448,7 @@
   notifier:
     notify_new_oportunity:
       title: "You have a new opportunity to improve"
-      oportunity_link: "See improvement opportunity" # KEY_TO_FIX opportunity_link?
+      oportunity_link: "See improvement opportunity"
     notify_action_not_found:
       title: "Your mail was not processed"
       warning: "No action was taken with the mail received."
