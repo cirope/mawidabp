@@ -1390,7 +1390,7 @@ en:
         description: "Organization (description)"
       notification:
         status: "Status"
-        confirmation_hash: "Confirmation string" # REVIEW hash?
+        confirmation_hash: "Confirmation chain"
         notes: "Notes"
         findings: "Issues"
         conclusion_reviews: "Audit reports"
