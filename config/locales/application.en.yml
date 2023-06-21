@@ -977,7 +977,7 @@ en:
     control_objective_tag: "Objectives by tags"
     add_control_objective_tag: "Add control objective tag"
     add_tagging: "Add tag"
-    add_file_model: "Add attachment" # REVIEW es un adjunto, cierto?
+    add_file_model: "Add attachment"
     associated: "Associates"
     available: "Available"
     bundle: "File"
@@ -1067,9 +1067,9 @@ en:
       related_finding_incomplete: "is pending and has not been marked as repeated or fixed"
     survey:
       with_attachment:
-        one: "With an attachment" # REVIEW donde?
-        other: "With %{count} attachments" # REVIEW donde?
-      without_attachment: "Without attachments" # REVIEW donde?
+        one: "With an attachment"
+        other: "With %{count} attachments"
+      without_attachment: "Without attachments"
       download: "Download survey"
       download_attachment: "Download attachment"
     review_data:
@@ -1359,7 +1359,7 @@ en:
         commitment_date: "Commitment date"
         finding_id: "Finding"
         user_id: "User"
-        file_model: "Attachment" # REVIEW Annex? donde?
+        file_model: "Attachment"
         notify_users: "Send notification"
         created_at: "Comment date"
         skip_commitment_support: 'Check if the issue is fixed'
@@ -1440,7 +1440,7 @@ en:
         period_id: "Period"
         plan_item_id: "Project"
         plan_item: "Project"
-        file_model_id: "Attachments" # REVIEW Annexes?
+        file_model_id: "Attachments"
         score: "Rating"
         score_alt: "Compliance rating"
         scope: "Audit scope"
@@ -1459,10 +1459,10 @@ en:
         alternative_review: 'External audit report'
         alternative_review_id: 'External audit report'
       review/file_model:
-        one: "Attachment (file)" # REVIEW Annex?
-        file_file_name: "Attachment (filename)" # REVIEW Annex?
-        file_content_type: "Attachment (file type)" # REVIEW Annex?
-        file_file_size: "Attachment (file size)" # REVIEW Annex?
+        one: "Attachment (file)"
+        file_file_name: "Attachment (filename)"
+        file_content_type: "Attachment (file type)"
+        file_file_size: "Attachment (file size)"
       review/finding_review_assignments:
         one: "Pending issue / improvement opportunity" # REVIEW igual que el punto de abajo
         other: "Pending issues / improvement opportunities"
@@ -1511,7 +1511,7 @@ en:
         review: "Audit report"
         cost: "Cost"
         units: "Units"
-        file_model_id: "Attachment" # REVIEW Annex?
+        file_model_id: "Attachment"
         workflow_items_resources: "Resources"
       workflow/workflow_items:
         one: "Task"
