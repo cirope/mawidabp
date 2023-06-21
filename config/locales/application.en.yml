@@ -290,7 +290,7 @@ en:
         objective_title: '<b><u>OBJECTIVE</u></b>'
         general_conclusion_title: '<b><u>GENERAL CONCLUSION</u></b>'
         first_footer: '<b>AUS. Alejandro Camnasio</b>' # REVIEW que es AUS?
-        second_footer: '<b>A/C int. Internal Audit Management</b>' # REVIEW Que es A/C?
+        second_footer: '<b>"IA/IC Internal Audit Management</b>' # REVIEW por lo que vi, "A/C int." es "Auditoría/Control Interno" y en inglés sería "IA/IC" (Internal Audit/Internal Control). Algún sabio puede confirmar?
       detailed_report:
         title: '<b><u>DETAILED REPORT</u></b>'
         introduction_and_scope_title: '<b><u>INTRODUCTION AND SCOPE OF WORK PERFORMED</u></b>'
