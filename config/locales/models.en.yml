@@ -300,7 +300,7 @@ en:
         score_type: 'Score type'
         control_objective_id: 'Control objective'
         audit_sector: 'Audit Sector'
-        date_charge: 'Registration date' # REVIEW contexto?
+        date_charge: 'Date of entry'
         affected_sector_id: 'Bank sector affected by the alert'
         control_objective_auditors: 'Auditors in charge'
       review/control_objective_items:
@@ -343,12 +343,12 @@ en:
         priority: 'Priority'
         user_ids: 'Users'
         finding_user_assignments: 'Users'
-        origination_date: 'Origination date' # REVIEW origen?
-        first_follow_up_date: 'Initial follow-up date' # REVIEW Initial implementation date?
-        follow_up_date: 'Follow-up date' # REVIEW Implementation date?
-        audit_comments: 'Audit Comments'
-        state: 'Status' # REVIEW contexto de estado?
-        state_was: 'Previous status' # REVIEW contexto de estado?
+        origination_date: 'Origin date'
+        first_follow_up_date: 'First implementation date'
+        follow_up_date: 'Implementation date'
+        audit_comments: 'Audit comments'
+        state: 'Status'
+        state_was: 'Previous status'
         count: 'Count'
         solution_date: 'Solution date'
         skip_work_paper: 'Does not require work paper'
@@ -413,16 +413,16 @@ en:
         notify_users: 'Comment (send notification)'
         skip_commitment_support: 'Check if the issue is fixed'
       finding/finding_answers/commitment_support:
-        one: 'Support commitment' # REVIEW context?
-        reason: 'Reschedule reason'
+        one: 'Basis of commitment'
+        reason: 'Reason for rescheduling'
         plan: 'New action plan'
         controls: 'Mitigating controls'
       finding/finding_answers/file_model:
-        one: 'Attachment (file)' # REVIEW Annex?
-        file: 'Attachment (file)' # REVIEW Annex?
-        file_file_name: 'Attachment (file name)' # REVIEW Annex?
-        file_content_type: 'Attachment (file type)' # REVIEW Annex?
-        file_file_size: 'Attachment (file size)' # REVIEW Annex?
+        one: 'Attachment (file)'
+        file: 'Attachment (file)'
+        file_file_name: 'Attachment (file name)'
+        file_content_type: 'Attachment (file type)'
+        file_file_size: 'Attachment (file size)'
       finding/work_papers:
         one: 'Work paper'
         other: 'Work papers'
@@ -596,7 +596,7 @@ en:
         created_at: 'Date'
         event: 'Event'
         item: 'Item'
-        whodunnit: 'Executor' # REVIEW owner?
+        whodunnit: 'Responsible user'
       period:
         name: 'Name'
         description: 'Description'
@@ -652,7 +652,7 @@ en:
         answered: 'Answered'
         questionnaire: 'Questionnaire'
         user: 'User'
-        pollable: 'About' # REVIEW context?
+        pollable: 'About'
         about: 'About'
       poll/answers:
         answer: 'Answer'
@@ -755,12 +755,12 @@ en:
         user_ids: 'User'
         finding_user_assignments: 'Users'
         origination_date: 'Origin date'
-        first_follow_up_date: 'First follow-up date' # REVIEW Initial implementation date?
-        follow_up_date: 'Follow-up date' # REVIEW Implementation date?
-        state: 'Status' # REVIEW context?
+        first_follow_up_date: 'First implementation date'
+        follow_up_date: 'Implementation date'
+        state: 'Status'
         solution_date: 'Solution date'
         compliance: 'Compliance'
-        compliance_observations: 'Affected standard' # REVIEW context?
+        compliance_observations: 'Norm impacting'
         compliance_susceptible_to_sanction: 'Susceptible to sanction'
         operational_risk: 'Operational risk'
         impact: 'Impact'
@@ -816,7 +816,7 @@ en:
               must_have_state_that_allows_extension: 'To indicate that it has %{extension}, it must be in the %{states} status'
               cant_have_extension_when_didnt_have_extension: 'It cannot have %{extension}, since at most once in its history it was without %{extension} in the %{states} status'
             risk_justification:
-              present: 'Must not have risk justification' # REVIEW minúscula?
+              present: 'Should not have risk justification'
             compliance_susceptible_to_sanction:
               inclusion: 'must be one of the list'
             draft_review_code:
@@ -874,8 +874,8 @@ en:
         memo:
           attributes:
             base:
-              file_model_memos_blank: 'Must have at least one file'
-              cant_change_fields: 'You cannot change any field because the closing date has passed' # REVIEW va el sujeto?
+              file_model_memos_blank: 'It must have at least one file.'
+              cant_change_fields: 'You cannot change any field because the closing date has passed'
             plan_item_id:
               used: 'The project is already being used by another audit report or external audit report'
         subsidiary:

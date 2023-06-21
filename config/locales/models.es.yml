@@ -300,8 +300,8 @@ es:
         score_type: 'Tipo de calificación'
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
-        date_charge: 'Fecha de alta'
-        affected_sector_id: 'Sector del banco afectado al alerta' # REVIEW afectado por la alerta?
+        date_charge: 'Fecha de alta' # REVIEW: Que sería esta fecha? La fecha en la que se crea el objetivo de control?
+        affected_sector_id: 'Sector del banco afectado al alerta' # REVIEW No sería "afectado por la alerta"?
         control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
@@ -343,7 +343,7 @@ es:
         priority: 'Prioridad'
         user_ids: 'Usuarios'
         finding_user_assignments: 'Usuarios'
-        origination_date: 'Fecha de origen'
+        origination_date: 'Fecha de origen' # REVIEW: Que sería esta fecha?
         first_follow_up_date: 'Primer fecha de implementación'
         follow_up_date: 'Fecha de implementación'
         audit_comments: 'Comentarios de auditoría'
@@ -413,8 +413,8 @@ es:
         notify_users: 'Comentario (enviar notificación)'
         skip_commitment_support: 'Tildar si la observación está solucionada'
       finding/finding_answers/commitment_support:
-        one: 'Sustento compromiso'
-        reason: 'Motivo reprogramación'
+        one: 'Sustento compromiso' # REVIEW: Que sería esto?
+        reason: 'Motivo de reprogramación'
         plan: 'Nuevo plan de acción'
         controls: 'Controles mitigantes'
       finding/finding_answers/file_model:
@@ -652,7 +652,7 @@ es:
         answered: 'Contestada'
         questionnaire: 'Cuestionario'
         user: 'Usuario'
-        pollable: 'Sobre'
+        pollable: 'Sobre' # REVIEW: Que sería esto? Porque la traducción sería "About" y quería igual que el siguiente.
         about: 'Acerca de'
       poll/answers:
         answer: 'Respuesta'
@@ -820,8 +820,8 @@ es:
             compliance_susceptible_to_sanction:
               inclusion: 'debe ser uno de la lista'
             draft_review_code:
-              not_same_draft_review_code_parent: 'No tiene el mismo código de informe borrador que su hallazgo original' # REVIEW observación?
-              not_same_draft_review_code_children: 'No tiene el mismo código de informe borrador que su hallazgo final' # REVIEW observación?
+              not_same_draft_review_code_parent: 'No tiene el mismo código de informe borrador que su hallazgo original'
+              not_same_draft_review_code_children: 'No tiene el mismo código de informe borrador que su hallazgo final'
         finding_user_assignment:
           attributes:
             user:
