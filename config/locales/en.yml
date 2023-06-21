@@ -191,7 +191,7 @@
       committee: "Committee"
     important_dates:
       title: "Dates to consider"
-      expiration_date: "Will go to _\"No Response\"_ status on **%{date}** if no auditee provides a response"
+      expiration_date: "Will go to _\"Unanswered\"_ status on **%{date}** if no auditee provides a response"
       notification_date: "First notified on **%{date}**"
       confirmation_date: "Notification was confirmed on **%{date}**"
     follow_up_report:
@@ -505,8 +505,8 @@
     unanswered_finding:
       subject: Notification of changes to findings [#%{finding_id}]"
       title: "Notification of changes"
-      the_following_finding_are_now_unanswered: "The following finding / improvement opportunity has its status changed to **No response**, due to not receiving a response"
-      if_no_answer_is_given_the_following_users_will_be_notified: "DIf it continue in the same status (No response) the following notifications will be generated"
+      the_following_finding_are_now_unanswered: "The following finding / improvement opportunity has its status changed to **Unanswered**, due to not receiving a response"
+      if_no_answer_is_given_the_following_users_will_be_notified: "If it continues in the same status (Unanswered) the following notifications will be generated"
 
   organization:
     index_title: "List of organizations"

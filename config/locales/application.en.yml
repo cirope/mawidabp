@@ -907,9 +907,9 @@ en:
     unanswered_findings:
       title: "Notification of changes"
       the_following_findings_are_now_unanswered:
-        one: "The following issue / improvement opportunity has its status changed to **No response**, due to not receiving a response"
-        other: "The following issues / improvement opportunities have their status changed to **No response**, due to not receiving a response"
-      if_no_answer_is_given_the_following_users_will_be_notified: "If it continues in the same status (No response), the following notifications will be generated"
+        one: "The following issue / improvement opportunity has its status changed to **Unanswered**, due to not receiving a response"
+        other: "The following issues / improvement opportunities have their status changed to **Unanswered**, due to not receiving a response"
+      if_no_answer_is_given_the_following_users_will_be_notified: "If it continues in the same status (Unanswered), the following notifications will be generated"
     group_welcome_email:
       title: "The group %{name} has been created"
       initial_user: "To start using the system you must first create a user"
