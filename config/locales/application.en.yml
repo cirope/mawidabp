@@ -1222,7 +1222,7 @@ en:
         one: "Audit report"
         other: "Audit reports"
       review_user_assignment: "Audit report user assignment"
-      role: "Profile" # REVIEW role??
+      role: "Profile"
       workflow: "Workflow"
       workflow_item: "Workflow record"
       work_paper: "Work paper"
@@ -1415,7 +1415,7 @@ en:
       organization_role:
         user_id: "User"
         organization_id: "Organization"
-        role_id: "Profile" # REVIEW role??
+        role_id: "Profile"
       privilege:
         module: "Module"
         read: "Read"
@@ -1639,7 +1639,7 @@ en:
     plans: "Workplans"
     resource_classes: "Resources"
     reviews: "Audit reports"
-    roles: "Profiles" # REVIEW roles?
+    roles: "Profiles"
     users: "Users"
     versions: "Versions"
     weaknesses: "Issues"
