@@ -462,7 +462,7 @@ en:
         email_attribute: 'Email attribute'
         function_attribute: 'Function attribute'
         office_attribute: 'Department attribute'
-        roles_attribute: 'Roles attribute'
+        roles_attribute: 'Profiles attribute'
         manager_attribute: 'Manager attribute'
         tls: 'TLS version'
         ca_path: 'CA path'
