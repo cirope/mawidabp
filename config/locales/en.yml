@@ -230,7 +230,7 @@
       without_weaknesses: "Without issues"
       weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
     process_control_stats:
-      average_effectiveness: 'Weighted average score'
+      average_effectiveness: 'Weighted average rating'
       average_effectiveness_resume:
         one: "%{effectiveness} - %{count} evaluated audit report"
         other: "%{effectiveness} - %{count} evaluated audit reports"
@@ -243,7 +243,7 @@
       without_reviews_in_the_period: "Without audit reports in the selected period"
       without_weaknesses: "Without issues"
       weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
-      review_effectiveness_average: 'Weighted average of control objective scores: <b>%{score}%</b>'
+      review_effectiveness_average: 'Weighted average of control objective ratings: <b>%{score}%</b>'
 
   follow_up_audited_committee_report:
     process_control_stats:
@@ -564,7 +564,7 @@
       conclusion_review:
         effectiveness_notes: "Effectiveness notes"
       control_objective_item:
-        scored_business_unit_type_id: "Business unit type scored"
+        scored_business_unit_type_id: "Evaluated organizational unit"
       file_model:
         file: "File"
       group:

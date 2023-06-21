@@ -273,9 +273,9 @@ en:
         user_id: "User"
       business_unit_score:
         business_unit_id: 'Business unit'
-        design_score: 'Design test score'
-        compliance_score: 'Compliance test score'
-        sustantive_score: 'Substantive test score'
+        design_score: 'Design test rating'
+        compliance_score: 'Compliance test rating'
+        sustantive_score: 'Substantive test rating'
       closing_interview:
         interview_date: 'Interview date'
         findings_summary: 'Summary of findings'
@@ -298,7 +298,7 @@ en:
         risk: 'Risk'
         obsolete: 'Obsolete'
         support: 'Support'
-        score_type: 'Score type'
+        score_type: 'Rating type'
         control_objective_id: 'Control objective'
         audit_sector: 'Audit Sector'
         date_charge: 'Date of entry'
