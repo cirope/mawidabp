@@ -438,8 +438,8 @@ en:
     present_findings: "New issues"
     present_findings_empty: "There are no issues to mention."
     add_recipient: "Add new recipient"
-    review_sended: "The audit report has been sent to all the indicated recipients"
-    review_not_approved: "The audit report was not submitted, it must be approved" # REVIEW Que tal un "Por favor, asegurese que antes esté aprobado"?
+    review_sended: "The audit report has been sent to all specified recipients"
+    review_not_approved: "The audit report was not sent. Please make sure to obtain the necessary approval and try again"
     review_repeated_finding_label: "Audit report #"
     executive_summary:
       title: "Executive Summary"
