@@ -921,8 +921,8 @@ en:
       change_password: "Set password"
       clarification: "You have received this email because you have been registered in the 'Mawidabp' system."
       organizations_sites:
-        one: "Then you can log in at the following URL:" # REVIEW luego de realizar una accoón? O tipo "a continiación"?
-        other: "Then you can log in at any of the following URLs (depending on the organization you select):"
+        one: "Then you can access the following URL address:"
+        other: "Then you can access any of the following URLs (depending on the organization you select):"
 
   oportunity:
     index_title: "Opportunities list"
