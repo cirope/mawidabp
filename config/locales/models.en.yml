@@ -301,7 +301,7 @@ en:
         control_objective_id: 'Control objective'
         audit_sector: 'Audit Sector'
         date_charge: 'Registration date' # REVIEW contexto?
-        affected_sector_id: 'Sector of the bank affected by the alert'
+        affected_sector_id: 'Bank sector affected by the alert'
         control_objective_auditors: 'Auditors in charge'
       review/control_objective_items:
         control_objective_id: 'Control objective'
