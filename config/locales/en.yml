@@ -142,10 +142,10 @@
     add_user: "Add user"
     add_endorsement: "Add reviewer"
     show_commitment_date: "New commitment date"
-    add_work_paper: "Add work paper"
+    add_work_paper: "Add working paper"
     endorsements: "Reviewers"
     recode_tasks: "Recode tasks"
-    create_work_paper: "Add as work paper"
+    create_work_paper: "Add as working paper"
     follow_up_date_changed_warning: "Follow-up date changed to accommodate tasks"
     follow_up_date_last_changed: "Last implementation date changed"
     assignment_confirm_message: "You have not selected any reference auditors or managers. Do you want to continue?"
@@ -182,7 +182,7 @@
     status_change_history: "Status change history"
     view_cost_details: "List of previous activities related to the finding"
     without_conclusion_final_review: "Without final audit report"
-    without_work_papers: "Without work papers"
+    without_work_papers: "Without working papers"
     responsibility_removed: "Has been removed from the %{class_name} %{review_code} of the %{review} audit report"
     commitment_date_required_level:
       manager: "Headquarters"
@@ -206,7 +206,7 @@
       download: "Download full trace"
       follow_up_comments: "Follow-up Comments"
       without_important_changes: "No major changes to date"
-      work_papers: "Work papers"
+      work_papers: "Working papers"
       pdf_name: "track_finding_%{code}.pdf"
     pdf:
       filtered_by_html:

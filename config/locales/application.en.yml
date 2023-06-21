@@ -122,7 +122,7 @@ en:
     check_for_approval: "Check now"
     generate_score_sheet: "Download detailed rating form"
     generate_global_score_sheet: "Download global rating form"
-    download_work_papers: "Download work papers"
+    download_work_papers: "Download working papers"
     download_without_score: "Download without rating"
     download_brief: "Download brief"
     download_expanded: "Download expanded"
@@ -387,7 +387,7 @@ en:
     stale_object_error: "The final audit report could not be updated, please try again."
     generate_score_sheet: "Download detailed rating form"
     generate_global_score_sheet: "Download global rating form"
-    download_work_papers: "Download work papers"
+    download_work_papers: "Download working papers"
     create_bundle: "Generate file"
     send_by_email: "Send by email"
     download_without_control_objectives_excluded_from_score: "Download without unrated control objectives"
@@ -475,8 +475,8 @@ en:
       items_label: "Index entries"
       pdf_name: "00_file_index.pdf"
     findings_sheet:
-      title: "Issues - Work Papers"
-      pdf_name: "%{prefix}_cover_of_issues_and_work_papers.pdf"
+      title: "Issues - Working Papers"
+      pdf_name: "%{prefix}_cover_of_issues_and_working_papers.pdf"
     findings_follow_up:
       title: "FINDINGS FOLLOW-UP"
       weakness_title_in_singular: "ISSUE FOLLOW-UP"
@@ -486,10 +486,10 @@ en:
     workflow:
       title: "Workflow documentation"
       pdf_name: "workflow_documentation.pdf"
-      control_objective_work_papers: "Control Objective Work Papers"
+      control_objective_work_papers: "Control Objective Working Papers"
       control_objective_weaknesses: "Issues"
       control_objective_oportunities: "Opportunities"
-      finding_work_papers: "Finding Work Papers"
+      finding_work_papers: "Finding Working Papers"
     scope_detail:
       title: "RATING OF THE DIFFERENT ITEMS EVALUATED WITHIN THE SCOPE OF THIS AUDIT"
 
@@ -510,11 +510,11 @@ en:
     view_all_oportunities: "Show improvement opportunities list"
     add_oportunity: "Add new improvement opportunity"
     add_weakness: "Add new issue"
-    add_work_paper: "Add work paper"
+    add_work_paper: "Add working paper"
     add_business_unit_score: "Add business unit rating"
     add_business_unit_type: "Add business units by type"
     readonly: "The control objective cannot be modified, the final audit report has already been issued"
-    without_work_papers: "No work papers"
+    without_work_papers: "No working papers"
     not_rated: "Not rated"
     not_apply_text: 'No rating applies'
     excluded_from_score: "Not taken into account in the audit report rating"
@@ -1000,8 +1000,8 @@ en:
     new_weaknesses: "New"
     outdated_control_objective_name: 'The name of the control objective has changed from the one defined in the best practice, click to restore it'
     taken_work_paper_code:
-      one: "%{duplicated_work_papers} work paper code is duplicated"
-      other: "The following work paper codes are duplicated: %{duplicated_work_papers}"
+      one: "%{duplicated_work_papers} working paper code is duplicated"
+      other: "The following working paper codes are duplicated: %{duplicated_work_papers}"
     user_assignment:
       type_viewer: "Viewer"
       type_auditor: "Auditor"
@@ -1035,9 +1035,9 @@ en:
     weaknesses_work_papers: "Issues"
     oportunities_work_papers: "Opportunities"
     follow_up_work_papers: "Follow-up issues"
-    download_work_papers: "Download work papers"
-    finished_work_papers: "Work papers - Auditor approved"
-    revise_work_papers: "Work Papers - Supervisor revised"
+    download_work_papers: "Download working papers"
+    finished_work_papers: "Working papers - Auditor approved"
+    revise_work_papers: "Working Papers - Supervisor revised"
     notes: "Notes"
     estimated_amount: "Estimated cost in workplan"
     other_actions: "Actions"
@@ -1047,14 +1047,14 @@ en:
     recode_weaknesses_by_risk_and_repetition: "Recode issues by risk and repetition"
     recode_weaknesses_by_control_objective_order: "Recode issues by control objective order"
     reorder: "Reorder processes by name"
-    recode_work_papers: "Recode work papers"
+    recode_work_papers: "Recode working papers"
     findings_recoded: "Findings were successfully recoded"
     reordered: "Processes were successfully reordered"
-    work_papers_recoded: "Work papers were successfully recoded"
-    work_papers_recode_failed: "Work papers could not be recoded"
+    work_papers_recoded: "Working papers were successfully recoded"
+    work_papers_recode_failed: "Working papers could not be recoded"
     failed_to_reorder: "Processes could not be reordered"
-    work_papers_marked_as_finished: "Work papers marked as finished auditor"
-    work_papers_marked_as_revised: "Work papers marked as revised supervisor"
+    work_papers_marked_as_finished: "Working papers marked as finished auditor"
+    work_papers_marked_as_revised: "Working papers marked as revised supervisor"
     review_qualification_explanation: "The audit report rating is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight is added and the result is divided by the sum of the weights."
     process_control_qualification_explanation: "The business process rating is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are summed and the result is divided by the sum of the weights."
     errors:
@@ -1225,7 +1225,7 @@ en:
       role: "Profile"
       workflow: "Workflow"
       workflow_item: "Workflow record"
-      work_paper: "Work paper"
+      work_paper: "Working paper"
 
     attributes:
       answer:
@@ -1318,7 +1318,7 @@ en:
         support: "Support"
         weaknesses: "Issues"
         oportunities: "Improvement opportunities"
-        work_papers: "Work papers"
+        work_papers: "Working papers"
       control_objective_item/control:
         order: "Control objective (order)"
         control: "Control objective (controls)"
@@ -1326,19 +1326,19 @@ en:
         design_tests: "Control objective (design tests)"
         compliance_tests: "Control objective (compliance tests)"
         sustantive_tests: "Control objective (substantive tests)"
-        work_papers: "Work papers"
+        work_papers: "Working papers"
       control_objective_item/work_papers:
-        one: "Work papers"
-        other: "Work papers"
-        name: "Work paper (name)"
-        code: "Work paper (code)"
-        description: "Work paper (description)"
-        number_of_pages: "Work paper (pages)"
+        one: "Working papers"
+        other: "Working papers"
+        name: "Working paper (name)"
+        code: "Working paper (code)"
+        description: "Working paper (description)"
+        number_of_pages: "Working paper (pages)"
       control_objective_item/work_papers/file_model:
-        one: "Work paper (file)"
-        file_file_name: "Work paper (file name)"
-        file_content_type: "Work paper (file type)"
-        file_file_size: "Work paper (file size)"
+        one: "Working paper (file)"
+        file_file_name: "Working paper (file name)"
+        file_content_type: "Working paper (file type)"
+        file_file_size: "Working paper (file size)"
       control_objective_item/business_unit_scores:
         business_unit_id: 'Business unit rating (business unit)'
         design_score: 'Business unit rating (design tests)'
@@ -1448,7 +1448,7 @@ en:
         manual_score: "Audit rating"
         manual_score_alt: "Compliance audit rating"
         include_sox: "Include SOX test"
-        work_papers: "Work papers"
+        work_papers: "Working papers"
         review_user_assignments: "Members"
         taggings: "Taggings"
         review_objective: "Audit report objective"
