@@ -577,7 +577,7 @@
         workflow_items:
           one: "Task"
           other: "Tasks"
-          base: "" # REVIEW nil?
+          base: "" # REVIEW Por qué está vacío?
           task: "Task"
           start: "Task (start)"
           end: "Task (end)"

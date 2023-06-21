@@ -454,7 +454,7 @@
       warning: "No se tomó acción con el correo recibido."
       reply_receive: "Respuesta recibida"
     conclusion_final_review_close_date_warning:
-      title: "Notificación de informes cercanos al cierre" # REVIEW: No debería ser "... de informes definitivos"? Por el key que tiene
+      title: "Notificación de informes cercanos al cierre"
       body_title: "Los siguientes informes están próximos al cierre"
     findings_expiration_warning:
       title: "Notificación de hallazgos cercanos al vencimiento"
