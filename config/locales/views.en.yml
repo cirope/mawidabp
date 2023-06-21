@@ -401,7 +401,7 @@ en:
         long: 'Completed early (Grey)'
         short: 'Completed early'
       in_early_progress:
-        long: 'In early progress (Celeste)'
+        long: 'In early progress (Light Blue)'
         short: 'In early progress'
       not_started_no_delayed:
         long: 'No started no delayed (Light Green)'
