@@ -293,7 +293,7 @@ en:
         second_footer: '<b>A/C int. Internal Audit Management</b>' # REVIEW Que es A/C?
       detailed_report:
         title: '<b><u>DETAILED REPORT</u></b>'
-        introduction_and_scope_title: '<b><u>INTRODUCTION AND SCOPE OF WORK DONE</u></b>' # REVIEW CARRIED OUT?
+        introduction_and_scope_title: '<b><u>INTRODUCTION AND SCOPE OF WORK PERFORMED</u></b>'
         classification_methodology: 'The rating methodology for cycles used in the 2019 period was approved by the Audit Committee at its meeting on 14.05.2019 - Minutes No. 294, which we present below:'
         classification_title: '<i><b>Table I: Internal Control Rating of NCHB S.A. – %{period}</b></i>'
         conclusions_title: '<u><b>CONCLUSIONS</b></u>'
