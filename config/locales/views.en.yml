@@ -38,7 +38,7 @@ en:
       add_activity: 'Add activity group'
 
   answer_options:
-    not_apply: 'Not apply' # REVIEW donde?
+    not_apply: 'Does not apply'
     strongly_disagree: 'Strongly disagree'
     disagree: 'Disagree'
     neither_agree_nor_disagree: 'Neither agree nor disagree'
@@ -95,7 +95,7 @@ en:
       add_assistant: 'Add assistant'
     show:
       title: 'Show closing interview'
-      auditeds: 'Responsible for the cycle' # REVIEW donde?
+      auditeds: 'Cycle responsibles'
       auditors: 'Assigned auditors'
       download_pdf: 'Download PDF'
     pdf:
@@ -134,8 +134,8 @@ en:
       title: 'Mail details'
 
   error_records:
-    error_on_login: 'Error on login' # REVIEW donde?
-    error_on_password_change: 'Error on password change' # REVIEW donde?
+    error_on_login: 'Incorrect login'
+    error_on_password_change: 'Incorrect password change'
     error_user_disabled: 'User disabled'
     index:
       title: 'Error logs'
@@ -146,7 +146,7 @@ en:
     show:
       title: 'Record details'
       list: 'Show error logs'
-    void_user: 'Void user' # REVIEW donde?
+    void_user: 'Non-existent'
 
   findings:
     index:
@@ -178,25 +178,25 @@ en:
       confirmed: 'Confirmed'
       unconfirmed: 'Unconfirmed'
       unanswered: 'Unanswered'
-      awaiting: 'Awaiting' # REVIEW To regularize?
+      awaiting: 'To be regularized'
       failure: 'Failure'
       being_implemented: 'Being implemented'
-      being_implemented_current: 'Current' # REVIEW Current no me suena como antónimo de overdue. Quizás On time?
-      being_implemented_current_rescheduled: 'Currently rescheduled'
-      being_implemented_stale: 'Overdue' # REVIEW Stale se utiliza más para productos vencidos/expirados. Overdue se usa para algo que tenía deadline y ya pasó. También se puede usar Delayed
-      being_implemented_stale_rescheduled: 'Rescheduled overdue'
+      being_implemented_current: 'Active'
+      being_implemented_current_rescheduled: 'Re-scheduled active'
+      being_implemented_stale: 'Overdue'
+      being_implemented_stale_rescheduled: 'Re-scheduled overdue'
       implemented: 'Implemented'
       implemented_audited: 'Implemented / Audited'
       assumed_risk: 'Assumed risk'
       notify: 'Notify'
       incomplete: 'Incomplete'
       repeated: 'Repeated'
-      revoked: 'Revoked'
-      criteria_mismatch: 'Criteria mismatch'
-      expired: 'Dismissed / Not apply' # REVIEW Not valid?
+      revoked: 'Cancelled'
+      criteria_mismatch: 'Different criteria'
+      expired: 'Dismissed / Not applicable'
     work_papers:
       create:
-        from_comment: 'From comment by %{user} on %{date}' # REVIEW donde?
+        from_comment: 'From comment by %{user} on %{date}'
     endorsements:
       status:
         pending: 'Pending'
@@ -217,15 +217,15 @@ en:
     blocked:
       show:
         body: 'Your organization is disabled, contact soporte@mawidabp.com'
-        check: 'Recheck payment' # REVIEW Check payment?
+        check: 'Recheck payment'
     license:
-      check: 'Recheck payment' # REVIEW Check payment?
+      check: 'Recheck payment'
       approve: 'Go to Paypal'
       authorize_new_plan:
         title: 'Authorize new plan'
-        body: |- # REVIEW se refiere a cambiar de planes ya armados, cierto? Ej: cambiar de plan base a premium || Quizás debería referirste más a utilizar/operar/tener disponible los usuarios que a "verlos"
-          To switch plans, you must authorize the new monthly plan.
-          The new plan will be invoiced in the next cycle, but you will see the desired number of audit users now.'
+        body: |-
+          To switch plans, you will need to authorize the new monthly plan.
+          The new plan will be billed in the next billing cycle, but you will see the desired number of auditor users reflected immediately.
     authorizations:
       new:
         title: 'License'
@@ -233,13 +233,13 @@ en:
         title: 'License'
     paypal_button:
       create: 'Subscribe'
-      create_error: 'A problem has occurred, please contact soporte@mawidabp.com to check if the payment is credited' # REVIEW No se si es buena idea hablar de problema...
+      create_error: 'A problem has been detected. Please contact soporte@mawidabp.com to verify if the payment has been credited'
 
   login_records:
     choose:
       title: 'Security reports'
     index:
-      title: 'Login records' # REVIEW logs?
+      title: 'Login records'
     pdf_list_name: 'list_of_login_records_%{from_date}_%{to_date}.pdf'
     period:
       title: 'Interval'
@@ -250,16 +250,16 @@ en:
 
   memos:
     edit:
-      title: 'Edit external report'
+      title: 'Edit external audit report'
     index:
-      new: 'New external report'
-      title: 'External report list'
-      empty_html: 'There are no external reports, you can create one with the <span class="badge badge-primary">New memo</span> button' # REVIEW New memo?
-      empty_search_html: 'There are no external reports that match the search criteria'
+      new: 'New external audit report'
+      title: 'External audit report list'
+      empty_html: 'There are no external audit reports, you can create one with the <span class="badge badge-primary">New memo</span> button'
+      empty_search_html: 'No external audit reports that match the search criteria'
     new:
-      title: 'Create external report'
+      title: 'Create external audit report'
     form:
-      markdown_help_html: '<span class="badge badge-info">Attention</span> within the content you can use %{link}' # REVIEW donde?
+      markdown_help_html: '<span class="badge badge-info">Attention</span> within the content you can use %{link}'
       add_file_model: 'Add file'
       download_cover: 'Download cover'
     show:
@@ -298,7 +298,7 @@ en:
       add_assistant: 'Add assistant'
     show:
       title: 'Show opening interview'
-      auditeds: 'Responsible for the cycle' # REVIEW donde?
+      auditeds: 'Cycle responsibles'
       auditors: 'Assigned auditors'
       download_pdf: 'Download PDF'
     pdf:
@@ -313,11 +313,11 @@ en:
       title: 'Add organization'
     edit:
       title: 'Edit organization'
-    new_organization_can_not_have_image: 'You will be able to load an organization logo after creating it' # REVIEW isologotipo? logo? / Tenía "haberla creado" pero el infinitivo compuesto se usa para arrepentimiento
+    new_organization_can_not_have_image: 'You will be able to load an organization logo after creating it'
     logo_styles:
       default: 'Default'
-      success: 'Successful'
-      info: 'Informative' # REVIEW info?
+      success: 'Success'
+      info: 'Information'
       warning: 'Warning'
       danger: 'Danger'
     saml_providers:
@@ -347,11 +347,11 @@ en:
   plan_items:
     best_practice:
       best_practice_projects:
-        save: 'Attach best practice' # REVIEW donde?
+        save: 'Associate best practice'
         done: 'Save'
     control_objective:
       control_objective_projects:
-        save: 'Attach control objective' # REVIEW donde?
+        save: 'Associate control objective'
         done: 'Save'
 
   plans:
@@ -379,7 +379,7 @@ en:
       human_resources: 'Human resources'
       material_resources_abbr: 'MR'
       material_resources: 'Material resources'
-    item_status: # REVIEW Quizás los estados podrían ser como las issues, in progress, done, etc
+    item_status:
       note: 'Status must be read as: C = Concluded; E = Executing in time; E (FP) = Executing overtime; R = Delayed'
       concluded:
         long: 'Concluded'
@@ -433,12 +433,12 @@ en:
       time_summary_hours: 'Time Summary Hours'
     csv_prs_pat:
       csv_name: 'progress_report_by_status_%{current_date}.csv'
-      business_unit: 'Sector' # REVIEW donde?
+      business_unit: 'Sector'
       totals: 'Totals'
-      total_plan_items: 'Total Planned Works' # REVIEW donde?
+      total_plan_items: 'Total projects in workplan'
     csv_prh_pat:
       csv_name: 'totalizing_progress_report_in_hours_%{current_date}.csv'
-      business_unit: 'Sector' # REVIEW donde?
+      business_unit: 'Sector'
       budgeted_hours: 'Budgeted Hours'
       progress: 'Total Progress'
       percentage: 'Percentage'
@@ -451,7 +451,7 @@ en:
         title: 'Calendar'
         empty: 'There are no projects in the selected plan'
         empty_with_no_business_units: 'No business units selected'
-        detail: 'Details' # REVIEW Plural? Sería para obtener información la cosa, cierto?
+        detail: 'Detail'
         by_business_unit: 'Show calendar by business unit'
         by_project: 'Show calendar by project'
     resources:
@@ -469,8 +469,8 @@ en:
         progress: 'Total progress'
         compliance: 'Compliance'
     business_unit_type_plan_items:
-      associate_control_objective: 'Associate control objective' # REVIEW Add / Attach?
-      associate_best_practice: 'Associate best practice' # REVIEW Add / Attach?
+      associate_control_objective: 'Associate control objective'
+      associate_best_practice: 'Associate best practice'
     download_progress_report_with_statuses_pat: 'Download progress statuses of work'
     download_totalizer_progress_report_in_hours_of_work_pat: 'Download totalizing progress report in hours of work'
     download_detailed_progress_report_in_hours_of_work_pat: 'Download detailed progress report in hours of work'
@@ -481,12 +481,12 @@ en:
     download_detailed_business_unit_type_plan: 'Download detailed %{business_unit_type} plan'
     download_detailed_business_unit_type_plan_csv: 'Download %{business_unit_type} plan in CSV'
     download_business_unit_type_plan_csv: 'Download plan in CSV'
-    without_business_unit_type: 'Without business unit' # REVIEW donde?
+    without_business_unit_type: 'Without business unit'
 
   profiles:
     edit:
-      title: 'My profile' # REVIEW donde?
-      submit: 'Update my profile' # REVIEW donde?
+      title: 'My profile'
+      submit: 'Update my profile'
     update:
       success: 'Your profile was updated successfully'
 
@@ -526,7 +526,7 @@ en:
       title: 'Poll details'
     total_answered: 'Total answered polls'
     total_unanswered: 'Total unanswered polls'
-    without_data: 'Without data for the entered filters' # REVIEW donde?
+    without_data: 'No data for the entered filters'
     score: 'Average level of satisfaction'
 
   questionnaires:
@@ -558,7 +558,7 @@ en:
 
   reports:
     customization_titles: 'Title customization'
-    generating: 'Generating report...' # REVIEW Creating?
+    generating: 'Generating report...'
     file_will_be_sent: "We will send you the report by email, please review it in a few minutes"
 
   resource_classes:
@@ -584,7 +584,7 @@ en:
         title: 'Open control objectives'
         label: 'OCO'
       control_objective_items_finished:
-        title: 'Completed control objectives' # REVIEW completados en vez de finalizados está bien?
+        title: 'Completed control objectives'
         label: 'CCO'
     form:
       add_business_unit_type: 'Add organizational unit'
@@ -593,13 +593,13 @@ en:
 
   sessions:
     new:
-      title: 'Login' # REVIEW donde?
+      title: 'Login'
       log_in: 'Login'
       email: 'Email'
       user: 'User'
       password: 'Password'
       remember_me: 'Remember me'
-      try_again: 'Try again' # REVIEW donde?
+      try_again: 'Try again'
       forgot_password: 'Forgot your password?'
     create:
       invalid: 'Your email and/or password are incorrect =('
@@ -634,11 +634,11 @@ en:
     show_follow_up_timestamps: 'Show follow-up timestamps'
     require_manager_on_findings: 'Require audit manager on findings'
     hide_import_from_ldap: 'Show "Import from LDAP" only to users with approval permissions'
-    skip_function_and_manager_from_ldap_sync: 'Do not sync "Position" and "Superior" fields with LDAP values' # REVIEW como se llaman los campos en LDAP?
+    skip_function_and_manager_from_ldap_sync: 'Do not sync "Position" and "Superior" fields with LDAP values'
     hide_obsolete_best_practices: 'Hide obsolete best practices'
     hours_of_work_per_day: 'Hours of work per day'
     conclusion_review_receiver: 'Audit report receiver(s)'
-    temporary_polls: 'Temporarily save poll responses. A poll is complete when all of its questions are answered. '
+    temporary_polls: 'Temporarily save poll responses. A poll is complete when all of its questions are answered.'
 
   tags:
     edit:
@@ -659,8 +659,8 @@ en:
     styles:
       secondary: 'Default'
       primary: 'Important'
-      success: 'Successful'
-      info: 'Informative' # REVIEW info?
+      success: 'Success'
+      info: 'Info'
       warning: 'Warning'
       danger: 'Danger'
 
@@ -709,7 +709,7 @@ en:
         task: "Task"
         user: "User"
         business_unit_types: "Organizational units"
-        detail: "Details" # REVIEW Plural? Sería para obtener información la cosa, cierto?
+        detail: "Detail"
         organization: "Organization"
         period: "Period"
         period_start: "Period Start"
@@ -786,7 +786,7 @@ en:
         with_findings: 'Include pending findings?'
         with_reviews: 'Include executing audit reports?'
         submit: 'Reassign'
-      must_select_a_user: 'You must select a user' # REVIEW donde?
+      must_select_a_user: 'You must select a user'
 
     registrations:
       new:

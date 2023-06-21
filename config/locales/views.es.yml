@@ -223,7 +223,7 @@ es:
       approve: 'Ir a Paypal'
       authorize_new_plan:
         title: 'Autorizar nuevo plan'
-        body: |-
+        body: |- # REVIEW Se refiere a cambiar de planes ya armados, cierto? Ej: cambiar de plan base a premium. Pregunto para saber si usar "switch"
           Para cambiar de plan, deberá autorizar el nuevo plan mensual.
           El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios auditores en el momento.'
     authorizations:
@@ -233,7 +233,7 @@ es:
         title: 'Licencia'
     paypal_button:
       create: 'Suscribirse'
-      create_error: 'Ha ocurrido un problema, por favor comuníquese con soporte@mawidabp.com para comprobar si el pago está acreditado'
+      create_error: 'Se ha detectado un problema. Por favor, comuníquese con soporte@mawidabp.com para verificar si el pago ha sido acreditado'
 
   login_records:
     choose:
@@ -250,14 +250,14 @@ es:
 
   memos:
     edit:
-      title: 'Editar Informe externo'
+      title: 'Editar informe externo'
     index:
-      new: 'Nuevo Informe externo'
-      title: 'Listado de Informes externos'
-      empty_html: 'No hay Informes externos, puede crear una con el botón <span class="badge badge-primary">Nuevo memo</span>'
-      empty_search_html: 'No hay Informes externos que coincidan con el criterio de búsqueda'
+      new: 'Nuevo informe externo'
+      title: 'Listado de informes externos'
+      empty_html: 'No hay informes externos, puede crear una con el botón <span class="badge badge-primary">Nuevo memo</span>'
+      empty_search_html: 'No hay informes externos que coincidan con el criterio de búsqueda'
     new:
-      title: 'Crear Informe externo'
+      title: 'Crear informe externo'
     form:
       markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
       add_file_model: 'Agregar archivo'
@@ -599,7 +599,7 @@ es:
       user: 'Usuario'
       password: 'Contraseña'
       remember_me: 'Recordarme'
-      try_again: 'Ingresar nuevamente'
+      try_again: 'Ingresar nuevamente' # REVIEW No sería "Intentar nuevamente"?
       forgot_password: '¿Olvidaste tu contraseña?'
     create:
       invalid: 'Tu correo y/o contraseña no están bien =('
@@ -638,7 +638,7 @@ es:
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
     hours_of_work_per_day: 'Horas de trabajo por día'
     conclusion_review_receiver: 'Receptor/es del informe'
-    temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas. '
+    temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.'
 
   tags:
     edit:
