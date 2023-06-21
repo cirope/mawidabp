@@ -6,7 +6,7 @@ en:
       organization:
         management: 'Management'
         business_units: 'Business units'
-        business_unit_kind: 'Business unit types'
+        business_unit_kind: 'Type of business unit'
       security_title: 'Security'
       security:
         reports: 'Security reports'

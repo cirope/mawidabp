@@ -1232,7 +1232,7 @@ en:
         attached: 'Attached'
       business_unit:
         name: "Name"
-        business_unit_kind_id: 'Business unit type'
+        business_unit_kind_id: 'Type of business unit'
         business_unit_type_id: 'Organizational unit'
       business_unit_type:
         name: "Name"
@@ -1255,7 +1255,7 @@ en:
         one: "Business unit"
         other: "Business units"
         name: "Business unit"
-        business_unit_kind_id: "Business unit kind"
+        business_unit_kind_id: "Type of business unit"
       business_unit_type_user:
         business_unit_type_id: "Organizational unit"
       comment:

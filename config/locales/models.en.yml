@@ -67,8 +67,8 @@ en:
         one: 'Business Unit'
         other: 'Business units'
       business_unit_kind:
-        one: 'Organizational unit type'
-        other: 'Organizational unit types'
+        one: 'Type of business unit'
+        other: 'Types of business unit'
       business_unit_score:
         one: 'Business unit qualification'
         other: 'Business unit qualifications'

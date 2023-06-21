@@ -4,7 +4,7 @@
 
   business_unit_kind:
     errors:
-      business_unit_kind_related: "The organizational unit cannot be deleted, it is related to at least one business unit"
+      business_unit_kind_related: "The type of business unit cannot be deleted, it is related to at least one business unit"
 
   business_unit:
     edit_title: "Modify business unit"

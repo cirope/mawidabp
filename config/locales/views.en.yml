@@ -78,7 +78,7 @@ en:
 
   business_unit_kinds:
     index:
-      empty_html: 'There are no business unit types, you can create one with the <span class="badge badge-primary">New</span> button'
+      empty_html: 'There are no types of business units, you can create one with the <span class="badge badge-primary">New</span> button'
   closing_interviews:
     edit:
       title: 'Edit closing interview'
