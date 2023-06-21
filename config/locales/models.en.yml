@@ -412,7 +412,7 @@ en:
         commitment_date: 'Commitment date'
         user_id: 'Comment (user)'
         notify_users: 'Comment (send notification)'
-        skip_commitment_support: 'Check if the issue is fixed'
+        skip_commitment_support: 'Check if the issue is resolved'
       finding/finding_answers/commitment_support:
         one: 'Basis of commitment'
         reason: 'Reason for rescheduling'

@@ -537,7 +537,7 @@
   review:
     external_reviews_label: "Alternative audit reports"
     external_reviews_title: "Add alternative audit report"
-    add_past_findings: "Add recent fixed finding"
+    add_past_findings: "Add recent resolved finding"
     control_objectives_previous_effectiveness: "Control previous effectiveness"
     weaknesses_count_by_state: "Number of Issues (Pending/Resolved-Repeated)"
 

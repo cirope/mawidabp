@@ -142,7 +142,7 @@ en:
     weaknesses_by_risk_title: "Total findings by risk"
     weaknesses_by_audit_type_title: "Total findings by audit type"
     high_risk_weaknesses_report_title: "High risk issues"
-    fixed_weaknesses_report_title: "Fixed issues by risk"
+    fixed_weaknesses_report_title: "Resolved issues by risk"
     cost_analysis:
       detailed_column_resource: "Resource"
       detailed_column_estimated_amount: "Estimated cost (planned)"
@@ -190,7 +190,7 @@ en:
     review_score_details_report_title: "Detailed audit report ratings"
     nbc_annual_report_title: "Annual summary"
     high_risk_weaknesses_report_title: "High risk issues"
-    fixed_weaknesses_report_title: "Fixed issues by risk"
+    fixed_weaknesses_report_title: "Resolved issues by risk"
     qa_indicators_title: "Quality indicators"
     weaknesses_by_state_title: "Total findings by status"
     weaknesses_by_risk_title: "Total findings by risk"
@@ -200,7 +200,7 @@ en:
     weaknesses_type_internal: "Internal Audit Issues"
     weaknesses_type_external: "External Audit Issues"
     high_risk_weaknesses: "High risk issues"
-    fixed_weaknesses: "Fixed issues by risk"
+    fixed_weaknesses: "Resolved issues by risk"
     weaknesses_graphs: "Issues graph"
     from_date: "From"
     to_date: "To"
@@ -237,11 +237,11 @@ en:
       without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
     fixed_weaknesses_report:
-      pdf_name: "fixed_issues_by_risk_from_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "resolved_issues_by_risk_from_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Issues"
       external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
-      subtitle: "ISSUES SOLVED - FINAL AUDIT REPORTS"
+      subtitle: "RESOLVED ISSUES - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
       without_weaknesses: "No issues"
@@ -615,7 +615,7 @@ en:
     weaknesses_by_risk_title: "Total findings by risk"
     weaknesses_by_audit_type_title: "Total findings by audit type"
     high_risk_weaknesses_report_title: "High risk issues"
-    fixed_weaknesses_report_title: "Fixed issues by risk"
+    fixed_weaknesses_report_title: "Resolved issues by risk"
     weaknesses_graphs:
       title: 'Issue graph'
       empty: 'No issues for the applied filter'
@@ -662,11 +662,11 @@ en:
     synthesis_report_title: "Executive summary"
     review_stats_report_title: "Audit report statistics"
     high_risk_weaknesses_report_title: "High risk issues"
-    fixed_weaknesses_report_title: "Fixed issues by risk"
+    fixed_weaknesses_report_title: "Resolved issues by risk"
     qa_indicators_title: "Quality indicators"
     weakness_summary: "Summary of issues"
     high_risk_weaknesses: "High risk issues"
-    fixed_weaknesses: "Fixed issues by risk"
+    fixed_weaknesses: "Resolved issues by risk"
     weaknesses_being_implemented_current:
       one: "Active"
       other: "Active"
@@ -720,11 +720,11 @@ en:
       without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
     fixed_weaknesses_report:
-      pdf_name: "fixed_issues_by_risk_from_%{from_date}_to_%{to_date}.pdf"
+      pdf_name: "resolved_issues_by_risk_from_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Issues"
       external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
-      subtitle: "ISSUES SOLVED - FINAL AUDIT REPORTS"
+      subtitle: "RESOLVED ISSUES - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
       without_weaknesses: "No issues"
@@ -1064,7 +1064,7 @@ en:
       without_audited: "has no audited user"
       without_file_model: "has no attachment"
       without_control_objectives: "has no control objectives"
-      related_finding_incomplete: "is pending and has not been marked as repeated or fixed"
+      related_finding_incomplete: "is pending and has not been marked as repeated or resolved"
     survey:
       with_attachment:
         one: "With an attachment"
@@ -1362,7 +1362,7 @@ en:
         file_model: "Attachment"
         notify_users: "Send notification"
         created_at: "Comment date"
-        skip_commitment_support: 'Check if the issue is fixed'
+        skip_commitment_support: 'Check if the issue is resolved'
       finding_relation:
         finding_id: 'Finding'
         related_finding_id: 'Related finding'

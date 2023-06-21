@@ -172,7 +172,7 @@ en:
       pending_to_endorsement: 'Pending approval'
       as_owner: '%{kind} as owner'
       incomplete: 'Pending'
-      complete: 'Fixed'
+      complete: 'Resolved'
       repeated: 'Repeated'
     state:
       confirmed: 'Confirmed'
@@ -820,8 +820,8 @@ en:
             one: '**One** pending issue'
             other: '**%{count}** pending issues'
           complete:
-            one: '**One** issue fixed'
-            other: '**%{count}** issues fixed'
+            one: '**One** issue resolved'
+            other: '**%{count}** issues resolved'
           repeated:
             one: '**One** repeated issue'
             other: '**%{count}** repeated issues'
