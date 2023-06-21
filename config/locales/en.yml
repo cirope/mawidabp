@@ -42,21 +42,21 @@
 
     control_objective_counts:
       pdf_name: "control_objectives_analysis_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "ANALYSIS OF CONTROL OBJECTIVES / FINAL AUDIT REPORTS"
       without_control_objective_items: "Without control objectives"
     weaknesses_by_risk_report:
       pdf_name: "issues_by_risk_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal audit issues"
       external_audit_weaknesses: "External audit issues"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "RISK ISSUES - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "Without audits in the period"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
     weaknesses_by_month:
       pdf_name: "issues_by_month_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONTHLY REPORT - FINAL AUDIT REPORTS"
       main_weaknesses: "Main issues"
       other_weaknesses: "Other issues"
@@ -66,20 +66,20 @@
       year: "Origin year"
     weaknesses_by_control_objective:
       pdf_name: "control_objectives_result_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "RESULTS OF CONTROL OBJECTIVES / FINAL AUDIT REPORTS"
       without_weaknesses: "Without issues"
       origination_year: "Origin year"
     weaknesses_by_user:
       pdf_name: "issues_by_user_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "ISSUES BY USER / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
       weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
     weaknesses_by_business_unit:
       pdf_name: "issues_by_cycle_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "ISSUES PER CYCLE / FINAL AUDIT REPORTS"
       on_revision: "On revision"
       without_audits_in_the_interval: "Without audits in the selected interval"
@@ -224,7 +224,7 @@
     business_unit_title: "Business unit"
     weaknesses_by_user:
       pdf_name: "issues_by_user.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONITORING ISSUES BY USER / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
@@ -238,7 +238,7 @@
         one: "%{count} audit report with issues in the O.C."
         other: "%{count} audit reports with issues in the O.C."
       pdf_name: "issues_by_business_process.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONITORING ISSUES BY BUSINESS PROCESS / FINAL AUDIT REPORTS"
       without_reviews_in_the_period: "Without audit reports in the selected period"
       without_weaknesses: "Without issues"
@@ -272,7 +272,7 @@
     weaknesses_current_situation_title: "Global report - Quarterly drafts"
     weaknesses_current_situation:
       pdf_name: "issues_current_situation_draft_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "GLOBAL REPORT MONITORING - QUARTERLY / DRAFT AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
@@ -310,14 +310,14 @@
       pdf_name: "high_risk_issues_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Issues"
       external_audit_weaknesses: "External Audit Issues"
-      title: "SUMMARY REPORT TO THE BOARD\nASSESSMENT OF\n THE INTERNAL CONTROL SYSTEM COM. \"A\" 5042" # REVIEW BOARD OF DIRECTORS?
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "HIGH RISK ISSUES FOLLOW-UP - FINAL AUDIT REPORTS"
       without_audits_in_the_period: "No high risk audits in the period"
       without_audits_in_the_interval: "No high risk audits in the selected interval"
       without_weaknesses: "No issues"
     weaknesses_by_month:
       pdf_name: "issues_by_month_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "FOLLOW-UP MONTHLY REPORT - FINAL AUDIT REPORTS"
       main_weaknesses: "Main issues"
       other_weaknesses: "Other issues"
@@ -327,7 +327,7 @@
       year: "Origin year"
     weaknesses_current_situation:
       pdf_name: "issues_current_situation_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "GLOBAL REPORT MONITORING - FOUR-MONTHLY / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
@@ -340,13 +340,13 @@
       cut_date: "Computation date"
     weaknesses_by_control_objective:
       pdf_name: "control_objectives_result_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONITORING THE RESULTS OF THE CONTROL OBJECTIVES / FINAL AUDIT REPORTS"
       without_weaknesses: "Without issues"
       origination_year: "Origin year"
     weaknesses_by_control_objective_process:
       pdf_name: "process_report_by_control_objective_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONITORING PROCESS ISSUES BY CONTROL OBJECTIVE / FINAL AUDIT REPORTS"
       weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
       without_weaknesses: "Without issues"
@@ -356,14 +356,14 @@
       review_tags: "Audit report tags"
     weaknesses_by_user:
       pdf_name: "issues_by_user_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONITORING ISSUES BY USER / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
       weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
     weaknesses_by_business_unit:
       pdf_name: "issues_by_cycle_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONITORING ISSUES PER CYCLE / FINAL AUDIT REPORTS"
       on_revision: "On revision"
       without_audits_in_the_interval: "Without audits in the selected interval"
@@ -371,7 +371,7 @@
       year: "Origin year"
     weaknesses_heatmap:
       pdf_name: "heatmap_by_issues_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "HEAT MAP MONITORING ISSUES / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
@@ -381,7 +381,7 @@
       process_owner_roots: "Top owners"
     weaknesses_evolution:
       pdf_name: "issues_evolution_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONITORING ISSUES EVOLUTION / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
@@ -396,7 +396,7 @@
       review_tags: "Audit report tags"
     weaknesses_brief:
       pdf_name: "summary_of_pending_issues_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "SUMMARY OF PENDING ISSUES / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
@@ -412,7 +412,7 @@
         other: "%{count} issues were regularized between %{from_date} and %{to_date}."
     weaknesses_reschedules:
       pdf_name: "rescheduling_issues_summary_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "SUMMARY OF ISSUES / RESCHEDULES / FINAL AUDIT REPORTS"
       without_weaknesses: "Without issues"
       reschedule_count_manager: "Number of reschedules approved by headquarters"
@@ -421,7 +421,7 @@
       reschedule_count_committee: "Number of reschedules approved by committee"
     weaknesses_repeated:
       pdf_name: "issues_with_status_according_last_monitoring_%{from_date}_to_%{to_date}.pdf"
-      title: "SYNTHESIS REPORT TO THE DIRECTORS BOARD\nASSESSMENT OF\nINTERNAL CONTROL SYSTEM COM. \"A\" 5042"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONITORING OF ISSUES WITH STATUS ACCORDING TO LAST MONITORING / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
