@@ -34,7 +34,7 @@ es:
     insert_item: "Insertar ítem"
     insert_record_item: "Insertar nuevo"
     list: "Listado"
-    modify: "Modificar" # REVIEW Se usa en el submit de Modificar información personal, se podría unificar con Update? Porque básicamente actualiza un form
+    modify: "Modificar"
     move: "Mover"
     new: "Nuevo"
     next: "Siguiente"
@@ -112,7 +112,7 @@ es:
     show_title: "Detalle del informe borrador"
     new_title: "Agregar informe borrador"
     edit_title: "Modificar informe borrador"
-    bundle_title: "Generar legajo" # REVIEW Que sería esto? Diferencia con create_bundle? Parece que no se utiliza (hay varios)
+    bundle_title: "Generar legajo"
     correctly_created: "Informe borrador agregado correctamente."
     correctly_updated: "Informe borrador actualizado correctamente."
     stale_object_error: "El informe borrador no pudo ser actualizado, intente nuevamente."
@@ -204,12 +204,12 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
-    mid_date: "Corte"
-    date_field: "Fecha a utilizar"
+    mid_date: "Corte" # REVIEW Que sería esta fecha? (hay varios)
+    date_field: "Fecha a utilizar" # REVIEW Que sería esta fecha? Podría ser "Fecha de uso" para que combine con el resto? (hay varios)
     created_at: "Fecha de creación"
     issue_date: "Fecha de emisión"
-    origination_date: "Fecha de origen"
-    cut_date: "Fecha cierre antigua data" # REVIEW: Que sería esto? (hay varios)
+    origination_date: "Fecha de origen" # REVIEW Cuál es la diferencia con "Fecha de creación"? (hay varios)
+    cut_date: "Fecha cierre antigua data" # REVIEW: Que sería esta fecha? (hay varios)
     applied_filters:
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
@@ -289,7 +289,7 @@ es:
         title: '<b><u>RESUMEN EJECUTIVO</u></b>'
         objective_title: '<b><u>OBJETIVO</u></b>'
         general_conclusion_title: '<b><u>CONCLUSIÓN GENERAL</u></b>'
-        first_footer: '<b>AUS. Alejandro Camnasio</b>'
+        first_footer: '<b>AUS. Alejandro Camnasio</b>' # REVIEW que es AUS?
         second_footer: '<b>A/C int. Gerencia de Auditoria Interna</b>'
       detailed_report:
         title: '<b><u>INFORME DETALLADO</u></b>'
@@ -306,7 +306,7 @@ es:
       internal_control_qualification:
         header_cycle: '<b>Ciclo</b>'
         header_count_findings: '<b>Cantidad de Observaciones</b>'
-        header_weight: '<b>Ponderador por fecha de los Informes</b>' # REVIEW: Ponderador por fecha de los informes?
+        header_weight: '<b>Ponderador por fecha de los Informes</b>' # REVIEW: No sería "Ponderador por fecha de informe"?
         header_qualification: '<b>Calificación</b>'
         count_weight: '<b>Total ponderación</b>'
         count_cycles: '<b>Cantidad de ciclos</b>'
@@ -348,7 +348,7 @@ es:
       total_score: "Calificación total"
       empty: "Sin calificaciones para el filtro aplicado"
     review_score_details_report:
-      pdf_name: "calificaciones_de_informes_definitivos_detallado_%{from_date}_al_%{to_date}.pdf" # REVIEW: calificaciones_detalladas_de_informes_definitivos? O sea, entiendo que las calificaciones son las detalladas
+      pdf_name: "calificaciones_de_informes_definitivos_detallado_%{from_date}_al_%{to_date}.pdf" # REVIEW: calificaciones_detalladas_de_informes_definitivos? O sea, entiendo que las calificaciones son las detalladas. Hay varios en los que el detallado se le aplica al informe y no a las calificaciones
       title: "CALIFICACIONES DE INFORMES DETALLADO"
       subtitle: "INFORMES DEFINITIVOS"
       brief: "Resumen"
@@ -373,7 +373,7 @@ es:
       oportunities: "Oportunidades"
       without_weaknesses: "Sin hallazgos"
       pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
-      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
+      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA" # REVIEW No falta una preposición? "EN" INFORMES DEFINITIVOS / "DE" INFORMES DEFINITIVOS?
       total: "TOTAL"
 
   conclusion_final_review:
@@ -434,7 +434,7 @@ es:
     oportunities: "OPORTUNIDADES DE MEJORA"
     finding_review_assignments: "HALLAZGOS REVISADOS"
     repeated_findings: "Seguimiento de observaciones"
-    repeated_findings_empty: "No se registran observaciones pendientes de regularización."
+    repeated_findings_empty: "No se registran observaciones pendientes de regularización." # REVIEW Teniendo en cuenta el key, no debería decir "No se registran observaciones reiteradas."?
     present_findings: "Nuevas observaciones"
     present_findings_empty: "No se registran observaciones que mencionar."
     add_recipient: "Agregar nuevo destinatario"
@@ -456,11 +456,11 @@ es:
     detailed_review:
       title: "Informe detallado"
       legend: "Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
-    annex:
+    annex: # REVIEW sobre el texto anterior, cuando dice "en sus respectivos textos ordenados BCRA a la fecha del presente informe" no debería decir "en sus respectivos textos ordenados por el BCRA a la fecha del presente informe"?
       title: "Anexo I"
       legend: "La Auditoría practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
-      workflow_text: "El programa de trabajo elaborado para esta casa, así como su desarrollo y demás elementos, forma parte de los antecedentes obrantes en carpeta de trabajo del presente informe."
       scope: "Alcance de la tarea"
+      workflow_text: "El programa de trabajo elaborado para esta casa, así como su desarrollo y demás elementos, forma parte de los antecedentes obrantes en carpeta de trabajo del presente informe." # REVIEW "para esta casa"? Está bien eso?
       scope_column: "Alcance de la tarea"
       staff: "Personal interviniente"
       satisfactory_control_objective_items: "Resto de los Objetivos de Control"
@@ -845,7 +845,7 @@ es:
     correctly_updated: "Notificación actualizada correctamente."
     stale_object_error: "La notificación no fue actualizada, intente nuevamente."
     confirmed: "Notificación confirmada correctamente."
-    rejected: "Notificación rechazada correctamente, por favor autentíquese e ingrese un comentario de la misma."
+    rejected: "Notificación rechazada correctamente, por favor autentíquese e ingrese un comentario sobre la misma." # REVIEW Cuando hablamos de autenticar sería iniciar sesión? Quizás iniciar sesión es más claro
     confirm: "Confirmar"
     reject: "Rechazar"
     status_unconfirmed: "Sin confirmar"
@@ -901,7 +901,7 @@ es:
     expired_finding_to_manager:
       title: "Hallazgo vencido"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
-      managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama" # REVIEW: No sería hallazgo?
+      managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama" # REVIEW: Estos casos no deberían reemplazarse por hallazgo? Hay varios
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_findings:
@@ -1036,8 +1036,8 @@ es:
     oportunities_work_papers: "Oportunidades"
     follow_up_work_papers: "Seguimiento de observaciones"
     download_work_papers: "Descargar papeles de trabajo"
-    finished_work_papers: "Papeles de trabajo - Conforme auditor"
-    revise_work_papers: "Papeles de trabajo - Revisado supervisor"
+    finished_work_papers: "Papeles de trabajo - Conforme auditor" # REVIEW A que se refiere con "Conforme auditor"? (hay varios)
+    revise_work_papers: "Papeles de trabajo - Revisado supervisor" # REVIEW A que se refiere con "Revisado supervisor"? (hay varios)
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
     other_actions: "Acciones"
@@ -1083,7 +1083,7 @@ es:
       title: "Modificación de responsabilidades en el informe %{review}"
       old_responsible: "Responsable anterior: %{responsible}"
       new_responsible: "Responsable actual: %{responsible}"
-    responsibility_removed: "Ha sido desafectado del informe %{review}"
+    responsibility_removed: "Ha sido desafectado del informe %{review}" # REVIEW: es un mensaje para el user que está usando la app ("Usted ha sido desafectado") o se puede desafectar otro usuario ("El usuario Juanito ha sido desafectado"). Es para saber que incluyo como sujeto en la traducción.
     cannot_be_reassigned: "El usuario no puede ser reasignado, tiene observaciones que dependen de el"
     cannot_be_destroyed: "El usuario no puede ser eliminado, tiene observaciones que dependen de el"
 
@@ -1212,7 +1212,7 @@ es:
       control: "Control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      finding_answer: Respuesta a hallazgo REVIEW Se usa en algún lado? No lo encontré
+      finding_answer: Respuesta a hallazgo
       finding_review_assignment: "Asignación de observación a informe"
       group: "Grupo"
       notification: "Notificación"
@@ -1516,7 +1516,7 @@ es:
       workflow/workflow_items:
         one: "Tarea"
         other: "Tareas"
-        base: ""
+        base: "" # REVIEW Por qué está vacío?
         task: "Tarea"
         start: "Tarea (inicio)"
         end: "Tarea (fin)"

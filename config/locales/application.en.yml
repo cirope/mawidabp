@@ -32,7 +32,7 @@ en:
     edit: "Edit"
     import: "Import"
     insert_item: "Insert item"
-    insert_record_item: "Insert new" # REVIEW donde? qué se inserta? parece que no se usa
+    insert_record_item: "Insert new"
     list: "List"
     modify: "Modify"
     move: "Move"
@@ -87,10 +87,10 @@ en:
     error_file: "error_file"
     header_message: "A problem has been found"
     hide_details: "Hide details"
-    or_send_it_to_the_following_email: "Or to the following email address:" # REVIEW Debe comenzar con may? PARECE QUE NO SE ESTÄ USANDO
-    send_it_to_the_administrator: "And send it to the system administrator via the website:" # REVIEW Donde sale? Debe comenzar con may? PARECE QUE NO SE ESTÄ USANDO
+    or_send_it_to_the_following_email: "Or to the following email address:"
+    send_it_to_the_administrator: "And send it to the system administrator via the website:"
     show_details: "Show details"
-    thank_you_and_apologies_for_the_inconvenience: "Thank you very much and sorry for the inconvenience" # REVIEW Donde sale? Thanks a lot? PARECE QUE NO SE ESTÄ USANDO
+    thank_you_and_apologies_for_the_inconvenience: "Thank you very much and sorry for the inconvenience"
 
   business_unit_type:
     index_title: "Organizational units list"
@@ -289,7 +289,7 @@ en:
         title: '<b><u>EXECUTIVE SUMMARY</u></b>'
         objective_title: '<b><u>OBJECTIVE</u></b>'
         general_conclusion_title: '<b><u>GENERAL CONCLUSION</u></b>'
-        first_footer: '<b>AUS. Alejandro Camnasio</b>' # REVIEW que es AUS?
+        first_footer: '<b>AUS. Alejandro Camnasio</b>'
         second_footer: '<b>"IA/IC Internal Audit Management</b>' # REVIEW por lo que vi, "A/C int." es "Auditoría/Control Interno" y en inglés sería "IA/IC" (Internal Audit/Internal Control). Algún sabio puede confirmar?
       detailed_report:
         title: '<b><u>DETAILED REPORT</u></b>'
@@ -373,7 +373,7 @@ en:
       oportunities: "Opportunities"
       without_weaknesses: "No findings"
       pdf_name: "final_audit_reports_issues_by_audit_type_%{from_date}_to_%{to_date}.pdf"
-      title: "ISSUES/IMPROVEMENT OPPORTUNITIES FINAL AUDIT REPORTS\nTOTALS BY TYPE OF AUDIT" # REVIEW Revisar español
+      title: "ISSUES/IMPROVEMENT OPPORTUNITIES FINAL AUDIT REPORTS\nTOTALS BY TYPE OF AUDIT"
       total: "TOTAL"
 
   conclusion_final_review:
@@ -461,7 +461,7 @@ en:
       legend: "The conducted audit consisted of various controls, which have been evaluated in relation to associated risks, for which reason they are detailed below with their respective ratings, noting that these concepts may be linked to different assessments:"
       workflow_text: "The work program prepared for this house, as well as its development and other elements, is part of the background information in the work folder of this audit report."
       scope: "Task scope"
-      scope_column: "Task scope" # REVIEW Diferencia con el de arriba?
+      scope_column: "Task scope"
       staff: "Intervening staff"
       satisfactory_control_objective_items: "Other Control Objectives"
     bundle:
@@ -567,8 +567,8 @@ en:
     reviews_with_incomplete_work_papers_report_incomplete_title: "Audit reports closed without auditor's approval"
     reviews_with_incomplete_work_papers_report_revised_title: "Audit reports closed without supervisor's review"
     reviews_with_incomplete_work_papers_report:
-      empty_incomplete: "No audit reports closed without auditor's approval in working papers" # REVIEW There are ... (No se cerraron informes sin ...)
-      empty_revised: "No audit reports closed without supervisor's review in working papers" # REVIEW There are ...
+      empty_incomplete: "No audit reports closed without auditor's approval in working papers"
+      empty_revised: "No audit reports closed without supervisor's review in working papers"
     index_title: "Execution reports"
     findings_type_external: "External Audit Findings"
     findings_type_internal: "Internal Audit Findings"
@@ -606,7 +606,7 @@ en:
       duplicated: "Duplicate"
 
   follow_up_audited:
-    index_title: "General reports" # REVIEW Quizás pueda llevar otro nombre...
+    index_title: "General reports"
 
   follow_up_audit:
     index_title: "Audit reports"
@@ -642,8 +642,8 @@ en:
       column_business_unit: "Business Unit"
       column_project: "Project"
       column_review: "Audit report"
-      column_audit_cost: "Number of hours used (sum of follow-up hours by auditors)" # REVIEW total follow-up hours?
-      column_audited_cost: "Number of hours spent on the solution (sum of follow-up hours by auditee)" # REVIEW total follow-up hours?
+      column_audit_cost: "Number of hours used (sum of follow-up hours by auditors)"
+      column_audited_cost: "Number of hours spent on the solution (sum of follow-up hours by auditee)"
       title: "COST ANALYSIS\nOF FOLLOW-UP FINDINGS\nBY INTERNAL AUDIT REPORT"
       weaknesses: "ISSUES"
       oportunities: "IMPROVEMENT OPPORTUNITIES"
@@ -875,7 +875,7 @@ en:
       pending: "Pending notifications"
       unconfirmed: "Unconfirmed notifications"
       confirm: "Confirm notification"
-      the_following_findings_are_still_unconfirmed: "The following findings have been reported but have not received a confirmation" # REVIEW oportunidades de mejora en :es?
+      the_following_findings_are_still_unconfirmed: "The following findings have been reported but have not received a confirmation"
     reassigned_findings:
       new_responsibles:
         one: "Current user: %{responsible}"
@@ -914,7 +914,7 @@ en:
       title: "The group %{name} has been created"
       initial_user: "To start using the system you must first create a user"
       create_user: "Create user"
-      clarification: "You have received this email because you have been assigned a group in the 'Mawidabp' system" # REVIEW no sería más como "usted ha sido agregado a un grupo"?
+      clarification: "You have received this email because you have been assigned a group in the 'Mawidabp' system"
     welcome_email:
       title: "%{name}, your account has been created"
       initial_password: "To start using the system, you must first set your password"
@@ -942,7 +942,7 @@ en:
       with_follow_up_date: "has an implementation date (and it should not)"
       with_solution_date: "has solution date (and it should not)"
       without_answer: "has no answer"
-      without_audited: "has no auditee" # REVIEW entiendo que es un sistantivo, por lo que sería auditee
+      without_audited: "has no auditee"
       without_auditor: "has no auditor"
       without_follow_up_date: "has no implementation date"
       without_solution_date: "has no solution date"
@@ -1009,7 +1009,7 @@ en:
       type_manager: "Manager"
       type_responsible: "Head of internal audit"
       type_audited: "Auditee"
-      audit_team: "Audit Team" # REVIEW donde sale?
+      audit_team: "Audit Team" # REVIEW en :es sale como "Auditoría", donde sale? o a que se refiere?
       others: "Users"
       readonly: "The members cannot be modified, the final audit report has already been issued"
     score_sheet_title: "DETAILED RATING PROCESS FORM"
@@ -1036,8 +1036,8 @@ en:
     oportunities_work_papers: "Opportunities"
     follow_up_work_papers: "Follow-up issues"
     download_work_papers: "Download work papers"
-    finished_work_papers: "Work papers - Auditor approved" # REVIEW conforme auditor?
-    revise_work_papers: "Work Papers - Supervisor revised" # REVIEW conforme supervisor?
+    finished_work_papers: "Work papers - Auditor approved"
+    revise_work_papers: "Work Papers - Supervisor revised"
     notes: "Notes"
     estimated_amount: "Estimated cost in workplan"
     other_actions: "Actions"
@@ -1053,8 +1053,8 @@ en:
     work_papers_recoded: "Work papers were successfully recoded"
     work_papers_recode_failed: "Work papers could not be recoded"
     failed_to_reorder: "Processes could not be reordered"
-    work_papers_marked_as_finished: "Work papers marked as finished auditor" # REVIEW Conforme auditor?
-    work_papers_marked_as_revised: "Work papers marked as revised supervisor" # REVIEW Conforme supervisor?
+    work_papers_marked_as_finished: "Work papers marked as finished auditor"
+    work_papers_marked_as_revised: "Work papers marked as revised supervisor"
     review_qualification_explanation: "The audit report rating is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight is added and the result is divided by the sum of the weights."
     process_control_qualification_explanation: "The business process rating is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are summed and the result is divided by the sum of the weights."
     errors:
@@ -1118,7 +1118,7 @@ en:
         one: "The pending findings from the audit report %{reviews} have been reassigned"
         other: "The pending findings from the audit reports %{reviews} have been reassigned"
     responsibility_release:
-      title: "Disclaimer" # REVIEW Release of responsibilities?
+      title: "Disclaimer"
     unconfirmed_findings: "Unconfirmed issues to this date"
     pdf:
       pdf_name: "user_list.pdf"
@@ -1419,7 +1419,7 @@ en:
       privilege:
         module: "Module"
         read: "Read"
-        modify: "Modify" # REVIEW Edit? donde?
+        modify: "Modify"
         erase: "Remove"
         approval: "Approval"
       process_controls/control_objectives/control:
@@ -1475,7 +1475,7 @@ en:
         user: "Member"
         user_id: "Member"
         include_signature: "Include signature"
-        owner: "Responsible" # REVIEW owner??
+        owner: "Responsible"
       review_user_assignment:
         assignment_type: "Role"
         user: "Member"
@@ -1516,7 +1516,7 @@ en:
       workflow/workflow_items:
         one: "Task"
         other: "Tasks"
-        base: "" # REVIEW nil?
+        base: ""
         task: "Task"
         start: "Task (start)"
         end: "Task (end)"
@@ -1579,7 +1579,7 @@ en:
         organization_role:
           attributes:
             role_id:
-              invalid: "must be only the audited type or another type but not both" # REVIEW auditee?
+              invalid: "must be only the auditee type or another type but not both"
         process_control:
           attributes:
             control_objectives:
