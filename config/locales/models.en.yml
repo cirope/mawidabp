@@ -109,8 +109,8 @@ en:
         one: 'Image'
         other: 'Images'
       issue:
-        one: 'Issue'
-        other: 'Issues'
+        one: 'Record'
+        other: 'Records'
       ldap_config:
         one: 'LDAP configuration'
         other: 'LDAP configurations'

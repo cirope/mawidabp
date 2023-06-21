@@ -1311,7 +1311,7 @@ en:
         auditor_comment: "Auditor comments"
         finished: "Finished"
         exclude_from_score: "Do not rate"
-        issues_count: "Observed cases"
+        issues_count: "Observed records"
         alerts_count: "Number of alerts"
         process_control_id: "Business process"
         effectiveness: "Control effectiveness"

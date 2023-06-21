@@ -367,7 +367,7 @@ es:
         use_suggested_impact: 'Impacto sugerido'
         use_suggested_probability: 'Probabilidad sugerida'
         impact_amount: 'Monto universo'
-        probability_amount: 'Universo en cantidad de casos'
+        probability_amount: 'Universo en cantidad de casos' # REVIEW Con "casos" no se refiere a registros del modelo Issue, cierto?
         organization: 'Organización'
         frequency: 'Frecuencia'
         state_regulations: 'Normativa Estado'

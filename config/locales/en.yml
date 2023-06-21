@@ -136,7 +136,7 @@
     download_pdf: "Summary in PDF"
     add_finding_relation: "Add relation"
     add_task: "Add task"
-    add_issue: "Add issue"
+    add_issue: "Add record"
     add_tagging: "Add tag"
     add_finding_answer: "Add finding"
     add_user: "Add user"
