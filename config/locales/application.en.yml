@@ -1083,7 +1083,7 @@ en:
       title: "Modification of responsibilities in %{review} audit report"
       old_responsible: "Old responsible: %{responsible}"
       new_responsible: "Current responsible: %{responsible}"
-    responsibility_removed: "Have been removed from the %{review} audit report" # REVIEW donde?
+    responsibility_removed: "You have been removed from the %{review} audit report"
     cannot_be_reassigned: "User cannot be reassigned, has issues that depend on them"
     cannot_be_destroyed: "User cannot be deleted, it has issues that depend on them"
 
