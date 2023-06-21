@@ -123,7 +123,7 @@ en:
     generate_score_sheet: "Download detailed rating form"
     generate_global_score_sheet: "Download global rating form"
     download_work_papers: "Download work papers"
-    download_without_score: "Download without score"
+    download_without_score: "Download without rating"
     download_brief: "Download brief"
     download_expanded: "Download expanded"
     create_bundle: "Create file"
@@ -181,13 +181,13 @@ en:
   conclusion_committee_report:
     index_title: "Conclusion reports"
     control_objective_stats_title: 'Issues by control objective'
-    control_objective_stats_by_review_title: 'Issues by control objective without scores' # REVIEW scores?
+    control_objective_stats_by_review_title: 'Issues by control objective without rating'
     benefits_title: 'Benefits / Detriments'
     process_control_stats_title: 'Issues by business process'
     synthesis_report_title: "Executive summary"
     review_stats_report_title: "Audit report statistics"
-    review_scores_report_title: "Audit report scores"
-    review_score_details_report_title: "Detailed audit report scores"
+    review_scores_report_title: "Audit report ratings"
+    review_score_details_report_title: "Detailed audit report ratings"
     nbc_annual_report_title: "Annual summary"
     high_risk_weaknesses_report_title: "High risk issues"
     fixed_weaknesses_report_title: "Fixed issues by risk"
@@ -223,16 +223,16 @@ en:
       pdf_name: 'issues_by_control_objective_%{from_date}_to_%{to_date}.pdf'
       title: "ISSUES GROUPED BY CONTROL OBJECTIVE"
       subtitle: "FINAL AUDIT REPORTS"
-      average_effectiveness: 'Weighted average score'
+      average_effectiveness: 'Weighted average rating'
       average_effectiveness_resume:
         one: '%{effectiveness} - %{count} evaluated audit report'
         other: '%{effectiveness} - %{count} evaluated audit reports'
       without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
-      review_effectiveness_average: 'Weighted average of control objective scores: <b>%{score}%</b>'
+      review_effectiveness_average: 'Weighted average rating of control objectives: <b>%{score}%</b>'
     control_objective_stats_by_review:
-      pdf_name: 'issues_by_control_objective_without_score_%{from_date}_to_%{to_date}.pdf' # REVIEW qualification / stast? x2
-      title: 'ISSUES GROUPED BY CONTROL OBJECTIVE WITHOUT SCORE' # REVIEW QUALIFICATION / STATS? x2
+      pdf_name: 'issues_by_control_objective_without_rating_%{from_date}_to_%{to_date}.pdf'
+      title: 'ISSUES GROUPED BY CONTROL OBJECTIVE WITHOUT RATING'
       subtitle: 'FINAL AUDIT REPORTS'
       without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
@@ -261,13 +261,13 @@ en:
       pdf_name: 'issues_by_business_process_%{from_date}_to_%{to_date}.pdf'
       title: "ISSUES GROUPED BY BUSINESS PROCESS"
       subtitle: "FINAL AUDIT REPORTS"
-      average_effectiveness: 'Weighted average score'
+      average_effectiveness: 'Weighted average rating'
       average_effectiveness_resume:
         one: '%{effectiveness} - %{count} evaluated audit report'
         other: '%{effectiveness} - %{count} evaluated audit reports'
       without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
-      review_effectiveness_average: 'Weighted average of business process scores: <b>%{score}%</b>'
+      review_effectiveness_average: 'Weighted average rating of business processes: <b>%{score}%</b>'
     qa_indicators:
       title: "Internal Audit Quality Management System - Quality Indicators"
       subtitle: ""
@@ -282,7 +282,7 @@ en:
     nbc_annual_report:
       pdf_name: "annual_report_%{from_date}_to_%{to_date}.pdf"
       front_page:
-        first_title: 'Internal Control Qualification of'
+        first_title: 'Internal Control Rating of'
         footer_title: 'Audit report:'
         footer_prepared_by: 'Prepared by Internal Audit - NBCH'
       executive_summary:
@@ -294,39 +294,39 @@ en:
       detailed_report:
         title: '<b><u>DETAILED REPORT</u></b>'
         introduction_and_scope_title: '<b><u>INTRODUCTION AND SCOPE OF WORK DONE</u></b>' # REVIEW CARRIED OUT?
-        classification_methodology: 'The cycle qualification methodology used in the 2019 period was approved by the Audit Committee at its meeting on 05.14.2019 – Minutes No. 294, which we present below:' # REVIEW score?
-        classification_title: '<i><b>Table I: Internal Control Score of NCHB S.A. – %{period}</b></i>' # REVIEW Qualification?
+        classification_methodology: 'The rating methodology for cycles used in the 2019 period was approved by the Audit Committee at its meeting on 14.05.2019 - Minutes No. 294, which we present below:'
+        classification_title: '<i><b>Table I: Internal Control Rating of NCHB S.A. – %{period}</b></i>'
         conclusions_title: '<u><b>CONCLUSIONS</b></u>'
-        conclusions_body: "Based on Table I <i>“NCHB S.A. Internal Control Qualification.”</i>, it can be seen that the Entity's internal control qualification, according to the parameters used, is <b>“%{calification}”.</b>" # REVIEW score? voz pasiva?
+        conclusions_body: "Based on Table I <i>“NCHB S.A. Internal Control Rating.”</i>, it can be seen that the Entity's internal control rating, according to the parameters used, is <b>“%{calification}”.</b>"
       cycle_qualification:
         header_number: '<b>N°</b>' # REVIEW Quizásse pudiera usar numeral...
-        header_qualification: '<b>Qualification</b>' # REVIEW Score?
+        header_qualification: '<b>Rating</b>'
         header_weight: '<b>Weight</b>'
         header_high_risk_observations: '<b>Number of High Risk Issues</b>'
       internal_control_qualification:
         header_cycle: '<b>Cycle</b>'
         header_count_findings: '<b>Number of Issues</b>'
         header_weight: '<b>Weighting by audit report date</b>'
-        header_qualification: '<b>Qualification</b>' # REVIEW Score?
+        header_qualification: '<b>Rating</b>'
         count_weight: '<b>Total weight</b>'
         count_cycles: '<b>Number of cycles</b>'
         final_weight: '<b>Weight</b>'
-        final_qualification: '<b>Internal Control Qualification</b>'
+        final_qualification: '<b>Internal Control Rating</b>'
     synthesis_report:
       pdf_name: "executive_summary_final_audit_reports_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Findings"
       external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "ISSUES/IMPROVEMENT OPPORTUNITIES\nOF FINAL AUDIT REPORTS"
-      organization_score: "Organization Score: %{score}% (*)"
-      organization_score_note: "(*) The organization score is obtained as an average of the scores obtained in the audit types (%{audit_types})."
+      organization_score: "Organization Rating: %{score}% (*)"
+      organization_score_note: "(*) The organization rating is obtained as an average of the ratings obtained in the audit types (%{audit_types})."
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
       without_weaknesses: "No findings"
-      references: "References:\n\n(1) Score: the score (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their score from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Issues: lists the titles of the detected issues. If there are no issues, the legend \"No issues\" is displayed."
+      references: "References:\n\n(1) Score: the rating (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their rating from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Issues: lists the titles of the detected issues. If there are no issues, the legend \"No issues\" is displayed."
       generic_score_average:
-        one: 'Average of %{audit_type} scores in a audit report'
-        other: 'Average of %{audit_type} scores in %{count} audit reports'
+        one: 'Average of %{audit_type} ratings in a audit report'
+        other: 'Average of %{audit_type} ratings in %{count} audit reports'
     review_stats_report:
       pdf_name: "final_audit_report_statistics_%{from_date}_to_%{to_date}.pdf"
       title: "AUDIT REPORT STATISTICS"
@@ -337,25 +337,25 @@ en:
         title: "Audit reports by tag"
         footnote: "The tag-audit report pair is counted. So, for example, a audit report with two tags will be counted twice and a audit report without tags will be ignored."
       weaknesses_by_score:
-        title: "Issues by risk, priority and audit report score"
+        title: "Issues by risk, priority and audit report rating"
         total: "Total"
     review_scores_report:
-      pdf_name: "final_audit_report_scores_%{from_date}_to_%{to_date}.pdf"
-      title: "AUDIT REPORT SCORES"
+      pdf_name: "final_audit_report_ratings_%{from_date}_to_%{to_date}.pdf"
+      title: "AUDIT REPORT RATINGS"
       subtitle: "FINAL AUDIT REPORTS"
-      review_score: "Audit report score"
-      business_unit_score: "Business units score"
-      total_score: "Total score"
-      empty: "No scores for the applied filter"
+      review_score: "Audit report rating"
+      business_unit_score: "Business units rating"
+      total_score: "Total rating"
+      empty: "No ratings for the applied filter"
     review_score_details_report:
-      pdf_name: "detailed_final_audit_report_scores_%{from_date}_to_%{to_date}.pdf"
-      title: "DETAILED AUDIT REPORT SCORES"
+      pdf_name: "detailed_final_audit_report_ratings_%{from_date}_to_%{to_date}.pdf"
+      title: "DETAILED AUDIT REPORT RATINGS"
       subtitle: "FINAL AUDIT REPORTS"
       brief: "Summary"
       details: "Details"
       count: "Quantity"
       share: "Participation"
-      empty: "No scores for the applied filter"
+      empty: "No ratings for the applied filter"
     weaknesses_by_state:
       pdf_name: "final_audit_report_findings_by_status_%{from_date}_to_%{to_date}.pdf"
       title: "FINAL AUDIT REPORT FINDINGS\nTOTALS BY STATUS"
@@ -390,15 +390,15 @@ en:
     download_work_papers: "Download work papers"
     create_bundle: "Create file"
     send_by_email: "Send by email"
-    download_without_control_objectives_excluded_from_score: "Download without control objectives excluded from score" # REVIEW unscored? La del key?
+    download_without_control_objectives_excluded_from_score: "Download without unrated control objectives"
     download_expanded: "Download expanded"
-    download_without_score: "Download without score"
+    download_without_score: "Download without rating"
     download_brief: "Download brief"
-    hide_control_objectives_excluded_from_score: "Hide unscored control objectives" # REVIEW unscored? La del key?
+    hide_control_objectives_excluded_from_score: "Hide unrated control objectives"
     send_type:
       normal: "Full audit report"
       brief: "Summary audit report"
-      without_score: "Unscored audit report"
+      without_score: "Audit report without rating"
       expanded: "Extended audit report"
     pdf:
       pdf_name: "list_of_final_audit_reports.pdf"
@@ -447,7 +447,7 @@ en:
       project: "The audit carried out was circumscribed to the review of:"
       project_alt: "In accordance with the provisions of the Professional Services Rental proposal, accepted in all its terms and conditions by Naranja Digital Compañía Financiera S.A.U. dated January 21, 2021, we present the Audit report corresponding to the following process:"
       risk_exposure: "Risk exposure of the evaluated process: <b>%{risk}</b> (Risk Matrix algorithmic formula)"
-      score: "Score"
+      score: "Rating"
       evolution: "EVOLUTION (*)"
       main_weaknesses: "Main Weaknesses"
       other_weaknesses: "Other issues"
@@ -458,7 +458,7 @@ en:
       legend: "During the current month an Audit on the reference process has been carried out.\nIn compliance with the “Minimum Standards on Internal Controls”, the “Guidelines for Risk Management in Financial Institutions”, the “Guidelines for the Corporate Governance” in their respective texts ordered by the BCRA as of the date of this audit report, and of the “Minimum Requirements for Management, Implementation and Control of Risks Related to Information Technology, Information Systems and Associated Resources for Financial Entities” regulated by the BCRA, internal control has been evaluated as a process designed to provide reasonable assurance regarding the achievement of the following objectives: Objectives of the Entity, Effectiveness and Efficiency of operations, Reliability of the Accounting Information and Compliance with the laws and regulations applicable in the operation analyzed.\nThe implementation of the recommendations cited in this report will allow to fulfill: i) the requirements of the audit report prepared by the so-called Committee of Sponsoring Organizations of the Treadway Commission (COSO) on the evaluation of internal control, international methodology used for this Audit; ii) the requirements of the COBIT Control Model (Governance, Control and Audit for Information and Related Technology), an international methodology used for this Systems Audit and which includes, among others, ISO Technical Standards and ISO 9000 qualification criteria, which will allow the Bank to fit within International Safety and Quality Control Standards."
     annex: # REVIEW arriba: lo entre comillas debería ir en español? | Los informes que menciona son los audit report u otro informe?
       title: "Annex I"
-      legend: "The audit carried out consisted of different controls, which have been evaluated in relation to the associated risks, for which reason they are detailed below with their respective qualification, clarifying that these concepts may be linked to different assessments:"
+      legend: "The conducted audit consisted of various controls, which have been evaluated in relation to associated risks, for which reason they are detailed below with their respective ratings, noting that these concepts may be linked to different assessments:"
       workflow_text: "The work program prepared for this house, as well as its development and other elements, is part of the background information in the work folder of this audit report."
       scope: "Task scope"
       scope_column: "Task scope" # REVIEW Diferencia con el de arriba?
@@ -491,7 +491,7 @@ en:
       control_objective_oportunities: "Opportunities"
       finding_work_papers: "Finding Work Papers"
     scope_detail:
-      title: "SCORE OF THE DIFFERENT ITEMS EVALUATED WITHIN THE SCOPE OF THIS AUDIT" # REVIEW QUALIFICATION?
+      title: "RATING OF THE DIFFERENT ITEMS EVALUATED WITHIN THE SCOPE OF THIS AUDIT"
 
   control_objective:
     errors:
@@ -511,19 +511,19 @@ en:
     add_oportunity: "Add new improvement opportunity"
     add_weakness: "Add new issue"
     add_work_paper: "Add work paper"
-    add_business_unit_score: "Add business unit score"
+    add_business_unit_score: "Add business unit rating"
     add_business_unit_type: "Add business units by type"
     readonly: "The control objective cannot be modified, the final audit report has already been issued"
     without_work_papers: "No work papers"
     not_rated: "Not rated"
-    not_apply_text: 'Does not apply rate' # REVIEW Donde sale?
-    excluded_from_score: "Not taken into account in the audit report score"
+    not_apply_text: 'No rating applies'
+    excluded_from_score: "Not taken into account in the audit report rating"
     not_applicable: "Not applicable"
     previous_effectiveness: "Previous effectiveness %{effectiveness}%"
     errors:
       not_finished: "is not finished"
       audit_date_ahead_of_issue_date: "audit date is ahead than audit report issue date"
-      without_score: "without scoring"
+      without_score: "without rating"
       without_relevance: "without relevance"
       without_audit_date: "without audit date"
       without_effects: "without effects"
@@ -654,7 +654,7 @@ en:
   follow_up_committee_report:
     index_title: "Committee reports"
     control_objective_stats_title: 'Issues by control objective'
-    control_objective_stats_by_review_title: 'Issues by control objective without score' # REVIEW qualification?
+    control_objective_stats_by_review_title: 'Issues by control objective without rating'
     benefits_title: 'Benefits / Detriments'
     process_control_stats_title: 'Issues by business process'
     control_effectiveness: "Control effectiveness"
@@ -707,15 +707,15 @@ en:
       pdf_name: 'issues_by_control_objective_%{from_date}_to_%{to_date}.pdf'
       title: "ISSUES GROUPED BY CONTROL OBJECTIVE"
       subtitle: "AUDIT REPORT FOLLOW-UP"
-      average_effectiveness: 'Weighted average score' # REVIEW qualification?
+      average_effectiveness: 'Weighted average rating'
       average_effectiveness_resume:
         one: '%{effectiveness} - %{count} evaluated audit report'
         other: '%{effectiveness} - %{count} evaluated audit reports'
       without_weaknesses: 'No issues'
-      review_effectiveness_average: 'Weighted average of control objective scores: <b>%{score}%</b>'
+      review_effectiveness_average: 'Weighted average rating of control objectives: <b>%{score}%</b>'
     control_objective_stats_by_review:
-      pdf_name: 'issues_by_control_objective_without_score_%{from_date}_to_%{to_date}.pdf' # REVIEW qualification / stast? x2
-      title: 'ISSUES GROUPED BY CONTROL OBJECTIVE WITHOUT SCORE' # REVIEW QUALIFICATION / STATS? x2
+      pdf_name: 'issues_by_control_objective_without_rating_%{from_date}_to_%{to_date}.pdf'
+      title: 'ISSUES GROUPED BY CONTROL OBJECTIVE WITHOUT RATING'
       subtitle: "AUDIT REPORT FOLLOW-UP"
       without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
@@ -744,13 +744,13 @@ en:
       pdf_name: 'issues_by_business_process_%{from_date}_to_%{to_date}.pdf'
       title: "ISSUES GROUPED BY BUSINESS PROCESS"
       subtitle: "AUDIT REPORT FOLLOW-UP"
-      average_effectiveness: 'Weighted average score'
+      average_effectiveness: 'Weighted average rating'
       average_effectiveness_resume:
         one: '%{effectiveness} - %{count} evaluated audit report'
         other: '%{effectiveness} - %{count} evaluated audit reports'
       without_weaknesses: 'No issues'
       without_audits_in_the_period: 'No audits in the period'
-      review_effectiveness_average: 'Weighted average of business process scores: <b>%{score}%</b>'
+      review_effectiveness_average: 'Weighted average rating of business processes: <b>%{score}%</b>'
     qa_indicators:
       without_data: "No data for the entered date range"
       title: "Internal Audit Quality Management System - Quality Indicators (Monitoring)"
@@ -763,7 +763,7 @@ en:
         production_level: "Production Level"
         highest_solution_rate: "Highest Risk Issues Solution"
         medium_solution_rate: "Medium Risk Issues Solution"
-        score_average: "Audit report score"
+        score_average: "Audit report rating"
         digitalized: "Digitization"
         ancient_medium_risk_weaknesses: "Aged Medium Risk Issues"
     synthesis_report:
@@ -772,20 +772,20 @@ en:
       external_audit_weaknesses: "External Audit Issues"
       title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "FOLLOW-UP OF ISSUES/IMPROVEMENT OPPORTUNITIES"
-      organization_score: "Organization score: %{score}% (*)"
-      organization_score_note: "(*) The organization score is obtained as an average of the scores obtained in the audit types (%{audit_types})."
+      organization_score: "Organization rating: %{score}% (*)"
+      organization_score_note: "(*) The organization rating is obtained as an average of the ratings obtained in the audit types (%{audit_types})."
       without_audits_in_the_period: "No audits in the period"
       without_audits_in_the_interval: "No audits in the selected interval"
       without_weaknesses: "No issues"
       without_oportunities: "No improvement opportunities" # KEY_TO_FIX without_opportunities?
       generic_score_average:
-        one: 'Average of %{audit_type} scores in a audit report'
-        other: 'Average of %{audit_type} scores in %{count} audit report'
+        one: 'Average of %{audit_type} ratings in a audit report'
+        other: 'Average of %{audit_type} ratings in %{count} audit report'
       repeated_count:
         one: "A repeated finding"
         other: "%{count} repeated findings"
-      total_score_average: "Total average scores (%{reference })"
-      references: "References:\n\n(1) Score: the score (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their score from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Issues: lists the titles of the detected issues. If there are no issues, the legend \"No issues\" is displayed."
+      total_score_average: "Total average ratings (%{reference })"
+      references: "References:\n\n(1) Score: the rating (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their rating from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Issues: lists the titles of the detected issues. If there are no issues, the legend \"No issues\" is displayed."
     review_stats_report:
       pdf_name: "final_audit_report_statistics_%{from_date}_to_%{to_date}.pdf"
       title: "AUDIT REPORT STATISTICS"
@@ -796,7 +796,7 @@ en:
         title: "Audit reports by label"
         footnote: "The tag-audit report pair is counted. So, for example, a audit report with two tags will be counted twice and a audit report without tags will be ignored."
       weaknesses_by_score:
-        title: "Issues by risk, priority and audit report score"
+        title: "Issues by risk, priority and audit report rating"
         total: "Total"
     weaknesses_by_state:
       pdf_name: "monitoring_issues_by_status_%{from_date}_to_%{to_date}.pdf"
@@ -993,7 +993,7 @@ en:
     readonly: "The audit report cannot be modified, the final audit report has already been issued"
     with_final_review: "With final audit report"
     without_final_review: "Without final audit report"
-    without_score: "Without score" # REVIEW Do not score?
+    without_score: "Do not rate"
     weakness_from_template: "Issue created from template"
     repeated_weaknesses: "Repeated"
     old_weaknesses: "Old data"
@@ -1020,13 +1020,13 @@ en:
     audit_period: "%{start} to %{end}"
     audit_period_title: "AUDITING PERIOD"
     auditors: "AUDITORS"
-    score: "SCORE"
+    score: "RATING"
     control_objectives_effectiveness: "Control effectiveness"
     control_objectives_relevance: "Weight"
     oportunities_summary: "Improvement opportunities sorted by status" # KEY_TO_FIX opportunities_summary?
     oportunities_count_summary: "Number of improvement opportunities sorted by status" # KEY_TO_FIX opportunities_count_summary?
-    weaknesses_summary: "Summary of issues that support the score given (ordered by risk importance (%{risks}) and then by issue status)"
-    weaknesses_count_summary: "Number of issues that support the given score (ordered by risk importance (%{risks}) and then by issue status)"
+    weaknesses_summary: "Summary of issues that support the rating given (ordered by risk importance (%{risks}) and then by issue status)"
+    weaknesses_count_summary: "Number of issues that support the given rating (ordered by risk importance (%{risks}) and then by issue status)"
     weaknesses_count: "Number of issues"
     oportunities_count: "Number of Improvement Opportunities" # KEY_TO_FIX opportunities_count?
     control_objectives_work_papers: "Control objectives"
@@ -1055,11 +1055,11 @@ en:
     failed_to_reorder: "Processes could not be reordered"
     work_papers_marked_as_finished: "Work papers marked as finished auditor" # REVIEW Conforme auditor?
     work_papers_marked_as_revised: "Work papers marked as revised supervisor" # REVIEW Conforme supervisor?
-    review_qualification_explanation: "The audit report qualification is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight is added and the result is divided by the sum of the weights."
-    process_control_qualification_explanation: "The business process qualification is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are summed and the result is divided by the sum of the weights."
+    review_qualification_explanation: "The audit report rating is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight is added and the result is divided by the sum of the weights."
+    process_control_qualification_explanation: "The business process rating is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are summed and the result is divided by the sum of the weights."
     errors:
       can_not_be_destroyed: "Audit report cannot be deleted"
-      without_score: "has no audit score"
+      without_score: "has no audit rating"
       without_survey: "has no survey"
       without_audited: "has no audited user"
       without_file_model: "has no attachment"
@@ -1277,7 +1277,7 @@ en:
         summary: "Summary"
         recipients: "Audit report recipients"
         sectors: "Sectors/departments involved"
-        evolution: "Score evolution"
+        evolution: "Rating evolution"
         evolution_justification: "Evolution justification"
         observations: "Other considerations"
         main_weaknesses_text: "Main weaknesses"
@@ -1304,13 +1304,13 @@ en:
         control_objective_id: "Control objective"
         control_objective_text: "Control objective"
         relevance: "Importance"
-        design_score: "Design test score"
-        compliance_score: "Compliance test score"
-        sustantive_score: "Substantive evidence score" # KEY_TO_FIX substantive_score?
+        design_score: "Design test rating"
+        compliance_score: "Compliance test rating"
+        sustantive_score: "Substantive evidence rating"
         audit_date: "Audit date"
         auditor_comment: "Auditor comments"
         finished: "Finished"
-        exclude_from_score: "Do not score"
+        exclude_from_score: "Do not rate"
         issues_count: "Observed cases"
         alerts_count: "Number of alerts"
         process_control_id: "Business process"
@@ -1340,10 +1340,10 @@ en:
         file_content_type: "Work paper (file type)"
         file_file_size: "Work paper (file size)"
       control_objective_item/business_unit_scores:
-        business_unit_id: 'Business unit score (business unit)'
-        design_score: 'Business unit score (design tests)'
-        compliance_score: 'Business unit score (compliance tests)'
-        sustantive_score: 'Business unit score (substantive tests)' # KEY_TO_FIX substantive_score?
+        business_unit_id: 'Business unit rating (business unit)'
+        design_score: 'Business unit rating (design tests)'
+        compliance_score: 'Business unit rating (compliance tests)'
+        sustantive_score: 'Business unit rating (substantive tests)'
       cost:
         cost: "Time spent"
         description: "Description of the activities carried out"
@@ -1441,12 +1441,12 @@ en:
         plan_item_id: "Project"
         plan_item: "Project"
         file_model_id: "Attachments" # REVIEW Annexes?
-        score: "Score"
-        score_alt: "Compliance score"
+        score: "Rating"
+        score_alt: "Compliance rating"
         scope: "Audit scope"
         risk_exposure: "Risk exposure"
-        manual_score: "Audit score"
-        manual_score_alt: "Compliance audit score"
+        manual_score: "Audit rating"
+        manual_score_alt: "Compliance audit rating"
         include_sox: "Include SOX test"
         work_papers: "Work papers"
         review_user_assignments: "Members"
