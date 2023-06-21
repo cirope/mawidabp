@@ -1212,7 +1212,7 @@ en:
       control: "Control"
       control_objective_item: "Control objective"
       cost: "Cost"
-      finding_answer: "Finding answer"
+      finding_answer: "Response to finding"
       finding_review_assignment: "Assignment of issue to audit report"
       group: "Group"
       notification: "Notification"
