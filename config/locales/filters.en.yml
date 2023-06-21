@@ -17,6 +17,6 @@ en:
       order_by:
         issue_date: 'Issue date'
         risk: 'Risk'
-        first_follow_up_date: 'First follow-up date'
+        first_follow_up_date: 'First implementation date'
       repeated:
         allow_latest: 'Show latest repeated'
