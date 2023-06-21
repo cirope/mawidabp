@@ -1497,7 +1497,7 @@ es:
         name_identifier_format: 'Formato del identificador de nombre'
         assertion_consumer_service_binding: 'Enlace de Servicio de consumidor de aserciones'
         idp_cert: 'Certificado (Base64)'
-        default_role_for_users: 'Role por defecto para usuarios'
+        default_role_for_users: 'Rol por defecto para usuarios'
       work_paper:
         name: "Nombre"
         code: "Código"
