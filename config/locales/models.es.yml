@@ -191,6 +191,7 @@ es:
         other: 'Valores de evaluación de riesgo'
       saml_provider:
         one: 'Configuración SAML'
+        other: 'Configuraciones SAML'
       setting:
         one: 'Configuración'
         other: 'Configuraciones'

@@ -28,26 +28,26 @@ en:
   activerecord:
     models:
       achievement:
-        one: 'Estimated benefit / harm'
+        one: 'Estimated benefit / detriment'
         other: 'Estimated benefits / detriments'
       annex:
-        one: 'Appendix'
-        other: 'Annexes'
+        one: 'Attachment'
+        other: 'Attachments'
       activity:
         one: 'Activity'
         other: 'Activities'
       activity_group:
         one: 'Activity group'
-        other: 'Activities group'
+        other: 'Activity groups'
       answer:
         one: 'Response'
         other: 'Responses'
       answer_multi_choice:
         one: 'Multiple choice'
-        other: 'Multiple options'
+        other: 'Multiple choices'
       answer_option:
-        one: 'Response Choice'
-        other: 'Response Options'
+        one: 'Response option'
+        other: 'Response options'
       answer_written:
         one: 'Written response'
         other: 'Written responses'
@@ -55,23 +55,23 @@ en:
         one: 'Option yes or no'
         other: 'Options yes or no'
       benefit:
-        one: 'Benefit / Harm'
+        one: 'Benefit / Detriment'
         other: 'Benefits / Detriments'
       best_practice:
         one: 'Best practice'
         other: 'Best practices'
       best_practice_comment:
-        one: 'Auditor comment (good practice)'
-        other: 'Auditor comments (good practice)'
+        one: 'Auditor comment (best practice)'
+        other: 'Auditor comments (best practice)'
       business_unit:
-        one: 'Business Unit'
+        one: 'Business unit'
         other: 'Business units'
       business_unit_kind:
         one: 'Type of business unit'
         other: 'Types of business unit'
       business_unit_score:
-        one: 'Business unit qualification'
-        other: 'Business unit qualifications'
+        one: 'Business unit rating'
+        other: 'Business unit ratings'
       closing_interview:
         one: 'Closing interview'
         other: 'Closing interviews'
@@ -112,8 +112,8 @@ en:
         one: 'Issue'
         other: 'Issues'
       ldap_config:
-        one: 'LDAP Configuration'
-        other: 'LDAP Configurations'
+        one: 'LDAP configuration'
+        other: 'LDAP configurations'
       license:
         one: 'License'
         other: 'Licenses'
@@ -121,8 +121,8 @@ en:
         one: 'Login record'
         other: 'Login records'
       memo:
-        one: 'External report'
-        other: 'External reports'
+        one: 'External audit report'
+        other: 'External audit reports'
       news:
         one: 'News'
         other: 'News'
@@ -191,6 +191,7 @@ en:
         other: 'Risk assessment values'
       saml_provider:
         one: 'SAML configuration'
+        other: 'SAML configurations'
       setting:
         one: 'Settings'
         other: 'Settings'
@@ -214,7 +215,7 @@ en:
         other: 'Issues'
       weakness_template:
         one: 'Issue template'
-        other: 'Issues templates'
+        other: 'Issue templates'
       work_paper:
         one: 'Working paper'
         other: 'Working papers'
