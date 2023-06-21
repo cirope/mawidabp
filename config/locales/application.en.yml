@@ -1245,7 +1245,7 @@ en:
         require_tag: "Require tag in audit report"
         require_counts: "Require counts on control targets"
         hide_review_logo: "Hide logo in audit reports"
-        independent_identification: "Independent identification" # REVIEW google lo tradujo como numbering
+        independent_identification: "Independent numbering"
         shared_business_units: "Shared business units"
         without_number: "No number"
         reviews_for: "Audit reports for"
