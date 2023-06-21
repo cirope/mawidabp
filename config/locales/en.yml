@@ -169,12 +169,12 @@
       one: "Auditee"
       other: "Auditees"
     audited_users:
-      one: "Audited File"
+      one: "Audited file"
       other: "Audited files"
     readonly: "The finding cannot be created or modified, the final audit report has already been issued"
     responsibles:
       one: "Responsible"
-      other: "Responsible"
+      other: "Responsibles"
     responsible_users:
       one: "Responsible file"
       other: "Responsible files"
