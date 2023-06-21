@@ -49,18 +49,18 @@ en:
 
   benefits:
     index:
-      title: 'Benefit / Harm list'
+      title: 'Benefit / Detriment list'
     kinds:
       benefit_tangible: 'Tangible benefit'
       benefit_intangible: 'Intangible benefit'
-      damage_tangible: 'Tangible harm'
-      damage_intangible: 'Intangible harm'
+      damage_tangible: 'Tangible detriment'
+      damage_intangible: 'Intangible detriment'
     show:
-      title: 'Benefit / Harm details'
+      title: 'Benefit / Detriment details'
     new:
-      title: 'Add benefit / harm'
+      title: 'Add benefit / detriment'
     edit:
-      title: 'Edit benefit / harm'
+      title: 'Edit benefit / detriment'
 
   best_practices:
     index:
