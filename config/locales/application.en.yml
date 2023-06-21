@@ -1420,7 +1420,7 @@ en:
         module: "Module"
         read: "Read"
         modify: "Modify" # REVIEW Edit? donde?
-        erase: "Erase"
+        erase: "Remove"
         approval: "Approval"
       process_controls/control_objectives/control:
         effects: "Effects"
