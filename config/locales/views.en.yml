@@ -380,7 +380,7 @@ en:
       material_resources_abbr: 'MR'
       material_resources: 'Material resources'
     item_status:
-      note: 'Status must be read as: C = Concluded; E = Executing in time; E (FP) = Executing overtime; R = Delayed'
+      note: 'Status must be read as: C = Concluded; E = Executing (in time); E (O) = Executing (overtime); D = Delayed'
       concluded:
         long: 'Concluded'
         short: 'C'
