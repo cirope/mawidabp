@@ -13,11 +13,11 @@ every 5.minutes do
   runner_file 'runners/every_5_minutes.rb'
 end
 
-every 1.day, at: '20:00' do
+every 1.day, at: '8:00' do
   runner_file 'runners/daily.rb'
 end
 
-every :thursday, at: '20:00' do
+every :thursday, at: '8:00' do
   runner_file 'runners/weekly.rb'
 end
 
