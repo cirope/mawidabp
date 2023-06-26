@@ -302,7 +302,7 @@ es:
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
         date_charge: 'Fecha de alta' # REVIEW: Que sería esta fecha? La fecha en la que se crea el objetivo de control?
-        affected_sector_id: 'Sector del banco afectado al alerta' # REVIEW No sería "afectado por la alerta"?
+        affected_sector_id: 'Sector del banco afectado al alerta'
         control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
