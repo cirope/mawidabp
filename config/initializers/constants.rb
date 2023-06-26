@@ -1,20 +1,21 @@
+# Variable para setear cookies de session
 COOKIES_DOMAIN = ".#{ENV['APP_HOST'].sub /:.*/, ''}"
+SHARED_SESSION = ENV['SHARED_SESSION'] == 'true'
 # Dirección del correo electrónico de soporte
 SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
-# Ruta hasta el directorio de configuración
-CONFIG_PATH = File.join(Rails.root, 'config', File::SEPARATOR).freeze
-# Ruta hasta el directorio público
-PUBLIC_PATH = File.join(Rails.root, 'public', File::SEPARATOR).freeze
-# Ruta hasta el directorio privado
-PRIVATE_PATH = File.join(Rails.root, 'private', File::SEPARATOR).freeze
+# Ruta relativa directorio privado de almacenamiento de archivos
+RELATIVE_PRIVATE_PATH =
+  if Rails.env.test?
+    File.join('test', 'private').freeze
+  else
+    File.join('private').freeze
+  end
+# Ruta absoluta directorio privado de almacenamiento de archivos
+PRIVATE_PATH = File.join(Rails.root, RELATIVE_PRIVATE_PATH).freeze
 # Ruta al directorio temporal
-TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
+TEMP_PATH = File.join(Rails.root, 'tmp').freeze
 # Prefijo de la organización para administrar grupos
 APP_ADMIN_PREFIXES = ['admin', 'www'].freeze
-# Ruta a los archivos subidos a la aplicación
-APP_FILES_PATH = File.join(PRIVATE_PATH, 'file_models', File::SEPARATOR).freeze
-# Ruta a las imágenes subidas a la aplicación
-APP_IMAGES_PATH = File.join(PRIVATE_PATH, 'image_models', File::SEPARATOR).freeze
 # Variable con los idiomas disponibles (Debería reemplazarse con
 # I18.available_locales cuando se haya completado la traducción a Inglés)
 AVAILABLE_LOCALES = [:es].freeze

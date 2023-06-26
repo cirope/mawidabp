@@ -142,10 +142,10 @@ class PlanItemTest < ActiveSupport::TestCase
     assert PlanItem.list_unused((periods :current_period).id).blank?
   end
 
-  test 'should return blank unused because current user dont have business_unit' do
+  test 'should return blank unused because the user does not have business unit and auxiliary business unit type of this' do
     Current.user = users :poll
 
-    PlanItem.create!(
+    new_free_plan_item = PlanItem.create!(
       project: 'free plan item',
       start: 10.days.ago.to_date.to_s(:db),
       end: 10.days.from_now.to_date.to_s(:db),
@@ -156,11 +156,61 @@ class PlanItemTest < ActiveSupport::TestCase
       business_unit: business_units(:business_unit_three)
     )
 
+    AuxiliarBusinessUnitType.create!(
+      plan_item: new_free_plan_item,
+      business_unit_type: business_unit_types(:bcra_google)
+    )
+
     assert PlanItem.list_unused((periods :current_period).id).blank?
   end
 
-  test 'should return unused plan item' do
-    new_plan_item = PlanItem.create!(
+  test 'should return unused because user have auxiliary business unit type' do
+    Current.user = users :poll
+
+    new_free_plan_item = PlanItem.create!(
+      project: 'free plan item',
+      start: 10.days.ago.to_date.to_s(:db),
+      end: 10.days.from_now.to_date.to_s(:db),
+      order_number: 7,
+      scope: users(:committee),
+      risk_exposure: 'high',
+      plan: plans(:current_plan),
+      business_unit: business_units(:business_unit_three)
+    )
+
+    AuxiliarBusinessUnitType.create!(
+      plan_item: new_free_plan_item,
+      business_unit_type: business_unit_types(:cycle)
+    )
+
+    reponse = PlanItem.list_unused((periods :current_period).id)
+
+    assert reponse.present?
+    assert reponse.include?(new_free_plan_item)
+  end
+
+  test 'should return unused because user have business unit' do
+    Current.user = users :poll
+
+    new_free_plan_item = PlanItem.create!(
+      project: 'free plan item',
+      start: 10.days.ago.to_date.to_s(:db),
+      end: 10.days.from_now.to_date.to_s(:db),
+      order_number: 7,
+      scope: users(:committee),
+      risk_exposure: 'high',
+      plan: plans(:current_plan),
+      business_unit: business_units(:business_unit_one)
+    )
+
+    reponse = PlanItem.list_unused((periods :current_period).id)
+
+    assert reponse.present?
+    assert reponse.include?(new_free_plan_item)
+  end
+
+  test 'should return unused plan item because user does not have business units' do
+    new_free_plan_item = PlanItem.create!(
       project: 'free plan item',
       start: 10.days.ago.to_date.to_s(:db),
       end: 10.days.from_now.to_date.to_s(:db),
@@ -174,7 +224,67 @@ class PlanItemTest < ActiveSupport::TestCase
     reponse = PlanItem.list_unused((periods :current_period).id)
 
     assert reponse.present?
-    assert reponse.include?(new_plan_item)
+    assert reponse.include?(new_free_plan_item)
+  end
+
+  test 'should return all plan items when user does not have business unit types' do
+    assert_equal PlanItem.allowed_by_business_units_and_auxiliar_business_units_types.count,
+                 PlanItem.all.count
+  end
+
+  test 'should return plan items of a business unit types' do
+    Current.user.business_unit_types << business_unit_types(:cycle)
+
+    expected_count = PlanItem.where(business_unit: Current.user.business_units)
+                             .count
+
+    assert_equal PlanItem.allowed_by_business_units_and_auxiliar_business_units_types.count, 
+                 expected_count
+  end
+
+  test 'should return plan items of a auxiliar business unit types' do
+    Current.user.business_unit_types << business_unit_types(:bcra_google)
+
+    AuxiliarBusinessUnitType.create!(
+      plan_item: plan_items(:current_plan_item_1),
+      business_unit_type: business_unit_types(:bcra_google)
+    )
+
+    expected_count = PlanItem.left_joins(:auxiliar_business_unit_types)
+                             .where(auxiliar_business_unit_types: {
+                                      business_unit_type: Current.user.business_unit_types
+                                    })
+                             .count
+
+    assert_equal PlanItem.allowed_by_business_units_and_auxiliar_business_units_types.count, 
+                 expected_count
+  end
+
+  test 'should return plan items of a auxiliar business unit types and business units' do
+    Current.user.business_unit_types << business_unit_types(:consolidated_substantive)
+    Current.user.business_unit_types << business_unit_types(:bcra_google)
+
+    AuxiliarBusinessUnitType.create!(
+      plan_item: plan_items(:current_plan_item_2),
+      business_unit_type: business_unit_types(:bcra_google)
+    )
+
+    expected_count = PlanItem.left_joins(:auxiliar_business_unit_types)
+                             .where(auxiliar_business_unit_types: {
+                                      business_unit_type: Current.user.business_unit_types
+                                    })
+                             .or(PlanItem.where(business_unit_id: Current.user.business_units))
+                             .count
+
+    assert_equal PlanItem.allowed_by_business_units_and_auxiliar_business_units_types.count, 
+                 expected_count
+  end
+
+  test 'should return blank plan items when any have same business unit or auxiliar business unit' do
+    Current.user.business_unit_types << business_unit_types(:bcra_google)
+
+    assert_equal PlanItem.allowed_by_business_units_and_auxiliar_business_units_types.count, 
+                 0
   end
 
   test 'completed_early status' do
@@ -249,5 +359,72 @@ class PlanItemTest < ActiveSupport::TestCase
     assert_nil plan_item_6.review
     assert_equal plan_item_6.progress.to_i, plan_item_6.human_units_consumed.to_i
     assert_equal @plan_item.progress.to_i, @plan_item.human_units.to_i
+  end
+
+  test 'can edit business unit because is a new record' do
+    new_plan_item = PlanItem.new
+
+    assert new_plan_item.can_edit_business_unit?
+  end
+
+  test 'can edit business unit because is not in memo or review' do
+    plan_item = plan_items :past_plan_item_2
+
+    assert plan_item.can_edit_business_unit?
+  end
+
+  test 'can edit business unit because is in draft review only' do
+    plan_item = plan_items :current_plan_item_2
+
+    assert plan_item.can_edit_business_unit?
+  end
+
+  test 'cannot edit business unit because is in final review' do
+    refute @plan_item.can_edit_business_unit?
+  end
+
+  test 'cannot edit business unit because is in memo' do
+    plan_item = plan_items :current_plan_item_6
+
+    refute plan_item.can_edit_business_unit?
+  end
+
+  test 'valid when change business unit because is not in memo or review' do
+    plan_item               = plan_items :past_plan_item_2
+    business_unit           = business_units :business_unit_one
+    plan_item.business_unit = business_unit
+
+    assert plan_item.valid?
+  end
+
+  test 'valid when change business unit because is in draft review only' do
+    plan_item               = plan_items :current_plan_item_2
+    business_unit           = business_units :business_unit_one
+    plan_item.business_unit = business_unit
+
+    assert plan_item.can_edit_business_unit?
+  end
+
+  test 'invalid when change business unit because is in final review' do
+    business_unit            = business_units :business_unit_two
+    @plan_item.business_unit = business_unit
+
+    refute @plan_item.valid?
+    assert_error @plan_item,
+                 :business_unit,
+                 :cannot_edit_business_unit,
+                 memo_condition: SHOW_MEMOS ? I18n.t('plan_item.errors.cannot_edit_business_unit_for_memos_too') : ''
+  end
+
+  test 'invalid when change business unit because is in memo' do
+    plan_item               = plan_items :current_plan_item_6
+    business_unit           = business_units :business_unit_two
+    plan_item.business_unit = business_unit
+
+    refute plan_item.valid?
+    assert_error plan_item,
+                 :business_unit,
+                 :cannot_edit_business_unit,
+                 memo_condition: SHOW_MEMOS ? I18n.t('plan_item.errors.cannot_edit_business_unit_for_memos_too') : ''
   end
 end

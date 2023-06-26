@@ -1,0 +1,206 @@
+<% conclusion_review_score = conclusion_review.review.score_array.first %>
+
+<%= wicked_pdf_javascript_include_tag 'wicked_pdf/bic_pdf/set_background_image' %>
+
+<div class="text-justify">
+  <div class="alwaysbreak <%= watermark_class draft %>">
+    <div class="row">
+      <div class="col-3 text-white">
+        <div class="row">
+          <div class="col-4 offset-8">
+            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'logo_1.png')), 
+                          width: 126,
+                          height: 139,
+                          class: 'mb-5' %>
+          </div>  
+        </div>
+        <div class="row">
+          <div class="col-10 offset-1">
+            <p class="text-left font-weight-bold" style="font-size:2.5em;"><%= I18n.t 'conclusion_review.bic.cover.review_identification', identification: conclusion_review.review.identification %></p>
+            <p class="text-left font-weight-bold" style="font-size:2.5em;"><%= conclusion_review.review.plan_item.project %></p>
+            <p class="text-left pt-4" style="font-size:1.8em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.auditors' %></span> <%= bic_review_auditors_text conclusion_review %></p>
+            <p class="text-left pt-4" style="font-size:1.8em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.owners' %></span> <%= bic_review_owners_text conclusion_review %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-9">
+        <div class="row pt-5">
+          <div class="col-10 offset-1">
+            <p style="font-size:1.7em;"><span class="font-weight-bold"><%= ConclusionReview.human_attribute_name :issue_date %></span> <%= I18n.l conclusion_review.issue_date, format: :minimal %></p>
+          </div>
+        </div>
+        <div class="row pt-5 pb-5">
+          <div class="col-10 offset-1">
+            <p class="font-weight-bold" style="font-size:1.7em;"><span><%= I18n.t 'conclusion_review.bic.cover.version' %></span> <span class="aqua-text"><%= review_version_text draft  %></span></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-10 offset-1 border-left">
+            <p style="font-size:1.7em;"><%= (put_bic_cover_note_on conclusion_review).html_safe %></p>
+          </div>
+        </div>
+        <div class="row pt-5" style="padding-bottom: 160px;">
+          <div class="col-10 offset-1">
+            <p class="font-weight-bold" style="font-size:1.7em;"><%= I18n.t 'conclusion_review.bic.cover.signature' %></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-10 offset-1">
+            <p class="font-weight-bold" style="font-size:1.7em;"><%= I18n.t 'conclusion_review.bic.cover.recipients' %></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-10 offset-1">
+            <%= simple_format conclusion_review.recipients, style: "font-size:1.7em;" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alwaysbreak <%= watermark_class draft %>">
+    <div class="row">
+      <div class="col-3 text-white">
+        <div class="row">
+          <div class="col-4 offset-8">
+            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'logo_1.png')), 
+                          width: 126,
+                          height: 139,
+                          class: 'mb-5' %>
+          </div>  
+        </div>
+        <div class="row">
+          <div class="col-10 offset-1">
+            <p class="text-left font-weight-bold" style="font-size:2.5em;"><%= I18n.t 'conclusion_review.bic.cover.review_identification', identification: conclusion_review.review.identification %></p>
+            <p class="text-left font-weight-bold" style="font-size:2.5em;"><%= conclusion_review.review.plan_item.project %></p>
+            <p class="text-left pt-4" style="font-size:1.8em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.auditors' %></span> <%= bic_review_auditors_text conclusion_review %></p>
+            <p class="text-left pt-4" style="font-size:1.8em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.owners' %></span> <%= bic_review_owners_text conclusion_review %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-9">
+        <div class="row pb-5">
+          <div class="col-10 offset-1">
+            <p class="pt-3" style="font-size:1.7em;"><span class="font-weight-bold"><%= ConclusionReview.human_attribute_name :previous_identification %></span> <%= bic_previous_review_text conclusion_review %></p>
+            <p class="pt-3" style="font-size:1.7em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.cover.review_period_title' %></span> <%= bic_review_period conclusion_review %></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-10 offset-1 border-left">
+            <p class="font-weight-bold" style="font-size:1.7em;"><%= Review.human_attribute_name :description %></p>
+            <%= simple_format conclusion_review.review.description, style: "font-size:1.7em;", class: "pt-5" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1 offset-1">
+            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'lupa.png')), 
+                          width: 55, 
+                          height: 53,
+                          class: 'mt-4' %>
+          </div>
+          <div class="col-6">
+            <p class="pt-5 font-weight-bold" style="font-size:2.2em;"><%= I18n.t 'conclusion_review.bic.cover.cycle_qualification' %> <span class="aqua-text"><%= I18n.t("score_types.#{conclusion_review_score}") %></span></p>
+          </div>
+          <div class="col-1">
+            <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'emojis', "#{conclusion_review_score}.png")), 
+                          width: 79, 
+                          height: 76,
+                          class: 'mt-3' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alwaysbreak <%= watermark_class draft %>">
+    <div class="row">
+      <div class="col-3 text-white">
+        <p class="font-weight-bold pl-5" style="font-size:4.2em; text-align: center; padding-top: 400px;"><%= I18n.t 'conclusion_review.bic.scope' %></p>
+      </div>
+      <div class="col-9" >
+        <div class="row pt-5">
+          <div class="col-10 offset-1">
+            <%= simple_format conclusion_review.applied_procedures, style: "font-size:1.7em;"%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alwaysbreak <%= watermark_class draft %>">
+    <% if conclusion_review.reference.present? %>
+      <div class="row">
+        <div class="col-3 text-white">
+          <p class="font-weight-bold pl-5" style="font-size:3.4em; text-align: center; position: absolute; top: 50%;"><%= ConclusionReview.human_attribute_name(:reference).upcase %></p>
+        </div>
+        <div class="col-9">
+          <div class="row pt-5">
+            <div class="col-10 offset-1">
+              <%= simple_format conclusion_review.reference, style: "font-size:1.7em;"%>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <% if conclusion_review.conclusion.present? %>
+      <div class="row pt-5">
+        <div class="col-3 text-white">
+          <p class="font-weight-bold pl-5" style="font-size:3.4em; text-align: center; position: absolute; top: 50%;"><%= I18n.t 'conclusion_review.bic.audit_comments' %></p>
+        </div>
+        <div class="col-9">
+          <div class="row pt-5">
+            <div class="col-10 offset-1">
+              <%= simple_format conclusion_review.conclusion, style: "font-size:1.7em;"%>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% conclusion_review_weaknesses(conclusion_review).each_with_index do |weakness, i| %>
+    <div class="alwaysbreak <%= watermark_class draft %>">
+      <div class="row">
+        <div class="col-3 text-white">
+          <p class="font-weight-bold" style="font-size:2.4em; text-align: center; padding-top: 50px; padding-bottom: 75px;"><%= I18n.t 'conclusion_review.bic.weaknesses.plan', index: i %></p>
+          <div class="ml-4" style="min-height: 300px;">
+            <p class="font-weight-bold" style="font-size:3.1em; text-align: center;"><%= weakness.title %></p>
+          </div>
+          <p class="ml-2 text-left" style="font-size:1.7em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p>
+          <p class="pt-5 ml-2 font-weight-bold text-left" style="font-size:1.7em;"><%= Weakness.human_attribute_name :risk %>: <%= weakness.risk_text %></p>
+          <div class="row">
+            <div class="col-3">
+              <p class="pt-5 ml-2 font-weight-bold text-left" style="font-size:1.7em;"><%= Weakness.human_attribute_name :state %>: </p>
+            </div>
+            <div class="col-9">
+              <p class="pt-5 ml-2 font-weight-bold text-left <%= risk_style weakness %>" style="font-size:1.7em;"><%= weakness.state_text %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-9">
+          <div class="row pt-5">
+            <div class="col-8 offset-1">
+              <p class="font-weight-bold aqua-text" style="font-size:2.8em;"><%= legend_weakness_repeated weakness %></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-10 offset-1">
+              <p class="pt-5 font-weight-bold" style="font-size:1.7em;"><%= Weakness.model_name.human count: 1 %></p>
+              <%= simple_format weakness.description, style: "font-size:1.7em;", class: 'pt-4' %>
+              <p class="pt-4" style="font-size:1.7em;"><span class="font-weight-bold"><%= Weakness.human_attribute_name :effect %>:</span> <%= weakness.effect %></p>
+              <p class="pt-4" style="font-size:1.7em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.audit_recommendations' %></span> <%= weakness.audit_recommendations %></p>
+              <p class="pt-4" style="font-size:1.7em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.follow_up_date' %></span> <%= follow_up_date_weakness weakness %></p>
+              <p class="pt-4" style="font-size:1.7em;"><span class="font-weight-bold"><%= Answer.model_name.human count: 1 %>:</span> <%= weakness.answer %></p>
+              <% if weakness.repeated_of.present? %>
+                <p class="pt-4" style="font-size:1.7em;"><span class="font-weight-bold"><%= Finding.human_attribute_name :repeated_of_id %>:</span><span class="aqua-text"> <%= weakness.repeated_of %></span></p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="alwaysbreak">
+  </div>
+</div>

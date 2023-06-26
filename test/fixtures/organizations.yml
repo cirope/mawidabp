@@ -3,7 +3,6 @@ cirope:
   prefix: cirope
   logo_style: 'default'
   description: ''
-  saml_provider:
   group: main_group
   corporate: false
 
@@ -12,7 +11,6 @@ twitter:
   prefix: tw
   logo_style: 'default'
   description: ''
-  saml_provider:
   group: main_group
   corporate: true
 
@@ -21,7 +19,6 @@ google:
   prefix: google
   logo_style: 'default'
   description: ''
-  saml_provider:
   group: second_group
   corporate: false
 
@@ -30,6 +27,5 @@ alphabet:
   prefix: alphabet
   logo_style: 'default'
   description: ''
-  saml_provider:
   group: second_group
   corporate: true

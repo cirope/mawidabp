@@ -22,28 +22,16 @@
         }, readonly: true %>
         <div class="row">
           <div class="col-md-4">
-            <%= f.input :year, 
-                        input_html: 
-                        { 
-                          maxlength: 4,
-                          data: { input_text_only_accept_numerics: true } 
-                        } %>
+            <%= f.input :year,
+              input_html: { maxlength: 4, data: { input_text_only_accept_numerics: true } } %>
           </div>
           <div class="col-md-4">
-            <%= f.input :nsisio, 
-                        input_html: 
-                        { 
-                          maxlength: 4,
-                          data: { input_text_only_accept_numerics: true } 
-                        } %>
+            <%= f.input :nsisio,
+              input_html: { maxlength: 4, data: { input_text_only_accept_numerics: true } } %>
           </div>
           <div class="col-md-4">
-            <%= f.input :nobs, 
-                        input_html: 
-                        { 
-                          maxlength: 4,
-                          data: { input_text_only_accept_numerics: true } 
-                        } %>
+            <%= f.input :nobs,
+              input_html: { maxlength: 4, data: { input_text_only_accept_numerics: true } } %>
           </div>
         </div>
       </div>
@@ -59,6 +47,10 @@
     </div>
   </div>
 
+  <div id="tags">
+    <%= render 'tags', f: f %>
+  </div>
+
   <%= f.hidden_field :skip_work_paper, value: 1 %>
 
   <hr />
@@ -66,7 +58,7 @@
   <div class="form-actions">
     <div class="float-right">
       <%= link_to_show finding_path(params[:completion_state], @finding, user_id: params[:user_id]) %> |
-      <%= link_to_index findings_path(params[:completion_state], user_id: params[:user_id]) %> 
+      <%= link_to_index findings_path(params[:completion_state], user_id: params[:user_id]) %>
     </div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>

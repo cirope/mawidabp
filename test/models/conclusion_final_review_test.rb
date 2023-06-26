@@ -291,6 +291,11 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert weakness.update_attribute :state, 7
 
+    if (method = has_extra_sort_method? Current.organization)
+      review.send method
+      review.reload
+    end
+
     findings_not_revoked = review.weaknesses.not_revoked + review.oportunities.not_revoked
     findings_revoked     = review.weaknesses.revoked + review.oportunities.revoked
 
@@ -529,7 +534,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
 
     final_findings_count =
-      @conclusion_review.review.final_weaknesses.count + @conclusion_review.review.final_oportunities.count 
+      @conclusion_review.review.final_weaknesses.count + @conclusion_review.review.final_oportunities.count
 
     assert final_findings_count > 0
 
@@ -653,6 +658,25 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :review_id, :without_draft
+  end
+
+  # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates nbc external_reviews issue_date' do
+    skip unless Current.conclusion_pdf_format == 'nbc'
+
+    @conclusion_review.review.external_reviews_attributes = [
+      { alternative_review_id: reviews(:past_review).id }
+    ]
+
+    @conclusion_review.review.external_reviews.map(&:alternative_review).each do |alt_review|
+      alt_issue_date = 1.week.from_now.to_date.to_formatted_s(:db)
+
+      alt_review.conclusion_final_review.issue_date = alt_issue_date
+
+      assert @conclusion_review.invalid?
+      assert_error @conclusion_review, :issue_date, :less_than_alt_issue_date,
+        date: alt_issue_date, name: alt_review.identification
+    end
   end
 
   test 'duplicate review findings' do

@@ -205,6 +205,7 @@ es:
     endorsement_item:
       approve: 'Aprobar'
       reject: 'Rechazar'
+    finding_answers: 'Comentarios de'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -320,6 +321,8 @@ es:
       info: 'Informativo'
       warning: 'Advertencia'
       danger: 'Peligro'
+    saml_providers:
+      azure: 'Azure'
 
   periods:
     edit:
@@ -423,22 +426,27 @@ es:
     csv:
       title: 'Plan de auditoría'
       csv_name: 'plan_periodo_%{period}.csv'
+      csv_name_pat_im: 'grado_de_avance_reporte_de_gestión_interna_%{current_date}.csv'
+      csv_name_pat_dprh: 'grado_de_avance_horas_de_trabajo_detallado_%{current_date}.csv'
       number_observations_per_risk: 'Cantidad observaciones por riesgo'
       annual_plan_hours: 'Hs Plan Anual'
       auditor: 'Auditor (Usuario)'
       time_summary_hours: 'Hs Resumen Horario'
     csv_prs_pat:
-      csv_name: 'grado_avance_estados_%{current_date}.csv'
+      csv_name: 'grado_de_avance_estados_de_trabajos_%{current_date}.csv'
       business_unit: 'Sector'
       totals: 'Totales'
       total_plan_items: 'Total de Trabajos Planificados'
     csv_prh_pat:
-      csv_name: 'grado_avance_horas_trabajo_%{current_date}.csv'
+      csv_name: 'grado_de_avance_horas_de_trabajo_totalizador_%{current_date}.csv'
       business_unit: 'Sector'
       budgeted_hours: 'Horas Presupuestadas'
       progress: 'Avance Total'
-      percentage: 'Procentaje'
+      percentage: 'Porcentaje'
       total_hours: 'Total de Horas'
+      period_name: 'Periodo'
+      period_start: 'Periodo Inicio'
+      period_end: 'Periodo Fin'
     calendar:
       show:
         title: 'Cronograma'
@@ -464,8 +472,10 @@ es:
     business_unit_type_plan_items:
       associate_control_objective: 'Asociar objetivo de control'
       associate_best_practice: 'Asociar buena práctica'
-    download_progress_report_with_statuses_pat: 'Descargar grado de avance con estados de trabajos'
-    download_progress_report_in_hours_of_work_pat: 'Descargar grado de avance en horas de trabajo'
+    download_progress_report_with_statuses_pat: 'Descargar grado de avance estados de trabajos'
+    download_totalizer_progress_report_in_hours_of_work_pat: 'Descargar grado de avance horas de trabajo totalizador'
+    download_detailed_progress_report_in_hours_of_work_pat: 'Descargar grado de avance horas de trabajo detallado'
+    download_progress_report_internal_management_pat: 'Descargar grado de avance reporte de gestión interna'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
     download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
@@ -629,6 +639,7 @@ es:
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
     hours_of_work_per_day: 'Horas de trabajo por día'
     conclusion_review_receiver: 'Receptor/es del informe'
+    temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas. '
 
   tags:
     edit:
@@ -681,6 +692,8 @@ es:
       add_business_unit_type: 'Agregar unidad organizativa'
       activity: 'Actividad'
       review: 'Informe'
+      workflow_amount: 'Cantidad de horas programadas:'
+      time_consumption_amount: 'Cantidad de horas asignadas:'
     auxiliar_business_unit_types:
       title: 'Unidades organizativas auxiliares'
       activity: 'Actividad'
@@ -699,6 +712,12 @@ es:
         business_unit_types: "Unidades organizativas"
         detail: "Detalle"
         organization: "Organización"
+        period: "Periodo"
+        period_start: "Periodo Inicio"
+        period_end: "Periodo Fin"
+        plan_item: "Proyecto"
+        plan_item_start: "Proyecto Inicio"
+        plan_item_end: "Proyecto Fin"
 
   users:
     index:
@@ -721,6 +740,7 @@ es:
       add_business_unit_type: 'Agregar unidades organizativas'
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
+      add_tagging: 'Agregar etiqueta'
     create:
       correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
     imports:
@@ -896,3 +916,8 @@ es:
       title: 'Ver plantilla de observación'
     form:
       add_control_objective: 'Agregar objetivo de control'
+
+  work_papers:
+    show:
+      title: 'Papel de trabajo'
+      error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'

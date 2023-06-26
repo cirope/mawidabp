@@ -5,6 +5,7 @@ class PlanItem < ApplicationRecord
   include PlanItems::AttributeTypes
   include PlanItems::AuxiliarBusinessUnitTypes
   include PlanItems::BestPractices
+  include PlanItems::BusinessUnit
   include PlanItems::Comparable
   include PlanItems::ControlObjectives
   include PlanItems::DestroyValidation
