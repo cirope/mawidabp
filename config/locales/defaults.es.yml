@@ -99,8 +99,8 @@ es:
         one: 1 semana
         other: ! '%{count} semanas'
     prompts:
-      second: Segundos # REVIEW singular en original
-      minute: Minutos # REVIEW singular en original
+      second: Segundo
+      minute: Minuto
       hour: Hora
       day: Día
       month: Mes
