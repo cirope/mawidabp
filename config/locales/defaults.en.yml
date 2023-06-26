@@ -32,8 +32,8 @@ en:
     - Saturday
     formats:
       default: ! '%Y-%m-%d'
-      long: ! '%B %d, %Y' # REVIEW %e no sería %d? Así sale en original.
-      short: ! '%b %d' # REVIEW %e no sería %d? Así sale en original.
+      long: ! '%B %d, %Y'
+      short: ! '%b %d'
       minimal: ! '%y-%m-%d'
     month_names:
     -
@@ -201,8 +201,8 @@ en:
   time:
     am: am
     formats:
-      default: ! '%A, %e %B %Y %H:%M:%S %z' # REVIEW Se aplicó el mismo criterio de :es, está bien?
-      minimal: ! '%y-%m-%d %H:%M:%S' # REVIEW mismo criterio para minimal de date.formats, está bien?
+      default: ! '%A, %e %B %Y %H:%M:%S %z'
+      minimal: ! '%y-%m-%d %H:%M:%S'
       short: ! '%e %b %Y %H:%M'
       long: ! '%e de %B de %Y %H:%M'
       validation: ! '%d/%m/%Y %H:%M:%S'
