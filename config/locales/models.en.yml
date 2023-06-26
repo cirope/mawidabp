@@ -582,6 +582,7 @@ en:
         last_name: 'Last Name'
         logged_in: 'Logged in'
         manager_id: 'Superior'
+        children: 'Responsible of'
         name: 'Name'
         notes: 'Notes'
         organization_roles: 'Profiles'

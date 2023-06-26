@@ -205,6 +205,7 @@ en:
     endorsement_item:
       approve: 'Approve'
       reject: 'Reject'
+    finding_answers: 'Comments of'
 
   licenses:
     trial_valid_until: 'End of trial period'
@@ -915,3 +916,8 @@ en:
       title: 'Show issue template'
     form:
       add_control_objective: 'Add control objective'
+
+  work_papers:
+    show:
+      title: 'Working paper'
+      error: 'Please remember that you must be authenticated or have permissions to view the document'

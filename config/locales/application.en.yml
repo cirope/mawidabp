@@ -295,7 +295,8 @@ en:
         title: '<b><u>DETAILED REPORT</u></b>'
         introduction_and_scope_title: '<b><u>INTRODUCTION AND SCOPE OF WORK PERFORMED</u></b>'
         classification_methodology: 'The rating methodology for cycles used in the 2019 period was approved by the Audit Committee at its meeting on 14.05.2019 - Minutes No. 294, which we present below:'
-        classification_title: '<i><b>Table I: Internal Control Rating of NCHB S.A. – %{period}</b></i>'
+        classification_with_final_weaknesses_title: '<i><b>Table I: Internal Control Rating of NCHB S.A. – %{period}</b></i>'
+        classification_with_not_final_weaknesses_title: '<i><b>Table II: Internal Control Rating of NCHB S.A. – %{period}</b></i>'
         conclusions_title: '<u><b>CONCLUSIONS</b></u>'
         conclusions_body: "Based on Table I <i>“NCHB S.A. Internal Control Rating.”</i>, it can be seen that the Entity's internal control rating, according to the parameters used, is <b>“%{calification}”.</b>"
       cycle_qualification:
@@ -1241,6 +1242,7 @@ en:
         review_prefix: "Audit report prefix"
         recipients: "Audit report recipients"
         sectors: "Sectors/departments involved"
+        exec_summary_intro: 'Executive Summary Introduction'
         external: "External"
         require_tag: "Require tag in audit report"
         require_counts: "Require counts on control targets"
@@ -1416,6 +1418,7 @@ en:
         user_id: "User"
         organization_id: "Organization"
         role_id: "Profile"
+        sync_ldap: 'Synchronize with LDAP?'
       privilege:
         module: "Module"
         read: "Read"
@@ -1552,6 +1555,10 @@ en:
           attributes:
             business_units:
               locked: "cannot be removed, already used in at least one workplan"
+            exec_summary_intro:
+              missing_keys:
+                one: "contains an invalid key: %{invalid_keys}"
+                other: "contains %{count} invalid keys: %{invalid_keys}"
         conclusion_final_review:
           attributes:
             review_id:

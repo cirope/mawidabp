@@ -54,3 +54,5 @@ en:
         password: 'Service user password for automatic user import'
       import:
         username: 'User with permissions to query the LDAP user database'
+      business_unit_type:
+        exec_summary_intro: "The valid key to include is: <code>%{%{keywords}}</code>"

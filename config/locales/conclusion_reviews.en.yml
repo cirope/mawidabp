@@ -2,36 +2,31 @@
 en:
   conclusion_review:
     bic:
-      header: "INTERNAL AUDIT REPORT\nN° %{identification}"
       cover:
-        title_html: "\n<b><i>DISTRIBUTION REPORT N° %{identification}</i></b>\n%{space}"
-        to_html: "\n<i><b>A =</b> View Distribution list</i>"
-        date_html: "<i><b>Date</b>:\n%{date}</i>"
-        from_html: "\n<i><b>From =</b> Internal Audit</i>"
-        draft_html: "<color rgb='ffffff'><b>Version\nDRAFT</b></color>"
-        final_html: "<color rgb='ffffff'><b>Version\nFINAL</b></color>"
-        ref_html: "\n<i><b>Ref =</b> Audit Report N° %{identification}: \"%{project}\"</i>"
-        legend: "We are at your disposal to clarify any issue you deem necessary.\n\nSincerely,"
-        draft_with_weaknesses: "Attached herewith we distribute the reference report in draft version, requesting that you kindly consider the weaknesses and <b>respond</b>, as required by the Board of Directors (*)."
-        final_with_weaknesses: "Attached herewith we distribute the Final version of the Reference Report containing the responses from each of the areas."
-        final_without_weaknesses: "Attached herewith we distribute the Final version of the Reference Report, which does not contain relevant weaknesses to make."
-        footer: "(*) Each Audited Management must respond to the reports within a period of 10 business days of receipt. The responses must include the course of action committed by each Management, to regularize the weaknesses indicated. In addition, Management must inform the term in which they will proceed to the committed regularization."
-      review:
-        subject: "Subject"
-        previous: "Previous report\n%{review}"
-        revision: "Internal Audit Review:\nStarted: %{start} - Completed: %{end}"
-        applied_procedures: "Scope"
-        observations: "Preliminary clarifications"
-        conclusion: "Audit comments"
-        score: "Cycle evaluation"
+        review_identification: "Audit Report No: %{identification}"
+        auditors: 'Auditors:'
+        owners: 'Responsible:'
+        review_period: 'Review Period:'
+        cycle_qualification: 'Cycle Rating:'
+        signature: 'Signature:'
+        version: 'Version:'
+        versions:
+          draft: 'DRAFT'
+          final: 'FINAL'
+        draft_with_weaknesses: 'Attached to this document, we distribute the referenced audit report in draft version, kindly requesting that you consider the issues and <span class="font-weight-bold">respond</span> as required by the Board of Directors (*).'
+        final_with_weaknesses: 'Attached to this document, we distribute the final version of the referenced audit report, which includes responses from each area.'
+        final_without_weaknesses: 'Attached to this document, we distribute the Final version of the referenced audit report, which does not contain relevant issues.'
+        recipients: 'Recipients'
+        review_period_title: "Internal Audit Review:"
+        review_period_description: "Started: %{plan_item_start} - Completed: %{plan_item_end}"
+      scope: 'SCOPE'
+      audit_comments: 'AUDIT COMMENTS'
       weaknesses:
-        title: "DETAIL OF WEAKNESSES - ACTION PLANS"
-        plan: "Corrective action plan N° %{number}"
-        responsible: "MANAGEMENT RESPONSIBLE"
-      repeated_weaknesses:
-        title: "DETAIL OF REPEATED WEAKNESSES - ACTION PLANS"
-      images:
-        plan: "Evidence corrective action plan N° %{number}"
+        plan: "Corrective Action Plan No: %{index}"
+        responsible: 'Responsible:'
+        audit_recommendations: 'Recommendation:'
+        follow_up_date: 'Implementation:'
+        repeated: 'REPEATED ISSUE'
     cro:
       header:
         legend_html: "<b>Bértora y Asociados</b>\r\nBernardo de Irigoyen 330 Piso 3\r\n\r\nCiudad Autónoma de Buenos Aires\r\nC1072AAF\r\nTeléfono +54 (11)4342 2544\r\n\r\nwww.crowe.com.ar"
@@ -134,7 +129,8 @@ en:
       weaknesses:
         title: "<b>EXECUTIVE SUMMARY</b>"
         subtitle: "<b>OBJECTIVE</b>"
-        main_observations: "<b>WEAKNESSES IN THE PROCESS OF REGULARIZATION</b>"
+        main_being_implemented: "<b>ISSUES BEING IMPLEMENTED</b>"
+        main_implemented_audited: "<b>REGULARIZED ISSUES</b>"
         from_external_review: "From Review"
         audit_conclusion: "<b>OVERALL AUDIT CONCLUSION</b>"
         highest_responsible: "<b>%{responsible}</b>"
