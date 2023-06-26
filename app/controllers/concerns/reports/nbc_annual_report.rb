@@ -15,9 +15,10 @@ module Reports::NbcAnnualReport
       pdf          = Prawn::Document.create_generic_pdf :portrait,
                                                         margins: [30, 20, 20, 25]
 
-      put_nbc_cover_on      pdf, organization
-      put_executive_summary pdf, organization
-      put_detailed_report   pdf, period
+      put_nbc_cover_on                              pdf, organization
+      put_executive_summary                         pdf, organization
+      put_detailed_report_with_final_weaknesses     pdf, period
+      put_detailed_report_with_not_final_weaknesses pdf, period
 
       save_pdf(pdf, @controller, period.start, period.end, 'nbc_annual_report')
       redirect_to_pdf(@controller, period.start, period.end, 'nbc_annual_report')
@@ -151,7 +152,7 @@ module Reports::NbcAnnualReport
       pdf.start_new_page
     end
 
-    def put_detailed_report pdf, period
+    def put_detailed_report_with_final_weaknesses pdf, period
       pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.title'),
                align: :center,
                inline_format: true
@@ -176,13 +177,25 @@ module Reports::NbcAnnualReport
 
       pdf.move_down PDF_FONT_SIZE * 3
 
-      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.classification_title',
+      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.classification_with_final_weaknesses_title',
                       period: period.name),
                inline_format: true
 
       pdf.move_down PDF_FONT_SIZE * 2
 
-      put_internal_control_qualification_and_conclusion pdf
+      put_internal_control_qualification_and_conclusion pdf, true, true
+
+      pdf.start_new_page
+    end
+
+    def put_detailed_report_with_not_final_weaknesses pdf, period
+      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.classification_with_not_final_weaknesses_title',
+                      period: period.name),
+               inline_format: true
+
+      pdf.move_down PDF_FONT_SIZE * 2
+
+      put_internal_control_qualification_and_conclusion pdf, false, false
     end
 
     def put_cycle_qualification pdf
@@ -250,7 +263,7 @@ module Reports::NbcAnnualReport
       ], column_widths: [20, 170, 60, 180]
     end
 
-    def put_internal_control_qualification_and_conclusion pdf
+    def put_internal_control_qualification_and_conclusion pdf, final_weaknesses, with_conclusion
       total_cycles = 0
       total_weight = 0
       table        = []
@@ -290,7 +303,7 @@ module Reports::NbcAnnualReport
         }
       ]
 
-      results = results_internal_qualification
+      results = results_internal_qualification final_weaknesses
 
       results.each do |item|
         total_cycles += 1
@@ -392,20 +405,22 @@ module Reports::NbcAnnualReport
 
       pdf.table table, column_widths: [110, 110, 110, 110]
 
-      pdf.move_down PDF_FONT_SIZE * 3
+      if with_conclusion
+        pdf.move_down PDF_FONT_SIZE * 3
 
-      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.conclusions_title'),
-               inline_format: true
+        pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.conclusions_title'),
+                 inline_format: true
 
-      pdf.move_down PDF_FONT_SIZE
+        pdf.move_down PDF_FONT_SIZE
 
-      pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.conclusions_body',
-                      calification: annual_qualification),
-               inline_format: true,
-               align: :justify
+        pdf.text I18n.t('conclusion_committee_report.nbc_annual_report.detailed_report.conclusions_body',
+                        calification: annual_qualification),
+                 inline_format: true,
+                 align: :justify
+      end
     end
 
-    def results_internal_qualification
+    def results_internal_qualification final_weaknesses
       result = []
 
       ######## grouped by business_unit
@@ -421,7 +436,7 @@ module Reports::NbcAnnualReport
                                                           })
                                                    .map(&:review)
 
-                    add_unit_qualification result, bu, reviews
+                    add_unit_qualification result, bu, reviews, final_weaknesses
                   end
 
       ######## grouped by business_unit_type
@@ -436,13 +451,13 @@ module Reports::NbcAnnualReport
                                                               })
                                                        .map(&:review)
 
-                        add_unit_qualification result, but, reviews
+                        add_unit_qualification result, but, reviews, final_weaknesses
                       end
 
       result
     end
 
-    def add_unit_qualification array, unit, reviews
+    def add_unit_qualification array, unit, reviews, final_weaknesses
       weaknesses = []
 
       reviews.each do |review|
@@ -453,7 +468,7 @@ module Reports::NbcAnnualReport
                                   reviews: [review] + review.external_reviews.map(&:alternative_review) 
                                 },
                                 state: Finding::STATUS[:being_implemented],
-                                final: true
+                                final: final_weaknesses
                               )
       end
 

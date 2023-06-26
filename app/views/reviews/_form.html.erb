@@ -103,7 +103,7 @@
           <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
         </div>
         <% if Current.conclusion_pdf_format == 'nbc' %>
-          <%= f.input :type_review, collection: type_review, include_blank: t('helpers.select.prompt') %>
+          <%= f.input :type_review, collection: type_review, include_blank: t('helpers.select.prompt'), input_html: { disabled: readonly } %>
         <% end %>
       </div>
     </div>
@@ -348,9 +348,11 @@
           <%= render 'external_review', f: er, readonly: readonly %>
         <% end %>
       </div>
-      <div>
-        <%= link_to_add_fields((t 'review.external_reviews_title'), f, :external_reviews) %>
-      </div>
+      <% unless readonly %>
+        <div>
+          <%= link_to_add_fields((t 'review.external_reviews_title'), f, :external_reviews) %>
+        </div>
+      <% end %>
     </div>
   <% end %>
 

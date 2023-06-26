@@ -17,6 +17,7 @@ class OrganizationRole < ApplicationRecord
   validates :user_id, :organization_id, :role_id,
     :numericality => {:only_integer => true}, :allow_nil => true,
     :allow_blank => true
+  validates :sync_ldap, inclusion: { in: [true, false] }
   validates_each :role_id do |record, attr, value|
     organization_roles = record.user.try(:organization_roles) || []
     same_organization_roles = organization_roles.select do |o_r|
@@ -47,6 +48,9 @@ class OrganizationRole < ApplicationRecord
   belongs_to :user, -> { readonly }
   belongs_to :organization, -> { readonly }
   belongs_to :role, -> { readonly }
+
+  # Atributos
+  attribute :sync_ldap, :boolean
 
   def to_s
     "#{self.role.name} (#{self.organization.name})"

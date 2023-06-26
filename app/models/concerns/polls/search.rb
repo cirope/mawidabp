@@ -19,6 +19,6 @@ module Polls::Search
         regexp:            /\Asi|no\z/i,
         conversion_method: ->(value) { value.downcase == 'si' }
       }
-    }
+    }.with_indifferent_access
   end
 end

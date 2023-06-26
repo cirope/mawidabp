@@ -205,6 +205,7 @@ es:
     endorsement_item:
       approve: 'Aprobar'
       reject: 'Rechazar'
+    finding_answers: 'Comentarios de'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -915,3 +916,8 @@ es:
       title: 'Ver plantilla de observación'
     form:
       add_control_objective: 'Agregar objetivo de control'
+
+  work_papers:
+    show:
+      title: 'Papel de trabajo'
+      error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'

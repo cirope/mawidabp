@@ -15,11 +15,11 @@
   <%= t "label.#{@tag.obsolete ? 'yes' : 'no'}" %>
 </p>
 
-<% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
-  <% Array(TAG_OPTIONS[@tag.kind]).each do |title, value| %>
+<% if SHOW_REVIEW_EXTRA_ATTRIBUTES || tags_options_collection(kind: @tag.kind).any? %>
+  <% Array(TAG_OPTIONS[@tag.kind]).each do |title, option| %>
     <p class="mb-1">
       <strong><%= title %></strong>:
-      <%= t "label.#{@tag.options&.include?(value) ? 'yes' : 'no'}" %>
+      <%= @tag.option_value option, human: true %>
     </p>
   <% end %>
 <% end %>
