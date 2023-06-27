@@ -59,4 +59,20 @@ module TagsHelper
   def tags_options_collection kind:
     Array(TAG_OPTIONS[kind])
   end
+
+  def tag_input_option form, tag, value
+    option     = value.last
+    input_html = {
+      id:    "#{option}_tag_options",
+      name:  "tag[options][#{option}]",
+      value: tag.option_value(option),
+    }
+
+    input_html.merge!(checked: tag.option_value(option)) if tag.is_boolean?(option)
+
+    form.input :options,
+      as:         tag.option_type(option),
+      label:      value.first,
+      input_html: input_html
+  end
 end
