@@ -118,7 +118,11 @@ module ConclusionReviews::GalPdf
                  I18n.t 'conclusion_review.detailed_review.title'
                end
 
-      legend = I18n.t 'conclusion_review.detailed_review.legend'
+      legend = if review.business_unit_type.detailed_review_legend.present?
+                 review.business_unit_type.detailed_review_legend
+               else
+                 I18n.t 'conclusion_review.detailed_review.legend'
+               end
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
