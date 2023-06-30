@@ -10,28 +10,35 @@ module Findings::Expiration
   end
 
   module ClassMethods
-    def expires_very_soon
-      setting = Organization.all_parameters('finding_days_for_the_second_expiration_warning').to_i
-      expires_on setting.business_days.from_now.to_date
-    end
-
-    def next_to_expire
-      setting = Organization.all_parameters('finding_warning_expire_days').to_i
-
+    def next_to_expire setting
       expires_on setting.business_days.from_now.to_date
     end
 
     def warning_users_about_expiration
       # Sólo si no es sábado o domingo (porque no tiene sentido)
       if Time.zone.today.workday?
-        users = next_to_expire.or(expires_very_soon).inject([]) do |u, finding|
-          u | finding.users
-        end
+        finding_warning_expire_days_parameters.each do |organization, value|
+          Current.organization = organization
+          Current.group        = organization.group
+          expire_days          = value.split ','
+          users                = []
 
-        users.each do |user|
-          findings = user.findings.next_to_expire.or user.findings.expires_very_soon
+          expire_days.map do |day|
+            users = list.next_to_expire(day.to_i).inject(users) do |u, finding|
+              u | finding.users
+            end
 
-          NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
+            users.each do |user|
+              findings = []
+
+              expire_days.each do |day|
+                byebug
+                findings = user.findings.list.next_to_expire(day.to_i)
+              end
+byebug
+              #NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
+            end
+          end
         end
       end
     end
@@ -63,6 +70,12 @@ module Findings::Expiration
         date = date.next until date.next.workday?
 
         date
+      end
+
+      def finding_warning_expire_days_parameters
+        Organization.all_parameters('finding_warning_expire_days').map do |p|
+          [p[:organization], p[:parameter]]
+        end
       end
   end
 end

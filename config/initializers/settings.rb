@@ -24,7 +24,5 @@ DEFAULT_SETTINGS = {
   hours_of_work_per_day: { value: '0', validates: 'numericality' },
   conclusion_review_receiver: { value: '_', validates: 'presence' },
   temporary_polls: { value: '0', validates: 'numericality' },
-  finding_warning_expire_days: { value: '7', validates: 'numericality' },
-  finding_days_for_the_second_expiration_warning: { value: '1', validates: 'numericality' },
-  disable_finding_notifications: { value: '0', validates: 'numericality'},
+  finding_warning_expire_days: { value: '7,1', validates: 'presence' }
 }.with_indifferent_access.freeze
