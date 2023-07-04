@@ -1051,15 +1051,19 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'warning users about findings expiration' do
-    Current.organization = nil
+    Current.organization = organizations :cirope
     # Only if no weekend
     assert Time.zone.today.workday?
 
-    review_codes_by_user = review_codes_on_findings_by_user :next_to_expire
+    before_expire = Array(7.business_days.from_now.to_date)
+
+    review_codes_by_user = review_codes_on_findings_by_user :expires_on, args: before_expire
 
     assert_enqueued_emails 7 do
       Finding.warning_users_about_expiration
     end
+  ensure
+    Current.organization = nil
   end
 
   test 'remember users about expired findings' do
@@ -1163,7 +1167,8 @@ class FindingTest < ActiveSupport::TestCase
   test 'notify expired follow up' do
     skip unless NOTIFY_EXPIRED_AND_STALE_FOLLOW_UP
 
-    Current.organization = nil
+    organization         = organizations :cirope
+    Current.organization = organization
     # Only if no weekend
     assert Time.zone.today.workday?
 
@@ -1366,10 +1371,12 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'next to expire scope' do
-    before_expire = FINDING_WARNING_EXPIRE_DAYS.pred.business_days.from_now.to_date
-    expire        = FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
+    Current.organization = organizations :cirope
 
-    all_findings_are_in_range = Finding.next_to_expire.all? do |finding|
+    before_expire = 7.pred.business_days.from_now.to_date
+    expire        = 7.business_days.from_now.to_date
+
+    all_findings_are_in_range = Finding.expires_on([before_expire]).all? do |finding|
       finding.follow_up_date.between?(before_expire, expire) ||
         finding.solution_date.between?(before_expire, expire)
     end
@@ -1744,7 +1751,7 @@ class FindingTest < ActiveSupport::TestCase
 
     set_first_follow_update_at_end_of_month finding
 
-    create_finding_answer_with_commitment_date finding, 
+    create_finding_answer_with_commitment_date finding,
                                                one_day_later_of_required_level_if_is_end_of_month(finding, :medium, :manager)
 
     assert_equal :management, finding.commitment_date_required_level
@@ -1757,7 +1764,7 @@ class FindingTest < ActiveSupport::TestCase
 
     set_first_follow_update_at_beginning_of_month finding
 
-    create_finding_answer_with_commitment_date finding, 
+    create_finding_answer_with_commitment_date finding,
                                                one_day_later_of_required_level(finding, :medium, :manager)
 
     assert_equal :management, finding.commitment_date_required_level
@@ -2746,17 +2753,27 @@ class FindingTest < ActiveSupport::TestCase
                      body: body
     end
 
-    def review_codes_on_findings_by_user method
+    def review_codes_on_findings_by_user method, args: nil
       review_codes_by_user = {}
+      Current.organization = organizations :cirope
+      findings             = if args.present?
+                               Finding.list.send(method, args)
+                             else
+                               Finding.send(method)
+                             end
 
-      Finding.send(method).each do |finding|
+      findings.each do |finding|
         finding.users.each do |user|
           review_codes_by_user[user] ||= []
 
           user.notifications.not_confirmed.each do |n|
             assert n.findings.present?
 
-            review_codes_by_user[user] |= n.findings.send(method).map(&:review_code)
+            review_codes_by_user[user] |= if args.present?
+                                            n.findings.send(method, args)
+                                          else
+                                            n.findings.send(method)
+                                          end.map(&:review_code)
           end
         end
       end

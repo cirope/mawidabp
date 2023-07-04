@@ -23,16 +23,16 @@ module Findings::Expiration
           expire_days          = value.to_s.split ','
 
           expire_dates = expire_days.map do |day|
-            expire_date(day.to_i) if day.to_i > 0
+            expire_date(day.strip.to_i) if day.strip.to_i > 0
           end
 
           if expire_dates.present?
-            users = list.expires_on(expire_dates).finals(:false).expires_statuses.inject([]) do |u, finding|
+            users = list.expires_on(expire_dates).inject([]) do |u, finding|
               u | finding.users
             end
 
             users.each do |user|
-              findings = user.findings.list.expires_on(expire_dates).finals(:false).expires_statuses
+              findings = user.findings.list.expires_on(expire_dates)
 
               NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
             end
@@ -61,10 +61,13 @@ module Findings::Expiration
         to = expires_to_date from
 
         where follow_up_date: from..to
-      end.inject(:or)
+      end.
+        inject(:or).
+        finals(:false).
+        pending_statuses
     end
 
-    def expires_statuses
+    def pending_statuses
       being_implemented.or(awaiting)
     end
 

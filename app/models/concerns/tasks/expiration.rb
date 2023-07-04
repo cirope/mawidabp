@@ -14,9 +14,12 @@ module Tasks::Expiration
   end
 
   module ClassMethods
+    def expire_date setting
+      setting.business_days.from_now.to_date
+    end
 
     def finals final
-      includes(:finding).merge(Finding.finals(final)).references :findings
+      includes(:finding).merge(Finding.list.finals(final)).references :findings
     end
 
     def warning_users_about_expiration
@@ -29,16 +32,16 @@ module Tasks::Expiration
           expire_days          = value.to_s.split ','
 
           expire_dates = expire_days.map do |day|
-            expire_date(day.to_i) if day.to_i > 0
+            expire_date(day.strip.to_i) if day.strip.to_i > 0
           end
 
           if expire_dates.present?
-            users = list.expires_on(expire_dates).finals(:false).expires_statuses.inject([]) do |u, task|
+            users = expires_on(expire_dates).inject([]) do |u, task|
               u | task.users
             end
 
             users.each do |user|
-              tasks = user.tasks.list.expires_on(expire_dates).finals(:false).expires_statuses
+              tasks = user.tasks.expires_on(expire_dates)
 
               NotifierMailer.tasks_expiration_warning(user, tasks.to_a).deliver_later
             end
@@ -59,23 +62,26 @@ module Tasks::Expiration
       end
     end
 
-    def expires_on date
+    def expires_on dates
       dates.map do |from|
         to = expires_to_date from
 
         where due_on: from..to
-      end.inject(:or)
-
-      pending.or(in_progress)
+      end.
+        inject(:or).
+        finals(:false).
+        pending_statuses
     end
 
-    def expires_statuses
+    def pending_statuses
       pending.or(in_progress)
     end
 
     private
       def expires_to_date date
-        date.next until date.next.workday?
+        date = date.next until date.next.workday?
+
+        date
       end
 
       def finding_warning_expire_days_parameters

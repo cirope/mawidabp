@@ -1,3 +1,5 @@
+<% FINDING_WARNING_EXPIRE_DAYS = 7 %>
+
 normal_version:
   item_id: <%= ActiveRecord::FixtureSet.identify(:bare_success_login_record) %>
   item_type: LoginRecord
@@ -32,7 +34,7 @@ finding_being_implemented_weakness_without_extension_before_final_review:
   event: create
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
-  object: { extension: false, 
+  object: { extension: false,
             follow_up_date: <%= (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date - 9.days).to_s(:db) %>,
             state: <%= Finding::STATUS[:incomplete] %> }
   important: true
@@ -44,7 +46,7 @@ finding_being_implemented_weakness_with_extension_and_awaiting_before_final_revi
   event: create
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
-  object: { extension: true, 
+  object: { extension: true,
             follow_up_date: <%= (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date - 8.days).to_s(:db) %>,
             state: <%= Finding::STATUS[:awaiting] %> }
   important: true
@@ -56,7 +58,7 @@ finding_being_implemented_weakness_with_extension_before_final_review:
   event: create
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
-  object: { extension: true, 
+  object: { extension: true,
             follow_up_date: <%= (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date - 7.days).to_s(:db) %>,
             state: <%= Finding::STATUS[:being_implemented] %> }
   important: true
@@ -68,7 +70,7 @@ first_finding_being_implemented_weakness_with_extension_after_final_review:
   event: update
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
-  object: { extension: true, 
+  object: { extension: true,
             follow_up_date: <%= (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date - 6.days).to_s(:db) %>,
             state: <%= Finding::STATUS[:being_implemented] %> }
   important: true
@@ -80,7 +82,7 @@ second_finding_being_implemented_weakness_with_extension_after_final_review:
   event: update
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
-  object: { extension: true, 
+  object: { extension: true,
             follow_up_date: <%= (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date - 5.days).to_s(:db) %>,
             state: <%= Finding::STATUS[:being_implemented] %> }
   important: true
@@ -92,7 +94,7 @@ finding_being_implemented_weakness_with_extension_and_awaiting_after_final_revie
   event: update
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
-  object: { extension: true, 
+  object: { extension: true,
             follow_up_date: <%= (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date - 4.days).to_s(:db) %>,
             state: <%= Finding::STATUS[:awaiting] %> }
   important: true
@@ -104,7 +106,7 @@ finding_being_implemented_weakness_without_extension_and_awaiting_after_final_re
   event: update
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
-  object: { extension: false, 
+  object: { extension: false,
             follow_up_date: <%= (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date - 3.days).to_s(:db) %>,
             state: <%= Finding::STATUS[:awaiting] %> }
   important: true
@@ -116,7 +118,7 @@ finding_being_implemented_without_follow_update_weakness_without_extension_after
   event: update
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
-  object: { extension: false, 
+  object: { extension: false,
             follow_up_date: nil,
             state: <%= Finding::STATUS[:being_implemented] %> }
   important: true
@@ -128,7 +130,7 @@ finding_being_implemented_weakness_without_extension_after_final_review:
   event: update
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
-  object: { extension: false, 
+  object: { extension: false,
             follow_up_date: <%= (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date - 2.days).to_s(:db) %>,
             state: <%= Finding::STATUS[:being_implemented] %> }
   important: true

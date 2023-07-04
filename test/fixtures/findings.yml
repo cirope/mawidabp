@@ -1,4 +1,5 @@
 <% stale_confirmed_days = DEFAULT_SETTINGS[:finding_stale_confirmed_days][:value].to_i %>
+<% FINDING_WARNING_EXPIRE_DAYS = 7 %>
 being_implemented_weakness:
   type: Weakness
   control_objective_item: management_dependency_item

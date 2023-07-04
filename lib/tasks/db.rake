@@ -120,8 +120,8 @@ private
     if add_finding_warning_expire_days? #2023-06-06
       Organization.all.find_each do |o|
         o.settings.create! name:        'finding_warning_expire_days',
-          value:       DEFAULT_SETTINGS[:finding_warning_expire_days][:value],
-          description: I18n.t('settings.finding_warning_expire_days')
+                           value:       DEFAULT_SETTINGS[:finding_warning_expire_days][:value],
+                           description: I18n.t('settings.finding_warning_expire_days')
       end
     end
   end
