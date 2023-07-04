@@ -10,8 +10,8 @@ module Findings::Expiration
   end
 
   module ClassMethods
-    def expire_date setting
-      setting.business_days.from_now.to_date
+    def expire_date expire_day
+      expire_day.business_days.from_now.to_date
     end
 
     def warning_users_about_expiration
