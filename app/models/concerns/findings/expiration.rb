@@ -10,8 +10,8 @@ module Findings::Expiration
   end
 
   module ClassMethods
-    def next_to_expire setting
-      expires_on setting.business_days.from_now.to_date
+    def expire_date setting
+      setting.business_days.from_now.to_date
     end
 
     def warning_users_about_expiration
@@ -21,23 +21,17 @@ module Findings::Expiration
           Current.organization = organization
           Current.group        = organization.group
           expire_days          = value.split ','
-          users                = []
 
-          expire_days.map do |day|
-            users = list.next_to_expire(day.to_i).inject(users) do |u, finding|
-              u | finding.users
-            end
+          expire_dates = expire_days.map { |day| expire_date(day.to_i) }
 
-            users.each do |user|
-              findings = []
+          users = list.expires_on(expire_dates).finals(:false).expires_statuses.inject([]) do |u, finding|
+            u | finding.users
+          end
 
-              expire_days.each do |day|
-                byebug
-                findings = user.findings.list.next_to_expire(day.to_i)
-              end
-byebug
-              #NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
-            end
+          users.each do |user|
+            findings = user.findings.list.expires_on(expire_dates).finals(:false).expires_statuses
+
+            NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
           end
         end
       end
@@ -57,14 +51,21 @@ byebug
       end
     end
 
-    private
 
-      def expires_on date
+    def expires_on dates
+      dates.map do |date|
         from = date
         to   = expires_to_date from
 
-        being_implemented.or(awaiting).finals(false).where follow_up_date: from..to
-      end
+        where follow_up_date: from..to
+      end.inject(:or)
+    end
+
+    def expires_statuses
+      being_implemented.or(awaiting)
+    end
+
+    private
 
       def expires_to_date date
         date = date.next until date.next.workday?
