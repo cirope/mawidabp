@@ -58,7 +58,7 @@ module Findings::Expiration
 
     def expires_on dates
       dates.map do |from|
-        to   = expires_to_date from
+        to = expires_to_date from
 
         where follow_up_date: from..to
       end.inject(:or)
@@ -71,7 +71,9 @@ module Findings::Expiration
     private
 
       def expires_to_date date
-        date.next until date.next.workday?
+        date = date.next until date.next.workday?
+
+        date
       end
 
       def finding_warning_expire_days_parameters
