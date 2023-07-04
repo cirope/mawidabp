@@ -20,18 +20,22 @@ module Findings::Expiration
         finding_warning_expire_days_parameters.each do |organization, value|
           Current.organization = organization
           Current.group        = organization.group
-          expire_days          = value.split ','
+          expire_days          = value.to_s.split ','
 
-          expire_dates = expire_days.map { |day| expire_date(day.to_i) }
-
-          users = list.expires_on(expire_dates).finals(:false).expires_statuses.inject([]) do |u, finding|
-            u | finding.users
+          expire_dates = expire_days.map do |day|
+            expire_date(day.to_i) if day.to_i > 0
           end
 
-          users.each do |user|
-            findings = user.findings.list.expires_on(expire_dates).finals(:false).expires_statuses
+          if expire_dates.present?
+            users = list.expires_on(expire_dates).finals(:false).expires_statuses.inject([]) do |u, finding|
+              u | finding.users
+            end
 
-            NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
+            users.each do |user|
+              findings = user.findings.list.expires_on(expire_dates).finals(:false).expires_statuses
+
+              NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
+            end
           end
         end
       end
@@ -53,8 +57,7 @@ module Findings::Expiration
 
 
     def expires_on dates
-      dates.map do |date|
-        from = date
+      dates.map do |from|
         to   = expires_to_date from
 
         where follow_up_date: from..to
@@ -68,9 +71,7 @@ module Findings::Expiration
     private
 
       def expires_to_date date
-        date = date.next until date.next.workday?
-
-        date
+        date.next until date.next.workday?
       end
 
       def finding_warning_expire_days_parameters

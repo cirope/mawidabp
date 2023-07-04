@@ -29,12 +29,6 @@ CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS = 7
 EMAIL_REGEXP = /\A[a-z0-9'._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\Z/i
 # Cantidad máxima de observaciones por PDF
 FINDING_MAX_PDF_ROWS = 100
-# Cantidad de días anteriores al vencimiento de una observación en los que el
-# sistema notificará su proximidad
-FINDING_WARNING_EXPIRE_DAYS = 7
-# Cantidad de días anteriores para la notificación de vencimiento muy cercano
-# de una observación en los que el sistema notificará su proximidad.
-FINDING_DAYS_FOR_THE_SECOND_EXPIRATION_WARNING = 1
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
 FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1
 # Fecha inicial para el envío de correo con resumen de observaciones
