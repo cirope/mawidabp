@@ -26,13 +26,12 @@ module Tasks::Expiration
       # Sólo si no es sábado o domingo (porque no tiene sentido)
       if Time.zone.today.workday?
         finding_warning_expire_days_parameters.each do |organization, value|
-
           Current.organization = organization
           Current.group        = organization.group
-          expire_days          = value.to_s.split ','
+          expire_days          = value.to_s.split(',').map { |v| v.strip.to_i }
 
           expire_dates = expire_days.map do |day|
-            expire_date(day.strip.to_i) if day.strip.to_i > 0
+            expire_date(day) if day > 0
           end
 
           if expire_dates.present?
@@ -41,7 +40,7 @@ module Tasks::Expiration
             end
 
             users.each do |user|
-              tasks = user.tasks.expires_on(expire_dates)
+              tasks = user.tasks.expires_on expire_dates
 
               NotifierMailer.tasks_expiration_warning(user, tasks.to_a).deliver_later
             end
@@ -74,7 +73,7 @@ module Tasks::Expiration
     end
 
     def pending_statuses
-      pending.or(in_progress)
+      pending.or in_progress
     end
 
     private

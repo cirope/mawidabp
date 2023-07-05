@@ -1,5 +1,4 @@
 <% stale_confirmed_days = DEFAULT_SETTINGS[:finding_stale_confirmed_days][:value].to_i %>
-<% FINDING_WARNING_EXPIRE_DAYS = 7 %>
 being_implemented_weakness:
   type: Weakness
   control_objective_item: management_dependency_item
@@ -19,8 +18,8 @@ being_implemented_weakness:
   effect: Effect 1w
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
-  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date.to_s(:db) %>
-  first_follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date.to_s(:db) %>
+  follow_up_date: <%= 7.business_days.from_now.to_date.to_s(:db) %>
+  first_follow_up_date: <%= 7.business_days.from_now.to_date.to_s(:db) %>
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
@@ -54,8 +53,8 @@ being_implemented_weakness_final:
   effect: Effect 1w
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
-  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date.to_s(:db) %>
-  first_follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date.to_s(:db) %>
+  follow_up_date: <%= 7.business_days.from_now.to_date.to_s(:db) %>
+  first_follow_up_date: <%= 7.business_days.from_now.to_date.to_s(:db) %>
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: true
   parent: being_implemented_weakness

@@ -20,10 +20,10 @@ module Findings::Expiration
         finding_warning_expire_days_parameters.each do |organization, value|
           Current.organization = organization
           Current.group        = organization.group
-          expire_days          = value.to_s.split ','
+          expire_days          = value.to_s.split(',').map { |v| v.strip.to_i }
 
           expire_dates = expire_days.map do |day|
-            expire_date(day.strip.to_i) if day.strip.to_i > 0
+            expire_date(day) if day > 0
           end
 
           if expire_dates.present?
@@ -32,7 +32,7 @@ module Findings::Expiration
             end
 
             users.each do |user|
-              findings = user.findings.list.expires_on(expire_dates)
+              findings = user.findings.list.expires_on expire_dates
 
               NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
             end
@@ -68,7 +68,7 @@ module Findings::Expiration
     end
 
     def pending_statuses
-      being_implemented.or(awaiting)
+      being_implemented.or awaiting
     end
 
     private
