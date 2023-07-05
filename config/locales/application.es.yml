@@ -50,6 +50,7 @@ es:
 
   lang:
     es: 'Español'
+    en: 'Inglés'
 
   message:
     ldap_error: 'El servidor de autenticación no está disponible en este momento. Por favor, inténtelo de nuevo más tarde'
@@ -204,12 +205,12 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
-    mid_date: "Corte" # REVIEW Que sería esta fecha? (hay varios)
-    date_field: "Fecha a utilizar" # REVIEW Que sería esta fecha? Podría ser "Fecha de uso" para que combine con el resto? (hay varios)
+    mid_date: "Corte"
+    date_field: "Fecha a utilizar"
     created_at: "Fecha de creación"
     issue_date: "Fecha de emisión"
-    origination_date: "Fecha de origen" # REVIEW Cuál es la diferencia con "Fecha de creación"? (hay varios)
-    cut_date: "Fecha cierre antigua data" # REVIEW: Que sería esta fecha? (hay varios)
+    origination_date: "Fecha de origen"
+    cut_date: "Fecha cierre antigua data"
     applied_filters:
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
@@ -289,7 +290,7 @@ es:
         title: '<b><u>RESUMEN EJECUTIVO</u></b>'
         objective_title: '<b><u>OBJETIVO</u></b>'
         general_conclusion_title: '<b><u>CONCLUSIÓN GENERAL</u></b>'
-        first_footer: '<b>AUS. Alejandro Camnasio</b>' # REVIEW que es AUS?
+        first_footer: '<b>AUS. Alejandro Camnasio</b>'
         second_footer: '<b>A/C int. Gerencia de Auditoria Interna</b>'
       detailed_report:
         title: '<b><u>INFORME DETALLADO</u></b>'
@@ -307,7 +308,7 @@ es:
       internal_control_qualification:
         header_cycle: '<b>Ciclo</b>'
         header_count_findings: '<b>Cantidad de Observaciones</b>'
-        header_weight: '<b>Ponderador por fecha de los Informes</b>' # REVIEW: No sería "Ponderador por fecha de informe"?
+        header_weight: '<b>Ponderador por fecha de informe</b>'
         header_qualification: '<b>Calificación</b>'
         count_weight: '<b>Total ponderación</b>'
         count_cycles: '<b>Cantidad de ciclos</b>'
@@ -330,7 +331,7 @@ es:
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
     review_stats_report:
       pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
-      title: "ESTADÍSTICAS DE INFORMES" # REVIEW: en estos  casos habla de los informes definitivos o de los informes? No es redundante mencionar tanto en el título como en el subtítulo a los INFORMES? (hay varios)
+      title: "ESTADÍSTICAS DE INFORMES"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       ratio: "Proporción"
       review_count: "Cantidad de informes"
@@ -349,7 +350,7 @@ es:
       total_score: "Calificación total"
       empty: "Sin calificaciones para el filtro aplicado"
     review_score_details_report:
-      pdf_name: "calificaciones_de_informes_definitivos_detallado_%{from_date}_al_%{to_date}.pdf" # REVIEW: calificaciones_detalladas_de_informes_definitivos? O sea, entiendo que las calificaciones son las detalladas. Hay varios en los que el detallado se le aplica al informe y no a las calificaciones
+      pdf_name: "calificaciones_de_informes_definitivos_detallado_%{from_date}_al_%{to_date}.pdf"
       title: "CALIFICACIONES DE INFORMES DETALLADO"
       subtitle: "INFORMES DEFINITIVOS"
       brief: "Resumen"
@@ -374,7 +375,7 @@ es:
       oportunities: "Oportunidades"
       without_weaknesses: "Sin hallazgos"
       pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
-      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA" # REVIEW No falta una preposición? "EN" INFORMES DEFINITIVOS / "DE" INFORMES DEFINITIVOS?
+      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
       total: "TOTAL"
 
   conclusion_final_review:
@@ -435,7 +436,7 @@ es:
     oportunities: "OPORTUNIDADES DE MEJORA"
     finding_review_assignments: "HALLAZGOS REVISADOS"
     repeated_findings: "Seguimiento de observaciones"
-    repeated_findings_empty: "No se registran observaciones pendientes de regularización." # REVIEW Teniendo en cuenta el key, no debería decir "No se registran observaciones reiteradas."?
+    repeated_findings_empty: "No se registran observaciones pendientes de regularización."
     present_findings: "Nuevas observaciones"
     present_findings_empty: "No se registran observaciones que mencionar."
     add_recipient: "Agregar nuevo destinatario"
@@ -456,12 +457,12 @@ es:
       assumed_risk_weaknesses: "Riesgo asumido"
     detailed_review:
       title: "Informe detallado"
-      legend: "Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
-    annex: # REVIEW sobre el texto anterior, cuando dice "en sus respectivos textos ordenados BCRA a la fecha del presente informe" no debería decir "en sus respectivos textos ordenados por el BCRA a la fecha del presente informe"?
+      legend: "Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados por el BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
+    annex:
       title: "Anexo I"
       legend: "La Auditoría practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
       scope: "Alcance de la tarea"
-      workflow_text: "El programa de trabajo elaborado para esta casa, así como su desarrollo y demás elementos, forma parte de los antecedentes obrantes en carpeta de trabajo del presente informe." # REVIEW "para esta casa"? Está bien eso?
+      workflow_text: "El programa de trabajo elaborado para esta casa, así como su desarrollo y demás elementos, forma parte de los antecedentes obrantes en carpeta de trabajo del presente informe."
       scope_column: "Alcance de la tarea"
       staff: "Personal interviniente"
       satisfactory_control_objective_items: "Resto de los Objetivos de Control"
@@ -546,7 +547,7 @@ es:
     cost_analysis_title: "Análisis de costos"
     detailed_management_report:
       pdf_name: "informe_gerencial_detallado_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Hallazgos Auditoría Interna" # REVIEW: Hallazgos de Auditoría Interna? (varios a reemplazar)
+      internal_audit_weaknesses: "Hallazgos Auditoría Interna"
       external_audit_weaknesses: "Hallazgos de Auditorías Externas"
       title: "RESUMEN GERENCIAL\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES EN EJECUCIÓN"
@@ -616,7 +617,7 @@ es:
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas" # REVIEW: Observaciones solucionadas por riesgo? (varios a corregir)
+    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     weaknesses_graphs:
       title: 'Gráfico de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
@@ -834,7 +835,7 @@ es:
     add_organization: "Agregar organización"
 
   memo:
-    correctly_created: "Informe externo agregado correctamente." # REVIEW: se refiere al Informe (audit report) o a otro informe/reporte?
+    correctly_created: "Informe externo agregado correctamente."
     correctly_updated: "Informe externo actualizado correctamente."
     stale_object_error: "El Informe externo no fue actualizado, intente nuevamente."
     description_pdf: "COMENTARIOS"
@@ -846,7 +847,7 @@ es:
     correctly_updated: "Notificación actualizada correctamente."
     stale_object_error: "La notificación no fue actualizada, intente nuevamente."
     confirmed: "Notificación confirmada correctamente."
-    rejected: "Notificación rechazada correctamente, por favor autentíquese e ingrese un comentario sobre la misma." # REVIEW Cuando hablamos de autenticar sería iniciar sesión? Quizás iniciar sesión es más claro
+    rejected: "Notificación rechazada correctamente. Por favor, inicie sesión e ingrese un comentario sobre la misma."
     confirm: "Confirmar"
     reject: "Rechazar"
     status_unconfirmed: "Sin confirmar"
@@ -902,7 +903,7 @@ es:
     expired_finding_to_manager:
       title: "Hallazgo vencido"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
-      managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama" # REVIEW: Estos casos no deberían reemplazarse por hallazgo? Hay varios
+      managers_clarification: "Las personas pueden cambiar si se modifican los usuarios del hallazgo o si se altera el organigrama"
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_findings:
@@ -1037,8 +1038,8 @@ es:
     oportunities_work_papers: "Oportunidades"
     follow_up_work_papers: "Seguimiento de observaciones"
     download_work_papers: "Descargar papeles de trabajo"
-    finished_work_papers: "Papeles de trabajo - Conforme auditor" # REVIEW A que se refiere con "Conforme auditor"? (hay varios)
-    revise_work_papers: "Papeles de trabajo - Revisado supervisor" # REVIEW A que se refiere con "Revisado supervisor"? (hay varios)
+    finished_work_papers: "Papeles de trabajo - Conforme auditor"
+    revise_work_papers: "Papeles de trabajo - Revisado supervisor"
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
     other_actions: "Acciones"
@@ -1084,7 +1085,7 @@ es:
       title: "Modificación de responsabilidades en el informe %{review}"
       old_responsible: "Responsable anterior: %{responsible}"
       new_responsible: "Responsable actual: %{responsible}"
-    responsibility_removed: "Ha sido desafectado del informe %{review}" # REVIEW: es un mensaje para el user que está usando la app ("Usted ha sido desafectado") o se puede desafectar otro usuario ("El usuario Juanito ha sido desafectado"). Es para saber que incluyo como sujeto en la traducción.
+    responsibility_removed: "Ha sido desafectado del informe %{review}"
     cannot_be_reassigned: "El usuario no puede ser reasignado, tiene observaciones que dependen de el"
     cannot_be_destroyed: "El usuario no puede ser eliminado, tiene observaciones que dependen de el"
 
@@ -1519,7 +1520,7 @@ es:
       workflow/workflow_items:
         one: "Tarea"
         other: "Tareas"
-        base: "" # REVIEW Por qué está vacío?
+        base: ""
         task: "Tarea"
         start: "Tarea (inicio)"
         end: "Tarea (fin)"

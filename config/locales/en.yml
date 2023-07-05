@@ -37,8 +37,8 @@
     weaknesses_by_business_unit_title: "Issues by business unit"
     control_objective_stats:
       reviews_with_weaknesses:
-        one: "%{count} audit report with issues in the O.C"
-        other: "%{count} audit reports with issues in the O.C"
+        one: "%{count} audit report with issues in the C.O."
+        other: "%{count} audit reports with issues in the C.O."
 
     control_objective_counts:
       pdf_name: "control_objectives_analysis_%{from_date}_to_%{to_date}.pdf"
@@ -89,8 +89,8 @@
       csv_name: 'issues_by_business_process_%{from_date}_to_%{to_date}.pdf'
       period_column: 'Period'
       reviews_with_weaknesses:
-        one: "%{count} audit report with issues in the O.C" # REVIEW: que es O.C? como se traduciría? (hay varios)
-        other: "%{count} audit reports with issues in the O.C"
+        one: "%{count} audit report with issues in the C.O."
+        other: "%{count} audit reports with issues in the C.O."
       download_csv: 'Download CSV'
     weaknesses_by_risk_and_business_unit:
       pdf_name: "issues_of_final_audit_reports_by_risk_and_business_units_%{from_date}_to_%{to_date}.pdf"
@@ -235,8 +235,8 @@
         one: "%{effectiveness} - %{count} evaluated audit report"
         other: "%{effectiveness} - %{count} evaluated audit reports"
       reviews_with_weaknesses:
-        one: "%{count} audit report with issues in the O.C."
-        other: "%{count} audit reports with issues in the O.C."
+        one: "%{count} audit report with issues in the C.O."
+        other: "%{count} audit reports with issues in the C.O."
       pdf_name: "issues_by_business_process.pdf"
       title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONITORING ISSUES BY BUSINESS PROCESS / FINAL AUDIT REPORTS"
@@ -301,8 +301,8 @@
     weaknesses_by_control_objective_process_title: "Report process by control objectives"
     control_objective_stats:
       reviews_with_weaknesses:
-        one: "%{count} audit report with issues in the O.C."
-        other: "%{count} audit reports with issues in the O.C."
+        one: "%{count} audit report with issues in the C.O."
+        other: "%{count} audit reports with issues in the C.O."
       without_audits_in_the_period: "Without audits in the period"
     follow_up_cost_analysis:
       pdf_name: "follow_up_cost_analysis_%{from_date}_to_%{to_date}.pdf"
@@ -429,8 +429,8 @@
       weakness_tags: "Issue tags"
     process_control_stats:
       reviews_with_weaknesses:
-        one: "%{count} audit report with issues in the O.C."
-        other: "%{count} audit reports with issues in the O.C."
+        one: "%{count} audit report with issues in the C.O."
+        other: "%{count} audit reports with issues in the C.O."
     qa_indicators:
       indicators:
         oportunities_solution_rate: "Improvement opportunities solution"
@@ -577,7 +577,7 @@
         workflow_items:
           one: "Task"
           other: "Tasks"
-          base: "" # REVIEW Por qué está vacío?
+          base: ""
           task: "Task"
           start: "Task (start)"
           end: "Task (end)"

@@ -301,7 +301,7 @@ en:
         score_type: 'Rating type'
         control_objective_id: 'Control objective'
         audit_sector: 'Audit Sector'
-        date_charge: 'Date of entry'
+        date_charge: 'Date of creation'
         affected_sector_id: 'Bank sector affected by the alert'
         control_objective_auditors: 'Auditors in charge'
       review/control_objective_items:
@@ -367,7 +367,7 @@ en:
         use_suggested_impact: 'Suggested impact'
         use_suggested_probability: 'Suggested probability'
         impact_amount: 'Universe amount'
-        probability_amount: 'Universe in number of cases'
+        probability_amount: 'Universe in number of records'
         organization: 'Organization'
         frequency: 'Frequency'
         state_regulations: 'State Regulations'

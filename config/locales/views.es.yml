@@ -224,7 +224,7 @@ es:
       approve: 'Ir a Paypal'
       authorize_new_plan:
         title: 'Autorizar nuevo plan'
-        body: |- # REVIEW Se refiere a cambiar de planes ya armados, cierto? Ej: cambiar de plan base a premium. Pregunto para saber si usar "switch"
+        body: |-
           Para cambiar de plan, deberá autorizar el nuevo plan mensual.
           El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios auditores en el momento.'
     authorizations:
@@ -600,7 +600,7 @@ es:
       user: 'Usuario'
       password: 'Contraseña'
       remember_me: 'Recordarme'
-      try_again: 'Ingresar nuevamente' # REVIEW No sería "Intentar nuevamente"?
+      try_again: 'Intentar nuevamente'
       forgot_password: '¿Olvidaste tu contraseña?'
     create:
       invalid: 'Tu correo y/o contraseña no están bien =('

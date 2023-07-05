@@ -49,7 +49,8 @@ en:
     without_data: "Without data"
 
   lang:
-    es: 'Spanish' # REVIEW donde se usaría esto? Deberíamos cambiarlo a English? Parece que no se usa
+    es: 'Spanish'
+    en: 'English'
 
   message:
     ldap_error: 'The authentication server is currently unavailable. Please try again later'
@@ -204,12 +205,12 @@ en:
     weaknesses_graphs: "Issues graph"
     from_date: "From"
     to_date: "To"
-    mid_date: "Mid"
+    mid_date: "Cutoff"
     date_field: "Date to use"
     created_at: "Creation date"
     issue_date: "Issuance date"
     origination_date: "Origin date"
-    cut_date: "Old data closing date"
+    cut_date: "Old data cutoff date"
     applied_filters:
       one: "The following filter has been applied to this report: %{filters}"
       other: "The following filters have been applied to this report: %{filters}"
@@ -289,8 +290,8 @@ en:
         title: '<b><u>EXECUTIVE SUMMARY</u></b>'
         objective_title: '<b><u>OBJECTIVE</u></b>'
         general_conclusion_title: '<b><u>GENERAL CONCLUSION</u></b>'
-        first_footer: '<b>AUS. Alejandro Camnasio</b>'
-        second_footer: '<b>"IA/IC Internal Audit Management</b>' # REVIEW por lo que vi, "A/C int." es "Auditoría/Control Interno" y en inglés sería "IA/IC" (Internal Audit/Internal Control). Algún sabio puede confirmar?
+        first_footer: '<b>AUD. Alejandro Camnasio</b>'
+        second_footer: '<b>"IA/IC Internal Audit Management</b>'
       detailed_report:
         title: '<b><u>DETAILED REPORT</u></b>'
         introduction_and_scope_title: '<b><u>INTRODUCTION AND SCOPE OF WORK PERFORMED</u></b>'
@@ -435,7 +436,7 @@ en:
     oportunities: "IMPROVEMENT OPPORTUNITIES"
     finding_review_assignments: "REVIEWED FINDINGS"
     repeated_findings: "Issues follow-up"
-    repeated_findings_empty: "There are no issues pending regularization."
+    repeated_findings_empty: "There are no pending issues requiring regularization."
     present_findings: "New issues"
     present_findings_empty: "There are no issues to mention."
     add_recipient: "Add new recipient"
@@ -692,8 +693,8 @@ en:
     not_expired: "Not expired"
     from_date: "From"
     to_date: "To"
-    mid_date: "Cut"
-    cut_date: "Old data closing date"
+    mid_date: "Cutoff"
+    cut_date: "Old data cutoff date"
     print_date: "Print date: %{date}"
     applied_filters:
       one: "The following filter has been applied to this report: %{filters}"
@@ -834,9 +835,9 @@ en:
     add_organization: "Add organization"
 
   memo:
-    correctly_created: "External report was successfully created."
-    correctly_updated: "External report was successfully updated."
-    stale_object_error: "External report was not updated, please try again."
+    correctly_created: "External audit report was successfully created."
+    correctly_updated: "External audit report was successfully updated."
+    stale_object_error: "External audit report was not updated, please try again."
     description_pdf: "COMMENTS"
 
   notification:
@@ -846,7 +847,7 @@ en:
     correctly_updated: "Notification was successfully updated."
     stale_object_error: "Notification was not updated, please try again."
     confirmed: "Notification was successfully confirmed."
-    rejected: "Notification was successfully rejected, please authenticate and enter a comment about it."
+    rejected: "Notification was successfully rejected. Please, log in and enter a comment about it."
     confirm: "Confirm"
     reject: "Reject"
     status_unconfirmed: "Unconfirmed"
@@ -1010,7 +1011,7 @@ en:
       type_manager: "Manager"
       type_responsible: "Head of internal audit"
       type_audited: "Auditee"
-      audit_team: "Audit Team" # REVIEW en :es sale como "Auditoría", donde sale? o a que se refiere?
+      audit_team: "Audit Team"
       others: "Users"
       readonly: "The members cannot be modified, the final audit report has already been issued"
     score_sheet_title: "DETAILED RATING PROCESS FORM"
@@ -1038,7 +1039,7 @@ en:
     follow_up_work_papers: "Follow-up issues"
     download_work_papers: "Download working papers"
     finished_work_papers: "Working papers - Auditor approved"
-    revise_work_papers: "Working Papers - Supervisor revised"
+    revise_work_papers: "Working Papers - Supervisor reviewed"
     notes: "Notes"
     estimated_amount: "Estimated cost in workplan"
     other_actions: "Actions"
@@ -1054,8 +1055,8 @@ en:
     work_papers_recoded: "Working papers were successfully recoded"
     work_papers_recode_failed: "Working papers could not be recoded"
     failed_to_reorder: "Processes could not be reordered"
-    work_papers_marked_as_finished: "Working papers marked as finished auditor"
-    work_papers_marked_as_revised: "Working papers marked as revised supervisor"
+    work_papers_marked_as_finished: "Working papers marked as auditor-approved"
+    work_papers_marked_as_revised: "Working papers marked as supervisor-reviewed"
     review_qualification_explanation: "The audit report rating is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight is added and the result is divided by the sum of the weights."
     process_control_qualification_explanation: "The business process rating is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are summed and the result is divided by the sum of the weights."
     errors:
