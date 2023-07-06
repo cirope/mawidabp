@@ -205,6 +205,7 @@ es:
     endorsement_item:
       approve: 'Aprobar'
       reject: 'Rechazar'
+    finding_answers: 'Comentarios de'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
