@@ -59,7 +59,6 @@ class OrganizationRole < ApplicationRecord
   end
 
   private
-
     def set_sync_ldap
       self.sync_ldap = true if sync_ldap.nil?
     end
