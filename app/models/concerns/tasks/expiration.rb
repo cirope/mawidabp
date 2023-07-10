@@ -28,7 +28,7 @@ module Tasks::Expiration
 
           expire_dates = expire_days.map do |day|
             day.business_days.from_now.to_date if day > 0
-          end
+          end.compact
 
           if expire_dates.present?
             users = expires_on(expire_dates).inject([]) do |u, task|
@@ -74,6 +74,7 @@ module Tasks::Expiration
     end
 
     private
+
       def expires_to_date date
         date = date.next until date.next.workday?
 
