@@ -1,6 +1,6 @@
 module MarkdownHelper
   def markdown(text)
-    text.present? ? MARKDOWN_RENDERER.render(text).strip.html_safe : ''
+    text.present? ? sanitize(MARKDOWN_RENDERER.render(text).strip.html_safe) : ''
   end
 
   def markdown_without_paragraph(text)
