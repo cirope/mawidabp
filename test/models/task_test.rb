@@ -78,7 +78,7 @@ class TaskTest < ActiveSupport::TestCase
   end
 
   test 'warning users about tasks expiration' do
-    Current.organization = organizations :cirope
+    Current.organization = nil
     # Only if no weekend
     assert Time.zone.today.workday?
 
@@ -87,19 +87,15 @@ class TaskTest < ActiveSupport::TestCase
     assert_enqueued_emails @task.users.size do
       Task.warning_users_about_expiration
     end
-  ensure
-    Current.organization = nil
   end
 
   test 'remember users about expired tasks' do
-    Current.organization = organizations :cirope
+    Current.organization = nil
 
     @task.update! due_on: Time.zone.yesterday
 
     assert_enqueued_emails @task.users.size do
       Task.remember_users_about_expiration
     end
-  ensure
-    Current.organization = nil
   end
 end

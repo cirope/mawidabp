@@ -14,12 +14,8 @@ module Tasks::Expiration
   end
 
   module ClassMethods
-    def expire_date expire_day
-      expire_day.business_days.from_now.to_date
-    end
-
     def finals final
-      includes(:finding).merge(Finding.list.finals(final)).references :findings
+      includes(:finding).merge(Finding.finals(final)).references :findings
     end
 
     def warning_users_about_expiration
@@ -31,7 +27,7 @@ module Tasks::Expiration
           expire_days          = value.to_s.split(',').map { |v| v.strip.to_i }
 
           expire_dates = expire_days.map do |day|
-            expire_date(day) if day > 0
+            day.business_days.from_now.to_date if day > 0
           end
 
           if expire_dates.present?
@@ -69,7 +65,8 @@ module Tasks::Expiration
       end.
         inject(:or).
         finals(:false).
-        pending_statuses
+        pending_statuses.
+        where(findings: { organization_id: Current.organization&.id })
     end
 
     def pending_statuses

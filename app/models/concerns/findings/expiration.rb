@@ -10,10 +10,6 @@ module Findings::Expiration
   end
 
   module ClassMethods
-    def expire_date expire_day
-      expire_day.business_days.from_now.to_date
-    end
-
     def warning_users_about_expiration
       # Sólo si no es sábado o domingo (porque no tiene sentido)
       if Time.zone.today.workday?
@@ -23,7 +19,7 @@ module Findings::Expiration
           expire_days          = value.to_s.split(',').map { |v| v.strip.to_i }
 
           expire_dates = expire_days.map do |day|
-            expire_date(day) if day > 0
+            day.business_days.from_now.to_date if day > 0
           end
 
           if expire_dates.present?

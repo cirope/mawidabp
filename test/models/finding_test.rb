@@ -1051,7 +1051,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'warning users about findings expiration' do
-    Current.organization = organizations :cirope
+    Current.organization = nil
     # Only if no weekend
     assert Time.zone.today.workday?
 
@@ -1062,8 +1062,6 @@ class FindingTest < ActiveSupport::TestCase
     assert_enqueued_emails 7 do
       Finding.warning_users_about_expiration
     end
-  ensure
-    Current.organization = nil
   end
 
   test 'remember users about expired findings' do
@@ -1167,8 +1165,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'notify expired follow up' do
     skip unless NOTIFY_EXPIRED_AND_STALE_FOLLOW_UP
 
-    organization         = organizations :cirope
-    Current.organization = organization
+    Current.organization = nil
     # Only if no weekend
     assert Time.zone.today.workday?
 
@@ -1371,8 +1368,6 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'next to expire scope' do
-    Current.organization = organizations :cirope
-
     before_expire = 7.pred.business_days.from_now.to_date
     expire        = 7.business_days.from_now.to_date
 
@@ -2521,7 +2516,7 @@ class FindingTest < ActiveSupport::TestCase
 
       finding.save!
 
-      finding.follow_up_date = (7777777.business_days.from_now.to_date + 5.days).to_s(:db)
+      finding.follow_up_date = (7.business_days.from_now.to_date + 5.days).to_s(:db)
 
       assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
     end
@@ -2755,7 +2750,6 @@ class FindingTest < ActiveSupport::TestCase
 
     def review_codes_on_findings_by_user method, args: nil
       review_codes_by_user = {}
-      Current.organization = organizations :cirope
       findings             = if args.present?
                                Finding.list.send(method, args)
                              else
