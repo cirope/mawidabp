@@ -640,6 +640,7 @@ es:
     hours_of_work_per_day: 'Horas de trabajo por día'
     conclusion_review_receiver: 'Receptor/es del informe'
     temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.'
+    finding_warning_expire_days: 'Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad'
 
   tags:
     edit:
