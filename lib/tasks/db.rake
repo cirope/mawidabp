@@ -116,6 +116,14 @@ private
                            description: I18n.t('settings.temporary_polls')
       end
     end
+
+    if add_finding_warning_expire_days? #2023-06-06
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'finding_warning_expire_days',
+                           value:       DEFAULT_SETTINGS[:finding_warning_expire_days][:value],
+                           description: I18n.t('settings.finding_warning_expire_days')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -156,6 +164,10 @@ private
 
   def add_temporary_polls?
     Setting.where(name: 'temporary_polls').empty?
+  end
+
+  def add_finding_warning_expire_days?
+    Setting.where(name: 'finding_warning_expire_days').empty?
   end
 
   def add_new_answer_options
