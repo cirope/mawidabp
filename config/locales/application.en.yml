@@ -1,0 +1,1656 @@
+en:
+  app_name: "Mawidabp"
+  app_copyright: "Copyright © 2008-%{year} Hullop Solutions S.A. All rights reserved."
+
+  label:
+    'yes': "Yes"
+    'no': "No"
+    total: "Total"
+    by: "by"
+    add: "Add"
+    add_item: "Add item"
+    all: "All"
+    apply_filter: "Apply filter"
+    ascendant: "Ascendant"
+    back: "Back"
+    optional: "Optional"
+    cancel: "Cancel"
+    close: "Close"
+    create: "Create"
+    day:
+      one: "1 day"
+      other: "%{count} days"
+    delete: "Delete"
+    delete_file: "Delete file"
+    descendant: "Descendant"
+    details: "Details"
+    disable: "Disable"
+    download: "Download"
+    download_csv: "Download CSV"
+    download_rtf: "Download RTF"
+    create_permalink: "Create permalink"
+    edit: "Edit"
+    import: "Import"
+    insert_item: "Insert item"
+    insert_record_item: "Insert new"
+    list: "List"
+    modify: "Modify"
+    move: "Move"
+    new: "New"
+    next: "Next"
+    "or": 'or'
+    previous: "Previous"
+    save: "Save"
+    search: "Search"
+    send: "Send"
+    show: "Show"
+    downloads: "Downloads"
+    update: "Update"
+    without_data: "Without data"
+
+  lang:
+    es: 'Spanish'
+    en: 'English'
+
+  message:
+    ldap_error: 'The authentication server is currently unavailable. Please try again later'
+    change_weakness_risk: "The risk of the issue has changed"
+    confirmation_question: "Are you sure?"
+    download: "Download"
+    insufficient_privileges: "You do not have permission to perform this action"
+    invalid_user_or_password: "Invalid user/password"
+    loading: "Loading"
+    must_be_authenticated: "You must log in to continue"
+    must_change_the_password: "You must change your password"
+    no_organization: "The organization does not exist. Please verify the URL address"
+    password_expire_in_x:
+      one: "Your password expires tomorrow"
+      other: "Your password expires in %{count} days"
+    password_expired_x_days_ago:
+      one: "Your password expired yesterday"
+      other: "Your password expired %{count} days ago"
+    search_link_title: "Filter listing (Ctrl + Spacebar)"
+    session_closed_correctly: "You have successfully logged out"
+    session_expires_in_less_than_two_minutes: "Your session expires in less than two minutes"
+    session_time_expired: "Your session has expired. Please log in again to continue"
+    sort_by: "Sort by..."
+    unsaved_data_warning: "You have modified the content. If you leave the page, you will lose all the changes made"
+    rejected_data_format: "Some field contains the string <code>../</code>. Please remove it before performing the action. Check the highlighted fields"
+    validation_failed_message: "The entered data is not valid. Please check the highlighted fields and try again"
+    you_are_already_logged: "This user is already logged in"
+    empty_result: "No results. Please modify your search criteria"
+    automatic_by_the_system: "Done automatically by the system"
+    compatibility_warning_html: 'You are using an <strong>outdated</strong> browser. Please consider <a href="https://browsehappy.com/">upgrading it</a>'
+
+  error:
+    title: "Error"
+    download_the_following_file: "Please download the following file:"
+    error_file: "error_file"
+    header_message: "A problem has been found"
+    hide_details: "Hide details"
+    or_send_it_to_the_following_email: "Or to the following email address:"
+    send_it_to_the_administrator: "And send it to the system administrator via the website:"
+    show_details: "Show details"
+    thank_you_and_apologies_for_the_inconvenience: "Thank you very much and sorry for the inconvenience"
+
+  business_unit_type:
+    index_title: "Organizational units list"
+    show_title: "Organizational unit detail"
+    new_title: "Add organizational unit"
+    edit_title: "Edit organizational unit"
+    correctly_created: "Organizational unit was successfully created."
+    correctly_updated: "Organizational unit was successfully updated."
+    stale_object_error: "The organizational unit was not updated, please try again."
+    add_business_unit: "Add business unit"
+    internal_audit: "Audits performed by the entity"
+    external_audit: "Audits performed by other entities"
+    errors:
+      can_not_be_destroyed: "The organizational unit cannot be deleted"
+      business_unit_related: "The business unit cannot be deleted, it is related to at least one workplan"
+
+  conclusion_draft_review:
+    index_title: "Draft audit report list"
+    show_title: "Draft audit report details"
+    new_title: "Add draft audit report"
+    edit_title: "Edit draft audit report"
+    bundle_title: "Generate file"
+    correctly_created: "Draft audit report was successfully created."
+    correctly_updated: "Draft audit report was successfully updated."
+    stale_object_error: "The draft audit report could not be updated, please try again."
+    new_conclusion_final_review: "New final audit report"
+    approved: "Approved"
+    not_approved: "Not approved"
+    check_for_approval: "Check now"
+    generate_score_sheet: "Download detailed rating form"
+    generate_global_score_sheet: "Download global rating form"
+    download_work_papers: "Download working papers"
+    download_without_score: "Download without rating"
+    download_brief: "Download brief"
+    download_expanded: "Download expanded"
+    create_bundle: "Generate file"
+    send_by_email: "Send by email"
+    last_verified_date: "Last verification was performed on %{date}"
+    has_final_review: "A final audit report has already been issued and therefore it is not possible to continue working with the draft audit report"
+    errors:
+      without_corrective_actions: "has no corrective actions"
+
+  conclusion_report:
+    index_title: "Conclusion reports"
+    cost_analysis_title: "Cost Analysis"
+    cost_summary_title: "Cost Summary"
+    detailed_cost_analysis_title: "Detailed cost analysis"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
+    high_risk_weaknesses_report_title: "High risk issues"
+    fixed_weaknesses_report_title: "Resolved issues by risk"
+    cost_analysis:
+      detailed_column_resource: "Resource"
+      detailed_column_estimated_amount: "Estimated cost (planned)"
+      detailed_column_real_amount: "Actual cost (executed)"
+      detailed_column_deviation: "Deviation"
+      general_column_business_unit: "Business unit"
+      general_column_review: "Audit report"
+      general_column_estimated_amount: "Estimated cost (planned)"
+      general_column_real_amount: "Actual cost (executed)"
+      general_column_deviation: "Deviation"
+      pdf_name: "cost_analysis_%{from_date}_to_%{to_date}.pdf"
+      detailed_title: "DETAILED COST ANALYSIS\nBY INTERNAL AUDIT REPORT"
+      general_title: "INTERNAL AUDIT\nCOST ANALYSIS"
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      period:
+        title: "Interval"
+    cost_summary:
+      pdf_name: "cost_summary_%{from_date}_to_%{to_date}.pdf"
+      title: "INTERNAL AUDIT\nCOST SUMMARY"
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      column_month: "Month"
+      column_estimated_amount: "Estimated units"
+      column_real_amount: "Real Units"
+      column_deviation: "Deviation"
+
+  conclusion_reports:
+    weaknesses_graphs:
+      empty: 'No issues for the applied filter'
+      hint: 'You must perform a search'
+      users: 'By user'
+      business_units: 'By business unit'
+      process_controls: 'By business process'
+
+  conclusion_committee_report:
+    index_title: "Conclusion reports"
+    control_objective_stats_title: 'Issues by control objective'
+    control_objective_stats_by_review_title: 'Issues by control objective without rating'
+    benefits_title: 'Benefits / Detriments'
+    process_control_stats_title: 'Issues by business process'
+    synthesis_report_title: "Executive summary"
+    review_stats_report_title: "Audit report statistics"
+    review_scores_report_title: "Audit report ratings"
+    review_score_details_report_title: "Detailed audit report ratings"
+    nbc_annual_report_title: "Annual summary"
+    high_risk_weaknesses_report_title: "High risk issues"
+    fixed_weaknesses_report_title: "Resolved issues by risk"
+    qa_indicators_title: "Quality indicators"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
+    findings_type_internal: "Internal Audit Findings"
+    findings_type_external: "External Audit Findings"
+    weaknesses_type_internal: "Internal Audit Issues"
+    weaknesses_type_external: "External Audit Issues"
+    high_risk_weaknesses: "High risk issues"
+    fixed_weaknesses: "Resolved issues by risk"
+    weaknesses_graphs: "Issues graph"
+    from_date: "From"
+    to_date: "To"
+    mid_date: "Cutoff"
+    date_field: "Date to use"
+    created_at: "Creation date"
+    issue_date: "Issuance date"
+    origination_date: "Origin date"
+    cut_date: "Old data cutoff date"
+    applied_filters:
+      one: "The following filter has been applied to this report: %{filters}"
+      other: "The following filters have been applied to this report: %{filters}"
+    benefits:
+      pdf_name: 'benefits_detriments_%{from_date}_to_%{to_date}.pdf'
+      title: "Benefits / Detriments"
+      subtitle: "FINAL AUDIT REPORTS"
+      without_audits_in_the_period: 'No audits with benefits / detriments in the period'
+      total: 'Total amount: <b>%{amount}</b>'
+    control_objective_stats:
+      pdf_name: 'issues_by_control_objective_%{from_date}_to_%{to_date}.pdf'
+      title: "ISSUES GROUPED BY CONTROL OBJECTIVE"
+      subtitle: "FINAL AUDIT REPORTS"
+      average_effectiveness: 'Weighted average rating'
+      average_effectiveness_resume:
+        one: '%{effectiveness} - %{count} evaluated audit report'
+        other: '%{effectiveness} - %{count} evaluated audit reports'
+      without_weaknesses: 'No issues'
+      without_audits_in_the_period: 'No audits in the period'
+      review_effectiveness_average: 'Weighted average rating of control objectives: <b>%{score}%</b>'
+    control_objective_stats_by_review:
+      pdf_name: 'issues_by_control_objective_without_rating_%{from_date}_to_%{to_date}.pdf'
+      title: 'ISSUES GROUPED BY CONTROL OBJECTIVE WITHOUT RATING'
+      subtitle: 'FINAL AUDIT REPORTS'
+      without_weaknesses: 'No issues'
+      without_audits_in_the_period: 'No audits in the period'
+    fixed_weaknesses_report:
+      pdf_name: "resolved_issues_by_risk_from_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Issues"
+      external_audit_weaknesses: "External Audit Issues"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
+      subtitle: "RESOLVED ISSUES - FINAL AUDIT REPORTS"
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      without_weaknesses: "No issues"
+    high_risk_weaknesses_report:
+      pdf_name: "high_risk_issues_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Issues"
+      external_audit_weaknesses: "External Audit Issues"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
+      subtitle: "HIGH RISK ISSUES - FINAL AUDIT REPORTS"
+      without_audits_in_the_period: "No high risk audits in the period"
+      without_audits_in_the_interval: "No high risk audits in the selected interval"
+      without_weaknesses: "No issues"
+    period:
+      title: "Interval"
+      range: "from %{from_date} to %{to_date}"
+    process_control_stats:
+      pdf_name: 'issues_by_business_process_%{from_date}_to_%{to_date}.pdf'
+      title: "ISSUES GROUPED BY BUSINESS PROCESS"
+      subtitle: "FINAL AUDIT REPORTS"
+      average_effectiveness: 'Weighted average rating'
+      average_effectiveness_resume:
+        one: '%{effectiveness} - %{count} evaluated audit report'
+        other: '%{effectiveness} - %{count} evaluated audit reports'
+      without_weaknesses: 'No issues'
+      without_audits_in_the_period: 'No audits in the period'
+      review_effectiveness_average: 'Weighted average rating of business processes: <b>%{score}%</b>'
+    qa_indicators:
+      title: "Internal Audit Quality Management System - Quality Indicators"
+      subtitle: ""
+      indicator: "Indicator"
+      value: "Value"
+      pdf_name: "quality_indicators_%{from_date}_to_%{to_date}.pdf"
+      without_audits_in_the_period: 'No audits in the period'
+      indicators:
+        highest_solution_rate: "Highest Risk Issues Solution"
+        medium_solution_rate: "Medium Risk Issues Solution"
+        digitalized: "Digitization"
+    nbc_annual_report:
+      pdf_name: "annual_report_%{from_date}_to_%{to_date}.pdf"
+      front_page:
+        first_title: 'Internal Control Rating of'
+        footer_title: 'Audit report:'
+        footer_prepared_by: 'Prepared by Internal Audit - NBCH'
+      executive_summary:
+        title: '<b><u>EXECUTIVE SUMMARY</u></b>'
+        objective_title: '<b><u>OBJECTIVE</u></b>'
+        general_conclusion_title: '<b><u>GENERAL CONCLUSION</u></b>'
+        first_footer: '<b>AUD. Alejandro Camnasio</b>'
+        second_footer: '<b>"IA/IC Internal Audit Management</b>'
+      detailed_report:
+        title: '<b><u>DETAILED REPORT</u></b>'
+        introduction_and_scope_title: '<b><u>INTRODUCTION AND SCOPE OF WORK PERFORMED</u></b>'
+        classification_methodology: 'The rating methodology for cycles used in the 2019 period was approved by the Audit Committee at its meeting on 14.05.2019 - Minutes No. 294, which we present below:'
+        classification_with_final_weaknesses_title: '<i><b>Table I: Internal Control Rating of NCHB S.A. – %{period}</b></i>'
+        classification_with_not_final_weaknesses_title: '<i><b>Table II: Internal Control Rating of NCHB S.A. – %{period}</b></i>'
+        conclusions_title: '<u><b>CONCLUSIONS</b></u>'
+        conclusions_body: "Based on Table I <i>“NCHB S.A. Internal Control Rating.”</i>, it can be seen that the Entity's internal control rating, according to the parameters used, is <b>“%{calification}”.</b>"
+      cycle_qualification:
+        header_number: '<b>No.</b>'
+        header_qualification: '<b>Rating</b>'
+        header_weight: '<b>Weight</b>'
+        header_high_risk_observations: '<b>Number of High Risk Issues</b>'
+      internal_control_qualification:
+        header_cycle: '<b>Cycle</b>'
+        header_count_findings: '<b>Number of Issues</b>'
+        header_weight: '<b>Weighting by audit report date</b>'
+        header_qualification: '<b>Rating</b>'
+        count_weight: '<b>Total weight</b>'
+        count_cycles: '<b>Number of cycles</b>'
+        final_weight: '<b>Weight</b>'
+        final_qualification: '<b>Internal Control Rating</b>'
+    synthesis_report:
+      pdf_name: "executive_summary_final_audit_reports_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Findings"
+      external_audit_weaknesses: "External Audit Issues"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
+      subtitle: "ISSUES/IMPROVEMENT OPPORTUNITIES\nOF FINAL AUDIT REPORTS"
+      organization_score: "Organization Rating: %{score}% (*)"
+      organization_score_note: "(*) The organization rating is obtained as an average of the ratings obtained in the audit types (%{audit_types})."
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      without_weaknesses: "No findings"
+      references: "References:\n\n(1) Score: the rating (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their rating from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Issues: lists the titles of the detected issues. If there are no issues, the legend \"No issues\" is displayed."
+      generic_score_average:
+        one: 'Average of %{audit_type} ratings in a audit report'
+        other: 'Average of %{audit_type} ratings in %{count} audit reports'
+    review_stats_report:
+      pdf_name: "final_audit_report_statistics_%{from_date}_to_%{to_date}.pdf"
+      title: "AUDIT REPORT STATISTICS"
+      subtitle: "ISSUES/IMPROVEMENT OPPORTUNITIES\nOF FINAL AUDIT REPORTS"
+      ratio: "Ratio"
+      review_count: "Number of audit reports"
+      reviews_by_tag:
+        title: "Audit reports by tag"
+        footnote: "The tag-audit report pair is counted. So, for example, a audit report with two tags will be counted twice and a audit report without tags will be ignored."
+      weaknesses_by_score:
+        title: "Issues by risk, priority and audit report rating"
+        total: "Total"
+    review_scores_report:
+      pdf_name: "final_audit_report_ratings_%{from_date}_to_%{to_date}.pdf"
+      title: "AUDIT REPORT RATINGS"
+      subtitle: "FINAL AUDIT REPORTS"
+      review_score: "Audit report rating"
+      business_unit_score: "Business units rating"
+      total_score: "Total rating"
+      empty: "No ratings for the applied filter"
+    review_score_details_report:
+      pdf_name: "detailed_final_audit_report_ratings_%{from_date}_to_%{to_date}.pdf"
+      title: "DETAILED AUDIT REPORT RATINGS"
+      subtitle: "FINAL AUDIT REPORTS"
+      brief: "Summary"
+      details: "Details"
+      count: "Quantity"
+      share: "Participation"
+      empty: "No ratings for the applied filter"
+    weaknesses_by_state:
+      pdf_name: "final_audit_report_findings_by_status_%{from_date}_to_%{to_date}.pdf"
+      title: "FINAL AUDIT REPORT FINDINGS\nTOTALS BY STATUS"
+      weaknesses_column: "Issues"
+      oportunities_column: "Improvement Opportunities"
+      period_summary: "Period summary %{period}"
+      total: "TOTAL"
+    weaknesses_by_risk:
+      pdf_name: "final_audit_report_issues_by_risk_%{from_date}_to_%{to_date}.pdf"
+      period_summary: "Period summary %{period}"
+      title: "FINAL AUDIT REPORT ISSUES\nTOTALS BY RISK LEVEL"
+      total: "TOTAL"
+    weaknesses_by_audit_type:
+      weaknesses: "Issues"
+      oportunities: "Opportunities"
+      without_weaknesses: "No findings"
+      pdf_name: "final_audit_reports_issues_by_audit_type_%{from_date}_to_%{to_date}.pdf"
+      title: "ISSUES/IMPROVEMENT OPPORTUNITIES FINAL AUDIT REPORTS\nTOTALS BY TYPE OF AUDIT"
+      total: "TOTAL"
+
+  conclusion_final_review:
+    index_title: "Final audit report list"
+    show_title: "Final audit report details"
+    new_title: "Add final audit report"
+    edit_title: "Edit final audit report"
+    bundle_title: "Generate file"
+    correctly_created: "Final audit report was successfully created."
+    correctly_updated: "Final audit report was successfully updated."
+    stale_object_error: "The final audit report could not be updated, please try again."
+    generate_score_sheet: "Download detailed rating form"
+    generate_global_score_sheet: "Download global rating form"
+    download_work_papers: "Download working papers"
+    create_bundle: "Generate file"
+    send_by_email: "Send by email"
+    download_without_control_objectives_excluded_from_score: "Download without unrated control objectives"
+    download_expanded: "Download expanded"
+    download_without_score: "Download without rating"
+    download_brief: "Download brief"
+    hide_control_objectives_excluded_from_score: "Hide unrated control objectives"
+    send_type:
+      normal: "Full audit report"
+      brief: "Summary audit report"
+      without_score: "Audit report without rating"
+      expanded: "Extended audit report"
+    pdf:
+      pdf_name: "list_of_final_audit_reports.pdf"
+      filtered_by:
+        one: "The list was filtered with the query '%{query}' on the column %{columns}"
+        other: "The list was filtered with the query '%{query}' on the columns %{columns}"
+      sorted_by: "The list was sorted by column %{column}"
+
+  conclusion_management_report:
+    index_title: "Management reports"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
+
+  conclusion_review:
+    include_global_score_sheet: "Include global rating form?"
+    include_score_sheet: "Include detailed rating form?"
+    score_sheet: "Detailed rating form"
+    global_score_sheet: "Global rating form"
+    email_note: "Note to include in the email"
+    responsibles: "Responsibles"
+    issue_date_title: "DATE"
+    new_origination_date: "New"
+    estimated_follow_up_date: "Estimated month of normalization"
+    audit_period: "%{start} to %{end}"
+    audit_period_title: "AUDIT PERIOD"
+    objectives_and_scopes: "OBJECTIVES AND SCOPE OF WORK"
+    applied_procedures: "APPLIED PROCEDURES"
+    conclusion: "CONCLUSION"
+    weaknesses_brief: "ISSUES SUMMARY"
+    weaknesses_reschedules: "ISSUES / RESCHEDULES SUMMARY"
+    weaknesses: "ISSUES"
+    oportunities: "IMPROVEMENT OPPORTUNITIES"
+    finding_review_assignments: "REVIEWED FINDINGS"
+    repeated_findings: "Issues follow-up"
+    repeated_findings_empty: "There are no pending issues requiring regularization."
+    present_findings: "New issues"
+    present_findings_empty: "There are no issues to mention."
+    add_recipient: "Add new recipient"
+    review_sended: "The audit report has been sent to all specified recipients"
+    review_not_approved: "The audit report was not sent. Please make sure to obtain the necessary approval and try again"
+    review_repeated_finding_label: "Audit report #"
+    executive_summary:
+      title: "Executive Summary"
+      review_author: "Internal Audit Management"
+      project: "The audit carried out was circumscribed to the review of:"
+      project_alt: "In accordance with the provisions of the Professional Services Rental proposal, accepted in all its terms and conditions by Naranja Digital Compañía Financiera S.A.U. dated January 21, 2021, we present the Audit report corresponding to the following process:"
+      risk_exposure: "Risk exposure of the evaluated process: <b>%{risk}</b> (Risk Matrix algorithmic formula)"
+      score: "Rating"
+      evolution: "EVOLUTION (*)"
+      main_weaknesses: "Main Weaknesses"
+      other_weaknesses: "Other issues"
+      no_weaknesses: "No issues"
+      assumed_risk_weaknesses: "Assumed risk weaknesses"
+    detailed_review:
+      title: "Detailed audit report"
+      legend: "An audit has been conducted on the referenced process during the current month.\nIn compliance with the “Minimum Standards on Internal Controls”, the “Guidelines for Risk Management in Financial Institutions”, the “Guidelines for Corporate Governance” in their respective texts ordered by the BCRA as of the date of this audit report, and of the “Minimum Requirements for Management, Implementation and Control of Risks Related to Information Technology, Information Systems and Associated Resources for Financial Entities” regulated by the BCRA, the internal control has been evaluated as a process designed to provide reasonable assurance regarding the achievement of the following objectives: Entity Objectives, Effectiveness and Efficiency of operations, Reliability of the Accounting Information and Compliance with applicable laws and regulations in the analyzed operation.\nThe implementation of the recommendations mentioned in this report will allow compliance with: i) the requirements of the report prepared by the so-called Committee of Sponsoring Organizations of the Treadway Commission (COSO) on internal control assessment, an international methodology used by this Audit; ii) the requirements of the COBIT Control Model (Governance, Control and Audit for Information and Related Technology), an international methodology used by this Systems Audit which includes, among others, ISO Technical Standards and ISO 9000 qualification criteria, allowing the Bank to align with International Standards for Security and Quality Control."
+    annex:
+      title: "Annex I"
+      legend: "The conducted audit consisted of various controls, which have been evaluated in relation to associated risks, for which reason they are detailed below with their respective ratings, noting that these concepts may be linked to different assessments:"
+      workflow_text: "The work program prepared for this house, as well as its development and other elements, is part of the background information in the work folder of this audit report."
+      scope: "Task scope"
+      scope_column: "Task scope"
+      staff: "Intervening staff"
+      satisfactory_control_objective_items: "Other Control Objectives"
+    bundle:
+      zip_name: "file_%{identification}.zip"
+      control_objectives_dir: "%{prefix}_control_objectives"
+      findings_dir: "%{prefix}_issues_and_opportunities"
+      create: "Create"
+    bundle_index:
+      title: "INDEX"
+      default_items: "GLOBAL RATING FORM\nDETAILED RATING FORM\nFINAL AUDIT REPORT\nSURVEY\nFINDINGS FOLLOW-UP"
+      items_label: "Index entries"
+      pdf_name: "00_file_index.pdf"
+    findings_sheet:
+      title: "Issues - Working Papers"
+      pdf_name: "%{prefix}_cover_of_issues_and_working_papers.pdf"
+    findings_follow_up:
+      title: "FINDINGS FOLLOW-UP"
+      weakness_title_in_singular: "ISSUE FOLLOW-UP"
+      oportunity_title_in_singular: "IMPROVEMENT OPPORTUNITY FOLLOW-UP"
+      index_clarification: "* At the time of issuing the final audit report"
+      pdf_name: "%{prefix}_monitoring_of_issues_opportunities_for_improvement.pdf"
+    workflow:
+      title: "Workflow documentation"
+      pdf_name: "workflow_documentation.pdf"
+      control_objective_work_papers: "Control Objective Working Papers"
+      control_objective_weaknesses: "Issues"
+      control_objective_oportunities: "Opportunities"
+      finding_work_papers: "Finding Working Papers"
+    scope_detail:
+      title: "RATING OF THE DIFFERENT ITEMS EVALUATED WITHIN THE SCOPE OF THIS AUDIT"
+
+  control_objective:
+    errors:
+      related: "Control objective cannot be removed, it is related in at least one control procedure and test"
+
+  control_objective_item:
+    index_title: "Control objectives list"
+    show_title: "Control objective details"
+    edit_title: "Edit control objective"
+    correctly_created: "Control objective was successfully created."
+    correctly_updated: "Control objective was successfully updated."
+    stale_object_error: "The control objective was not updated, please try again."
+    no_weaknesses: "Control objective with no issues"
+    no_oportunities: "Control objective with no improvement opportunities"
+    view_all_weaknesses: "Show issues list"
+    view_all_oportunities: "Show improvement opportunities list"
+    add_oportunity: "Add new improvement opportunity"
+    add_weakness: "Add new issue"
+    add_work_paper: "Add working paper"
+    add_business_unit_score: "Add business unit rating"
+    add_business_unit_type: "Add business units by type"
+    readonly: "The control objective cannot be modified, the final audit report has already been issued"
+    without_work_papers: "No working papers"
+    not_rated: "Not rated"
+    not_apply_text: 'No rating applies'
+    excluded_from_score: "Not taken into account in the audit report rating"
+    not_applicable: "Not applicable"
+    previous_effectiveness: "Previous effectiveness %{effectiveness}%"
+    errors:
+      not_finished: "is not finished"
+      audit_date_ahead_of_issue_date: "audit date is ahead than audit report issue date"
+      without_score: "without rating"
+      without_relevance: "without relevance"
+      without_audit_date: "without audit date"
+      without_effects: "without effects"
+      without_controls: "without controls"
+      without_design_tests: "without design tests"
+      without_compliance_tests: "without compliance tests"
+      without_sustantive_tests: "without substantive tests"
+      without_auditor_comment: "without auditor conclusions"
+    review:
+      edit: 'Edit audit report'
+      show: 'Show audit report'
+
+  customize_report_form:
+    create: "Create"
+    title: "Title"
+    subtitle: "Subtitle"
+
+  execution_reports:
+    cost_analysis_title: "Cost Analysis"
+    detailed_management_report:
+      pdf_name: "detailed_management_report_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Findings"
+      external_audit_weaknesses: "External Audit Findings"
+      title: "MANAGEMENT SUMMARY\n\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
+      subtitle: "ISSUES/IMPROVEMENT OPPORTUNITIES\nOF AUDIT REPORTS IN EXECUTION"
+      clarification: "Note: the findings shown in this report are not final (the audit reports are in the Execution stage)"
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      without_weaknesses: "No issues"
+      without_oportunities: "No improvement opportunitiest"
+      references: "References:\n\n(1) Number of Issues: shows the number of issues obtained in the audit report (not the final ones), ordered according to risk level (%{risk_types}). If there are no issues, the legend \"No issues\" appears.\n(2) Number of Improvement Opportunities: shows the number of improvement opportunities obtained in the audit report (not the final ones). If there are no improvement opportunities, the legend \"No improvement opportunities\" appears."
+    detailed_management_report_title: "Management report"
+    planned_cost_summary:
+      pdf_name: "summary_of_planned_costs_%{from_date}_to_%{to_date}.pdf"
+      title: "INTERNAL AUDIT\nPLANNED COSTS SUMMARY"
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      column_month: "Month"
+      column_estimated_amount: "Estimated units"
+    planned_cost_summary_title: "Planned cost summary"
+    reviews_with_incomplete_work_papers_report_incomplete_title: "Audit reports closed without auditor's approval"
+    reviews_with_incomplete_work_papers_report_revised_title: "Audit reports closed without supervisor's review"
+    reviews_with_incomplete_work_papers_report:
+      empty_incomplete: "No audit reports closed without auditor's approval in working papers"
+      empty_revised: "No audit reports closed without supervisor's review in working papers"
+    index_title: "Execution reports"
+    findings_type_external: "External Audit Findings"
+    findings_type_internal: "Internal Audit Findings"
+    period:
+      title: "Interval"
+      range: "from %{from_date} to %{to_date}"
+    weaknesses_by_state_title: "Total findings by audit report and status"
+    weaknesses_by_state:
+      pdf_name: "findings_in_execution_by_status_%{from_date}_to_%{to_date}.pdf"
+      title: "DETAILED MANAGEMENT REPORT\nFINDINGS IN EXECUTION\nTOTALS BY AUDIT REPORT AND STATUS"
+      clarification: "Note: the findings shown in this report are not final (the audit reports are in the Execution stage)"
+      weaknesses_column: "Issues"
+      oportunities_column: "Improvement Opportunities"
+      total: "TOTAL"
+    without_weaknesses: "No findings in the period"
+    without_weaknesses_in_the_interval: "No findings in the interval"
+    without_findings: "No findings"
+    tagged_findings_report:
+      empty: 'No findings for the applied filter'
+      findings_count: 'Number of findings that meet the criteria: %{count}'
+      findings_count_html: 'Number of findings that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      pdf_name: 'follow_up_of_findings_in_execution_tagged.pdf'
+      tags_count_label: 'Maximum number of tags'
+      title: 'Findings by maximum number of tags'
+    weaknesses_report:
+      title: 'Issue follow-up report'
+      empty: 'No issues for the applied filter'
+      weaknesses_count: 'Number of issues that meet the criteria: %{count}'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      pdf_name: 'follow_up_report_of_issues_in_execution.pdf'
+
+  finding_relation:
+    types:
+      related: "Related"
+      duplicated: "Duplicate"
+
+  follow_up_audited:
+    index_title: "General reports"
+
+  follow_up_audit:
+    index_title: "Audit reports"
+    cost_analysis_title: "Cost analysis"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
+    high_risk_weaknesses_report_title: "High risk issues"
+    fixed_weaknesses_report_title: "Resolved issues by risk"
+    weaknesses_graphs:
+      title: 'Issue graph'
+      empty: 'No issues for the applied filter'
+      hint: 'Must perform a search'
+      users: 'By user'
+      business_units: 'By business unit'
+      process_controls: 'By business process'
+    tagged_findings_report:
+      empty: 'No findings for the applied filter'
+      findings_count: 'Number of findings that meet the criteria: %{count}'
+      findings_count_html: 'Number of findings that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      pdf_name: 'follow-up_tagged_findings.pdf'
+      tags_count_label: "Maximum number of tags"
+      title: 'Findings by maximum number of labels'
+    weaknesses_report:
+      title: 'Issue follow-up report'
+      empty: 'No issues for the applied filter'
+      weaknesses_count: 'Number of issues that meet the criteria: %{count}'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      pdf_name: 'issues_follow-up_report.pdf'
+    others:
+      title: 'Others'
+    cost_analysis:
+      column_business_unit: "Business Unit"
+      column_project: "Project"
+      column_review: "Audit report"
+      column_audit_cost: "Number of hours used (sum of follow-up hours by auditors)"
+      column_audited_cost: "Number of hours spent on the solution (sum of follow-up hours by auditee)"
+      title: "COST ANALYSIS\nOF FOLLOW-UP FINDINGS\nBY INTERNAL AUDIT REPORT"
+      weaknesses: "ISSUES"
+      oportunities: "IMPROVEMENT OPPORTUNITIES"
+      without_weaknesses: "No issues in the period"
+      without_oportunities: "No improvement opportunities in the period"
+      pdf_name: "follow-up_costs_analysis_%{from_date}_to_%{to_date}.pdf"
+
+  follow_up_committee_report:
+    index_title: "Committee reports"
+    control_objective_stats_title: 'Issues by control objective'
+    control_objective_stats_by_review_title: 'Issues by control objective without rating'
+    benefits_title: 'Benefits / Detriments'
+    process_control_stats_title: 'Issues by business process'
+    control_effectiveness: "Control effectiveness"
+    pending_findings: "Pending issues follow-up"
+    synthesis_report_title: "Executive summary"
+    review_stats_report_title: "Audit report statistics"
+    high_risk_weaknesses_report_title: "High risk issues"
+    fixed_weaknesses_report_title: "Resolved issues by risk"
+    qa_indicators_title: "Quality indicators"
+    weakness_summary: "Summary of issues"
+    high_risk_weaknesses: "High risk issues"
+    fixed_weaknesses: "Resolved issues by risk"
+    weaknesses_being_implemented_current:
+      one: "Active"
+      other: "Active"
+    weaknesses_being_implemented_current_rescheduled:
+      one: "Re-scheduled active"
+      other: "Re-scheduled active"
+    weaknesses_being_implemented_stale:
+      one: "Overdue"
+      other: "Overdue"
+    weaknesses_being_implemented_stale_rescheduled:
+      one: "Re-scheduled overdue"
+      other: "Re-scheduled overdue"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
+    without_oportunities: "No opportunities in the period"
+    without_weaknesses: "No issues in the period"
+    repeated_count:
+      one: "A repeated finding"
+      other: "%{count} repeated findings"
+    expired: "Expired"
+    not_expired: "Not expired"
+    from_date: "From"
+    to_date: "To"
+    mid_date: "Cutoff"
+    cut_date: "Old data cutoff date"
+    print_date: "Print date: %{date}"
+    applied_filters:
+      one: "The following filter has been applied to this report: %{filters}"
+      other: "The following filters have been applied to this report: %{filters}"
+    benefits:
+      pdf_name: 'benefits_detriments_%{from_date}_to_%{to_date}.pdf'
+      title: "Benefits / Detriments"
+      subtitle: "AUDIT REPORT FOLLOW-UP"
+      without_audits_in_the_period: 'No audits with benefits / detriments in the period'
+      total: 'Total amount: <b>%{amount}</b>'
+    control_objective_stats:
+      pdf_name: 'issues_by_control_objective_%{from_date}_to_%{to_date}.pdf'
+      title: "ISSUES GROUPED BY CONTROL OBJECTIVE"
+      subtitle: "AUDIT REPORT FOLLOW-UP"
+      average_effectiveness: 'Weighted average rating'
+      average_effectiveness_resume:
+        one: '%{effectiveness} - %{count} evaluated audit report'
+        other: '%{effectiveness} - %{count} evaluated audit reports'
+      without_weaknesses: 'No issues'
+      review_effectiveness_average: 'Weighted average rating of control objectives: <b>%{score}%</b>'
+    control_objective_stats_by_review:
+      pdf_name: 'issues_by_control_objective_without_rating_%{from_date}_to_%{to_date}.pdf'
+      title: 'ISSUES GROUPED BY CONTROL OBJECTIVE WITHOUT RATING'
+      subtitle: "AUDIT REPORT FOLLOW-UP"
+      without_weaknesses: 'No issues'
+      without_audits_in_the_period: 'No audits in the period'
+    fixed_weaknesses_report:
+      pdf_name: "resolved_issues_by_risk_from_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Issues"
+      external_audit_weaknesses: "External Audit Issues"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
+      subtitle: "RESOLVED ISSUES - FINAL AUDIT REPORTS"
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      without_weaknesses: "No issues"
+    high_risk_weaknesses_report:
+      pdf_name: "high_risk_issues_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Issues"
+      external_audit_weaknesses: "External Audit Issues"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
+      subtitle: "HIGH RISK ISSUES FOLLOW-UP - FINAL AUDIT REPORTS"
+      without_audits_in_the_period: "No high risk audits in the period"
+      without_audits_in_the_interval: "No high risk audits in the selected interval"
+      without_weaknesses: "No issues"
+    period:
+      title: "Interval"
+      range: "from %{from_date} to %{to_date}"
+    process_control_stats:
+      pdf_name: 'issues_by_business_process_%{from_date}_to_%{to_date}.pdf'
+      title: "ISSUES GROUPED BY BUSINESS PROCESS"
+      subtitle: "AUDIT REPORT FOLLOW-UP"
+      average_effectiveness: 'Weighted average rating'
+      average_effectiveness_resume:
+        one: '%{effectiveness} - %{count} evaluated audit report'
+        other: '%{effectiveness} - %{count} evaluated audit reports'
+      without_weaknesses: 'No issues'
+      without_audits_in_the_period: 'No audits in the period'
+      review_effectiveness_average: 'Weighted average rating of business processes: <b>%{score}%</b>'
+    qa_indicators:
+      without_data: "No data for the entered date range"
+      title: "Internal Audit Quality Management System - Quality Indicators (Monitoring)"
+      subtitle: ""
+      indicator: "Indicator"
+      value: "Value"
+      pdf_name: "quality_indicators_%{from_date}_to_%{to_date}.pdf"
+      without_audits_in_the_period: 'No audits in the period'
+      indicators:
+        production_level: "Production Level"
+        highest_solution_rate: "Highest Risk Issues Solution"
+        medium_solution_rate: "Medium Risk Issues Solution"
+        score_average: "Audit report rating"
+        digitalized: "Digitization"
+        ancient_medium_risk_weaknesses: "Aged Medium Risk Issues"
+    synthesis_report:
+      pdf_name: "executive_summary_%{from_date}_to_%{to_date}.pdf"
+      internal_audit_weaknesses: "Internal Audit Findings"
+      external_audit_weaknesses: "External Audit Issues"
+      title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
+      subtitle: "FOLLOW-UP OF ISSUES/IMPROVEMENT OPPORTUNITIES"
+      organization_score: "Organization rating: %{score}% (*)"
+      organization_score_note: "(*) The organization rating is obtained as an average of the ratings obtained in the audit types (%{audit_types})."
+      without_audits_in_the_period: "No audits in the period"
+      without_audits_in_the_interval: "No audits in the selected interval"
+      without_weaknesses: "No issues"
+      without_oportunities: "No improvement opportunities"
+      generic_score_average:
+        one: 'Average of %{audit_type} ratings in a audit report'
+        other: 'Average of %{audit_type} ratings in %{count} audit report'
+      repeated_count:
+        one: "A repeated finding"
+        other: "%{count} repeated findings"
+      total_score_average: "Total average ratings (%{reference })"
+      references: "References:\n\n(1) Score: the rating (weighted control effectiveness) of each audit report is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are added and the result is divide by the sum of the weights.\n(2) Business processes: business processes are listed in order of their rating from lowest to highest.\n(3) Objectives and scope of work: lists the evaluated control objectives and procedures .\n(4) Issues: lists the titles of the detected issues. If there are no issues, the legend \"No issues\" is displayed."
+    review_stats_report:
+      pdf_name: "final_audit_report_statistics_%{from_date}_to_%{to_date}.pdf"
+      title: "AUDIT REPORT STATISTICS"
+      subtitle: "FOLLOW-UP OF ISSUES/IMPROVEMENT OPPORTUNITIES"
+      ratio: "Proportion"
+      review_count: "Number of audit reports"
+      reviews_by_tag:
+        title: "Audit reports by label"
+        footnote: "The tag-audit report pair is counted. So, for example, a audit report with two tags will be counted twice and a audit report without tags will be ignored."
+      weaknesses_by_score:
+        title: "Issues by risk, priority and audit report rating"
+        total: "Total"
+    weaknesses_by_state:
+      pdf_name: "monitoring_issues_by_status_%{from_date}_to_%{to_date}.pdf"
+      period_summary: "Period summary %{period}"
+      title: "FOLLOW-UP OF ISSUES/IMPROVEMENT OPPORTUNITIES\nTOTALS BY STATUS"
+      total: "TOTAL"
+    weaknesses_by_risk:
+      pdf_name: "issues_monitoring_by_risk_%{from_date}_to_%{to_date}.pdf"
+      period_summary: "Period summary %{period}"
+      title: "FOLLOW-UP OF ISSUES\nTOTALS BY RISK LEVEL"
+      total: "TOTAL"
+    weaknesses_by_audit_type:
+      weaknesses: "Issues"
+      oportunities: "Opportunities"
+      without_weaknesses: "No findings"
+      pdf_name: "monitoring_issues_by_audit_type_%{from_date}_to_%{to_date}.pdf"
+      title: "FOLLOW-UP OF ISSUES/IMPROVEMENT OPPORTUNITIES\nTOTALS BY TYPE OF AUDIT"
+      total: "TOTAL"
+
+  follow_up_management:
+    index_title: "Management reports"
+    weaknesses_by_state_title: "Total findings by status"
+    weaknesses_by_risk_title: "Total findings by risk"
+    weaknesses_by_audit_type_title: "Total findings by audit type"
+
+  group:
+    index_title: "Group list"
+    show_title: "Group details"
+    new_title: "Add group"
+    edit_title: "Edit group"
+    correctly_created: "Group was successfully created."
+    correctly_updated: "Group was successfully updated."
+    stale_object_error: "Group was not updated, please try again."
+    add_organization: "Add organization"
+
+  memo:
+    correctly_created: "External audit report was successfully created."
+    correctly_updated: "External audit report was successfully updated."
+    stale_object_error: "External audit report was not updated, please try again."
+    description_pdf: "COMMENTS"
+
+  notification:
+    index_title: "Notifications list"
+    show_title: "Notification details"
+    edit_title: "Edit notification"
+    correctly_updated: "Notification was successfully updated."
+    stale_object_error: "Notification was not updated, please try again."
+    confirmed: "Notification was successfully confirmed."
+    rejected: "Notification was successfully rejected. Please, log in and enter a comment about it."
+    confirm: "Confirm"
+    reject: "Reject"
+    status_unconfirmed: "Unconfirmed"
+    status_confirmed: "Confirmed"
+    status_rejected: "Rejected"
+    type: "Type"
+
+  notifier:
+    findings_brief:
+      title: "Pending findings summary"
+    notify_new_finding:
+      title: "You have a new finding [#%{finding_id}]"
+      created_title: "New finding"
+    notify_new_finding_answer:
+      title: "New comment on audit report %{review} [#%{finding_id}]"
+      finding_data: "A comment has been added to the finding **%{finding_code}** of audit report **%{review}**"
+      finding_link: "Show finding"
+    change_password: "Change password"
+    changes_notification:
+      title: "Notification of changes"
+    conclusion_review_notification:
+      title: "%{type} audit report %{review}"
+      body_title: "The following documents are attached: %{elements}"
+      final: "Final"
+      draft: "Draft"
+    notification:
+      pending: "Pending notifications"
+      unconfirmed: "Unconfirmed notifications"
+      confirm: "Confirm notification"
+      the_following_findings_are_still_unconfirmed: "The following findings have been reported but have not received a confirmation"
+    reassigned_findings:
+      new_responsibles:
+        one: "Current user: %{responsible}"
+        other: "Current users: %{responsible}"
+      old_responsibles:
+        one: "Previous user: %{responsible}"
+        other: "Previous users: %{responsible}"
+      the_following_findings_are_now_reassigned:
+        one: "The following finding has been reassigned"
+        other: "The following findings have been reassigned"
+      title:
+        one: "Finding / Improvement opportunity reassigned"
+        other: "Findings / Improvement opportunities reassigned"
+    restore_password:
+      title: "Reset password"
+      body_title: "%{user_name}, to reset the password of your user (%{user}) use the following link:"
+      valid_until: "%{link} (You will be able to use this link until the day **%{date}** inclusive"
+      clarification: "If you **did not request** the reset **do nothing**, your username and password are still valid"
+    unanswered_finding_to_manager:
+      title: "Inactivity notification"
+      the_following_finding_is_stale_and_unanswered: "No response has been received from the users regarding the following finding"
+      managers_clarification: "People can change if the finding's users are modified or if the organizational structure is altered"
+    expired_finding_to_manager:
+      title: "Expired finding"
+      the_following_finding_is_expired: "No new implementation date has been proposed for the following finding"
+      managers_clarification: "People can change if the users of the issue / improvement opportunity are modified or if the organizational structure is altered"
+    pending_poll_email:
+      about_html: "Survey about <strong>%{entity}</strong>"
+    unanswered_findings:
+      title: "Notification of changes"
+      the_following_findings_are_now_unanswered:
+        one: "The following issue / improvement opportunity has its status changed to **Unanswered**, due to not receiving a response"
+        other: "The following issues / improvement opportunities have their status changed to **Unanswered**, due to not receiving a response"
+      if_no_answer_is_given_the_following_users_will_be_notified: "If it continues in the same status (Unanswered), the following notifications will be generated"
+    group_welcome_email:
+      title: "The group %{name} has been created"
+      initial_user: "To start using the system you must first create a user"
+      create_user: "Create user"
+      clarification: "You have received this email because you have been assigned a group in the 'Mawidabp' system"
+    welcome_email:
+      title: "%{name}, your account has been created"
+      initial_password: "To start using the system, you must first set your password"
+      change_password: "Set password"
+      clarification: "You have received this email because you have been registered in the 'Mawidabp' system."
+      organizations_sites:
+        one: "Then you can access the following URL address:"
+        other: "Then you can access any of the following URLs (depending on the organization you select):"
+
+  oportunity:
+    index_title: "Opportunities list"
+    show_title: "Opportunity details"
+    new_title: "Add opportunity"
+    edit_title: "Edit opportunity"
+    correctly_created: "Opportunity was successfully created."
+    correctly_updated: "Opportunity was successfully updated."
+    stale_object_error: "Opportunity was not updated, please try again."
+    edit_control_objective: "Edit control objective"
+    show_follow_up: 'Show follow-up'
+    edit_follow_up: 'Edit follow-up'
+    errors:
+      is_unconfirmed: "is in 'Unconfirmed' status"
+      not_valid_state: "has a not valid status"
+      with_expired_tasks: "has expired pending or in progress tasks"
+      with_follow_up_date: "has an implementation date (and it should not)"
+      with_solution_date: "has solution date (and it should not)"
+      without_answer: "has no answer"
+      without_audited: "has no auditee"
+      without_auditor: "has no auditor"
+      without_follow_up_date: "has no implementation date"
+      without_solution_date: "has no solution date"
+      without_audit_comments: "has no audit comments"
+      without_audit_recommendations: "has no audit recommendations"
+
+  pdf:
+    export: "Export"
+    page_pattern: "Page %{page} of %{total}"
+    period_description: "Period %{period}"
+    review_identification: "Audit report number %{review}"
+    draft: "Draft"
+
+  plan_item:
+    errors:
+      cannot_edit_business_unit_for_memos_too: 'or a memo'
+
+  review:
+    index_title: "Audit reports list"
+    show_title: "Audit report details"
+    new_title: "Add audit report"
+    edit_title: "Edit audit report"
+    correctly_created: "Audit report was successfully created."
+    correctly_updated: "Audit report was successfully updated."
+    stale_object_error: "The audit report was not updated, please try again."
+    control_objective_items_label: "Control objectives"
+    show_excluded_control_objectives: "Show control objectives loaded in the best practice and absent in the audit report"
+    no_excluded_control_objectives: "All control objectives for this process are in the audit report"
+    add_control_objective: "Add a new control objective"
+    add_process_control: "Add a new process"
+    add_best_practice: "Add a new best practice"
+    control_objective_tag: "Objectives by tags"
+    add_control_objective_tag: "Add control objective tag"
+    add_tagging: "Add tag"
+    add_file_model: "Add attachment"
+    associated: "Associates"
+    available: "Available"
+    bundle: "File"
+    copy: "Copy"
+    findings_label: "Pending findings"
+    add_finding_assignment: "Add pending finding"
+    add_user_assignment: "Add related user"
+    suggest_findings: 'Suggest pending findings'
+    suggest_past_findings: 'Suggest recent resolved findings'
+    without_suggested_findings: 'No pending findings'
+    without_past_implemented_audited_findings: 'No recent resolved findings'
+    suggested_findings_for: 'Suggested findings for %{process_control}'
+    readonly: "The audit report cannot be modified, the final audit report has already been issued"
+    with_final_review: "With final audit report"
+    without_final_review: "Without final audit report"
+    without_score: "Do not rate"
+    weakness_from_template: "Issue created from template"
+    repeated_weaknesses: "Repeated"
+    old_weaknesses: "Old data"
+    new_weaknesses: "New"
+    outdated_control_objective_name: 'The name of the control objective has changed from the one defined in the best practice, click to restore it'
+    taken_work_paper_code:
+      one: "%{duplicated_work_papers} working paper code is duplicated"
+      other: "The following working paper codes are duplicated: %{duplicated_work_papers}"
+    user_assignment:
+      type_viewer: "Viewer"
+      type_auditor: "Auditor"
+      type_supervisor: "Supervisor"
+      type_manager: "Manager"
+      type_responsible: "Head of internal audit"
+      type_audited: "Auditee"
+      audit_team: "Audit Team"
+      others: "Users"
+      readonly: "The members cannot be modified, the final audit report has already been issued"
+    score_sheet_title: "DETAILED RATING PROCESS FORM"
+    global_score_sheet_title: "GLOBAL RATING PROCESS FORM"
+    score_sheet_filename: "detailed_rating_form"
+    global_score_sheet_filename: "global_rating_form"
+    draft_score_sheet: "Draft"
+    audit_period: "%{start} to %{end}"
+    audit_period_title: "AUDITING PERIOD"
+    auditors: "AUDITORS"
+    score: "RATING"
+    control_objectives_effectiveness: "Control effectiveness"
+    control_objectives_relevance: "Weight"
+    oportunities_summary: "Improvement opportunities sorted by status"
+    oportunities_count_summary: "Number of improvement opportunities sorted by status"
+    weaknesses_summary: "Summary of issues that support the rating given (ordered by risk importance (%{risks}) and then by issue status)"
+    weaknesses_count_summary: "Number of issues that support the given rating (ordered by risk importance (%{risks}) and then by issue status)"
+    weaknesses_count: "Number of issues"
+    oportunities_count: "Number of Improvement Opportunities"
+    control_objectives_work_papers: "Control objectives"
+    show_control_objective: "Show control objective details"
+    hide_control_objective: "Hide control objective details"
+    weaknesses_work_papers: "Issues"
+    oportunities_work_papers: "Opportunities"
+    follow_up_work_papers: "Follow-up issues"
+    download_work_papers: "Download working papers"
+    finished_work_papers: "Working papers - Auditor approved"
+    revise_work_papers: "Working Papers - Supervisor reviewed"
+    notes: "Notes"
+    estimated_amount: "Estimated cost in workplan"
+    other_actions: "Actions"
+    recode_findings: "Recode findings"
+    recode_weaknesses_by_risk: "Recode issues by risk"
+    recode_weaknesses_by_repetition_and_risk: "Recode issues by repetition and risk"
+    recode_weaknesses_by_risk_and_repetition: "Recode issues by risk and repetition"
+    recode_weaknesses_by_control_objective_order: "Recode issues by control objective order"
+    reorder: "Reorder processes by name"
+    recode_work_papers: "Recode working papers"
+    findings_recoded: "Findings were successfully recoded"
+    reordered: "Processes were successfully reordered"
+    work_papers_recoded: "Working papers were successfully recoded"
+    work_papers_recode_failed: "Working papers could not be recoded"
+    failed_to_reorder: "Processes could not be reordered"
+    work_papers_marked_as_finished: "Working papers marked as auditor-approved"
+    work_papers_marked_as_revised: "Working papers marked as supervisor-reviewed"
+    review_qualification_explanation: "The audit report rating is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight is added and the result is divided by the sum of the weights."
+    process_control_qualification_explanation: "The business process rating is calculated as a weighted average. The effectiveness of the control objectives multiplied by their weight are summed and the result is divided by the sum of the weights."
+    errors:
+      can_not_be_destroyed: "Audit report cannot be deleted"
+      without_score: "has no audit rating"
+      without_survey: "has no survey"
+      without_audited: "has no audited user"
+      without_file_model: "has no attachment"
+      without_control_objectives: "has no control objectives"
+      related_finding_incomplete: "is pending and has not been marked as repeated or resolved"
+    survey:
+      with_attachment:
+        one: "With an attachment"
+        other: "With %{count} attachments"
+      without_attachment: "Without attachments"
+      download: "Download survey"
+      download_attachment: "Download attachment"
+    review_data:
+      close_date: "Close date: %{date}"
+      without_close_date: "Without close date"
+    pdf:
+      pdf_name: 'audit_report_%{identification}.pdf'
+
+  review_user_assignment:
+    responsibility_modification:
+      title: "Modification of responsibilities in %{review} audit report"
+      old_responsible: "Old responsible: %{responsible}"
+      new_responsible: "Current responsible: %{responsible}"
+    responsibility_removed: "You have been removed from the %{review} audit report"
+    cannot_be_reassigned: "User cannot be reassigned, has issues that depend on them"
+    cannot_be_destroyed: "User cannot be deleted, it has issues that depend on them"
+
+  role:
+    index_title: "Profile list"
+    show_title: "Profile details"
+    new_title: "Add profile"
+    edit_title: "Edit profile"
+    correctly_created: "Profile was successfully created."
+    correctly_updated: "Profile was successfully updated."
+    stale_object_error: "Profile was not updated, please try again."
+    type_admin: "Admin"
+    type_supervisor: "Supervisor"
+    type_auditor: "Auditor"
+    type_audited: "Auditee"
+    type_committee: "Committee"
+    type_manager: "Audit manager"
+    type_executive_manager: "Manager"
+
+  user:
+    will_be_orphan_findings: "The user was not deleted, they have pending findings to date. Must reassign them first."
+    disabled: "Disabled"
+    without_organization: "The user has no profile assigned, therefore it does not belong to any organization and cannot enter the system"
+    responsibility_modification:
+      title: "Modification of responsibilities"
+      old_responsible: "Old Responsible: %{responsible}"
+      new_responsible: "Current responsible: %{responsible}"
+      reassigned_to_reviews:
+        one: "The responsibility for the audit report in execution %{reviews} has been reassigned"
+        other: "The responsibility for the audit reports in execution %{reviews} has been reassigned"
+      reassigned_to_findings_from_reviews:
+        one: "The pending findings from the audit report %{reviews} have been reassigned"
+        other: "The pending findings from the audit reports %{reviews} have been reassigned"
+    responsibility_release:
+      title: "Disclaimer"
+    unconfirmed_findings: "Unconfirmed issues to this date"
+    pdf:
+      pdf_name: "user_list.pdf"
+      users_count: "Number of users: %{count}"
+      filtered_by:
+        one: "The list was filtered with the query '%{query}' on the column %{columns}"
+        other: "The list was filtered with the query '%{query}' on the columns %{columns}"
+
+  weakness:
+    index_title: "Issue list"
+    show_title: "Issue details"
+    new_title: "Add issue"
+    edit_title: "Edit issue"
+    correctly_created: "Issue was successfully created."
+    correctly_updated: "Issue was successfully updated."
+    stale_object_error: "Issue was not updated, please try again."
+    see_all: "Show all"
+    edit_control_objective: "Edit control objective"
+    previous_follow_up_dates: "Previous follow-up dates"
+    show_follow_up: 'Show follow-up'
+    edit_follow_up: 'Edit follow-up'
+    errors:
+      is_unconfirmed: "is in 'Unconfirmed' status"
+      not_valid_state: "has an invalid status"
+      with_expired_tasks: "has expired pending or in-process tasks"
+      with_follow_up_date: "has a follow-up date (and should not)"
+      with_solution_date: "has solution date (and should not)"
+      without_answer: "has no answer"
+      without_audited: "has no auditee"
+      without_auditor: "has no auditor"
+      without_effect: "has no effect"
+      without_follow_up_date: "has no follow-up date"
+      without_solution_date: "has no solution date"
+      without_audit_comments: "has no audit comments"
+      without_audit_recommendations: "has no audit recommendations"
+      cannot_update_sigen_fields_in_repeated_of: "Sigen fields cannot be updated in finding with id: %{id} due to errors: %{messages}"
+
+  welcome:
+    index_title: "Welcome"
+
+  work_paper:
+    cover_name: "%{prefix}%{filename}-cover.pdf"
+    number_of_pages:
+      one: "one sheet"
+      other: "%{count} sheets"
+
+  workflow:
+    index_title: "Workflow list"
+    show_title: "Workflow details"
+    new_title: "Add workflow"
+    edit_title: "Edit workflow"
+    correctly_created: "Workflow was successfully created."
+    correctly_updated: "Workflow was successfully updated."
+    stale_object_error: "Workflow was not updated, please try again"
+    save_as_new_version: "Save as new version?"
+    column_estimated: "Estimated"
+    column_real: "Real"
+    row_cost: "Cost"
+    row_time: "Time"
+    human_resources_abbr: "HR"
+    human_resources: "Human resources"
+    material_resources_abbr: "MR"
+    material_resources: "Material resources"
+    allow_overload: "Allow overload?"
+    copy: "Copy"
+    readonly: "The workflow cannot be modified, the final audit report has already been issued"
+    add_human_resource_utilization: "Add human resource"
+    add_material_resource_utilization: "Add material resource"
+    show_resource_utilization: "Show resources"
+    hide_resource_utilization: "Hide resources"
+    download_global_workflow: "Download global workflow"
+    download_detailed_workflow: "Download detailed workflow"
+    period:
+      title: "Period (%{name})"
+      range: "%{from_date} to %{to_date}"
+    pdf:
+      pdf_name: "workflow_%{review}.pdf"
+      resources_utilization: "Resources used"
+      planned_resources_utilization: "Estimated resources in the workplan (*)"
+      planned_resources_utilization_explanation: "(*) They are not part of the total cost of the workflow"
+
+  activerecord:
+    models:
+      business_unit: "Business unit"
+      business_unit_type: "Organizational unit"
+      business_unit_type_user: "Organizational unit"
+      comment: "Comment"
+      conclusion_review: "Audit report"
+      conclusion_final_review: "Final audit report"
+      conclusion_draft_review: "Draft audit report"
+      control: "Control"
+      control_objective_item: "Control objective"
+      cost: "Cost"
+      finding_answer: "Response to finding"
+      finding_review_assignment: "Assignment of issue to audit report"
+      group: "Group"
+      notification: "Notification"
+      old_password: "Old password"
+      privilege: "Privilege"
+      review:
+        one: "Audit report"
+        other: "Audit reports"
+      review_user_assignment: "Audit report user assignment"
+      role: "Profile"
+      workflow: "Workflow"
+      workflow_item: "Workflow record"
+      work_paper: "Working paper"
+
+    attributes:
+      answer:
+        attached: 'Attached'
+      business_unit:
+        name: "Name"
+        business_unit_kind_id: 'Type of business unit'
+        business_unit_type_id: 'Organizational unit'
+      business_unit_type:
+        name: "Name"
+        business_unit_label: "Business unit label in the audit report"
+        project_label: "Project label in the audit report"
+        review_prefix: "Audit report prefix"
+        recipients: "Audit report recipients"
+        sectors: "Sectors/departments involved"
+        exec_summary_intro: 'Executive Summary Introduction'
+        external: "External"
+        require_tag: "Require tag in audit report"
+        require_counts: "Require counts on control targets"
+        hide_review_logo: "Hide logo in audit reports"
+        independent_identification: "Independent numbering"
+        shared_business_units: "Shared business units"
+        without_number: "No number"
+        reviews_for: "Audit reports for"
+        detailed_review: "Detailed audit report title"
+        detailed_review_legend: "Detailed audit report text"
+        grouped_by_business_unit_annual_report: "Grouped by business unit in annual report"
+      business_unit_type/business_units:
+        one: "Business unit"
+        other: "Business units"
+        name: "Business unit"
+        business_unit_kind_id: "Type of business unit"
+      business_unit_type_user:
+        business_unit_type_id: "Organizational unit"
+      comment:
+        comment: "Comment"
+        user_id: "User"
+        created_at: "Comment date"
+      conclusion_draft_review:
+        force_approval: "Force approval"
+      conclusion_review:
+        type: "Type"
+        review_id: "Audit report"
+        issue_date: "Issue date"
+        close_date: "Closing date"
+        applied_procedures: "Applied procedures"
+        conclusion: "Conclusion"
+        business_unit: "Business unit"
+        project: "Project"
+        approved: "Approved"
+        summary: "Summary"
+        recipients: "Audit report recipients"
+        sectors: "Sectors/departments involved"
+        evolution: "Rating evolution"
+        evolution_justification: "Evolution justification"
+        observations: "Other considerations"
+        main_weaknesses_text: "Main weaknesses"
+        corrective_actions: "Corrective actions"
+        affects_compliance: "Affects compliance"
+        collapse_control_objectives: "Group control objectives"
+        scope: "Scope limitation"
+        reference: "Frame of reference"
+        previous_identification: "Previous audit report"
+        previous_date: "Previous issue date"
+        main_recommendations: "Main Audit Recommendations"
+        additional_comments: "Additional comments"
+        exclude_regularized_findings: "Exclude regularized findings"
+      conclusion_review/review/best_practice_comments:
+        auditor_comment: "Auditor conclusions (process)"
+      control:
+        order: "Order"
+        control: "Controls"
+        effects: "Effects"
+        design_tests: "Design tests"
+        compliance_tests: "Compliance tests"
+        sustantive_tests: "Substantive tests"
+      control_objective_item:
+        control_objective_id: "Control objective"
+        control_objective_text: "Control objective"
+        relevance: "Importance"
+        design_score: "Design test rating"
+        compliance_score: "Compliance test rating"
+        sustantive_score: "Substantive evidence rating"
+        audit_date: "Audit date"
+        auditor_comment: "Auditor comments"
+        finished: "Finished"
+        exclude_from_score: "Do not rate"
+        issues_count: "Observed records"
+        alerts_count: "Number of alerts"
+        process_control_id: "Business process"
+        effectiveness: "Control effectiveness"
+        support: "Support"
+        weaknesses: "Issues"
+        oportunities: "Improvement opportunities"
+        work_papers: "Working papers"
+      control_objective_item/control:
+        order: "Control objective (order)"
+        control: "Control objective (controls)"
+        effects: "Control objective (effects)"
+        design_tests: "Control objective (design tests)"
+        compliance_tests: "Control objective (compliance tests)"
+        sustantive_tests: "Control objective (substantive tests)"
+        work_papers: "Working papers"
+      control_objective_item/work_papers:
+        one: "Working papers"
+        other: "Working papers"
+        name: "Working paper (name)"
+        code: "Working paper (code)"
+        description: "Working paper (description)"
+        number_of_pages: "Working paper (pages)"
+      control_objective_item/work_papers/file_model:
+        one: "Working paper (file)"
+        file_file_name: "Working paper (file name)"
+        file_content_type: "Working paper (file type)"
+        file_file_size: "Working paper (file size)"
+      control_objective_item/business_unit_scores:
+        business_unit_id: 'Business unit rating (business unit)'
+        design_score: 'Business unit rating (design tests)'
+        compliance_score: 'Business unit rating (compliance tests)'
+        sustantive_score: 'Business unit rating (substantive tests)'
+      cost:
+        cost: "Time spent"
+        description: "Description of the activities carried out"
+        user_id: "User"
+        item_id: "Item"
+        item_type: "Item (type)"
+      file_model:
+        uploaded_data: "File"
+        content_type: "File (type)"
+        size: "File (size)"
+      finding_answer:
+        answer: "Comment"
+        commitment_date: "Commitment date"
+        finding_id: "Finding"
+        user_id: "User"
+        file_model: "Attachment"
+        notify_users: "Send notification"
+        created_at: "Comment date"
+        skip_commitment_support: 'Check if the issue is resolved'
+      finding_relation:
+        finding_id: 'Finding'
+        related_finding_id: 'Related finding'
+        description: 'Description'
+      finding_review_assignment:
+        finding_id: 'Finding'
+        finding: 'Finding'
+        review_id: 'Audit report'
+        review: 'Audit report'
+      finding_user_assignment:
+        finding_id: 'Finding'
+        user_id: 'User'
+        user: 'User'
+        process_owner: 'Owner'
+        responsible_auditor: 'Referring auditor'
+      group:
+        name: "Name"
+        description: "Description"
+        admin_email: "Admin email"
+        send_notification_email: "Send notification"
+      group/organizations:
+        one: "Organization"
+        name: "Organization (name)"
+        prefix: "Organization (prefix)"
+        description: "Organization (description)"
+      notification:
+        status: "Status"
+        confirmation_hash: "Confirmation chain"
+        notes: "Notes"
+        findings: "Issues"
+        conclusion_reviews: "Audit reports"
+        user_who_confirm: "Confirmed by"
+        created_at: "Sent date"
+        updated_at: "Update date"
+        confirmation_date: "Confirmation date"
+      notification_relation:
+        model: "Model"
+        notification: "Notification"
+      old_password:
+        password: "Password"
+      organization:
+        name: "Name"
+        prefix: "Prefix"
+        description: "Description"
+      organization/image_model:
+        one: "Logo"
+        image_file_name: "Logo (filename)"
+        image_content_type: "Logo (file type)"
+        image_file_size: "Logo (size)"
+      organization_role:
+        user_id: "User"
+        organization_id: "Organization"
+        role_id: "Profile"
+        sync_ldap: 'Synchronize with LDAP?'
+      privilege:
+        module: "Module"
+        read: "Read"
+        modify: "Modify"
+        erase: "Remove"
+        approval: "Approval"
+      process_controls/control_objectives/control:
+        effects: "Effects"
+        compliance_tests: "Compliance tests"
+      related_user_relation:
+        user_id: 'User'
+        related_user_id: 'Related user'
+        notify: 'Include in notifications'
+      resource_utilization:
+        resource_id: "Resource"
+      review:
+        identification: "Identification"
+        description: "Description"
+        survey: "Survey"
+        audit_type: "Organizational unit"
+        business_unit: "Business unit"
+        period_id: "Period"
+        plan_item_id: "Project"
+        plan_item: "Project"
+        file_model_id: "Attachments"
+        score: "Rating"
+        score_alt: "Compliance rating"
+        scope: "Audit scope"
+        risk_exposure: "Risk exposure"
+        manual_score: "Audit rating"
+        manual_score_alt: "Compliance audit rating"
+        include_sox: "Include SOX test"
+        work_papers: "Working papers"
+        review_user_assignments: "Members"
+        taggings: "Taggings"
+        review_objective: "Audit report objective"
+        type_review: "Audit report type"
+        subsidiary_id: "Branch"
+        subsidiary: "Branch"
+      review/external_reviews:
+        alternative_review: 'External audit report'
+        alternative_review_id: 'External audit report'
+      review/file_model:
+        one: "Attachment (file)"
+        file_file_name: "Attachment (filename)"
+        file_content_type: "Attachment (file type)"
+        file_file_size: "Attachment (file size)"
+      review/finding_review_assignments:
+        one: "Pending issue / improvement opportunity"
+        other: "Pending issues / improvement opportunities"
+        finding: "Pending issue / improvement opportunity"
+        finding_id: "Pending issue / improvement opportunity"
+      review/review_user_assignments:
+        one: "Member"
+        other: "Members"
+        assignment_type: "Member (role)"
+        user: "Member"
+        user_id: "Member"
+        include_signature: "Include signature"
+        owner: "Responsible"
+      review_user_assignment:
+        assignment_type: "Role"
+        user: "Member"
+        user_id: "Member"
+        include_signature: "Include signature"
+        owner: "Responsible"
+        review: "Audit report"
+      role:
+        name: "Profile"
+        role_type: "Profile type"
+        privileges: "Privileges"
+      saml_provider:
+        provider: 'Provider'
+        idp_homepage: 'Application federation metadata URL'
+        idp_entity_id: 'Azure AD identifier'
+        idp_sso_target_url: 'Login URL'
+        sp_entity_id: 'Identifier (entity ID)'
+        assertion_consumer_service_url: 'Response URL (Assertion consumer service URL)'
+        name_identifier_format: 'Name identifier format'
+        assertion_consumer_service_binding: 'Assertion consumer service binding'
+        idp_cert: 'Certificate (Base64)'
+        default_role_for_users: 'Default role for users'
+      work_paper:
+        name: "Name"
+        code: "Code"
+        description: "Description"
+        file_model: "File"
+        number_of_pages: "Pages"
+      workflow:
+        organization_id: "Organization"
+        period_id: "Period"
+        review_id: "Audit report"
+        review: "Audit report"
+        cost: "Cost"
+        units: "Units"
+        file_model_id: "Attachment"
+        workflow_items_resources: "Resources"
+      workflow/workflow_items:
+        one: "Task"
+        other: "Tasks"
+        base: ""
+        task: "Task"
+        start: "Task (start)"
+        end: "Task (end)"
+        order_number: "Task (order)"
+        resources: "Task (resources)"
+      workflow/workflow_items/resource_utilizations:
+        one: "Resource"
+        other: "Resources"
+        units: "Resource (number of units)"
+        cost_per_unit: "Resource (cost per unit)"
+        cost: "Resource (cost)"
+        resource_id: "Resource"
+        resource: "Resource"
+      workflow_item:
+        task: "Task"
+        start: "Start"
+        end: "End"
+        order_number: "Order"
+        resources: "Resources"
+        resource_ids: "Resources"
+        human_resource_units: "Human resource cost"
+        material_resource_units: "Material resource cost"
+        total_resource_units: "Total cost"
+
+    errors:
+      # Append your own errors here or at the model/attributes scope.
+      models:
+        best_practice:
+          attributes:
+            process_controls:
+              locked: "cannot be removed, they have already been used in at least one audit report"
+        business_unit_type:
+          attributes:
+            business_units:
+              locked: "cannot be removed, already used in at least one workplan"
+            exec_summary_intro:
+              missing_keys:
+                one: "contains an invalid key: %{invalid_keys}"
+                other: "contains %{count} invalid keys: %{invalid_keys}"
+        conclusion_final_review:
+          attributes:
+            review_id:
+              taken: "has already created a final audit report"
+              invalid: "is not approved"
+              without_draft: "has no draft audit report"
+            issue_date:
+              less_than_alt_issue_date: 'must be greater than or equal to the issuance date %{date} of the attached audit report %{name}'
+        file_model:
+          attributes:
+            file_file_name:
+              without_extension: 'must have extension'
+        finding:
+          attributes:
+            tag_ids:
+              too_short:
+                one: "must be at least one"
+                other: "must be at least %{count}"
+        image_model:
+          attributes:
+            image_content_type:
+              invalid: "is not valid"
+            image_file_size:
+              invalid: "is not valid"
+        organization_role:
+          attributes:
+            role_id:
+              invalid: "must be only the auditee type or another type but not both"
+        process_control:
+          attributes:
+            control_objectives:
+              locked: "cannot be removed, they have already been used in at least one audit report"
+        question:
+          attributes:
+            question:
+              answered: 'already has answers'
+            answer_type:
+              used: 'has already been submitted in at least one questionnaire'
+        review:
+          attributes:
+            review_user_assignments:
+              invalid: "must have at least %{required_roles}"
+            plan_item:
+              invalid: "must have a business unit assigned in planning"
+              required: "must select one"
+        review_user_assignment:
+          attributes:
+            user_id:
+              invalid: "must have a profile according to your role within the audit report"
+        user:
+          attributes:
+            organization_roles:
+              blank: "must have at least one"
+              invalid: "cannot be modified, user has pending issues (must reassign or detach them)"
+            password:
+              invalid: "must meet the restrictions set by the administrator"
+              already_used: "already used before"
+              too_short: "is too short (%{count} characters minimum)"
+              too_soon:
+                one: "cannot be modified, must wait at least one day between changes"
+                other: "cannot be modified, must wait at least %{count} days between changes"
+        workflow_item:
+          attributes:
+            start:
+              resource_overload: "overloads with another item that occupies the same resource"
+            end:
+              resource_overload: "overloads with another item that occupies the same resource"
+
+  actioncontroller:
+    best_practices: "Best practices"
+    business_unit_types: "Organizational unit"
+    follow_up_audit: "Follow-up reports"
+    conclusion_reports: "Conclusion reports"
+    conclusion_draft_reviews: "Draft audit reports"
+    conclusion_final_reviews: "Final audit reports"
+    control_objective_items: "Control objectives"
+    error_records: "Error logs"
+    execution_reports: "Execution reports"
+    groups: "Groups"
+    login_records: "Login records"
+    notifications: "Notifications"
+    oportunities: "Improvement opportunities"
+    organizations: "Organizations"
+    periods: "Periods"
+    plans: "Workplans"
+    resource_classes: "Resources"
+    reviews: "Audit reports"
+    roles: "Profiles"
+    users: "Users"
+    versions: "Versions"
+    weaknesses: "Issues"
+    welcome: "Welcome"
+    workflows: "Workflows"

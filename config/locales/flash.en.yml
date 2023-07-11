@@ -1,0 +1,181 @@
+en:
+  flash:
+    actions:
+      create:
+        notice: '%{resource_name} created'
+        alert: ''
+      update:
+        notice: '%{resource_name} updated'
+        alert: ''
+        stale: '%{resource_name} could not be updated, please try again'
+      destroy:
+        notice: '%{resource_name} deleted'
+        alert: '%{resource_name} could not be deleted'
+
+    benefits:
+      destroy:
+        alert: 'Benefit could not be deleted, it was already used in observations'
+
+    best_practices:
+      create:
+        notice: 'Best practices successfully created'
+      update:
+        notice: 'Best practices successfully updated'
+        stale: 'Best practices were not updated, please try again'
+      destroy:
+        notice: 'Best practice deleted'
+        alert: 'Best practice cannot be deleted, it has already been used in audit reports'
+
+    closing_interviews:
+      create:
+        notice: 'Closing interview successfully created'
+      update:
+        notice: 'Closing interview successfully updated'
+        stale: 'Closing interview was not updated, please try again'
+
+    findings:
+      update:
+        notice: 'Finding response successfully updated.'
+        stale: 'Finding responses was not updated, please try again.'
+
+    finding_answers:
+      create:
+        notice: 'Finding answer created successfully.'
+        alert: 'Answer could not be created, please try again.'
+
+    news:
+      create:
+        notice: 'News created'
+      update:
+        notice: 'News updated'
+        alert: ''
+        stale: 'News could not be updated, please try again'
+      destroy:
+        notice: 'News deleted'
+        alert: 'News could not be deleted'
+
+    licenses:
+      authorizations:
+        create:
+          notice: 'License updated'
+
+    opening_interviews:
+      create:
+        notice: 'Opening interview successfully created'
+      update:
+        notice: 'Opening interview successfully updated'
+        stale: 'Opening interview was not updated, please try again'
+
+    organizations:
+      create:
+        notice: 'Organization created successfully'
+      update:
+        notice: 'Organization updated successfully'
+        stale: 'Organization was not updated, please try again'
+
+    periods:
+      create:
+        notice: 'Period created successfully'
+      update:
+        notice: 'Period updated successfully'
+        stale: 'Period was not updated, please try again'
+
+    plans:
+      destroy:
+        notice: 'Work plan deleted'
+        alert: 'Plan cannot be deleted, it is related to at least one audit report'
+
+    polls:
+      create:
+        notice: 'Poll has been successfully created'
+      update:
+        notice: 'Poll has been successfully saved. Thank you very much!'
+        stale: 'Poll was not saved, please try again'
+      destroy:
+        notice: 'Poll deleted'
+        alert: 'Poll could not be deleted'
+
+    questionnaires:
+      create:
+        notice: 'Questionnaire has been successfully created'
+      update:
+        notice: 'Questionnaire has been successfully updated'
+        stale: 'Questionnaire was not updated, please try again'
+
+    registrations:
+      create:
+        # With this we skip showing a flash message, the show view is enough
+        notice: ''
+
+    resource_classes:
+      create:
+        notice: 'Resource class created successfully'
+      update:
+        notice: 'Resource class updated successfully'
+        stale: 'Resource class was not updated, please try again'
+      destroy:
+        notice: 'Resource class deleted'
+        alert: 'Resource class could not be deleted'
+
+    risk_assessments:
+      create:
+        notice: 'Risk assessment successfully created'
+      merge_to_plan:
+        notice: 'Plan updated successfully'
+      update:
+        notice: 'Risk assessment updated successfully'
+        stale: 'Risk assessment was not updated, please try again'
+      destroy:
+        notice: 'Risk assessment deleted'
+      sort_by_risk:
+        notice: 'Risk assessment ordered successfully'
+
+    risk_assessment_templates:
+      create:
+        notice: 'Risk assessment template successfully created'
+      update:
+        notice: 'Risk assessment template successfully updated'
+        stale: 'Risk assessment template was not updated, please try again'
+      destroy:
+        notice: 'Risk assessment template deleted'
+
+    settings:
+      update:
+        notice: 'Setting updated successfully'
+        stale: 'Settings was not updated, please try again'
+
+    tags:
+      create:
+        notice: 'Tag created'
+      update:
+        notice: 'Tag updated'
+        alert: ''
+        stale: 'Tag could not be updated, please try again'
+      destroy:
+        notice: 'Tag deleted'
+        alert: 'Tag could not be deleted'
+
+    users:
+      profiles:
+        update:
+          notice: 'Profile update successful'
+          alert: 'Failed to update profile'
+      reassignments:
+        update:
+          notice: 'Responsibility reassignment completed successfully'
+          alert: 'Responsibility reassignment cannot be performed'
+      releases:
+        update:
+          notice: 'Release of responsibilities completed successfully'
+          alert: 'Release of responsibilities cannot be performed, you must in some cases reassign them'
+
+    weakness_templates:
+      create:
+        notice: 'Weakness template created'
+      update:
+        notice: 'Weakness template updated'
+        alert: ''
+        stale: 'Weakness template could not be updated, please try again'
+      destroy:
+        notice: 'Weakness template deleted'
+        alert: 'Weakness template could not be deleted'

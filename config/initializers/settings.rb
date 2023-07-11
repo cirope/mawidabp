@@ -23,5 +23,6 @@ DEFAULT_SETTINGS = {
   hide_obsolete_best_practices: { value: '0', validates: 'numericality' },
   hours_of_work_per_day: { value: '0', validates: 'numericality' },
   conclusion_review_receiver: { value: '_', validates: 'presence' },
-  temporary_polls: { value: '0', validates: 'numericality' }
+  temporary_polls: { value: '0', validates: 'numericality' },
+  finding_warning_expire_days: { value: '7,1', validates: 'presence' }
 }.with_indifferent_access.freeze
