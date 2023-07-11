@@ -197,7 +197,7 @@ class AuthenticationTest < ActionController::TestCase
 
     assert_difference 'ErrorRecord.count', max_attempts.next do
       max_attempts.pred.times { assert_invalid_authentication }
-      @auth = Authentication.new @params, request, session, @organization, false
+      @auth = Authentication.new @params, request, session, @organization, false, @user
       @auth.authenticated?
     end
 
@@ -585,7 +585,7 @@ class AuthenticationTest < ActionController::TestCase
   private
 
     def assert_valid_authentication redirect_url: nil, message: nil, admin_mode: false
-      @auth = Authentication.new @params, request, session, @organization, admin_mode
+      @auth = Authentication.new @params, request, session, @organization, admin_mode, @user
 
       assert_difference 'LoginRecord.count' do
         assert @auth.authenticated?
@@ -604,11 +604,11 @@ class AuthenticationTest < ActionController::TestCase
     end
 
     def assert_invalid_authentication redirect_url: nil, message: nil, admin_mode: false
-      @auth = Authentication.new @params, request, session, @organization, admin_mode
+      @auth = Authentication.new @params, request, session, @organization, admin_mode, @user
 
       assert_difference 'ErrorRecord.count' do
         assert !@auth.authenticated?
-        assert_equal redirect_url || Hash[controller: 'sessions', action: 'new'], @auth.redirect_url
+        assert_equal redirect_url || Hash[controller: 'authentications', action: 'new'], @auth.redirect_url
         assert_equal I18n.t(*message || 'message.invalid_user_or_password'), @auth.message
         assert_kind_of ErrorRecord, error_record(:on_login)
       end
