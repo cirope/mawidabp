@@ -57,6 +57,8 @@ module TagsHelper
   end
 
   def tags_options_collection kind:
+    TAG_OPTIONS['finding'] = {'Requerir en observaciones' => 'required_finding'}
+
     Array(TAG_OPTIONS[kind])
   end
 

@@ -347,24 +347,31 @@ module ConclusionReviews::NbcPdf
         [
           I18n.t('conclusion_review.nbc.weaknesses_detected.risk'),
           I18n.t('conclusion_review.nbc.weaknesses_detected.state'),
-          I18n.t('conclusion_review.nbc.weaknesses_detected.origination_date')
+          I18n.t('conclusion_review.nbc.weaknesses_detected.origination_date'),
+          I18n.t('conclusion_review.nbc.weaknesses_detected.origination_audit')
         ],
         [
           weakness.risk_text,
           weakness.state_text,
-          weakness.origination_date
+          weakness.origination_date,
+          origination_audit_tag(weakness).split(',')
         ]
       ]
+byebug
+      width_column1 = PDF_FONT_SIZE * 16
+      width_column2 = (pdf.bounds.width - width_column1) / 3
 
-      width_column1 = PDF_FONT_SIZE * 17
-      width_column2 = (pdf.bounds.width - width_column1) / 2
-
-      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2, width_column2]) do
+      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2, width_column2, width_column2]) do
         row(0).style(
           background_color: 'EEEEEE'
         )
       end
     end
+
+    def origination_audit_tag weakness
+      weakness.tags.select do |t|
+        t.options['required_finding'] == '1'
+      end.compact.map &:name
 
     def nbc_audit_answer_last answer
       answer.split("\r\n\r\n").last

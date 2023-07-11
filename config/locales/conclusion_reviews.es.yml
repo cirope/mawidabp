@@ -169,6 +169,7 @@ es:
         state: "<b>Estado</b>"
         risk: "<b>Nivel de riesgo</b>"
         origination_date: '<b>Fecha de origen</b>'
+        origination_audit: '<b>Auditoria Origen</b>'
         origination_author: '<b>Origen emisor</b>'
         audit_recommendations: "<b>Sugerencia de Mejora</b>"
         audit_comments: "<b>Plan de acción propuesto por el responsable</b>"
