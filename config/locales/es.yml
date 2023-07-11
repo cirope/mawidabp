@@ -499,7 +499,7 @@
     expired_finding_to_manager:
       subject: "Hallazgo vencido [#%{finding_id}]"
     notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
-      title: "Vencimiento de observación implementada por el negocio"
+      title: "Vencimiento de observación implementada"
       finding_follow_up_date_last_changed_is_grerater_90_days: "Han pasado 90 días desde el último cambio en la fecha de implementación de la observación"
       follow_up_date_last_changed: "Último cambio en fecha de implementación: %{follow_up_date_last_changed}"
     unanswered_finding:

@@ -499,7 +499,7 @@
     expired_finding_to_manager:
       subject: "Expired finding [#%{finding_id}]"
     notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
-      title: "'Implemented by the business' issue expiration"
+      title: "Deployed issue expiration"
       finding_follow_up_date_last_changed_is_grerater_90_days: "90 days have passed since the last change in the issue implementation date"
       follow_up_date_last_changed: "Last changed implementation date: %{follow_up_date_last_changed}"
     unanswered_finding:
