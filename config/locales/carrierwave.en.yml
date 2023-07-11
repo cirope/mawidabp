@@ -1,0 +1,8 @@
+en:
+  errors:
+    messages:
+      carrierwave_processing_error: 'Cannot resize image'
+      carrierwave_integrity_error: 'Not an image'
+      carrierwave_download_error: 'Failed to download image'
+      extension_white_list_error: 'Cannot upload files with extension %{extension}, allowed extensions: %{allowed_types}'
+      extension_black_list_error: 'Cannot upload files with extension %{extension}, extensions not allowed: %{prohibited_types}'

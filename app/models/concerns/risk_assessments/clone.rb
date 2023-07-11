@@ -75,7 +75,6 @@ module RiskAssessments::Clone
         rai.risk_weights.each do |rw|
           weight_attributes = rw.attributes.except 'id',
                                                    'risk_assessment_item_id',
-                                                   'value',
                                                    'created_at',
                                                    'updated_at'
 

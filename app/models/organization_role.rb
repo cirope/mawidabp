@@ -12,6 +12,8 @@ class OrganizationRole < ApplicationRecord
     ).references(:organizations)
   }
 
+  before_validation :set_sync_ldap
+
   # Restricciones
   validates :organization_id, :role_id, :presence => true
   validates :user_id, :organization_id, :role_id,
@@ -55,4 +57,9 @@ class OrganizationRole < ApplicationRecord
   def to_s
     "#{self.role.name} (#{self.organization.name})"
   end
+
+  private
+    def set_sync_ldap
+      self.sync_ldap = true if sync_ldap.nil?
+    end
 end
