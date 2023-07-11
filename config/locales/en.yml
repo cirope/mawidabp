@@ -98,7 +98,7 @@
       title: "ISSUES FROM FINAL AUDIT REPORTS\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
       being_implemented: "'In process of implementation' as of %{date}"
       created: "'Registered' between %{from_date} and %{to_date}"
-      implemented: "'Implemented' between %{from_date} and %{to_date}"
+      implemented: "'Implemented by the business' between %{from_date} and %{to_date}"
       total: "TOTAL"
       empty: "No issues for the applied filter."
 
@@ -441,7 +441,7 @@
       title: "MONITORING ISSUES\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
       being_implemented: "'In process of implementation' as of %{date}"
       created: "'Registered' between %{from_date} and %{to_date}"
-      implemented: "'Implemented' between %{from_date} and %{to_date}"
+      implemented: "'Implemented by the business' between %{from_date} and %{to_date}"
       total: "TOTAL"
       empty: "No issues for the applied filter."
 
@@ -499,7 +499,7 @@
     expired_finding_to_manager:
       subject: "Expired finding [#%{finding_id}]"
     notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
-      title: "Deployed issue expiration"
+      title: "'Implemented by the business' issue expiration"
       finding_follow_up_date_last_changed_is_grerater_90_days: "90 days have passed since the last change in the issue implementation date"
       follow_up_date_last_changed: "Last changed implementation date: %{follow_up_date_last_changed}"
     unanswered_finding:

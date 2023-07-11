@@ -98,7 +98,7 @@
       title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
-      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
+      implemented: "'Implementadas por el negocio' entre el %{from_date} y el %{to_date}"
       total: "TOTAL"
       empty: "Sin observaciones para el filtro aplicado."
 
@@ -441,7 +441,7 @@
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
-      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
+      implemented: "'Implementadas por el negocio' entre el %{from_date} y el %{to_date}"
       total: "TOTAL"
       empty: "Sin observaciones para el filtro aplicado."
 
@@ -499,7 +499,7 @@
     expired_finding_to_manager:
       subject: "Hallazgo vencido [#%{finding_id}]"
     notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
-      title: "Vencimiento de observación implementada"
+      title: "Vencimiento de observación implementada por el negocio"
       finding_follow_up_date_last_changed_is_grerater_90_days: "Han pasado 90 días desde el último cambio en la fecha de implementación de la observación"
       follow_up_date_last_changed: "Último cambio en fecha de implementación: %{follow_up_date_last_changed}"
     unanswered_finding:
