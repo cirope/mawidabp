@@ -1252,7 +1252,8 @@ en:
         shared_business_units: "Shared business units"
         without_number: "No number"
         reviews_for: "Audit reports for"
-        detailed_review: "Detailed audit report"
+        detailed_review: "Detailed audit report title"
+        detailed_review_legend: "Detailed audit report text"
         grouped_by_business_unit_annual_report: "Grouped by business unit in annual report"
       business_unit_type/business_units:
         one: "Business unit"

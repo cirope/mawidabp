@@ -640,6 +640,7 @@ en:
     hours_of_work_per_day: 'Hours of work per day'
     conclusion_review_receiver: 'Audit report receiver(s)'
     temporary_polls: 'Temporarily save poll responses. A poll is complete when all of its questions are answered.'
+    finding_warning_expire_days: 'Number of days before the expiration of an observation in which the system will notify its proximity'
 
   tags:
     edit:
