@@ -98,7 +98,7 @@
       title: "ISSUES FROM FINAL AUDIT REPORTS\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
       being_implemented: "'In process of implementation' as of %{date}"
       created: "'Registered' between %{from_date} and %{to_date}"
-      implemented: "'Implemented' between %{from_date} and %{to_date}"
+      implemented: "'Implemented by the business' between %{from_date} and %{to_date}"
       total: "TOTAL"
       empty: "No issues for the applied filter."
 
@@ -441,7 +441,7 @@
       title: "MONITORING ISSUES\nTOTALS BY RISK LEVEL AND BUSINESS UNITS"
       being_implemented: "'In process of implementation' as of %{date}"
       created: "'Registered' between %{from_date} and %{to_date}"
-      implemented: "'Implemented' between %{from_date} and %{to_date}"
+      implemented: "'Implemented by the business' between %{from_date} and %{to_date}"
       total: "TOTAL"
       empty: "No issues for the applied filter."
 

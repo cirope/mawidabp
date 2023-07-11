@@ -98,7 +98,7 @@
       title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
-      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
+      implemented: "'Implementadas por el negocio' entre el %{from_date} y el %{to_date}"
       total: "TOTAL"
       empty: "Sin observaciones para el filtro aplicado."
 
@@ -441,7 +441,7 @@
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
-      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
+      implemented: "'Implementadas por el negocio' entre el %{from_date} y el %{to_date}"
       total: "TOTAL"
       empty: "Sin observaciones para el filtro aplicado."
 
