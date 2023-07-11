@@ -1252,7 +1252,8 @@ es:
         shared_business_units: "Unidades de negocio compartidas"
         without_number: "Sin número"
         reviews_for: "Informes para"
-        detailed_review: "Informe detallado"
+        detailed_review: "Título de Informe Detallado"
+        detailed_review_legend: "Texto de Informe Detallado"
         grouped_by_business_unit_annual_report: "Agrupado por unidad de negocio en reporte anual"
       business_unit_type/business_units:
         one: "Unidad de negocio"
