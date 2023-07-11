@@ -55,4 +55,4 @@ es:
       import:
         username: 'Usuario con permisos para consultar la base de usuarios LDAP'
       business_unit_type:
-        exec_summary_intro: "Las clave válida a incluir es: <code>%{%{keywords}}</code>"
+        exec_summary_intro: "La clave válida a incluir es: <code>%{%{keywords}}</code>"
