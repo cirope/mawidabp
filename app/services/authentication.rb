@@ -1,8 +1,10 @@
 class Authentication
   attr_reader :message, :redirect_url
 
-  def initialize params, request, session, current_organization, admin_mode
-    @current_organization, @admin_mode = current_organization, admin_mode
+  def initialize params, request, session, current_organization, admin_mode, current_user = nil
+    @admin_mode           = admin_mode
+    @valid_user           = current_user
+    @current_organization = current_organization
     @params, @request, @session = params, request, session
 
     set_resources
@@ -27,7 +29,7 @@ class Authentication
       end
     else
       @message ||= I18n.t 'message.invalid_user_or_password'
-      @redirect_url ||= { controller: 'sessions', action: 'new' }
+      @redirect_url ||= { controller: 'authentications', action: 'new' }
 
       register_login_error
     end
@@ -41,7 +43,6 @@ class Authentication
       set_saml_user
       set_login_user
       set_ldap_config
-      set_valid_user
     end
 
     def set_saml_user
@@ -146,31 +147,6 @@ class Authentication
 
     def set_ldap_config
       @ldap_config = @current_organization && choose_ldap_config(@params[:user])
-    end
-
-    def set_valid_user
-      conditions = [
-        [
-          "LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user",
-          "LOWER(#{User.quoted_table_name}.#{User.qcn('email')}) = :email"
-        ].join(' OR ')
-      ]
-
-      parameters = {
-        user: unmasked_user.to_s.downcase.strip,
-        email: unmasked_user.to_s.downcase.strip
-      }
-
-      if @admin_mode
-        conditions << "#{User.quoted_table_name}.#{User.qcn('group_admin')} = :true"
-        parameters[:true] = true
-      else
-        conditions << "#{Organization.quoted_table_name}.#{Organization.qcn('id')} = :organization_id"
-        parameters[:organization_id] = @current_organization.id
-      end
-
-      @valid_user = User.includes(:organizations).where(conditions.join(' AND '), parameters).
-        references(:organizations).first
     end
 
     def encrypt_password
