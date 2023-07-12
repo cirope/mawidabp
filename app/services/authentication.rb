@@ -18,9 +18,9 @@ class Authentication
     authenticate
 
     if @valid && @valid_user
-      if @current_organization.try(:ldap_config)
+      if ldap_config_present?
         verify_pending_poll
-      elsif @current_organization&.saml_provider.present?
+      elsif saml_config_present?
         verify_pending_poll
       else
         verify_days_for_password_expiration
@@ -46,7 +46,7 @@ class Authentication
     end
 
     def set_saml_user
-      if @current_organization&.saml_provider.present?
+      if saml_config_present?
         provider      = @current_organization.saml_provider
         saml_config   = IdpSettingsAdapter.saml_settings provider
         saml_response = OneLogin::RubySaml::Response.new @params[:SAMLResponse], settings: saml_config
@@ -161,9 +161,9 @@ class Authentication
     end
 
     def authenticate
-      if @current_organization.try(:ldap_config) && !is_user_recovery?
+      if ldap_config_present?
         ldap_auth
-      elsif @current_organization&.saml_provider.present? && !is_user_recovery?
+      elsif saml_config_present?
         saml_auth
       else
         local_auth
@@ -320,5 +320,13 @@ class Authentication
 
     def is_user_recovery?
       @valid_user&.recovery?
+    end
+
+    def saml_config_present?
+      !is_user_recovery? && @current_organization&.saml_provider.present?
+    end
+
+    def ldap_config_present?
+      !is_user_recovery? && @current_organization.try(:ldap_config)
     end
 end
