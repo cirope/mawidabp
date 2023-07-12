@@ -19,6 +19,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf  { redirect_to pdf.relative_path }
+      format.csv  { render csv: csv, filename: filename }
     end
   end
 
@@ -79,6 +80,75 @@ class UsersController < ApplicationController
       scope.list.include_tags.search(**search_params).order(
         Arel.sql "#{User.quoted_table_name}.#{User.qcn('user')} ASC"
       ).page params[:page]
+    end
+
+    def csv
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      csv_str = CSV.generate(**options) do |csv|
+        csv << users_header_csv
+
+        users_data_csv.each do |data|
+          csv << data
+        end
+
+        csv << [filter_text]
+      end
+
+      "\uFEFF#{csv_str}"
+    end
+
+    def users_header_csv
+      [
+        User.human_attribute_name('user'),
+        User.human_attribute_name('name'),
+        User.human_attribute_name('last_name'),
+        User.human_attribute_name('email'),
+        User.human_attribute_name('function'),
+        User.human_attribute_name('roles'),
+        User.human_attribute_name('manager_id'),
+        User.human_attribute_name('children'),
+        User.human_attribute_name('enable'),
+        User.human_attribute_name('password_changed'),
+        User.human_attribute_name('last_access')
+      ]
+    end
+
+    def users_data_csv
+      @users
+        .unscope(:limit, :offset)
+        .preload(organization_roles: :role)
+        .map do |user|
+          [
+            user.user,
+            user.name,
+            user.last_name,
+            user.email,
+            user.function,
+            user.roles(@current_organization.id).map(&:name).join('; '),
+            user.parent&.full_name,
+            user.children.not_hidden.enabled.map(&:full_name).join(' / '),
+            I18n.t(user.enable? ? 'label.yes' : 'label.no'),
+            user.password_changed ? I18n.l(user.password_changed, format: :minimal) : '-',
+            user.last_access ? I18n.l(user.last_access, format: :minimal) : '-'
+          ]
+        end
+    end
+
+    def filter_text
+      columns = search_params[:columns]
+      query   = User.split_terms_in_query(search_params[:query])
+
+      if columns.present? || query.present?
+        filter_columns = columns.map { |c| "#{User.human_attribute_name c}" }
+        query          = query.flatten.map { |q| "#{q}" }
+        text           = I18n.t 'user.pdf_csv.filtered_by', query: query.to_sentence,
+          columns: filter_columns.to_sentence, count: columns.size
+      end
+    end
+
+    def filename
+      I18n.t 'user.pdf_csv.pdf_csv_name'
     end
 
     def pdf

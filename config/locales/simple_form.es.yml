@@ -54,3 +54,5 @@ es:
         password: 'Contraseña del usuario de servicio para la importación automática de usuarios'
       import:
         username: 'Usuario con permisos para consultar la base de usuarios LDAP'
+      business_unit_type:
+        exec_summary_intro: "La clave válida a incluir es: <code>%{%{keywords}}</code>"
