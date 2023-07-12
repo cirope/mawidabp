@@ -665,6 +665,8 @@ es:
       info: 'Informativa'
       warning: 'Advertencia'
       danger: 'Peligro'
+    options:
+      origination_audit: 'Origen auditoria'
 
   tasks:
     on_time: 'A tiempo, sin reprogramación'

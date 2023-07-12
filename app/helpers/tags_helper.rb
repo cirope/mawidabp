@@ -57,7 +57,11 @@ module TagsHelper
   end
 
   def tags_options_collection kind:
-    TAG_OPTIONS['finding'] = {'Requerir en observaciones' => 'required_finding'}
+    if kind == 'finding' && Current.conclusion_pdf_format == 'nbc'
+      tag_option = I18n.t('tags.options.origination_audit')
+
+      TAG_OPTIONS['finding'][tag_option] = 'origination_audit'
+    end
 
     Array(TAG_OPTIONS[kind])
   end

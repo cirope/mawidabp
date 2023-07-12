@@ -354,10 +354,10 @@ module ConclusionReviews::NbcPdf
           weakness.risk_text,
           weakness.state_text,
           weakness.origination_date,
-          origination_audit_tag(weakness).split(',')
+          origination_audit_tag(weakness).join(', ')
         ]
       ]
-byebug
+
       width_column1 = PDF_FONT_SIZE * 16
       width_column2 = (pdf.bounds.width - width_column1) / 3
 
@@ -369,9 +369,10 @@ byebug
     end
 
     def origination_audit_tag weakness
-      weakness.tags.select do |t|
-        t.options['required_finding'] == '1'
+      weakness.tags.select do |tag|
+        tag.options['origination_audit'] == '1'
       end.compact.map &:name
+    end
 
     def nbc_audit_answer_last answer
       answer.split("\r\n\r\n").last
