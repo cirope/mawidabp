@@ -7,6 +7,7 @@ module Sessions
   end
 
   private
+
     def user_logged_in?
       auth_user = User.find(session[:user_id]) if session[:user_id]
 
