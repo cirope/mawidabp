@@ -8,6 +8,8 @@ class AuthenticationsController < ApplicationController
   end
 
   def create
+    params[:user] = username
+
     auth = Authentication.new params, request, session,
       current_organization, @admin_mode, @current_user
 
