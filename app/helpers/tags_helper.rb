@@ -57,13 +57,13 @@ module TagsHelper
   end
 
   def tags_options_collection kind:
-    if kind == 'finding' && Current.conclusion_pdf_format == 'nbc'
-      tag_option = {I18n.t('tags.options.origination_audit') => 'origination_audit'}
+    tag_option = {}
 
-      Array(TAG_OPTIONS[kind]) + Array(tag_option)
-    else
-      Array(TAG_OPTIONS[kind])
+    if kind == 'finding' && Current.conclusion_pdf_format == 'nbc1'
+      tag_option = { I18n.t('tags.options.origination_audit') => 'origination_audit' }
     end
+
+    Array(TAG_OPTIONS[kind].merge(tag_option))
   end
 
   def tag_input_option form, tag, value
