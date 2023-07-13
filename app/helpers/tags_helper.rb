@@ -59,7 +59,7 @@ module TagsHelper
   def tags_options_collection kind:
     tag_option = {}
 
-    if kind == 'finding' && Current.conclusion_pdf_format == 'nbc1'
+    if kind == 'finding' && Current.conclusion_pdf_format == 'nbc'
       tag_option = { I18n.t('tags.options.origination_audit') => 'origination_audit' }
     end
 
