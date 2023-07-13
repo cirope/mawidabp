@@ -59,7 +59,7 @@ es:
     download: "Descargar"
     insufficient_privileges: "No tiene permisos para realizar la acción"
     invalid_user_or_password: "Usuario/contraseña inválido"
-    invalid_user_or_email: 'Tu usuario o correo no es válido'
+    invalid_user_or_email: 'Tu usuario o correo no puede estar en blanco'
     loading: "Cargando"
     must_be_authenticated: "Debe iniciar sesión para continuar"
     must_change_the_password: "Debe cambiar su contraseña"

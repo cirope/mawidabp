@@ -5,6 +5,7 @@ class Authentication
     @admin_mode           = admin_mode
     @valid_user           = current_user
     @current_organization = current_organization
+
     @params, @request, @session = params, request, session
 
     set_resources

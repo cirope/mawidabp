@@ -37,7 +37,6 @@ class SessionsController < ApplicationController
   end
 
   private
-
     def redirect_to_saml?
       current_organization&.saml_provider.present? &&
         params[:saml_error].blank? &&
