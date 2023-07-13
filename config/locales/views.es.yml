@@ -592,13 +592,18 @@ es:
       operational_audit: 'Auditoría operativa'
       system_audit: 'Auditoría de sistema'
 
+  authentications:
+    new:
+      title: 'Autenticación'
+      password: 'Contraseña'
+      log_in: 'Ingresar'
+
   sessions:
     new:
       title: 'Ingreso'
       log_in: 'Ingresar'
       email: 'Correo'
       user: 'Usuario'
-      password: 'Contraseña'
       remember_me: 'Recordarme'
       try_again: 'Intentar nuevamente'
       forgot_password: '¿Olvidaste tu contraseña?'

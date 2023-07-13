@@ -59,6 +59,7 @@ es:
     download: "Descargar"
     insufficient_privileges: "No tiene permisos para realizar la acción"
     invalid_user_or_password: "Usuario/contraseña inválido"
+    invalid_user_or_email: 'Tu usuario o correo no puede estar en blanco'
     loading: "Cargando"
     must_be_authenticated: "Debe iniciar sesión para continuar"
     must_change_the_password: "Debe cambiar su contraseña"
@@ -81,6 +82,7 @@ es:
     empty_result: "Sin resultados, modifique el criterio de búsqueda"
     automatic_by_the_system: "Realizado de forma automática por el sistema"
     compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="https://browsehappy.com/">actualizarlo</a>'
+    welcome: 'Bienvenido'
 
   error:
     title: "Error"
