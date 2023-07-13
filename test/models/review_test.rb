@@ -213,7 +213,7 @@ class ReviewTest < ActiveSupport::TestCase
     tag           = tags :manual
     tag_option    = opts[:require_tags].first
 
-    tag.update! options: [tag_option]
+    tag.update! options: { tag_option => '1' }
 
     assert @review.invalid?
     assert_error @review, :taggings, :missing_tags_for_scope,

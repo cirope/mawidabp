@@ -84,10 +84,14 @@ module FindingsHelper
     content_tag :abbr, finding.review_code, title: j(finding.description)
   end
 
-  def finding_answer_notification_check form
+  def finding_answer_notification_check form, finding_answer
     form.input :notify_users,
       as:           :boolean,
-      wrapper_html: { hidden: @auth_user.can_act_as_audited? }
+      wrapper_html: { hidden: @auth_user.can_act_as_audited? || bic_committee?(finding_answer) }
+  end
+
+  def bic_committee? finding_answer
+    finding_answer.user.committee? && Current.conclusion_pdf_format == 'bic'
   end
 
   def finding_show_status_change_history element_id
@@ -190,7 +194,7 @@ module FindingsHelper
       finding_answer.user.can_act_as_audited?  &&
       finding_answer.requires_commitment_date? &&
       !current_organization.corporate?
-    )
+    ) || bic_committee?(finding_answer)
   end
 
   def show_commitment_endorsement_edition? finding_answer

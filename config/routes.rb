@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   post   'sessions', to: 'sessions#create',  as: 'sessions'
   delete 'logout',   to: 'sessions#destroy', as: 'logout'
 
+  # Authentication
+  get  'signin', to: 'authentications#new',    as: 'signin'
+  post 'auth',   to: 'authentications#create', as: 'auth'
+
   # SAML
   get 'saml/auth', to: 'saml_sessions#new', as: :new_saml_session
   post 'saml/callback', to: 'saml_sessions#create', as: :saml_session

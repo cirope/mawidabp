@@ -109,4 +109,29 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
     assert @business_unit_type.invalid?
     assert_error @business_unit_type, :business_units, :locked
   end
+
+  # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates gal exec summary intro must have valid keys' do
+    set_organization
+
+    skip unless Current.conclusion_pdf_format == 'gal'
+
+    invalid_key  = 'inválida'
+    missing_keys = [invalid_key]
+    valid_key    = I18n.t "conclusion_review.executive_summary.keywords.review"
+
+    @business_unit_type.exec_summary_intro = "Prueba con key inválido: %{#{invalid_key}}"
+
+    assert @business_unit_type.invalid?
+    assert_error @business_unit_type, :exec_summary_intro, :missing_keys,
+      count: missing_keys.count, invalid_keys: missing_keys.to_sentence
+
+    @business_unit_type.exec_summary_intro = "Prueba con key válido: %{#{valid_key}}"
+    assert @business_unit_type.valid?
+
+  ensure
+    Current.organization = nil
+    Current.user         = nil
+  end
+
 end
