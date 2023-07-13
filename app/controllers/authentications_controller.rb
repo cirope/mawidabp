@@ -16,6 +16,7 @@ class AuthenticationsController < ApplicationController
     if auth.authenticated?
       flash.notice = auth.message
 
+
       set_session_values auth.user
     else
       flash.alert = auth.message
