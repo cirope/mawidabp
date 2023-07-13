@@ -170,6 +170,7 @@ en:
         state: "<b>State</b>"
         risk: "<b>Risk level</b>"
         origination_date: '<b>Origination Date</b>'
+        origination_audit: '<b>Origination Audit</b>'
         origination_author: '<b>Origination author</b>'
         audit_recommendations: "<b>Improvement Suggestions</b>"
         audit_comments: "<b>Action plan proposed by the manager</b>"
