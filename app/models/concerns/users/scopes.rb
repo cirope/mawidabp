@@ -7,16 +7,10 @@ module Users::Scopes
         where(organizations: { id: Current.organization&.id }).
         references :organizations
     }
-    scope :ldap_import_list, -> {
-      list.where organization_roles: { sync_ldap: true }
-    }
     scope :group_list, -> {
       includes(:group).
         where(groups: { id: Current.group&.id }).
         references :groups
-    }
-    scope :ldap_import_group_list, -> {
-      group_list.where organization_roles: { sync_ldap: true }
     }
     scope :without_organization, -> {
       includes(:organizations).

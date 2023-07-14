@@ -62,12 +62,14 @@ module LdapConfigs::LdapImport
       data[:manager_id] = nil if manager_dn.blank?
 
       state = if user
-                update_user user: user, data: data, roles: roles
+                if should_sync_ldap?(user)
+                  update_user user: user, data: data, roles: roles
 
-                if user.roles.any?
-                  user.saved_changes? ? :updated : :unchanged
-                else
-                  :deleted
+                  if user.roles.any?
+                    user.saved_changes? ? :updated : :unchanged
+                  else
+                    :deleted
+                  end
                 end
               else
                 user = create_user user: user, data: data, roles: roles
@@ -80,9 +82,9 @@ module LdapConfigs::LdapImport
     end
 
     def find_user data
-      User.ldap_import_group_list.by_email(data[:email]) ||
+      User.group_list.by_email(data[:email]) ||
         User.without_organization.by_email(data[:email]) ||
-        User.ldap_import_list.by_user(data[:user])
+        User.list.by_user(data[:user])
     end
 
     def role_data entry
@@ -189,5 +191,11 @@ module LdapConfigs::LdapImport
 
         u_d
       end
+    end
+
+    def should_sync_ldap? user
+      organization_role = user.organization_roles.where(organization: organization).take
+
+      organization_role.nil? ? true : organization_role.sync_ldap
     end
 end
