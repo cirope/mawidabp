@@ -65,7 +65,7 @@ class NbcInternalControlQualificationAsGroupOfCompaniesForm < NbcAnnualReportFor
 
     def business_unit_types_must_have_the_same_name
       organization_ids = self.organization_ids
-      current_names = self.business_unit_type_names
+      current_names    = self.business_unit_type_names
 
       but_per_organization = BusinessUnitType
         .where(organization_id: organization_ids)
