@@ -68,7 +68,7 @@ module LdapConfigs::LdapImport
       data[:manager_id] = nil if manager_dn.blank? && !skip_function_and_manager?
 
       state = if user
-                if should_be_sync_ldap?(user)
+                if should_sync_ldap?(user)
                   User.update_user user: user, data: data, roles: roles
 
                   if user.roles.any?
