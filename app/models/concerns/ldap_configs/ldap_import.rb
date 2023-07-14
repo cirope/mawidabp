@@ -185,7 +185,7 @@ module LdapConfigs::LdapImport
       end
     end
 
-    def should_be_sync_ldap? user
+    def should_sync_ldap? user
       organization_role = user.organization_roles.where(organization: organization).take
 
       organization_role.nil? ? true : organization_role.sync_ldap
