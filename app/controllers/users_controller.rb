@@ -3,6 +3,7 @@
 class UsersController < ApplicationController
   include Users::Finders
   include Users::Params
+  include AutoCompleteFor::Tagging
 
   respond_to :html
 
@@ -76,7 +77,7 @@ class UsersController < ApplicationController
                 User.not_hidden
               end
 
-      scope.list.search(**search_params).order(
+      scope.list.include_tags.search(**search_params).order(
         Arel.sql "#{User.quoted_table_name}.#{User.qcn('user')} ASC"
       ).page params[:page]
     end
@@ -114,21 +115,24 @@ class UsersController < ApplicationController
     end
 
     def users_data_csv
-      @users.preload(organization_roles: :role).map do |user|
-        [
-          user.user,
-          user.name,
-          user.last_name,
-          user.email,
-          user.function,
-          user.roles(@current_organization.id).map(&:name).join('; '),
-          user.parent&.full_name,
-          user.children.not_hidden.enabled.map(&:full_name).join(' / '),
-          I18n.t(user.enable? ? 'label.yes' : 'label.no'),
-          user.password_changed ? I18n.l(user.password_changed, format: :minimal) : '-',
-          user.last_access ? I18n.l(user.last_access, format: :minimal) : '-'
-        ]
-      end
+      @users
+        .unscope(:limit, :offset)
+        .preload(organization_roles: :role)
+        .map do |user|
+          [
+            user.user,
+            user.name,
+            user.last_name,
+            user.email,
+            user.function,
+            user.roles(@current_organization.id).map(&:name).join('; '),
+            user.parent&.full_name,
+            user.children.not_hidden.enabled.map(&:full_name).join(' / '),
+            I18n.t(user.enable? ? 'label.yes' : 'label.no'),
+            user.password_changed ? I18n.l(user.password_changed, format: :minimal) : '-',
+            user.last_access ? I18n.l(user.last_access, format: :minimal) : '-'
+          ]
+        end
     end
 
     def filter_text

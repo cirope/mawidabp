@@ -35,6 +35,13 @@ module Users::Scopes
         }
       )
     }
+    scope :include_tags, -> {
+      includes('tags').references('tags')
+    }
+  end
+
+  def recovery?
+    tags.with_option('recovery', '1').exists?
   end
 
   module ClassMethods

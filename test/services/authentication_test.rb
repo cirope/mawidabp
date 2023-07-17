@@ -31,6 +31,56 @@ class AuthenticationTest < ActionController::TestCase
     assert_valid_authentication
   end
 
+  test 'should authenticate with ldap config and recovery user' do
+    tag = tags :recovery
+
+    @organization = organizations :google
+    @organization.ldap_config.update_column :hostname, 'wrong_hostname'
+
+    @params = { user: @user.user, password: 'admin123' }
+
+    Current.organization = @organization
+
+    assert !@user.recovery?
+    assert_invalid_authentication message: 'message.ldap_error'
+
+    @user.taggings.create! tag: tag
+
+    assert @user.recovery?
+    assert_valid_authentication
+  end
+
+  test 'should authenticate with saml config and recovery user' do
+    tag = tags :recovery
+
+    @organization = organizations :google
+    @organization.ldap_config.destroy!
+
+    saml_provider = SamlProvider.create! provider: 'azure',
+                                      idp_homepage: 'https://login.microsoftonline.com/test/federationmetadata/2007-06/federationmetadata.xml',
+                                      idp_entity_id: 'https://sts.windows.net/test/',
+                                      idp_sso_target_url: 'https://login.microsoftonline.com/test/saml2',
+                                      sp_entity_id: 'https://test.com/saml/metadata',
+                                      assertion_consumer_service_url: 'https://test.com/saml/callback',
+                                      name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
+                                      assertion_consumer_service_binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+                                      idp_cert: 'cert_test',
+                                      organization: @organization
+
+    @organization.reload
+    @params = { user: @user.user, password: 'admin123', SAMLResponse: '' }
+
+    Current.organization = @organization
+
+    assert !@user.recovery?
+    assert_invalid_authentication redirect_url: Hash[controller: 'sessions', action: 'new', saml_error: true]
+
+    @user.taggings.create! tag: tag
+
+    assert @user.recovery?
+    assert_valid_authentication
+  end
+
   test 'should authenticate via ldap using the proper config' do
     role = roles :admin_second_alphabet_role
     ldap_config = ldap_configs :google_ldap
@@ -147,7 +197,7 @@ class AuthenticationTest < ActionController::TestCase
 
     assert_difference 'ErrorRecord.count', max_attempts.next do
       max_attempts.pred.times { assert_invalid_authentication }
-      @auth = Authentication.new @params, request, session, @organization, false
+      @auth = Authentication.new @params, request, session, @organization, false, @user
       @auth.authenticated?
     end
 
@@ -535,7 +585,7 @@ class AuthenticationTest < ActionController::TestCase
   private
 
     def assert_valid_authentication redirect_url: nil, message: nil, admin_mode: false
-      @auth = Authentication.new @params, request, session, @organization, admin_mode
+      @auth = Authentication.new @params, request, session, @organization, admin_mode, @user
 
       assert_difference 'LoginRecord.count' do
         assert @auth.authenticated?
@@ -554,11 +604,11 @@ class AuthenticationTest < ActionController::TestCase
     end
 
     def assert_invalid_authentication redirect_url: nil, message: nil, admin_mode: false
-      @auth = Authentication.new @params, request, session, @organization, admin_mode
+      @auth = Authentication.new @params, request, session, @organization, admin_mode, @user
 
       assert_difference 'ErrorRecord.count' do
         assert !@auth.authenticated?
-        assert_equal redirect_url || Hash[controller: 'sessions', action: 'new'], @auth.redirect_url
+        assert_equal redirect_url || Hash[controller: 'authentications', action: 'new'], @auth.redirect_url
         assert_equal I18n.t(*message || 'message.invalid_user_or_password'), @auth.message
         assert_kind_of ErrorRecord, error_record(:on_login)
       end

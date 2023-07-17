@@ -32,6 +32,7 @@ class User < ApplicationRecord
   include Users::Validations
   include Users::Tree
   include Users::Update
+  include Taggable
 
   trimmed_fields :user, :email, :name, :last_name
 

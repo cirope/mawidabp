@@ -213,7 +213,7 @@ class ReviewTest < ActiveSupport::TestCase
     tag           = tags :manual
     tag_option    = opts[:require_tags].first
 
-    tag.update! options: [tag_option]
+    tag.update! options: { tag_option => '1' }
 
     assert @review.invalid?
     assert_error @review, :taggings, :missing_tags_for_scope,
@@ -371,6 +371,17 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal 5, @review.score
     assert_equal 53, @review.score_alt
     assert_equal 'splitted_effectiveness', @review.score_type
+  end
+
+  test 'implemented audited or being_implemented weaknesses' do
+    @review = reviews(:current_review)
+
+    @review.finding_review_assignments_attributes = [{ finding_id: findings(:being_implemented_weakness_on_final).id }]
+
+    states       = @review.implemented_audited_or_being_implemented_w.pluck(:state)
+    valid_states = [:implemented_audited, :being_implemented].map { |s| Finding::STATUS[s] }
+
+    assert states.all? { |state| valid_states.include?(state) }
   end
 
   test 'must be approved function' do

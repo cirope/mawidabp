@@ -20,7 +20,7 @@ es:
     stats: 'Estadísticas'
     warning: 'Advertencia'
     upload: 'Adjuntar'
-    _yes: 'Si'
+    _yes: 'Sí'
     _no: 'No'
 
   activity_groups:
@@ -44,7 +44,7 @@ es:
     neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
     agree: 'De acuerdo'
     strongly_agree: 'Muy de acuerdo'
-    'yes': 'Si'
+    'yes': 'Sí'
     'no': 'No'
 
   benefits:
@@ -66,11 +66,11 @@ es:
     index:
       title: 'Listado de buenas prácticas'
     show:
-      title: 'Detalle buenas prácticas'
+      title: 'Detalles de la buena práctica'
     new:
-      title: 'Agregar buenas prácticas'
+      title: 'Agregar buena práctica'
     edit:
-      title: 'Modificar buenas prácticas'
+      title: 'Modificar buena práctica'
     process_controls:
       new: 'Agregar proceso'
     control_objectives:
@@ -105,7 +105,7 @@ es:
     index:
       title: 'Listado de objetivos de control'
     show:
-      title: 'Detalle objetivo de control'
+      title: 'Detalles del objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
       add_control_objective_auditor: 'Agregar auditor a cargo'
@@ -163,11 +163,11 @@ es:
     form:
       show_status_change_history: 'Ver historial de cambios de estado'
       follow_up_date_label_append: ' - Sugerida: '
-      confirm_finding_without_extension: '¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo.'
+      confirm_finding_without_extension: '¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo'
     auditor_form:
       origin: 'origen'
     edit_bic_sigen_fields:
-      title: 'Editar campos sigen de observacion.'
+      title: 'Editar campos sigen de observación'
     current_user_filters:
       pending_to_endorsement: 'Pendientes de aprobación'
       as_owner: '%{kind} como responsable'
@@ -205,6 +205,7 @@ es:
     endorsement_item:
       approve: 'Aprobar'
       reject: 'Rechazar'
+    finding_answers: 'Comentarios de'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -216,7 +217,7 @@ es:
       cancelled: 'Cancelado'
     blocked:
       show:
-        body: 'Su organización está inhabilitada, contacte sopore@mawidabp.com'
+        body: 'Su organización está inhabilitada, contacte soporte@mawidabp.com'
         check: 'Volver a comprobar pago'
     license:
       check: 'Volver a comprobar pago'
@@ -233,7 +234,7 @@ es:
         title: 'Licencia'
     paypal_button:
       create: 'Suscribirse'
-      create_error: 'Ha ocurrido un problema, por favor comuníquese con soporte@mawidabp.com para comprobar si el pago está acreditado.'
+      create_error: 'Se ha detectado un problema. Por favor, comuníquese con soporte@mawidabp.com para verificar si el pago ha sido acreditado'
 
   login_records:
     choose:
@@ -250,14 +251,14 @@ es:
 
   memos:
     edit:
-      title: 'Editar Informe externo'
+      title: 'Editar informe externo'
     index:
-      new: 'Nuevo Informe externo'
-      title: 'Listado de Informes externos'
-      empty_html: 'No hay Informes externos, puede crear una con el botón <span class="badge badge-primary">Nuevo memo</span>'
-      empty_search_html: 'No hay Informes externos que coincidan con el criterio de búsqueda'
+      new: 'Nuevo informe externo'
+      title: 'Listado de informes externos'
+      empty_html: 'No hay informes externos, puede crear una con el botón <span class="badge badge-primary">Nuevo memo</span>'
+      empty_search_html: 'No hay informes externos que coincidan con el criterio de búsqueda'
     new:
-      title: 'Crear Informe externo'
+      title: 'Crear informe externo'
     form:
       markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
       add_file_model: 'Agregar archivo'
@@ -313,7 +314,7 @@ es:
       title: 'Agregar organización'
     edit:
       title: 'Modificar organización'
-    new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de haberla creado'
+    new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de crearla'
     logo_styles:
       default: 'Por defecto'
       success: 'Exitoso'
@@ -491,7 +492,7 @@ es:
       success: 'Tus datos se actualizaron correctamente'
 
   polls:
-    access_denied: 'La encuesta ya ha sido contestada.'
+    access_denied: 'La encuesta ya ha sido contestada'
     already_exists: 'Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente'
     answer_poll: '¿Contestar encuesta?'
     about: 'Acerca de'
@@ -514,7 +515,7 @@ es:
       other: 'Tiene %{count} encuestas pendientes por responder'
     new:
       title: 'Agregar encuesta'
-    not_found: 'No se encontró la encuesta o la misma ya ha sido contestada.'
+    not_found: 'No se encontró la encuesta o ya ha sido contestada'
     pdf:
       name: 'resumen_encuestas_del_%{from_date}_al_%{to_date}.pdf'
     questionnaires:
@@ -539,7 +540,7 @@ es:
     show:
       title: 'Detalles del cuestionario'
     questions:
-      new: 'Agregar cuestión'
+      new: 'Agregar pregunta'
 
   readings:
     reading:
@@ -551,7 +552,7 @@ es:
       title: 'Nueva Organización'
     show:
       title: 'Organización creada'
-      body: 'Su registro está completo, recibirá un correo con instrucciones para ingresar.'
+      body: 'Su registro está completo, recibirá un correo con instrucciones para ingresar'
 
   report:
     index_title: 'Listado de reportes'
@@ -591,15 +592,20 @@ es:
       operational_audit: 'Auditoría operativa'
       system_audit: 'Auditoría de sistema'
 
+  authentications:
+    new:
+      title: 'Autenticación'
+      password: 'Contraseña'
+      log_in: 'Ingresar'
+
   sessions:
     new:
       title: 'Ingreso'
       log_in: 'Ingresar'
       email: 'Correo'
       user: 'Usuario'
-      password: 'Contraseña'
       remember_me: 'Recordarme'
-      try_again: 'Ingresar nuevamente'
+      try_again: 'Intentar nuevamente'
       forgot_password: '¿Olvidaste tu contraseña?'
     create:
       invalid: 'Tu correo y/o contraseña no están bien =('
@@ -638,6 +644,8 @@ es:
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
     hours_of_work_per_day: 'Horas de trabajo por día'
     conclusion_review_receiver: 'Receptor/es del informe'
+    temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.'
+    finding_warning_expire_days: 'Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad'
 
   tags:
     edit:
@@ -662,6 +670,8 @@ es:
       info: 'Informativa'
       warning: 'Advertencia'
       danger: 'Peligro'
+    options:
+      origination_audit: 'Origen auditoria'
 
   tasks:
     on_time: 'A tiempo, sin reprogramación'
@@ -723,7 +733,7 @@ es:
       import_from_ldap: 'Importar desde LDAP'
       show_hidden: 'Mostrar ocultos'
     show:
-      title: 'Detalles de usuario'
+      title: 'Detalles del usuario'
       profiles: 'Perfiles'
       organizations: 'Organizaciones'
     new:
@@ -738,6 +748,7 @@ es:
       add_business_unit_type: 'Agregar unidades organizativas'
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
+      add_tagging: 'Agregar etiqueta'
     create:
       correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
     imports:
@@ -904,12 +915,17 @@ es:
       title: 'Editar plantilla de observación'
     index:
       new: 'Nueva plantilla de observación'
-      title: 'Listado de plantillas de observaciones'
-      empty_html: 'No hay plantillas de observaciones, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de observación</span>'
-      empty_search_html: 'No hay plantillas de observaciones que coincidan con el criterio de búsqueda'
+      title: 'Listado de plantillas de observación'
+      empty_html: 'No hay plantillas de observación, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de observación</span>'
+      empty_search_html: 'No hay plantillas de observación que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear plantilla de observación'
     show:
       title: 'Ver plantilla de observación'
     form:
       add_control_objective: 'Agregar objetivo de control'
+
+  work_papers:
+    show:
+      title: 'Papel de trabajo'
+      error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'

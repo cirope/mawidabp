@@ -6,7 +6,8 @@ module TagsHelper
       finding:           Finding.model_name.human(count: 0),
       news:              News.model_name.human(count: 0),
       plan_item:         PlanItem.model_name.human(count: 0),
-      review:            Review.model_name.human(count: 0)
+      review:            Review.model_name.human(count: 0),
+      user:              User.model_name.human(count: 0)
     }.with_indifferent_access
   end
 
@@ -56,6 +57,28 @@ module TagsHelper
   end
 
   def tags_options_collection kind:
-    Array(TAG_OPTIONS[kind])
+    tag_option = {}
+
+    if kind == 'finding' && Current.conclusion_pdf_format == 'nbc'
+      tag_option = { I18n.t('tags.options.origination_audit') => 'origination_audit' }
+    end
+
+    Array(TAG_OPTIONS[kind].merge(tag_option))
+  end
+
+  def tag_input_option form, tag, value
+    option     = value.last
+    input_html = {
+      id:    "#{option}_tag_options",
+      name:  "tag[options][#{option}]",
+      value: tag.option_value(option),
+    }
+
+    input_html.merge!(checked: tag.option_value(option)) if tag.is_boolean?(option)
+
+    form.input :options,
+      as:         tag.option_type(option),
+      label:      value.first,
+      input_html: input_html
   end
 end
