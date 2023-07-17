@@ -64,7 +64,7 @@ module Findings::Expiration
     end
 
     def pending_statuses
-      being_implemented.or awaiting
+      being_implemented
     end
 
     private
