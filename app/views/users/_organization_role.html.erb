@@ -2,7 +2,7 @@
 <% readonly = readonly %>
 <fieldset class="organization_role">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <%= f.input :organization_id, collection: user_organizations(f.object), prompt: true, label: false, input_html: {
         id: "organization_id_#{id}", disabled: readonly, data: { update_role: "#role_id_#{id}", roles_url: user_roles_path }
       } %>
@@ -10,6 +10,9 @@
     <div class="col-md-4">
       <%= f.input :role_id, collection: roles_for(f.object), prompt: true, label: false,
         disabled: f.object.organization.nil?, input_html: { id: "role_id_#{id}", disabled: readonly } %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :sync_ldap, wrapper_html: { class: 'mt-2' }, input_html: { disabled: readonly } %>
     </div>
     <div class="col-md-2">
       <div class="mt-2 text-right">

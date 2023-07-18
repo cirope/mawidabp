@@ -32,6 +32,7 @@ namespace :db do
       add_commitment_data_on_findings            # 2020-12-01
       update_finding_follow_up_date_last_changed # 2021-12-22
       update_draft_review_code                   # 2022-07-20
+      update_options_tags                        # 2023-06-05
     end
   end
 end
@@ -118,6 +119,14 @@ private
                            description: I18n.t('settings.temporary_polls')
       end
     end
+
+    if add_finding_warning_expire_days? #2023-06-06
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'finding_warning_expire_days',
+                           value:       DEFAULT_SETTINGS[:finding_warning_expire_days][:value],
+                           description: I18n.t('settings.finding_warning_expire_days')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -158,6 +167,10 @@ private
 
   def add_temporary_polls?
     Setting.where(name: 'temporary_polls').empty?
+  end
+
+  def add_finding_warning_expire_days?
+    Setting.where(name: 'finding_warning_expire_days').empty?
   end
 
   def add_new_answer_options
@@ -734,4 +747,25 @@ private
 
   def update_draft_review_code?
     Finding.where.not(draft_review_code: nil).blank?
+  end
+
+  def update_options_tags
+    if update_options_tags?
+      Tag.find_each do |tag|
+        options = Array(tag.options).each_with_object({}) do |option, hsh|
+          hsh[option] = '1'
+        end
+
+        tag.update_column :options, options
+      end
+    end
+  end
+
+  def update_options_tags?
+    if POSTGRESQL_ADAPTER
+      if tag = Tag.where.not(options: nil).take
+
+        tag.options.kind_of? Array
+      end
+    end
   end
