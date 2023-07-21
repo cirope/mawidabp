@@ -118,6 +118,8 @@
           <% if Current.conclusion_pdf_format == 'nbc' %>
             <%= link_to t('conclusion_committee_report.nbc_annual_report_title'),
               { action: :nbc_annual_report, controller_name: 'conclusion' }, class: 'list-group-item list-group-item-action' %>
+            <%= link_to t('conclusion_committee_report.nbc_cycle_rating_title'),
+              { action: :nbc_cycle_rating, controller_name: 'conclusion' }, class: 'list-group-item list-group-item-action' %>
           <% end %>
         </div>
       </div>

@@ -126,7 +126,7 @@ module Reports::NbcReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text form.introduction_and_scope
+      pdf.text form.introduction_and_scope, align: :justify
 
       pdf.move_down PDF_FONT_SIZE
 
