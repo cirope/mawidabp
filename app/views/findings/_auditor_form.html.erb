@@ -13,13 +13,9 @@
         next_oportunity_work_paper_code(@finding)}';" %>
   <% end %>
 
-  <% if @finding.closed_at && (@finding.updated_at.to_date >= @finding.closed_at) && !@finding.pending? %>
-    <div class="card border-warning mb-3">
-      <div class="card-header bg-warning text-white py-2 px-3">
-      </div>
-      <div class="card-body p-3">
-          <%= t 'messages.finding_updated_after_complete' %>
-      </div>
+  <% if @finding.closed_at && (@finding.updated_at.to_date > @finding.closed_at) && !@finding.pending? %>
+    <div class="alert alert-warning">
+      <%= t 'messages.finding_updated_after_complete' %>
     </div>
   <% end %>
 
@@ -67,27 +63,27 @@
         <% if %w(bic).include? Current.conclusion_pdf_format %>
           <div class="row">
             <div class="col-md-4">
-              <%= f.input :year,
-                          input_html:
-                          {
+              <%= f.input :year, 
+                          input_html: 
+                          { 
                             maxlength: 4,
-                            data: { input_text_only_accept_numerics: true }
+                            data: { input_text_only_accept_numerics: true } 
                           } %>
             </div>
             <div class="col-md-4">
-              <%= f.input :nsisio,
-                          input_html:
-                          {
+              <%= f.input :nsisio, 
+                          input_html: 
+                          { 
                             maxlength: 4,
-                            data: { input_text_only_accept_numerics: true }
+                            data: { input_text_only_accept_numerics: true } 
                           } %>
             </div>
             <div class="col-md-4">
-              <%= f.input :nobs,
-                          input_html:
-                          {
+              <%= f.input :nobs, 
+                          input_html: 
+                          { 
                             maxlength: 4,
-                            data: { input_text_only_accept_numerics: true }
+                            data: { input_text_only_accept_numerics: true } 
                           } %>
             </div>
           </div>
@@ -196,7 +192,7 @@
         <% options_for_select = if USE_SCOPE_CYCLE
                                   {
                                     data:
-                                      {
+                                      { 
                                         target_values_enable_checkbox: extension_enabled?(f.object) ? Finding.states_that_allow_extension : [],
                                         target_checkbox: '#finding_extension'
                                       }.merge(data_options_for_suggested_follow_up_date('finding'))
@@ -269,7 +265,7 @@
         <div class="col-md-2">
           <%= f.input :compliance_susceptible_to_sanction, collection: weakness_compliance_susceptible_to_sanction_options,
                                                 include_blank: t('helpers.select.prompt'),
-                                                input_html: {
+                                                input_html: { 
                                                   data: { compliance_susceptible_to_sanction: true }
                                                 } %>
         </div>
