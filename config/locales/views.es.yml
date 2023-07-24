@@ -3,7 +3,7 @@ es:
     confirmation: '¿Está seguro?'
     not_authorized: 'Debe ingresar para ver el contenido'
     truncated: 'Truncado, cantidad máxima de caracteres %{count}'
-    finding_updated_after_complete: 'El hallazgo a sido modificado después de solucionado, por favor revise el historial'
+    finding_updated_after_complete: 'El hallazgo a sido modificado después de solucionado, por favor revise el historial de cambios'
 
   navigation:
     back: 'Volver'
