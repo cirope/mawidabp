@@ -168,8 +168,8 @@ class FindingsHelperTest < ActionView::TestCase
                  link_to_edit_finding(finding, auth_user)
   end
 
-  test 'should return nil link to edit finding when user is included in finding and current pdf format is not bic' do
-    skip_if_bic_include_in_current_pdf_format
+  test 'should return nil link to edit finding when user is included in finding and current pdf format is not bic and nbc' do
+    skip_if_organizations_include_in_current_pdf_format
 
     auth_user             = users :audited
     Current.user          = users :supervisor
@@ -182,8 +182,8 @@ class FindingsHelperTest < ActionView::TestCase
     assert_nil link_to_edit_finding(finding, auth_user)
   end
 
-  test 'should return nil link to edit finding when user is not can act as audited and current pdf format is not bic' do
-    skip_if_bic_include_in_current_pdf_format
+  test 'should return nil link to edit finding when user is not can act as audited and current pdf format is not bic and nbc' do
+    skip_if_organizations_include_in_current_pdf_format
 
     auth_user             = users :supervisor
     Current.user          = auth_user
@@ -201,7 +201,7 @@ class FindingsHelperTest < ActionView::TestCase
   end
 
   test 'should return link to edit finding when user is included in finding and finding have final state' do
-    skip_if_bic_exclude_in_current_pdf_format
+    skip_if_organizations_exclude_in_current_pdf_format
 
     auth_user             = users :audited
     Current.user          = users :supervisor
@@ -211,12 +211,17 @@ class FindingsHelperTest < ActionView::TestCase
 
     finding.save!
 
-    assert_equal link_to_edit(edit_bic_sigen_fields_finding_path('complete', finding)),
-                 link_to_edit_finding(finding, auth_user)
+    if Current.conclusion_pdf_format == 'bic'
+      assert_equal link_to_edit(edit_bic_sigen_fields_finding_path('complete', finding)),
+        link_to_edit_finding(finding, auth_user)
+    elsif  Current.conclusion_pdf_format == 'nbc'
+      assert_equal link_to_edit(edit_finding_path('complete', finding)),
+        link_to_edit_finding(finding, auth_user)
+    end
   end
 
-  test 'should return link to edit finding when user is not can act as audited and finding have final state' do
-    skip_if_bic_exclude_in_current_pdf_format
+  test 'should return link to edit finding when user cannot act as audited and finding have final state' do
+    skip_if_organizations_exclude_in_current_pdf_format
 
     auth_user             = users :supervisor
     Current.user          = auth_user
@@ -230,8 +235,13 @@ class FindingsHelperTest < ActionView::TestCase
 
     finding_user_assignment.destroy
 
-    assert_equal link_to_edit(edit_bic_sigen_fields_finding_path('complete', finding)),
-                 link_to_edit_finding(finding, auth_user)
+    if Current.conclusion_pdf_format == 'bic'
+      assert_equal link_to_edit(edit_bic_sigen_fields_finding_path('complete', finding)),
+        link_to_edit_finding(finding, auth_user)
+    elsif Current.conclusion_pdf_format == 'nbc'
+      assert_equal link_to_edit(edit_finding_path('complete', finding)),
+        link_to_edit_finding(finding, auth_user)
+    end
   end
 
   test 'should return next task expiration when it is not yet due' do
@@ -303,15 +313,15 @@ class FindingsHelperTest < ActionView::TestCase
       end
     end
 
-    def skip_if_bic_include_in_current_pdf_format
+    def skip_if_organizations_include_in_current_pdf_format
       set_organization
 
-      skip if %w(bic).include?(Current.conclusion_pdf_format)
+      skip if %w(bic nbc).include?(Current.conclusion_pdf_format)
     end
 
-    def skip_if_bic_exclude_in_current_pdf_format
+    def skip_if_organizations_exclude_in_current_pdf_format
       set_organization
 
-      skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+      skip if %w(bic nbc).exclude?(Current.conclusion_pdf_format)
     end
 end
