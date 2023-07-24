@@ -13,6 +13,12 @@
         next_oportunity_work_paper_code(@finding)}';" %>
   <% end %>
 
+  <% if @finding.closed_at && (@finding.updated_at.to_date > @finding.closed_at) && !@finding.pending? %>
+    <div class="alert alert-warning">
+      <%= t 'messages.finding_updated_after_complete' %>
+    </div>
+  <% end %>
+
   <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
