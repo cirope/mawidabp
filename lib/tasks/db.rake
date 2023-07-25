@@ -30,6 +30,7 @@ namespace :db do
       update_finding_follow_up_date_last_changed # 2021-12-22
       update_draft_review_code                   # 2022-07-20
       update_options_tags                        # 2023-06-05
+      update_roles_identifier                    # 2023-07-24
     end
   end
 end
@@ -759,6 +760,16 @@ private
       if tag = Tag.where.not(options: nil).take
 
         tag.options.kind_of? Array
+      end
+    end
+  end
+
+  def update_roles_identifier
+    Organization.find_each do |organization|
+      if organization.saml_provider || organization.ldap_config
+        if Role.all.map(&:identifier).all? &:blank?
+          Role.find_each { |role| role.update_column :identifier, role.name }
+        end
       end
     end
   end
