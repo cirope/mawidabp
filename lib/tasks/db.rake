@@ -765,11 +765,15 @@ private
   end
 
   def update_roles_identifier
-    Organization.find_each do |organization|
-      if organization.saml_provider || organization.ldap_config
-        if Role.all.map(&:identifier).all? &:blank?
-          Role.find_each { |role| role.update_column :identifier, role.name }
+    unless roles_identifier_updated?
+      Organization.all.each do |org|
+        if (org.saml_provider || org.ldap_config) && org.roles.map(&:identifier).all?(&:blank?)
+          org.roles.each { |role| role.update_column :identifier, role.name }
         end
       end
     end
+  end
+
+  def roles_identifier_updated?
+    Role.where.not(identifier: nil).exists?
   end
