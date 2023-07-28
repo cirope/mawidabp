@@ -23,8 +23,25 @@ es:
         name: 'Nombre'
         objective: 'Objetivo'
         conclusion: 'Conclusion'
-        introduction_and_scope: 'Introduccion y Alcance'
-
+        introduction_and_scope: 'Introducción y Alcance'
+        previous_period_id: 'Periodo previo'
+        business_unit_types: Unidades organizativas
+        organizations: Organizaciones
+    errors:
+      models:
+        nbc_internal_control_qualification_as_group_of_companies:
+          attributes:
+            period_id:
+              must_have_the_same_name: 'debe tener el mismo nombre en todas las organizaciones. Actualmente difiere en: %{organizations}'
+            previous_period_id:
+              must_have_the_same_name: 'debe tener el mismo nombre en todas las organizaciones. Actualmente difiere en: %{organizations}'
+              must_be_before_period: 'debe tener una fecha de inicio anterior a la fecha de inicio del Periodo'
+            business_unit_types:
+              must_have_the_same_business_unit_type_names:
+                one: 'deben tener los mismos nombres en las tres organizaciones. Actualmente la que difiere es: %{different_names}'
+                other: 'deben tener los mismos nombres en las tres organizaciones. Actualmente las que difieren son: %{different_names}'
+            organizations:
+              are_misconfigured: 'están mal configuradas en las opciones de la aplicación. Por favor, comuníquese con soporte@mawidabp.com'
   activerecord:
     models:
       achievement:
@@ -100,8 +117,8 @@ es:
         one: 'Registro de error'
         other: 'Registros de errores'
       external_review:
-        one: 'Informe Externo'
-        other: 'Informes Externos'
+        one: 'Informe externo'
+        other: 'Informes externos'
       finding:
         one: 'Hallazgo'
         other: 'Hallazgos'
@@ -191,6 +208,7 @@ es:
         other: 'Valores de evaluación de riesgo'
       saml_provider:
         one: 'Configuración SAML'
+        other: 'Configuraciones SAML'
       setting:
         one: 'Configuración'
         other: 'Configuraciones'
@@ -214,7 +232,7 @@ es:
         other: 'Observaciones'
       weakness_template:
         one: 'Plantilla de observación'
-        other: 'Plantillas de observaciones'
+        other: 'Plantillas de observación'
       work_paper:
         one: 'Papel de trabajo'
         other: 'Papeles de trabajo'
@@ -370,7 +388,7 @@ es:
         organization: 'Organización'
         frequency: 'Frecuencia'
         state_regulations: 'Normativa Estado'
-        degree_compliance: 'Grado Cumpliento Normativa'
+        degree_compliance: 'Grado de Cumplimiento de la Normativa'
         observation_originated_tests: 'Originada en prueba de'
         sample_deviation: 'Desvio de la muestra'
         external_repeated: 'Reiterada externa'
@@ -414,7 +432,7 @@ es:
         skip_commitment_support: 'Tildar si la observación está solucionada'
       finding/finding_answers/commitment_support:
         one: 'Sustento compromiso'
-        reason: 'Motivo reprogramación'
+        reason: 'Motivo de reprogramación'
         plan: 'Nuevo plan de acción'
         controls: 'Controles mitigantes'
       finding/finding_answers/file_model:
@@ -741,7 +759,7 @@ es:
         weight: 'Ponderador'
       subsidiary:
         name: 'Nombre'
-        identity: 'Identificacion'
+        identity: 'Identificación'
       weakness:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -762,7 +780,7 @@ es:
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
         compliance_observations: 'Norma que impacta'
-        compliance_susceptible_to_sanction: 'Suceptible a sanción'
+        compliance_susceptible_to_sanction: 'Susceptible a sanción'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
@@ -817,12 +835,12 @@ es:
               must_have_state_that_allows_extension: 'Para indicar que tiene %{extension} debe estar en estado %{states}'
               cant_have_extension_when_didnt_have_extension: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension} en los estados %{states}'
             risk_justification:
-              present: 'No debe tener justificacion de riesgo'
+              present: 'No debe tener justificación de riesgo'
             compliance_susceptible_to_sanction:
               inclusion: 'debe ser uno de la lista'
             draft_review_code:
-              not_same_draft_review_code_parent: 'No tiene el mismo review code borrador que su finding original'
-              not_same_draft_review_code_children: 'No tiene el mismo review code borrador que su finding final'
+              not_same_draft_review_code_parent: 'No tiene el mismo código de informe borrador que su hallazgo original'
+              not_same_draft_review_code_children: 'No tiene el mismo código de informe borrador que su hallazgo final'
         finding_user_assignment:
           attributes:
             user:
@@ -855,7 +873,7 @@ es:
             auxiliar_business_unit_types:
               taken: 'repetidas'
             business_unit:
-              cannot_edit_business_unit: "no se puede editar debido a que el proyecto ya esta tomado por un informe definitivo %{memo_condition}"
+              cannot_edit_business_unit: "no se puede editar debido a que el proyecto ya está tomado por un informe definitivo %{memo_condition}"
             start:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
@@ -871,15 +889,15 @@ es:
         user:
           attributes:
             base:
-              auditors_limit_reached: 'Limite de auditores alcanzado, por favor actualice su licencia.'
+              auditors_limit_reached: 'Límite de auditores alcanzado, por favor actualice su licencia.'
         memo:
           attributes:
             base:
               file_model_memos_blank: 'Debe tener al menos un archivo'
-              cant_change_fields: 'No puede cambiar ningun campo debido a que supero la fecha de cierre'
+              cant_change_fields: 'No puede cambiar ningún campo debido a que superó la fecha de cierre'
             plan_item_id:
-              used: 'El proyecto ya esta siendo utilizado por otro Informe o Informe externo'
+              used: 'El proyecto ya está siendo utilizado por otro informe o informe externo'
         subsidiary:
           attributes:
             identity:
-              only_numerics: 'solo puede contener valores numericos'
+              only_numerics: 'solo puede contener valores numéricos'

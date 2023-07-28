@@ -18,7 +18,7 @@ TEMP_PATH = File.join(Rails.root, 'tmp').freeze
 APP_ADMIN_PREFIXES = ['admin', 'www', 'admin-comafi-test'].freeze
 # Variable con los idiomas disponibles (Debería reemplazarse con
 # I18.available_locales cuando se haya completado la traducción a Inglés)
-AVAILABLE_LOCALES = [:es].freeze
+AVAILABLE_LOCALES = [:es, :en].freeze
 # Cantidad de días en los que es posible cambiar la contraseña luego de un
 # blanqueo
 BLANK_PASSWORD_STALE_DAYS = 3
@@ -29,9 +29,6 @@ CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS = 7
 EMAIL_REGEXP = /\A[a-z0-9'._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\Z/i
 # Cantidad máxima de observaciones por PDF
 FINDING_MAX_PDF_ROWS = 100
-# Cantidad de días anteriores al vencimiento de una observación en los que el
-# sistema notificará su proximidad
-FINDING_WARNING_EXPIRE_DAYS = 7
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
 FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1
 # Fecha inicial para el envío de correo con resumen de observaciones
