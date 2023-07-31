@@ -460,8 +460,8 @@ ActiveRecord::Schema.define(version: 2023_07_24_123724) do
   end
 
   create_table "file_model_memos", force: :cascade do |t|
-    t.bigint "file_model_id", null: false
-    t.bigint "memo_id", null: false
+    t.integer "file_model_id", null: false
+    t.integer "memo_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["file_model_id"], name: "index_file_model_memos_on_file_model_id"
@@ -682,9 +682,9 @@ ActiveRecord::Schema.define(version: 2023_07_24_123724) do
     t.integer "alternative_port"
     t.string "tls"
     t.string "ca_path"
+    t.string "office_attribute"
     t.string "organizational_unit_attribute"
     t.string "organizational_unit"
-    t.string "office_attribute"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
   end
 
@@ -720,9 +720,9 @@ ActiveRecord::Schema.define(version: 2023_07_24_123724) do
     t.date "close_date"
     t.string "required_by"
     t.integer "lock_version", default: 0, null: false
-    t.bigint "period_id", null: false
-    t.bigint "plan_item_id", null: false
-    t.bigint "organization_id", null: false
+    t.integer "period_id", null: false
+    t.integer "plan_item_id", null: false
+    t.integer "organization_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_memos_on_organization_id"
