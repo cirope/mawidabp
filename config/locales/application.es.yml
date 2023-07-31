@@ -1538,6 +1538,7 @@ es:
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
+        identifier: 'Identificador'
       saml_provider:
         provider: 'Proveedor'
         idp_homepage: 'Dirección URL de metadatos de federación de aplicación'

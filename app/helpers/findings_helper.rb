@@ -353,7 +353,7 @@ module FindingsHelper
   end
 
   def link_to_edit_finding finding, auth_user
-    if !auth_user.can_act_as_audited? || finding.users.reload.include?(auth_user)
+    if auth_user.can_act_as_auditor? || finding.users.reload.include?(auth_user)
       if finding.pending?
         link_to_edit(edit_finding_path('incomplete', finding, user_id: params[:user_id]))
       elsif !finding.repeated? && %w(bic).include?(Current.conclusion_pdf_format)
