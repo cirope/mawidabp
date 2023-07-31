@@ -9,7 +9,6 @@ module Findings::FollowUpPdf
     put_follow_up_user_data_on         pdf
     put_relation_information_on        pdf
     put_history_on                     pdf unless brief
-    put_follow_up_comments_on          pdf
     put_follow_up_work_papers_on       pdf
     put_follow_up_finding_answers_on   pdf unless brief
 
@@ -108,35 +107,6 @@ module Findings::FollowUpPdf
         put_history_table_on pdf, important_versions
       else
         pdf.text "\n#{I18n.t 'finding.follow_up_report.without_important_changes'}", font_size: PDF_FONT_SIZE
-      end
-    end
-
-    def put_follow_up_comments_on pdf
-      if comments.any?
-        column_names   = [['comment', 50], ['user_id', 30], ['created_at', 20]]
-        column_headers = follow_up_column_headers_for Comment, column_names
-        column_widths  = column_widths_for pdf, column_names
-        row_data       = comments_row_data
-
-        pdf.move_down PDF_FONT_SIZE
-
-        pdf.add_title I18n.t('finding.comments'), (PDF_FONT_SIZE * 1.25).round
-
-        pdf.move_down PDF_FONT_SIZE
-
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-          table_options = pdf.default_table_options column_widths
-
-          pdf.table(row_data.insert(0, column_headers), table_options) do
-            row(0).style(
-              background_color: 'cccccc',
-              padding: [
-                (PDF_FONT_SIZE * 0.5).round,
-                (PDF_FONT_SIZE * 0.3).round
-              ]
-            )
-          end
-        end
       end
     end
 
