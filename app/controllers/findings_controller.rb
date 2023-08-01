@@ -213,7 +213,7 @@ class FindingsController < ApplicationController
 
     def check_if_editable
       not_editable = (!@finding.pending? && @finding.valid?) ||
-        @auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user)
+        (@auth_user.can_act_as_audited? && @finding.users.reload.exclude?(@auth_user))
 
       raise ActiveRecord::RecordNotFound if not_editable
     end
