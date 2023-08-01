@@ -194,6 +194,21 @@ class ConclusionFinalReview < ConclusionReview
     close_date && Time.zone.today > close_date
   end
 
+  def all_close_dates
+    all_close_dates = []
+    last_date       = close_date
+
+    dates = versions.map do |v|
+      v.reify&.close_date
+    end
+
+    dates.reverse.each do |d|
+      if d.present? && last_date && d < last_date
+        all_close_dates << last_date = d
+      end
+    end
+  end
+
   private
 
     def check_if_can_be_created
