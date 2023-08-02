@@ -358,7 +358,7 @@ module FindingsHelper
         link_to_edit(edit_finding_path('incomplete', finding, user_id: params[:user_id]))
       elsif !finding.repeated? && %w(bic).include?(Current.conclusion_pdf_format)
         link_to_edit(edit_bic_sigen_fields_finding_path('complete', finding))
-      elsif %w(nbc).include?(Current.conclusion_pdf_format)
+      elsif %w(nbc).include?(Current.conclusion_pdf_format) && auth_user.can_act_as_auditor?
         link_to_edit(edit_finding_path('complete', finding, user_id: params[:user_id]))
       end
     end

@@ -112,7 +112,7 @@ module Findings::FollowUpPdf
     end
 
     def put_follow_up_comments_on pdf
-      if comments.any?
+      if comments.any? && Weakness.show_follow_up_timestamps?
         column_names   = [['comment', 50], ['user_id', 30], ['created_at', 20]]
         column_headers = follow_up_column_headers_for Comment, column_names
         column_widths  = column_widths_for pdf, column_names

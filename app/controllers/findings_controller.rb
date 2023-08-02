@@ -13,7 +13,6 @@ class FindingsController < ApplicationController
                                      :update,
                                      :edit_bic_sigen_fields,
                                      :update_bic_sigen_fields]
-  #before_action :check_if_editable, only: [:edit, :update]
   before_action :check_if_editable_bic_sigen_fields, only: [:edit_bic_sigen_fields,
                                                             :update_bic_sigen_fields]
   before_action :set_title, except: [:destroy]
