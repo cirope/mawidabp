@@ -816,6 +816,19 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     end
   end
 
+  test 'list all previous close dates' do
+    Current.user = users :supervisor
+    conclusion_final_review = conclusion_reviews(:conclusion_past_final_review)
+    old_date                = conclusion_final_review.close_date.clone
+
+    assert conclusion_final_review.reload.all_close_dates.blank?
+    assert_not_nil conclusion_final_review.close_date
+
+    conclusion_final_review.update! close_date: 10.days.from_now.to_date
+
+    assert conclusion_final_review.all_close_dates.include?(old_date)
+  end
+
   private
 
     def has_extra_sort_method? organization

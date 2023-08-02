@@ -248,7 +248,7 @@ module ConclusionFinalReviewsHelper
       out << link_to(t('conclusion_final_review.previous_close_dates'), '#', :onclick =>
         "$('#previous_close_dates').slideToggle();return false;")
 
-      out << content_tag(:div, content_tag(:ol, list),
+      out << content_tag(:div, content_tag(:ul, list),
         :id => 'previous_close_dates', :style => 'display: none; margin-bottom: 1em;')
 
       content_tag(:div, out, :style => 'margin-bottom: 1em;')
