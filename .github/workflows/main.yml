@@ -141,7 +141,7 @@ jobs:
             config-type: reviews_scored_by_weakness
     services:
       postgres:
-        image: postgres
+        image: postgres:14
         ports:
           - '5432:5432'
         env:
@@ -170,7 +170,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: update ubuntu packages
-        run: sudo apt-get update && sudo apt-get upgrade -y
+        run: sudo apt-get update
       - name: Install sldap
         run: sudo apt -y install slapd ldap-utils
       - name: Install wkhtmltopdf
