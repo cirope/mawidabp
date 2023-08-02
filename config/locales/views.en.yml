@@ -665,6 +665,8 @@ en:
       info: 'Info'
       warning: 'Warning'
       danger: 'Danger'
+    options:
+      origination_audit: 'Origination audit'
 
   tasks:
     on_time: 'On time, without rescheduling'

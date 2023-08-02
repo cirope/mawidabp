@@ -3,11 +3,14 @@
 
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-lg-4">
         <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
       </div>
-      <div class="col-md-6">
+      <div class="col-lg-4">
         <%= role_type_field(f) %>
+      </div>
+      <div class="col-lg-4">
+        <%= f.input :identifier %>
       </div>
     </div>
   </div>

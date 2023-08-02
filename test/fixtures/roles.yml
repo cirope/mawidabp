@@ -2,6 +2,7 @@
 <%= role_name %>_role:
   name: <%= role_name.to_s.upcase %>
   role_type: <%= value %>
+  identifier: <%= role_name.to_s.upcase %>
   organization: cirope
   created_at: <%= 3.days.ago.to_s(:db) %>
   updated_at: <%= 2.days.ago.to_s(:db) %>
@@ -10,45 +11,54 @@
 admin_google_role:
   name: Administrator Google
   role_type: <%= Role::TYPES[:admin] %>
+  identifier: Administrator Google
   organization: google
 
 supervisor_google_role:
   name: Supervisor Google
   role_type: <%= Role::TYPES[:supervisor] %>
+  identifier: Supervisor Google
   organization: google
 
 admin_second_role:
   name: Administrator Second
   role_type: <%= Role::TYPES[:admin] %>
+  identifier: Administrator Second
   organization: google
 
 admin_twitter_role:
   name: Administrator Twitter
   role_type: <%= Role::TYPES[:admin] %>
+  identifier: Administrator Twitter
   organization: twitter
 
 auditor_second_role:
   name: Auditor Second
   role_type: <%= Role::TYPES[:auditor] %>
+  identifier: Auditor Second
   organization: google
 
 admin_second_alphabet_role:
   name: Administrator Corp Second
   role_type: <%= Role::TYPES[:admin] %>
+  identifier: Administrator Corp Second
   organization: alphabet
 
 auditor_second_alphabet_role:
   name: Auditor Corp Second
   role_type: <%= Role::TYPES[:auditor] %>
+  identifier: Auditor Corp Second
   organization: alphabet
 
 empty_admin_role:
   name: Empty
   role_type: <%= Role::TYPES[:admin] %>
+  identifier: Empty
   organization: cirope
 
 audited_role:
   name: Auditado
   role_type: <%= Role::TYPES[:audited] %>
+  identifier: Auditado
   organization: cirope
 
