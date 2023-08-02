@@ -817,7 +817,6 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   end
 
   test 'list all previous close dates' do
-    Current.user = users :supervisor
     conclusion_final_review = conclusion_reviews(:conclusion_past_final_review)
     old_date                = conclusion_final_review.close_date.clone
 
