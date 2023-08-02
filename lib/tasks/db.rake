@@ -30,6 +30,7 @@ namespace :db do
       update_finding_follow_up_date_last_changed # 2021-12-22
       update_draft_review_code                   # 2022-07-20
       update_options_tags                        # 2023-06-05
+      update_roles_identifier                    # 2023-07-24
     end
   end
 end
@@ -116,6 +117,14 @@ private
                            description: I18n.t('settings.temporary_polls')
       end
     end
+
+    if add_finding_warning_expire_days? #2023-06-06
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'finding_warning_expire_days',
+                           value:       DEFAULT_SETTINGS[:finding_warning_expire_days][:value],
+                           description: I18n.t('settings.finding_warning_expire_days')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -156,6 +165,10 @@ private
 
   def add_temporary_polls?
     Setting.where(name: 'temporary_polls').empty?
+  end
+
+  def add_finding_warning_expire_days?
+    Setting.where(name: 'finding_warning_expire_days').empty?
   end
 
   def add_new_answer_options
@@ -749,4 +762,18 @@ private
         tag.options.kind_of? Array
       end
     end
+  end
+
+  def update_roles_identifier
+    unless roles_identifier_updated?
+      Organization.all.each do |org|
+        if (org.saml_provider || org.ldap_config) && org.roles.map(&:identifier).all?(&:blank?)
+          org.roles.each { |role| role.update_column :identifier, role.name }
+        end
+      end
+    end
+  end
+
+  def roles_identifier_updated?
+    Role.where.not(identifier: nil).exists?
   end
