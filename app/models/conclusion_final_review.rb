@@ -195,9 +195,20 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def all_close_dates
-    all_close_dates = versions.map { |v| v.reify&.close_date }
+    all_close_dates = []
+    last_date       = close_date
 
-    all_close_dates.compact.sort.reverse
+    dates = versions.map do |v|
+      v.reify&.close_date
+    end
+
+    dates.reverse.each do |d|
+      if d.present? && last_date && d < last_date
+        all_close_dates << last_date = d
+      end
+    end
+
+    all_close_dates.compact
   end
 
   private
