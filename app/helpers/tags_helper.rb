@@ -63,7 +63,7 @@ module TagsHelper
       tag_option = { I18n.t('tags.options.origination_audit') => 'origination_audit' }
     end
 
-    Array(TAG_OPTIONS[kind].merge(tag_option))
+    Array(tag_option.present? ? TAG_OPTIONS[kind].merge(tag_option) : TAG_OPTIONS[kind])
   end
 
   def tag_input_option form, tag, value
