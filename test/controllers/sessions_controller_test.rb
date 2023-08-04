@@ -14,25 +14,35 @@ class SessionsControllerTest < ActionController::TestCase
     assert_template 'sessions/new'
   end
 
+  test 'should ask for password' do
+    post :create, params: { user: @user.user }
+
+    assert_redirected_to signin_url
+  end
+
+  test 'should create a new session' do
+    post :create, params: { user: @user.user }
+
+    @controller = AuthenticationsController.new
+
+    post :create, params: { password: 'admin123' }
+
+    assert_redirected_to welcome_url
+    assert_equal @user.id, @controller.current_user
+  end
+
   test 'login without organization' do
     @request.host = URL_HOST
 
-    post :create, params: {
-      user: @user.user,
-      password: 'admin123'
-    }
+    post :create, params: { user: @user.user }
 
     assert_redirected_to login_url
     assert_equal I18n.t('message.no_organization'), flash.alert
   end
 
   test 'redirected instead of relogin' do
-    post :create, params: {
-      user: @user.user,
-      password: 'admin123'
-    }
+    login
 
-    assert_redirected_to welcome_url
     get :new
     assert_redirected_to welcome_url
   end
