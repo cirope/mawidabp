@@ -454,6 +454,7 @@ es:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
       sorted_by: "El listado fue ordenado por la columna %{column}"
+    previous_close_dates: "Fechas de cierre anteriores"
 
   conclusion_management_report:
     index_title: "Reportes de la gerencia"
