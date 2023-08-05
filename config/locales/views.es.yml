@@ -6,6 +6,7 @@ es:
 
   navigation:
     back: 'Volver'
+    change_to_organization: 'Cambiar a organización'
     copy: 'Copiar'
     destroy: 'Eliminar'
     download: 'Descargar'
