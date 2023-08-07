@@ -897,6 +897,7 @@ class ReviewTest < ActiveSupport::TestCase
     order = [
       repeated_order,
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
     ].map { |o| Arel.sql o }
 
