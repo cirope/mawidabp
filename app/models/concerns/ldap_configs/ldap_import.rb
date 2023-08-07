@@ -50,9 +50,9 @@ module LdapConfigs::LdapImport
     def process_entry? entry
       if entry[email_attribute].present?
         role_names = role_data entry
-        roles      = clean_roles Role.list_with_corporate.where(name: role_names)
+        roles      = clean_roles Role.list_with_corporate.where(identifier: role_names)
         data       = trivial_data entry
-        user       = User.ldap_import_find data
+        user       = User.find_user data
 
         if user&.roles.blank? && roles.blank?
           false
@@ -68,12 +68,14 @@ module LdapConfigs::LdapImport
       data[:manager_id] = nil if manager_dn.blank? && !skip_function_and_manager?
 
       state = if user
-                User.update_user user: user, data: data, roles: roles
+                if should_sync_ldap?(user)
+                  User.update_user user: user, data: data, roles: roles
 
-                if user.roles.any?
-                  user.saved_changes? ? :updated : :unchanged
-                else
-                  :deleted
+                  if user.roles.any?
+                    user.saved_changes? ? :updated : :unchanged
+                  else
+                    :deleted
+                  end
                 end
               else
                 user = create_user user: user, data: data, roles: roles
@@ -181,5 +183,11 @@ module LdapConfigs::LdapImport
 
         u_d
       end
+    end
+
+    def should_sync_ldap? user
+      organization_role = user.organization_roles.where(organization: organization).take
+
+      organization_role.nil? ? true : organization_role.sync_ldap
     end
 end
