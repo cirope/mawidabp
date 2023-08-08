@@ -99,9 +99,6 @@ module Reports::FileResponder
         where_clause.send(:predicates).map do |predicate|
           if predicate.is_a? String
             wheres << predicate
-          elsif predicate.is_a?(Arel::Nodes::Grouping)
-            byebug
-            wheres << predicate.to_sql
           else
             where_tables << predicate.left.relation.name
           end

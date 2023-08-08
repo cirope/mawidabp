@@ -219,5 +219,7 @@ module Reports::WeaknessesRepeated
       else
         weaknesses
       end
+
+      weaknesses
     end
 end
