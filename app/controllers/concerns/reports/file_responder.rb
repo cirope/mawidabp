@@ -94,7 +94,6 @@ module Reports::FileResponder
       if (where_clause = values.delete :where)
         wheres       = []
         where_tables = []
-        havings      = []
 
         where_clause.send(:predicates).map do |predicate|
           if predicate.is_a? String
@@ -111,7 +110,6 @@ module Reports::FileResponder
 
         wheres << where_hash if where_hash.any?
 
-        values[:having] = havings
         values[:where] = wheres
       end
 
