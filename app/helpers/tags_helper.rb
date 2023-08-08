@@ -57,6 +57,28 @@ module TagsHelper
   end
 
   def tags_options_collection kind:
-    Array(TAG_OPTIONS[kind])
+    tag_options = TAG_OPTIONS[kind].dup
+
+    if kind == 'finding' && Current.conclusion_pdf_format == 'nbc'
+      tag_options.merge! I18n.t('tags.options.origination_audit') => 'origination_audit'
+    end
+
+    Array tag_options
+  end
+
+  def tag_input_option form, tag, value
+    option     = value.last
+    input_html = {
+      id:    "#{option}_tag_options",
+      name:  "tag[options][#{option}]",
+      value: tag.option_value(option),
+    }
+
+    input_html.merge!(checked: tag.option_value(option)) if tag.is_boolean?(option)
+
+    form.input :options,
+      as:         tag.option_type(option),
+      label:      value.first,
+      input_html: input_html
   end
 end

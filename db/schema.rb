@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_31_034310) do
+ActiveRecord::Schema.define(version: 2023_07_24_123724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(version: 2023_03_31_034310) do
     t.string "detailed_review"
     t.boolean "grouped_by_business_unit_annual_report", default: false
     t.text "exec_summary_intro"
+    t.text "detailed_review_legend"
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
@@ -459,8 +460,8 @@ ActiveRecord::Schema.define(version: 2023_03_31_034310) do
   end
 
   create_table "file_model_memos", force: :cascade do |t|
-    t.integer "file_model_id", null: false
-    t.integer "memo_id", null: false
+    t.bigint "file_model_id", null: false
+    t.bigint "memo_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["file_model_id"], name: "index_file_model_memos_on_file_model_id"
@@ -681,9 +682,9 @@ ActiveRecord::Schema.define(version: 2023_03_31_034310) do
     t.integer "alternative_port"
     t.string "tls"
     t.string "ca_path"
-    t.string "office_attribute"
     t.string "organizational_unit_attribute"
     t.string "organizational_unit"
+    t.string "office_attribute"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
   end
 
@@ -719,9 +720,9 @@ ActiveRecord::Schema.define(version: 2023_03_31_034310) do
     t.date "close_date"
     t.string "required_by"
     t.integer "lock_version", default: 0, null: false
-    t.integer "period_id", null: false
-    t.integer "plan_item_id", null: false
-    t.integer "organization_id", null: false
+    t.bigint "period_id", null: false
+    t.bigint "plan_item_id", null: false
+    t.bigint "organization_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_memos_on_organization_id"
@@ -816,6 +817,7 @@ ActiveRecord::Schema.define(version: 2023_03_31_034310) do
     t.integer "role_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "sync_ldap", null: false
     t.index ["organization_id"], name: "index_organization_roles_on_organization_id"
     t.index ["role_id"], name: "index_organization_roles_on_role_id"
     t.index ["user_id"], name: "index_organization_roles_on_user_id"
@@ -1143,6 +1145,8 @@ ActiveRecord::Schema.define(version: 2023_03_31_034310) do
     t.integer "lock_version", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "identifier"
+    t.index ["identifier"], name: "index_roles_on_identifier"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["organization_id"], name: "index_roles_on_organization_id"
   end
