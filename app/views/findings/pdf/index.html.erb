@@ -22,7 +22,7 @@
         <td class="border border-dark"><%= finding.control_objective&.process_control&.name %></td>
         <td class="border border-dark"><%= finding.title %></td>
         <% if Current.conclusion_pdf_format == 'pat' %>
-          <td class="border border-dark"><%= t('findings.pdf.issue', review_code: finding.review_code)if show_pdf_issues finding %></td>
+          <td class="border border-dark"><%= t('findings.pdf.issue', review_code: finding.review_code) if show_pdf_issues finding %></td>
         <% end %>
       </tr>
     <% end %>
