@@ -1340,6 +1340,7 @@ es:
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
+        sync_ldap: '¿Sincronizar con LDAP?'
       privilege:
         module: "Módulo"
         read: "Lectura"

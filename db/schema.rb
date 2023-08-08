@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_05_172357) do
+ActiveRecord::Schema.define(version: 2023_07_06_204023) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -2046,6 +2046,7 @@ ActiveRecord::Schema.define(version: 2022_09_05_172357) do
     t.integer "role_id", precision: 38
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "sync_ldap", null: false
     t.index ["organization_id"], name: "i_org_rol_org_id"
     t.index ["role_id"], name: "i_organization_roles_role_id"
     t.index ["user_id"], name: "i_organization_roles_user_id"
