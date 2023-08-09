@@ -192,14 +192,19 @@ class LdapConfigTest < ActiveSupport::TestCase
   end
 
   test 'should not import user when sync ldap is not set' do
-    set_organization organizations(:google)
+    organization      = organizations :google
+    user              = users :administrator
+    organization_role = user.organization_roles.where(organization: organization).take
 
-    organization_role = organization_roles :admin_role_for_administrator_in_google
+    set_organization organization
+
+    assert_equal user.name, 'Administrator'
+
     organization_role.update! sync_ldap: false
 
-    assert_no_difference 'User.count' do
-      @ldap_config.import 'admin', 'admin123'
-    end
+    @ldap_config.import 'admin', 'admin123'
+
+    assert_equal user.reload.name, 'Administrator'
   end
 
   test 'import with alternative ldap' do

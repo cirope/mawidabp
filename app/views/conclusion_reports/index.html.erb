@@ -100,6 +100,10 @@
             <%= link_to t('conclusion_committee_report.control_objective_counts_title'),
               { :action => :control_objective_counts, :controller_name => 'conclusion'}, class: 'list-group-item list-group-item-action' %>
           <% end %>
+          <% if Current.conclusion_pdf_format == 'nbc' %>
+            <%= link_to t('conclusion_committee_report.nbc_internal_control_qualification_as_group_of_companies'),
+              { action: :nbc_internal_control_qualification_as_group_of_companies, controller_name: 'conclusion' }, class: 'list-group-item list-group-item-action' %>
+          <% end %>
         </div>
       </div>
 
