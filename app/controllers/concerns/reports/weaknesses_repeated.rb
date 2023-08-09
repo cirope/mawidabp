@@ -213,13 +213,11 @@ module Reports::WeaknessesRepeated
           @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""
         end
 
-        weaknesses.references(:latest).where(state: states).or(
-          weaknesses.where(latests_findings: { state: states })
+        weaknesses.latest.where(
+          'findings.state IN (:states) OR latests_findings.state IN (:states)', states: states
         )
       else
         weaknesses
       end
-
-      weaknesses
     end
 end
