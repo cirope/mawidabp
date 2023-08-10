@@ -260,7 +260,7 @@ module Findings::Validations
             subtags_count >= required_min
           elsif required_max&.positive?
             subtags_count <= required_max
-          elsif required_min.nil?
+          elsif required_min.nil? || required_min.zero?
             true
           end
 
