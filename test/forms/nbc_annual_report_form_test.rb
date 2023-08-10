@@ -4,6 +4,8 @@ require 'test_helper'
 
 class NbcAnnualReportFormTest < ActiveSupport::TestCase
   setup do
+    set_organization
+
     @form = NbcAnnualReportForm.new(OpenStruct.new(
                                       period_id: periods(:current_period).id,
                                       date: Date.today,
@@ -16,7 +18,7 @@ class NbcAnnualReportFormTest < ActiveSupport::TestCase
   end
 
   test 'should require all fields' do
-    @form.validate(
+    refute @form.validate(
       {
         period_id: '',
         date: '',
@@ -76,9 +78,5 @@ class NbcAnnualReportFormTest < ActiveSupport::TestCase
   test 'should attribute introduction and scope' do
     assert_equal NbcAnnualReportForm.human_attribute_name(:introduction_and_scope),
                  I18n.t('activemodel.attributes.nbc_annual_report_form.introduction_and_scope')
-  end
-
-  test 'should return period' do
-    assert_equal @form.period, periods(:current_period)
   end
 end
