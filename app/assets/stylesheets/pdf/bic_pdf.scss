@@ -1,0 +1,31 @@
+.aqua-text {
+  color:#5bc4e4;
+}
+
+.orange-text {
+  color:#c25d2e;
+}
+
+.green-text {
+  color:#04b38c;
+}
+
+.header-background-image {
+  background-image: asset-data-url("bic_pdf/header-background-image.png");
+  background-size: 1600px;
+}
+
+.body-background-image {
+  background-image: asset-data-url("bic_pdf/body-background-image.png");
+  background-size: 1600px;
+}
+
+.footer-background-image {
+  background-image: asset-data-url("bic_pdf/footer-background-image.png");
+  background-size: 1600px;
+}
+
+.watermark-bic {
+  background-image: asset-data-url("bic_pdf/watermark.png");
+  background-size: 300px 300px;
+}

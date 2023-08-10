@@ -4,6 +4,10 @@ module Tags::Scopes
   included do
     scope :ordered,   -> { order name: :asc }
     scope :non_roots, -> { where.not parent_id: nil }
+
+    Tag::KINDS.each do |kind|
+      define_method("#{kind}?") { self.kind == kind }
+    end
   end
 
   module ClassMethods
@@ -22,8 +26,8 @@ module Tags::Scopes
     end
 
     if POSTGRESQL_ADAPTER
-      def with_option option
-        where "#{quoted_table_name}.#{qcn 'options'} ? :value", value: option
+      def with_option option, value
+        where "#{quoted_table_name}.#{qcn 'options'} ->> :option = :value", option: option, value: value
       end
     end
   end

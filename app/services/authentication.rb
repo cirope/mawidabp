@@ -1,8 +1,11 @@
 class Authentication
   attr_reader :message, :redirect_url
 
-  def initialize params, request, session, current_organization, admin_mode
-    @current_organization, @admin_mode = current_organization, admin_mode
+  def initialize params, request, session, current_organization, admin_mode, current_user = nil
+    @admin_mode           = admin_mode
+    @valid_user           = current_user
+    @current_organization = current_organization
+
     @params, @request, @session = params, request, session
 
     set_resources
@@ -16,9 +19,9 @@ class Authentication
     authenticate
 
     if @valid && @valid_user
-      if @current_organization.try(:ldap_config)
+      if ldap_config_present?
         verify_pending_poll
-      elsif @current_organization&.saml_provider.present?
+      elsif saml_config_present?
         verify_pending_poll
       else
         verify_days_for_password_expiration
@@ -27,7 +30,7 @@ class Authentication
       end
     else
       @message ||= I18n.t 'message.invalid_user_or_password'
-      @redirect_url ||= { controller: 'sessions', action: 'new' }
+      @redirect_url ||= { controller: 'authentications', action: 'new' }
 
       register_login_error
     end
@@ -41,11 +44,10 @@ class Authentication
       set_saml_user
       set_login_user
       set_ldap_config
-      set_valid_user
     end
 
     def set_saml_user
-      if @current_organization&.saml_provider.present?
+      if saml_config_present?
         provider      = @current_organization.saml_provider
         saml_config   = IdpSettingsAdapter.saml_settings provider
         saml_response = OneLogin::RubySaml::Response.new @params[:SAMLResponse], settings: saml_config
@@ -70,16 +72,16 @@ class Authentication
 
     def update_user user, attributes
       current_roles = user.organization_roles.where organization_id: @current_organization.id
-      remove_roles  = current_roles.includes(:role).references(:roles).where.not roles: { name: attributes[:roles] }
-      add_roles     = Array(attributes[:roles]).select do |name|
-        current_roles.includes(:role).references(:roles).where(roles: { name: name }).empty?
+      remove_roles  = current_roles.includes(:role).references(:roles).where.not roles: { identifier: attributes[:roles] }
+      add_roles     = Array(attributes[:roles]).select do |identifier|
+        current_roles.includes(:role).references(:roles).where(roles: { identifier: identifier }).empty?
       end
 
       User.transaction do
         user.organization_roles.where(id: remove_roles.ids).destroy_all
 
-        add_roles.each do |name|
-          role = Role.where(organization_id: @current_organization.id, name: name).take
+        add_roles.each do |identifier|
+          role = Role.where(organization_id: @current_organization.id, identifier: identifier).take
 
           if role
             user.organization_roles.create! organization_id: role.organization_id,
@@ -87,11 +89,12 @@ class Authentication
           end
         end
 
-        if user.organization_roles.empty? && USE_SCOPE_CYCLE
-            default_saml_roles.each do |default_role|
-              user.organization_roles.create! organization_id: default_role.organization_id,
-                                              role_id:         default_role.id
-          end
+        default_role = @current_organization.saml_provider.default_role_for_users
+
+        if user.organization_roles.where(organization_id: @current_organization.id).empty? &&
+           default_role.present?
+          user.organization_roles.create! organization_id: default_role.organization_id,
+                                          role_id:         default_role.id
         end
 
         user.update! user:      attributes[:user],
@@ -105,10 +108,11 @@ class Authentication
     end
 
     def create_user attributes
-      roles = Role.where organization_id: @current_organization.id, name: attributes[:roles]
-      roles = default_saml_roles if roles.empty? && USE_SCOPE_CYCLE
+      roles = Role.where(organization_id: @current_organization.id, identifier: attributes[:roles]).to_a
 
-      if roles.any?
+      roles << @current_organization.saml_provider.default_role_for_users if roles.empty?
+
+      if roles.compact.any?
         User.create!(
           name:                          attributes[:name],
           last_name:                     attributes[:last_name],
@@ -146,31 +150,6 @@ class Authentication
       @ldap_config = @current_organization && choose_ldap_config(@params[:user])
     end
 
-    def set_valid_user
-      conditions = [
-        [
-          "LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user",
-          "LOWER(#{User.quoted_table_name}.#{User.qcn('email')}) = :email"
-        ].join(' OR ')
-      ]
-
-      parameters = {
-        user: unmasked_user.to_s.downcase.strip,
-        email: unmasked_user.to_s.downcase.strip
-      }
-
-      if @admin_mode
-        conditions << "#{User.quoted_table_name}.#{User.qcn('group_admin')} = :true"
-        parameters[:true] = true
-      else
-        conditions << "#{Organization.quoted_table_name}.#{Organization.qcn('id')} = :organization_id"
-        parameters[:organization_id] = @current_organization.id
-      end
-
-      @valid_user = User.includes(:organizations).where(conditions.join(' AND '), parameters).
-        references(:organizations).first
-    end
-
     def encrypt_password
       @user.salt = @valid_user.salt
       @user.encrypt_password
@@ -183,9 +162,9 @@ class Authentication
     end
 
     def authenticate
-      if @current_organization.try(:ldap_config)
+      if ldap_config_present?
         ldap_auth
-      elsif @current_organization&.saml_provider.present?
+      elsif saml_config_present?
         saml_auth
       else
         local_auth
@@ -340,7 +319,15 @@ class Authentication
       end
     end
 
-    def default_saml_roles
-      Role.where organization_id: @current_organization.id, name: DEFAULT_SAML_ROLES
+    def is_user_recovery?
+      @valid_user&.recovery?
+    end
+
+    def saml_config_present?
+      !is_user_recovery? && @current_organization&.saml_provider.present?
+    end
+
+    def ldap_config_present?
+      !is_user_recovery? && @current_organization.try(:ldap_config)
     end
 end

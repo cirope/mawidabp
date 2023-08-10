@@ -40,7 +40,7 @@ module Weaknesses::GraphHelpers
 
       being_implemented_counts.each do |label, value|
         unless value == 0
-          labels << I18n.t("follow_up_committee.weaknesses_being_implemented_#{label}", count: value)
+          labels << I18n.t("follow_up_committee_report.weaknesses_being_implemented_#{label}", count: value)
           series << value
         end
       end

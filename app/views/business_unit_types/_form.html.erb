@@ -40,14 +40,7 @@
       <div class="col-md-3">
         <%= f.input :require_tag %>
       </div>
-      <% if Current.conclusion_pdf_format == 'gal' %>
-        <div class="col-md-3">
-          <%= f.input :require_counts %>
-        </div>
-        <div class="col-md-3">
-          <%= f.input :hide_review_logo %>
-        </div>
-      <% elsif Current.conclusion_pdf_format == 'pat' %>
+      <% if Current.conclusion_pdf_format == 'pat' %>
         <div class="col-md-3">
           <%= f.input :shared_business_units %>
         </div>
@@ -60,6 +53,12 @@
 
     <% if Current.conclusion_pdf_format == 'gal' %>
       <div class="row">
+        <div class="col-md-3">
+          <%= f.input :require_counts %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :hide_review_logo %>
+        </div>
         <div class="col-md-3">
           <%= f.input :independent_identification %>
         </div>
@@ -74,6 +73,18 @@
         </div>
         <div class="col-md-6">
           <%= f.input :detailed_review, input_html: { maxlength: 255 } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :exec_summary_intro, input_html: { rows: 4 },
+            hint: t('simple_form.hints.business_unit_type.exec_summary_intro',
+              keywords: I18n.t("conclusion_review.executive_summary.keywords.review")
+            ).html_safe %>
+        </div>
+        <div class="col-md-6">
+        <%= f.input :detailed_review_legend, input_html: { rows: 4 } %>
         </div>
       </div>
     <% end %>

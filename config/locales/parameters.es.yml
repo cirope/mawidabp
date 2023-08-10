@@ -25,7 +25,7 @@ es:
     high: 'Alto'
     critical: 'Crítico'
     # Short relevance
-    'yes': 'Si'
+    'yes': 'Sí'
     'no': 'No'
   qualification_types:
     not_rated: 'Nulo'
@@ -47,12 +47,12 @@ es:
     low: 'Bajo'
     medium: 'Moderado'
     high: 'Alto'
-    none: 'Organismo contralor'
+    none: 'Organismo controlador'
   priority_types:
     low: 'Baja'
     medium: 'Media'
     high: 'Alta'
-    none: 'Organismo contralor'
+    none: 'Organismo controlador'
   probability_types:
     rare: 'Raro'
     unlikely: 'Improbable'

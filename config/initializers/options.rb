@@ -130,8 +130,16 @@ TAGS_READONLY = [
 ]
 
 TAG_OPTIONS = {
+  'finding' => {
+    'Mínimo requerido' => 'required_min_count',
+    'Máximo requerido' => 'required_max_count',
+    'Requerido desde'  => 'required_from',
+  },
   'review' => {
     'Requerida en informes `Trabajo especial`' => 'required_on_special_reviews'
+  },
+  'user' => {
+    'Usuario de recuperación' => 'recovery'
   }
 }
 

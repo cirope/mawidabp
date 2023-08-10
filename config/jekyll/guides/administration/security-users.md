@@ -16,11 +16,11 @@ Esta opción **NO** se utiliza cuando el sistema se encuentra instalado en la in
 
 Permite el alta de usuarios.
 
-![]({% asset administration/security/users-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-1.png){: class="img-responsive"}
 
 Para dar de alta un usuario seleccionamos **Nuevo**, muestra la siguiente pantalla.
 
-![]({% asset administration/security/users-2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-2.png){: class="img-responsive"}
 
 Usuario: por defecto el usuario se define con la primera letra del nombre y el apellido (no obstante es opcional la forma de cargarlo en base a la política definida por la organización).
 
@@ -56,7 +56,7 @@ A continuación damos de alta un usuario auditor:
 
 Ingresamos los datos requeridos (*) y tenemos la posibilidad de agregar los opcionales.
 
-![]({% asset administration/security/users-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-3.png){: class="img-responsive"}
 
 Al finalizar seleccionamos **Actualizar Usuario**, para que se guarden lo datos.
 
@@ -70,23 +70,23 @@ Permite visualizar los **Estados** en que se encuentran las observaciones (En pr
 
 También nos muestra el estado de las **pendientes** (vencidas, reprogramada vigente).
 
-![]({% asset administration/security/users-4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-4.png){: class="img-responsive"}
 
 Si seleccionamos **Ver tabla** nos muestra el detalle en forma ordenada.
 
-![]({% asset administration/security/users-5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-5.png){: class="img-responsive"}
 
 Y tenemos la posibilidad de seleccionar **Ver gráfico** (para volver a la parte gráfica).
 
-![]({% asset administration/security/users-6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-6.png){: class="img-responsive"}
 
 También podemos ver los datos de la observación si seleccionamos uno de los estados de las observaciones, por ejemplo: **11 observaciones pendientes**.
 
-![]({% asset administration/security/users-7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-7.png){: class="img-responsive"}
 
 En la opción **Reasignar responsabilidades**, permite pasar las observaciones a otro usuario, seleccionando el Nuevo responsable.
 
-![]({% asset administration/security/users-8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-8.png){: class="img-responsive"}
 
 Se pueden reasignar responsabilidades a otro usuario con el mismo perfil (de auditor a auditor, y de auditado a auditado).
 
@@ -94,10 +94,10 @@ Siempre se mantiene la historia de los hallazgos. Al seleccionar Reasignar respo
 
 En la opción **Liberar responsabilidades**, permite liberar los hallazgos que tiene asignado un auditor o auditado (si queremos liberar las observaciones que tiene asignado un auditor, tiene que haber otro auditor asignado en la observación, lo mismo sucede con el auditado).
 
-![]({% asset administration/security/users-9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-9.png){: class="img-responsive"}
 
 A continuación mostramos un ejemplo en donde el sistema no deja liberar responsabilidades de un auditor, debido a que la observación tiene asignado un solo auditor. El sistema muestra el mensaje de lo que debemos hacer.
 
-![]({% asset administration/security/users-10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-10.png){: class="img-responsive"}
 
 Es importante aclarar que cuando generamos una observación como mínimo tenemos que asignar: 1 Auditor, 1 Auditado y 1 Supervisor o Gerente de auditoría.

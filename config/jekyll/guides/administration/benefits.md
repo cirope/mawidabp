@@ -12,11 +12,11 @@ Permite mostrar los beneficios y perjuicios que se evitan/previenen a las distin
 
 Seleccionamos **Administración -> Beneficios / Perjuicios**. En este caso muestra los que tenemos generados.
 
-![]({% asset administration/benefits/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/benefits/1.png){: class="img-responsive"}
 
 Seleccionamos **Nuevo** para agregar en la organización.
 
-![]({% asset administration/benefits/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/benefits/2.png){: class="img-responsive"}
 
 Cargamos el Nombre, y seleccionamos el Tipo (Beneficios Tangibles, Beneficios Intangibles, Perjuicios Tangibles, Perjuicios Intangibles)
 
@@ -26,4 +26,4 @@ Estos datos se utilizan, luego en la etapa de Ejecución, cuando generamos un ha
 
 Luego, cuando generamos una observación/oportunidad de mejora, podemos seleccionar beneficios y/o perjuicios (es opcional) de los cargados en "Administración" y agregarlos a la observación/oportunidad de mejora.
 
-![]({% asset administration/benefits/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/benefits/3.png){: class="img-responsive"}

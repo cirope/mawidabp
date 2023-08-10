@@ -8,6 +8,11 @@
   <%= role_type_text(@role.role_type, nil) %>
 </p>
 
+<p class="mb-1">
+  <strong><%= Role.human_attribute_name :identifier %>:</strong>
+  <%= @role.identifier %>
+</p>
+
 <table class="table table-sm table-striped table-hover mt-3">
   <thead>
     <tr>

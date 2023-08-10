@@ -75,13 +75,12 @@ module ConclusionReviews::NbcPdf
     def put_nbc_grid pdf
       column_data = [
         [
-          I18n.t('conclusion_review.nbc.cover.number_review'),
-          review.identification,
+          "#{I18n.t('conclusion_review.nbc.cover.number_review')}: #{review.identification}",
           I18n.t('conclusion_review.nbc.cover.prepared_by')
         ]
       ]
 
-      w_c = pdf.bounds.width / 3
+      w_c = pdf.bounds.width / 2
 
       pdf.table(column_data, cell_style: { size: (PDF_FONT_SIZE * 0.75).round, inline_format: true },
                 column_widths: w_c)
@@ -100,19 +99,58 @@ module ConclusionReviews::NbcPdf
     end
 
     def put_nbc_weaknesses_on pdf
-      use_finals = kind_of? ConclusionFinalReview
-      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+      being_implemented_w, implemented_audited_w = review.implemented_audited_or_being_implemented_w.partition(&:being_implemented?)
 
-      if weaknesses.select(&:being_implemented?).any?
-        pdf.move_down PDF_FONT_SIZE * 2
-        pdf.text I18n.t('conclusion_review.nbc.weaknesses.main_observations'), inline_format: true
+      being_implemented_alt_w   = []
+      implemented_audited_alt_w = []
 
-        pdf.move_down PDF_FONT_SIZE
-        weaknesses.each do |weakness|
-          pdf.text "• #{weakness.title}" if weakness.being_implemented?
+      review.external_reviews.map(&:alternative_review).map do |ar|
+        alt_weaknesses = ar.implemented_audited_or_being_implemented_w
+
+        if alt_weaknesses.any?(&:being_implemented?)
+          being_implemented_alt_w << [ar.identification, alt_weaknesses.select(&:being_implemented?)]
         end
 
-        pdf.start_new_page
+        if alt_weaknesses.any?(&:implemented_audited?)
+          implemented_audited_alt_w << [ar.identification, alt_weaknesses.select(&:implemented_audited?)]
+        end
+      end
+
+      if being_implemented_w.any? || being_implemented_alt_w.any?
+        main_weaknesses_partial pdf, being_implemented_w, being_implemented_alt_w, 'being_implemented'
+      end
+
+      if implemented_audited_w.any? || implemented_audited_alt_w.any?
+        main_weaknesses_partial pdf, implemented_audited_w, implemented_audited_alt_w, 'implemented_audited'
+      end
+
+      pdf.start_new_page
+    end
+
+    def main_weaknesses_partial pdf, weaknesses, alt_weaknesses, status
+      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.text I18n.t("conclusion_review.nbc.weaknesses.main_#{status}"), inline_format: true
+      pdf.move_down PDF_FONT_SIZE
+
+      if weaknesses.any?
+        weaknesses.each do |weakness|
+          pdf.text "• #{weakness.title}"
+        end
+
+        pdf.move_down PDF_FONT_SIZE
+      end
+
+      if alt_weaknesses.any?
+        alt_weaknesses.each do |review_name, alt_w|
+          pdf.text "#{I18n.t('conclusion_review.nbc.weaknesses.from_external_review')} #{review_name}:", style: :italic
+          pdf.move_down PDF_FONT_SIZE
+
+          alt_w.each do |alt_weakness|
+            pdf.text "• #{alt_weakness.title}"
+          end
+
+          pdf.move_down PDF_FONT_SIZE
+        end
       end
     end
 
@@ -124,6 +162,7 @@ module ConclusionReviews::NbcPdf
 
         data       = [nbc_header_scores]
         sum_weight = 0
+        total_sum  = 0
 
         review.score_by_weakness_reviews(issue_date).each do |row, weaknesses|
           risk_text = weaknesses.first.risk_text
@@ -132,10 +171,12 @@ module ConclusionReviews::NbcPdf
 
           weight      = row.inject &:*
           sum_weight += weight
+          total_sum  += weaknesses.count
 
           data << [risk_text] + row + [weight]
         end
-        data << ['', '', '', '', '', sum_weight]
+
+        data << [I18n.t('conclusion_review.nbc.scores.total'), total_sum, '', '', '', sum_weight]
         data << nbc_footer_scores(review.score_array)
 
         pdf.move_down PDF_FONT_SIZE
@@ -174,7 +215,7 @@ module ConclusionReviews::NbcPdf
 
     def nbc_footer_scores score
       [
-        { content: I18n.t('conclusion_review.nbc.scores.footer_table'), colspan: 5},
+        { content: I18n.t('conclusion_review.nbc.scores.footer_table'), colspan: 5 },
         I18n.t("conclusion_review.nbc.results_by_weighting.#{score.first}")
       ]
     end
@@ -219,7 +260,7 @@ module ConclusionReviews::NbcPdf
       pdf.move_down PDF_FONT_SIZE
       pdf.text applied_procedures, align: :justify, inline_format: true
 
-      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.nbc.weaknesses.messages'), align: :justify
 
       pdf.move_down PDF_FONT_SIZE
@@ -306,23 +347,31 @@ module ConclusionReviews::NbcPdf
         [
           I18n.t('conclusion_review.nbc.weaknesses_detected.risk'),
           I18n.t('conclusion_review.nbc.weaknesses_detected.state'),
-          I18n.t('conclusion_review.nbc.weaknesses_detected.origination_date')
+          I18n.t('conclusion_review.nbc.weaknesses_detected.origination_date'),
+          I18n.t('conclusion_review.nbc.weaknesses_detected.origination_audit')
         ],
         [
           weakness.risk_text,
           weakness.state_text,
-          weakness.origination_date
+          weakness.origination_date,
+          origination_audit_tag(weakness).join(', ')
         ]
       ]
 
-      width_column1 = PDF_FONT_SIZE * 17
-      width_column2 = (pdf.bounds.width - width_column1) / 2
+      width_column1 = PDF_FONT_SIZE * 16
+      width_column2 = (pdf.bounds.width - width_column1) / 3
 
-      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2, width_column2]) do
+      pdf.table(data, cell_style: { inline_format: true, border_width: 0 }, column_widths: [width_column1, width_column2, width_column2, width_column2]) do
         row(0).style(
           background_color: 'EEEEEE'
         )
       end
+    end
+
+    def origination_audit_tag weakness
+      weakness.tags.select do |tag|
+        tag.options['origination_audit'] == '1'
+      end.compact.map &:name
     end
 
     def nbc_audit_answer_last answer
