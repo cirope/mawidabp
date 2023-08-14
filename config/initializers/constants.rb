@@ -1,6 +1,5 @@
 # Variable para setear cookies de session
 COOKIES_DOMAIN = ".#{ENV['APP_HOST'].sub /:.*/, ''}"
-SHARED_SESSION = ENV['SHARED_SESSION'] == 'true'
 # Dirección del correo electrónico de soporte
 SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
 # Ruta relativa directorio privado de almacenamiento de archivos

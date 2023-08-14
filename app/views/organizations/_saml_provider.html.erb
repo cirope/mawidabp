@@ -17,7 +17,7 @@
     </div>
 
     <% collapse_in = s_p_f.object.persisted? || s_p_f.object.errors.present? %>
-    <div id="saml_provider" class="card-body collapse<%= ' show' if collapse_in %>" data-enable-disable-card-fieldset=<%= SHARED_SESSION ? 'false' : 'true'%>>
+    <div id="saml_provider" class="card-body collapse<%= ' show' if collapse_in %>" data-enable-disable-card-fieldset="true">
       <% if s_p_f.object.errors[:base].present? %>
         <div class="alert alert-danger">
           <%= s_p_f.object.errors[:base].to_sentence %>
