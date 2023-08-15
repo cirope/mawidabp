@@ -33,7 +33,7 @@ def delete_file_or_directory path
 end
 
 root_directory = Rails.root
-tmp_directory  = "#{root_directory}/tmp"
+tmp_directory  = "#{root_directory}/uploads/tmp"
 
 Dir.foreach(tmp_directory) do |file_name|
   next if file_name == '.' || file_name == '..'
