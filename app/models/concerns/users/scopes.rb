@@ -45,7 +45,7 @@ module Users::Scopes
   end
 
   def current_organizations
-    organizations.where.not(id: Current.organization).distinct
+    organizations.distinct
   end
 
   module ClassMethods
