@@ -25,10 +25,10 @@ CarrierWave.clean_cached_files!
 
 
 def delete_file_or_directory path
-  if File.directory?(path)
-    FileUtils.rm_rf(path)
+  if File.directory? path
+    FileUtils.rm_rf path
   else
-    FileUtils.rm(path)
+    FileUtils.rm path
   end
 end
 
@@ -38,7 +38,7 @@ tmp_directory  = "#{root_directory}/uploads/tmp"
 Dir.foreach(tmp_directory) do |file_name|
   next if file_name == '.' || file_name == '..'
 
-  file_path = File.join(tmp_directory, file_name)
+  file_path = File.joint tmp_directory, file_name)
 
   if File.mtime(file_path) < 1.days.ago
     delete_file_or_directory file_path
