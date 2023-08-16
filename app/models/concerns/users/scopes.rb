@@ -44,6 +44,10 @@ module Users::Scopes
     tags.with_option('recovery', '1').exists?
   end
 
+  def current_organizations
+    organizations.where.not(id: Current.organization).distinct
+  end
+
   module ClassMethods
     def by_email email
       where(

@@ -7,6 +7,7 @@ en:
   navigation:
     back: 'Back'
     copy: 'Copy'
+    change_to_organization: 'Change to organization'
     destroy: 'Delete'
     download: 'Download'
     edit: 'Edit'
