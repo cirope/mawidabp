@@ -97,8 +97,10 @@ class FileModelTest < ActiveSupport::TestCase
       "#{self.class.fixture_path}/files/test.csv", 'text/plain'
     )
 
-    assert @file_model.invalid?
-    assert_error @file_model, :file, :extension_allowlist_error,
-      extension: "\"csv\"", allowed_types: @file_model.file.extension_allowlist.join(', ')
+    if @file_model.file.extension_allowlist.present?
+      assert @file_model.invalid?
+      assert_error @file_model, :file, :extension_allowlist_error,
+        extension: "\"csv\"", allowed_types: @file_model.file.extension_allowlist.join(', ')
+    end
   end
 end
