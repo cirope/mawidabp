@@ -327,6 +327,8 @@ en:
         review: 'Audit report'
         review_id: 'Audit report'
         alternative_review_id: 'External audit report'
+      file_model_reviews/file_model:
+        file: 'File'
       finding:
         control_objective_item_id: 'Control objective'
         title: 'Title'
