@@ -437,6 +437,7 @@ en:
         file_content_type: 'Working paper (file type)'
         file_file_size: 'Working paper (file size)'
       image_model:
+        image: 'Image'
         uploaded_data: 'Image'
         content_type: 'Image (type)'
         size: 'Image (size)'
@@ -795,6 +796,8 @@ en:
         allow_duplication: 'Allow duplicate title'
         audit_recommendations: 'Audit recommendations'
         failure: 'Failure'
+      work_papers/file_model:
+        file: 'Work paper (file)'
 
     errors:
       models:

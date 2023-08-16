@@ -454,6 +454,7 @@ es:
         file_content_type: 'Papel de trabajo (tipo de archivo)'
         file_file_size: 'Papel de trabajo (tamaño de archivo)'
       image_model:
+        image: 'Imagen'
         uploaded_data: 'Imagen'
         content_type: 'Imagen (tipo)'
         size: 'Imagen (tamaño)'
@@ -812,6 +813,8 @@ es:
         allow_duplication: 'Permitir título duplicado'
         audit_recommendations: 'Recomendaciones de auditoría'
         failure: 'Falla'
+      work_papers/file_model:
+        file: 'Papel de trabajo (archivo)'
 
     errors:
       models:

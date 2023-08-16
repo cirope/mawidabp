@@ -91,4 +91,14 @@ class FileModelTest < ActiveSupport::TestCase
     assert @file_model.invalid?
     assert_error @file_model, :file, :without_extension
   end
+
+  test 'validates file extension constraints' do
+    @file_model.file = Rack::Test::UploadedFile.new(
+      "#{self.class.fixture_path}/files/test.csv", 'text/plain'
+    )
+
+    assert @file_model.invalid?
+    assert_error @file_model, :file, :extension_allowlist_error,
+      extension: "\"csv\"", allowed_types: @file_model.file.extension_allowlist.join(', ')
+  end
 end
