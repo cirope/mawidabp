@@ -17,7 +17,7 @@
         <%= link_to t('users.status.show.title'), users_status_path(user, graph: true), class: 'dropdown-item' %>
       <% end %>
       <div class="dropdown-divider"></div>
-      <% if @auth_user.current_organizations.exists? %>
+      <% if SHARED_SESSION && @auth_user.current_organizations.exists? %>
         <div class="dropdown-header">
           <%= t 'navigation.change_to_organization' %>
         </div>
