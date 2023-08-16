@@ -242,29 +242,31 @@ module Findings::Validations
       required_tags = organization.tags.for_findings.non_roots.group_by &:parent
 
       required_tags.each do |tag, subtags|
-        required_from = Date.parse(tag.required_from) if tag.required_from.present?
-
-        if !required_from || created_at >= required_from
+        if tag.required_min&.positive? || tag.required_max&.positive?
+          required_from = Date.parse(tag.required_from) if tag.required_from.present?
+          validate_from = created_at || Time.zone.now
           required_min  = tag.required_min
           required_max  = tag.required_max
-          assigned_tags = taggings.reject(&:marked_for_destruction?).map &:tag
 
-          subtags_count = (subtags & assigned_tags).count
+          if !required_from || validate_from >= required_from
+            assigned_tags = taggings.reject(&:marked_for_destruction?).map &:tag
+            subtags_count = (subtags & assigned_tags).count
 
-          result = if required_min&.positive? && required_max&.positive?
-            subtags_count.between? required_min, required_max
-          elsif required_min&.positive?
-            subtags_count >= required_min
-          elsif required_max&.positive?
-            subtags_count <= required_max
-          end
+            result = if required_min&.positive? && required_max&.positive?
+              subtags_count.between? required_min, required_max
+            elsif required_min&.positive?
+              subtags_count >= required_min
+            elsif required_max&.positive?
+              subtags_count <= required_max
+            end
 
-          unless result
-            required_errors = []
-            required_errors << "#{tag.required_min_label}: #{required_min}" if required_min&.positive?
-            required_errors << "#{tag.required_max_label}: #{required_max}" if required_max&.positive?
+            unless result
+              required_errors = []
+              required_errors << "#{tag.required_min_label}: #{required_min}" if required_min&.positive?
+              required_errors << "#{tag.required_max_label}: #{required_max}" if required_max&.positive?
 
-            errors.add :base, "#{Tag.model_name.human} #{tag.name}: #{required_errors.join ', '}"
+              errors.add :base, "#{Tag.model_name.human} #{tag.name}: #{required_errors.join ', '}"
+            end
           end
         end
       end

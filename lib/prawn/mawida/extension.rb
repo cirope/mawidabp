@@ -225,7 +225,7 @@ module Prawn
           if show_print_date_on? organization
             self.canvas do
               date_text = I18n.l(date, :format => :long) if date
-              text ||= I18n.t(:'follow_up_committee.print_date',
+              text ||= I18n.t(:'follow_up_committee_report.print_date',
                 :date => date_text)
               coordinates = [
                 self.bounds.width / 2.0,

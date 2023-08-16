@@ -1,0 +1,41 @@
+<%= render 'header' %>
+
+<div class="row help justify-content-center text-center">
+  <div class="col-md-3">
+    <div>
+      <%= image_tag 'welcome/follow_up.svg', alt: 'Pending findings', height: 60 %>
+    </div>
+
+    <h3 class="my-2">Pending findings</h3>
+
+    <p class="text-muted">
+      Here you can check your pending findings for a solution. To
+      answer any finding, you must select Edit (Pencil)
+    </p>
+  </div>
+
+  <div class="col-md-3">
+    <div>
+      <%= image_tag 'welcome/conclusion.svg', alt: 'Resolved findings', height: 60 %>
+    </div>
+
+    <h3 class="my-2">Fixed findings</h3>
+
+    <p class="text-muted">You can check your resolved or reiterated findings</p>
+  </div>
+
+  <div class="col-md-3">
+    <div>
+      <%= image_tag 'welcome/help.svg', alt: 'Ayuda', height: 60 %>
+    </div>
+
+    <h3 class="my-2">Help</h3>
+
+    <p class="text-muted">
+      If you have any questions about a functionality or process, this is the best
+      place to clear them up
+    </p>
+  </div>
+</div>
+
+<%= render 'footer' %>
