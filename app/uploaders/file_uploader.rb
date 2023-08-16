@@ -6,6 +6,16 @@ class FileUploader < CarrierWave::Uploader::Base
     guess_path
   end
 
+  def extension_allowlist
+    FILE_UPLOADS_CONSTRAINTS&.fetch 'extensions', nil
+  end
+
+  def size_range
+    size_limit = FILE_UPLOADS_CONSTRAINTS&.fetch 'size_limit', nil
+
+    1.byte..size_limit.megabytes if size_limit
+  end
+
   private
 
     def organization_id_path organization_id = Current.organization&.id

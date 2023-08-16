@@ -408,6 +408,7 @@ en:
         one: "The list was filtered with the query '%{query}' on the column %{columns}"
         other: "The list was filtered with the query '%{query}' on the columns %{columns}"
       sorted_by: "The list was sorted by column %{column}"
+    previous_close_dates: "Previous close dates"
 
   conclusion_management_report:
     index_title: "Management reports"
