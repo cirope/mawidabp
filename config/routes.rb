@@ -543,4 +543,6 @@ Rails.application.routes.draw do
   post 'paypal', to: 'paypal#create'
 
   get 'private/:path', to: 'file_models#download', constraints: { path: /.+/ }
+
+  match '*path', to: 'application#route_not_found', via: :all
 end
