@@ -72,10 +72,10 @@ class FindingsController < ApplicationController
   private
 
     def finding_params
-      casted_params = if @auth_user.can_act_as_audited? || @auth_user.committee?
-                        audited_finding_params
-                      else
+      casted_params = if @auth_user.can_act_as_auditor?
                         auditor_finding_params
+                      else
+                        audited_finding_params
                       end
 
       casted_params.merge(

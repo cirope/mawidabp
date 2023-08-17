@@ -512,4 +512,8 @@ module FindingsHelper
     def finding_bic_risks_types finding
       finding.bic_risks_types.invert.reverse_each.to_json
     end
+
+    def show_pdf_issues finding
+      finding.issues.any? && finding.issues.without_close_date.count > 0
+    end
 end
