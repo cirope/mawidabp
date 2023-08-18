@@ -28,10 +28,7 @@ def delete_file_or_directory path
   File.directory? path ? FileUtils.rm_rf path : FileUtils.rm path
 end
 
-root_directory = Rails.root
-tmp_directory  = "#{root_directory}/uploads/tmp"
-
-Dir.foreach(tmp_directory) do |file_name|
+Dir.foreach("#{Rails.root}/uploads/tmp") do |file_name|
   next if %w(. ..).include? file_name
 
   file_path = File.join tmp_directory, file_name
