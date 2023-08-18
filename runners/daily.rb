@@ -40,9 +40,7 @@ Dir.foreach(tmp_directory) do |file_name|
 
   file_path = File.join tmp_directory, file_name
 
-  if File.mtime(file_path) < 1.days.ago
-    delete_file_or_directory file_path
-  end
+  delete_file_or_directory file_path if File.mtime(file_path) < 1.day.ago
 end
 
 Rails.logger.info "Daily runner finished (version #{APP_REVISION[0,8]})"
