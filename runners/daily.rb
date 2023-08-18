@@ -25,11 +25,7 @@ CarrierWave.clean_cached_files!
 
 
 def delete_file_or_directory path
-  if File.directory? path
-    FileUtils.rm_rf path
-  else
-    FileUtils.rm path
-  end
+  File.directory? path ? FileUtils.rm_rf path : FileUtils.rm path
 end
 
 root_directory = Rails.root
