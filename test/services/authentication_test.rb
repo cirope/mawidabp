@@ -15,8 +15,8 @@ class AuthenticationTest < ActionController::TestCase
     assert_valid_authentication
   end
 
-  test 'shuld authenticate by email' do
-    @params = { user: @user.email, password: 'admin123' }
+  test 'should authenticate by email' do
+    @params = { email: @user.email, password: 'admin123' }
 
     assert_valid_authentication redirect_url: Group, admin_mode: true
   ensure

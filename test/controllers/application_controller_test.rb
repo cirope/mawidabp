@@ -393,6 +393,20 @@ class ApplicationControllerTest < ActionController::TestCase
     assert_redirected_to license_blocked_url
   end
 
+  test 'redirect to login when user is not logged in and path is wrong' do
+    @controller.send :route_not_found
+
+    assert_redirected_to login_url
+  end
+
+  test 'redirect to welcome when user is logged in and path is wrong' do
+    login_admin
+
+    @controller.send :route_not_found
+
+    assert_redirected_to welcome_url
+  end
+
   private
 
     def login_admin

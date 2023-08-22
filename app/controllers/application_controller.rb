@@ -71,6 +71,10 @@ class ApplicationController < ActionController::Base
   end
   helper_method :order_param
 
+  def route_not_found
+    redirect_to @auth_user ? welcome_url : login_url
+  end
+
   private
 
     def set_locale
