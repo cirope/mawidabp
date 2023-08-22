@@ -400,6 +400,8 @@ class ApplicationControllerTest < ActionController::TestCase
   end
 
   test 'redirect to welcome when user is logged in and path is wrong' do
+    login_admin
+
     @controller.send :route_not_found
 
     assert_redirected_to welcome_url
