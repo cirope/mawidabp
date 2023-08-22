@@ -4,5 +4,14 @@ es:
       carrierwave_processing_error: 'No se puede cambiar el tamaño de la imagen'
       carrierwave_integrity_error: 'No es una imagen'
       carrierwave_download_error: 'No se ha podido descargar la imagen'
-      extension_white_list_error: 'No pueden subir archivos con extensión %{extension}, extensiones permitidas: %{allowed_types}'
-      extension_black_list_error: 'No pueden subir archivos con extensión %{extension}, extensiones no permitidas: %{prohibited_types}'
+      extension_allowlist_error: 'No pueden subir archivos con extensión %{extension}, extensiones permitidas: %{allowed_types}'
+      extension_denylist_error: 'No pueden subir archivos con extensión %{extension}, extensiones no permitidas: %{prohibited_types}'
+      content_type_allowlist_error: "No pueden subir archivos del tipo %{content_type}, tipos permitidos: %{allowed_types}"
+      content_type_denylist_error: "No pueden subir archivos del tipo %{content_type}"
+      processing_error: "No se puede procesar la imagen"
+      min_size_error: "El tamaño del archivo debe ser mayor a %{min_size}"
+      max_size_error: "El tamaño del archivo debe ser menor a %{max_size}"
+      min_width_error: "El ancho de la imagen debe ser mayor que %{min_width}px"
+      max_width_error: "El ancho de la imagen debe ser menor que %{max_width}px"
+      min_height_error: "El alto de la imagen debe ser mayor que %{min_height}px"
+      max_height_error: "El alto de la imagen debe ser menor que %{max_height}px"
