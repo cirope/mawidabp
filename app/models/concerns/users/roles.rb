@@ -70,10 +70,7 @@ module Users::Roles
   end
 
   def auditor_on? organization_id
-    auditor_junior_on?(organization_id) ||
-    auditor_senior_on?(organization_id) ||
-    supervisor_on?(organization_id) ||
-    manager_on?(organization_id)
+    auditor_junior_on?(organization_id) || auditor_senior_on?(organization_id)
   end
 
   def can_act_as_audited?

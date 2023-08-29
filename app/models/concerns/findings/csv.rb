@@ -112,7 +112,9 @@ module Findings::Csv
 
     def auditor_users
       users.select do |u|
-        u.auditor_on?(organization_id)
+        u.auditor_on?(organization_id)    ||
+          supervisor_on?(organization_id) ||
+          manager_on?(organization_id)
       end.map &:full_name
     end
 
