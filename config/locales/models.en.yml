@@ -327,6 +327,8 @@ en:
         review: 'Audit report'
         review_id: 'Audit report'
         alternative_review_id: 'External audit report'
+      file_model_reviews/file_model:
+        file: 'File'
       finding:
         control_objective_item_id: 'Control objective'
         title: 'Title'
@@ -437,6 +439,7 @@ en:
         file_content_type: 'Working paper (file type)'
         file_file_size: 'Working paper (file size)'
       image_model:
+        image: 'Image'
         uploaded_data: 'Image'
         content_type: 'Image (type)'
         size: 'Image (size)'
@@ -795,6 +798,8 @@ en:
         allow_duplication: 'Allow duplicate title'
         audit_recommendations: 'Audit recommendations'
         failure: 'Failure'
+      work_papers/file_model:
+        file: 'Work paper (file)'
 
     errors:
       models:

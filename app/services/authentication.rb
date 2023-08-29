@@ -63,7 +63,7 @@ class Authentication
       email             = pruned_attributes[:email] || email
       @params[:user]    = pruned_attributes[:user]
 
-      if user = User.find_by(user: @params[:user])
+      if (user = User.find_by(email: email) || User.find_by(user: @params[:user]))
         update_user user, pruned_attributes.merge(email: email)
       else
         create_user pruned_attributes.merge(email: email)
@@ -72,16 +72,16 @@ class Authentication
 
     def update_user user, attributes
       current_roles = user.organization_roles.where organization_id: @current_organization.id
-      remove_roles  = current_roles.includes(:role).references(:roles).where.not roles: { name: attributes[:roles] }
-      add_roles     = Array(attributes[:roles]).select do |name|
-        current_roles.includes(:role).references(:roles).where(roles: { name: name }).empty?
+      remove_roles  = current_roles.includes(:role).references(:roles).where.not roles: { identifier: attributes[:roles] }
+      add_roles     = Array(attributes[:roles]).select do |identifier|
+        current_roles.includes(:role).references(:roles).where(roles: { identifier: identifier }).empty?
       end
 
       User.transaction do
         user.organization_roles.where(id: remove_roles.ids).destroy_all
 
-        add_roles.each do |name|
-          role = Role.where(organization_id: @current_organization.id, name: name).take
+        add_roles.each do |identifier|
+          role = Role.where(organization_id: @current_organization.id, identifier: identifier).take
 
           if role
             user.organization_roles.create! organization_id: role.organization_id,
@@ -108,7 +108,7 @@ class Authentication
     end
 
     def create_user attributes
-      roles = Role.where(organization_id: @current_organization.id, name: attributes[:roles]).to_a
+      roles = Role.where(organization_id: @current_organization.id, identifier: attributes[:roles]).to_a
 
       roles << @current_organization.saml_provider.default_role_for_users if roles.empty?
 
