@@ -27,6 +27,14 @@ module RedisClient
     client.setex 'paypal_token', expire_in, token
   end
 
+  def mgraph_token
+    client.get 'mgraph_token'
+  end
+
+  def assign_mgraph_token token, expire_in
+    client.setex 'mgraph_token', expire_in, token
+  end
+
   def license_plan_change_url subscription_id
     client.get "plan_change_url_for_#{subscription_id}"
   end

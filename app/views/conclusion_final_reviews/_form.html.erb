@@ -20,16 +20,19 @@
           value: (@conclusion_final_review.review.plan_item.project if @conclusion_final_review.review&.persisted?),
           readonly: true } %>
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
-          value: (@conclusion_final_review.review.score_text if @conclusion_final_review.review&.persisted?),
+          value: (score_text_for(@conclusion_final_review) if @conclusion_final_review.review&.persisted?),
           readonly: true } %>
         <% if USE_SCOPE_CYCLE %>
           <%= f.input :score_alt, label: Review.human_attribute_name(:score_alt), input_html: {
-            value: (@conclusion_final_review.review.score_alt_text if @conclusion_final_review.review&.persisted?),
+            value: (score_alt_text_for(@conclusion_final_review) if @conclusion_final_review.review&.persisted?),
             readonly: true } %>
         <% end %>
         <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
           <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
-          <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+          <%= f.input :close_date, as: :date_picker %>
+          <% if @conclusion_final_review.close_date %>
+            <%= show_conclusion_final_reviews_previous_close_dates(@conclusion_final_review) %>
+          <% end %>
         <% else %>
           <%= f.input :summary %>
         <% end %>
@@ -64,7 +67,10 @@
           <%= f.input :summary %>
         <% else %>
           <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
-          <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+          <%= f.input :close_date, as: :date_picker %>
+          <% if @conclusion_final_review.close_date %>
+            <%= show_conclusion_final_reviews_previous_close_dates(@conclusion_final_review) %>
+          <% end %>
         <% end %>
       </div>
     </div>

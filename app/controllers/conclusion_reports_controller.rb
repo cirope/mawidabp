@@ -1,4 +1,7 @@
 class ConclusionReportsController < ApplicationController
+  include Reports::NbcAnnualReport
+  include Reports::NbcInternalControlQualificationAsGroupOfCompanies
+  include Reports::NbcReport
   include Reports::SynthesisReport
   include Reports::ReviewStatsReport
   include Reports::ReviewScoresReport
@@ -75,7 +78,9 @@ class ConclusionReportsController < ApplicationController
         benefits: :read,
         create_benefits: :read,
         auto_complete_for_business_unit: :read,
-        auto_complete_for_process_control: :read
+        auto_complete_for_process_control: :read,
+        nbc_annual_report: :read,
+        create_nbc_annual_report: :read
       )
     end
 end

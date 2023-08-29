@@ -16,6 +16,7 @@ module PlanItems::Validations
     validate :not_overloaded_or_allowed
     validate :related_plan_item_dates
     validate :uniqueness_auxiliar_business_unit_types
+    validate :edit_business_unit
   end
 
     private
@@ -123,5 +124,13 @@ module PlanItems::Validations
 
       def validate_business_unit_type?
         Current.user&.business_unit_types&.list&.any?
+      end
+
+      def edit_business_unit
+        if business_unit_id_changed? && !can_edit_business_unit?
+          errors.add :business_unit,
+                     :cannot_edit_business_unit,
+                     memo_condition: SHOW_MEMOS ? I18n.t('plan_item.errors.cannot_edit_business_unit_for_memos_too') : ''
+        end
       end
 end

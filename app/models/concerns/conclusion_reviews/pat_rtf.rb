@@ -60,7 +60,7 @@ module ConclusionReviews::PatRtf
     def add_organization_image document, organization
       organization_image = organization.image_model&.image&.thumb&.path
 
-      if organization_image && File.exists?(organization_image)
+      if organization_image && File.exist?(organization_image)
         header = RTF::HeaderNode.new document
 
         header.paragraph { |n| n.image(organization_image) }
@@ -351,14 +351,14 @@ module ConclusionReviews::PatRtf
 
         put_pat_previous_weaknesses_on_rtf  document
         put_pat_weaknesses_on_rtf           document
-        put_pat_weaknesses_follow_up_on_rtf document
+        put_pat_weaknesses_external_on_rtf  document
       end
     end
 
     def put_pat_previous_weaknesses_on_rtf document
-      previous = review.previous
+      filtered = pat_previous_weaknesses
 
-      if previous&.weaknesses&.with_pending_status&.any?
+      if filtered.any?
         previous_title_style = style bold: true
 
         previous_title = I18n.t(
@@ -371,7 +371,7 @@ module ConclusionReviews::PatRtf
           p1.line_break
         end
 
-        previous.weaknesses.each do |weakness|
+        filtered.each do |weakness|
           put_pat_previous_weakness_on_rtf document, weakness, (@_next_index_rtf += 1)
           document.paragraph do |p1|
             p1.line_break
@@ -395,6 +395,15 @@ module ConclusionReviews::PatRtf
         p1 << weakness.description
       end
 
+      document.paragraph(title_style) do |p1|
+        p1.line_break
+        p1 << I18n.t('conclusion_review.pat.rtf.weaknesses.risk')
+      end
+
+      document.paragraph(description_style) do |p1|
+        p1 << weakness.risk_text
+      end
+
       if weakness.current_situation.present?
         document.paragraph(title_style) do |p1|
           p1.line_break
@@ -406,15 +415,6 @@ module ConclusionReviews::PatRtf
         end
       end
 
-      document.paragraph(title_style) do |p1|
-        p1.line_break
-        p1 << I18n.t('conclusion_review.pat.rtf.weaknesses.risk')
-      end
-
-      document.paragraph(description_style) do |p1|
-        p1 << weakness.risk_text
-      end
-
       if weakness.implemented_audited? || weakness.failure?
         document.paragraph(title_style) do |p1|
           p1.line_break
@@ -422,7 +422,7 @@ module ConclusionReviews::PatRtf
         end
 
         document.paragraph(description_style) do |p1|
-          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.key(weakness.state)}")
         end
       elsif weakness.follow_up_date
         document.paragraph(title_style) do |p1|
@@ -438,9 +438,7 @@ module ConclusionReviews::PatRtf
 
     def put_pat_weaknesses_on_rtf document
       title_style = style bold: true
-      use_finals  = kind_of? ConclusionFinalReview
-      weaknesses  = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered    = weaknesses.not_revoked.where.not risk: Finding.risks[:none]
+      filtered    = pat_weaknesses
 
       if filtered.any?
         i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
@@ -455,7 +453,7 @@ module ConclusionReviews::PatRtf
 
         filtered.each do |weakness|
           put_pat_weakness_on_rtf document, weakness, (@_next_index_rtf += 1)
-          
+
           document.paragraph(title_style) do |p1|
             p1.line_break
             p1.line_break
@@ -537,7 +535,7 @@ module ConclusionReviews::PatRtf
         end
 
         document.paragraph(description_style) do |p1|
-          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
+          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.key(weakness.state)}")
         end
       elsif weakness.follow_up_date
         document.paragraph(title_style) do |p1|
@@ -594,33 +592,22 @@ module ConclusionReviews::PatRtf
       end
     end
 
-    def put_pat_weaknesses_follow_up_on_rtf document
+    def put_pat_weaknesses_external_on_rtf document
       title_style = style bold: true
-      use_finals  = kind_of? ConclusionFinalReview
-      weaknesses  = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered    = weaknesses.not_revoked.where risk: Finding.risks[:none]
-      assigned    = review.assigned_weaknesses
+      filtered    = pat_weaknesses_external
 
-      if filtered.any? || assigned.any?
+      if filtered.any?
         document.paragraph(title_style) do |p1|
-          p1 << I18n.t('conclusion_review.pat.weaknesses.follow_up',
+          p1 << I18n.t('conclusion_review.pat.weaknesses.external',
                        prefix: "#{@_next_prefix_rtf}.",
                        year: review.period.name)
+
           p1.line_break
           p1.line_break
         end
 
         filtered.each do |weakness|
-          put_pat_weakness_follow_up_on_rtf document, weakness, (@_next_index_rtf += 1)
-
-          document.paragraph(title_style) do |p1|
-            p1.line_break
-            p1.line_break
-          end
-        end
-
-        assigned.each do |weakness|
-          put_pat_weakness_follow_up_on_rtf document, weakness, (@_next_index_rtf += 1)
+          put_pat_weakness_on_rtf document, weakness, (@_next_index_rtf += 1)
 
           document.paragraph(title_style) do |p1|
             p1.line_break
@@ -631,61 +618,6 @@ module ConclusionReviews::PatRtf
         @_next_prefix_rtf = @_next_prefix_rtf.next
       end
     end
-
-    def put_pat_weakness_follow_up_on_rtf document, weakness, i
-      title_style       = style bold: true
-      description_style = style
-
-      document.paragraph(title_style) do |p1|
-        p1 << "#{i}. #{weakness.title}"
-        p1.line_break
-      end
-
-      document.paragraph(description_style) do |p1|
-        p1 << weakness.description
-        p1.line_break
-      end
-
-      document.paragraph(title_style) do |p1|
-        p1 << I18n.t('conclusion_review.pat.rtf.weaknesses.risk')
-      end
-
-      document.paragraph(description_style) do |p1|
-        p1 << weakness.risk_text
-        p1.line_break
-      end
-
-      if weakness.current_situation.present?
-        document.paragraph(title_style) do |p1|
-          p1 << I18n.t('conclusion_review.pat.weaknesses.current_situation')
-        end
-
-        document.paragraph(description_style) do |p1|
-          p1 << weakness.current_situation
-          p1.line_break
-        end
-      end
-
-      if weakness.implemented_audited? || weakness.failure?
-        document.paragraph(title_style) do |p1|
-          p1.line_break
-          p1 << I18n.t('conclusion_review.pat.weaknesses.follow_up_date')
-        end
-
-        document.paragraph(description_style) do |p1|
-          p1 << I18n.t("conclusion_review.pat.weaknesses.follow_up_date_#{Finding::STATUS.index(weakness.state)}")
-        end
-      elsif weakness.follow_up_date
-        document.paragraph(title_style) do |p1|
-          p1 << I18n.t('conclusion_review.pat.weaknesses.follow_up_date')
-        end
-
-        document.paragraph(description_style) do |p1|
-          p1 << I18n.l(weakness.follow_up_date, format: :minimal)
-        end
-      end
-    end
-
     def put_pat_workflow_on_rtf document
       if review.workflow
         title_style       = style bold: true
@@ -730,7 +662,9 @@ module ConclusionReviews::PatRtf
           end
         end
 
-        annexes.each do |annex|
+        filtered_annexes = pat_annexes
+
+        filtered_annexes.each_with_index do |annex, idx|
           document.paragraph(title_style) do |p1|
             p1.line_break
             p1.line_break
@@ -756,6 +690,8 @@ module ConclusionReviews::PatRtf
               end
             end
           end
+
+          document.page_break if idx < annexes.size - 1
         end
       end
     end

@@ -9,6 +9,12 @@ module Findings::Tasks
     accepts_nested_attributes_for :tasks, allow_destroy: true
   end
 
+  def next_task_expiration
+    tasks.where(status: [Task.statuses['pending'], Task.statuses['in_progress']])
+         .first
+         &.due_on
+  end
+
   private
 
     def mark_tasks_as_finished
@@ -16,6 +22,6 @@ module Findings::Tasks
         state_changed? &&
         (state.presence_in(Finding::FINAL_STATUS) || repeated?)
 
-      tasks.each &:finished! if finish_tasks
+      tasks.each { |t| t.finished! unless t.finished? } if finish_tasks
     end
 end

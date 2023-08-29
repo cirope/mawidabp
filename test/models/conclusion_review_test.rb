@@ -298,6 +298,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'bic pdf conversion' do
+    skip unless Current.conclusion_pdf_format == 'bic'
+
     Current.organization = organizations :cirope
     Current.user         = users :auditor
     organization         = Current.organization
@@ -536,5 +538,17 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert File.size(file_path) > 0
 
     FileUtils.rm file_path
+  end
+
+  test 'should be draft' do
+    conclusion_draft_review = conclusion_reviews :conclusion_current_draft_review
+
+    assert conclusion_draft_review.draft?
+  end
+
+  test 'should be not draft' do
+    conclusion_draft_review = conclusion_reviews :conclusion_current_final_review
+
+    refute conclusion_draft_review.draft?
   end
 end

@@ -1,7 +1,12 @@
+# frozen_string_literal: true
+
 class ControlObjective < ApplicationRecord
   include Auditable
+  include ControlObjectives::AffectedSectorGal
   include ControlObjectives::AttributeTypes
+  include ControlObjectives::AuditSectorsGal
   include ControlObjectives::Control
+  include ControlObjectives::ControlObjectiveAuditors
   include ControlObjectives::Defaults
   include ControlObjectives::DestroyValidation
   include ControlObjectives::Json

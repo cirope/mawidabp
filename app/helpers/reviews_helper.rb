@@ -247,4 +247,19 @@ module ReviewsHelper
       [t("reviews.form.#{key}"), value]
     end
   end
+
+  def show_external_review_options review
+    Review.list.map do |r|
+      if r.conclusion_final_review &&
+        r.type_review == Review::TYPES_REVIEW[:system_audit] &&
+        r.period_id == review.period_id &&
+        r.id != review.id
+          [r.identification, r.id]
+      end
+    end.compact
+  end
+
+  def subsidiaries_options
+    Subsidiary.list.map { |s| [s.to_s, s.id] }
+  end
 end

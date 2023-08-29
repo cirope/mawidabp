@@ -6,7 +6,7 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
-//= require jquery
+//= require jquery3
 //= require jquery_ujs
 //= require jquery-ui/effects/effect-highlight
 //= require jquery-ui/widgets/autocomplete
@@ -24,6 +24,7 @@
 //= require autocomplete
 //= require best_practices
 //= require checkbox
+//= require checkbox_enable_disable_inputs
 //= require closing_interviews
 //= require common
 //= require conclusion_draft_reviews
@@ -31,6 +32,7 @@
 //= require date_pickers
 //= require documents
 //= require dynamic_form
+//= require enable_disable_card_fieldset
 //= require endless_pagination
 //= require extensions
 //= require fetch
@@ -42,11 +44,13 @@
 //= require form_modification
 //= require form_submit
 //= require hide
+//= require input_text_only_accept_numerics
 //= require licenses
+//= require memos
 //= require needs_confirm_form
 //= require news
+//= require number_pages
 //= require opening_interviews
-//= require organizations
 //= require permalinks
 //= require plan_items
 //= require plans

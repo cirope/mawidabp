@@ -1,6 +1,7 @@
 class Question < ApplicationRecord
   include Auditable
 
+  include Questions::AnswerTypeName
   include Questions::Callbacks
   include Questions::Options
   include Questions::Scopes

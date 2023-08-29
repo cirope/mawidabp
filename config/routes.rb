@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   post   'sessions', to: 'sessions#create',  as: 'sessions'
   delete 'logout',   to: 'sessions#destroy', as: 'logout'
 
+  # Authentication
+  get  'signin', to: 'authentications#new',    as: 'signin'
+  post 'auth',   to: 'authentications#create', as: 'auth'
+
   # SAML
   get 'saml/auth', to: 'saml_sessions#new', as: :new_saml_session
   post 'saml/callback', to: 'saml_sessions#create', as: :saml_session
@@ -66,7 +70,9 @@ Rails.application.routes.draw do
 
   resources :e_mails, only: [:index, :show]
 
-  resources :business_unit_types
+  resources :business_unit_types do
+    resources :business_units, only: [:edit, :update], controller: 'business_unit_types/business_units'
+  end
   resources :business_unit_kinds
 
   resources :groups
@@ -79,7 +85,7 @@ Rails.application.routes.draw do
 
   resources :time_summary
 
-  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
+  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review|user/ do
     resources :tags
   end
 
@@ -227,6 +233,20 @@ Rails.application.routes.draw do
       to: "follow_up_audit##{action}"
   end
 
+  get 'conclusion_reports/nbc_annual_report',
+    as: 'nbc_annual_report_conclusion_reports',
+    to: 'conclusion_reports#nbc_annual_report'
+  post 'conclusion_reports/create_nbc_annual_report',
+    as: 'create_nbc_annual_report_conclusion_reports',
+    to: 'conclusion_reports#create_nbc_annual_report'
+
+  get 'conclusion_reports/nbc_internal_control_qualification_as_group_of_companies',
+      as: 'nbc_internal_control_qualification_as_group_of_companies_conclusion_reports',
+      to: 'conclusion_reports#nbc_internal_control_qualification_as_group_of_companies'
+  post 'conclusion_reports/create_nbc_internal_control_qualification_as_group_of_companies',
+       as: 'create_nbc_internal_control_qualification_as_group_of_companies_conclusion_reports',
+       to: 'conclusion_reports#create_nbc_internal_control_qualification_as_group_of_companies'
+
   get 'conclusion_reports/cost_analysis',
     as: 'cost_analysis_conclusion_reports',
     to: 'conclusion_reports#cost_analysis'
@@ -271,6 +291,9 @@ Rails.application.routes.draw do
 
       get :follow_up_pdf, on: :member, to: 'findings/follow_up_pdf#show'
 
+      get :edit_bic_sigen_fields, on: :member
+      patch :update_bic_sigen_fields, on: :member
+
       collection do
         get :export_to_pdf
         get :export_to_csv
@@ -292,6 +315,8 @@ Rails.application.routes.draw do
       get :reviews_for_period
     end
   end
+
+  resource :work_papers, only: [:show]
 
   namespace :conclusion_draft_reviews do
     resources :users, only: [:index]
@@ -432,7 +457,11 @@ Rails.application.routes.draw do
 
   resources :resource_classes
 
-  resources :control_objectives, only: [:index, :show]
+  resources :control_objectives, only: [:index, :show] do
+    collection do
+      get :auto_complete_for_control_objective_auditor
+    end
+  end
 
   resources :best_practices do
     resources :process_controls, only: [:new, :edit]
@@ -487,7 +516,9 @@ Rails.application.routes.draw do
     resources :imports, only: [:new, :create]
   end
 
-  resources :users
+  resources :users do
+    get :auto_complete_for_tagging, on: :collection
+  end
 
   resource :registration, only: [:show, :new, :create]
 
@@ -495,6 +526,16 @@ Rails.application.routes.draw do
     resource :blocked, only: :show, controller: 'licenses/blocked'
     resource :check, only: :create, controller: 'licenses/check'
     resource :authorizations, only: [:new, :create], controller: 'licenses/authorizations'
+  end
+
+  resources :memos, except: [:destroy] do
+    collection do
+      get :plan_item_refresh
+    end
+
+    member do
+      get :export_to_pdf
+    end
   end
 
   root 'sessions#new'

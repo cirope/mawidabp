@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Users::Scopes
   extend ActiveSupport::Concern
 
@@ -26,6 +28,20 @@ module Users::Scopes
         }
       )
     }
+    scope :auditors, -> {
+      includes(organization_roles: :role).where(
+        roles: {
+          role_type: ::Role::TYPES[:auditor]
+        }
+      )
+    }
+    scope :include_tags, -> {
+      includes('tags').references('tags')
+    }
+  end
+
+  def recovery?
+    tags.with_option('recovery', '1').exists?
   end
 
   module ClassMethods

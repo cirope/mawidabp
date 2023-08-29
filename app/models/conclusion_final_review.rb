@@ -14,7 +14,7 @@ class ConclusionFinalReview < ConclusionReview
                 :assign_audit_date_to_control_objective_items
 
   # Restricciones de los atributos
-  attr_readonly :issue_date, :close_date, :conclusion, :applied_procedures
+  attr_readonly :issue_date, :conclusion, :applied_procedures
 
   # Relaciones
   has_one :conclusion_draft_review, through: :review
@@ -48,7 +48,12 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def duplicate_review_findings
-    findings  = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
+    findings = Finding.list
+                      .left_joins(:control_objective_item)
+                      .where(control_objective_items: { review_id: review_id }, final: false)
+                      .where.not(state: Finding::STATUS[:revoked])
+                      .order(:order_number, :id)
+
     last_code = latest_final_weakness_review_code if Current.global_weakness_code
 
     begin
@@ -109,6 +114,10 @@ class ConclusionFinalReview < ConclusionReview
           ).check_code_prefix = false
         end
 
+        unless finding.review_code.size == 8 && finding.draft_review_code.blank?
+          final_finding.draft_review_code ||= finding.draft_review_code ||= finding.review_code
+        end
+
         if Current.global_weakness_code && finding.kind_of?(Weakness)
           if finding.repeated_of.present?
             code = finding.repeated_of.review_code
@@ -131,6 +140,11 @@ class ConclusionFinalReview < ConclusionReview
 
       revoked_findings.each do |rf|
         rf.final = true
+
+        unless rf.review_code.size == 8 && rf.draft_review_code.blank?
+          rf.draft_review_code ||= rf.review_code
+        end
+
         rf.save! validate: false
       end
     rescue ActiveRecord::RecordInvalid => ex
@@ -178,6 +192,23 @@ class ConclusionFinalReview < ConclusionReview
 
   def is_frozen?
     close_date && Time.zone.today > close_date
+  end
+
+  def all_close_dates
+    all_close_dates = []
+    last_date       = close_date
+
+    dates = versions.map do |v|
+      v.reify&.close_date
+    end
+
+    dates.reverse.each do |d|
+      if d.present? && last_date && d < last_date
+        all_close_dates << last_date = d
+      end
+    end
+
+    all_close_dates.compact
   end
 
   private

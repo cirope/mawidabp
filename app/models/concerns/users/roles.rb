@@ -69,12 +69,8 @@ module Users::Roles
     USE_SCOPE_CYCLE ? roles_audited? : (roles_audited? && !roles_auditors?)
   end
 
-  def roles_audited?
-    audited? || executive_manager? || admin?
-  end
-
-  def roles_auditors?
-    auditor? || supervisor? || manager?
+  def can_act_as_auditor?
+    roles_auditors?
   end
 
   def can_act_as_audited_on? organization_id
@@ -127,6 +123,14 @@ module Users::Roles
   end
 
   private
+
+    def roles_audited?
+      audited? || executive_manager? || admin?
+    end
+
+    def roles_auditors?
+      auditor? || supervisor? || manager?
+    end
 
     def inject_auth_privileges_in_roles
       roles.each { |r| r.inject_auth_privileges Hash.new(Hash.new(true)) }

@@ -92,7 +92,7 @@ module Reports::WeaknessesByBusinessUnit
       document           = RTF::Document.new RTF::Font.new(RTF::Font::ROMAN, 'Arial')
       organization_image = current_organization.image_model&.image&.thumb&.path
 
-      if organization_image && File.exists?(organization_image)
+      if organization_image && File.exist?(organization_image)
         header = RTF::HeaderNode.new document
 
         header.paragraph { |n| n.image(organization_image) }

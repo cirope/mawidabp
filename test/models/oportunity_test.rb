@@ -277,7 +277,7 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.state = Finding::STATUS[:assumed_risk]
     @oportunity.audit_comments = '  '
 
-    if Current.conclusion_pdf_format == 'gal'
+    if %w(bic gal).include? Current.conclusion_pdf_format
       assert @oportunity.must_be_approved?
     else
       refute @oportunity.must_be_approved?
@@ -316,5 +316,20 @@ class OportunityTest < ActiveSupport::TestCase
         end
       end
     end
+  end
+
+  test 'invalid because not same draft review code parent' do
+    children                   = findings :confirmed_oportunity_final
+    children.draft_review_code = 'different code'
+
+    refute children.valid?
+    assert_error children, :draft_review_code, :not_same_draft_review_code_parent
+  end
+
+  test 'invalid because not same draft review code children' do
+    @oportunity.draft_review_code = 'different code'
+
+    refute @oportunity.valid?
+    assert_error @oportunity, :draft_review_code, :not_same_draft_review_code_children
   end
 end

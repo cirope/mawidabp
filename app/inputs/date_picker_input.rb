@@ -6,7 +6,11 @@ class DatePickerInput < SimpleForm::Inputs::Base
   private
 
     def value
-      I18n.l object.send(attribute_name) if object.send(attribute_name)
+      if object.present? && object.send(attribute_name)
+        I18n.l object.send(attribute_name) rescue nil
+      else
+        input_html_options[:value]
+      end
     end
 
     def input_options

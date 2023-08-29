@@ -1,23 +1,24 @@
+# Variable para setear cookies de session
 COOKIES_DOMAIN = ".#{ENV['APP_HOST'].sub /:.*/, ''}"
+SHARED_SESSION = ENV['SHARED_SESSION'] == 'true'
 # Dirección del correo electrónico de soporte
 SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
-# Ruta hasta el directorio de configuración
-CONFIG_PATH = File.join(Rails.root, 'config', File::SEPARATOR).freeze
-# Ruta hasta el directorio público
-PUBLIC_PATH = File.join(Rails.root, 'public', File::SEPARATOR).freeze
-# Ruta hasta el directorio privado
-PRIVATE_PATH = File.join(Rails.root, 'private', File::SEPARATOR).freeze
+# Ruta relativa directorio privado de almacenamiento de archivos
+RELATIVE_PRIVATE_PATH =
+  if Rails.env.test?
+    File.join('test', 'private').freeze
+  else
+    File.join('private').freeze
+  end
+# Ruta absoluta directorio privado de almacenamiento de archivos
+PRIVATE_PATH = File.join(Rails.root, RELATIVE_PRIVATE_PATH).freeze
 # Ruta al directorio temporal
-TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
+TEMP_PATH = File.join(Rails.root, 'tmp').freeze
 # Prefijo de la organización para administrar grupos
-APP_ADMIN_PREFIXES = ['admin', 'www', 'mawida-admin'].freeze
-# Ruta a los archivos subidos a la aplicación
-APP_FILES_PATH = File.join(PRIVATE_PATH, 'file_models', File::SEPARATOR).freeze
-# Ruta a las imágenes subidas a la aplicación
-APP_IMAGES_PATH = File.join(PRIVATE_PATH, 'image_models', File::SEPARATOR).freeze
+APP_ADMIN_PREFIXES = ['admin', 'www', 'admin-hipotecario'].freeze
 # Variable con los idiomas disponibles (Debería reemplazarse con
 # I18.available_locales cuando se haya completado la traducción a Inglés)
-AVAILABLE_LOCALES = [:es].freeze
+AVAILABLE_LOCALES = [:es, :en].freeze
 # Cantidad de días en los que es posible cambiar la contraseña luego de un
 # blanqueo
 BLANK_PASSWORD_STALE_DAYS = 3
@@ -26,11 +27,10 @@ BLANK_PASSWORD_STALE_DAYS = 3
 CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS = 7
 # Expresión regular para validar direcciones de correo
 EMAIL_REGEXP = /\A[a-z0-9'._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\Z/i
+# Restricciones para subir archivos.
+FILE_UPLOADS_CONSTRAINTS = YAML.load(ENV['FILE_UPLOADS_CONSTRAINTS']) rescue nil
 # Cantidad máxima de observaciones por PDF
 FINDING_MAX_PDF_ROWS = 100
-# Cantidad de días anteriores al vencimiento de una observación en los que el
-# sistema notificará su proximidad
-FINDING_WARNING_EXPIRE_DAYS = 7
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
 FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1
 # Fecha inicial para el envío de correo con resumen de observaciones
@@ -67,6 +67,8 @@ SPLIT_OR_TERMS_REGEXP = /\s+o\s+|\s*[,]\s*|\s+OR\s+/i
 TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 # Ruta a un archivo para realizar las pruebas (ruta completa)
 TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
+# Ruta a una imagen para realizar las pruebas (ruta completa)
+TEST_IMAGE_FULL_PATH = File.join(Rails.root, 'test/test_images', 'logo.png').freeze
 # Dirección base para formar los links absolutos
 URL_HOST = (ENV['APP_HOST'] + (Rails.env.development? ? ':3000' : '')).freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador
@@ -91,9 +93,15 @@ POSTGRESQL_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' 
 # Limite de filas en reportes para servir en real-time
 SEND_REPORT_EMAIL_AFTER_COUNT = 100
 # Planes de licencias
-LICENSE_PLANS = YAML.load(
-  File.read('config/license_plans.yml')
-)[Rails.env].with_indifferent_access.freeze
+LICENSE_PLANS = if RUBY_VERSION >= '3.1.0'
+                  YAML.load(
+                    File.read('config/license_plans.yml'), aliases: true
+                  )[Rails.env].with_indifferent_access.freeze
+                else
+                  YAML.load(
+                    File.read('config/license_plans.yml')
+                  )[Rails.env].with_indifferent_access.freeze
+                end
 # Redis config
 REDIS_HOST = ENV['REDIS_HOST'] || 'localhost'
 REDIS_PORT = ENV['REDIS_PORT'] || '6379'

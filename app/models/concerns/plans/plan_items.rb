@@ -16,6 +16,13 @@ module Plans::PlanItems
     plan_items.group_by { |pi| pi.business_unit&.business_unit_type }
   end
 
+  def plan_items_for_but_and_abut business_unit_type_id
+    plan_items.select do |pi|
+      pi.business_unit&.business_unit_type_id == business_unit_type_id ||
+        pi.auxiliar_business_unit_types.any? { |auxbu| auxbu.business_unit_type_id == business_unit_type_id }
+    end.sort
+  end
+
   private
 
     def plan_items_on date

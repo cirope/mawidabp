@@ -79,6 +79,6 @@ class BusinessUnitKindsControllerTest < ActionController::TestCase
 
     def use_business_unit_kinds?
       !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS &&
-        HIDE_FINDING_CRITERIA_MISMATCH
+        HIDE_FINDING_CRITERIA_MISMATCH && !USE_SCOPE_CYCLE
     end
 end

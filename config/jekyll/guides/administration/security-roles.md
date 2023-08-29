@@ -34,12 +34,12 @@ Veedor | cualquier tipo
 
 A continuación mostramos un ejemplo de los perfiles básicos que tienen que estar cargados en el sistema para poder iniciar su uso.
 
-![]({% asset administration/security/users-13.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-13.png){: class="img-responsive"}
 
 A continuación mostramos los campos a completar para agregar un **Nuevo perfil** y sus privilegios (permisos).
 
-![]({% asset administration/security/users-14.png @path %}){: class="img-responsive"}
-![]({% asset administration/security/users-15.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-14.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-15.png){: class="img-responsive"}
 
 Una vez cargados los datos de la pantalla anterior, seleccionamos **Crear Perfil**.
 
@@ -50,25 +50,25 @@ Permite ver gráficos y en una tabla el estado de las observaciones que correspo
 
 Seleccionamos Editar **->** Acciones **->** Estado
 
-![]({% asset administration/security/users-16.png @path %}){: class="img-responsive"}
-![]({% asset administration/security/users-17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-16.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-17.png){: class="img-responsive"}
 
 **Reporte para ver las observaciones pendientes y solucionadas de un usuario y de las personas que tiene a cargo**
 
 **Administración -> Seguridad**.
 
-![]({% asset administration/security/users-18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-18.png){: class="img-responsive"}
 
 Seleccionamos ¨Editar¨ del usuario que necesitamos, vamos al final de la pantalla y seleccionamos ¨Acciones¨ (podemos observar que el cargo de Supervisor tiene una persona a cargo).
 
-![]({% asset administration/security/users-19.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-19.png){: class="img-responsive"}
 
 Seleccionamos ¨Estado¨, nos muestra la siguiente pantalla.
 
-![]({% asset administration/security/users-20.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-20.png){: class="img-responsive"}
 
 A la derecha de la pantalla muestra un icono **¨Persona¨**, si hacemos clic vemos el listado de todas las observaciones del usuario y las personas que tengan a cargo.
 
-![]({% asset administration/security/users-21.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/security/users-21.png){: class="img-responsive"}
 
 Tenemos la posibilidad de ¨Descargar CSV¨ y ¨Resumen en PDF¨

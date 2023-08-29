@@ -20,7 +20,12 @@ module Weaknesses::Validations
               :internal_control_components,
               presence: true, if: :validate_extra_attributes?
     validates :compliance_observations, presence: true, if: :compliance_require_observations?
-    validate :fields_bic_cannot_modified
+    validates :compliance_susceptible_to_sanction,
+              inclusion: { in: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values },
+              if: :compliance_require_observations?
+    validates :year, :nsisio, :nobs, length: { maximum: 4 },
+                                     numericality: { only_integer: true },
+                                     allow_blank: true
     validates :risk_justification, presence: true, if: :bic_require_is_manual_risk_enabled?
     validates :risk_justification, absence: true, if: :bic_require_is_manual_risk_disabled?
     validates :state_regulations,
@@ -29,6 +34,12 @@ module Weaknesses::Validations
               :sample_deviation, :impact_risk,
               :probability, :external_repeated,
               presence: true, if: :bic_require_is_manual_risk_disabled?
+    validates :state_regulations,
+              :degree_compliance,
+              :observation_originated_tests,
+              :sample_deviation, :impact_risk,
+              :probability, :external_repeated,
+              absence: true, if: :bic_require_is_manual_risk_enabled?
     validate  :bic_calculated_risk, if: :bic_require_is_manual_risk_disabled?
   end
 
@@ -77,20 +88,6 @@ module Weaknesses::Validations
       self.operational_risk = Array(operational_risk).reject &:blank?
       self.internal_control_components =
         Array(internal_control_components).reject &:blank?
-    end
-
-    def fields_bic_cannot_modified
-      if repeated_of.present?
-        %i[year nsisio nobs].each do |attr|
-          errors.add attr, :different_from_repeated_of if self[attr] != repeated_of[attr]
-        end
-      elsif fields_bic_frozen?
-        %i[year nsisio nobs].each { |attr| errors.add attr, :frozen if send("#{attr}_changed?") }
-      end
-    end
-
-    def fields_bic_frozen?
-      review.try(:is_frozen?) || repeated?
     end
 
     def bic_require_is_manual_risk_disabled?

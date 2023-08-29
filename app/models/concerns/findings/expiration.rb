@@ -10,31 +10,29 @@ module Findings::Expiration
   end
 
   module ClassMethods
-    def expires_very_soon
-      date = if Time.zone.now < Time.zone.now.noon
-               Time.zone.today
-             else
-               1.business_day.from_now.to_date
-             end
-
-      expires_on date
-    end
-
-    def next_to_expire
-      expires_on FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
-    end
-
     def warning_users_about_expiration
       # Sólo si no es sábado o domingo (porque no tiene sentido)
       if Time.zone.today.workday?
-        users = next_to_expire.or(expires_very_soon).inject([]) do |u, finding|
-          u | finding.users
-        end
+        finding_warning_expire_days_parameters.each do |organization, value|
+          Current.organization = organization
+          Current.group        = organization.group
+          expire_days          = value.to_s.split(',').map { |v| v.strip.to_i }
 
-        users.each do |user|
-          findings = user.findings.next_to_expire.or user.findings.expires_very_soon
+          expire_dates = expire_days.map do |day|
+            day.business_days.from_now.to_date if day > 0
+          end.compact
 
-          NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
+          if expire_dates.present?
+            users = list.expires_on(expire_dates).inject([]) do |u, finding|
+              u | finding.users
+            end
+
+            users.each do |user|
+              findings = user.findings.list.expires_on expire_dates
+
+              NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
+            end
+          end
         end
       end
     end
@@ -53,19 +51,34 @@ module Findings::Expiration
       end
     end
 
+
+    def expires_on dates
+      dates.map do |from|
+        to = expires_to_date from
+
+        where follow_up_date: from..to
+      end.
+        inject(:or).
+        finals(:false).
+        pending_statuses
+    end
+
+    def pending_statuses
+      being_implemented
+    end
+
     private
-
-      def expires_on date
-        from = date
-        to   = expires_to_date from
-
-        being_implemented.finals(false).where follow_up_date: from..to
-      end
 
       def expires_to_date date
         date = date.next until date.next.workday?
 
         date
+      end
+
+      def finding_warning_expire_days_parameters
+        Organization.all_parameters('finding_warning_expire_days').map do |p|
+          [p[:organization], p[:parameter]]
+        end
       end
   end
 end

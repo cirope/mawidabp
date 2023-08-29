@@ -51,6 +51,32 @@ class OrganizationsControllerTest < ActionController::TestCase
     assert_equal groups(:main_group).id, assigns(:organization).reload.group_id
   end
 
+  test 'create organization with saml_provider' do
+    assert_difference ['Organization.count', 'SamlProvider.count'] do
+      post :create, params: {
+        organization: {
+          name:        'New organization',
+          prefix:      'new-prefix',
+          description: 'New description',
+          group_id:    groups(:main_group).id,
+          saml_provider_attributes: {
+            provider: 'azure',
+            idp_homepage: 'https://login.microsoftonline.com/test/federationmetadata/2007-06/federationmetadata.xml',
+            idp_entity_id: 'https://sts.windows.net/test/',
+            idp_sso_target_url: 'https://login.microsoftonline.com/test/saml2',
+            sp_entity_id: 'https://test.com/saml/metadata',
+            assertion_consumer_service_url: 'https://test.com/saml/callback',
+            name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
+            assertion_consumer_service_binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+            idp_cert: 'cert_test'
+          }
+        }
+      }
+    end
+
+    assert_equal groups(:main_group).id, assigns(:organization).reload.group_id
+  end
+
   test 'create organization with LDAP config' do
     assert_difference ['Organization.count', 'LdapConfig.count'] do
       post :create, params: {
@@ -95,7 +121,7 @@ class OrganizationsControllerTest < ActionController::TestCase
           group_id: groups(:main_group).id,
           ldap_config_attributes: {
             hostname: 'localhost',
-            port: ENV['TRAVIS'] ? 3389 : 389,
+            port: ENV['GH_ACTIONS'] ? 3389 : 389,
             basedn: 'ou=people,dc=test,dc=com',
             filter: 'CN=*',
             login_mask: 'cn=%{user},%{basedn}',

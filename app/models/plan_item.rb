@@ -5,16 +5,19 @@ class PlanItem < ApplicationRecord
   include PlanItems::AttributeTypes
   include PlanItems::AuxiliarBusinessUnitTypes
   include PlanItems::BestPractices
+  include PlanItems::BusinessUnit
   include PlanItems::Comparable
   include PlanItems::ControlObjectives
   include PlanItems::DestroyValidation
   include PlanItems::Pdf
+  include PlanItems::Progress
   include PlanItems::ResourceUtilizations
   include PlanItems::Scope
   include PlanItems::Scopes
   include PlanItems::Spread
   include PlanItems::Stats
   include PlanItems::Status
+  include PlanItems::StatusCsvPat
   include PlanItems::Units
   include PlanItems::Validations
   include Taggable
@@ -24,6 +27,7 @@ class PlanItem < ApplicationRecord
   belongs_to :plan, optional: true
   belongs_to :business_unit, optional: true
   has_one :review
+  has_one :memo
   has_one :conclusion_final_review, through: :review
   has_one :business_unit_type, through: :business_unit
 

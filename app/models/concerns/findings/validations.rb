@@ -18,10 +18,12 @@ module Findings::Validations
     validate :validate_state
     validate :validate_review_code, if: -> { repeated_of.blank? }
     validate :validate_finding_user_assignments
-    validate :validate_manager_presence, if: :validate_manager_presence?
-    validate :validate_follow_up_date,   if: :check_dates?
-    validate :validate_solution_date,    if: :check_dates?
-    validate :extension_enabled,         if: :extension
+    validate :validate_manager_presence,  if: :validate_manager_presence?
+    validate :validate_follow_up_date,    if: :check_dates?
+    validate :validate_solution_date,     if: :check_dates?
+    validate :extension_enabled,          if: :extension
+    validate :validate_draft_review_code, if: -> { !revoked? }
+    validate :validate_required_tags
   end
 
   def is_in_a_final_review?
@@ -197,23 +199,76 @@ module Findings::Validations
     end
 
     def extension_enabled
-      if !being_implemented?
-        errors.add :extension, :must_be_being_implemented, { extension: Finding.human_attribute_name(:extension),
-                                                             state: I18n.t('findings.state.being_implemented') }
-      elsif persisted? && cant_have_an_extension?
-        errors.add :extension, :had_no_extension_when_being_implemented, { extension: Finding.human_attribute_name(:extension) }
+      if Finding.states_that_allow_extension.exclude?(state)
+        errors.add :extension,
+                   :must_have_state_that_allows_extension,
+                   extension: Finding.human_attribute_name(:extension),
+                   states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
+      elsif cant_have_an_extension?
+        errors.add :extension,
+                   :cant_have_extension_when_didnt_have_extension,
+                   extension: Finding.human_attribute_name(:extension),
+                   states: "#{I18n.t('findings.state.being_implemented')} o #{I18n.t('findings.state.awaiting')}"
       end
     end
 
     def cant_have_an_extension?
-      not_the_first_version_of_being_implemented? && !extension_was && being_implemented_was?
+      persisted? &&
+        review.conclusion_final_review.present? &&
+        !extension_was
     end
 
-    def not_the_first_version_of_being_implemented?
-      had_version_with_being_implemented? || being_implemented_was?
+    def validate_draft_review_code
+      if final?
+        check_invalid_draft_review_code_when_is_final
+      else
+        check_invalid_draft_review_code_when_is_not_final
+      end
     end
 
-    def being_implemented_was?
-      state_was == Finding::STATUS[:being_implemented]
+    def check_invalid_draft_review_code_when_is_final
+      if parent.draft_review_code != draft_review_code
+        errors.add :draft_review_code, :not_same_draft_review_code_parent
+      end
+    end
+
+    def check_invalid_draft_review_code_when_is_not_final
+      if children.present? && children.take.draft_review_code != draft_review_code
+        errors.add :draft_review_code, :not_same_draft_review_code_children
+      end
+    end
+
+    def validate_required_tags
+      required_tags = organization.tags.for_findings.non_roots.group_by &:parent
+
+      required_tags.each do |tag, subtags|
+        if tag.required_min&.positive? || tag.required_max&.positive?
+          required_from = Date.parse(tag.required_from) if tag.required_from.present?
+          validate_from = created_at || Time.zone.now
+          required_min  = tag.required_min
+          required_max  = tag.required_max
+
+          if !required_from || validate_from >= required_from
+            assigned_tags = taggings.reject(&:marked_for_destruction?).map &:tag
+            subtags_count = (subtags & assigned_tags).count
+
+            result = if required_min&.positive? && required_max&.positive?
+              subtags_count.between? required_min, required_max
+            elsif required_min&.positive?
+              subtags_count >= required_min
+            elsif required_max&.positive?
+              subtags_count <= required_max
+            end
+
+            unless result
+              required_errors = []
+              required_errors << "#{tag.required_min_label}: #{required_min}" if required_min&.positive?
+              required_errors << "#{tag.required_max_label}: #{required_max}" if required_max&.positive?
+
+              errors.add :base, "#{Tag.model_name.human} #{tag.name}: #{required_errors.join ', '}"
+            end
+          end
+        end
+      end
     end
 end

@@ -113,9 +113,7 @@ module Reviews::Score
     medium_score    = 50
     hundred_percent = 100
 
-    scores = weaknesses.select { |w| w.state_weight > 0 }.group_by do |w|
-      [w.risk_weight, w.state_weight, w.age_weight(date: date)]
-    end
+    scores = score_by_weakness_reviews date
 
     total = scores.sum do |row, weaknesses|
       row.unshift weaknesses.size
@@ -135,6 +133,33 @@ module Reviews::Score
       max = 16
 
       self.score = max - ((total * min) / high_score.next).to_i
+    end
+  end
+
+  def score_by_weakness_reviews date
+    weaknesses_total = []
+
+    weaknesses_total << implemented_audited_or_being_implemented_w
+
+    weaknesses_total << external_reviews.flat_map do |er|
+      er.alternative_review.implemented_audited_or_being_implemented_w
+    end
+
+    scores = weaknesses_total.flatten.group_by do |w|
+      [w.risk_weight, w.state_weight, w.age_weight(date: date)]
+    end
+
+    scores
+  end
+
+  def implemented_audited_or_being_implemented_w
+    total_weaknesses = conclusion_final_review ? [final_weaknesses] : [weaknesses]
+
+    assigned_findings = finding_review_assignments.map(&:finding)
+    total_weaknesses << assigned_findings
+
+    total_weaknesses.flatten.select do |w|
+      w.being_implemented? || w.implemented_audited?
     end
   end
 

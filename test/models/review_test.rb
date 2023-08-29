@@ -130,7 +130,21 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert review.invalid?
     assert_error review, :identification, :taken
-    assert_error review, :plan_item_id, :taken
+    assert_error review, :plan_item_id, :used
+  end
+
+  test 'invalid because Memo have same plan item' do
+    @review.plan_item = plan_items :current_plan_item_6
+
+    refute @review.valid?
+    assert_error @review, :plan_item_id, :used
+  end
+
+  test 'invalid because another review have same plan item' do
+    @review.plan_item = plan_items :current_plan_item_1
+
+    refute @review.valid?
+    assert_error @review, :plan_item_id, :used
   end
 
   test 'validate unique identification number' do
@@ -199,7 +213,7 @@ class ReviewTest < ActiveSupport::TestCase
     tag           = tags :manual
     tag_option    = opts[:require_tags].first
 
-    tag.update! options: [tag_option]
+    tag.update! options: { tag_option => '1' }
 
     assert @review.invalid?
     assert_error @review, :taggings, :missing_tags_for_scope,
@@ -285,7 +299,7 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'review score by weaknesses' do
-    skip if score_type != :weaknesses
+    skip if USE_SCOPE_CYCLE || score_type != :weaknesses
 
     # With two low risk and not repeated weaknesses
     assert_equal :require_some_improvements, @review.score_array.first
@@ -302,8 +316,9 @@ class ReviewTest < ActiveSupport::TestCase
 
     finding.save!(:validate => false)
 
+    score_weakness = SCORE_BY_WEAKNESS.present? ? :require_improvements : :require_some_improvements
     # High risk counts 12
-    assert_equal :require_some_improvements, @review.reload.score_array.first
+    assert_equal score_weakness , @review.reload.score_array.first
     assert_equal 84, @review.score
 
     repeated_of = findings :being_implemented_weakness
@@ -337,7 +352,7 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item.update! scope: scope.first
 
     # With two low risk on design
-    assert_equal :improve, @review.score_array.first
+    assert_equal :regular, @review.score_array.first
     assert_equal 50, @review.score
     assert_equal 75, @review.score_alt
     assert_equal 'splitted_effectiveness', @review.score_type
@@ -358,10 +373,21 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal 'splitted_effectiveness', @review.score_type
   end
 
+  test 'implemented audited or being_implemented weaknesses' do
+    @review = reviews(:current_review)
+
+    @review.finding_review_assignments_attributes = [{ finding_id: findings(:being_implemented_weakness_on_final).id }]
+
+    states       = @review.implemented_audited_or_being_implemented_w.pluck(:state)
+    valid_states = [:implemented_audited, :being_implemented].map { |s| Finding::STATUS[s] }
+
+    assert states.all? { |state| valid_states.include?(state) }
+  end
+
   test 'must be approved function' do
     @review = reviews(:review_approved_with_conclusion)
 
-    @review.file_models << FileModel.take!
+    @review.file_models << FileModel.create!(file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain'))
     @review.save!
 
     assert @review.must_be_approved?
@@ -532,6 +558,27 @@ class ReviewTest < ActiveSupport::TestCase
       assert @review.approval_errors.flatten.include?(
         I18n.t('review.errors.without_score')
       )
+    end
+
+    # alternative_reviews_errors method
+    if Current.conclusion_pdf_format == 'nbc'
+      @review.external_reviews_attributes = [
+        { alternative_review_id: reviews(:past_review).id }
+      ]
+
+      @review.external_reviews.map(&:alternative_review).each do |alt_review|
+        alt_issue_date = 1.week.from_now.to_date.to_formatted_s(:db)
+
+        alt_review.conclusion_final_review.issue_date = alt_issue_date
+
+        refute @review.must_be_approved?
+        assert @review.approval_errors.flatten.include?(
+          I18n.t('external_review.errors.issue_date_after_review_issue_date', date: alt_issue_date)
+        )
+      end
+
+      assert @review.reload.must_be_approved?
+      assert @review.approval_errors.blank?
     end
 
     @review.review_user_assignments.each { |rua| rua.audited? && rua.delete }
@@ -882,6 +929,7 @@ class ReviewTest < ActiveSupport::TestCase
     order = [
       repeated_order,
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
     ].map { |o| Arel.sql o }
 

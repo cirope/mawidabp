@@ -6,17 +6,14 @@ module Answers::Validations
 
     validates :type, inclusion: { in: TYPES }, allow_nil: true,
       allow_blank: true
-    validate :answer_options, on: :update
+    validate :answer_written, on: :update
   end
 
   private
 
-    def answer_options
-      should_have_answer = question.answer_multi_choice? ||
-                           question.answer_yes_no?
-
-      if should_have_answer && answer_option.blank?
-        errors.add(:answer_option, :blank)
+    def answer_written
+      if question&.answer_written? && answer.length > 255
+        errors.add :answer, :too_long, count: 255
       end
     end
 end
