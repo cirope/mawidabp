@@ -25,7 +25,7 @@ GEM
     http_parser.rb (0.8.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
-    jekyll (4.3.2)
+    jekyll (4.3.1)
       addressable (~> 2.4)
       colorator (~> 1.0)
       em-websocket (~> 0.5)
@@ -56,12 +56,9 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     mercenary (0.4.0)
-    nokogiri (1.12.5-x86_64-linux)
-      racc (~> 1.4)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
     public_suffix (5.0.3)
-    racc (1.7.1)
     rack (2.2.8)
     rake (13.0.6)
     rb-fsevent (0.11.2)
@@ -72,7 +69,7 @@ GEM
     safe_yaml (1.0.5)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
-    sass-embedded (1.63.6)
+    sass-embedded (1.66.1)
       google-protobuf (~> 3.23)
       rake (>= 13.0.0)
     sass-listen (4.0.0)
@@ -98,13 +95,12 @@ DEPENDENCIES
   bootstrap-sass
   coffee-script
   execjs (< 2.8)
-  jekyll (~> 4.3.1)
+  jekyll (= 4.3.1)
   jekyll-multiple-languages-plugin
   kramdown
-  nokogiri (= 1.12.5)
   sass
   sprockets (~> 3.7)
   uglifier
 
 BUNDLED WITH
-   2.2.16
+   2.4.5
