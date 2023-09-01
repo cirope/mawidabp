@@ -27,7 +27,7 @@
             <%= submit_tag t('.log_in'), class: 'btn btn-lg btn-outline-secondary' %>
           </div>
 
-          <% if current_organization.blank? || (current_organization.ldap_config.blank? && current_organization.saml_provider.blank?) %>
+          <% if current_organization.blank? || current_organization.ldap_config.blank? %>
             <hr>
 
             <p>
