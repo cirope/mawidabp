@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_24_123724) do
+ActiveRecord::Schema.define(version: 2023_09_02_152424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1282,11 +1282,13 @@ ActiveRecord::Schema.define(version: 2023_07_24_123724) do
     t.boolean "hidden", default: false
     t.string "organizational_unit"
     t.string "office"
+    t.string "saml_request_id"
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"
     t.index ["hidden"], name: "index_users_on_hidden"
     t.index ["manager_id"], name: "index_users_on_manager_id"
+    t.index ["saml_request_id"], name: "index_users_on_saml_request_id"
     t.index ["user"], name: "index_users_on_user"
   end
 

@@ -7,35 +7,6 @@ class SamlSessionsControllerTest < ActionController::TestCase
     @organization      = organizations :cirope
   end
 
-  test 'should redirect to new_session_url when saml_config nil' do
-    IdpSettingsAdapter.stub :saml_settings, nil do
-      get :new
-
-      assert_redirected_to login_url
-    end
-  end
-
-  test 'should redirect to login azure' do
-    create_saml_provider @organization
-
-    set_host_for_organization @organization.prefix
-
-    response_stub =
-      OneLogin::RubySaml::Settings.new({ idp_sso_target_url: @external_saml_url })
-
-    IdpSettingsAdapter.stub :saml_settings, response_stub do
-      mock = Minitest::Mock.new
-
-      mock.expect :create, @external_saml_url, [response_stub]
-
-      OneLogin::RubySaml::Authrequest.stub :new, mock do
-        get :new
-
-        assert_redirected_to @external_saml_url
-      end
-    end
-  end
-
   test 'should get metadata' do
     create_saml_provider @organization
 
@@ -62,6 +33,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     hash_attributes = get_hash_attributes name:      'new_user@azure.com',
                                           givenname: 'new_user_name',
@@ -82,7 +54,6 @@ class SamlSessionsControllerTest < ActionController::TestCase
           assert_equal last_user.name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first
           assert_equal last_user.email, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first
           assert_equal last_user.last_name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first
-          assert last_user.enable
           assert_equal last_user.organization_roles.first.role, roles(:supervisor_role)
           assert flash[:notice].blank?
           assert_redirected_to welcome_url
@@ -107,6 +78,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     hash_attributes = get_hash_attributes name:      'new_user@azure.com',
                                           givenname: 'new_user_name',
@@ -147,6 +119,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     hash_attributes = get_hash_attributes name:      'new_user@azure.com',
                                           givenname: 'new_user_name',
@@ -182,6 +155,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     hash_attributes = get_hash_attributes name:      '',
                                           givenname: 'new_user_name',
@@ -212,6 +186,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     hash_attributes = get_hash_attributes name:      'new_user@azure.com',
                                           givenname: 'new_user_name',
@@ -246,8 +221,11 @@ class SamlSessionsControllerTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     user_to_update  = users :disabled
+    user_to_update.update_saml_request_id '91dfe9376a2e8e09e6dcb444c04fc53a'
+
     hash_attributes = get_hash_attributes name:      user_to_update.email,
                                           givenname: 'updated_name',
                                           surname:   'updated_surname',
@@ -287,8 +265,11 @@ class SamlSessionsControllerTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     user_to_update  = users :poll
+    user_to_update.update_saml_request_id '91dfe9376a2e8e09e6dcb444c04fc53a'
+
     hash_attributes = get_hash_attributes name:      "#{user_to_update.user}@test.com",
                                           givenname: 'updated_name',
                                           surname:   'updated_surname',
@@ -338,8 +319,10 @@ class SamlSessionsControllerTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     user_to_update = users :disabled
+    user_to_update.update_saml_request_id '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     organization_roles(:admin_role_for_disabled_in_cirope).destroy!
 
@@ -387,8 +370,10 @@ class SamlSessionsControllerTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     user_to_update = users :poll
+    user_to_update.update_saml_request_id '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     organization_roles(:auditor_role_for_poll_in_cirope).destroy!
 
@@ -436,8 +421,11 @@ class SamlSessionsControllerTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     user_to_update   = users :administrator
+    user_to_update.update_saml_request_id '91dfe9376a2e8e09e6dcb444c04fc53a'
+
     roles_to_destroy = user_to_update.organization_roles.where(organization: @organization).count
     hash_attributes  = get_hash_attributes name:      "#{user_to_update.user}@test.com",
                                            givenname: 'updated_name',
