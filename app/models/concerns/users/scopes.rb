@@ -44,6 +44,10 @@ module Users::Scopes
     tags.with_option('recovery', '1').exists?
   end
 
+  def update_saml_request_id new_request_id
+    update_column :saml_request_id, new_request_id
+  end
+
   module ClassMethods
     def by_email email
       where(
