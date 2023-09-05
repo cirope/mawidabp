@@ -14,6 +14,16 @@ class ImageUploader < CarrierWave::Uploader::Base
     File.join RELATIVE_PRIVATE_PATH, organization_id, model.class.to_s.underscore.pluralize, id
   end
 
+  def extension_allowlist
+    FILE_UPLOADS_CONSTRAINTS&.fetch 'extensions', nil
+  end
+
+  def size_range
+    size_limit = FILE_UPLOADS_CONSTRAINTS&.fetch 'size_limit', nil
+
+    1.byte..size_limit.megabytes if size_limit
+  end
+
   version :medium do
     process resize_to_fit: [600, 600]
     process convert: 'png'
@@ -48,10 +58,6 @@ class ImageUploader < CarrierWave::Uploader::Base
     def full_filename for_file
       full_filename_with_extension super(for_file), 'png'
     end
-  end
-
-  def extension_allowlist
-    %w(jpg jpeg gif png)
   end
 
   private
