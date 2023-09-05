@@ -64,8 +64,8 @@ class Authentication
       @params[:user]    = pruned_attributes[:user]
       conditions        = { saml_request_id: saml_response.in_response_to }
 
-      user = User.find_by(conditions.merge(email: email)) ||
-             User.find_by(conditions.merge(user: @params[:user]))
+      user = User.where(conditions).by_email(email) ||
+             User.where(conditions).by_user(@params[:user])
 
       if user
         update_user user, pruned_attributes.merge(email: email)
