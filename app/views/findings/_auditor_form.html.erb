@@ -57,27 +57,27 @@
         <% if %w(bic).include? Current.conclusion_pdf_format %>
           <div class="row">
             <div class="col-md-4">
-              <%= f.input :year, 
-                          input_html: 
-                          { 
+              <%= f.input :year,
+                          input_html:
+                          {
                             maxlength: 4,
-                            data: { input_text_only_accept_numerics: true } 
+                            data: { input_text_only_accept_numerics: true }
                           } %>
             </div>
             <div class="col-md-4">
-              <%= f.input :nsisio, 
-                          input_html: 
-                          { 
+              <%= f.input :nsisio,
+                          input_html:
+                          {
                             maxlength: 4,
-                            data: { input_text_only_accept_numerics: true } 
+                            data: { input_text_only_accept_numerics: true }
                           } %>
             </div>
             <div class="col-md-4">
-              <%= f.input :nobs, 
-                          input_html: 
-                          { 
+              <%= f.input :nobs,
+                          input_html:
+                          {
                             maxlength: 4,
-                            data: { input_text_only_accept_numerics: true } 
+                            data: { input_text_only_accept_numerics: true }
                           } %>
             </div>
           </div>
@@ -186,7 +186,7 @@
         <% options_for_select = if USE_SCOPE_CYCLE
                                   {
                                     data:
-                                      { 
+                                      {
                                         target_values_enable_checkbox: extension_enabled?(f.object) ? Finding.states_that_allow_extension : [],
                                         target_checkbox: '#finding_extension'
                                       }.merge(data_options_for_suggested_follow_up_date('finding'))
@@ -259,7 +259,7 @@
         <div class="col-md-2">
           <%= f.input :compliance_susceptible_to_sanction, collection: weakness_compliance_susceptible_to_sanction_options,
                                                 include_blank: t('helpers.select.prompt'),
-                                                input_html: { 
+                                                input_html: {
                                                   data: { compliance_susceptible_to_sanction: true }
                                                 } %>
         </div>
@@ -469,8 +469,9 @@
     <%= link_to_add_fields(t('finding.add_task'), f, :tasks) %>
   </div>
 
-  <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
   <% if USE_SCOPE_CYCLE %>
+    <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
+
     <div class="row">
       <div class="col-md-2">
         <%= f.input :impact_amount, disabled: true %>
@@ -479,34 +480,35 @@
         <%= f.input :probability_amount, disabled: true %>
       </div>
     </div>
-  <% end %>
-  <div class="row">
-    <div class="col-md-2">
-      <h5 class="h6"><%= Issue.human_attribute_name 'customer' %></h5>
-    </div>
-    <div class="col-md-2 d-none d-md-block">
-      <h5 class="h6"><%= Issue.human_attribute_name 'entry' %></h5>
-    </div>
-    <div class="col-md-2 d-none d-md-block">
-      <h5 class="h6"><%= Issue.human_attribute_name 'operation' %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= Issue.human_attribute_name 'comments' %></h5>
-    </div>
-    <div class="col-md-1">
-      <h5 class="h6"><%= Issue.human_attribute_name 'close_date' %></h5>
-    </div>
-    <div class="col-md-1">
-      <h5 class="h6"><%= Issue.human_attribute_name 'currency' %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= Issue.human_attribute_name 'amount' %></h5>
-    </div>
-  </div>
 
-  <div id="issues">
-    <%= render 'issues', f: f, readonly: users_readonly %>
-  </div>
+    <div class="row">
+      <div class="col-md-2">
+        <h5 class="h6"><%= Issue.human_attribute_name 'customer' %></h5>
+      </div>
+      <div class="col-md-2 d-none d-md-block">
+        <h5 class="h6"><%= Issue.human_attribute_name 'entry' %></h5>
+      </div>
+      <div class="col-md-2 d-none d-md-block">
+        <h5 class="h6"><%= Issue.human_attribute_name 'operation' %></h5>
+      </div>
+      <div class="col-md-2">
+        <h5 class="h6"><%= Issue.human_attribute_name 'comments' %></h5>
+      </div>
+      <div class="col-md-1">
+        <h5 class="h6"><%= Issue.human_attribute_name 'close_date' %></h5>
+      </div>
+      <div class="col-md-1">
+        <h5 class="h6"><%= Issue.human_attribute_name 'currency' %></h5>
+      </div>
+      <div class="col-md-2">
+        <h5 class="h6"><%= Issue.human_attribute_name 'amount' %></h5>
+      </div>
+    </div>
+
+    <div id="issues">
+      <%= render 'issues', f: f, readonly: users_readonly %>
+    </div>
+  <% end %>
 
   <h5 class="mt-3">
     <%= t('finding.finding_answers') %>
