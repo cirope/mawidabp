@@ -13,7 +13,7 @@ gem 'validates_timeliness', git: 'https://github.com/adzap/validates_timeliness.
 gem 'redcarpet'
 gem 'whenever'
 gem 'paper_trail', '< 15'
-gem 'carrierwave'
+gem 'carrierwave', '< 3'
 gem 'acts_as_tree'
 gem 'net-ldap'
 gem 'rubyzip', require: 'zip'
