@@ -35,6 +35,13 @@ module Users::Scopes
         }
       )
     }
+    scope :auditors_and_audited, -> {
+      includes(organization_roles: :role).where(
+        roles: {
+          role_type: [::Role::TYPES[:auditor], ::Role::TYPES[:audited]]
+        }
+      )
+    }
     scope :include_tags, -> {
       includes('tags').references('tags')
     }
