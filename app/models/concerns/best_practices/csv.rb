@@ -33,7 +33,8 @@ module BestPractices::Csv
         ControlObjective.human_attribute_name('obsolete'),
         (ControlObjective.human_attribute_name('audit_sector') if show_gal_columns?),
         (ControlObjective.human_attribute_name('date_charge') if show_gal_columns?),
-        (ControlObjectiveAuditor.model_name.human if show_gal_columns?),
+        (I18n.t('best_practice.auditors') if show_gal_columns?),
+        (I18n.t('best_practice.audited') if show_gal_columns?),
         (Tag.model_name.human(count: 0) if show_gal_columns?),
         (Sector.model_name.human if show_gal_columns?)
       ].compact
@@ -44,6 +45,14 @@ module BestPractices::Csv
 
       process_controls.each do |process_control|
         process_control.control_objectives.each do |control_objective|
+
+          if show_gal_columns?
+            auditors, audited = control_objective&.control_objective_auditors.map { |u| u.user }.partition(&:auditor?)
+
+            auditors = auditors.map { |u| u.full_name }.join(" ; ")
+            audited = audited.map { |u| u.full_name }.join(" ; ")
+          end
+
           rows << [
             process_control.name.to_s,
             control_objective.name.to_s,
@@ -57,7 +66,8 @@ module BestPractices::Csv
             I18n.t(control_objective.obsolete ? 'label.yes' : 'label.no'),
             (control_objective.audit_sector.to_s if show_gal_columns?),
             (date_charge_format(control_objective) if show_gal_columns?),
-            (control_objective&.control_objective_auditors.map { |u| u.user.full_name }.join(' ; ') if show_gal_columns?),
+            (auditors if show_gal_columns?),
+            (audited if show_gal_columns?),
             (control_objective&.taggings.map(&:tag).join(' ; ') if show_gal_columns?),
             (control_objective&.affected_sector&.name if show_gal_columns?)
           ].compact
