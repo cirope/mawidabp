@@ -102,8 +102,8 @@ es:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
       control_objective_auditor:
-        one: 'Auditor a cargo'
-        other: 'Auditores a cargo'
+        one: 'Auditor/Referente a cargo'
+        other: 'Auditores/Referentes a cargo'
       document:
         one: 'Documento'
         other: 'Documentos'
