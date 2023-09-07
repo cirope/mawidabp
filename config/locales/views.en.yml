@@ -108,7 +108,7 @@ en:
       title: 'Control objective details'
     new:
       tagging: 'Add tag'
-      add_control_objective_auditor: 'Add auditor in charge'
+      add_control_objective_auditor: 'Add auditor/auditee in charge'
     score_type:
       option: 'Options'
       percentage: 'Percentage'

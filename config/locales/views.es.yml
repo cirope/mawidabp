@@ -108,7 +108,7 @@ es:
       title: 'Detalles del objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
-      add_control_objective_auditor: 'Agregar auditor a cargo'
+      add_control_objective_auditor: 'Agregar auditor/referente a cargo'
     score_type:
       option: 'Opciones'
       percentage: 'Porcentaje'
