@@ -95,7 +95,7 @@ module Findings::CurrentSituationCsv
             weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; '),
             weakness.taggings.map(&:tag).join('; '),
             weakness.compliance_observations,
-            compliance_susceptible_to_sanction(weakness)
+            compliance_maybe_sanction(weakness)
           ].concat(benefits.map do |b|
             achievement = weakness.achievements.detect do |a|
               a.benefit_id == b.id
@@ -111,7 +111,7 @@ module Findings::CurrentSituationCsv
       end
 
       private
-        def compliance_susceptible_to_sanction weakness
+        def compliance_maybe_sanction weakness
           unless weakness.compliance_susceptible_to_sanction.nil?
             I18n.t "label.#{weakness.compliance_susceptible_to_sanction ? 'yes' : 'no'}"
           end
