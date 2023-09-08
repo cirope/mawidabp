@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_02_152424) do
+ActiveRecord::Schema.define(version: 2023_09_08_202037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -364,8 +364,6 @@ ActiveRecord::Schema.define(version: 2023_09_02_152424) do
     t.string "score_type", default: "option", null: false
     t.string "audit_sector"
     t.date "date_charge"
-    t.bigint "affected_sector_id"
-    t.index ["affected_sector_id"], name: "index_control_objectives_on_affected_sector_id"
     t.index ["obsolete"], name: "index_control_objectives_on_obsolete"
     t.index ["process_control_id"], name: "index_control_objectives_on_process_control_id"
   end
@@ -1424,7 +1422,6 @@ ActiveRecord::Schema.define(version: 2023_09_02_152424) do
   add_foreign_key "control_objective_weakness_template_relations", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_weakness_template_relations", "weakness_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objectives", "process_controls", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "control_objectives", "sectors", column: "affected_sector_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "costs", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "groups", on_update: :restrict, on_delete: :restrict
