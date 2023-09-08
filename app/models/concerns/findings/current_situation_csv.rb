@@ -111,6 +111,7 @@ module Findings::CurrentSituationCsv
       end
 
       private
+
         def compliance_maybe_sanction weakness
           unless weakness.compliance_maybe_sanction.nil?
             I18n.t "label.#{weakness.compliance_maybe_sanction ? 'yes' : 'no'}"
