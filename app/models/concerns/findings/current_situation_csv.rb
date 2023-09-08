@@ -66,7 +66,7 @@ module Findings::CurrentSituationCsv
           I18n.t('finding.auditors', count: 0),
           Tag.model_name.human(count: 0),
           Weakness.human_attribute_name('compliance_observations'),
-          Weakness.human_attribute_name('compliance_susceptible_to_sanction')
+          Weakness.human_attribute_name('compliance_maybe_sanction')
         ].concat benefits.pluck('name')
       end
 
@@ -112,8 +112,8 @@ module Findings::CurrentSituationCsv
 
       private
         def compliance_maybe_sanction weakness
-          unless weakness.compliance_susceptible_to_sanction.nil?
-            I18n.t "label.#{weakness.compliance_susceptible_to_sanction ? 'yes' : 'no'}"
+          unless weakness.compliance_maybe_sanction.nil?
+            I18n.t "label.#{weakness.compliance_maybe_sanction ? 'yes' : 'no'}"
           end
         end
   end

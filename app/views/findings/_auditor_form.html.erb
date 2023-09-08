@@ -257,10 +257,10 @@
             } %>
         </div>
         <div class="col-md-2">
-          <%= f.input :compliance_susceptible_to_sanction, collection: weakness_compliance_susceptible_to_sanction_options,
+          <%= f.input :compliance_maybe_sanction, collection: weakness_compliance_maybe_sanction_options,
                                                 include_blank: t('helpers.select.prompt'),
                                                 input_html: {
-                                                  data: { compliance_susceptible_to_sanction: true }
+                                                  data: { compliance_maybe_sanction: true }
                                                 } %>
         </div>
       </div>

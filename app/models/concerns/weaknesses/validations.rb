@@ -20,8 +20,8 @@ module Weaknesses::Validations
               :internal_control_components,
               presence: true, if: :validate_extra_attributes?
     validates :compliance_observations, presence: true, if: :compliance_require_observations?
-    validates :compliance_susceptible_to_sanction,
-              inclusion: { in: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values },
+    validates :compliance_maybe_sanction,
+              inclusion: { in: COMPLIANCE_MAYBE_SANCTION_OPTIONS.values },
               if: :compliance_require_observations?
     validates :year, :nsisio, :nobs, length: { maximum: 4 },
                                      numericality: { only_integer: true },
