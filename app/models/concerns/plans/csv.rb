@@ -31,6 +31,7 @@ module Plans::Csv
         PlanItem.human_attribute_name(:order_number),
         PlanItem.human_attribute_name(:status),
         BusinessUnitType.model_name.human,
+        (I18n.t('plans.csv.main_or_aux_but') if Current.conclusion_pdf_format == 'pat'),
         PlanItem.human_attribute_name(:business_unit_id),
         PlanItem.human_attribute_name(:project),
         (PlanItem.human_attribute_name(:scope) if SHOW_REVIEW_EXTRA_ATTRIBUTES),
@@ -101,6 +102,7 @@ module Plans::Csv
             plan_item.order_number,
             Current.conclusion_pdf_format == 'pat' ? plan_item.status_text_pat(long: false).to_s : plan_item.status_text(long: false).to_s,
             business_unit_type&.name || '',
+            (main_or_aux_but(business_unit_type, plan_item) if Current.conclusion_pdf_format == 'pat'),
             plan_item.business_unit&.name || '',
             plan_item.project.to_s,
             (plan_item.scope.to_s if SHOW_REVIEW_EXTRA_ATTRIBUTES),
@@ -147,6 +149,16 @@ module Plans::Csv
 
           csv << array_to_csv.compact
         end
+      end
+    end
+
+    def main_or_aux_but business_unit_type, plan_item
+      if business_unit_type.nil?
+        ''
+      elsif (business_unit_type == plan_item.business_unit_type)
+        I18n.t('plans.csv.main_but')
+      else
+        I18n.t('plans.csv.aux_but')
       end
     end
 
