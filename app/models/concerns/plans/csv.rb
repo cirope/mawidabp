@@ -89,7 +89,11 @@ module Plans::Csv
     end
 
     def put_csv_rows_on csv, business_unit_type
-      plan_items = Array(grouped_plan_items[business_unit_type]).sort
+      if Current.conclusion_pdf_format == 'pat'
+        plan_items = Array(plan_items_for_but_and_abut(business_unit_type&.id)).sort
+      else
+        plan_items = Array(grouped_plan_items[business_unit_type]).sort
+      end
 
       if plan_items.present?
         plan_items.each do |plan_item|
