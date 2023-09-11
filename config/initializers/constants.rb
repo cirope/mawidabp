@@ -15,7 +15,7 @@ PRIVATE_PATH = File.join(Rails.root, RELATIVE_PRIVATE_PATH).freeze
 # Ruta al directorio temporal
 TEMP_PATH = File.join(Rails.root, 'tmp').freeze
 # Prefijo de la organización para administrar grupos
-APP_ADMIN_PREFIXES = ['admin', 'www', 'admin-hipotecario'].freeze
+APP_ADMIN_PREFIXES = ['admin', 'www', 'admin-hipotecario-testing'].freeze
 # Variable con los idiomas disponibles (Debería reemplazarse con
 # I18.available_locales cuando se haya completado la traducción a Inglés)
 AVAILABLE_LOCALES = [:es, :en].freeze
