@@ -1,9 +1,9 @@
 en:
   code_prefixes:
-    oportunities: 'IO'
-    weaknesses: 'I'
-    revoked: 'R'
-    work_papers_in_control_objectives: 'COWP'
-    work_papers_in_oportunities: 'IOWP'
-    work_papers_in_weaknesses: 'IWP'
-    work_papers_in_weaknesses_follow_up: 'IFWP'
+    oportunities: 'OM'
+    weaknesses: 'O'
+    revoked: 'A'
+    work_papers_in_control_objectives: 'PTOC'
+    work_papers_in_oportunities: 'PTOM'
+    work_papers_in_weaknesses: 'PTO'
+    work_papers_in_weaknesses_follow_up: 'PTSO'
