@@ -20,6 +20,10 @@ module Findings::State
   end
 
   module ClassMethods
+    def bh_with_pending_status
+      where state: (PENDING_STATUS - [STATUS[:incomplete], STATUS[:implemented]])
+    end
+
     def with_pending_status
       where state: visible_pending_status
     end

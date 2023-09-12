@@ -87,7 +87,7 @@ module Users::Scopes
     def list_all_with_pending_findings
       left_joins(finding_user_assignments: :raw_finding).
         where(findings: { final: false }).
-        merge(Finding.with_pending_status).
+        merge(Finding.bh_with_pending_status).
         merge(Finding.list).
         references(:findings).
         distinct.
