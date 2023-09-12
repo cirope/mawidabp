@@ -327,6 +327,8 @@ en:
         review: 'Audit report'
         review_id: 'Audit report'
         alternative_review_id: 'External audit report'
+      file_model_reviews/file_model:
+        file: 'File'
       finding:
         control_objective_item_id: 'Control objective'
         title: 'Title'
@@ -437,6 +439,7 @@ en:
         file_content_type: 'Working paper (file type)'
         file_file_size: 'Working paper (file size)'
       image_model:
+        image: 'Image'
         uploaded_data: 'Image'
         content_type: 'Image (type)'
         size: 'Image (size)'
@@ -763,7 +766,7 @@ en:
         solution_date: 'Solution date'
         compliance: 'Compliance'
         compliance_observations: 'Norm impacting'
-        compliance_susceptible_to_sanction: 'Susceptible to sanction'
+        compliance_maybe_sanction: 'Susceptible to sanction'
         operational_risk: 'Operational risk'
         impact: 'Impact'
         internal_control_components: 'CI components'
@@ -795,6 +798,8 @@ en:
         allow_duplication: 'Allow duplicate title'
         audit_recommendations: 'Audit recommendations'
         failure: 'Failure'
+      work_papers/file_model:
+        file: 'Work paper (file)'
 
     errors:
       models:
@@ -819,7 +824,7 @@ en:
               cant_have_extension_when_didnt_have_extension: 'It cannot have %{extension}, since at most once in its history it was without %{extension} in the %{states} status'
             risk_justification:
               present: 'Should not have risk justification'
-            compliance_susceptible_to_sanction:
+            compliance_maybe_sanction:
               inclusion: 'must be one of the list'
             draft_review_code:
               not_same_draft_review_code_parent: 'Does not have the same draft audit report code as its original finding'

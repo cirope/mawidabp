@@ -15,8 +15,8 @@ class AuthenticationTest < ActionController::TestCase
     assert_valid_authentication
   end
 
-  test 'shuld authenticate by email' do
-    @params = { user: @user.email, password: 'admin123' }
+  test 'should authenticate by email' do
+    @params = { email: @user.email, password: 'admin123' }
 
     assert_valid_authentication redirect_url: Group, admin_mode: true
   ensure
@@ -229,6 +229,7 @@ class AuthenticationTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     hash_attributes = get_hash_attributes name:      'new_user@azure.com',
                                           givenname: 'new_user_name',
@@ -271,6 +272,7 @@ class AuthenticationTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     hash_attributes = get_hash_attributes name:      'new_user@azure.com',
                                           givenname: 'new_user_name',
@@ -307,6 +309,7 @@ class AuthenticationTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     hash_attributes = get_hash_attributes name:      'new_user@azure.com',
                                           givenname: 'new_user_name',
@@ -335,6 +338,7 @@ class AuthenticationTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     hash_attributes = get_hash_attributes name:      '',
                                           givenname: 'new_user_name',
@@ -363,6 +367,7 @@ class AuthenticationTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     hash_attributes = get_hash_attributes name:      'new_user@azure.com',
                                           givenname: 'new_user_name',
@@ -390,8 +395,11 @@ class AuthenticationTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     user_to_update  = users :disabled
+    user_to_update.update_saml_request_id '91dfe9376a2e8e09e6dcb444c04fc53a'
+
     hash_attributes = get_hash_attributes name:      user_to_update.email,
                                           givenname: 'updated_name',
                                           surname:   'updated_surname',
@@ -425,8 +433,11 @@ class AuthenticationTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     user_to_update  = users :poll
+    user_to_update.update_saml_request_id '91dfe9376a2e8e09e6dcb444c04fc53a'
+
     hash_attributes = get_hash_attributes name:      "#{user_to_update.user}@test.com",
                                           givenname: 'updated_name',
                                           surname:   'updated_surname',
@@ -470,8 +481,10 @@ class AuthenticationTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     user_to_update = users :disabled
+    user_to_update.update_saml_request_id '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     organization_roles(:admin_role_for_disabled_in_cirope).destroy!
 
@@ -516,8 +529,10 @@ class AuthenticationTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     user_to_update = users :poll
+    user_to_update.update_saml_request_id '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     organization_roles(:auditor_role_for_poll_in_cirope).destroy!
 
@@ -560,8 +575,11 @@ class AuthenticationTest < ActionController::TestCase
     mock = Minitest::Mock.new
 
     mock.expect :nameid, 'email'
+    mock.expect :in_response_to, '91dfe9376a2e8e09e6dcb444c04fc53a'
 
     user_to_update   = users :administrator
+    user_to_update.update_saml_request_id '91dfe9376a2e8e09e6dcb444c04fc53a'
+
     roles_to_destroy = user_to_update.organization_roles.where(organization: @organization).count
     hash_attributes  = get_hash_attributes name:      "#{user_to_update.user}@test.com",
                                            givenname: 'updated_name',

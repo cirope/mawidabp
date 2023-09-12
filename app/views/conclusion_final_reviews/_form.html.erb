@@ -29,7 +29,10 @@
         <% end %>
         <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
           <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
-          <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+          <%= f.input :close_date, as: :date_picker %>
+          <% if @conclusion_final_review.close_date %>
+            <%= show_conclusion_final_reviews_previous_close_dates(@conclusion_final_review) %>
+          <% end %>
         <% else %>
           <%= f.input :summary %>
         <% end %>
@@ -64,7 +67,10 @@
           <%= f.input :summary %>
         <% else %>
           <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
-          <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+          <%= f.input :close_date, as: :date_picker %>
+          <% if @conclusion_final_review.close_date %>
+            <%= show_conclusion_final_reviews_previous_close_dates(@conclusion_final_review) %>
+          <% end %>
         <% end %>
       </div>
     </div>

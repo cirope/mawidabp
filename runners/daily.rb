@@ -23,4 +23,19 @@ end
 
 CarrierWave.clean_cached_files!
 
+
+def delete_file_or_directory path
+  File.directory?(path) ? FileUtils.rm_rf(path) : FileUtils.rm(path)
+end
+
+tmp_directory = "#{Rails.root}/uploads/tmp"
+
+Dir.foreach(tmp_directory) do |file_name|
+  next if %w(. ..).include? file_name
+
+  file_path = File.join tmp_directory, file_name
+
+  delete_file_or_directory file_path if File.mtime(file_path) < 1.day.ago
+end
+
 Rails.logger.info "Daily runner finished (version #{APP_REVISION[0,8]})"

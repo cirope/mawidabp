@@ -206,6 +206,8 @@ es:
       approve: 'Aprobar'
       reject: 'Rechazar'
     finding_answers: 'Comentarios de'
+    pdf:
+      issue: 'Ver en cuadro adjunto, los casos bajo código cam %{review_code}'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'

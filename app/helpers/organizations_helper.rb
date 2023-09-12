@@ -53,7 +53,7 @@ module OrganizationsHelper
 
         image_tag @organization.send(model).image.url(thumb_name),
           size: @organization.send(model).image_size(thumb_name),
-          alt: 'Logo'
+          alt: 'Logo' if @organization.send(model).image?
       end.resume
     end
 end

@@ -344,6 +344,8 @@ es:
         review: 'Informe'
         review_id: 'Informe'
         alternative_review_id: 'Informe externo'
+      file_model_reviews/file_model:
+        file: 'Archivo'
       finding:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -454,6 +456,7 @@ es:
         file_content_type: 'Papel de trabajo (tipo de archivo)'
         file_file_size: 'Papel de trabajo (tamaño de archivo)'
       image_model:
+        image: 'Imagen'
         uploaded_data: 'Imagen'
         content_type: 'Imagen (tipo)'
         size: 'Imagen (tamaño)'
@@ -780,7 +783,7 @@ es:
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
         compliance_observations: 'Norma que impacta'
-        compliance_susceptible_to_sanction: 'Susceptible a sanción'
+        compliance_maybe_sanction: 'Susceptible a sanción'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
@@ -812,6 +815,8 @@ es:
         allow_duplication: 'Permitir título duplicado'
         audit_recommendations: 'Recomendaciones de auditoría'
         failure: 'Falla'
+      work_papers/file_model:
+        file: 'Papel de trabajo (archivo)'
 
     errors:
       models:
@@ -836,7 +841,7 @@ es:
               cant_have_extension_when_didnt_have_extension: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension} en los estados %{states}'
             risk_justification:
               present: 'No debe tener justificación de riesgo'
-            compliance_susceptible_to_sanction:
+            compliance_maybe_sanction:
               inclusion: 'debe ser uno de la lista'
             draft_review_code:
               not_same_draft_review_code_parent: 'No tiene el mismo código de informe borrador que su hallazgo original'
