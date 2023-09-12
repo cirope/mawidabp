@@ -21,7 +21,7 @@ module Findings::State
 
   module ClassMethods
     def with_in_progress_status
-      where state: (PENDING_STATUS - [STATUS[:incomplete], STATUS[:implemented]])
+      where state: visible_pending_status - [STATUS[:implemented]]
     end
 
     def with_pending_status
