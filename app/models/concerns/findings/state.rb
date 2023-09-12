@@ -20,7 +20,7 @@ module Findings::State
   end
 
   module ClassMethods
-    def bh_with_pending_status
+    def with_in_progress_status
       where state: (PENDING_STATUS - [STATUS[:incomplete], STATUS[:implemented]])
     end
 
