@@ -53,17 +53,21 @@ class Authentication
         saml_response = OneLogin::RubySaml::Response.new @params[:SAMLResponse], settings: saml_config
 
         if saml_response.is_valid?
-          @user = saml_user_for saml_response.nameid, saml_response.attributes
+          @user = saml_user_for saml_response
         end
       end
     end
 
-    def saml_user_for email, attributes
-      pruned_attributes = send("prune_#{@current_organization.saml_provider}_attributes", attributes)
-      email             = pruned_attributes[:email] || email
+    def saml_user_for saml_response
+      pruned_attributes = send("prune_#{@current_organization.saml_provider}_attributes", saml_response.attributes)
+      email             = pruned_attributes[:email] || saml_response.nameid
       @params[:user]    = pruned_attributes[:user]
+      conditions        = { saml_request_id: saml_response.in_response_to }
 
-      if (user = User.find_by(email: email) || User.find_by(user: @params[:user]))
+      user = User.where(conditions).by_email(email) ||
+             User.where(conditions).by_user(@params[:user])
+
+      if user
         update_user user, pruned_attributes.merge(email: email)
       else
         create_user pruned_attributes.merge(email: email)
