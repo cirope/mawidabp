@@ -35,10 +35,10 @@ module Users::Scopes
         }
       )
     }
-    scope :auditors_and_audited, -> {
+    scope :auditors_and_act_as_audited, -> {
       includes(organization_roles: :role).where(
         roles: {
-          role_type: [::Role::TYPES[:auditor], ::Role::TYPES[:audited]]
+          role_type: [::Role::TYPES[:auditor], ::Role::ACT_AS[:audited]].flatten
         }
       )
     }
