@@ -98,6 +98,8 @@ module Plans::Csv
 
       if plan_items.present?
         plan_items.each do |plan_item|
+          principal_but = is_principal_but? business_unit_type, plan_item
+
           array_to_csv = [
             plan_item.order_number,
             Current.conclusion_pdf_format == 'pat' ? plan_item.status_text_pat(long: false).to_s : plan_item.status_text(long: false).to_s,
@@ -110,7 +112,7 @@ module Plans::Csv
             plan_item.tags.map(&:to_s).join(';'),
             I18n.l(plan_item.start, format: :default),
             I18n.l(plan_item.end, format: :default),
-            '%.2f' % plan_item.human_units,
+            '%.2f' % (principal_but ? plan_item.human_units : 0),
             ('%.2f' % plan_item.material_units unless Current.conclusion_pdf_format == 'pat'),
             ('%.2f' % plan_item.units unless Current.conclusion_pdf_format == 'pat')
           ]
@@ -136,13 +138,13 @@ module Plans::Csv
 
             if @dprh
               array_to_csv += [
-                '%.2f' % plan_item.progress.to_i,
-                '%.2f' % get_percentage(plan_item.human_units.to_i, plan_item.progress.to_i),
+                '%.2f' % (principal_but ? plan_item.progress.to_i : 0),
+                '%.2f' % (principal_but ? get_percentage(plan_item.human_units.to_i, plan_item.progress.to_i) : 0)
               ]
             else
               array_to_csv += [
                 plan_item_auditors(plan_item) || '',
-                '%.2f' % plan_item&.human_units_consumed,
+                '%.2f' % (principal_but ? plan_item&.human_units_consumed : 0),
               ]
             end
           end
@@ -155,11 +157,15 @@ module Plans::Csv
     def main_or_aux_but business_unit_type, plan_item
       if business_unit_type.nil?
         ''
-      elsif (business_unit_type == plan_item.business_unit_type)
-        I18n.t('plans.csv.main_but')
+      elsif is_principal_but? business_unit_type, plan_item
+         I18n.t('plans.csv.main_but')
       else
         I18n.t('plans.csv.aux_but')
       end
+    end
+
+    def is_principal_but? business_unit_type, plan_item
+      business_unit_type == plan_item.business_unit_type
     end
 
     def plan_item_auditors plan_item
