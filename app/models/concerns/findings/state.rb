@@ -20,6 +20,10 @@ module Findings::State
   end
 
   module ClassMethods
+    def with_in_progress_status
+      where state: visible_pending_status - [STATUS[:implemented]]
+    end
+
     def with_pending_status
       where state: visible_pending_status
     end
