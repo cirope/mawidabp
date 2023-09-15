@@ -193,6 +193,7 @@ es:
     review_score_details_report_title: "Calificaciones de informes detallado"
     nbc_annual_report_title: "Resumen anual"
     nbc_internal_control_qualification_as_group_of_companies: "Calificacion del control interno como grupo de sociedades"
+    nbc_cycle_rating_title: Calificación de ciclo
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -360,6 +361,29 @@ es:
         classification_title: '<i><b>Cuadro III: Situación actual del Control Interno (fecha de corte %{date})</b></i>'
         actual_qualification: '<b>Ponderador actual (%{date})</b>'
       comments: '<u><b>COMENTARIOS</b></u>'
+    nbc_cycle_rating:
+      pdf_name: "informe_de_calificacion_de_ciclo_%{from_date}_al_%{to_date}.pdf"
+      front_page:
+        second_title: 'Calificación del Ciclo'
+      nbc_scores:
+        footer:
+          totals: Totales
+          business_units: Unidades de negocio
+          weighter: Ponderación
+          cycle_rating: Calificación de ciclo
+      nbc_comparison_table:
+        headers:
+          comparison: Comparación con el periodo anterior
+          weighting: Ponderación
+          rating: Calificación
+      nbc_detailed_scores:
+        introduction: "A continuación, exponemos las calificaciones asignadas a cada unidad de negocio en el %{period_name} y el comparativo con la revisión anterior %{previous_period_name}:"
+        headers:
+          business_unit: Unidad de negocio
+          current_weighter: Ponderador actual
+          current_rating: Calificación actual
+          previous_weighter: Ponderador anterior
+          previous_rating: Calificación anterior
     synthesis_report:
       pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"

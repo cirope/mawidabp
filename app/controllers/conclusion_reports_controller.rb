@@ -1,6 +1,7 @@
 class ConclusionReportsController < ApplicationController
   include Reports::NbcAnnualReport
   include Reports::NbcInternalControlQualificationAsGroupOfCompanies
+  include Reports::NbcCycleRating
   include Reports::NbcReport
   include Reports::SynthesisReport
   include Reports::ReviewStatsReport
