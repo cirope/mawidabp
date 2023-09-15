@@ -151,13 +151,20 @@
             <p class="font-weight-bold" style="font-size:3.1em; text-align: center;"><%= weakness.title %></p>
           </div>
           <p class="ml-2 text-left" style="font-size:1.7em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p>
-          <p class="pt-5 ml-2 font-weight-bold text-left" style="font-size:1.7em;"><%= Weakness.human_attribute_name :risk %>: <%= weakness.risk_text %></p>
-          <div class="row">
-            <div class="col-3">
-              <p class="pt-5 ml-2 font-weight-bold text-left" style="font-size:1.7em;"><%= Weakness.human_attribute_name :state %>: </p>
+          <div class="row font-weight-bold ml-2">
+            <div class="col-5 text-center">
+              <p class="badge badge-dark w-100" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :risk).upcase %>: </p>
             </div>
-            <div class="col-9">
-              <p class="pt-5 ml-2 font-weight-bold text-left <%= risk_style weakness %>" style="font-size:1.7em;"><%= weakness.state_text %></p>
+            <div class="col-7">
+              <p class="ml-2 text-left text-dark-shadow" style="font-size:1.7em;"><%= weakness.risk_text %></p>
+            </div>
+          </div>
+          <div class="row font-weight-bold ml-2">
+            <div class="col-5 text-center">
+              <p class="badge badge-dark w-100" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :state).upcase %>: </p>
+            </div>
+            <div class="col-7">
+              <p class="ml-2 text-left text-dark-shadow <%= risk_style weakness %>" style="font-size:1.7em;"><%= weakness.state_text %></p>
             </div>
           </div>
         </div>
