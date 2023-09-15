@@ -140,13 +140,13 @@
 
   <% conclusion_review_weaknesses(conclusion_review).each_with_index do |weakness, i| %>
     <div class="alwaysbreak <%= watermark_class draft %>">
-      <div class="row">
-        <div class="col-3 text-white">
-          <p class="font-weight-bold" style="font-size:2.4em; text-align: center; padding-top: 50px; padding-bottom: 75px;"><%= I18n.t 'conclusion_review.bic.weaknesses.plan', index: i %></p>
-          <div class="ml-4" style="min-height: 300px;">
-            <p class="font-weight-bold" style="font-size:3.1em; text-align: center;"><%= weakness.title %></p>
+      <div class="row py-5">
+        <div class="col-3 text-white text-center py-5">
+          <p class="font-weight-bold py-5" style="font-size:2.4em;"><%= I18n.t 'conclusion_review.bic.weaknesses.plan', index: i %></p>
+          <div style="min-height: 300px;">
+            <p class="font-weight-bold text-center" style="font-size:3.1em;"><%= weakness.title %></p>
           </div>
-          <p class="ml-2 text-left" style="font-size:1.7em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p>
+          <p class="ml-4 text-left" style="font-size:1.7em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p>
           <div class="row font-weight-bold ml-2">
             <div class="col-5 text-center">
               <p class="badge badge-dark w-100" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :risk).upcase %>: </p>
