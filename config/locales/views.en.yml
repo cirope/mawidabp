@@ -432,6 +432,9 @@ en:
       annual_plan_hours: 'Annual plan hours'
       auditor: 'Auditor (User)'
       time_summary_hours: 'Time Summary Hours'
+      main_or_aux_but: Main/Auxiliar OU
+      main_but: Main OU
+      aux_but: Auxiliar OU
     csv_prs_pat:
       csv_name: 'progress_report_by_status_%{current_date}.csv'
       business_unit: 'Sector'
