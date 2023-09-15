@@ -113,29 +113,25 @@
 
   <div class="alwaysbreak <%= watermark_class draft %>">
     <% if conclusion_review.reference.present? %>
-      <div class="row">
-        <div class="col-3 text-white">
-          <p class="font-weight-bold pl-5" style="font-size:3.4em; text-align: center; position: absolute; top: 50%;"><%= ConclusionReview.human_attribute_name(:reference).upcase %></p>
+      <div class="row py-4">
+        <div class="col-3 text-white text-center vertical-align-center py-5">
+          <p class="font-weight-bold text-dark-shadow m-0 pl-5 py-5" style="font-size:3.4em;"><%= ConclusionReview.human_attribute_name(:reference).upcase %></p>
         </div>
-        <div class="col-9">
-          <div class="row pt-5">
-            <div class="col-10 offset-1">
-              <%= simple_format conclusion_review.reference, style: "font-size:1.7em;"%>
-            </div>
+        <div class="col-9 vertical-align-center w-100 px-0">
+          <div class="col-10 offset-1">
+            <%= simple_format conclusion_review.reference, style: "font-size:1.7em;", class: "m-0" %>
           </div>
         </div>
       </div>
     <% end %>
     <% if conclusion_review.conclusion.present? %>
-      <div class="row pt-5">
-        <div class="col-3 text-white">
-          <p class="font-weight-bold pl-5" style="font-size:3.4em; text-align: center; position: absolute; top: 50%;"><%= I18n.t 'conclusion_review.bic.audit_comments' %></p>
+      <div class="row py-4">
+        <div class="col-3 text-white text-center vertical-align-center py-5">
+          <p class="font-weight-bold text-dark-shadow m-0 pl-5 py-5" style="font-size:3.4em;"><%= I18n.t 'conclusion_review.bic.audit_comments' %></p>
         </div>
-        <div class="col-9">
-          <div class="row pt-5">
-            <div class="col-10 offset-1">
-              <%= simple_format conclusion_review.conclusion, style: "font-size:1.7em;"%>
-            </div>
+        <div class="col-9 vertical-align-center w-100 px-0">
+          <div class="col-10 offset-1">
+            <%= simple_format conclusion_review.conclusion, style: "font-size:1.7em;", class: "m-0" %>
           </div>
         </div>
       </div>
