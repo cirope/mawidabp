@@ -115,7 +115,7 @@
     <% if conclusion_review.reference.present? %>
       <div class="row py-4">
         <div class="col-3 text-white text-center vertical-align-center py-5">
-          <p class="font-weight-bold text-dark-shadow m-0 pl-5 py-5" style="font-size:3.4em;"><%= ConclusionReview.human_attribute_name(:reference).upcase %></p>
+          <p class="font-weight-bold m-0 pl-5 py-5" style="font-size:3.4em;"><%= ConclusionReview.human_attribute_name(:reference).upcase %></p>
         </div>
         <div class="col-9 vertical-align-center w-100 px-0">
           <div class="col-10 offset-1">
@@ -127,7 +127,7 @@
     <% if conclusion_review.conclusion.present? %>
       <div class="row py-4">
         <div class="col-3 text-white text-center vertical-align-center py-5">
-          <p class="font-weight-bold text-dark-shadow m-0 pl-5 py-5" style="font-size:3.4em;"><%= I18n.t 'conclusion_review.bic.audit_comments' %></p>
+          <p class="font-weight-bold m-0 pl-5 py-5" style="font-size:3.4em;"><%= I18n.t 'conclusion_review.bic.audit_comments' %></p>
         </div>
         <div class="col-9 vertical-align-center w-100 px-0">
           <div class="col-10 offset-1">
