@@ -239,15 +239,26 @@ module ConclusionReviews::PatPdf
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
       filtered   = weaknesses.not_revoked.reorder(sort_weaknesses_by)
 
-      if filtered.any?
+      if pat_previous_weaknesses.any? || filtered.any?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.cover.brief.details_title'), align: :justify
 
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text I18n.t('conclusion_review.pat.cover.brief.weaknesses_title'), align: :justify
+        if pat_previous_weaknesses.any?
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text I18n.t('conclusion_review.pat.cover.brief.previous_title'), align: :justify
 
-        filtered.each do |weakness|
-          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
+          pat_previous_weaknesses.each do |weakness|
+            pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
+          end
+        end
+
+        if filtered.any?
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text I18n.t('conclusion_review.pat.cover.brief.weaknesses_title'), align: :justify
+
+          filtered.each do |weakness|
+            pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
+          end
         end
       end
     end

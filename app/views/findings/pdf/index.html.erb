@@ -42,6 +42,7 @@
     <thead>
       <tr class="bg-secondary text-white">
         <th class="border border-dark"><%= Finding.human_attribute_name('review_code') %></th>
+        <th class="border border-dark"><%= Finding.human_attribute_name('state') %></th>
         <th class="border border-dark"><%= Issue.human_attribute_name('customer') %></th>
         <th class="border border-dark"><%= Issue.human_attribute_name('entry') %></th>
         <th class="border border-dark"><%= Issue.human_attribute_name('operation') %></th>
@@ -55,6 +56,7 @@
         <% finding.issues.without_close_date.each do |issue| %>
           <tr>
             <td class="border border-dark"><%= finding.review_code %></td>
+            <td class="border border-dark"><%= finding.state_text %></td>
             <td class="border border-dark"><%= issue.customer %></td>
             <td class="border border-dark"><%= issue.entry %></td>
             <td class="border border-dark"><%= issue.operation %></td>

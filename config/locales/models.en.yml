@@ -766,7 +766,7 @@ en:
         solution_date: 'Solution date'
         compliance: 'Compliance'
         compliance_observations: 'Norm impacting'
-        compliance_susceptible_to_sanction: 'Susceptible to sanction'
+        compliance_maybe_sanction: 'Susceptible to sanction'
         operational_risk: 'Operational risk'
         impact: 'Impact'
         internal_control_components: 'CI components'
@@ -824,7 +824,7 @@ en:
               cant_have_extension_when_didnt_have_extension: 'It cannot have %{extension}, since at most once in its history it was without %{extension} in the %{states} status'
             risk_justification:
               present: 'Should not have risk justification'
-            compliance_susceptible_to_sanction:
+            compliance_maybe_sanction:
               inclusion: 'must be one of the list'
             draft_review_code:
               not_same_draft_review_code_parent: 'Does not have the same draft audit report code as its original finding'
