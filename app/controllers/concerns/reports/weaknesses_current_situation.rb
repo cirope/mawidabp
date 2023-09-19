@@ -96,6 +96,7 @@ module Reports::WeaknessesCurrentSituation
       order = [
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
       ].map { |o| Arel.sql o }
       weaknesses = if @permalink
                      current_situation_weaknesses_from_permalink final
@@ -148,7 +149,7 @@ module Reports::WeaknessesCurrentSituation
 
     def current_situation_weaknesses_scope
       scoped = if @controller == 'follow_up'
-        Weakness.list_with_and_without_final_review
+        Weakness.list_with_final_review.or(Weakness.list_without_final_review)
       elsif @controller == 'execution'
         Weakness.list_without_final_review
       end
@@ -156,8 +157,26 @@ module Reports::WeaknessesCurrentSituation
       if @permalink
         scoped
       elsif @controller == 'follow_up'
-        scoped.where(origination_date: @from_date..@to_date).or(
-         scoped.where(conclusion_final_review: { issue_date: @from_date..@to_date })
+        scoped.
+          where( reviews: {
+            conclusion_reviews: {
+              issue_date: @from_date..@to_date
+          }
+        }).
+        where.not(reviews: {
+          conclusion_reviews: {
+            id: nil
+          }
+        }).
+        or(
+          scoped.where(
+            origination_date: @from_date..@to_date,
+            reviews: {
+              conclusion_reviews: {
+                id: nil
+              }
+            }
+          )
         )
       elsif @controller == 'execution'
         scoped.by_origination_date 'BETWEEN', @from_date, @to_date
