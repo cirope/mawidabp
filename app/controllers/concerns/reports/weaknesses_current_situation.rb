@@ -158,27 +158,7 @@ module Reports::WeaknessesCurrentSituation
       if @permalink
         scoped
       elsif @controller == 'follow_up'
-        scoped.
-          where( reviews: {
-            conclusion_reviews: {
-              issue_date: @from_date..@to_date
-          }
-        }).
-        where.not(reviews: {
-          conclusion_reviews: {
-            id: nil
-          }
-        }).
-        or(
-          scoped.where(
-            origination_date: @from_date..@to_date,
-            reviews: {
-              conclusion_reviews: {
-                id: nil
-              }
-            }
-          )
-        )
+        scoped.by_origination_date_or_issue_date @from_date, @to_date
       elsif @controller == 'execution'
         scoped.by_origination_date 'BETWEEN', @from_date, @to_date
       end
