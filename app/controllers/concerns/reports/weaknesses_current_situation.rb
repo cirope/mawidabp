@@ -103,6 +103,7 @@ module Reports::WeaknessesCurrentSituation
                    else
                      current_situation_weaknesses final
                    end
+
       @weaknesses = weaknesses.reorder order
     end
 
