@@ -213,13 +213,12 @@ module Findings::Scopes
       end
     end
 
-    def by_origination_date_or_issue_date from_date, to_date
-      where( reviews: {
+    def by_origination_or_issue_date from_date, to_date
+      where(reviews: {
         conclusion_reviews: {
           issue_date: from_date..to_date
         }
-      }).
-      or(
+      }).or(
         where(
           origination_date: from_date..to_date,
           reviews: {
