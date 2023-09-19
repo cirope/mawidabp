@@ -96,14 +96,12 @@ module Reports::WeaknessesCurrentSituation
       order = [
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
       ].map { |o| Arel.sql o }
       weaknesses = if @permalink
                      current_situation_weaknesses_from_permalink final
                    else
                      current_situation_weaknesses final
                    end
-
       @weaknesses = weaknesses.reorder order
     end
 
@@ -150,7 +148,7 @@ module Reports::WeaknessesCurrentSituation
 
     def current_situation_weaknesses_scope
       scoped = if @controller == 'follow_up'
-        Weakness.list_for_report
+        Weakness.list_with_and_without_final_review
       elsif @controller == 'execution'
         Weakness.list_without_final_review
       end
@@ -158,7 +156,9 @@ module Reports::WeaknessesCurrentSituation
       if @permalink
         scoped
       elsif @controller == 'follow_up'
-        scoped.by_issue_date 'BETWEEN', @from_date, @to_date
+        scoped.where(origination_date: @from_date..@to_date).or(
+         scoped.where(conclusion_final_review: { issue_date: @from_date..@to_date })
+        )
       elsif @controller == 'execution'
         scoped.by_origination_date 'BETWEEN', @from_date, @to_date
       end
