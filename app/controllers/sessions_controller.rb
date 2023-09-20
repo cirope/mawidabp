@@ -10,7 +10,12 @@ class SessionsController < ApplicationController
   def create
     if params[:user].present?
       if redirect_to_saml? && !@current_user&.recovery?
-        redirect_to new_saml_session_url
+        saml_request = OneLogin::RubySaml::Authrequest.new
+        action       = saml_request.create saml_config
+
+        @current_user&.update_saml_request_id saml_request.request_id
+
+        redirect_to action
       else
         store_user params[:user]
 
@@ -41,5 +46,9 @@ class SessionsController < ApplicationController
       current_organization&.saml_provider.present? &&
         params[:saml_error].blank? &&
         params[:saml_logout].blank?
+    end
+
+    def saml_config
+      IdpSettingsAdapter.saml_settings current_organization.saml_provider
     end
 end
