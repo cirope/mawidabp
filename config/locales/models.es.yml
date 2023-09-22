@@ -42,6 +42,7 @@ es:
                 other: 'deben tener los mismos nombres en las tres organizaciones. Actualmente las que difieren son: %{different_names}'
             organizations:
               are_misconfigured: 'están mal configuradas en las opciones de la aplicación. Por favor, comuníquese con soporte@mawidabp.com'
+
   activerecord:
     models:
       achievement:

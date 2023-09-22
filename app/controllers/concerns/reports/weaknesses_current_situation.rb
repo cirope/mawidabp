@@ -150,7 +150,7 @@ module Reports::WeaknessesCurrentSituation
 
     def current_situation_weaknesses_scope
       scoped = if @controller == 'follow_up'
-        Weakness.list_for_report
+        Weakness.list_with_final_review.or(Weakness.list_without_final_review)
       elsif @controller == 'execution'
         Weakness.list_without_final_review
       end
@@ -158,7 +158,7 @@ module Reports::WeaknessesCurrentSituation
       if @permalink
         scoped
       elsif @controller == 'follow_up'
-        scoped.by_issue_date 'BETWEEN', @from_date, @to_date
+        scoped.by_origination_or_issue_date @from_date, @to_date
       elsif @controller == 'execution'
         scoped.by_origination_date 'BETWEEN', @from_date, @to_date
       end
