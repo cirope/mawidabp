@@ -522,15 +522,15 @@ class WeaknessTest < ActiveSupport::TestCase
 
     assert @weakness.invalid?
     assert_error @weakness, :compliance_observations, :blank
-    assert_error @weakness, :compliance_susceptible_to_sanction, :inclusion
+    assert_error @weakness, :compliance_maybe_sanction, :inclusion
   end
 
   test 'valids compliance observations attributtes' do
     skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
 
-    @weakness.compliance                         = 'yes'
-    @weakness.compliance_observations            = 'test'
-    @weakness.compliance_susceptible_to_sanction = COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values.first
+    @weakness.compliance                = 'yes'
+    @weakness.compliance_observations   = 'test'
+    @weakness.compliance_maybe_sanction = COMPLIANCE_MAYBE_SANCTION_OPTIONS.values.first
 
     assert @weakness.valid?
   end
