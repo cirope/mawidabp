@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_08_202037) do
+ActiveRecord::Schema.define(version: 2023_09_08_220747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -592,7 +592,7 @@ ActiveRecord::Schema.define(version: 2023_09_08_202037) do
     t.string "year"
     t.string "nsisio"
     t.string "nobs"
-    t.boolean "compliance_susceptible_to_sanction"
+    t.boolean "compliance_maybe_sanction"
     t.string "draft_review_code"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"

@@ -59,6 +59,7 @@ en:
     download: "Download"
     insufficient_privileges: "You do not have permission to perform this action"
     invalid_user_or_password: "Invalid user/password"
+    invalid_user_or_email: 'Your user or email cannot be blank'
     loading: "Loading"
     must_be_authenticated: "You must log in to continue"
     must_change_the_password: "You must change your password"
@@ -81,6 +82,7 @@ en:
     empty_result: "No results. Please modify your search criteria"
     automatic_by_the_system: "Done automatically by the system"
     compatibility_warning_html: 'You are using an <strong>outdated</strong> browser. Please consider <a href="https://browsehappy.com/">upgrading it</a>'
+    welcome: 'Welcome'
 
   error:
     title: "Error"
@@ -194,6 +196,7 @@ en:
     review_scores_report_title: "Audit report ratings"
     review_score_details_report_title: "Detailed audit report ratings"
     nbc_annual_report_title: "Annual summary"
+    nbc_internal_control_qualification_as_group_of_companies: "Internal Control Rating as Group of Companies"
     high_risk_weaknesses_report_title: "High risk issues"
     fixed_weaknesses_report_title: "Resolved issues by risk"
     qa_indicators_title: "Quality indicators"
@@ -284,6 +287,29 @@ en:
         highest_solution_rate: "Highest Risk Issues Solution"
         medium_solution_rate: "Medium Risk Issues Solution"
         digitalized: "Digitization"
+    nbc_report:
+      front_page:
+        footer_title: 'Audit report:'
+        footer_prepared_by: 'Prepared by Internal Audit - NBCH'
+      executive_summary:
+        title: '<b><u>EXECUTIVE SUMMARY</u></b>'
+        objective_title: '<b><u>OBJECTIVE</u></b>'
+        general_conclusion_title: '<b><u>GENERAL CONCLUSION</u></b>'
+        first_footer: '<b>AUD. Alejandro Camnasio</b>'
+        second_footer: '<b>IA/IC Internal Audit Management</b>'
+      introduction_and_scope:
+        title: '<b><u>INFORME DETALLADO</u></b>'
+        introduction_and_scope_title: '<b><u>INTRODUCTION AND SCOPE OF WORK PERFORMED</u></b>'
+        classification_methodology: 'The rating methodology for cycles used in the 2019 period was approved by the Audit Committee at its meeting on 14.05.2019 - Minutes No. 294, which we present below:'
+        classification_with_final_weaknesses_title: '<i><b>Table I: Internal Control Rating of NCHB S.A. – %{period}</b></i>'
+        classification_with_not_final_weaknesses_title: '<i><b>Table II: Internal Control Rating of NCHB S.A. – %{period}</b></i>'
+        conclusions_title: '<u><b>CONCLUSIONS</b></u>'
+        conclusions_body: "Based on Table I <i>“NCHB S.A. Internal Control Rating.”</i>, it can be seen that the Entity's internal control rating, according to the parameters used, is <b>“%{calification}”.</b>"
+      cycle_qualification:
+        header_number: '<b>No.</b>'
+        header_qualification: '<b>Rating</b>'
+        header_weight: '<b>Weight</b>'
+        header_high_risk_observations: '<b>Number of High Risk Issues</b>'
     nbc_annual_report:
       pdf_name: "annual_report_%{from_date}_to_%{to_date}.pdf"
       front_page:
@@ -295,7 +321,7 @@ en:
         objective_title: '<b><u>OBJECTIVE</u></b>'
         general_conclusion_title: '<b><u>GENERAL CONCLUSION</u></b>'
         first_footer: '<b>AUD. Alejandro Camnasio</b>'
-        second_footer: '<b>"IA/IC Internal Audit Management</b>'
+        second_footer: '<b>IA/IC Internal Audit Management</b>'
       detailed_report:
         title: '<b><u>DETAILED REPORT</u></b>'
         introduction_and_scope_title: '<b><u>INTRODUCTION AND SCOPE OF WORK PERFORMED</u></b>'
@@ -318,6 +344,26 @@ en:
         count_cycles: '<b>Number of cycles</b>'
         final_weight: '<b>Weight</b>'
         final_qualification: '<b>Internal Control Rating</b>'
+        classification_title: '<i><b>Table I: Internal Control Rating of NCHB S.A. – %{period}</b></i>'
+        conclusions_title: '<u><b>CONCLUSIONS</b></u>'
+        conclusions_body: "Based on Table I <i>“NCHB S.A. Internal Control Rating.”</i>, it can be seen that the Entity's internal control rating, according to the parameters used, is <b>“%{calification}”.</b>"
+    nbc_internal_control_qualification_as_group_of_companies_report:
+      pdf_name: "internal_control_rating_as_group_of_companies_report_%{from_date}_to_%{to_date}.pdf"
+      front_page:
+        first_title: 'Subsidiaries'
+        second_title: 'Cycle Rating'
+      internal_control_qualification:
+        classification_title: "<i><b>Table I: Summary of Subsidiaries' Internal Control Rating – %{period}</b></i>"
+      comparision_to_previous_period:
+        classification_title: "<i><b>Table II: Comparison with previous year's rating (%{period})</b></i>"
+        header_cycle: '<b>Cycle</b>'
+        header_weight: '<b>Weighting by audit report dates %{period}</b>'
+        header_qualification: '<b>Rating</b>'
+        conclusions_body: 'Although the Internal Control Rating of NBCH S.A. is <b>“%{annual_qualification_period}”</b>, and it has not changed compared to the previous year, it is important to note that the current weight <b>“%{annual_weight_period}”</b> is 7% lower than the <b>“%{annual_weight_previous_period}”</b> of the previous period.'
+      comparision_to_actual_situation:
+        classification_title: '<i><b>Table III: Current situation of Internal Control (cut date %{date})</b></i>'
+        actual_qualification: '<b>Current weight (%{date})</b>'
+      comments: '<u><b>COMMENTS</b></u>'
     synthesis_report:
       pdf_name: "executive_summary_final_audit_reports_%{from_date}_to_%{to_date}.pdf"
       internal_audit_weaknesses: "Internal Audit Findings"
@@ -1497,6 +1543,7 @@ en:
         name: "Profile"
         role_type: "Profile type"
         privileges: "Privileges"
+        identifier: 'Identifier'
       saml_provider:
         provider: 'Provider'
         idp_homepage: 'Application federation metadata URL'

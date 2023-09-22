@@ -76,11 +76,11 @@ module Reports::WeaknessesHeatmap
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
       ].map { |o| Arel.sql o }
-      weaknesses = Weakness.
+      weaknesses = Weakness.list_with_final_review.or(
+        Weakness.list_without_final_review).
         with_status_for_report.
         finals(final).
-        list_for_report.
-        by_issue_date('BETWEEN', @from_date, @to_date).
+        by_origination_or_issue_date(@from_date, @to_date).
         includes(
           :business_unit,
           :business_unit_type,
@@ -203,11 +203,11 @@ module Reports::WeaknessesHeatmap
         ],
         [
           ConclusionReview.human_attribute_name('conclusion'),
-          weakness.review.conclusion_final_review.conclusion
+          weakness.review&.conclusion_final_review&.conclusion
         ],
         [
           ConclusionReview.human_attribute_name('evolution'),
-          weakness.review.conclusion_final_review.evolution
+          weakness.review&.conclusion_final_review&.evolution
         ],
         [
           I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner_parents'),
