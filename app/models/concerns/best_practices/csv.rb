@@ -50,7 +50,7 @@ module BestPractices::Csv
             auditors, audited = control_objective&.control_objective_auditors.map { |u| u.user }.partition(&:auditor?)
 
             auditors = auditors.map { |u| u.full_name }.join(" ; ")
-            audited = audited.map { |u| u.full_name }.join(" ; ")
+            audited  = audited.map { |u| u.full_name }.join(" ; ")
           end
 
           rows << [
