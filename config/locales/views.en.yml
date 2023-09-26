@@ -108,7 +108,7 @@ en:
       title: 'Control objective details'
     new:
       tagging: 'Add tag'
-      add_control_objective_auditor: 'Add auditor in charge'
+      add_control_objective_auditor: 'Add auditor/auditee in charge'
     score_type:
       option: 'Options'
       percentage: 'Percentage'
@@ -206,6 +206,8 @@ en:
       approve: 'Approve'
       reject: 'Reject'
     finding_answers: 'Comments of'
+    pdf:
+      issue: 'Refer to the attached table for cases under the code cam %{review_code}'
 
   licenses:
     trial_valid_until: 'End of trial period'
@@ -594,6 +596,12 @@ en:
       add_business_unit_type: 'Add organizational unit'
       operational_audit: 'Operational audit'
       system_audit: 'System audit'
+
+  authentications:
+    new:
+      title: 'Authentication'
+      password: 'Password'
+      log_in: 'Login'
 
   sessions:
     new:

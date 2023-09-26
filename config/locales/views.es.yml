@@ -108,7 +108,7 @@ es:
       title: 'Detalles del objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
-      add_control_objective_auditor: 'Agregar auditor a cargo'
+      add_control_objective_auditor: 'Agregar auditor/referente a cargo'
     score_type:
       option: 'Opciones'
       percentage: 'Porcentaje'
@@ -207,7 +207,7 @@ es:
       reject: 'Rechazar'
     finding_answers: 'Comentarios de'
     pdf:
-      issue: 'Ver en cuadro adjunto, los casos bajo código cam %{review_code}'
+      issue: 'Ver en cuadro adjunto, los casos bajo código cam %{review_code}' # REVIEW
 
   licenses:
     trial_valid_until: 'Fin período de prueba'

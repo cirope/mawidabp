@@ -95,6 +95,10 @@ es:
     show_details: "Ver detalles"
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
+  best_practice:
+    auditors: Auditores a cargo
+    audited: Referentes a cargo
+
   business_unit_type:
     index_title: "Listado de sectores"
     show_title: "Detalle sector"
@@ -353,7 +357,7 @@ es:
       comparision_to_previous_period:
         classification_title: '<i><b>Cuadro II: Comparación con la calificación del año anterior (%{period})</b></i>'
         header_cycle: '<b>Ciclo</b>'
-        header_weight: '<b>Ponderador a fecha de los Informes %{period}</b>'
+        header_weight: '<b>Ponderador por fecha de los informes %{period}</b>'
         header_qualification: '<b>Calificación</b>'
         conclusions_body: 'Si bien la Calificación del Control Interno del NBCH S. A. es <b>“%{annual_qualification_period}”</b> y la misma no tiene tuvo modificaciones respecto del año anterior, es importante señalar que el ponderador actual <b>“%{annual_weight_period}”</b> es un 7% menor al <b>“%{annual_weight_previous_period}”</b> al del período anterior.'
       comparision_to_actual_situation:
