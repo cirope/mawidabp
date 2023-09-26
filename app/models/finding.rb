@@ -9,6 +9,7 @@ class Finding < ApplicationRecord
   include Findings::Brief
   include Findings::BusinessUnits
   include Findings::ByControlObjectiveProcessCsv
+  include Findings::ByRiskMap
   include Findings::ByUserCsv
   include Findings::WeaknessesHeatmapCsv
   include Findings::Code

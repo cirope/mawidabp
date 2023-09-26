@@ -1,0 +1,21 @@
+<div id="weakness_risk_map">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group row">
+        <% selected = params[action] ? params[action][:organizations_id] : nil %>
+        <%= f.label :organization,  Organization.model_name.human, class: 'col-md-4 col-form-label', for: nil %>
+        <div class="col-md-8">
+          <%= f.input :organization,
+            collection: Organization.all.map { |o| [o.name, o.id.to_s] },
+            label: '&nbsp;'.html_safe,
+            required: false,
+            class: 'form-control',
+            wrapper_html: { class: 'mt-n3' }
+          %>
+        </div>
+      <%= f.text_field :days %>
+      <%= f.text_field :before_committe_date %>
+      <%= f.text_field :current_committe_date %>
+    </div>
+  </div>
+</div>

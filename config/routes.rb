@@ -183,7 +183,8 @@ Rails.application.routes.draw do
     'auto_complete_for_business_unit',
     'auto_complete_for_process_control',
     'weaknesses_by_control_objective_process',
-    'weaknesses_heatmap'
+    'weaknesses_heatmap',
+    'weaknesses_risk_map'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -193,8 +194,8 @@ Rails.application.routes.draw do
       to: "follow_up_audit##{action}"
   end
 
-  get 'conclusion_reports/process_control_stats_csv', 
-    as: 'process_control_stats_csv_conclusion_reports', 
+  get 'conclusion_reports/process_control_stats_csv',
+    as: 'process_control_stats_csv_conclusion_reports',
     to: 'conclusion_reports#process_control_stats_csv'
 
   [
@@ -222,7 +223,8 @@ Rails.application.routes.draw do
     'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report',
     'create_weaknesses_by_control_objective_process',
-    'create_weaknesses_heatmap'
+    'create_weaknesses_heatmap',
+    'create_weaknesses_risk_map'
   ].each do |action|
     post "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
