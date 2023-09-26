@@ -3,7 +3,7 @@ module Findings::ByRiskMap
 
   OPTIONS = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-  def risk_map_row
+  def risk_map_row options = {}
     [
       organization,
       organization_id,
@@ -58,6 +58,9 @@ module Findings::ByRiskMap
         control_objective_item.compliance_score.to_i )/ 3
     end
 
+    def old_date_calculate
+      origination_date
+    end
 
   module ClassMethods
     def by_risk_map
@@ -69,6 +72,9 @@ module Findings::ByRiskMap
 
 
       ChunkIterator.iterate all_with_inclusions do |cursor|
+        byebug
+        raise
+
         csv_str += CSV.generate(**OPTIONS) do |csv|
           cursor.each { |f| csv << f.risk_map_row }
         end

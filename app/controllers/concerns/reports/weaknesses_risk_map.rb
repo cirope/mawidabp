@@ -19,11 +19,14 @@ module Reports::WeaknessesRiskMap
   def create_weaknesses_risk_map
     redirect_or_send_by_mail(
       collection:    @weaknesses,
-      method_name:   :to_weakness_report_pdf,
+      method_name:   :by_risk_map,
       filename:      weaknesses_report_pdf_name,
       options:       {
         title:         params[:report_title],
         subtitle:      params[:report_subtitle],
+        days:          params[:days],
+        before_committee_date: params[:before_committee_date],
+        current_committee_date: params[:current_committee_date],
         report_params: Hash(params[:weaknesses_report]&.permit!),
         filename:      weaknesses_report_pdf_name
       }

@@ -13,9 +13,18 @@
             wrapper_html: { class: 'mt-n3' }
           %>
         </div>
-      <%= f.text_field :days %>
-      <%= f.text_field :before_committe_date %>
-      <%= f.text_field :current_committe_date %>
+        <div>
+          <%= f.label :days, 'Cantidad de dias' %>
+          <%= f.input :days, label: false %>
+        </div>
+        <div>
+          <%= f.label :before_committee_date, 'Fecha comité anterior' %>
+          <%= f.input :before_committee_date, label: false %>
+        </div>
+        <div>
+          <%= f.label :current_committee_date, 'Fecha comité actual' %>
+          <%= f.input :current_committee_date, label: false %>
+        </div>
+      </div>
     </div>
   </div>
-</div>
