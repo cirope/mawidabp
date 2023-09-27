@@ -103,8 +103,8 @@ en:
         one: 'Control objective'
         other: 'Control objectives'
       control_objective_auditor:
-        one: 'Auditor in charge'
-        other: 'Auditors in charge'
+        one: 'Auditor/Auditee in charge'
+        other: 'Auditors/Auditees in charge'
       document:
         one: 'Document'
         other: 'Documents'
@@ -320,7 +320,6 @@ en:
         control_objective_id: 'Control objective'
         audit_sector: 'Audit Sector'
         date_charge: 'Date of creation'
-        affected_sector_id: 'Bank sector affected by the alert'
         control_objective_auditors: 'Auditors in charge'
       review/control_objective_items:
         control_objective_id: 'Control objective'

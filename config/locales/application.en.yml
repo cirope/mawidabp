@@ -95,6 +95,10 @@ en:
     show_details: "Show details"
     thank_you_and_apologies_for_the_inconvenience: "Thank you very much and sorry for the inconvenience"
 
+  best_practice:
+    auditors: Auditors in charge
+    audited: Auditees in charge
+
   business_unit_type:
     index_title: "Organizational units list"
     show_title: "Organizational unit detail"

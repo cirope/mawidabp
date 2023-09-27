@@ -95,6 +95,10 @@ es:
     show_details: "Ver detalles"
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
+  best_practice:
+    auditors: Auditores a cargo
+    audited: Referentes a cargo
+
   business_unit_type:
     index_title: "Listado de unidades organizativas"
     show_title: "Detalle unidad organizativa"
