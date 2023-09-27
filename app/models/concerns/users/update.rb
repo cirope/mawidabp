@@ -17,7 +17,11 @@ module Users::Update
 
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
 
-      user.update data unless roles.blank? && removed_roles.blank?
+      if roles.blank? && removed_roles.blank?
+        false
+      else
+        user.update data
+      end
     end
   end
 end
