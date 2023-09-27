@@ -8,6 +8,7 @@ module WorkPapers::Statuses
       revised:  'revised'
     }
 
+    before_validation :set_status
     after_update :mark_as_pending, unless: :saved_change_to_status?
   end
 
@@ -30,6 +31,10 @@ module WorkPapers::Statuses
   end
 
   private
+
+    def set_status
+      self.status ||= 'pending'
+    end
 
     def change_status_to new_status
       send "#{new_status}!"
