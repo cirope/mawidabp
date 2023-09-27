@@ -1,0 +1,8 @@
++function () {
+  $('[data-work-paper-id="<%= @work_paper.id %>"').replaceWith(
+    '<%= j render('status', work_paper: @work_paper, format: :html) %>'
+  )
+  $('fieldset#<%= @work_paper.id %>').find(
+    'input[name*="lock_version"]'
+  ).val('<%= @work_paper.lock_version %>')
+}()

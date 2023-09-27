@@ -931,3 +931,13 @@ es:
     show:
       title: 'Papel de trabajo'
       error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'
+    statuses:
+      pending: 'Pendiente'
+      finished: 'En Revisión'
+      revised: 'Revisado'
+      auditor:
+        next_to_pending: 'Marcar para revisión'
+        next_to_finished: 'Volver a pendiente'
+      supervisor:
+        next_to_finished: 'Marcar como revisado'
+        next_to_revised: 'Volver a pendiente'

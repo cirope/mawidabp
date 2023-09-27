@@ -5,6 +5,7 @@ class WorkPaper < ApplicationRecord
   include WorkPapers::LocalFiles
   include WorkPapers::RemoteFiles
   include WorkPapers::Review
+  include WorkPapers::Statuses
 
   # Named scopes
   scope :list, -> { where(organization_id: Current.organization&.id) }
@@ -18,6 +19,7 @@ class WorkPaper < ApplicationRecord
   attr_readonly :organization_id
 
   # Callbacks
+  before_validation :set_status
   before_save :check_for_modifications
   after_save :create_cover_and_zip
   after_destroy :destroy_file_model # TODO: delete when Rails fix gets in stable
@@ -309,5 +311,9 @@ class WorkPaper < ApplicationRecord
 
     def destroy_file_model
       file_model.try(:destroy!)
+    end
+
+    def set_status
+      self.status ||= 'pending'
     end
 end
