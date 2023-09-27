@@ -77,7 +77,7 @@
 
     <p class="mb-1">
       <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'conclusion' %></span>:
-      <%= weakness.review.conclusion_final_review.conclusion %>
+      <%= weakness.review&.conclusion_final_review&.conclusion %>
     </p>
 
     <p class="mb-1">

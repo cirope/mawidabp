@@ -82,7 +82,6 @@ class BestPracticesControllerTest < ActionController::TestCase
                   relevance: ControlObjective.relevances_values.first,
                   risk: ControlObjective.risks_values.first,
                   order: 1,
-                  affected_sector_id: sectors(:first_sector).id,
                   taggings_attributes: [
                     {
                       tag_id: tags(:risk_evaluation).id
@@ -265,7 +264,6 @@ class BestPracticesControllerTest < ActionController::TestCase
                     relevance: ControlObjective.relevances_values.first,
                     risk: ControlObjective.risks_values.first,
                     order: 1,
-                    affected_sector_id: sectors(:first_sector).id,
                     control_objective_auditors_attributes: [
                       {
                         id: control_objective_auditors(:organization_security_4_1_auditor),

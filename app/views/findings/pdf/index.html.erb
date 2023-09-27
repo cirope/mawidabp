@@ -12,6 +12,7 @@
       <th class="border border-dark"><%= Finding.human_attribute_name('title') %></th>
       <% if Current.conclusion_pdf_format == 'pat' %>
         <th class="border border-dark"><%= Finding.human_attribute_name('description') %></th>
+        <th class="border border-dark"><%= Finding.human_attribute_name('state') %></th>
         <th class="border border-dark"><%= Issue.model_name.human.pluralize %></th>
       <% end %>
     </tr>
@@ -28,6 +29,7 @@
         <td class="border border-dark"><%= finding.title %></td>
         <% if Current.conclusion_pdf_format == 'pat' %>
           <td class="border border-dark"><%= finding.description %></td>
+          <td class="border border-dark"><%= finding.state_text %></td>
           <td class="border border-dark"><%= t('findings.pdf.issue', review_code: finding.review_code) if show_pdf_issues finding %></td>
         <% end %>
       </tr>
