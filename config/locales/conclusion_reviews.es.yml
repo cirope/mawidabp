@@ -84,6 +84,7 @@ es:
             one: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el %{review}, consta de %{count} página."
             other: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el %{review}, consta de %{count} páginas."
           details_title: "A continuación se detallan las principales debilidades observadas, así como su situación al momento de emitir el respectivo informe:"
+          previous_title: "Observaciones de periodos anteriores:"
           weaknesses_title: "Observaciones del presente período:"
       weaknesses:
         title: "Anexo I"

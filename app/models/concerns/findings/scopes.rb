@@ -213,6 +213,23 @@ module Findings::Scopes
       end
     end
 
+    def by_origination_or_issue_date from_date, to_date
+      where(reviews: {
+        conclusion_reviews: {
+          issue_date: from_date..to_date
+        }
+      }).or(
+        where(
+          origination_date: from_date..to_date,
+          reviews: {
+            conclusion_reviews: {
+              id: nil
+            }
+          }
+        )
+      )
+    end
+
     private
 
       def search_by_tags_count tags, min_tag_count
