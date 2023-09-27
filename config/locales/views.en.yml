@@ -207,7 +207,7 @@ en:
       reject: 'Reject'
     finding_answers: 'Comments of'
     pdf:
-      issue: 'Refer to the attached table for cases under the code cam %{review_code}'
+      issue: 'Refer to the attached table for records under the code %{review_code}'
 
   licenses:
     trial_valid_until: 'End of trial period'
