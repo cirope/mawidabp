@@ -7,6 +7,8 @@ module WorkPapers::Statuses
       finished: 'finished',
       revised:  'revised'
     }
+
+    after_update :mark_as_pending, unless: :saved_change_to_status?
   end
 
   def update_status
@@ -31,5 +33,9 @@ module WorkPapers::Statuses
 
     def change_status_to new_status
       send "#{new_status}!"
+    end
+
+    def mark_as_pending
+      change_status_to 'pending'
     end
 end
