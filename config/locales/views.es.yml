@@ -207,7 +207,7 @@ es:
       reject: 'Rechazar'
     finding_answers: 'Comentarios de'
     pdf:
-      issue: 'Ver en el cuadro adjunto los casos bajo el código %{review_code}'
+      issue: 'Ver en la tabla adjunta los casos bajo el código %{review_code}'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
