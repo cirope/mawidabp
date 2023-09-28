@@ -9,7 +9,7 @@ module WorkPapers::Statuses
     }
 
     before_validation :set_status
-    after_update :mark_as_pending, unless: :saved_change_to_status?
+    after_update_commit :mark_as_pending, unless: :saved_change_to_status?
   end
 
   def update_status
@@ -41,6 +41,6 @@ module WorkPapers::Statuses
     end
 
     def mark_as_pending
-      change_status_to 'pending'
+      pending! unless pending?
     end
 end
