@@ -4,7 +4,6 @@ class WorkPaper < ApplicationRecord
   include Comparable
   include WorkPapers::LocalFiles
   include WorkPapers::RemoteFiles
-  include WorkPapers::Review
   include WorkPapers::Statuses
 
   # Named scopes

@@ -10,6 +10,7 @@ module WorkPapers::Statuses
 
     before_validation :set_status
     after_update_commit :mark_as_pending, unless: :saved_change_to_status?
+    after_commit :update_review_status
   end
 
   def update_status
@@ -42,5 +43,12 @@ module WorkPapers::Statuses
 
     def mark_as_pending
       pending! unless pending?
+    end
+
+    def update_review_status
+      if review = owner.review
+        review.updated_from_work_paper = true
+        review.update_status
+      end
     end
 end
