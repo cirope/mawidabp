@@ -141,7 +141,11 @@ module LdapConfigs::LdapImport
       end
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
 
-      user.update data
+      if roles.blank? && removed_roles.blank?
+        false
+      else
+        user.update data
+      end
     end
 
     def create_user user: nil, data: nil, roles: nil
