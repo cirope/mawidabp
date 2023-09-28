@@ -77,7 +77,12 @@ module Reports::WeaknessesRiskMap
       render_or_send_by_mail(
         collection:  @weaknesses,
         filename:    "#{@title.downcase}.csv",
-        method_name: :by_risk_map
+        method_name: :by_risk_map,
+        options: {
+          days:          params[:days],
+          before_committee_date: params[:before_committee_date],
+          current_committee_date: params[:current_committee_date],
+        }
       )
     end
 end

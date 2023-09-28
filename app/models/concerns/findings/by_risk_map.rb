@@ -63,7 +63,7 @@ module Findings::ByRiskMap
     end
 
   module ClassMethods
-    def by_risk_map
+    def by_risk_map options
       prefix_header_name = 'follow_up_committee_report.weaknesses_risk_map'
 
       csv_str = CSV.generate(**OPTIONS) do |csv|
@@ -72,11 +72,8 @@ module Findings::ByRiskMap
 
 
       ChunkIterator.iterate all_with_inclusions do |cursor|
-        byebug
-        raise
-
         csv_str += CSV.generate(**OPTIONS) do |csv|
-          cursor.each { |f| csv << f.risk_map_row }
+          cursor.each { |f| csv << f.risk_map_row(options) }
         end
       end
 
