@@ -12,7 +12,6 @@ module Findings::WorkPapersHelper
 
     if work_paper.persisted? && status.present?
       result    = work_paper_info_for status
-
       icon_text = if @auth_user.auditor?
                     t "work_papers.statuses.auditor.next_to_#{work_paper.status}"
                   elsif @auth_user.supervisor? || @auth_user.manager?
