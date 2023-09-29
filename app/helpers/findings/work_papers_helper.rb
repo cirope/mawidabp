@@ -34,9 +34,9 @@ module Findings::WorkPapersHelper
 
     def work_paper_info_for status
       case status
-      when 'pending', nil then ['text-default', 'file-circle-exclamation']
-      when 'finished'     then ['text-info',    'file-circle-check']
-      when 'revised'      then ['text-success', 'file-shield']
+        when 'pending', nil then ['text-default', 'file-circle-exclamation']
+        when 'finished'     then ['text-info',    'file-circle-check']
+        when 'revised'      then ['text-success', 'file-shield']
       end
     end
 end

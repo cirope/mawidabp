@@ -48,6 +48,7 @@ module WorkPapers::Statuses
     def update_review_status
       if review = owner.review
         review.updated_from_work_paper = true
+
         review.update_status status
       end
     end

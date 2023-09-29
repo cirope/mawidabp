@@ -936,7 +936,7 @@ es:
       error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'
     statuses:
       pending: 'Pendiente'
-      finished: 'En Revisión'
+      finished: 'En revisión'
       revised: 'Revisado'
       auditor:
         next_to_pending: 'Marcar para revisión'

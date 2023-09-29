@@ -935,3 +935,13 @@ en:
     show:
       title: 'Working paper'
       error: 'Please remember that you must be authenticated or have permissions to view the document'
+    statuses:
+      pending: 'Pending'
+      finished: 'Finished'
+      revised: 'Revised'
+      auditor:
+        next_to_pending: 'Mark for revision'
+        next_to_finished: 'Return to pending'
+      supervisor:
+        next_to_finished: 'Mark as revised'
+        next_to_revised: 'Return to pending'
