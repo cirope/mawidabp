@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_08_220747) do
+ActiveRecord::Schema.define(version: 2023_09_22_150532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1352,6 +1352,7 @@ ActiveRecord::Schema.define(version: 2023_09_08_220747) do
     t.integer "lock_version", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "status"
     t.index ["file_model_id"], name: "index_work_papers_on_file_model_id"
     t.index ["organization_id"], name: "index_work_papers_on_organization_id"
     t.index ["owner_type", "owner_id"], name: "index_work_papers_on_owner_type_and_owner_id"
