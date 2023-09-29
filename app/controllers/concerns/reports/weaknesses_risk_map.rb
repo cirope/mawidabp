@@ -22,14 +22,21 @@ module Reports::WeaknessesRiskMap
 
       if report_params.present?
         weaknesses = filter_weaknesses_for_report report_params
-        order      = weaknesses.values[:order]
+
+        conditions = []
+        parameters = {}
+
+        weaknesses.pluck(:id).each_slice(1000).with_index do |finding_ids, i|
+          conditions << "id IN (:ids_#{i})"
+          parameters[:"ids_#{i}"] = finding_ids
+        end
 
         @weaknesses = scoped_weaknesses.where(
-          id: weaknesses.pluck(:id)
-        ).includes(
+          conditions.map { |c| "(#{c})" }.join(' OR '), parameters).
+        includes(
           review: :plan_item,
           control_objective_item: [:process_control]
-        ).order order
+        )
       else
         @weaknesses = Weakness.none
       end
@@ -40,7 +47,7 @@ module Reports::WeaknessesRiskMap
     end
 
     def scoped_weaknesses
-      Weakness.where('created_at >= ?', 4.years.ago).
+      Weakness.where(created_at: 4.years.ago..).
         where.not(state: Finding::STATUS[:repeated])
     end
 
@@ -48,8 +55,8 @@ module Reports::WeaknessesRiskMap
       weaknesses = scoped_weaknesses.finals false
 
       if report_params[:organization_ids].present?
-        organization_ids = Array(report_params[:organization_ids]).reject(&:blank?).map &:to_i
-        weaknesses       = weaknesses.where organization_id: organization_ids if organization_ids.present?
+        organization_ids = Array(report_params[:organization_ids]).reject(&:blank?)
+        weaknesses       = weaknesses.where organization_id: organization_ids if organization_ids
       end
 
       weaknesses

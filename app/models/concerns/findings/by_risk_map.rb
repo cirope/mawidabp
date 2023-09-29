@@ -83,13 +83,12 @@ module Findings::ByRiskMap
       current_committee_date = options['current_committee_date'].to_date
 
       if committee_dates_present? options
-        committee_to_solution_date = if solution_date
-                                       solution_date > before_committee_date &&
-                                         origination_date <= current_committee_date
-                                     end
-
-        if state == Finding::STATUS[:implemented_audited] && committee_to_solution_date
-          '1'
+        if solution_date && (solution_date > before_committee_date && origination_date <= current_committee_date)
+          if state == Finding::STATUS[:implemented_audited]
+            '1'
+          else
+            '0'
+          end
         else
           '0'
         end
@@ -106,9 +105,9 @@ module Findings::ByRiskMap
     end
 
     def average_scores
-      ( control_objective_item.design_score.to_i +
+      (control_objective_item.design_score.to_i +
         control_objective_item.sustantive_score.to_i +
-        control_objective_item.compliance_score.to_i ) / 3
+        control_objective_item.compliance_score.to_i) / 3
     end
 
   module ClassMethods
