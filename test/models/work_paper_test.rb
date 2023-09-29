@@ -241,18 +241,19 @@ class WorkPaperTest < ActiveSupport::TestCase
     assert_error @work_paper, :code, :taken
   end
 
-  test 'mark review with work papers as not finished on change when auditor' do
+  test 'mark work papers as pending when review change to finished' do
     Current.user = users :auditor
     review       = @work_paper.owner.review
 
     review.work_papers_finished!
     review.save! validate: false
 
+    assert @work_paper.reload.finished?
     assert review.reload.work_papers_finished?
 
     @work_paper.update! number_of_pages: 20
 
-    assert review.reload.work_papers_not_finished?
+    assert @work_paper.pending?
   end
 
   test 'do not mark review with work papers as not finished on change when supervisor' do
@@ -261,11 +262,28 @@ class WorkPaperTest < ActiveSupport::TestCase
     review.work_papers_finished!
     review.save! validate: false
 
+    assert @work_paper.reload.finished?
     assert review.reload.work_papers_finished?
 
     @work_paper.update! number_of_pages: 20
 
-    assert review.reload.work_papers_finished?
+    assert review.reload.work_papers_not_finished?
+  end
+
+  test 'mark work_paper and review as pending when changed' do
+    review = @work_paper.owner.review
+
+    review.work_papers.map &:pending!
+    assert review.reload.work_papers.all? &:pending?
+    assert review.work_papers_not_finished?
+
+    review.reload.work_papers.map &:finished!
+    assert review.reload.work_papers.all? &:finished?
+    assert review.work_papers_finished?
+
+    @work_paper.reload.update! number_of_pages: 20
+    assert @work_paper.reload.pending?
+    assert review.reload.work_papers_not_finished?
   end
 
   test 'not save multiple files with same name' do

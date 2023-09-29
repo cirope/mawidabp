@@ -10,26 +10,25 @@ module Reviews::FinishedWorkPapers
       :work_papers_revised
     ]
 
-    after_update_commit :update_status, unless: :saved_change_to_finished_work_papers?
     after_update_commit :update_work_paper_status, if: :should_be_update_work_papers_status?
   end
 
-  def update_status
-    work_papers_status = work_papers.map(&:status).uniq
+  def update_status status
+    work_papers_status = work_papers.map(&:reload).map(&:status).uniq
 
-    if work_papers_status.include? 'pending'
+    if work_papers_status.include?    'pending'
       work_papers_not_finished! unless work_papers_not_finished?
     elsif work_papers_status.include? 'finished'
-      work_papers_finished! unless work_papers_finished?
+      work_papers_finished!     unless work_papers_finished?
     elsif work_papers_status.include? 'revised'
-      work_papers_revised! unless work_papers_revised?
+      work_papers_revised!      unless work_papers_revised?
     end
   end
 
   private
 
     def should_be_update_work_papers_status?
-      !updated_from_work_paper
+      !updated_from_work_paper && saved_change_to_finished_work_papers?
     end
 
     def update_work_paper_status
