@@ -50,18 +50,18 @@ module Findings::ByRiskMap
 
   private
 
-  def pending_finding_to options
-    current_committee_date = options['current_committee_date'].to_date
+    def pending_finding_to options
+      current_committee_date = options['current_committee_date'].to_date
 
-    if current_committee_date.present?
-      days                   = options['days'].to_i
-      date_old               = current_committee_date - days
+      if current_committee_date.present?
+        days                   = options['days'].to_i
+        date_old               = current_committee_date - days
 
-      origination_date < date_old ? '1' : '0'
-    else
-      '-'
+        origination_date < date_old ? '1' : '0'
+      else
+        '-'
+      end
     end
-  end
 
     def new_finding_between_committee_dates options
       before_committee_date  = options['before_committee_date'].to_date
@@ -84,7 +84,8 @@ module Findings::ByRiskMap
 
       if committee_dates_present? options
         committee_to_solution_date = if solution_date
-                                       solution_date > before_committee_date && origination_date <= current_committee_date
+                                       solution_date > before_committee_date &&
+                                         origination_date <= current_committee_date
                                      end
 
         if state == Finding::STATUS[:implemented_audited] && committee_to_solution_date

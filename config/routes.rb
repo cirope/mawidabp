@@ -223,8 +223,7 @@ Rails.application.routes.draw do
     'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report',
     'create_weaknesses_by_control_objective_process',
-    'create_weaknesses_heatmap',
-    'create_weaknesses_risk_map'
+    'create_weaknesses_heatmap'
   ].each do |action|
     post "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
