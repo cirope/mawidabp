@@ -923,6 +923,12 @@ en:
     form:
       add_control_objective: 'Add control objective'
 
+  follow_up_audit:
+    weaknesses_risk_map:
+      days: 'Cantidad de Días'
+      before_committee_date: 'Fecha comité anterior'
+      current_committee_date: 'Fecha comité actual'
+
   work_papers:
     show:
       title: 'Working paper'

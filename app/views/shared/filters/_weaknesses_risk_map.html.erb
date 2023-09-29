@@ -2,29 +2,35 @@
   <div class="row">
     <div class="col-md-4">
       <div class="form-group row">
-        <% selected = params[action] ? params[action][:organizations_id] : nil %>
+        <% selected = params[action] ? params[action][:organization_ids] : nil %>
         <%= f.label :organization,  Organization.model_name.human, class: 'col-md-4 col-form-label', for: nil %>
         <div class="col-md-8">
-          <%= f.input :organization,
+          <%= f.input :organization_ids,
+            as: :check_boxes,
             collection: Organization.all.map { |o| [o.name, o.id.to_s] },
             label: '&nbsp;'.html_safe,
             required: false,
+            checked: selected,
             class: 'form-control',
             wrapper_html: { class: 'mt-n3' }
           %>
         </div>
         <div>
-          <%= f.label :days, 'Cantidad de dias' %>
-          <%= f.input :days, label: false %>
+          <% days = params[action] ? params[action][:days] : nil %>
+          <%= f.label :days, t('follow_up_audit.weaknesses_risk_map.days') %>
+          <%= f.text_field :days, value: days %>
         </div>
         <div>
-          <%= f.label :before_committee_date, 'Fecha comité anterior' %>
-          <%= f.input :before_committee_date, label: false %>
+          <% before_committee_date = params[action] ? params[action][:before_committee_date] : nil %>
+          <%= f.label :before_committee_date, t('follow_up_audit.weaknesses_risk_map.days')%>
+          <%= f.text_field :before_committee_date, value: before_committee_date %>
         </div>
         <div>
-          <%= f.label :current_committee_date, 'Fecha comité actual' %>
-          <%= f.input :current_committee_date, label: false %>
+          <% current_committee_date = params[action] ? params[action][:current_committee_date] : nil %>
+          <%= f.label :current_committee_date, t('follow_up_audit.weaknesses_risk_map.days') %>
+          <%= f.text_field :current_committee_date, value: current_committee_date %>
         </div>
       </div>
     </div>
   </div>
+</div>

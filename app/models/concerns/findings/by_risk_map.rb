@@ -36,9 +36,9 @@ module Findings::ByRiskMap
       'rescheduled',
       'rescheduled_description',
       'antiquity',
-      'old_date',
-      'new_finding',
-      'closed_finding',
+      finding_old_data(options),
+      finding_new(options),
+      closed_finding(options),
       business_unit_type.external,
       business_unit.name,
       control_objective_item.best_practice.description,
@@ -51,11 +51,45 @@ module Findings::ByRiskMap
 
   private
 
+    def finding_old_data options
+      current_committee_date = options['current_committee_date'].to_date
+      days                   = options['days'].to_i
+      date_old               = current_committee_date - days
+
+      origination_date < date_old ? '1' : '0'
+    end
+
+    def finding_new options
+      before_committee_date  = options['before_committee_date'].to_date
+      current_committee_date = options['current_committee_date'].to_date
+
+      if origination_date > before_committee_date && origination_date <= current_committee_date
+        '1'
+      else
+        '0'
+      end
+    end
+
+    def closed_finding options
+      before_committee_date = options['before_committee_date'].to_date
+      current_committee_date = options['current_committee_date'].to_date
+
+      include_date = if solution_date
+        include_date = solution_date > before_committee_date && origination_date <= current_committee_date
+      end
+
+      if state == Finding::STATUS[:implemented_audited] && include_date
+        '1'
+      else
+        '0'
+      end
+    end
+
     def average_scores
       (
         control_objective_item.design_score.to_i +
         control_objective_item.sustantive_score.to_i +
-        control_objective_item.compliance_score.to_i )/ 3
+        control_objective_item.compliance_score.to_i ) / 3
     end
 
     def old_date_calculate
@@ -63,13 +97,13 @@ module Findings::ByRiskMap
     end
 
   module ClassMethods
+
     def by_risk_map options
       prefix_header_name = 'follow_up_committee_report.weaknesses_risk_map'
 
       csv_str = CSV.generate(**OPTIONS) do |csv|
         csv << risk_map_column_headers(prefix_header_name)
       end
-
 
       ChunkIterator.iterate all_with_inclusions do |cursor|
         csv_str += CSV.generate(**OPTIONS) do |csv|
