@@ -254,6 +254,7 @@ class WorkPaperTest < ActiveSupport::TestCase
     @work_paper.update! number_of_pages: 20
 
     assert @work_paper.pending?
+    assert review.reload.work_papers_not_finished?
   end
 
   test 'do not mark review with work papers as not finished on change when supervisor' do
