@@ -11,7 +11,7 @@ module Reports::WeaknessesRiskMap
   def weaknesses_risk_map
     respond_to do |format|
       format.html
-      format.csv  { render_weaknesses_report_csv }
+      format.csv { render_weaknesses_report_csv }
     end
   end
 

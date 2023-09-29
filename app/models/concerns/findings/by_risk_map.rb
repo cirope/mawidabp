@@ -18,7 +18,7 @@ module Findings::ByRiskMap
       control_objective_item.design_score,
       control_objective_item.sustantive_score,
       control_objective_item.compliance_score,
-      average_scores,
+      average_scores.to_f,
       id,
       description,
       review_code,
@@ -36,9 +36,9 @@ module Findings::ByRiskMap
       'rescheduled',
       'rescheduled_description',
       'antiquity',
-      finding_old_data(options),
-      finding_new(options),
-      closed_finding(options),
+      pending_finding_to(options),
+      new_finding_between_committee_dates(options),
+      closed_finding_between_committee_dates(options),
       business_unit_type.external,
       business_unit.name,
       control_objective_item.best_practice.description,
@@ -51,49 +51,64 @@ module Findings::ByRiskMap
 
   private
 
-    def finding_old_data options
-      current_committee_date = options['current_committee_date'].to_date
+  def pending_finding_to options
+    current_committee_date = options['current_committee_date'].to_date
+
+    if current_committee_date.present?
       days                   = options['days'].to_i
       date_old               = current_committee_date - days
 
       origination_date < date_old ? '1' : '0'
+    else
+      '-'
     end
+  end
 
-    def finding_new options
+    def new_finding_between_committee_dates options
       before_committee_date  = options['before_committee_date'].to_date
       current_committee_date = options['current_committee_date'].to_date
 
-      if origination_date > before_committee_date && origination_date <= current_committee_date
-        '1'
+      if committee_dates_present? options
+        if origination_date > before_committee_date && origination_date <= current_committee_date
+          '1'
+        else
+          '0'
+        end
       else
-        '0'
+        '-'
       end
     end
 
-    def closed_finding options
-      before_committee_date = options['before_committee_date'].to_date
+    def closed_finding_between_committee_dates options
+      before_committee_date  = options['before_committee_date'].to_date
       current_committee_date = options['current_committee_date'].to_date
 
-      include_date = if solution_date
-        include_date = solution_date > before_committee_date && origination_date <= current_committee_date
-      end
+      if committee_dates_present? options
+        committee_to_solution_date = if solution_date
+                                       solution_date > before_committee_date && origination_date <= current_committee_date
+                                     end
 
-      if state == Finding::STATUS[:implemented_audited] && include_date
-        '1'
+        if state == Finding::STATUS[:implemented_audited] && committee_to_solution_date
+          '1'
+        else
+          '0'
+        end
       else
-        '0'
+        '-'
       end
+    end
+
+    def committee_dates_present? options
+      before_committee_date  = options['before_committee_date'].to_date
+      current_committee_date = options['current_committee_date'].to_date
+
+      before_committee_date.present? && current_committee_date.present? ? true : false
     end
 
     def average_scores
-      (
-        control_objective_item.design_score.to_i +
+      ( control_objective_item.design_score.to_i +
         control_objective_item.sustantive_score.to_i +
         control_objective_item.compliance_score.to_i ) / 3
-    end
-
-    def old_date_calculate
-      origination_date
     end
 
   module ClassMethods
