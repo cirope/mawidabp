@@ -23,8 +23,8 @@ module Findings::WorkPapersHelper
         work_paper_url(work_paper),
         class: 'dropdown-item',
         data: {
-          method: :put,
-          remote: true,
+          method:  :put,
+          remote:  true,
           confirm: t('messages.confirmation')
         }
     end
