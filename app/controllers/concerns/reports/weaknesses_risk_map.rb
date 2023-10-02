@@ -11,7 +11,7 @@ module Reports::WeaknessesRiskMap
   def weaknesses_risk_map
     respond_to do |format|
       format.html
-      format.csv { render_weaknesses_report_csv }
+      format.csv { render_weaknesses_risk_map_csv }
     end
   end
 
@@ -33,10 +33,10 @@ module Reports::WeaknessesRiskMap
 
         @weaknesses = scoped_weaknesses.where(
           conditions.map { |c| "(#{c})" }.join(' OR '), parameters).
-        includes(
-          review: :plan_item,
-          control_objective_item: [:process_control]
-        )
+            includes(
+              review: :plan_item,
+              control_objective_item: [:process_control]
+            )
       else
         @weaknesses = Weakness.none
       end
@@ -62,7 +62,7 @@ module Reports::WeaknessesRiskMap
       weaknesses
     end
 
-    def render_weaknesses_report_csv
+    def render_weaknesses_risk_map_csv
       render_or_send_by_mail(
         collection:  @weaknesses,
         filename:    "#{@title.downcase}.csv",

@@ -30,14 +30,14 @@
           <% before_committee_date = params[action] ? params[action][:before_committee_date] : nil %>
           <%= f.label :before_committee_date, t('follow_up_audit.weaknesses_risk_map.before_committee_date'), class: 'col-md-4 col-form-label'%>
           <div class="col-md-4">
-            <%= f.text_field :before_committee_date, value: before_committee_date, class: 'form-control' %>
+            <%= f.text_field :before_committee_date, value: before_committee_date, class: 'form-control', autocomplete: :off, data: { date_picker: true }%>
           </div>
         </div>
         <div class="form-group row">
           <% current_committee_date = params[action] ? params[action][:current_committee_date] : nil %>
           <%= f.label :current_committee_date, t('follow_up_audit.weaknesses_risk_map.current_committee_date'), class: 'col-md-4 col-form-label' %>
           <div class="col-md-4">
-            <%= f.text_field :current_committee_date, value: current_committee_date, class: 'form-control' %>
+            <%= f.text_field :current_committee_date, value: current_committee_date, class: 'form-control', autocomplete: :off, data: { date_picker: true }%>
           </div>
         </div>
       </div>
