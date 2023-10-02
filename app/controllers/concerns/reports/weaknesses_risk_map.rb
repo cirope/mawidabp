@@ -27,7 +27,7 @@ module Reports::WeaknessesRiskMap
         parameters = {}
 
         weaknesses.pluck(:id).each_slice(1000).with_index do |finding_ids, i|
-          conditions << "id IN (:ids_#{i})"
+          conditions << "#{Finding.quoted_table_name}.#{Finding.qcn 'id'} IN (:ids_#{i})"
           parameters[:"ids_#{i}"] = finding_ids
         end
 
@@ -68,7 +68,7 @@ module Reports::WeaknessesRiskMap
         filename:    "#{@title.downcase}.csv",
         method_name: :by_risk_map,
         options:     Hash(params[:weaknesses_risk_map]&.permit!).merge(
-          {'back_url_to': weaknesses_risk_map_follow_up_audit_path})
+          {back_to_url: weaknesses_risk_map_follow_up_audit_path})
       )
     end
 end

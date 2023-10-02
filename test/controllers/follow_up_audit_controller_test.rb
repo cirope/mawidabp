@@ -1224,6 +1224,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       'weaknesses_heatmap', 0)
   end
 
+  test 'weaknesses risk map' do
+    login
+
+    get :weaknesses_risk_map
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_risk_map'
+  end
+
   test 'weaknesses risk map as CSV' do
     login
 
