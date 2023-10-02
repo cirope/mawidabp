@@ -31,7 +31,7 @@ module Reports::WeaknessesRiskMap
           parameters[:"ids_#{i}"] = finding_ids
         end
 
-        @weaknesses = scoped_weaknesses.where(
+        @weaknesses = scoped_risk_map_finding.where(
           conditions.map { |c| "(#{c})" }.join(' OR '), parameters).
             includes(
               review: :plan_item,
@@ -46,13 +46,13 @@ module Reports::WeaknessesRiskMap
       @title = t 'follow_up_committee_report.weaknesses_risk_map_title'
     end
 
-    def scoped_weaknesses
+    def scoped_risk_map_finding
       Weakness.where(created_at: 4.years.ago..).
         where.not(state: Finding::STATUS[:repeated])
     end
 
     def filter_weaknesses_for_report report_params
-      weaknesses = scoped_weaknesses.finals false
+      weaknesses = scoped_risk_map_finding.finals false
 
       if report_params[:organization_ids].present?
         organization_ids = Array(report_params[:organization_ids]).reject(&:blank?)
@@ -67,7 +67,8 @@ module Reports::WeaknessesRiskMap
         collection:  @weaknesses,
         filename:    "#{@title.downcase}.csv",
         method_name: :by_risk_map,
-        options:     Hash(params[:weaknesses_risk_map]&.permit!).merge({'redirect': true})
+        options:     Hash(params[:weaknesses_risk_map]&.permit!).merge(
+          {'back_url_to': weaknesses_risk_map_follow_up_audit_path})
       )
     end
 end

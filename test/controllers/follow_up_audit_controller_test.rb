@@ -2098,7 +2098,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = old_count }
 
     assert_response :redirect
-    byebug
     assert_match back_url, @response.body
   end
 
