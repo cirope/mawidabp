@@ -68,8 +68,11 @@ module Reports::FileResponder
     def perform_report_and_redirect_back args
       perform_deferred_report args
 
+      redirect   = args[:options].include? :redirect
       parameters = request.query_parameters.except 'format'
-      back_url   = if parameters.present?
+      back_url   = if redirect
+                      request.referrer
+                   elsif parameters.present?
                      [request.path, parameters.to_param].join '?'
                    else
                      request.path

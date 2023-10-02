@@ -67,7 +67,7 @@ module Reports::WeaknessesRiskMap
         collection:  @weaknesses,
         filename:    "#{@title.downcase}.csv",
         method_name: :by_risk_map,
-        options:     Hash(params[:weaknesses_risk_map]&.permit!)
+        options:     Hash(params[:weaknesses_risk_map]&.permit!).merge({'redirect': true})
       )
     end
 end
