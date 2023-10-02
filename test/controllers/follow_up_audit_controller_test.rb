@@ -1224,6 +1224,32 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       'weaknesses_heatmap', 0)
   end
 
+  test 'weaknesses risk map as CSV' do
+    login
+
+    organization = organizations :cirope
+
+    get :weaknesses_risk_map
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_risk_map'
+
+    assert_nothing_raised do
+      get :weaknesses_risk_map, :params => {
+        :weaknesses_risk_map => {
+          :before_committee_date => 10.years.ago.to_date,
+          :current_committee_date => 10.years.from_now.to_date,
+          :days => 730,
+          :organization_ids => [organization.id]
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'weaknesses by control objective process' do
     login
 
@@ -2072,6 +2098,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = old_count }
 
     assert_response :redirect
+    byebug
     assert_match back_url, @response.body
   end
 

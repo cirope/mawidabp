@@ -57,7 +57,7 @@ module Findings::ByRiskMap
         days     = options['days'].to_i
         date_old = current_committee_date - days
 
-        origination_date < date_old ? '1' : '0'
+        origination_date && (origination_date < date_old) ? '1' : '0'
       else
         '-'
       end
@@ -68,7 +68,8 @@ module Findings::ByRiskMap
       current_committee_date = options['current_committee_date'].to_date
 
       if committee_dates_present? options
-        if origination_date > before_committee_date && origination_date <= current_committee_date
+        if origination_date &&
+            (origination_date > before_committee_date && origination_date <= current_committee_date)
           '1'
         else
           '0'

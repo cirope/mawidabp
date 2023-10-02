@@ -5,7 +5,7 @@ module Reports::WeaknessesRiskMap
 
   included do
     before_action :set_weaknesses_for_risk_map,
-      :set_title, only: :weaknesses_risk_map
+      :set_title_risk_map, only: :weaknesses_risk_map
   end
 
   def weaknesses_risk_map
@@ -42,7 +42,7 @@ module Reports::WeaknessesRiskMap
       end
     end
 
-    def set_title
+    def set_title_risk_map
       @title = t 'follow_up_committee_report.weaknesses_risk_map_title'
     end
 
