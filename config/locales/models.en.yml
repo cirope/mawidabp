@@ -748,6 +748,7 @@ en:
       risk_assessment_template:
         name: 'Name'
         description: 'Description'
+        formula: 'Formula'
         risk_assessment_weights: 'Risk assessment attributes'
       risk_assessment_template/risk_assessment_weights:
         name: 'Attribute'
@@ -757,6 +758,7 @@ en:
         name: 'Attribute'
         description: 'Description'
         weight: 'Weight'
+        identifier: 'Identifier'
       risk_weight:
         value: 'Value'
         weight: 'Weight'

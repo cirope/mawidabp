@@ -32,6 +32,7 @@ namespace :db do
       update_options_tags                        # 2023-06-05
       update_roles_identifier                    # 2023-07-24
       update_status_work_papers                  # 2023-09-25
+      update_risk_assessment_weights             # 2023-10-02
     end
   end
 end
@@ -795,4 +796,31 @@ private
 
   def update_status_work_papers?
     WorkPaper.where(status: nil).exists?
+  end
+
+  def update_risk_assessment_weights
+    if should_update_risk_assessment_weights?
+      RiskAssessmentTemplate.find_each do |rat|
+        identifier = '@'
+
+        rat.risk_assessment_weights.each do |raw|
+          raw.update_column :identifier, identifier.next!
+        end
+
+        rat.update_column :formula, risk_assessment_make_formula(rat)
+      end
+    end
+  end
+
+  def should_update_risk_assessment_weights?
+    RiskAssessmentTemplate.where(formula: nil).exists?
+  end
+
+  def risk_assessment_make_formula rat
+    weights = rat.reload.risk_assessment_weights.ordered.pluck :identifier, :weight
+
+    dividend = weights.map { |raw| raw.join(' * ') }.join(' + ')
+    divisor  = weights.to_h.values.join ' + '
+
+    "(#{dividend}) / (#{divisor})"
   end

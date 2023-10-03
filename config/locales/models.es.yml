@@ -748,6 +748,7 @@ es:
       risk_assessment_template:
         name: 'Nombre'
         description: 'Descripción'
+        formula: 'Fórmula'
         risk_assessment_weights: 'Atributos de evaluación de riesgo'
       risk_assessment_template/risk_assessment_weights:
         name: 'Atributo'
@@ -757,6 +758,7 @@ es:
         name: 'Atributo'
         description: 'Descripción'
         weight: 'Ponderador'
+        identifier: 'Identificador'
       risk_weight:
         value: 'Valor'
         weight: 'Ponderador'

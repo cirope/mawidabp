@@ -6,6 +6,10 @@
   <strong><%= RiskAssessmentTemplate.human_attribute_name 'description' %></strong>:
   <%= @risk_assessment_template.description %>
 </p>
+<p class="mb-1">
+  <strong><%= RiskAssessmentTemplate.human_attribute_name 'formula' %></strong>:
+  <%= @risk_assessment_template.formula %>
+</p>
 
 <% if @risk_assessment_template.risk_assessment_weights.any? %>
   <table class="table table-sm table-striped table-hover">
@@ -16,7 +20,7 @@
       <tr>
         <th><%= RiskAssessmentWeight.human_attribute_name 'name' %></th>
         <th><%= RiskAssessmentWeight.human_attribute_name 'description' %></th>
-        <th><%= RiskAssessmentWeight.human_attribute_name 'weight' %></th>
+        <th><%= RiskAssessmentWeight.human_attribute_name 'identifier' %></th>
       </tr>
     </thead>
 
@@ -25,7 +29,7 @@
         <tr>
           <td><%= risk_assessment_weight.name %></td>
           <td><%= risk_assessment_weight.description %></td>
-          <td><%= risk_assessment_weight.weight %></td>
+          <td><%= risk_assessment_weight.identifier %></td>
         </tr>
       <% end %>
     </tbody>

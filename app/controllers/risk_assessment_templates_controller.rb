@@ -62,9 +62,9 @@ class RiskAssessmentTemplatesController < ApplicationController
     end
 
     def risk_assessment_template_params
-      params.require(:risk_assessment_template).permit :name, :description,
+      params.require(:risk_assessment_template).permit :name, :description, :formula,
         :lock_version, risk_assessment_weights_attributes: [
-          :id, :name, :description, :weight, :_destroy
+          :id, :name, :description, :identifier, :_destroy
         ]
     end
 end
