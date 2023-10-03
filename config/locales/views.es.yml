@@ -108,7 +108,7 @@ es:
       title: 'Detalles del objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
-      add_control_objective_auditor: 'Agregar auditor a cargo'
+      add_control_objective_auditor: 'Agregar auditor/referente a cargo'
     score_type:
       option: 'Opciones'
       percentage: 'Porcentaje'
@@ -207,7 +207,7 @@ es:
       reject: 'Rechazar'
     finding_answers: 'Comentarios de'
     pdf:
-      issue: 'Ver en cuadro adjunto, los casos bajo código cam %{review_code}'
+      issue: 'Ver en la tabla adjunta los casos bajo el código %{review_code}'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -434,6 +434,9 @@ es:
       annual_plan_hours: 'Hs Plan Anual'
       auditor: 'Auditor (Usuario)'
       time_summary_hours: 'Hs Resumen Horario'
+      main_or_aux_but: UO Principal/Auxiliar
+      main_but: UO Principal
+      aux_but: UO Auxiliar
     csv_prs_pat:
       csv_name: 'grado_de_avance_estados_de_trabajos_%{current_date}.csv'
       business_unit: 'Sector'
@@ -931,3 +934,13 @@ es:
     show:
       title: 'Papel de trabajo'
       error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'
+    statuses:
+      pending: 'Pendiente'
+      finished: 'En revisión'
+      revised: 'Revisado'
+      auditor:
+        next_to_pending: 'Marcar para revisión'
+        next_to_finished: 'Volver a pendiente'
+      supervisor:
+        next_to_finished: 'Marcar como revisado'
+        next_to_revised: 'Volver a pendiente'

@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
         saml_request = OneLogin::RubySaml::Authrequest.new
         action       = saml_request.create saml_config
 
-        @current_user.update_saml_request_id saml_request.request_id
+        @current_user&.update_saml_request_id saml_request.request_id
 
         redirect_to action
       else
