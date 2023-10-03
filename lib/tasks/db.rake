@@ -1,6 +1,9 @@
 namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
+    class PotentialNonconformity < Finding; end
+    class Fortress < Finding; end
+    class Nonconformity < Finding; end
     ActiveRecord::Base.transaction do
       update_organization_settings               # 2017-03-15 last 2021-08-09
       add_new_answer_options                     # 2017-06-29
