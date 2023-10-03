@@ -148,19 +148,25 @@
           </div>
           <p class="ml-4 text-left" style="font-size:1.7em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p>
           <div class="row font-weight-bold ml-2">
-            <div class="col-5 text-center">
-              <p class="badge badge-dark w-100" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :risk).upcase %>: </p>
+            <div class="col-5 text-center vertical-align-center pr-0">
+              <p class="border border-white bg-black w-100 mb-0" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :risk).upcase %></p>
             </div>
-            <div class="col-7">
-              <p class="ml-2 text-left text-dark-shadow" style="font-size:1.7em;"><%= weakness.risk_text %></p>
+            <div class="col-1">
+              <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'key.png')), height: 80 %>
+            </div>
+            <div class="col-6 vertical-align-center">
+              <p class="mb-0 text-left text-dark-shadow" style="font-size:1.7em;"><%= weakness.risk_text %></p>
             </div>
           </div>
           <div class="row font-weight-bold ml-2">
-            <div class="col-5 text-center">
-              <p class="badge badge-dark w-100" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :state).upcase %>: </p>
+            <div class="col-5 text-center vertical-align-center pr-0">
+              <p class="border border-white bg-black w-100 mb-0" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :state).upcase %></p>
             </div>
-            <div class="col-7">
-              <p class="ml-2 text-left text-dark-shadow <%= risk_style weakness %>" style="font-size:1.7em;"><%= weakness.state_text %></p>
+            <div class="col-1">
+              <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'key.png')), height: 80 %>
+            </div>
+            <div class="col-6 vertical-align-center">
+              <p class="mb-0 text-left text-dark-shadow <%= risk_style weakness %>" style="font-size:1.7em;"><%= weakness.state_text %></p>
             </div>
           </div>
         </div>

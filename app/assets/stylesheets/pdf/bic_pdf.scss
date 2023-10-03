@@ -10,6 +10,10 @@
   color: #04b38c;
 }
 
+.bg-black {
+  background-color: #000;
+}
+
 .text-dark-shadow {
   text-shadow: 1px 1px 4px #343a40;
 }
@@ -18,6 +22,7 @@
   display: -webkit-box;
   -webkit-box-align: center;
 }
+
 .header-background-image {
   background-image: asset-data-url("bic_pdf/header-background-image.png");
   background-size: 1600px;
