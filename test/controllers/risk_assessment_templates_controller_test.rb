@@ -45,11 +45,12 @@ class RiskAssessmentTemplatesControllerTest < ActionController::TestCase
         risk_assessment_template: {
           name: 'New',
           description: 'New risk template',
+          formula: '(A * 100) / 100',
           risk_assessment_weights_attributes: [
             {
+              identifier: 'A',
               name: 'New attribute',
-              description: 'Some new attribute',
-              weight: 80
+              description: 'Some new attribute'
             }
           ]
         }

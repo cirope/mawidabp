@@ -2,3 +2,4 @@ sox:
   name: Sox
   description: Sox risk matrix
   organization: cirope
+  formula: (A * 80) / 80

@@ -820,7 +820,7 @@ private
     weights = rat.reload.risk_assessment_weights.ordered.pluck :identifier, :weight
 
     dividend = weights.map { |raw| raw.join(' * ') }.join(' + ')
-    divisor  = weights.to_h.values.join ' + '
+    divisor  = weights.to_h.values.sum
 
-    "(#{dividend}) / (#{divisor})"
+    "(#{dividend}) / #{divisor}"
   end

@@ -3,6 +3,7 @@ module RiskAssessmentTemplates::Validations
 
   included do
     validates :name, :description, :formula, presence: true, pdf_encoding: true
+    validates :formula, length: { maximum: 255 }, allow_blank: true
     validates :name, length: { maximum: 255 }, allow_blank: true, uniqueness: {
       case_sensitive: false, scope: :organization_id
     }

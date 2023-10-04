@@ -1,4 +1,5 @@
 sox_404:
+  identifier: A
   name: Sox 404
   description: Sox section 404
   weight: 80

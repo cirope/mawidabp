@@ -1096,7 +1096,7 @@ ActiveRecord::Schema.define(version: 2023_10_02_153428) do
   create_table "risk_assessment_weights", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.integer "weight", null: false
+    t.integer "weight"
     t.bigint "risk_assessment_template_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
