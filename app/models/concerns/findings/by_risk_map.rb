@@ -9,7 +9,8 @@ module Findings::ByRiskMap
       organization_id,
       title,
       review.identification,
-      (taggings_format if self.class.show_follow_up_timestamps?),
+      taggings_findings('finding'),
+      taggings_findings('review'),
       control_objective_item_id,
       control_objective_item.control_objective_text,
       control_objective_item.relevance,
@@ -32,9 +33,7 @@ module Findings::ByRiskMap
       priority,
       parent_id,
       repeated_of_id,
-      'rescheduled',
-      'rescheduled_description',
-      'antiquity',
+      antiquity_finding(options),
       pending_finding_to(options),
       new_finding_between_committee_dates(options),
       closed_finding_between_committee_dates(options),
@@ -50,17 +49,27 @@ module Findings::ByRiskMap
 
   private
 
-    def pending_finding_to options
+    def taggings_findings kind
+      tags = taggings.includes(:tag).where(tag: {kind: kind}).pluck(:name)
+
+      tags.join(' - ')
+    end
+
+    def antiquity_finding options
       current_committee_date = options['current_committee_date'].to_date
 
-      if current_committee_date.present?
-        days     = options['days'].to_i
-        date_old = current_committee_date - days
-
-        origination_date && (origination_date < date_old) ? '1' : '0'
+      if origination_date && current_committee_date.present?
+        (current_committee_date - origination_date).to_i
       else
         '-'
       end
+    end
+
+    def pending_finding_to options
+      antiquity = antiquity_finding(options).to_i
+      days      = options['days'].to_i
+
+      antiquity > days ? '1' : '0'
     end
 
     def new_finding_between_committee_dates options
@@ -82,14 +91,11 @@ module Findings::ByRiskMap
     def closed_finding_between_committee_dates options
       before_committee_date  = options['before_committee_date'].to_date
       current_committee_date = options['current_committee_date'].to_date
+      allowed_state          = state == Finding::STATUS[:implemented_audited]
 
       if committee_dates_present? options
-        if solution_date && (solution_date > before_committee_date && origination_date <= current_committee_date)
-          if state == Finding::STATUS[:implemented_audited]
-            '1'
-          else
-            '0'
-          end
+        if allowed_state && (updated_at > before_committee_date && updated_at <= current_committee_date)
+          '1'
         else
           '0'
         end
@@ -137,7 +143,8 @@ module Findings::ByRiskMap
           'organization_id',
           'identification',
           'review_identification',
-          'tags',
+          'finding_tags',
+          'review_tags',
           'control_objective_item_id',
           'control_objective_item_control_objective_text',
           'control_objective_item_relevance',
@@ -160,8 +167,6 @@ module Findings::ByRiskMap
           'finding_priority',
           'finding_parent_id',
           'finding_repeated_of_id',
-          'finding_pending_rescheduling',
-          'finding_rescheduling_description',
           'finding_antiquity',
           'old_data',
           'new_finding',

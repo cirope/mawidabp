@@ -1227,8 +1227,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses risk map' do
     login
 
-    organization = organizations :cirope
-
     get :weaknesses_risk_map
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_risk_map'
@@ -1247,10 +1245,30 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_risk_map'
   end
 
-  test 'weaknesses risk map as CSV' do
+  test 'filtered weaknesses risk map' do
     login
 
-    cirope_organization = organizations :cirope
+    organization_ids = [organizations(:cirope).id, organizations(:google).id]
+
+    total_weaknesses_by_organizations = scoped_weaknesses_by_organizations(organization_ids)
+
+    get :weaknesses_risk_map, :params => {
+      :weaknesses_risk_map => {
+        :before_committee_date => 6.months.ago.to_date,
+        :current_committee_date => Time.zone.today,
+        :days => 730,
+        :organization_ids => organization_ids
+      },
+      :controller_name => 'follow_up',
+    }
+
+    assert_response :success
+    assert_equal total_weaknesses_by_organizations, assigns(:weaknesses).count
+    assert_template 'follow_up_audit/weaknesses_risk_map'
+  end
+
+  test 'weaknesses risk map as CSV' do
+    login
 
     get :weaknesses_risk_map
     assert_response :success
@@ -1268,26 +1286,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
-  end
-
-  test 'filtered weaknesses risk map' do
-    login
-
-    cirope_organization = organizations :cirope
-    google_organization = organizations :google
-
-    get :weaknesses_risk_map, :params => {
-      :weaknesses_risk_map => {
-        :before_committee_date => 10.years.ago.to_date,
-        :current_committee_date => 10.years.from_now.to_date,
-        :days => 730,
-        :organization_ids => [cirope_organization.id, google_organization.id]
-      },
-      :controller_name => 'follow_up',
-    }
-
-    assert_response :success
-    assert_template 'follow_up_audit/weaknesses_risk_map'
   end
 
   test 'weaknesses by control objective process' do
@@ -2287,5 +2285,11 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_response :redirect
+  end
+
+  def scoped_weaknesses_by_organizations organization_ids
+    Weakness.includes(:organization).where(created_at: 4.years.ago..).
+      where.not(state: Finding::STATUS[:repeated]).
+      where(organization_id: organization_ids).finals(false).count
   end
 end

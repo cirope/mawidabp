@@ -31,7 +31,7 @@ module Reports::WeaknessesRiskMap
           parameters[:"ids_#{i}"] = finding_ids
         end
 
-        @weaknesses = scoped_risk_map_finding.where(
+        @weaknesses = weaknesses.where(
           conditions.map { |c| "(#{c})" }.join(' OR '), parameters).
             includes(
               review: :plan_item,
