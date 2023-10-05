@@ -1250,7 +1250,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     organization_ids = [organizations(:cirope).id, organizations(:google).id]
 
-    total_weaknesses_by_organizations = scoped_weaknesses_by_organizations(organization_ids)
+    total_weaknesses_by_organizations = weaknesses_by_organization_count organization_ids
 
     get :weaknesses_risk_map, :params => {
       :weaknesses_risk_map => {
@@ -2287,7 +2287,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
-  def scoped_weaknesses_by_organizations organization_ids
+  def weaknesses_by_organization_count organization_ids
     Weakness.includes(:organization).where(created_at: 4.years.ago..).
       where.not(state: Finding::STATUS[:repeated]).
       where(organization_id: organization_ids).finals(false).count
