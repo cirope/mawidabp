@@ -1,0 +1,52 @@
+<% action = :weaknesses_risk_map %>
+
+<%= simple_form_for action_name, url: weaknesses_risk_map_follow_up_audit_path(format: 'csv'), html: { method: :get } do |f| %>
+  <div id="weakness_risk_map">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="form-group row">
+          <% selected = params[action] ? params[action][:organization_ids] : nil %>
+          <%= f.label :organization,  Organization.model_name.human, class: 'col-md-4 col-form-label', for: nil %>
+          <div class="col-md-8">
+            <%= f.input :organization_ids,
+              as: :check_boxes,
+              collection: Organization.all.map { |o| [o.name, o.id.to_s] },
+              label: '&nbsp;'.html_safe,
+              required: false,
+              checked: selected,
+              class: 'form-control',
+              wrapper_html: { class: 'mt-n3' }
+            %>
+          </div>
+        </div>
+        <div class="form-group row">
+          <% days = params[action] ? params[action][:days] : nil %>
+          <%= f.label :days, t('follow_up_audit.weaknesses_risk_map.days'), class: 'col-md-4 col-form-label'%>
+          <div class="col-md-4">
+            <%= f.text_field :days, value: days, class: 'form-control'%>
+          </div>
+        </div>
+        <div class="form-group row">
+          <% before_committee_date = params[action] ? params[action][:before_committee_date] : nil %>
+          <%= f.label :before_committee_date, t('follow_up_audit.weaknesses_risk_map.before_committee_date'), class: 'col-md-4 col-form-label'%>
+          <div class="col-md-4">
+            <%= f.text_field :before_committee_date, value: before_committee_date, class: 'form-control', autocomplete: :off, data: { date_picker: true }%>
+          </div>
+        </div>
+        <div class="form-group row">
+          <% current_committee_date = params[action] ? params[action][:current_committee_date] : nil %>
+          <%= f.label :current_committee_date, t('follow_up_audit.weaknesses_risk_map.current_committee_date'), class: 'col-md-4 col-form-label' %>
+          <div class="col-md-4">
+            <%= f.text_field :current_committee_date, value: current_committee_date, class: 'form-control', autocomplete: :off, data: { date_picker: true }%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div class="form-actions">
+    <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-outline-secondary'%> |
+    <%= link_to t('label.cancel'), action_name %>
+  </div>
+<% end %>

@@ -1224,6 +1224,70 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       'weaknesses_heatmap', 0)
   end
 
+  test 'weaknesses risk map' do
+    login
+
+    get :weaknesses_risk_map
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_risk_map'
+
+    assert_nothing_raised do
+      get :weaknesses_risk_map, :params => {
+        :weaknesses_risk_map => {
+          :before_committee_date => 10.years.ago.to_date,
+          :current_committee_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up'
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_risk_map'
+  end
+
+  test 'filtered weaknesses risk map' do
+    login
+
+    organization_ids = [organizations(:cirope).id, organizations(:google).id]
+
+    total_weaknesses_by_organizations = weaknesses_by_organization_count organization_ids
+
+    get :weaknesses_risk_map, :params => {
+      :weaknesses_risk_map => {
+        :before_committee_date => 6.months.ago.to_date,
+        :current_committee_date => Time.zone.today,
+        :days => 730,
+        :organization_ids => organization_ids
+      },
+      :controller_name => 'follow_up',
+    }
+
+    assert_response :success
+    assert_equal total_weaknesses_by_organizations, assigns(:weaknesses).count
+    assert_template 'follow_up_audit/weaknesses_risk_map'
+  end
+
+  test 'weaknesses risk map as CSV' do
+    login
+
+    get :weaknesses_risk_map
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_risk_map'
+
+    assert_nothing_raised do
+      get :weaknesses_risk_map, :params => {
+        :weaknesses_risk_map => {
+          :before_committee_date => 10.years.ago.to_date,
+          :current_committee_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'weaknesses by control objective process' do
     login
 
@@ -2221,5 +2285,11 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_response :redirect
+  end
+
+  def weaknesses_by_organization_count organization_ids
+    Weakness.includes(:organization).where(created_at: 4.years.ago..).
+      where.not(state: Finding::STATUS[:repeated]).
+      where(organization_id: organization_ids).finals(false).count
   end
 end
