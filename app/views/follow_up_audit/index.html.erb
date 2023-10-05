@@ -67,8 +67,8 @@
             { action: :tagged_findings_report }, class: 'list-group-item list-group-item-action' %>
           <%= link_to t('follow_up_audit.weaknesses_by_user_title'),
             { :action => :weaknesses_by_user, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-            <%= link_to t('follow_up_audit.weaknesses_risk_map_title'),
-              { :action => :weaknesses_risk_map, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+          <%= link_to t('follow_up_audit.weaknesses_risk_map_title'),
+            { :action => :weaknesses_risk_map, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
           <% if POSTGRESQL_ADAPTER %>
             <%= link_to t('follow_up_audit.weaknesses_repeated_title'),
               { :action => :weaknesses_repeated, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
