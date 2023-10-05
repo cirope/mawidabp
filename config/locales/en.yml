@@ -298,7 +298,7 @@
     weaknesses_repeated_title: "Issues with status by last traced"
     weaknesses_reschedules_title: "Summary of issues and reschedules"
     detailed_report: "Detailed report"
-    weaknesses_heatmap_title: "Issues heat map"
+    weaknesses_heatmap_title: "Issues heatmap"
     weaknesses_risk_map_title: "Issues risk map"
     weaknesses_by_control_objective_process_title: "Report process by control objectives"
     control_objective_stats:
