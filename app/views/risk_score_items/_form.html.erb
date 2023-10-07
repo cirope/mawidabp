@@ -1,0 +1,21 @@
+<h5>
+  <%= RiskScoreItem.model_name.human count: 0 %>
+</h5>
+
+<div class="row mt-3">
+  <div class="col-md-5">
+    <h5 class="h6"><%= RiskScoreItem.human_attribute_name 'name' %></h5>
+  </div>
+  <div class="col-md-5">
+    <h5 class="h6"><%= RiskScoreItem.human_attribute_name 'value' %></h5>
+  </div>
+</div>
+
+<%= f.simple_fields_for :risk_score_items do |rsi_f| %>
+  <%= render 'risk_score_items/risk_score_item', f: rsi_f %>
+<% end %>
+
+<p>
+  <%= link_to_add_fields t('.add_risk_score_item'), f,
+    :risk_score_items, 'risk_score_items/risk_score_item' %>
+</p>

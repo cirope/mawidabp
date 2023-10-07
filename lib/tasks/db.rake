@@ -803,8 +803,16 @@ private
       RiskAssessmentTemplate.find_each do |rat|
         identifier = '@'
 
-        rat.risk_assessment_weights.each do |raw|
+        rat.risk_assessment_weights.each_with_index do |raw, idx|
+          raw.update_column :heatmap, true if idx <= 1
           raw.update_column :identifier, identifier.next!
+
+          RiskWeight.risks.each do |risk, value|
+            raw.risk_score_items.create!(
+              name: I18n.t("risk_assessments.risk_weight_risks.#{risk}"),
+              value: value
+            )
+          end
         end
 
         rat.update_column :formula, risk_assessment_make_formula(rat)

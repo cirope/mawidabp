@@ -897,6 +897,10 @@ es:
     form:
       add_risk_assessment_weight: 'Agregar ponderador'
 
+  risk_score_items:
+    form:
+      add_risk_score_item: 'Agregar valor'
+
   versions:
     index:
       title: 'Ver reporte de cambios de seguridad'

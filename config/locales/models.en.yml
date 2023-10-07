@@ -204,6 +204,9 @@ en:
       risk_assessment_weight:
         one: 'Risk assessment attribute'
         other: 'Risk assessment attributes'
+      risk_score_item:
+        one: 'Value'
+        other: 'Values'
       risk_weight:
         one: 'Risk assessment value'
         other: 'Risk assessment values'
@@ -751,14 +754,23 @@ en:
         formula: 'Formula'
         risk_assessment_weights: 'Risk assessment attributes'
       risk_assessment_template/risk_assessment_weights:
+        identifier: 'Identifier'
         name: 'Attribute'
         description: 'Description'
-        weight: 'Weight'
+        risk_score_items: 'Values'
+        heatmap: 'Heatmap'
       risk_assessment_weight:
         name: 'Attribute'
         description: 'Description'
         weight: 'Weight'
         identifier: 'Identifier'
+        heatmap: 'Heatmap'
+      risk_assessment_weights/risk_score_items:
+        name: 'Name'
+        value: 'Value'
+      risk_score_item:
+        name: 'Name'
+        value: 'Value'
       risk_weight:
         value: 'Value'
         weight: 'Weight'
@@ -892,6 +904,10 @@ en:
         risk_assessment_template:
           attributes:
             risk_assessment_weights:
+              blank: 'must have at least one'
+        risk_assessment_weight:
+          attributes:
+            risk_score_items:
               blank: 'must have at least one'
         user:
           attributes:

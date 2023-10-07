@@ -898,6 +898,10 @@ en:
     form:
       add_risk_assessment_weight: 'Add weight'
 
+  risk_score_items:
+    form:
+      add_risk_score_item: 'Add value'
+
   versions:
     index:
       title: 'Show security change report'

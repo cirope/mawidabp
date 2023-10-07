@@ -1,10 +1,7 @@
 module RiskAssessmentsHelper
-  def risk_weight_value_options
-    RiskWeight.risks.map do |risk, value|
-      [
-        [value, t("risk_assessments.risk_weight_risks.#{risk}")].join(' - '),
-        value
-      ]
+  def risk_score_items risk_assessment_weight
+    risk_assessment_weight.risk_score_items.map do |rsi|
+      [rsi.name, rsi.value]
     end
   end
 

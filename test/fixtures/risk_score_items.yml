@@ -1,0 +1,9 @@
+one:
+  name: MyString
+  value: 9.99
+  risk_assessment_weight: one
+
+two:
+  name: MyString
+  value: 9.99
+  risk_assessment_weight: two

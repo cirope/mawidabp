@@ -2,7 +2,7 @@ class RiskAssessmentWeight < ApplicationRecord
   include Auditable
   include RiskAssessmentWeights::Scopes
   include RiskAssessmentWeights::Validations
+  include RiskAssessmentWeights::Relations
 
-  belongs_to :risk_assessment_template
-  has_many :risk_weights, dependent: :destroy
+  attribute :heatmap, :boolean
 end
