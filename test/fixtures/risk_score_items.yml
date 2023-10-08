@@ -1,9 +1,9 @@
-one:
-  name: MyString
-  value: 9.99
-  risk_assessment_weight: one
+sox_404a:
+  name: Alto
+  value: 90
+  risk_assessment_weight: sox_404
 
-two:
-  name: MyString
-  value: 9.99
-  risk_assessment_weight: two
+sox_404b:
+  name: Bajo
+  value: 10
+  risk_assessment_weight: sox_404

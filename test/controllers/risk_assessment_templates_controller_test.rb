@@ -50,7 +50,12 @@ class RiskAssessmentTemplatesControllerTest < ActionController::TestCase
             {
               identifier: 'A',
               name: 'New attribute',
-              description: 'Some new attribute'
+              description: 'Some new attribute',
+              heatmap: true,
+              risk_score_items_attributes: [
+                name: 'New name',
+                value: 10
+              ]
             }
           ]
         }
