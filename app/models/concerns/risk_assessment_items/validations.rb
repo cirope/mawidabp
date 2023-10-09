@@ -8,7 +8,7 @@ module RiskAssessmentItems::Validations
     validates :business_unit, :risk, presence: true, if: :final?
     validates :order, presence: true
     validates :risk, numericality: {
-      only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100
+      only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2147483647
     }, allow_blank: true
   end
 end

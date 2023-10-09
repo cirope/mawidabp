@@ -1120,6 +1120,7 @@ ActiveRecord::Schema.define(version: 2023_10_04_181623) do
     t.bigint "file_model_id"
     t.boolean "shared", default: false, null: false
     t.bigint "group_id", null: false
+    t.string "formula"
     t.index ["file_model_id"], name: "index_risk_assessments_on_file_model_id"
     t.index ["group_id"], name: "index_risk_assessments_on_group_id"
     t.index ["organization_id"], name: "index_risk_assessments_on_organization_id"
@@ -1139,11 +1140,12 @@ ActiveRecord::Schema.define(version: 2023_10_04_181623) do
 
   create_table "risk_weights", force: :cascade do |t|
     t.integer "value"
-    t.integer "weight", null: false
+    t.integer "weight"
     t.bigint "risk_assessment_weight_id", null: false
     t.bigint "risk_assessment_item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "identifier"
     t.index ["risk_assessment_item_id"], name: "index_risk_weights_on_risk_assessment_item_id"
     t.index ["risk_assessment_weight_id"], name: "index_risk_weights_on_risk_assessment_weight_id"
   end

@@ -2,6 +2,7 @@ class RiskAssessmentTemplate < ApplicationRecord
   include Auditable
   include RiskAssessmentTemplates::Clone
   include RiskAssessmentTemplates::DestroyValidation
+  include RiskAssessmentTemplates::Migration
   include RiskAssessmentTemplates::Scopes
   include RiskAssessmentTemplates::Search
   include RiskAssessmentTemplates::Validations

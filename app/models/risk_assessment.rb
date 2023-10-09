@@ -5,6 +5,7 @@ class RiskAssessment < ApplicationRecord
   include RiskAssessments::Csv
   include RiskAssessments::DestroyValidation
   include RiskAssessments::FileModel
+  include RiskAssessments::Formula
   include RiskAssessments::Pdf
   include RiskAssessments::Plan
   include RiskAssessments::RiskAssessmentItems

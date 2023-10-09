@@ -735,6 +735,7 @@ en:
         file_model: "Attachment"
         risk_assessment_weights: 'Weights'
         risk_assessment_items: 'Items'
+        formula: 'Formula'
       risk_assessment/risk_assessment_items:
         name: 'Name (item)'
         risk: 'Risk (item)'
@@ -774,6 +775,7 @@ en:
       risk_weight:
         value: 'Value'
         weight: 'Weight'
+        identifier: 'Identifier'
       subsidiary:
         name: 'Name'
         identity: 'Identification'

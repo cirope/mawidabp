@@ -1,7 +1,7 @@
 module RiskAssessmentsHelper
-  def risk_score_items risk_assessment_weight
-    risk_assessment_weight.risk_score_items.map do |rsi|
-      [rsi.name, rsi.value]
+  def risk_score_items risk_weight
+    risk_weight.risk_score_items.map do |rsi|
+      [rsi.name, rsi.value.to_i]
     end
   end
 

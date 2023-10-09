@@ -801,11 +801,13 @@ private
   def update_risk_assessment_weights
     if should_update_risk_assessment_weights?
       RiskAssessmentTemplate.find_each do |rat|
-        identifier = '@'
+        identifier = 'A'
 
         rat.risk_assessment_weights.each_with_index do |raw, idx|
           raw.update_column :heatmap, true if idx <= 1
-          raw.update_column :identifier, identifier.next!
+          raw.update_column :identifier, identifier
+
+          raw.risk_weights.update_all identifier: identifier
 
           RiskWeight.risks.each do |risk, value|
             raw.risk_score_items.create!(
@@ -813,22 +815,18 @@ private
               value: value
             )
           end
+
+          identifier.next!
         end
 
-        rat.update_column :formula, risk_assessment_make_formula(rat)
+        formula = rat.reload.make_formula
+
+        rat.risk_assessments.update_all formula: formula
+        rat.update_column :formula, formula
       end
     end
   end
 
   def should_update_risk_assessment_weights?
     RiskAssessmentTemplate.where(formula: nil).exists?
-  end
-
-  def risk_assessment_make_formula rat
-    weights = rat.reload.risk_assessment_weights.ordered.pluck :identifier, :weight
-
-    dividend = weights.map { |raw| raw.join(' * ') }.join(' + ')
-    divisor  = weights.to_h.values.sum
-
-    "(#{dividend}) / #{divisor}"
   end
