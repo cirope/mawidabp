@@ -95,11 +95,16 @@ class RiskAssessmentTest < ActiveSupport::TestCase
   end
 
   test 'sort by risk' do
+    @risk_assessment.risk_score_items.first.update value: 1000
+
     rai = @risk_assessment.risk_assessment_items.create!(
       name:  'First by risk',
-      risk:  99,
       order: 2,
-      business_unit_id: business_units(:business_unit_two).id
+      business_unit_id: business_units(:business_unit_two).id,
+      risk_weights_attributes: [
+        value: 1000,
+        risk_assessment_weight: @risk_assessment.risk_assessment_weights.first
+      ]
     )
 
     assert_equal @risk_assessment.risk_assessment_items.last.id, rai.id
