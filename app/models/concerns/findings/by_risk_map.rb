@@ -88,7 +88,7 @@ module Findings::ByRiskMap
     def new_finding_between_committee_dates options
       before_committee_date  = options['before_committee_date'].to_date
       current_committee_date = options['current_committee_date'].to_date
-      exclude_state         = Finding::STATUS[:repeated]
+      exclude_state          = Finding::STATUS[:repeated]
 
       if committee_dates_present? options
         if origination_date && state != exclude_state &&
