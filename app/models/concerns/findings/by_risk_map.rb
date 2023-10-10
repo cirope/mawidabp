@@ -54,7 +54,7 @@ module Findings::ByRiskMap
       if state == Finding::STATUS[:being_implemented]
         current_committee_date = options['current_committee_date'].to_date
 
-        if origination_date && current_committee_daate
+        if origination_date && current_committee_date
           origination_date > current_committee_date ? 'EPI_Vigente' : 'EPI_Vencida'
         else
           state_text
