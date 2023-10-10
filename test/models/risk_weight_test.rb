@@ -23,33 +23,9 @@ class RiskWeightTest < ActiveSupport::TestCase
   end
 
   test 'attribute inclusion' do
-    @risk_weight.value = RiskWeight.risks_values.last.next
+    @risk_weight.value = 10
 
     assert @risk_weight.invalid?
     assert_error @risk_weight, :value, :inclusion
-  end
-
-  test 'should return default risk when dont have constant RISK_WEIGHTS' do
-    skip if RISK_WEIGHTS.present?
-
-    assert_equal RiskWeight::RISK_TYPES, RiskWeight.risks
-  end
-
-  test 'should return RISK_WEIGHTS when have constant' do
-    skip unless RISK_WEIGHTS.present?
-
-    assert_equal RISK_WEIGHTS, RiskWeight.risks
-  end
-
-  test 'should return default risk_values when dont have constant RISK_WEIGHTS' do
-    skip if RISK_WEIGHTS.present?
-
-    assert_equal RiskWeight::RISK_TYPES.values, RiskWeight.risks_values
-  end
-
-  test 'should return RISK_WEIGHTS values when have constant' do
-    skip unless RISK_WEIGHTS.present?
-
-    assert_equal RISK_WEIGHTS.values, RiskWeight.risks_values
   end
 end

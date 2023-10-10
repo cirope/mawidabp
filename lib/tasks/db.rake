@@ -809,7 +809,7 @@ private
 
           raw.risk_weights.update_all identifier: identifier
 
-          RiskWeight.risks.each do |risk, value|
+          risk_weights.each do |risk, value|
             raw.risk_score_items.create!(
               name: I18n.t("risk_assessments.risk_weight_risks.#{risk}"),
               value: value
@@ -819,7 +819,7 @@ private
           identifier.next!
         end
 
-        formula = rat.reload.make_formula
+        formula = risk_template_make_formula rat
 
         rat.risk_assessments.update_all formula: formula
         rat.update_column :formula, formula
@@ -829,4 +829,26 @@ private
 
   def should_update_risk_assessment_weights?
     RiskAssessmentTemplate.where(formula: nil).exists?
+  end
+
+  def risk_weights
+    risk_types = {
+      none:        0,
+      low:         1,
+      medium_low:  2,
+      medium:      3,
+      medium_high: 4,
+      high:        5
+    }
+
+    RISK_WEIGHTS.present? ? RISK_WEIGHTS : risk_types
+  end
+
+  def risk_template_make_formula rat
+    raws = rat.reload.risk_assessment_weights.ordered.pluck :identifier, :weight
+
+    dividend = raws.map { |raw| raw.join(' * ') }.join(' + ')
+    divisor  = raws.to_h.values.sum
+
+    "(#{dividend}) / #{divisor}"
   end

@@ -2,7 +2,6 @@ class RiskWeight < ApplicationRecord
   include Auditable
   include RiskWeights::Identifier
   include RiskWeights::Relations
-  include RiskWeights::Risk
   include RiskWeights::Validations
 
   def name

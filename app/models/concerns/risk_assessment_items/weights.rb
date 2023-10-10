@@ -16,6 +16,7 @@ module RiskAssessmentItems::Weights
 
     risk_assessment_template.risk_assessment_weights.each do |raw|
       risk_weights.build(
+        identifier:                raw.identifier,
         risk_assessment_weight_id: raw.id
       )
     end
