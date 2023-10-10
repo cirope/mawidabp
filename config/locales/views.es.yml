@@ -878,6 +878,7 @@ es:
     pdf:
       title: 'Evaluación de riesgo'
       pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
+      formula: 'Fórmula'
       period:
         title: "Periodo (%{name})"
         range: "%{from_date} al %{to_date}"

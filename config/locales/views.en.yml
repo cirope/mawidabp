@@ -879,6 +879,7 @@ en:
     pdf:
       title: 'Risk assessment'
       pdf_name: 'risk_assessment_%{name}.pdf'
+      formula: 'Formula'
       period:
         title: "Period (%{name})"
         range: "%{from_date} to %{to_date}"

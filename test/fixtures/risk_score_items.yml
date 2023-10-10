@@ -1,9 +1,4 @@
 sox_404a:
   name: Alto
-  value: 90
-  risk_assessment_weight: sox_404
-
-sox_404b:
-  name: Bajo
-  value: 10
+  value: 30
   risk_assessment_weight: sox_404

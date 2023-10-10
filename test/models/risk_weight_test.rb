@@ -6,10 +6,11 @@ class RiskWeightTest < ActiveSupport::TestCase
   end
 
   test 'blank attributes' do
-    @risk_weight.weight = nil
+    @risk_weight.risk_assessment_weight = nil
+    @risk_weight.identifier = nil
 
     assert @risk_weight.invalid?
-    assert_error @risk_weight, :weight, :blank
+    assert_error @risk_weight, :identifier, :blank
   end
 
   test 'blank attributes on final' do
@@ -50,17 +51,5 @@ class RiskWeightTest < ActiveSupport::TestCase
     skip unless RISK_WEIGHTS.present?
 
     assert_equal RISK_WEIGHTS.values, RiskWeight.risks_values
-  end
-
-  test 'attributes boundaries' do
-    @risk_weight.weight = 0
-
-    assert @risk_weight.invalid?
-    assert_error @risk_weight, :weight, :greater_than, count: 0
-
-    @risk_weight.weight = 101
-
-    assert @risk_weight.invalid?
-    assert_error @risk_weight, :weight, :less_than_or_equal_to, count: 100
   end
 end

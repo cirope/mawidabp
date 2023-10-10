@@ -13,6 +13,6 @@ module RiskAssessmentItems::Risk
 
       values.to_h.each { |k,v| result.gsub! k, v.to_f.to_s }
 
-      self.risk = eval(result).round
+      self.risk = eval(result).round rescue risk
     end
 end

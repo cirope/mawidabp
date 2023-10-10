@@ -67,15 +67,15 @@
         </caption>
 
         <tr>
-          <th> <%= RiskAssessmentWeight.human_attribute_name 'name' %></th>
-          <th> <%= RiskWeight.human_attribute_name 'identifier' %></th>
-          <th> <%= RiskWeight.human_attribute_name 'value' %></th>
+          <th><%= RiskWeight.human_attribute_name 'identifier' %></th>
+          <th><%= RiskAssessmentWeight.human_attribute_name 'name' %></th>
+          <th><%= RiskWeight.human_attribute_name 'value' %></th>
         </tr>
 
         <% risk_assessment_item.risk_weights.each do |risk_weight| %>
           <tr>
+            <td class="w-25"><%= risk_weight.identifier %></td>
             <td><%= risk_weight.risk_assessment_weight.name %></td>
-            <td><%= risk_weight.identifier %></td>
             <td><%= risk_weight.value %></td>
           </tr>
         <% end %>

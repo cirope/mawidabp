@@ -8,4 +8,4 @@ sox_current:
   risk_assessment_template: sox
   organization: cirope
   group: main_group
-  formula: (A * 80) / 80
+  formula: "(A * 20) / 80"
