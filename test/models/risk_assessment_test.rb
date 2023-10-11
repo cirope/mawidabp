@@ -231,4 +231,16 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     assert new_risk_assessment.risk_assessment_items.size > 0
     assert all_items_are_equal
   end
+
+  test 'evaluate expression' do
+    rai = @risk_assessment.risk_assessment_items.first
+
+    assert_equal 30, rai.risk
+
+    @risk_assessment.update_column :formula, "A * 100"
+
+    rai.update name: 'New formula'
+
+    assert_equal 3000, rai.risk
+  end
 end
