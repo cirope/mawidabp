@@ -30,6 +30,8 @@ namespace :db do
       update_finding_follow_up_date_last_changed # 2021-12-22
       update_draft_review_code                   # 2022-07-20
       update_options_tags                        # 2023-06-05
+      update_roles_identifier                    # 2023-07-24
+      update_status_work_papers                  # 2023-09-25
     end
   end
 end
@@ -761,4 +763,36 @@ private
         tag.options.kind_of? Array
       end
     end
+  end
+
+  def update_roles_identifier
+    unless roles_identifier_updated?
+      Organization.all.each do |org|
+        if (org.saml_provider || org.ldap_config) && org.roles.map(&:identifier).all?(&:blank?)
+          org.roles.each { |role| role.update_column :identifier, role.name }
+        end
+      end
+    end
+  end
+
+  def roles_identifier_updated?
+    Role.where.not(identifier: nil).exists?
+  end
+
+  def update_status_work_papers
+    if update_status_work_papers?
+      Review.find_each do |review|
+        status = case review.finished_work_papers
+        when 'work_papers_not_finished' then 'pending'
+        when 'work_papers_finished'     then 'finished'
+        when 'work_papers_revised'      then 'revised'
+        end
+
+        review.work_papers.each { |wp| wp.update_column :status, status }
+      end
+    end
+  end
+
+  def update_status_work_papers?
+    WorkPaper.where(status: nil).exists?
   end

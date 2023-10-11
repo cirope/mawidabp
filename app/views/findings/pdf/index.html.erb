@@ -5,9 +5,16 @@
     <tr class="bg-secondary text-white">
       <th class="border border-dark"><%= Review.model_name.human %></th>
       <th class="border border-dark"><%= Finding.human_attribute_name('review_code') %></th>
-      <th class="border border-dark"><%= BestPractice.model_name.human %></th>
-      <th class="border border-dark"><%= ProcessControl.model_name.human %></th>
+      <% unless Current.conclusion_pdf_format == 'pat' %>
+        <th class="border border-dark"><%= BestPractice.model_name.human %></th>
+        <th class="border border-dark"><%= ProcessControl.model_name.human %></th>
+      <% end %>
       <th class="border border-dark"><%= Finding.human_attribute_name('title') %></th>
+      <% if Current.conclusion_pdf_format == 'pat' %>
+        <th class="border border-dark"><%= Finding.human_attribute_name('description') %></th>
+        <th class="border border-dark"><%= Finding.human_attribute_name('state') %></th>
+        <th class="border border-dark"><%= Issue.model_name.human.pluralize %></th>
+      <% end %>
     </tr>
   </thead>
   <tbody>
@@ -15,16 +22,56 @@
       <tr>
         <td class="border border-dark"><%= finding.review.identification %></td>
         <td class="border border-dark"><%= finding.review_code %></td>
-        <td class="border border-dark"><%= finding.control_objective&.process_control&.best_practice&.name || '' %></td>
-        <td class="border border-dark"><%= finding.control_objective&.process_control&.name %></td>
+        <% unless Current.conclusion_pdf_format == 'pat' %>
+          <td class="border border-dark"><%= finding.control_objective&.process_control&.best_practice&.name || '' %></td>
+          <td class="border border-dark"><%= finding.control_objective&.process_control&.name %></td>
+        <% end %>
         <td class="border border-dark"><%= finding.title %></td>
+        <% if Current.conclusion_pdf_format == 'pat' %>
+          <td class="border border-dark"><%= finding.description %></td>
+          <td class="border border-dark"><%= finding.state_text %></td>
+          <td class="border border-dark"><%= t('findings.pdf.issue', review_code: finding.review_code) if show_pdf_issues finding %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
 
+<% if Current.conclusion_pdf_format == 'pat' %>
+  <h2 class="font-weight-bold"><%= Issue.model_name.human.pluralize %></h2>
+
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr class="bg-secondary text-white">
+        <th class="border border-dark"><%= Finding.human_attribute_name('review_code') %></th>
+        <th class="border border-dark"><%= Issue.human_attribute_name('customer') %></th>
+        <th class="border border-dark"><%= Issue.human_attribute_name('entry') %></th>
+        <th class="border border-dark"><%= Issue.human_attribute_name('operation') %></th>
+        <th class="border border-dark"><%= Issue.human_attribute_name('comments') %></th>
+        <th class="border border-dark"><%= Issue.human_attribute_name('currency') %></th>
+        <th class="border border-dark"><%= Issue.human_attribute_name('amount') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @findings.each do |finding| %>
+        <% finding.issues.without_close_date.each do |issue| %>
+          <tr>
+            <td class="border border-dark"><%= finding.review_code %></td>
+            <td class="border border-dark"><%= issue.customer %></td>
+            <td class="border border-dark"><%= issue.entry %></td>
+            <td class="border border-dark"><%= issue.operation %></td>
+            <td class="border border-dark"><%= issue.comments %></td>
+            <td class="border border-dark"><%= issue.currency %></td>
+            <td class="border border-dark"><%= issue.amount %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
 <% if @columns.present? && @query.present? %>
-  <%= t 'finding.pdf.filtered_by_html', query: @query.flatten.to_sentence, 
-                                        columns: translate_filter_columns(@columns), 
-                                        count: @columns.size %>
+  <%= t 'finding.pdf.filtered_by_html', query: @query.flatten.to_sentence,
+    columns: translate_filter_columns(@columns),
+    count: @columns.size %>
 <% end %>

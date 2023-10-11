@@ -84,6 +84,7 @@ es:
             one: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el %{review}, consta de %{count} página."
             other: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el %{review}, consta de %{count} páginas."
           details_title: "A continuación se detallan las principales debilidades observadas, así como su situación al momento de emitir el respectivo informe:"
+          previous_title: "Observaciones de periodos anteriores:"
           weaknesses_title: "Observaciones del presente período:"
       weaknesses:
         title: "Anexo I"
@@ -133,7 +134,7 @@ es:
         from_external_review: "De Informe"
         audit_conclusion: "<b>CONCLUSIÓN GENERAL DE LA AUDITORÍA</b>"
         highest_responsible: "<b>%{responsible}</b>"
-        signature_label: "<b>Gerente a/c interino de Auditoría Interna</b>"
+        signature_label: "<b>Gerente de Auditoría Interna</b>"
         organization: "<b>Nuevo Banco del Chaco S.A.</b>"
         detailed_review: "INFORME DETALLADO"
         introduction_and_scope: "<b>INTRODUCCION Y ALCANCE DEL TRABAJO</b>"
@@ -169,6 +170,7 @@ es:
         state: "<b>Estado</b>"
         risk: "<b>Nivel de riesgo</b>"
         origination_date: '<b>Fecha de origen</b>'
+        origination_audit: '<b>Auditoria Origen</b>'
         origination_author: '<b>Origen emisor</b>'
         audit_recommendations: "<b>Sugerencia de Mejora</b>"
         audit_comments: "<b>Plan de acción propuesto por el responsable</b>"

@@ -7,8 +7,11 @@ Rails.application.routes.draw do
   post   'sessions', to: 'sessions#create',  as: 'sessions'
   delete 'logout',   to: 'sessions#destroy', as: 'logout'
 
+  # Authentication
+  get  'signin', to: 'authentications#new',    as: 'signin'
+  post 'auth',   to: 'authentications#create', as: 'auth'
+
   # SAML
-  get 'saml/auth', to: 'saml_sessions#new', as: :new_saml_session
   post 'saml/callback', to: 'saml_sessions#create', as: :saml_session
   get 'saml/metadata', to: 'saml_sessions#metadata', as: :saml_metadata
 
@@ -236,6 +239,13 @@ Rails.application.routes.draw do
     as: 'create_nbc_annual_report_conclusion_reports',
     to: 'conclusion_reports#create_nbc_annual_report'
 
+  get 'conclusion_reports/nbc_internal_control_qualification_as_group_of_companies',
+      as: 'nbc_internal_control_qualification_as_group_of_companies_conclusion_reports',
+      to: 'conclusion_reports#nbc_internal_control_qualification_as_group_of_companies'
+  post 'conclusion_reports/create_nbc_internal_control_qualification_as_group_of_companies',
+       as: 'create_nbc_internal_control_qualification_as_group_of_companies_conclusion_reports',
+       to: 'conclusion_reports#create_nbc_internal_control_qualification_as_group_of_companies'
+
   get 'conclusion_reports/cost_analysis',
     as: 'cost_analysis_conclusion_reports',
     to: 'conclusion_reports#cost_analysis'
@@ -306,6 +316,7 @@ Rails.application.routes.draw do
   end
 
   resource :work_papers, only: [:show]
+  resources :work_papers, only: [:update]
 
   namespace :conclusion_draft_reviews do
     resources :users, only: [:index]

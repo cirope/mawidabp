@@ -57,7 +57,13 @@ module TagsHelper
   end
 
   def tags_options_collection kind:
-    Array(TAG_OPTIONS[kind])
+    tag_options = TAG_OPTIONS[kind].dup
+
+    if kind == 'finding' && Current.conclusion_pdf_format == 'nbc'
+      tag_options.merge! I18n.t('tags.options.origination_audit') => 'origination_audit'
+    end
+
+    Array tag_options
   end
 
   def tag_input_option form, tag, value

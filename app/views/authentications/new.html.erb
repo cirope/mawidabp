@@ -1,0 +1,41 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <%= form_tag auth_path, novalidate: 'novalidate', data: { no_observe_changes: true } do %>
+      <div class="card mb-3">
+        <div class="card-header text-center bg-white border-white pt-5 pb-4">
+          <%= image_tag 'logo.svg', alt: t('app_name'), height: 40 %>
+        </div>
+        <div class="card-body py-0 px-5">
+          <h4 class="text-dark-50 text-center mt-0 font-weight-bold">
+            <%= t 'message.welcome' %> <%= link_to @username, login_url %>
+          </h4>
+          <%= render 'shared/flash' if flash_message %>
+
+          <div class="form-inputs">
+            <div class="form-group">
+              <%= label_tag :password, t('.password'), class: 'col-form-label' %>
+              <div class="controls">
+                <%= password_field_tag :password, nil, class: 'form-control form-control-lg',
+                  autofocus: true, maxlength: 128, autocomplete: 'off' %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer text-center bg-white border-white pb-4">
+          <div class="form-actions">
+            <%= submit_tag t('.log_in'), class: 'btn btn-lg btn-outline-secondary' %>
+          </div>
+
+          <% if current_organization.blank? || current_organization.ldap_config.blank? %>
+            <hr>
+
+            <p>
+              <%= link_to t('sessions.new.forgot_password'), new_users_password_path %>
+            </p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -59,6 +59,7 @@ es:
     download: "Descargar"
     insufficient_privileges: "No tiene permisos para realizar la acción"
     invalid_user_or_password: "Usuario/contraseña inválido"
+    invalid_user_or_email: 'Tu usuario o correo no puede estar en blanco'
     loading: "Cargando"
     must_be_authenticated: "Debe iniciar sesión para continuar"
     must_change_the_password: "Debe cambiar su contraseña"
@@ -81,6 +82,7 @@ es:
     empty_result: "Sin resultados, modifique el criterio de búsqueda"
     automatic_by_the_system: "Realizado de forma automática por el sistema"
     compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="https://browsehappy.com/">actualizarlo</a>'
+    welcome: 'Bienvenido'
 
   error:
     title: "Error"
@@ -92,6 +94,10 @@ es:
     send_it_to_the_administrator: "Y envíelo al administrador del sistema a través de la página:"
     show_details: "Ver detalles"
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
+
+  best_practice:
+    auditors: Auditores a cargo
+    audited: Referentes a cargo
 
   business_unit_type:
     index_title: "Listado de unidades organizativas"
@@ -190,6 +196,7 @@ es:
     review_scores_report_title: "Calificaciones de informes"
     review_score_details_report_title: "Calificaciones de informes detallado"
     nbc_annual_report_title: "Resumen anual"
+    nbc_internal_control_qualification_as_group_of_companies: "Calificacion del control interno como grupo de sociedades"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -280,6 +287,29 @@ es:
         highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
         digitalized: "Digitalización"
+    nbc_report:
+      front_page:
+        footer_title: 'Informe:'
+        footer_prepared_by: 'Preparado por Auditoría Interna - NBCH'
+      executive_summary:
+        title: '<b><u>RESUMEN EJECUTIVO</u></b>'
+        objective_title: '<b><u>OBJETIVO</u></b>'
+        general_conclusion_title: '<b><u>CONCLUSIÓN GENERAL</u></b>'
+        first_footer: '<b>AUS. Alejandro Camnasio</b>'
+        second_footer: '<b>A/C int. Gerencia de Auditoria Interna</b>'
+      introduction_and_scope:
+        title: '<b><u>INFORME DETALLADO</u></b>'
+        introduction_and_scope_title: '<b><u>INTRODUCCION Y ALCANCE DEL TRABAJO REALIZADO</u></b>'
+        classification_methodology: 'La metodología de calificación de ciclos utilizada en el período 2019 fue aprobada por el Comité de Auditoría en su reunión del 14.05.2019 – Acta N° 294, la cual exponemos a continuación:'
+        classification_with_final_weaknesses_title: '<i><b>Cuadro I: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        classification_with_not_final_weaknesses_title: '<i><b>Cuadro II: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        conclusions_title: '<u><b>CONCLUSIONES</b></u>'
+        conclusions_body: 'Partiendo del Cuadro I <i>“Calificación del Control Interno del NCHB S.A.”</i>, se observa que la calificación del control interno de la Entidad, de acuerdo a los parámetros utilizados, es <b>“%{calification}”.</b>'
+      cycle_qualification:
+        header_number: '<b>N°</b>'
+        header_qualification: '<b>Calificación</b>'
+        header_weight: '<b>Ponderador</b>'
+        header_high_risk_observations: '<b>Cantidad de Observaciones de Riesgo Alto</b>'
     nbc_annual_report:
       pdf_name: "resumen_anual_%{from_date}_al_%{to_date}.pdf"
       front_page:
@@ -314,6 +344,26 @@ es:
         count_cycles: '<b>Cantidad de ciclos</b>'
         final_weight: '<b>Ponderación</b>'
         final_qualification: '<b>Calificación Control Interno</b>'
+        classification_title: '<i><b>Cuadro I: Calificación del Control Interno del NCHB S.A. – %{period}</b></i>'
+        conclusions_title: '<u><b>CONCLUSIONES</b></u>'
+        conclusions_body: 'Partiendo del Cuadro I <i>“Calificación del Control Interno del NCHB S.A.”</i>, se observa que la calificación del control interno de la Entidad, de acuerdo a los parámetros utilizados, es <b>“%{calification}”.</b>'
+    nbc_internal_control_qualification_as_group_of_companies_report:
+      pdf_name: "informe_con_calificacion_del_control_interno_como_grupo_de_sociedades_%{from_date}_al_%{to_date}.pdf"
+      front_page:
+        first_title: 'Subsidiarias'
+        second_title: 'Calificación del Ciclo'
+      internal_control_qualification:
+        classification_title: '<i><b>Cuadro I: Resumen de Calificación del Control Interno Subsidiarias – %{period}</b></i>'
+      comparision_to_previous_period:
+        classification_title: '<i><b>Cuadro II: Comparación con la calificación del año anterior (%{period})</b></i>'
+        header_cycle: '<b>Ciclo</b>'
+        header_weight: '<b>Ponderador por fecha de los informes %{period}</b>'
+        header_qualification: '<b>Calificación</b>'
+        conclusions_body: 'Si bien la Calificación del Control Interno del NBCH S. A. es <b>“%{annual_qualification_period}”</b> y la misma no tiene tuvo modificaciones respecto del año anterior, es importante señalar que el ponderador actual <b>“%{annual_weight_period}”</b> es un 7% menor al <b>“%{annual_weight_previous_period}”</b> al del período anterior.'
+      comparision_to_actual_situation:
+        classification_title: '<i><b>Cuadro III: Situación actual del Control Interno (fecha de corte %{date})</b></i>'
+        actual_qualification: '<b>Ponderador actual (%{date})</b>'
+      comments: '<u><b>COMENTARIOS</b></u>'
     synthesis_report:
       pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"
@@ -408,6 +458,7 @@ es:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
       sorted_by: "El listado fue ordenado por la columna %{column}"
+    previous_close_dates: "Fechas de cierre anteriores"
 
   conclusion_management_report:
     index_title: "Reportes de la gerencia"
@@ -1492,6 +1543,7 @@ es:
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
+        identifier: 'Identificador'
       saml_provider:
         provider: 'Proveedor'
         idp_homepage: 'Dirección URL de metadatos de federación de aplicación'

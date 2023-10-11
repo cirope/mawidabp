@@ -21,9 +21,27 @@ en:
         date: 'Date'
         cc: 'CC'
         name: 'Name'
-        objective: 'Target'
+        objective: 'Objective'
         conclusion: 'Conclusion'
         introduction_and_scope: 'Introduction and Scope'
+        previous_period_id: 'Previous period'
+        business_unit_types: 'Organizational units'
+        organizations: 'Organizations'
+    errors:
+      models:
+        nbc_internal_control_qualification_as_group_of_companies:
+          attributes:
+            period_id:
+              must_have_the_same_name: 'must have the same name in all organizations. Currently differs in: %{organizations}'
+            previous_period_id:
+              must_have_the_same_name: 'must have the same name in all organizations. Currently differs in: %{organizations}'
+              must_be_before_period: 'must have a start date before the Period start date'
+            business_unit_types:
+              must_have_the_same_business_unit_type_names:
+                one: 'must have the same names in all three organizations. Currently, the one that differs is: %{different_names}'
+                other: 'must have the same names in all three organizations. Currently, the ones that differ are: %{different_names}'
+            organizations:
+              are_misconfigured: 'are misconfigured in the application settings. Please contact soporte@mawidabp.com'
 
   activerecord:
     models:
@@ -85,8 +103,8 @@ en:
         one: 'Control objective'
         other: 'Control objectives'
       control_objective_auditor:
-        one: 'Auditor in charge'
-        other: 'Auditors in charge'
+        one: 'Auditor/Auditee in charge'
+        other: 'Auditors/Auditees in charge'
       document:
         one: 'Document'
         other: 'Documents'
@@ -302,7 +320,6 @@ en:
         control_objective_id: 'Control objective'
         audit_sector: 'Audit Sector'
         date_charge: 'Date of creation'
-        affected_sector_id: 'Bank sector affected by the alert'
         control_objective_auditors: 'Auditors in charge'
       review/control_objective_items:
         control_objective_id: 'Control objective'
@@ -327,6 +344,8 @@ en:
         review: 'Audit report'
         review_id: 'Audit report'
         alternative_review_id: 'External audit report'
+      file_model_reviews/file_model:
+        file: 'File'
       finding:
         control_objective_item_id: 'Control objective'
         title: 'Title'
@@ -437,6 +456,7 @@ en:
         file_content_type: 'Working paper (file type)'
         file_file_size: 'Working paper (file size)'
       image_model:
+        image: 'Image'
         uploaded_data: 'Image'
         content_type: 'Image (type)'
         size: 'Image (size)'
@@ -763,7 +783,7 @@ en:
         solution_date: 'Solution date'
         compliance: 'Compliance'
         compliance_observations: 'Norm impacting'
-        compliance_susceptible_to_sanction: 'Susceptible to sanction'
+        compliance_maybe_sanction: 'Susceptible to sanction'
         operational_risk: 'Operational risk'
         impact: 'Impact'
         internal_control_components: 'CI components'
@@ -795,6 +815,8 @@ en:
         allow_duplication: 'Allow duplicate title'
         audit_recommendations: 'Audit recommendations'
         failure: 'Failure'
+      work_papers/file_model:
+        file: 'Work paper (file)'
 
     errors:
       models:
@@ -819,7 +841,7 @@ en:
               cant_have_extension_when_didnt_have_extension: 'It cannot have %{extension}, since at most once in its history it was without %{extension} in the %{states} status'
             risk_justification:
               present: 'Should not have risk justification'
-            compliance_susceptible_to_sanction:
+            compliance_maybe_sanction:
               inclusion: 'must be one of the list'
             draft_review_code:
               not_same_draft_review_code_parent: 'Does not have the same draft audit report code as its original finding'

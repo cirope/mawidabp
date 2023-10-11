@@ -85,6 +85,7 @@ en:
             one: "The following report summarizes the points observed in the benchmark audit. It is intended to allow quick reading at the highest levels. The full report, which will be copied to books under the %{review}, consists of %{count} page ."
             other: "The following report summarizes the points noted in the benchmark audit. It is intended to allow quick reading at the highest levels. The full report, which will be copied to books under the %{review}, consists of %{count} pages ."
           details_title: "The main weaknesses observed are detailed below, as well as their situation at the time of issuing the respective report:"
+          previous_title: "Weaknesses of the previous period:"
           weaknesses_title: "Weaknesses of the current period:"
       weaknesses:
         title: "Annex I"
@@ -170,6 +171,7 @@ en:
         state: "<b>State</b>"
         risk: "<b>Risk level</b>"
         origination_date: '<b>Origination Date</b>'
+        origination_audit: '<b>Origination Audit</b>'
         origination_author: '<b>Origination author</b>'
         audit_recommendations: "<b>Improvement Suggestions</b>"
         audit_comments: "<b>Action plan proposed by the manager</b>"
