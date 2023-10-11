@@ -8,10 +8,10 @@ module RiskAssessmentItems::Risk
   private
 
     def calculate_risk
-      result = formula.dup
+      result = formula.dup.downcase
       values = risk_weights.map { |rw| [rw.identifier, rw.value] }
 
-      values.to_h.each { |k,v| result.gsub! k, v.to_s }
+      values.to_h.each { |k,v| result.gsub! k.downcase, v.to_s }
 
       self.risk = eval(result).round
     end

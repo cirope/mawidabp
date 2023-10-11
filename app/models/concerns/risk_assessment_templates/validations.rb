@@ -28,13 +28,13 @@ module RiskAssessmentTemplates::Validations
     end
 
     def expression
-      result = formula.dup
+      result = formula.dup.downcase
 
       values = risk_assessment_weights.reject(&:marked_for_destruction?).map do |raw|
         [raw.identifier, raw.risk_score_items.take&.value]
       end
 
-      values.to_h.each { |k,v| result.gsub! k, v.to_s }
+      values.to_h.each { |k,v| result.gsub! k.downcase, v.to_s }
 
       result
     end
