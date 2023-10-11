@@ -204,6 +204,9 @@ es:
       risk_assessment_weight:
         one: 'Atributo de evaluación de riesgo'
         other: 'Atributos de evaluación de riesgo'
+      risk_score_item:
+        one: 'Valor'
+        other: 'Valores'
       risk_weight:
         one: 'Valor de evaluación de riesgo'
         other: 'Valores de evaluación de riesgo'
@@ -732,6 +735,7 @@ es:
         file_model: "Anexo"
         risk_assessment_weights: 'Ponderadores'
         risk_assessment_items: 'Ítems'
+        formula: 'Fórmula'
       risk_assessment/risk_assessment_items:
         name: 'Nombre (ítem)'
         risk: 'Riesgo (ítem)'
@@ -748,18 +752,30 @@ es:
       risk_assessment_template:
         name: 'Nombre'
         description: 'Descripción'
+        formula: 'Fórmula'
         risk_assessment_weights: 'Atributos de evaluación de riesgo'
       risk_assessment_template/risk_assessment_weights:
+        identifier: 'Identificador'
         name: 'Atributo'
         description: 'Descripción'
-        weight: 'Ponderador'
+        heatmap: 'Principal'
+        risk_score_items: 'Valores'
       risk_assessment_weight:
         name: 'Atributo'
         description: 'Descripción'
         weight: 'Ponderador'
+        identifier: 'Identificador'
+        heatmap: 'Principal'
+      risk_assessment_weights/risk_score_items:
+        name: 'Nombre'
+        value: 'Valor'
+      risk_score_item:
+        name: 'Nombre'
+        value: 'Valor'
       risk_weight:
         value: 'Valor'
         weight: 'Ponderador'
+        identifier: 'Identificador'
       subsidiary:
         name: 'Nombre'
         identity: 'Identificación'
@@ -890,6 +906,10 @@ es:
         risk_assessment_template:
           attributes:
             risk_assessment_weights:
+              blank: 'debe tener al menos uno'
+        risk_assessment_weight:
+          attributes:
+            risk_score_items:
               blank: 'debe tener al menos uno'
         user:
           attributes:

@@ -5,6 +5,7 @@ class RiskAssessment < ApplicationRecord
   include RiskAssessments::Csv
   include RiskAssessments::DestroyValidation
   include RiskAssessments::FileModel
+  include RiskAssessments::Formula
   include RiskAssessments::Pdf
   include RiskAssessments::Plan
   include RiskAssessments::RiskAssessmentItems
@@ -22,4 +23,5 @@ class RiskAssessment < ApplicationRecord
   belongs_to :organization
   belongs_to :group
   has_many :risk_assessment_weights, through: :risk_assessment_template
+  has_many :risk_score_items, through: :risk_assessment_weights
 end

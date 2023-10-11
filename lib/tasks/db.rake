@@ -32,6 +32,7 @@ namespace :db do
       update_options_tags                        # 2023-06-05
       update_roles_identifier                    # 2023-07-24
       update_status_work_papers                  # 2023-09-25
+      update_risk_assessment_weights             # 2023-10-02
     end
   end
 end
@@ -795,4 +796,59 @@ private
 
   def update_status_work_papers?
     WorkPaper.where(status: nil).exists?
+  end
+
+  def update_risk_assessment_weights
+    if should_update_risk_assessment_weights?
+      RiskAssessmentTemplate.find_each do |rat|
+        identifier = 'A'
+
+        rat.risk_assessment_weights.each_with_index do |raw, idx|
+          raw.update_column :heatmap, true if idx <= 1
+          raw.update_column :identifier, identifier
+
+          raw.risk_weights.update_all identifier: identifier
+
+          risk_weights.each do |risk, value|
+            raw.risk_score_items.create!(
+              name: I18n.t("risk_assessments.risk_weight_risks.#{risk}"),
+              value: value
+            )
+          end
+
+          identifier.next!
+        end
+
+        formula = risk_template_make_formula rat
+
+        rat.risk_assessments.update_all formula: formula
+        rat.update_column :formula, formula
+      end
+    end
+  end
+
+  def should_update_risk_assessment_weights?
+    RiskAssessmentTemplate.where(formula: nil).exists?
+  end
+
+  def risk_weights
+    risk_types = {
+      none:        0,
+      low:         1,
+      medium_low:  2,
+      medium:      3,
+      medium_high: 4,
+      high:        5
+    }
+
+    RISK_WEIGHTS.present? ? RISK_WEIGHTS : risk_types
+  end
+
+  def risk_template_make_formula rat
+    raws = rat.reload.risk_assessment_weights.ordered.pluck :identifier, :weight
+
+    dividend = raws.map { |raw| raw.join(' * ') }.join(' + ')
+    divisor  = raws.to_h.values.sum
+
+    "(#{dividend}) / #{divisor}"
   end

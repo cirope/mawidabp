@@ -864,7 +864,7 @@ es:
       add_best_practice: 'Agregar buena práctica'
       add_business_unit_type: 'Agregar unidad organizativa'
       apply: 'Aplicar'
-    risk_weight_risks:
+    risk_weight_risks: # Deprecated: remove when all clients are migrated
       none: 'Nulo'
       low: 'Bajo'
       medium_low: 'Medio bajo'
@@ -878,6 +878,7 @@ es:
     pdf:
       title: 'Evaluación de riesgo'
       pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
+      formula: 'Fórmula'
       period:
         title: "Periodo (%{name})"
         range: "%{from_date} al %{to_date}"
@@ -896,6 +897,10 @@ es:
       title: 'Ver plantilla de evaluación de riesgo'
     form:
       add_risk_assessment_weight: 'Agregar ponderador'
+
+  risk_score_items:
+    form:
+      add_risk_score_item: 'Agregar valor'
 
   versions:
     index:
