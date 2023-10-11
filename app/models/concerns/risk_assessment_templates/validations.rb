@@ -8,7 +8,7 @@ module RiskAssessmentTemplates::Validations
       case_sensitive: false, scope: :organization_id
     }
     validate :risk_assessment_weights_presence
-    validate :validate_formula
+    validate :validate_expression
   end
 
   private
@@ -19,19 +19,19 @@ module RiskAssessmentTemplates::Validations
       end
     end
 
-    def validate_formula
+    def validate_expression
       begin
-        eval test_formula
+        eval expression
       rescue Exception => exc
         errors.add :formula, :invalid
       end
     end
 
-    def test_formula
+    def expression
       result = formula.dup
 
       values = risk_assessment_weights.reject(&:marked_for_destruction?).map do |raw|
-        [raw.identifier, raw.risk_score_items.take&.value ]
+        [raw.identifier, raw.risk_score_items.take&.value]
       end
 
       values.to_h.each { |k,v| result.gsub! k, v.to_s }

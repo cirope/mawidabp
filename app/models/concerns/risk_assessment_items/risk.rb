@@ -11,7 +11,7 @@ module RiskAssessmentItems::Risk
       result = formula.dup
       values = risk_weights.map { |rw| [rw.identifier, rw.value] }
 
-      values.to_h.each { |k,v| result.gsub! k, v.to_f.to_s }
+      values.to_h.each { |k,v| result.gsub! k, v.to_s }
 
       self.risk = eval(result).round
     end

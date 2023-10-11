@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<%= f.simple_fields_for :risk_score_items do |rsi_f| %>
+<%= f.simple_fields_for :risk_score_items, risk_weights_score_items(f.object) do |rsi_f| %>
   <%= render 'risk_score_items/risk_score_item', f: rsi_f %>
 <% end %>
 

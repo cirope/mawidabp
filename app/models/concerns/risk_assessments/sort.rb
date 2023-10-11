@@ -6,7 +6,7 @@ module RiskAssessments::Sort
 
     self.class.transaction do
       items.each_with_index do |rai, i|
-        rai.update_column :order, i.next
+        rai.update! order: i.next
       end
     end
   end

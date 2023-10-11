@@ -1140,7 +1140,7 @@ ActiveRecord::Schema.define(version: 2023_10_04_181623) do
   end
 
   create_table "risk_weights", force: :cascade do |t|
-    t.integer "value"
+    t.decimal "value"
     t.integer "weight"
     t.bigint "risk_assessment_weight_id", null: false
     t.bigint "risk_assessment_item_id", null: false

@@ -865,7 +865,7 @@ en:
       add_best_practice: 'Add best practice'
       add_business_unit_type: 'Add organizational unit'
       apply: 'Apply'
-    risk_weight_risks:
+    risk_weight_risks: # Deprecated: remove when all clients are migrated
       none: 'None'
       low: 'Low'
       medium_low: 'Medium low'

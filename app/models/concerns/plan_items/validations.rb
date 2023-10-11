@@ -23,7 +23,7 @@ module PlanItems::Validations
 
       def uniqueness_auxiliar_business_unit_types
         business_unit_types = []
-      
+
         auxiliar_business_unit_types.each do |auxiliar_business_unit_type|
           if business_unit_types.include?(auxiliar_business_unit_type.business_unit_type.id)
             auxiliar_business_unit_type.errors.add(:business_unit_type_id, :taken)
