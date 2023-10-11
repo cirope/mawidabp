@@ -48,6 +48,13 @@ class RiskAssessmentTemplateTest < ActiveSupport::TestCase
     assert_error @risk_assessment_template, :formula, :pdf_encoding
   end
 
+  test 'validates formula' do
+    @risk_assessment_template.formula = "(A * 20) / B"
+
+    assert @risk_assessment_template.invalid?
+    assert_error @risk_assessment_template, :formula, :invalid
+  end
+
   test 'destroy' do
     assert_no_difference 'RiskAssessmentTemplate.count' do
       @risk_assessment_template.destroy
