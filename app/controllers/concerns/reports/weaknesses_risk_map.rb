@@ -47,7 +47,7 @@ module Reports::WeaknessesRiskMap
     end
 
     def scoped_risk_map_finding
-      Weakness.where(created_at: 4.years.ago..)
+      Weakness.where created_at: 4.years.ago..
     end
 
     def filter_weaknesses_for_report report_params

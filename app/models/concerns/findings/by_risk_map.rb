@@ -88,11 +88,11 @@ module Findings::ByRiskMap
     end
 
     def new_finding_between_committee_dates options
-      before_committee_date  = options['before_committee_date'].to_date
-      current_committee_date = options['current_committee_date'].to_date
+      previous_committee_date = options['previous_committee_date'].to_date
+      current_committee_date  = options['current_committee_date'].to_date
 
       if committee_dates_present? options
-         finding_between_committee_dates = origination_date && (origination_date > before_committee_date &&
+         finding_between_committee_dates = origination_date && (origination_date > previous_committee_date &&
            origination_date <= current_committee_date)
 
         if state != Finding::STATUS[:repeated] && finding_between_committee_dates
@@ -106,12 +106,12 @@ module Findings::ByRiskMap
     end
 
     def closed_finding_between_committee_dates options
-      before_committee_date  = options['before_committee_date'].to_date
-      current_committee_date = options['current_committee_date'].to_date
-      allowed_state          = state == Finding::STATUS[:implemented_audited]
+      previous_committee_date = options['previous_committee_date'].to_date
+      current_committee_date  = options['current_committee_date'].to_date
+      allowed_state           = state == Finding::STATUS[:implemented_audited]
 
       if committee_dates_present? options
-        if allowed_state && (updated_at > before_committee_date && updated_at <= current_committee_date)
+        if allowed_state && (updated_at > previous_committee_date && updated_at <= current_committee_date)
           '1'
         else
           '0'
@@ -122,10 +122,10 @@ module Findings::ByRiskMap
     end
 
     def committee_dates_present? options
-      before_committee_date  = options['before_committee_date'].to_date
-      current_committee_date = options['current_committee_date'].to_date
+      previous_committee_date = options['previous_committee_date'].to_date
+      current_committee_date  = options['current_committee_date'].to_date
 
-      before_committee_date.present? && current_committee_date.present? ? true : false
+      previous_committee_date.present? && current_committee_date.present? ? true : false
     end
 
     def average_scores
