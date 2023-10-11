@@ -933,7 +933,7 @@ es:
   follow_up_audit:
     weaknesses_risk_map:
       days: 'Cantidad de días'
-      before_committee_date: 'Fecha comité anterior'
+      previous_committee_date: 'Fecha comité anterior'
       current_committee_date: 'Fecha comité actual'
 
   work_papers:

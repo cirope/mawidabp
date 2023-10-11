@@ -1234,7 +1234,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_nothing_raised do
       get :weaknesses_risk_map, :params => {
         :weaknesses_risk_map => {
-          :before_committee_date => 10.years.ago.to_date,
+          :previous_committee_date => 10.years.ago.to_date,
           :current_committee_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up'
@@ -1254,7 +1254,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_risk_map, :params => {
       :weaknesses_risk_map => {
-        :before_committee_date => 6.months.ago.to_date,
+        :previous_committee_date => 6.months.ago.to_date,
         :current_committee_date => Time.zone.today,
         :days => 730,
         :organization_ids => organization_ids
@@ -1277,7 +1277,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_nothing_raised do
       get :weaknesses_risk_map, :params => {
         :weaknesses_risk_map => {
-          :before_committee_date => 10.years.ago.to_date,
+          :previous_committee_date => 10.years.ago.to_date,
           :current_committee_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',

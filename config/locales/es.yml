@@ -383,6 +383,8 @@
       process_owner_roots: "Responsables máximos"
     weaknesses_risk_map:
       title: "INFORME MAPA DE RIESGO"
+      current_being_implemented: "EPI_Vigente"
+      expired_being_implemented: "EPI_Vencida"
     weaknesses_evolution:
       pdf_name: "observaciones_evolucion_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"

@@ -7,8 +7,9 @@ module Findings::ByRiskMap
     [
       organization,
       organization_id,
-      title,
       review.identification,
+      title,
+      [organization.name, review.identification, review_code].join,
       taggings_findings('finding'),
       taggings_findings('review'),
       control_objective_item_id,
@@ -24,7 +25,7 @@ module Findings::ByRiskMap
       review_code,
       risk,
       try(:risk_text) || '',
-      state_text,
+      conditional_state_text(options),
       state,
       origination_date,
       follow_up_date,
@@ -48,6 +49,20 @@ module Findings::ByRiskMap
   end
 
   private
+
+    def conditional_state_text options
+      if state == Finding::STATUS[:being_implemented]
+        current_committee_date = options['current_committee_date'].to_date
+        current_state_text     = I18n.t 'follow_up_committee_report.weaknesses_risk_map.current_being_implemented'
+        expired_state_text     = I18n.t 'follow_up_committee_report.weaknesses_risk_map.expired_being_implemented'
+
+        if origination_date && current_committee_date
+          origination_date > current_committee_date ? current_state_text : expired_state_text
+        end
+      else
+        state_text
+      end
+    end
 
     def taggings_findings kind
       tags = taggings.includes(:tag).where(tag: {kind: kind}).pluck(:name)
@@ -73,12 +88,14 @@ module Findings::ByRiskMap
     end
 
     def new_finding_between_committee_dates options
-      before_committee_date  = options['before_committee_date'].to_date
-      current_committee_date = options['current_committee_date'].to_date
+      previous_committee_date = options['previous_committee_date'].to_date
+      current_committee_date  = options['current_committee_date'].to_date
 
       if committee_dates_present? options
-        if origination_date &&
-            (origination_date > before_committee_date && origination_date <= current_committee_date)
+         finding_between_committee_dates = origination_date && (origination_date > previous_committee_date &&
+           origination_date <= current_committee_date)
+
+        if state != Finding::STATUS[:repeated] && finding_between_committee_dates
           '1'
         else
           '0'
@@ -89,12 +106,12 @@ module Findings::ByRiskMap
     end
 
     def closed_finding_between_committee_dates options
-      before_committee_date  = options['before_committee_date'].to_date
-      current_committee_date = options['current_committee_date'].to_date
-      allowed_state          = state == Finding::STATUS[:implemented_audited]
+      previous_committee_date = options['previous_committee_date'].to_date
+      current_committee_date  = options['current_committee_date'].to_date
+      allowed_state           = state == Finding::STATUS[:implemented_audited]
 
       if committee_dates_present? options
-        if allowed_state && (updated_at > before_committee_date && updated_at <= current_committee_date)
+        if allowed_state && (updated_at > previous_committee_date && updated_at <= current_committee_date)
           '1'
         else
           '0'
@@ -105,10 +122,10 @@ module Findings::ByRiskMap
     end
 
     def committee_dates_present? options
-      before_committee_date  = options['before_committee_date'].to_date
-      current_committee_date = options['current_committee_date'].to_date
+      previous_committee_date = options['previous_committee_date'].to_date
+      current_committee_date  = options['current_committee_date'].to_date
 
-      before_committee_date.present? && current_committee_date.present? ? true : false
+      previous_committee_date.present? && current_committee_date.present? ? true : false
     end
 
     def average_scores
@@ -142,6 +159,7 @@ module Findings::ByRiskMap
           'organization',
           'organization_id',
           'identification',
+          'title',
           'review_identification',
           'finding_tags',
           'review_tags',

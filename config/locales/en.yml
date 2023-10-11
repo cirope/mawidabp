@@ -383,6 +383,8 @@
       process_owner_roots: "Top owners"
     weaknesses_risk_map:
       title: "RISK MAP REPORT"
+      current_being_implemented: "EPI_Current"
+      expired_being_implemented: "EPI_Expired"
     weaknesses_evolution:
       pdf_name: "issues_evolution_%{from_date}_to_%{to_date}.pdf"
       title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
