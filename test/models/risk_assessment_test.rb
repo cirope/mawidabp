@@ -237,7 +237,7 @@ class RiskAssessmentTest < ActiveSupport::TestCase
 
     assert_equal 30, rai.risk
 
-    @risk_assessment.update_column :formula, "A * 100"
+    @risk_assessment.update_column :formula, 'A * 100'
 
     rai.update name: 'New formula'
 
