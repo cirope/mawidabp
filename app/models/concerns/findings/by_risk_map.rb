@@ -9,7 +9,7 @@ module Findings::ByRiskMap
       organization_id,
       review.identification,
       title,
-      [organization.name,review.identification,review_code].join,
+      [organization.name, review.identification, review_code].join,
       taggings_findings('finding'),
       taggings_findings('review'),
       control_objective_item_id,
@@ -25,7 +25,7 @@ module Findings::ByRiskMap
       review_code,
       risk,
       try(:risk_text) || '',
-      custom_state_text(options),
+      conditional_state_text(options),
       state,
       origination_date,
       follow_up_date,
@@ -50,15 +50,17 @@ module Findings::ByRiskMap
 
   private
 
-    def custom_state_text options
+    def conditional_state_text options
       if state == Finding::STATUS[:being_implemented]
         current_committee_date = options['current_committee_date'].to_date
+        current_state_text     = I18n.t 'follow_up_committee_report.weaknesses_risk_map.current_being_implemented'
+        expired_state_text     = I18n.t 'follow_up_committee_report.weaknesses_risk_map.expired_being_implemented'
 
         if origination_date && current_committee_date
-          origination_date > current_committee_date ? 'EPI_Vigente' : 'EPI_Vencida'
-        else
-          state_text
+          origination_date > current_committee_date ? current_state_text : expired_state_text
         end
+      else
+        state_text
       end
     end
 
@@ -88,11 +90,12 @@ module Findings::ByRiskMap
     def new_finding_between_committee_dates options
       before_committee_date  = options['before_committee_date'].to_date
       current_committee_date = options['current_committee_date'].to_date
-      exclude_state          = Finding::STATUS[:repeated]
 
       if committee_dates_present? options
-        if origination_date && state != exclude_state &&
-            (origination_date > before_committee_date && origination_date <= current_committee_date)
+         finding_between_committee_dates = origination_date && (origination_date > before_committee_date &&
+           origination_date <= current_committee_date)
+
+        if state != Finding::STATUS[:repeated] && finding_between_committee_dates
           '1'
         else
           '0'
