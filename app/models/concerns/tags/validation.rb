@@ -15,19 +15,21 @@ module Tags::Validation
   private
 
     def tag_uniqueness
-      is_duplicated = Tag.by_name(name).any? do |t|
+      tags = Tag.by_name(name).reject { |t| t.id == id }
+
+      duplicated_tags = tags.any? do |t|
         if t.shared == true
           true
-        elsif new_record? && (t.organization == organization || shared == true)
+        elsif t.name == name && t.organization == organization
           true
-        elsif persisted? && (t.organization == organization || shared == true && t.organization != organization)
+        elsif shared == true && t.name == name && t.organization != organization
           true
         else
           false
         end
       end
 
-      errors.add :name, :taken if is_duplicated
+      errors.add :name, :taken if duplicated_tags
     end
 
     def shared_reversion
