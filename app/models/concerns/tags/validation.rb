@@ -15,19 +15,18 @@ module Tags::Validation
   private
 
     def tag_uniqueness
-      tags = Tag.by_name(name).reject { |t| t.id == id }
+      tags = Tag.by_name(name).
+        where.not(id: id).
+        where(shared: true).any?
 
-      duplicated_tags = tags.any? do |t|
-        if t.shared == true
-          true
-        elsif t.name == name && t.organization == organization
-          true
-        elsif shared == true && t.name == name && t.organization != organization
-          true
-        else
-          false
-        end
-      end
+      tags = Tag.by_name(name).
+        where.not(id: id).
+        where(organization_id: Current.organization.id).any?
+
+      tags = Tag.by_name(name).
+        where.not(id: id).
+        where(organization_id: !Current.organization.id, shared: shared).any?
+
 
       errors.add :name, :taken if duplicated_tags
     end
