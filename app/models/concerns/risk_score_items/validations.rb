@@ -23,7 +23,7 @@ module RiskScoreItems::Validations
           rsi == self || rsi.marked_for_destruction?
         end
 
-        if rsis.select { |rsi| rsi.send(attr).strip =~ /#{Regexp.quote(send(attr).strip)}/i }.any?
+        if rsis.select { |rsi| rsi.send(attr).strip =~ /^#{Regexp.quote(send(attr).strip)}$/i }.any?
           errors.add attr, :taken
         end
       end

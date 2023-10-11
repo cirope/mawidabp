@@ -32,7 +32,7 @@ module RiskAssessmentWeights::Validations
           raw == self || raw.marked_for_destruction?
         end
 
-        if raws.select { |raw| raw.send(attr).strip =~ /#{Regexp.quote(send(attr).strip)}/i }.any?
+        if raws.select { |raw| raw.send(attr).strip =~ /^#{Regexp.quote(send(attr).strip)}$/i }.any?
           errors.add attr, :taken
         end
       end
