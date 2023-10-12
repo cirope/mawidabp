@@ -4,7 +4,7 @@ module Tags::Validation
   included do
     validates :name, :kind, :style, :icon, presence: true, length: { maximum: 255 }
     validates :name, uniqueness: { case_sensitive: false, scope: :organization_id }
-    validates :name, uniqueness: { case_sensitive: false, scope: :group_id }, if: -> { shared }
+    validates :name, uniqueness: { case_sensitive: false, scope: :group_id }, if: :shared
     validates :icon, inclusion: { in: :available_icons }
     validates :kind, inclusion: { in: Tag::KINDS }
     validates :style, inclusion: {
