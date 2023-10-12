@@ -17,11 +17,11 @@ module Tags::Validation
   private
 
     def tag_uniqueness
-        tags = Tag.by_name(name).
+        other_tags = Tag.by_name(name).
           where.not(id: id).
-          where(shared: true).any?
+          where(shared: true)
 
-        errors.add :name, :taken if tags
+        errors.add :name, :taken if other_tags.any?
     end
 
     def shared_reversion
