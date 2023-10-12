@@ -3,6 +3,8 @@ module Tags::Validation
 
   included do
     validates :name, :kind, :style, :icon, presence: true, length: { maximum: 255 }
+    validates :name, uniqueness: { case_sensitive: false, scope: :organization_id }
+    validates :name, uniqueness: { case_sensitive: false, scope: :group_id }, if: -> { shared }
     validates :icon, inclusion: { in: :available_icons }
     validates :kind, inclusion: { in: Tag::KINDS }
     validates :style, inclusion: {
@@ -15,20 +17,11 @@ module Tags::Validation
   private
 
     def tag_uniqueness
-      tags = Tag.by_name(name).
-        where.not(id: id).
-        where(shared: true).any?
+        tags = Tag.by_name(name).
+          where.not(id: id).
+          where(shared: true).any?
 
-      tags = Tag.by_name(name).
-        where.not(id: id).
-        where(organization_id: Current.organization.id).any?
-
-      tags = Tag.by_name(name).
-        where.not(id: id).
-        where(organization_id: !Current.organization.id, shared: shared).any?
-
-
-      errors.add :name, :taken if duplicated_tags
+        errors.add :name, :taken if tags
     end
 
     def shared_reversion
