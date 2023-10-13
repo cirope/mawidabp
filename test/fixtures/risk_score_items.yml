@@ -2,3 +2,8 @@ sox_404a:
   name: High
   value: 30
   risk_assessment_weight: sox_404
+
+sox_current:
+  name: High
+  value: 30
+  risk_assessment_weight: sox_current

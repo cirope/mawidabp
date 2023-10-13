@@ -8,6 +8,6 @@ module RiskAssessments::Formula
   private
 
     def set_formula
-      self.formula = risk_assessment_template&.formula
+      self.formula ||= risk_assessment_template&.formula
     end
 end

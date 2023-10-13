@@ -73,7 +73,7 @@ class RiskAssessmentTemplateTest < ActiveSupport::TestCase
     new_risk_assessment_template.clone_from @risk_assessment_template
 
     all_weights_are_equal = new_risk_assessment_template.risk_assessment_weights.all? do |raw|
-      exclusion_list = %w(id risk_assessment_template_id created_at updated_at)
+      exclusion_list = %w(id owner_id owner_type created_at updated_at)
 
       @risk_assessment_template.risk_assessment_weights.any? do |original_raw|
         raw.attributes.except(*exclusion_list) ==

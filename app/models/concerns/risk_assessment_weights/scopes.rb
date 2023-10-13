@@ -3,6 +3,5 @@ module RiskAssessmentWeights::Scopes
 
   included do
     scope :ordered,  -> { order id: :asc }
-    scope :heatmaps, -> { where heatmap: true }
   end
 end

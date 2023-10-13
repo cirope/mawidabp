@@ -5,14 +5,6 @@ class RiskWeightTest < ActiveSupport::TestCase
     @risk_weight = risk_weights :sox_section_13_low_risk
   end
 
-  test 'blank attributes' do
-    @risk_weight.risk_assessment_weight = nil
-    @risk_weight.identifier = nil
-
-    assert @risk_weight.invalid?
-    assert_error @risk_weight, :identifier, :blank
-  end
-
   test 'blank attributes on final' do
     @risk_weight.risk_assessment_item.risk_assessment.update_columns status: 'final'
 

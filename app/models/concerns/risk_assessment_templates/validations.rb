@@ -9,6 +9,7 @@ module RiskAssessmentTemplates::Validations
     }
     validate :risk_assessment_weights_presence
     validate :validate_expression
+    validate :validate_heatmap
   end
 
   private
@@ -16,6 +17,14 @@ module RiskAssessmentTemplates::Validations
     def risk_assessment_weights_presence
       unless risk_assessment_weights.reject(&:marked_for_destruction?).any?
         errors.add :risk_assessment_weights, :blank
+      end
+    end
+
+    def validate_heatmap
+      raws = risk_assessment_weights.reject(&:marked_for_destruction?)
+
+      if raws.select(&:heatmap).count > 2
+        errors.add :risk_assessment_weights, :numericality, count: 2
       end
     end
 
@@ -34,7 +43,7 @@ module RiskAssessmentTemplates::Validations
         [raw.identifier, raw.risk_score_items.take&.value]
       end
 
-      values.to_h.each { |k,v| result.gsub! k.downcase, v.to_s }
+      values.to_h.each { |k,v| result.gsub! k.strip.downcase, v.to_s }
 
       result
     end

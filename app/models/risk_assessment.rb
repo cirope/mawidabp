@@ -9,6 +9,7 @@ class RiskAssessment < ApplicationRecord
   include RiskAssessments::Pdf
   include RiskAssessments::Plan
   include RiskAssessments::RiskAssessmentItems
+  include RiskAssessments::RiskAssessemntWeights
   include RiskAssessments::Scopes
   include RiskAssessments::Search
   include RiskAssessments::Sort
@@ -22,6 +23,4 @@ class RiskAssessment < ApplicationRecord
   belongs_to :risk_assessment_template, optional: true
   belongs_to :organization
   belongs_to :group
-  has_many :risk_assessment_weights, through: :risk_assessment_template
-  has_many :risk_score_items, through: :risk_assessment_weights
 end

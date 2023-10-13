@@ -24,7 +24,7 @@ jQuery(function ($) {
         var value       = +$value.val()
         var identifier  = $identifier.val()
 
-        formula = formula.replaceAll(identifier.toLowerCase(), value)
+        formula = formula.replaceAll(identifier.trim().toLowerCase(), value)
       })
 
       risk += eval(formula)

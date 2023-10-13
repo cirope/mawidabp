@@ -907,6 +907,7 @@ es:
           attributes:
             risk_assessment_weights:
               blank: 'debe tener al menos uno'
+              numericality: 'debe tener sólo %{count} atributos como principal'
         risk_assessment_weight:
           attributes:
             risk_score_items:

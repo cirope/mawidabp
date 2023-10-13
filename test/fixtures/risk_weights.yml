@@ -1,6 +1,5 @@
 sox_section_13_low_risk:
   value: 30
-  identifier: A
-  risk_assessment_weight: sox_404
-  risk_assessment_item: sox_section_13
   weight: 30
+  risk_assessment_weight: sox_current
+  risk_assessment_item: sox_section_13

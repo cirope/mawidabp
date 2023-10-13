@@ -44,7 +44,6 @@ module RiskAssessments::Clone
       common = [
         'id',
         'risk_assessment_id',
-        'risk',
         'created_at',
         'updated_at'
       ]
