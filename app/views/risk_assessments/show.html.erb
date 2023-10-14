@@ -98,7 +98,7 @@
             <tr>
               <th><%= name %></th>
               <% values.each do |value| %>
-                <td><%= value %></td>
+                <td class="<%= heatmap_color(heatmap, value) %>"><%= value %></td>
               <% end %>
             </tr>
           <% end %>

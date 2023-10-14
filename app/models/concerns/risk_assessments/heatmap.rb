@@ -21,6 +21,9 @@ module RiskAssessments::Heatmap
       hsh[:footer] << rsiy.name
     end
 
+    hsh[:max] = hsh[:body].values.flatten.max
+    hsh[:min] = hsh[:body].values.flatten.min
+
     hsh
   end
 
