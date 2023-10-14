@@ -6,6 +6,7 @@ class RiskAssessment < ApplicationRecord
   include RiskAssessments::DestroyValidation
   include RiskAssessments::FileModel
   include RiskAssessments::Formula
+  include RiskAssessments::Heatmap
   include RiskAssessments::Pdf
   include RiskAssessments::Plan
   include RiskAssessments::RiskAssessmentItems

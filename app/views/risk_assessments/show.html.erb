@@ -83,21 +83,23 @@
     </div>
   <% end %>
 
-  <% if false && (rws = @risk_assessment.risk_weights.heatmaps).count >= 2 %>
+  <% if @risk_assessment.risk_weights_heatmaps.count == 2 %>
+  <% heatmap = @risk_assessment.build_heatmap %>
     <div class="table-responsive">
       <table class="table table-sm table-bordered">
         <caption>
           <h5>
-            Mapa de calor
+            <%= t 'risk_assessments.heatmap' %>
           </h5>
         </caption>
 
         <tbody>
-          <% rws.each do |risk_weight| %>
+          <% heatmap[:body].each do |name, values| %>
             <tr>
-              <th><%= risk_weight.risk_assessment_weight.name %></th>
-              <td><%= rws.where(identifier: risk_weight.identifier).count %></td>
-              <td></td>
+              <th><%= name %></th>
+              <% values.each do |value| %>
+                <td><%= value %></td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>
@@ -105,8 +107,8 @@
         <tfoot>
           <tr>
             <th></th>
-            <% rws.each do |risk_weight| %>
-              <th><%= risk_weight.risk_assessment_weight.name %></th>
+            <% heatmap[:footer].each do |name| %>
+              <th><%= name %></th>
             <% end %>
           </tr>
         </tfoot>
