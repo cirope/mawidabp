@@ -36,11 +36,17 @@ module RiskAssessmentsHelper
     end
   end
 
-  def heatmap_color heatmap, value
-    if heatmap[:max] == value
-      'bg-danger'
-    elsif heatmap[:min] == value
-      'bg-success'
+  def heatmap_color heatmap, indexx, indexy
+    if indexx == 0 && indexy == 0
+      'bg-danger-light'
+    else
+      values  = heatmap[:body].values
+      lengthx = values.length
+      lengthy = values.first.length
+
+      if lengthx == indexx + 1 && lengthy == indexy + 1
+        'bg-success-light'
+      end
     end
   end
 end
