@@ -8,16 +8,16 @@ module RiskAssessments::Heatmap
     rwhy = rwhs.last
 
     hsh[:body] = {}
-    rwhx.risk_score_items.reorder(value: :desc).each do |rsix|
+    rwhx.risk_score_items.ordered.each do |rsix|
       hsh[:body][rsix.name] = []
 
-      rwhy.risk_score_items.reorder(value: :desc).each do |rsiy|
+      rwhy.risk_score_items.ordered.each do |rsiy|
         hsh[:body][rsix.name] << risk_weights_for(rsix.value, rsiy.value)
       end
     end
 
     hsh[:footer] = []
-    rwhy.risk_score_items.reorder(value: :desc).each do |rsiy|
+    rwhy.risk_score_items.ordered.each do |rsiy|
       hsh[:footer] << rsiy.name
     end
 
