@@ -9,7 +9,7 @@ module RiskAssessments::Heatmap
 
     hsh[:body] = {}
 
-    rwhx.risk_score_items.ordered.each do |rsix|
+    rwhx.risk_score_items.order(value: :desc).each do |rsix|
       hsh[:body][rsix.name] = []
 
       rwhy.risk_score_items.ordered.each do |rsiy|
@@ -36,7 +36,7 @@ module RiskAssessments::Heatmap
       rw_group = RiskWeight.joins(
         :risk_assessment_weight
       ).select(
-        'risk_assessment_item_id'
+        RiskAssessment.qcn 'risk_assessment_item_id'
       ).where(
         risk_assessment_weights: {
           heatmap: true,
@@ -49,9 +49,9 @@ module RiskAssessments::Heatmap
           value: rsiy.value
         )
       ).group(
-        'risk_assessment_item_id'
+        RiskAssessment.qcn 'risk_assessment_item_id'
       ).having(
-        'count(*) = 2'
+        'COUNT(*) = 2'
       )
 
       risk_assessment_items.where(id: rw_group).count
