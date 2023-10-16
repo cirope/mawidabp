@@ -15,7 +15,9 @@ module RiskAssessmentItems::Risk
         values.to_h.each { |k,v| result.gsub! k.strip.downcase, v.to_s }
 
         self.risk = eval(result).round
-      rescue Exception => exc
+      rescue Exception => ex
+        ::Rails.logger.error ex
+
         self.risk = nil
       end
     end
