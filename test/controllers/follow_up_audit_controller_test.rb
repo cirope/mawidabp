@@ -2222,4 +2222,15 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_response :redirect
   end
+
+  test 'Export issues' do
+    login
+
+    get :export_issues, :params => {
+      :controller_name => 'follow_up'
+
+    }, as: :csv
+
+    assert_response :success
+  end
 end
