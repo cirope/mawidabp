@@ -21,7 +21,7 @@ module RiskAssessmentTemplates::Validations
     end
 
     def validate_heatmap
-      raws = risk_assessment_weights.reject(&:marked_for_destruction?)
+      raws = risk_assessment_weights.reject &:marked_for_destruction?
 
       if raws.select(&:heatmap).count > 2
         errors.add :risk_assessment_weights, :numericality, count: 2

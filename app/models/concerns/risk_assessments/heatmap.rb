@@ -8,6 +8,7 @@ module RiskAssessments::Heatmap
     rwhy = rwhs.last
 
     hsh[:body] = {}
+
     rwhx.risk_score_items.ordered.each do |rsix|
       hsh[:body][rsix.name] = []
 
@@ -17,6 +18,7 @@ module RiskAssessments::Heatmap
     end
 
     hsh[:footer] = []
+
     rwhy.risk_score_items.ordered.each do |rsiy|
       hsh[:footer] << rsiy.name
     end
@@ -36,11 +38,16 @@ module RiskAssessments::Heatmap
       ).select(
         'risk_assessment_item_id'
       ).where(
-        'heatmap IS TRUE AND
-        (risk_assessment_weight_id = :rawx_id AND value = :valuex) OR
-        (risk_assessment_weight_id = :rawy_id AND value = :valuey)',
-        rawx_id: rsix.risk_assessment_weight_id, valuex: rsix.value,
-        rawy_id: rsiy.risk_assessment_weight_id, valuey: rsiy.value
+        risk_assessment_weights: {
+          heatmap: true,
+          id: rsix.risk_assessment_weight_id
+        },
+        value: rsix.value
+      ).or(
+        RiskWeight.where(
+          risk_assessment_weights: { id: rsiy.risk_assessment_weight_id },
+          value: rsiy.value
+        )
       ).group(
         'risk_assessment_item_id'
       ).having(

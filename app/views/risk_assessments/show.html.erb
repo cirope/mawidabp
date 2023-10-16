@@ -84,7 +84,8 @@
   <% end %>
 
   <% if @risk_assessment.risk_weights_heatmaps.count == 2 %>
-  <% heatmap = @risk_assessment.build_heatmap %>
+    <% heatmap = @risk_assessment.build_heatmap %>
+
     <div class="table-responsive">
       <table class="table table-sm table-bordered">
         <caption>
