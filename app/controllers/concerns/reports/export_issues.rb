@@ -42,11 +42,9 @@ module Reports::ExportIssues
     end
 
     def issue_rows
-      issues = []
-
-      Finding.includes(:issues).list.where(final: false).each do |finding|
-        finding.issues.each do |issue|
-          issues << [
+      Finding.includes(:issues).list.where(final: false).find_each.flat_map do |finding|
+        finding.issues.map do |issue|
+         [
             issue.id,
             finding.review_code,
             issue.customer,
@@ -59,7 +57,5 @@ module Reports::ExportIssues
           ]
         end
       end
-
-      issues
     end
 end

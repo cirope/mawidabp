@@ -2228,9 +2228,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :export_issues, :params => {
       :controller_name => 'follow_up'
-
     }, as: :csv
 
     assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 end
