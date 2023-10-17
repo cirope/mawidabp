@@ -267,6 +267,7 @@
     weaknesses_reschedules_title: "Resumen de observaciones y reprogramaciones"
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
     weaknesses_heatmap_title: "Mapa de calor observaciones"
+    export_issues: "Exportar casos"
 
   execution_committee_report:
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral borradores"
