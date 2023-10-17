@@ -39,7 +39,7 @@ module RiskAssessmentsHelper
   def heatmap_color heatmap, indexx, indexy
     length = heatmap[:body].length
     value  = heatmap[:value]
-    total  = heatmap[:values][indexx*length+indexy]
+    total  = heatmap[:values][indexx * length + indexy]
 
     if total >= value * 0.85
       'table-danger'
