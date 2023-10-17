@@ -28,7 +28,7 @@ module RiskAssessmentWeights::Validations
 
     def validate_uniqueness_for attr
       if send(attr).present?
-        raws = risk_assessment_template.risk_assessment_weights.reject do |raw|
+        raws = owner.risk_assessment_weights.reject do |raw|
           raw == self || raw.marked_for_destruction?
         end
 

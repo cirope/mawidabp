@@ -32,7 +32,7 @@ namespace :db do
       update_options_tags                        # 2023-06-05
       update_roles_identifier                    # 2023-07-24
       update_status_work_papers                  # 2023-09-25
-      update_risk_assessment_weights             # 2023-10-02
+      update_risk_assessments_changes            # 2023-10-02
     end
   end
 end
@@ -798,36 +798,48 @@ private
     WorkPaper.where(status: nil).exists?
   end
 
-  def update_risk_assessment_weights
-    if should_update_risk_assessment_weights?
-      RiskAssessmentTemplate.find_each do |rat|
-        identifier = 'A'
-
-        rat.risk_assessment_weights.each_with_index do |raw, idx|
-          raw.update_column :heatmap, true if idx <= 1
-          raw.update_column :identifier, identifier
-
-          raw.risk_weights.update_all identifier: identifier
-
-          risk_weights.each do |risk, value|
-            raw.risk_score_items.create!(
-              name: I18n.t("risk_assessments.risk_weight_risks.#{risk}"),
-              value: value
-            )
-          end
-
-          identifier.next!
-        end
-
-        formula = risk_template_make_formula rat
-
-        rat.risk_assessments.update_all formula: formula
-        rat.update_column :formula, formula
-      end
+  def update_risk_assessments_changes
+    if should_update_risk_assessment_changes?
+      update_risk_assessment_weights
+      update_risk_assessment_templates
+      update_risk_assessments
     end
   end
 
-  def should_update_risk_assessment_weights?
+  def update_risk_assessment_weights
+    RiskAssessmentWeight.update_all owner_type: 'RiskAssessmentTemplate'
+  end
+
+  def update_risk_assessment_templates
+    RiskAssessmentTemplate.find_each do |rat|
+      identifier = 'A'
+
+      rat.risk_assessment_weights.each_with_index do |raw, idx|
+        raw.update_column :heatmap, true if idx <= 1
+        raw.update_column :identifier, identifier
+
+        risk_weights.each do |risk, value|
+          raw.risk_score_items.create!(
+            name: I18n.t("risk_assessments.risk_weight_risks.#{risk}"),
+            value: value
+          )
+        end
+
+        identifier.next!
+      end
+
+      formula = risk_template_make_formula rat
+
+      rat.risk_assessments.update_all formula: formula
+      rat.update_column :formula, formula
+    end
+  end
+
+  def update_risk_assessments
+    RiskAssessment.find_each { |ra| ra.send :clone_risk_assessment_weights }
+  end
+
+  def should_update_risk_assessment_changes?
     RiskAssessmentTemplate.where(formula: nil).exists?
   end
 

@@ -2,7 +2,7 @@ module RiskAssessmentWeights::Relations
   extend ActiveSupport::Concern
 
   included do
-    belongs_to :risk_assessment_template
+    belongs_to :owner, polymorphic: true
     has_many :risk_weights, dependent: :destroy
     has_many :risk_score_items, dependent: :destroy
 

@@ -2,7 +2,7 @@ module RiskAssessmentTemplates::Weights
   extend ActiveSupport::Concern
 
   included do
-    has_many :risk_assessment_weights, dependent: :destroy
+    has_many :risk_assessment_weights, as: :owner, dependent: :destroy
     has_many :risk_weights, through: :risk_assessment_weights
     has_many :risk_score_items, through: :risk_assessment_weights
 

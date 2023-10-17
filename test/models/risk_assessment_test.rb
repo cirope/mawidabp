@@ -99,6 +99,7 @@ class RiskAssessmentTest < ActiveSupport::TestCase
 
     rai = @risk_assessment.risk_assessment_items.create!(
       name:  'First by risk',
+      risk: 1000,
       order: 2,
       business_unit_id: business_units(:business_unit_two).id,
       risk_weights_attributes: [

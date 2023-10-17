@@ -82,6 +82,40 @@
       </table>
     </div>
   <% end %>
+
+  <% if @risk_assessment.risk_weights_heatmaps.count == 2 %>
+    <% heatmap = @risk_assessment.build_heatmap %>
+
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered">
+        <caption>
+          <h5>
+            <%= t 'risk_assessments.heatmap' %>
+          </h5>
+        </caption>
+
+        <tbody>
+          <% heatmap[:body].each_with_index do |(name, values), indexx| %>
+            <tr>
+              <th><%= name %></th>
+              <% values.each_with_index do |value, indexy| %>
+                <td class="<%= heatmap_color(heatmap, indexx, indexy) %>"><%= value %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <th></th>
+            <% heatmap[:footer].each do |name| %>
+              <th><%= name %></th>
+            <% end %>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  <% end %>
 <% end %>
 
 <hr>
