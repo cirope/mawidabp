@@ -205,10 +205,10 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
     weakness       = findings :being_implemented_weakness
     weakness.state = Finding::STATUS[:implemented_audited]
 
-    assert_equal 'green-text', risk_style(weakness)
+    assert_equal 'text-green', risk_style(weakness)
   end
 
   test 'get risk style when is not implemented_audited' do
-    assert_equal 'orange-text', risk_style(findings(:being_implemented_weakness))
+    assert_equal 'text-white', risk_style(findings(:being_implemented_weakness))
   end
 end

@@ -96,6 +96,6 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
   end
 
   def risk_style weakness
-    weakness.implemented_audited? ? 'green-text' : 'orange-text'
+    weakness.implemented_audited? ? 'text-green' : 'text-white'
   end
 end

@@ -23,7 +23,7 @@
         </div>
         <div class="row pt-5 pb-5">
           <div class="col-10 offset-1">
-            <p class="font-weight-bold" style="font-size:1.7em;"><span><%= I18n.t 'conclusion_review.bic.cover.version' %></span> <span class="aqua-text"><%= review_version_text draft  %></span></p>
+            <p class="font-weight-bold" style="font-size:1.7em;"><span><%= I18n.t 'conclusion_review.bic.cover.version' %></span> <span class="text-aqua"><%= review_version_text draft  %></span></p>
           </div>
         </div>
         <div class="row">
@@ -83,7 +83,7 @@
                           class: 'mt-4' %>
           </div>
           <div class="col-6">
-            <p class="pt-5 font-weight-bold" style="font-size:2.2em;"><%= I18n.t 'conclusion_review.bic.cover.cycle_qualification' %> <span class="aqua-text"><%= I18n.t("score_types.#{conclusion_review_score}") %></span></p>
+            <p class="pt-5 font-weight-bold" style="font-size:2.2em;"><%= I18n.t 'conclusion_review.bic.cover.cycle_qualification' %> <span class="text-aqua"><%= I18n.t("score_types.#{conclusion_review_score}") %></span></p>
           </div>
           <div class="col-1">
             <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'emojis', "#{conclusion_review_score}.png")),
@@ -155,7 +155,7 @@
               <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'key.png')), height: 80 %>
             </div>
             <div class="col-6 vertical-align-center">
-              <p class="mb-0 text-left text-dark-shadow" style="font-size:1.7em;"><%= weakness.risk_text %></p>
+              <p class="mb-0 text-left" style="font-size:1.7em;"><%= weakness.risk_text %></p>
             </div>
           </div>
           <div class="row font-weight-bold ml-2">
@@ -166,14 +166,14 @@
               <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'key.png')), height: 80 %>
             </div>
             <div class="col-6 vertical-align-center">
-              <p class="mb-0 text-left text-dark-shadow <%= risk_style weakness %>" style="font-size:1.7em;"><%= weakness.state_text %></p>
+              <p class="mb-0 text-left <%= risk_style weakness %>" style="font-size:1.7em;"><%= weakness.state_text %></p>
             </div>
           </div>
         </div>
         <div class="col-9">
           <div class="row pt-5">
             <div class="col-8 offset-1">
-              <p class="font-weight-bold aqua-text" style="font-size:2.8em;"><%= legend_weakness_repeated weakness %></p>
+              <p class="font-weight-bold text-aqua" style="font-size:2.8em;"><%= legend_weakness_repeated weakness %></p>
             </div>
           </div>
           <div class="row">
@@ -185,7 +185,7 @@
               <p class="pt-4" style="font-size:1.7em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.follow_up_date' %></span> <%= follow_up_date_weakness weakness %></p>
               <p class="pt-4" style="font-size:1.7em;"><span class="font-weight-bold"><%= Answer.model_name.human count: 1 %>:</span> <%= weakness.answer %></p>
               <% if weakness.repeated_of.present? %>
-                <p class="pt-4" style="font-size:1.7em;"><span class="font-weight-bold"><%= Finding.human_attribute_name :repeated_of_id %>:</span><span class="aqua-text"> <%= weakness.repeated_of %></span></p>
+                <p class="pt-4" style="font-size:1.7em;"><span class="font-weight-bold"><%= Finding.human_attribute_name :repeated_of_id %>:</span><span class="text-aqua"> <%= weakness.repeated_of %></span></p>
               <% end %>
             </div>
           </div>
