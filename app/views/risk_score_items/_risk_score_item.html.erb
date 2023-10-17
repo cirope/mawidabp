@@ -1,0 +1,18 @@
+<fieldset>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-5">
+        <%= f.input :name, label: false,
+          input_html: { autofocus: f.object.new_record? } %>
+      </div>
+      <div class="col-md-5">
+        <%= f.input :value, label: false %>
+      </div>
+      <div class="col-md-2">
+        <div class="mt-2 text-right">
+          <%= link_to_remove_nested_item f %>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

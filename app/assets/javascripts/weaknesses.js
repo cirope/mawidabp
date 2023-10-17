@@ -15,7 +15,7 @@ $(document).on('change', '[data-mark-impact-as]', function () {
 
     $('[data-compliance-observations]').prop('hidden', true)
     $('[data-compliance-observations-text]').val('')
-    $('[data-compliance-susceptible-to-sanction]').val(null)
+    $('[data-compliance-maybe-sanction]').val(null)
   }
 })
 

@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   post 'auth',   to: 'authentications#create', as: 'auth'
 
   # SAML
-  get 'saml/auth', to: 'saml_sessions#new', as: :new_saml_session
   post 'saml/callback', to: 'saml_sessions#create', as: :saml_session
   get 'saml/metadata', to: 'saml_sessions#metadata', as: :saml_metadata
 
@@ -317,6 +316,7 @@ Rails.application.routes.draw do
   end
 
   resource :work_papers, only: [:show]
+  resources :work_papers, only: [:update]
 
   namespace :conclusion_draft_reviews do
     resources :users, only: [:index]

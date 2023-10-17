@@ -108,7 +108,7 @@ en:
       title: 'Control objective details'
     new:
       tagging: 'Add tag'
-      add_control_objective_auditor: 'Add auditor in charge'
+      add_control_objective_auditor: 'Add auditor/auditee in charge'
     score_type:
       option: 'Options'
       percentage: 'Percentage'
@@ -206,6 +206,8 @@ en:
       approve: 'Approve'
       reject: 'Reject'
     finding_answers: 'Comments of'
+    pdf:
+      issue: 'Refer to the attached table for records under the code %{review_code}'
 
   licenses:
     trial_valid_until: 'End of trial period'
@@ -432,6 +434,9 @@ en:
       annual_plan_hours: 'Annual plan hours'
       auditor: 'Auditor (User)'
       time_summary_hours: 'Time Summary Hours'
+      main_or_aux_but: Main/Auxiliar OU
+      main_but: Main OU
+      aux_but: Auxiliar OU
     csv_prs_pat:
       csv_name: 'progress_report_by_status_%{current_date}.csv'
       business_unit: 'Sector'
@@ -591,6 +596,12 @@ en:
       add_business_unit_type: 'Add organizational unit'
       operational_audit: 'Operational audit'
       system_audit: 'System audit'
+
+  authentications:
+    new:
+      title: 'Authentication'
+      password: 'Password'
+      log_in: 'Login'
 
   sessions:
     new:
@@ -854,7 +865,8 @@ en:
       add_best_practice: 'Add best practice'
       add_business_unit_type: 'Add organizational unit'
       apply: 'Apply'
-    risk_weight_risks:
+    heatmap: 'Heat map'
+    risk_weight_risks: # Deprecated: remove when all clients are migrated
       none: 'None'
       low: 'Low'
       medium_low: 'Medium low'
@@ -868,6 +880,7 @@ en:
     pdf:
       title: 'Risk assessment'
       pdf_name: 'risk_assessment_%{name}.pdf'
+      formula: 'Formula'
       period:
         title: "Period (%{name})"
         range: "%{from_date} to %{to_date}"
@@ -886,6 +899,10 @@ en:
       title: 'Show risk assessment template'
     form:
       add_risk_assessment_weight: 'Add weight'
+
+  risk_score_items:
+    form:
+      add_risk_score_item: 'Add value'
 
   versions:
     index:
@@ -924,3 +941,13 @@ en:
     show:
       title: 'Working paper'
       error: 'Please remember that you must be authenticated or have permissions to view the document'
+    statuses:
+      pending: 'Pending'
+      finished: 'Finished'
+      revised: 'Revised'
+      auditor:
+        next_to_pending: 'Mark for revision'
+        next_to_finished: 'Return to pending'
+      supervisor:
+        next_to_finished: 'Mark as revised'
+        next_to_revised: 'Return to pending'
