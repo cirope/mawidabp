@@ -7,6 +7,7 @@ module RiskAssessments::Pdf
     pdf.add_generic_report_header organization
     pdf.add_title *pdf_title
     pdf.add_description_item *pdf_period
+    pdf.add_description_item *pdf_formula
 
     pdf.move_down PDF_FONT_SIZE
     pdf.add_title name, (PDF_FONT_SIZE * 1.25).round
@@ -44,6 +45,12 @@ module RiskAssessments::Pdf
       }
 
       [period_label, range_label, 0, false]
+    end
+
+    def pdf_formula
+      formula_label = I18n.t 'risk_assessments.pdf.formula'
+
+      [formula_label, formula, 0, false]
     end
 
     def put_risk_assessment_items_on pdf
@@ -131,8 +138,8 @@ module RiskAssessments::Pdf
     def risk_assessment_weight_rows risk_assessment_item
       risk_assessment_item.risk_weights.map do |risk_weight|
         [
+          risk_weight.identifier,
           risk_weight.risk_assessment_weight.name,
-          risk_weight.weight,
           risk_weight.value
         ]
       end
@@ -140,9 +147,9 @@ module RiskAssessments::Pdf
 
     def weight_column_order
       [
-        [RiskAssessmentWeight.human_attribute_name('name'), 70],
-        [RiskWeight.human_attribute_name('weight'), 15],
-        [RiskWeight.human_attribute_name('value'), 15]
+        [RiskWeight.human_attribute_name('identifier'), 30],
+        [RiskAssessmentWeight.human_attribute_name('name'), 60],
+        [RiskWeight.human_attribute_name('value'), 10]
       ]
     end
 

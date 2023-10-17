@@ -597,7 +597,7 @@
         control_objective_auditor:
           attributes:
             user_id:
-              invalid: "Must be auditor"
+              invalid: "must be auditor or auditee"
         file_model:
           attributes:
             file:

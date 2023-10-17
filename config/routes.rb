@@ -316,6 +316,7 @@ Rails.application.routes.draw do
   end
 
   resource :work_papers, only: [:show]
+  resources :work_papers, only: [:update]
 
   namespace :conclusion_draft_reviews do
     resources :users, only: [:index]
