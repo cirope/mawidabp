@@ -1,0 +1,12 @@
+<div class="input-group-prepend" data-work-paper-id="<%= work_paper.id %>">
+  <% if work_paper.next_status %>
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+      <%= show_status_work_paper work_paper %>
+    </button>
+    <div class="dropdown-menu">
+      <%= link_to_next_status_work_paper work_paper %>
+    </div>
+  <% else %>
+    <span class="input-group-text"><%= show_status_work_paper work_paper %><span>
+  <% end %>
+</div>

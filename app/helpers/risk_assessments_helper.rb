@@ -1,11 +1,6 @@
 module RiskAssessmentsHelper
-  def risk_weight_value_options
-    RiskWeight.risks.map do |risk, value|
-      [
-        [value, t("risk_assessments.risk_weight_risks.#{risk}")].join(' - '),
-        value
-      ]
-    end
+  def risk_score_items risk_weight
+    risk_weight.risk_score_items.map { |rsi| [rsi.name, rsi.value] }
   end
 
   def risk_assessment_shared_icon risk_assessment
@@ -38,6 +33,20 @@ module RiskAssessmentsHelper
       link_to [:merge_to_plan, risk_assessment], options do
         icon 'fas', 'list'
       end
+    end
+  end
+
+  def heatmap_color heatmap, indexx, indexy
+    length = heatmap[:body].length
+    value  = heatmap[:value]
+    total  = heatmap[:values][indexx * length + indexy]
+
+    if total >= value * 0.85
+      'table-danger'
+    elsif total >= value * 0.5
+      'table-warning'
+    elsif total < value * 0.5
+      'table-success'
     end
   end
 end
