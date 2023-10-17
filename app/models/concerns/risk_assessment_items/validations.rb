@@ -4,6 +4,7 @@ module RiskAssessmentItems::Validations
   included do
     delegate :final?, to: :risk_assessment
 
+    validates :risk, presence: true
     validates :name, presence: true, pdf_encoding: true, length: { maximum: 255 }
     validates :business_unit, :risk, presence: true, if: :final?
     validates :order, presence: true

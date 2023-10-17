@@ -1097,13 +1097,15 @@ ActiveRecord::Schema.define(version: 2023_10_04_181623) do
     t.string "name", null: false
     t.text "description"
     t.integer "weight"
-    t.bigint "risk_assessment_template_id", null: false
+    t.bigint "owner_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "identifier"
     t.boolean "heatmap", default: false, null: false
+    t.string "owner_type"
     t.index ["heatmap"], name: "index_risk_assessment_weights_on_heatmap"
-    t.index ["risk_assessment_template_id"], name: "index_risk_assessment_weights_on_risk_assessment_template_id"
+    t.index ["owner_id"], name: "index_risk_assessment_weights_on_owner_id"
+    t.index ["owner_type", "owner_id"], name: "index_risk_assessment_weights_on_owner_type_and_owner_id"
   end
 
   create_table "risk_assessments", force: :cascade do |t|
@@ -1146,7 +1148,6 @@ ActiveRecord::Schema.define(version: 2023_10_04_181623) do
     t.bigint "risk_assessment_item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "identifier"
     t.index ["risk_assessment_item_id"], name: "index_risk_weights_on_risk_assessment_item_id"
     t.index ["risk_assessment_weight_id"], name: "index_risk_weights_on_risk_assessment_weight_id"
   end
@@ -1511,7 +1512,6 @@ ActiveRecord::Schema.define(version: 2023_10_04_181623) do
   add_foreign_key "risk_assessment_items", "process_controls", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_items", "risk_assessments", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_templates", "organizations", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "risk_assessment_weights", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "organizations", on_update: :restrict, on_delete: :restrict

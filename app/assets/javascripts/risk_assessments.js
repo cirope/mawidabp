@@ -11,7 +11,7 @@ jQuery(function ($) {
     var $input        = $(this)
     var id            = $input.data('updateRiskItem')
     var $values       = $('[data-update-risk-item="' + id + '"]')
-    var formula       = $('#risk_assessment_formula').val().toLowerCase()
+    var formula       = $('#risk_assessment_formula').val()
     var values        = $values.map(function () { return $(this).val() }).get()
     var allWithValues = values.reduce(function (a, v) { return a && v }, true)
 
@@ -24,7 +24,7 @@ jQuery(function ($) {
         var value       = +$value.val()
         var identifier  = $identifier.val()
 
-        formula = formula.replaceAll(identifier.toLowerCase(), value)
+        formula = formula.replaceAll(identifier.trim(), value)
       })
 
       risk += eval(formula)

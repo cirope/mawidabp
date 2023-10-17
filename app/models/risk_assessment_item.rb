@@ -4,8 +4,6 @@ class RiskAssessmentItem < ApplicationRecord
   include RiskAssessmentItems::Validations
   include RiskAssessmentItems::Weights
 
-  delegate :formula, to: :risk_assessment, allow_nil: false
-
   belongs_to :risk_assessment, optional: true
   belongs_to :business_unit, optional: true
   belongs_to :process_control, optional: true
