@@ -497,6 +497,7 @@ class ReviewsController < ApplicationController
         :identification, :description, :survey, :period_id, :plan_item_id,
         :scope, :risk_exposure, :manual_score, :manual_score_alt, :include_sox,
         :score_type, :review_objective, :type_review, :lock_version, :subsidiary_id,
+        :audit_period,
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version
         ],

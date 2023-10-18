@@ -1511,6 +1511,7 @@ es:
         type_review: "Tipo de informe"
         subsidiary_id: "Sucursal"
         subsidiary: "Sucursal"
+        audit_period: "Periodo de auditoría"
       review/external_reviews:
         alternative_review: 'Informe externo'
         alternative_review_id: 'Informe externo'

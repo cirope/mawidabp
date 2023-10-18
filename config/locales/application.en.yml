@@ -1511,6 +1511,7 @@ en:
         type_review: "Audit report type"
         subsidiary_id: "Branch"
         subsidiary: "Branch"
+        audit_period: "Audit period"
       review/external_reviews:
         alternative_review: 'External audit report'
         alternative_review_id: 'External audit report'

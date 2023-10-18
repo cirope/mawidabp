@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_04_181623) do
+ActiveRecord::Schema.define(version: 2023_10_18_201408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1060,6 +1060,7 @@ ActiveRecord::Schema.define(version: 2023_10_04_181623) do
     t.text "review_objective"
     t.integer "type_review"
     t.bigint "subsidiary_id"
+    t.string "audit_period"
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "index_reviews_on_identification"
     t.index ["organization_id"], name: "index_reviews_on_organization_id"

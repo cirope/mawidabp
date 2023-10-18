@@ -54,6 +54,8 @@
             disabled: readonly }
           %>
         <% end %>
+        <%= f.input :audit_period,
+          input_html: { value: @review.audit_period, readonly: readonly} %>
       </div>
       <div class="col-md-6">
         <% if USE_SCOPE_CYCLE %>
