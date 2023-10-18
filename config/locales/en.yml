@@ -267,6 +267,7 @@
     weaknesses_reschedules_title: "Summary of issues and reschedules"
     weaknesses_by_control_objective_process_title: "Report process by control objectives"
     weaknesses_heatmap_title: "Issues heat map"
+    export_issues: "Export issues"
 
   execution_committee_report:
     weaknesses_current_situation_title: "Global report - Quarterly drafts"
