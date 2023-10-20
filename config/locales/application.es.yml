@@ -183,14 +183,14 @@ es:
       hint: 'Debe realizar una búsqueda'
       users: 'Por usuario'
       business_units: 'Por unidad de negocio'
-      process_controls: 'Por proceso de negocio'
+      process_controls: 'Por procedimiento de negocio'
 
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
     control_objective_stats_title: 'Observaciones por objetivo de control'
     control_objective_stats_by_review_title: 'Observaciones por objetivo de control sin calificación'
     benefits_title: 'Beneficios / Perjuicios'
-    process_control_stats_title: 'Observaciones por proceso de negocio'
+    process_control_stats_title: 'Observaciones por procedimiento de negocio'
     synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
@@ -266,8 +266,8 @@ es:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
-      pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
-      title: "OBSERVACIONES AGRUPADAS POR PROCESO DE NEGOCIO"
+      pdf_name: 'observaciones_por_procedimiento_de_negocio_%{from_date}_al_%{to_date}.pdf'
+      title: "OBSERVACIONES AGRUPADAS POR PROCEDIMIENTO DE NEGOCIO"
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: 'Calificación promedio ponderada'
       average_effectiveness_resume:
@@ -275,7 +275,7 @@ es:
         other: '%{effectiveness} - %{count} informes evaluados'
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
-      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procedimientos de negocio: <b>%{score}%</b>'
     qa_indicators:
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
       subtitle: ""
@@ -375,7 +375,7 @@ es:
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin hallazgos"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procedimientos de negocio: los procedimientos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"." # REVIEW: a que se refiere con procedimiento? Podría confundirse con el cambio de proceso > procedimiento. En este texto también hablaba de procesos
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
@@ -479,7 +479,7 @@ es:
     audit_period: "%{start} al %{end}"
     audit_period_title: "PERIODO DE LA AUDITORÍA"
     objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
-    applied_procedures: "PROCEDIMIENTOS APLICADOS"
+    applied_procedures: "PROCEDIMIENTOS APLICADOS" # REVIEW: a que se refiere con procedimiento? Podría confundirse con el cambio de proceso > procedimiento
     conclusion: "CONCLUSIÓN"
     weaknesses_brief: "RESUMEN DE OBSERVACIONES"
     weaknesses_reschedules: "RESUMEN DE OBSERVACIONES / REPROGRAMACIONES"
@@ -675,7 +675,7 @@ es:
       hint: 'Debe realizar una búsqueda'
       users: 'Por usuario'
       business_units: 'Por unidad de negocio'
-      process_controls: 'Por proceso de negocio'
+      process_controls: 'Por procedimiento de negocio'
     tagged_findings_report:
       empty: 'No hay hallazgos para el filtro aplicado'
       findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
@@ -709,7 +709,7 @@ es:
     control_objective_stats_title: 'Observaciones por objetivo de control'
     control_objective_stats_by_review_title: 'Observaciones por objetivo de control sin calificación'
     benefits_title: 'Beneficios / Perjuicios'
-    process_control_stats_title: 'Observaciones por proceso de negocio'
+    process_control_stats_title: 'Observaciones por procedimiento de negocio'
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
     synthesis_report_title: "Resumen ejecutivo"
@@ -794,8 +794,8 @@ es:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
-      pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
-      title: "OBSERVACIONES AGRUPADAS POR PROCESO DE NEGOCIO"
+      pdf_name: 'observaciones_por_procedimiento_de_negocio_%{from_date}_al_%{to_date}.pdf'
+      title: "OBSERVACIONES AGRUPADAS POR PROCEDIMIENTO DE NEGOCIO"
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: 'Calificación promedio ponderada'
       average_effectiveness_resume:
@@ -803,7 +803,7 @@ es:
         other: '%{effectiveness} - %{count} informes evaluados'
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
-      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procedimientos de negocio: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
@@ -838,7 +838,7 @@ es:
         one: "Un hallazgo reiterado"
         other: "%{count} hallazgos reiterados"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procedimientos de negocio: los procedimientos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"." # REVIEW: a que se refiere con procedimiento? Podría confundirse con el cambio de proceso > procedimiento. Acá también se hablaba de procesos
     review_stats_report:
       pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       title: "ESTADÍSTICAS DE INFORMES"
@@ -1023,9 +1023,9 @@ es:
     stale_object_error: "El informe no fue actualizado, intente nuevamente."
     control_objective_items_label: "Objetivos de control"
     show_excluded_control_objectives: "Mostrar objetivos de control cargados en la buena práctica y ausentes en el informe"
-    no_excluded_control_objectives: "Todos los objetivos de control de este proceso se encuentran en el informe"
+    no_excluded_control_objectives: "Todos los objetivos de control de este proceso se encuentran en el informe" # REVIEW: a que proceso se refiere?
     add_control_objective: "Agregar un nuevo objetivo de control"
-    add_process_control: "Agregar un nuevo proceso"
+    add_process_control: "Agregar un nuevo procedimiento"
     add_best_practice: "Agregar una nueva buena práctica"
     control_objective_tag: "Objetivos por etiquetas"
     add_control_objective_tag: "Agregar etiqueta de objetivo de control"
@@ -1099,17 +1099,17 @@ es:
     recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y riesgo"
     recode_weaknesses_by_risk_and_repetition: "Recodificar observaciones por riesgo y reiteración"
     recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
-    reorder: "Reordenar procesos por nombre"
+    reorder: "Reordenar procedimientos por nombre"
     recode_work_papers: "Recodificar papeles de trabajo"
     findings_recoded: "Hallazgos recodificados correctamente"
-    reordered: "Procesos ordenados correctamente"
+    reordered: "Procedimientos ordenados correctamente"
     work_papers_recoded: "Se recodificaron los papeles de trabajo"
     work_papers_recode_failed: "Los papeles de trabajo no se pudieron recodificar"
-    failed_to_reorder: "Los procesos no pudieron ser ordenados"
+    failed_to_reorder: "Los procedimientos no pudieron ser ordenados"
     work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
     work_papers_marked_as_revised: "Papeles de trabajo marcados como revisados supervisor"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
-    process_control_qualification_explanation: "La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
+    process_control_qualification_explanation: "La calificación del procedimiento de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
       without_score: "no tiene puntaje de auditoría"
@@ -1324,7 +1324,7 @@ es:
         review_id: "Informe"
         issue_date: "Fecha de emisión"
         close_date: "Fecha de cierre"
-        applied_procedures: "Procedimientos aplicados"
+        applied_procedures: "Procedimientos aplicados" # REVIEW: a que se refiere con procedimiento? Podría confundirse con el cambio de proceso > procedimiento
         conclusion: "Conclusión"
         business_unit: "Unidad de negocio"
         project: "Proyecto"
@@ -1368,7 +1368,7 @@ es:
         exclude_from_score: "No calificar"
         issues_count: "Casos observados"
         alerts_count: "Cantidad de alertas"
-        process_control_id: "Proceso de negocio"
+        process_control_id: "Procedimiento de negocio"
         effectiveness: "Efectividad de control"
         support: "Soporte"
         weaknesses: "Observaciones"

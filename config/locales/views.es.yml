@@ -72,7 +72,7 @@ es:
     edit:
       title: 'Modificar buena práctica'
     process_controls:
-      new: 'Agregar proceso'
+      new: 'Agregar procedimiento'
     control_objectives:
       new: 'Agregar objetivo'
 
@@ -684,7 +684,7 @@ es:
     expired: 'Fuera de tiempo'
     status:
       pending: 'Pendiente'
-      in_progress: 'En proceso'
+      in_progress: 'En procedimiento'
       finished: 'Finalizada'
 
   time_summary:

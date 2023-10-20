@@ -178,8 +178,8 @@ es:
         one: 'Encuesta'
         other: 'Encuestas'
       process_control:
-        one: 'Proceso'
-        other: 'Procesos'
+        one: 'Procedimiento'
+        other: 'Procedimientos'
       question:
         one: 'Pregunta'
         other: 'Preguntas'
@@ -271,12 +271,12 @@ es:
         description: 'Descripción'
         obsolete: 'Obsoleta'
         shared: 'Compartida'
-        process_controls: 'Proceso'
+        process_controls: 'Procedimiento'
       business_unit_type:
         business_units: 'Unidades de negocio'
       best_practice/process_controls:
-        name: 'Proceso'
-        order: 'Proceso (orden)'
+        name: 'Procedimiento'
+        order: 'Procedimiento (orden)'
         control_objectives: 'Objetivos de control'
       best_practice/process_controls/control_objectives:
         name: 'Objetivo de control'
@@ -683,7 +683,7 @@ es:
         answer: 'Respuesta'
         answer_option: 'Opción'
       process_control:
-        name: 'Proceso'
+        name: 'Procedimiento'
         order: 'Orden'
         control_objectives: 'Objetivos de control'
         obsolete: 'Obsoleto'
@@ -748,7 +748,7 @@ es:
         name: 'Nombre'
         risk: 'Riesgo'
         business_unit: 'Unidad de negocio'
-        process_control: 'Proceso'
+        process_control: 'Procedimiento'
       risk_assessment_template:
         name: 'Nombre'
         description: 'Descripción'
