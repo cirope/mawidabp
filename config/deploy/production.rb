@@ -1,4 +1,4 @@
-set :branch,    'c-macro-test'
+set :branch,    'c-macro-production'
 set :stage,     :production
 set :rails_env, 'production'
 
@@ -8,8 +8,8 @@ set :default_env, {
   'LC_ALL':   'en_US.UTF-8'
 }
 
-role :web, %w{deployer@macro-test.mawidabp.com}
-role :app, %w{deployer@macro-test.mawidabp.com}
-role :db,  %w{deployer@macro-test.mawidabp.com}
+role :web, %w{deployer@macro.mawidabp.com}
+role :app, %w{deployer@macro.mawidabp.com}
+role :db,  %w{deployer@macro.mawidabp.com}
 
-server 'macro-test.mawidabp.com', user: 'deployer', roles: %w{web app db}
+server 'macro.mawidabp.com', user: 'deployer', roles: %w{web app db}
