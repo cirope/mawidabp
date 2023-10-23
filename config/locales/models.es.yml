@@ -82,14 +82,14 @@ es:
         one: 'Comentario del auditor (buena práctica)'
         other: 'Comentarios del auditor (buena práctica)'
       business_unit:
-        one: 'Unidad de negocio'
-        other: 'Unidades de negocio'
+        one: 'Proceso'
+        other: 'Procesos'
       business_unit_kind:
         one: 'Tipo de unidad de negocio'
         other: 'Tipos de unidad de negocio'
       business_unit_score:
-        one: 'Calificación unidad de negocio'
-        other: 'Calificaciones de unidades de negocio'
+        one: 'Calificación proceso'
+        other: 'Calificaciones de procesos'
       closing_interview:
         one: 'Entrevista de cierre'
         other: 'Entrevistas de cierre'
@@ -273,7 +273,7 @@ es:
         shared: 'Compartida'
         process_controls: 'Procedimiento'
       business_unit_type:
-        business_units: 'Unidades de negocio'
+        business_units: 'Procesos'
       best_practice/process_controls:
         name: 'Procedimiento'
         order: 'Procedimiento (orden)'
@@ -293,7 +293,7 @@ es:
         business_unit_type_id: "Unidad organizativa"
         user_id: "Usuario"
       business_unit_score:
-        business_unit_id: 'Unidad de negocio'
+        business_unit_id: 'Proceso'
         design_score: 'Calificación pruebas de diseño'
         compliance_score: 'Calificación pruebas de cumplimiento'
         sustantive_score: 'Calificación pruebas sustantivas'
@@ -512,7 +512,7 @@ es:
         plan_item_id: 'Proyecto'
         period: 'Periodo'
         plan_item: 'Proyecto'
-        business_unit: 'Unidad de negocio'
+        business_unit: 'Proceso'
         business_unit_type: 'Unidad organizativa'
         required_by: 'Requerido por'
         required_by_text: 'Requerido por'
@@ -640,7 +640,7 @@ es:
         order_number: 'Proyecto (orden)'
         scope: 'Proyecto (Alcance auditoría)'
         risk_exposure: 'Proyecto (exposición al riesgo)'
-        business_unit_id: 'Proyecto (unidad de negocio)'
+        business_unit_id: 'Proyecto (proceso)'
         status: 'Proyecto (estado)'
         auxiliar_business_unit_types: 'Unidades organizativas auxiliares'
       plan/plan_items/resource_utilizations:
@@ -657,7 +657,7 @@ es:
         order_number: 'Orden'
         scope: 'Alcance auditoría'
         risk_exposure: 'Exposición al riesgo'
-        business_unit_id: 'Unidad de negocio'
+        business_unit_id: 'Proceso'
         resources: 'Recursos'
         resource_ids: 'Recursos'
         status: 'Estado'
@@ -739,7 +739,7 @@ es:
       risk_assessment/risk_assessment_items:
         name: 'Nombre (ítem)'
         risk: 'Riesgo (ítem)'
-        business_unit: 'Unidad de negocio'
+        business_unit: 'Proceso'
         risk_weights: 'Valores de la evaluación'
       risk_assessment/risk_assessment_items/risk_weights:
         value: 'Valor (ítem)'
@@ -747,7 +747,7 @@ es:
       risk_assessment_item:
         name: 'Nombre'
         risk: 'Riesgo'
-        business_unit: 'Unidad de negocio'
+        business_unit: 'Proceso'
         process_control: 'Procedimiento'
       risk_assessment_template:
         name: 'Nombre'
