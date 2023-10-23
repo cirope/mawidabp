@@ -22,9 +22,9 @@ module Parameters::Qualification
       def qualification_types
         if SHOW_SHORT_QUALIFICATIONS
           {
-            low: 1,
-            medium: 5,
-            high: 10
+            ok: 10,
+            observed: 5,
+            not_apply: 1
           }
         else
           {
