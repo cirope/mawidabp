@@ -1,6 +1,6 @@
 set :application, 'mawidabp.com'
 set :user, 'deployer'
-set :repo_url, 'https://github.com/cirope/mawidabp.git'
+set :repo_url, 'git@github.com:cirope/mawidabp.git'
 
 set :format, :pretty
 set :log_level, :info
@@ -12,7 +12,7 @@ set :linked_files, %w{config/application.yml}
 set :linked_dirs, %w{log private tmp/pids}
 
 set :rbenv_type, :user
-set :rbenv_ruby, '2.7.5'
+set :rbenv_ruby, '3.1.2'
 
 set :keep_releases, 5
 
