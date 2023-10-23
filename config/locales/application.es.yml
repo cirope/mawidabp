@@ -580,7 +580,7 @@ es:
       without_relevance: "sin importancia"
       without_audit_date: "sin fecha de auditoría"
       without_effects: "sin efectos"
-      without_controls: "sin controles"
+      without_controls: "sin procedimientos detallados"
       without_design_tests: "sin pruebas de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
       without_sustantive_tests: "sin pruebas sustantivas"
@@ -1350,7 +1350,7 @@ es:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:
         order: "Orden"
-        control: "Controles"
+        control: "Procedimientos detallados"
         effects: "Efectos"
         design_tests: "Pruebas de diseño"
         compliance_tests: "Pruebas de cumplimiento"
@@ -1376,7 +1376,7 @@ es:
         work_papers: "Papeles de trabajo"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
-        control: "Objetivo de control (controles)"
+        control: "Objetivo de control (procedimientos detallados)"
         effects: "Objetivo de control (efectos)"
         design_tests: "Objetivo de control (pruebas de diseño)"
         compliance_tests: "Objetivo de control (pruebas de cumplimiento)"

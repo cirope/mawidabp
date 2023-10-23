@@ -1,8 +1,8 @@
 es:
   approach_types:
-    control: 'Control'
+    control: 'Control' # REVIEW: este también?
     sustantive: 'Sustantivo'
-    control_sustantive: 'Control/Sustantivo'
+    control_sustantive: 'Control/Sustantivo' # REVIEW: este también?
   frequency_types:
     monthly: 'Mensual'
     biyearly: 'Semestral'
