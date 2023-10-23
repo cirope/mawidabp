@@ -8,6 +8,7 @@ module Findings::ByRiskMap
       organization,
       organization_id,
       review.identification,
+      (I18n.t "label.#{review&.conclusion_draft_review&.approved ? 'yes' : 'no'}"),
       title,
       [organization.name, review.identification, review_code].join,
       taggings_findings('finding'),
@@ -56,8 +57,8 @@ module Findings::ByRiskMap
         current_state_text     = I18n.t 'follow_up_committee_report.weaknesses_risk_map.current_being_implemented'
         expired_state_text     = I18n.t 'follow_up_committee_report.weaknesses_risk_map.expired_being_implemented'
 
-        if origination_date && current_committee_date
-          origination_date > current_committee_date ? current_state_text : expired_state_text
+        if follow_up_date && current_committee_date
+          follow_up_date > current_committee_date ? current_state_text : expired_state_text
         end
       else
         state_text
@@ -111,7 +112,7 @@ module Findings::ByRiskMap
       allowed_state           = state == Finding::STATUS[:implemented_audited]
 
       if committee_dates_present? options
-        if allowed_state && (updated_at > previous_committee_date && updated_at <= current_committee_date)
+        if allowed_state && (updated_at.to_date > previous_committee_date && updated_at.to_date <= current_committee_date)
           '1'
         else
           '0'
@@ -159,6 +160,7 @@ module Findings::ByRiskMap
           'organization',
           'organization_id',
           'identification',
+          'approved',
           'title',
           'review_identification',
           'finding_tags',
