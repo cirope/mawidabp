@@ -111,7 +111,7 @@ module Findings::ByRiskMap
       allowed_state           = state == Finding::STATUS[:implemented_audited]
 
       if committee_dates_present? options
-        if allowed_state && (updated_at > previous_committee_date && updated_at <= current_committee_date)
+        if allowed_state && (updated_at.to_date > previous_committee_date && updated_at.to_date <= current_committee_date)
           '1'
         else
           '0'
