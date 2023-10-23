@@ -56,8 +56,8 @@ module Findings::ByRiskMap
         current_state_text     = I18n.t 'follow_up_committee_report.weaknesses_risk_map.current_being_implemented'
         expired_state_text     = I18n.t 'follow_up_committee_report.weaknesses_risk_map.expired_being_implemented'
 
-        if origination_date && current_committee_date
-          origination_date > current_committee_date ? current_state_text : expired_state_text
+        if follow_up_date && current_committee_date
+          follow_up_date > current_committee_date ? current_state_text : expired_state_text
         end
       else
         state_text
