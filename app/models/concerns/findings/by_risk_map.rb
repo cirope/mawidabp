@@ -8,7 +8,7 @@ module Findings::ByRiskMap
       organization,
       organization_id,
       review.identification,
-      review.conclusion_draft_review.approved,
+      (I18n.t "label.#{review&.conclusion_draft_review&.approved ? 'yes' : 'no'}"),
       title,
       [organization.name, review.identification, review_code].join,
       taggings_findings('finding'),
