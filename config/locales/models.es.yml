@@ -262,7 +262,7 @@ es:
       answers:
         answer_option: 'Opción'
       auxiliar_business_unit_type:
-        business_unit_type_id: 'Unidad organizativa auxiliar'
+        business_unit_type_id: 'Unidad de negocio auxiliar'
       benefit:
         name: 'Nombre'
         kind: 'Tipo'
@@ -290,7 +290,7 @@ es:
       business_unit_kind:
         name: 'Nombre'
       business_unit_type_users:
-        business_unit_type_id: "Unidad organizativa"
+        business_unit_type_id: "Unidad de negocio"
         user_id: "Usuario"
       business_unit_score:
         business_unit_id: 'Proceso'
@@ -513,7 +513,7 @@ es:
         period: 'Periodo'
         plan_item: 'Proyecto'
         business_unit: 'Proceso'
-        business_unit_type: 'Unidad organizativa'
+        business_unit_type: 'Unidad de negocio'
         required_by: 'Requerido por'
         required_by_text: 'Requerido por'
         close_date: 'Fecha de cierre'

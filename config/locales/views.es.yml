@@ -371,7 +371,7 @@ es:
       add_human_resource_utilization: 'Agregar recurso humano'
       add_material_resource_utilization: 'Agregar recurso material'
       add_tagging: 'Agregar etiqueta'
-      add_auxiliar_business_unit_type: 'Agregar unidad organizativa auxiliar'
+      add_auxiliar_business_unit_type: 'Agregar unidad de negocio auxiliar'
     plan_items:
       add_plan_item: 'Agregar proyecto'
     duplication_or_overload_form:
@@ -507,7 +507,7 @@ es:
         title: 'Resumen de respuestas'
     business_units:
       index:
-        title: 'Resumen por unidad organizativa'
+        title: 'Resumen por unidad de negocio'
     reviews:
       index:
         title: 'Resumen por informe'
@@ -593,7 +593,7 @@ es:
         title: 'Objetivos de control finalizados'
         label: 'OCF'
     form:
-      add_business_unit_type: 'Agregar unidad organizativa'
+      add_business_unit_type: 'Agregar unidad de negocio'
       operational_audit: 'Auditoría operativa'
       system_audit: 'Auditoría de sistema'
 
@@ -702,7 +702,7 @@ es:
     new:
       title: 'Nueva actividad'
     form:
-      add_business_unit_type: 'Agregar unidad organizativa'
+      add_business_unit_type: 'Agregar unidad de negocio'
       activity: 'Actividad'
       review: 'Informe'
       workflow_amount: 'Cantidad de horas programadas:'
@@ -862,7 +862,7 @@ es:
       cloned_risk_assessment_items: 'Luego de crear la evaluación de riesgo verá los ítems copiados y podrá editarlos o agregar nuevos'
       add_risk_assessment_item: 'Agregar item'
       add_best_practice: 'Agregar buena práctica'
-      add_business_unit_type: 'Agregar unidad organizativa'
+      add_business_unit_type: 'Agregar unidad de negocio'
       apply: 'Aplicar'
     heatmap: 'Mapa de calor'
     risk_weight_risks: # Deprecated: remove when all clients are migrated

@@ -220,7 +220,7 @@
     weaknesses_by_user_title: "Observaciones por usuario"
     status_user: "Estado de usuario"
     process_control_stats_title: "Observaciones por procedimiento de negocio"
-    business_unit_type_title: "Unidad organizativa"
+    business_unit_type_title: "Unidad de negocio"
     business_unit_title: "Proceso"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario.pdf"
@@ -554,18 +554,18 @@
 
   activerecord:
     models:
-      business_unit_type_review: "Unidad organizativa"
+      business_unit_type_review: "Unidad de negocio"
 
     attributes:
       business_unit_type_user:
         user_id: "Usuario"
       business_unit_type_review:
         review_id: "Informe"
-        business_unit_type_id: "Unidad organizativa"
+        business_unit_type_id: "Unidad de negocio"
       conclusion_review:
         effectiveness_notes: "Nota efectividad"
       control_objective_item:
-        scored_business_unit_type_id: "Unidad organizativa evaluada"
+        scored_business_unit_type_id: "Unidad de negocio evaluada"
       file_model:
         file: "Archivo"
       group:

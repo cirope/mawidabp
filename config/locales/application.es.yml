@@ -101,17 +101,17 @@ es:
 
   business_unit_type:
     index_title: "Listado de unidades organizativas"
-    show_title: "Detalle unidad organizativa"
-    new_title: "Agregar unidad organizativa"
-    edit_title: "Modificar unidad organizativa"
-    correctly_created: "Unidad organizativa agregada correctamente."
-    correctly_updated: "Unidad organizativa actualizada correctamente."
-    stale_object_error: "La unidad organizativa no fue actualizada, intente nuevamente."
+    show_title: "Detalle unidad de negocio"
+    new_title: "Agregar unidad de negocio"
+    edit_title: "Modificar unidad de negocio"
+    correctly_created: "Unidad de negocio agregada correctamente."
+    correctly_updated: "Unidad de negocio actualizada correctamente."
+    stale_object_error: "La unidad de negocio no fue actualizada, intente nuevamente."
     add_business_unit: "Agregar proceso"
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
     errors:
-      can_not_be_destroyed: "La unidad organizativa no puede ser eliminada"
+      can_not_be_destroyed: "La unidad de negocio no puede ser eliminada"
       business_unit_related: "El proceso no puede ser eliminado, se encuentra relacionado con al menos un plan de trabajo"
 
   conclusion_draft_review:
@@ -1256,8 +1256,8 @@ es:
   activerecord:
     models:
       business_unit: "Proceso"
-      business_unit_type: "Unidad organizativa"
-      business_unit_type_user: "Unidad organizativa"
+      business_unit_type: "Unidad de negocio"
+      business_unit_type_user: "Unidad de negocio"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1286,7 +1286,7 @@ es:
       business_unit:
         name: "Nombre"
         business_unit_kind_id: 'Tipo de unidad de negocio'
-        business_unit_type_id: 'Unidad organizativa'
+        business_unit_type_id: 'Unidad de negocio'
       business_unit_type:
         name: "Nombre"
         business_unit_label: "Etiqueta del proceso en el informe"
@@ -1312,7 +1312,7 @@ es:
         name: "Proceso"
         business_unit_kind_id: "Tipo de unidad de negocio"
       business_unit_type_user:
-        business_unit_type_id: "Unidad organizativa"
+        business_unit_type_id: "Unidad de negocio"
       comment:
         comment: "Comentario"
         user_id: "Usuario"
@@ -1491,7 +1491,7 @@ es:
         identification: "Identificación"
         description: "Descripción"
         survey: "Relevamiento"
-        audit_type: "Unidad organizativa"
+        audit_type: "Unidad de negocio"
         business_unit: "Proceso"
         period_id: "Periodo"
         plan_item_id: "Proyecto"
