@@ -32,7 +32,7 @@ module Reviews::ScoreDetails
         column_text = I18n.t "score_types.#{score[0]}"
 
         if score[0] == review_score
-          "<b>#{column_text.upcase} (#{self.score}%)</b>"
+          "<b>#{column_text.upcase}</b>"
         else
           column_text
         end

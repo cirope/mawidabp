@@ -1490,7 +1490,7 @@ en:
       review:
         identification: "Identification"
         description: "Description"
-        survey: "Survey"
+        survey: "Audited period"
         audit_type: "Organizational unit"
         business_unit: "Business unit"
         period_id: "Period"
