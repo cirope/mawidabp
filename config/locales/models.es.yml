@@ -160,8 +160,8 @@ es:
         one: 'Plan de trabajo'
         other: 'Planes de trabajo'
       plan_item:
-        one: 'Proyecto en plan'
-        other: 'Proyectos en plan'
+        one: 'Auditoría en plan'
+        other: 'Auditorías en plan'
       paper_trail/version:
         one: 'Versión'
         other: 'Versiones'
@@ -509,9 +509,9 @@ es:
         description: 'Descripción'
         file_model_memos: 'Archivos'
         period_id: 'Periodo'
-        plan_item_id: 'Proyecto'
+        plan_item_id: 'Auditoría'
         period: 'Periodo'
-        plan_item: 'Proyecto'
+        plan_item: 'Auditoría'
         business_unit: 'Proceso'
         business_unit_type: 'Unidad de negocio'
         required_by: 'Requerido por'
@@ -634,14 +634,14 @@ es:
       plan/plan_items:
         one: 'Registro'
         other: 'Registros'
-        project: 'Proyecto'
-        start: 'Proyecto (inicio)'
-        end: 'Proyecto (fin)'
-        order_number: 'Proyecto (orden)'
-        scope: 'Proyecto (Alcance auditoría)'
-        risk_exposure: 'Proyecto (exposición al impacto)'
-        business_unit_id: 'Proyecto (proceso)'
-        status: 'Proyecto (estado)'
+        project: 'Auditoría'
+        start: 'Auditoría (inicio)'
+        end: 'Auditoría (fin)'
+        order_number: 'Auditoría (orden)'
+        scope: 'Auditoría (Alcance)'
+        risk_exposure: 'Auditoría (exposición al impacto)'
+        business_unit_id: 'Auditoría (proceso)'
+        status: 'Auditoría (estado)'
         auxiliar_business_unit_types: 'Unidades organizativas auxiliares'
       plan/plan_items/resource_utilizations:
         one: 'Recurso'
@@ -651,7 +651,7 @@ es:
         cost: 'Recurso (costo)'
         resource_id: 'Recurso'
       plan_item:
-        project: 'Proyecto'
+        project: 'Auditoría'
         start: 'Inicio'
         end: 'Fin'
         order_number: 'Orden'
@@ -894,7 +894,7 @@ es:
             auxiliar_business_unit_types:
               taken: 'repetidas'
             business_unit:
-              cannot_edit_business_unit: "no se puede editar debido a que el proyecto ya está tomado por un informe definitivo %{memo_condition}"
+              cannot_edit_business_unit: "no se puede editar debido a que la auditoría ya está tomada por un informe definitivo %{memo_condition}"
             start:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
@@ -922,7 +922,7 @@ es:
               file_model_memos_blank: 'Debe tener al menos un archivo'
               cant_change_fields: 'No puede cambiar ningún campo debido a que superó la fecha de cierre'
             plan_item_id:
-              used: 'El proyecto ya está siendo utilizado por otro informe o informe externo'
+              used: 'La auditoría ya está siendo utilizada por otro informe o informe externo'
         subsidiary:
           attributes:
             identity:

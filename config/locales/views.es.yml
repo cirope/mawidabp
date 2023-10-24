@@ -373,7 +373,7 @@ es:
       add_tagging: 'Agregar etiqueta'
       add_auxiliar_business_unit_type: 'Agregar unidad de negocio auxiliar'
     plan_items:
-      add_plan_item: 'Agregar proyecto'
+      add_plan_item: 'Agregar auditoría'
     duplication_or_overload_form:
       allow_duplication: '¿Permitir duplicados?'
       allow_overload: '¿Permitir superposición?'
@@ -455,11 +455,11 @@ es:
     calendar:
       show:
         title: 'Cronograma'
-        empty: 'No hay proyectos en el plan seleccionado'
+        empty: 'No hay auditorías en el plan seleccionado'
         empty_with_no_business_units: 'No hay procesos seleccionados'
         detail: 'Detalle'
         by_business_unit: 'Ver calendario por proceso'
-        by_project: 'Ver calendario por proyecto'
+        by_project: 'Ver calendario por auditoría'
     resources:
       show:
         title: 'Resumen por recurso'
@@ -728,9 +728,9 @@ es:
         period: "Periodo"
         period_start: "Periodo Inicio"
         period_end: "Periodo Fin"
-        plan_item: "Proyecto"
-        plan_item_start: "Proyecto Inicio"
-        plan_item_end: "Proyecto Fin"
+        plan_item: "Auditoría"
+        plan_item_start: "Auditoría Inicio"
+        plan_item_end: "Auditoría Fin"
 
   users:
     index:
@@ -850,7 +850,7 @@ es:
       title: 'Listado de evaluaciones de impacto'
       empty_html: 'No hay evaluaciones de impacto, puede crear una con el botón <span class="badge badge-primary">Nueva evaluación de impacto</span>'
       empty_search_html: 'No hay evaluaciones de impacto que coincidan con el criterio de búsqueda'
-      merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
+      merge_to_plan: 'Crear auditorías en plan a partir de la evaluación'
     new:
       title: 'Crear evaluación de impacto'
     show:

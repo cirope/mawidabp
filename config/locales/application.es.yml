@@ -693,7 +693,7 @@ es:
       title: 'Otros'
     cost_analysis:
       column_business_unit: "Proceso"
-      column_project: "Proyecto"
+      column_project: "Auditoría"
       column_review: "Informe"
       column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)"
       column_audited_cost: "Cantidad de horas dedicas a la solución (suma de las horas de seguimiento de los auditados)"
@@ -1290,7 +1290,7 @@ es:
       business_unit_type:
         name: "Nombre"
         business_unit_label: "Etiqueta del proceso en el informe"
-        project_label: "Etiqueta del proyecto en el informe"
+        project_label: "Etiqueta del auditoría en el informe"
         review_prefix: "Prefijo en el informe"
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
@@ -1327,7 +1327,7 @@ es:
         applied_procedures: "Procedimientos aplicados" # REVIEW: a que se refiere con procedimiento? Podría confundirse con el cambio de proceso > procedimiento
         conclusion: "Conclusión"
         business_unit: "Proceso"
-        project: "Proyecto"
+        project: "Auditoría"
         approved: "Aprobado"
         summary: "Acta"
         recipients: "Destinatarios del informe"
@@ -1494,8 +1494,8 @@ es:
         audit_type: "Unidad de negocio"
         business_unit: "Proceso"
         period_id: "Periodo"
-        plan_item_id: "Proyecto"
-        plan_item: "Proyecto"
+        plan_item_id: "Auditoría"
+        plan_item: "Auditoría"
         file_model_id: "Anexos"
         score: "Calificación"
         score_alt: "Calificación cumplimiento"
