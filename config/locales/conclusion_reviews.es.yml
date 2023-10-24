@@ -86,6 +86,7 @@ es:
           details_title: "A continuación se detallan las principales debilidades observadas, así como su situación al momento de emitir el respectivo informe:"
           previous_title: "Observaciones de periodos anteriores:"
           weaknesses_title: "Observaciones del presente período:"
+          external_weaknesses_title: "Seguimiento de aspectos observados en otras inspecciones."
       weaknesses:
         title: "Anexo I"
         previous_title: "%{prefix} Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."
