@@ -193,23 +193,23 @@ es:
         one: 'Clase de recurso'
         other: 'Clases de recursos'
       risk_assessment:
-        one: 'Evaluación de riesgo'
-        other: 'Evaluaciones de riesgo'
+        one: 'Evaluación de impacto'
+        other: 'Evaluaciones de impacto'
       risk_assessment_item:
         one: 'Ítem evaluado'
         other: 'Items evaluados'
       risk_assessment_template:
-        one: 'Plantilla de evaluación de riesgo'
-        other: 'Plantillas de evaluación de riesgo'
+        one: 'Plantilla de evaluación de impacto'
+        other: 'Plantillas de evaluación de impacto'
       risk_assessment_weight:
-        one: 'Atributo de evaluación de riesgo'
-        other: 'Atributos de evaluación de riesgo'
+        one: 'Atributo de evaluación de impacto'
+        other: 'Atributos de evaluación de impacto'
       risk_score_item:
         one: 'Valor'
         other: 'Valores'
       risk_weight:
-        one: 'Valor de evaluación de riesgo'
-        other: 'Valores de evaluación de riesgo'
+        one: 'Valor de evaluación de impacto'
+        other: 'Valores de evaluación de impacto'
       saml_provider:
         one: 'Configuración SAML'
         other: 'Configuraciones SAML'
@@ -281,7 +281,7 @@ es:
       best_practice/process_controls/control_objectives:
         name: 'Objetivo de control'
         relevance: 'Objetivo de control (importancia)'
-        risk: 'Objetivo de control (riesgo)'
+        risk: 'Objetivo de control (impacto)'
       best_practice/process_controls/control_objectives/taggings:
         tag_id: 'Objetivo de control (etiqueta)'
       best_practice_comment:
@@ -316,7 +316,7 @@ es:
       control_objective:
         name: 'Objetivo de control'
         relevance: 'Importancia'
-        risk: 'Riesgo'
+        risk: 'Impacto'
         obsolete: 'Obsoleto'
         support: 'Soporte'
         score_type: 'Tipo de calificación'
@@ -362,7 +362,7 @@ es:
         current_situation: 'Situación actual'
         current_situation_verified: 'Situación actual verificada'
         effect: 'Efecto'
-        risk: 'Riesgo'
+        risk: 'Impacto'
         priority: 'Prioridad'
         user_ids: 'Usuarios'
         finding_user_assignments: 'Usuarios'
@@ -397,7 +397,7 @@ es:
         observation_originated_tests: 'Originada en prueba de'
         sample_deviation: 'Desvio de la muestra'
         external_repeated: 'Reiterada externa'
-        risk_justification: 'Justificar riesgo'
+        risk_justification: 'Justificar impacto'
         year: 'Año'
         nsisio: 'N_SISAC'
         nobs: 'N_Obs'
@@ -639,7 +639,7 @@ es:
         end: 'Proyecto (fin)'
         order_number: 'Proyecto (orden)'
         scope: 'Proyecto (Alcance auditoría)'
-        risk_exposure: 'Proyecto (exposición al riesgo)'
+        risk_exposure: 'Proyecto (exposición al impacto)'
         business_unit_id: 'Proyecto (proceso)'
         status: 'Proyecto (estado)'
         auxiliar_business_unit_types: 'Unidades organizativas auxiliares'
@@ -656,7 +656,7 @@ es:
         end: 'Fin'
         order_number: 'Orden'
         scope: 'Alcance auditoría'
-        risk_exposure: 'Exposición al riesgo'
+        risk_exposure: 'Exposición al impacto'
         business_unit_id: 'Proceso'
         resources: 'Recursos'
         resource_ids: 'Recursos'
@@ -729,7 +729,7 @@ es:
         name: 'Nombre'
         description: 'Descripción'
         period: 'Periodo'
-        risk_assessment_template: 'Plantilla de evaluación de riesgo'
+        risk_assessment_template: 'Plantilla de evaluación de impacto'
         status: 'Estado'
         shared: 'Compartida'
         file_model: "Anexo"
@@ -738,7 +738,7 @@ es:
         formula: 'Fórmula'
       risk_assessment/risk_assessment_items:
         name: 'Nombre (ítem)'
-        risk: 'Riesgo (ítem)'
+        risk: 'Impacto (ítem)'
         business_unit: 'Proceso'
         risk_weights: 'Valores de la evaluación'
       risk_assessment/risk_assessment_items/risk_weights:
@@ -746,14 +746,14 @@ es:
         weight: 'Ponderador (ítem)'
       risk_assessment_item:
         name: 'Nombre'
-        risk: 'Riesgo'
+        risk: 'Impacto'
         business_unit: 'Proceso'
         process_control: 'Procedimiento'
       risk_assessment_template:
         name: 'Nombre'
         description: 'Descripción'
         formula: 'Fórmula'
-        risk_assessment_weights: 'Atributos de evaluación de riesgo'
+        risk_assessment_weights: 'Atributos de evaluación de impacto'
       risk_assessment_template/risk_assessment_weights:
         identifier: 'Identificador'
         name: 'Atributo'
@@ -788,7 +788,7 @@ es:
         audit_recommendations: 'Recomendaciones de auditoría'
         answer: 'Respuesta/Acciones correctivas'
         effect: 'Efecto'
-        risk: 'Riesgo'
+        risk: 'Impacto'
         priority: 'Prioridad'
         user_ids: 'Usuario'
         finding_user_assignments: 'Usuarios'
@@ -800,7 +800,7 @@ es:
         compliance: 'Compliance'
         compliance_observations: 'Norma que impacta'
         compliance_maybe_sanction: 'Susceptible a sanción'
-        operational_risk: 'Riesgo operacional'
+        operational_risk: 'Impacto operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
         weakness_template: 'Buscar plantilla por título'
@@ -823,8 +823,8 @@ es:
         title: 'Título'
         description: 'Observación'
         brief: 'Resumen'
-        risk: 'Riesgo'
-        operational_risk: 'Riesgo operacional'
+        risk: 'Impacto'
+        operational_risk: 'Impacto operacional'
         impact: 'Impacto'
         notes: 'Notas'
         internal_control_components: 'Componentes de CI'
@@ -856,7 +856,7 @@ es:
               must_have_state_that_allows_extension: 'Para indicar que tiene %{extension} debe estar en estado %{states}'
               cant_have_extension_when_didnt_have_extension: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension} en los estados %{states}'
             risk_justification:
-              present: 'No debe tener justificación de riesgo'
+              present: 'No debe tener justificación de impacto'
             compliance_maybe_sanction:
               inclusion: 'debe ser uno de la lista'
             draft_review_code:

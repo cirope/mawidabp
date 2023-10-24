@@ -54,7 +54,7 @@ es:
 
   message:
     ldap_error: 'El servidor de autenticación no está disponible en este momento. Por favor, inténtelo de nuevo más tarde'
-    change_weakness_risk: "El riesgo de la observación ha cambiado"
+    change_weakness_risk: "El impacto de la observación ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
     insufficient_privileges: "No tiene permisos para realizar la acción"
@@ -146,10 +146,10 @@ es:
     cost_summary_title: "Resumen de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses_report_title: "Observaciones de impacto alto"
+    fixed_weaknesses_report_title: "Observaciones por impacto solucionadas"
     cost_analysis:
       detailed_column_resource: "Recurso"
       detailed_column_estimated_amount: "Costo estimado (planificado)"
@@ -197,18 +197,18 @@ es:
     review_score_details_report_title: "Calificaciones de informes detallado"
     nbc_annual_report_title: "Resumen anual"
     nbc_internal_control_qualification_as_group_of_companies: "Calificacion del control interno como grupo de sociedades"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses_report_title: "Observaciones de impacto alto"
+    fixed_weaknesses_report_title: "Observaciones por impacto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     findings_type_internal: "Hallazgos Auditoría Interna"
     findings_type_external: "Hallazgos Auditorías Externas"
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Observaciones Auditorías Externas"
-    high_risk_weaknesses: "Observaciones de riesgo alto"
-    fixed_weaknesses: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses: "Observaciones de impacto alto"
+    fixed_weaknesses: "Observaciones por impacto solucionadas"
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
@@ -245,7 +245,7 @@ es:
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
     fixed_weaknesses_report:
-      pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_por_impacto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -254,13 +254,13 @@ es:
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     high_risk_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_de_impacto_alto_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
+      subtitle: "OBSERVACIONES DE IMPACTO ALTO - INFORMES DEFINITIVOS"
+      without_audits_in_the_period: "Sin auditorías de impacto alto en el periodo"
+      without_audits_in_the_interval: "Sin auditorías de impacto alto en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     period:
       title: "Intervalo"
@@ -284,8 +284,8 @@ es:
       pdf_name: "indicadores_de_calidad_%{from_date}_al_%{to_date}.pdf"
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       indicators:
-        highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
-        medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
+        highest_solution_rate: "Solución de Observaciones de Impacto Alto"
+        medium_solution_rate: "Solución de Observaciones de Impacto Medio"
         digitalized: "Digitalización"
     nbc_report:
       front_page:
@@ -309,7 +309,7 @@ es:
         header_number: '<b>N°</b>'
         header_qualification: '<b>Calificación</b>'
         header_weight: '<b>Ponderador</b>'
-        header_high_risk_observations: '<b>Cantidad de Observaciones de Riesgo Alto</b>'
+        header_high_risk_observations: '<b>Cantidad de Observaciones de Impacto Alto</b>'
     nbc_annual_report:
       pdf_name: "resumen_anual_%{from_date}_al_%{to_date}.pdf"
       front_page:
@@ -334,7 +334,7 @@ es:
         header_number: '<b>N°</b>'
         header_qualification: '<b>Calificación</b>'
         header_weight: '<b>Ponderador</b>'
-        header_high_risk_observations: '<b>Cantidad de Observaciones de Riesgo Alto</b>'
+        header_high_risk_observations: '<b>Cantidad de Observaciones de Impacto Alto</b>'
       internal_control_qualification:
         header_cycle: '<b>Ciclo</b>'
         header_count_findings: '<b>Cantidad de Observaciones</b>'
@@ -389,7 +389,7 @@ es:
         title: "Informes por etiqueta"
         footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
       weaknesses_by_score:
-        title: "Observaciones por riesgo, prioridad y calificación de informe"
+        title: "Observaciones por impacto, prioridad y calificación de informe"
         total: "Total"
     review_scores_report:
       pdf_name: "calificaciones_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
@@ -416,9 +416,9 @@ es:
       period_summary: "Resumen del periodo %{period}"
       total: "TOTAL"
     weaknesses_by_risk:
-      pdf_name: "observaciones_informes_definitivos_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_informes_definitivos_por_impacto_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO"
+      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE IMPACTO"
       total: "TOTAL"
     weaknesses_by_audit_type:
       weaknesses: "Observaciones"
@@ -463,7 +463,7 @@ es:
   conclusion_management_report:
     index_title: "Reportes de la gerencia"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
 
   conclusion_review:
@@ -499,13 +499,13 @@ es:
       review_author: "Gerencia de Auditoría Interna"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
       project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
-      risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
+      risk_exposure: "Exposición al impacto del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Impactos)"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
       main_weaknesses: "Principales debilidades"
       other_weaknesses: "Otras observaciones"
       no_weaknesses: "No hay observaciones"
-      assumed_risk_weaknesses: "Riesgo asumido"
+      assumed_risk_weaknesses: "Impacto asumido"
     detailed_review:
       title: "Informe detallado"
       legend: "Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados por el BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
@@ -607,7 +607,7 @@ es:
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
-      references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de impacto (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     detailed_management_report_title: "Resumen gerencial"
     planned_cost_summary:
       pdf_name: "resumen_de_costos_planificados_%{from_date}_al_%{to_date}.pdf"
@@ -665,10 +665,10 @@ es:
     index_title: "Reportes de auditoría"
     cost_analysis_title: "Análisis de costos"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses_report_title: "Observaciones de impacto alto"
+    fixed_weaknesses_report_title: "Observaciones por impacto solucionadas"
     weaknesses_graphs:
       title: 'Gráfico de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
@@ -714,12 +714,12 @@ es:
     pending_findings: "Seguimiento de observaciones pendientes"
     synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses_report_title: "Observaciones de impacto alto"
+    fixed_weaknesses_report_title: "Observaciones por impacto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weakness_summary: "Resumen de observaciones"
-    high_risk_weaknesses: "Observaciones de riesgo alto"
-    fixed_weaknesses: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses: "Observaciones de impacto alto"
+    fixed_weaknesses: "Observaciones por impacto solucionadas"
     weaknesses_being_implemented_current:
       one: "Vigente"
       other: "Vigentes"
@@ -733,7 +733,7 @@ es:
       one: "Reprogramada vencida"
       other: "Reprogramadas vencidas"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     without_oportunities: "Sin oportunidades en el periodo"
     without_weaknesses: "Sin observaciones en el periodo"
@@ -773,7 +773,7 @@ es:
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
     fixed_weaknesses_report:
-      pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_por_impacto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -782,13 +782,13 @@ es:
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     high_risk_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_de_impacto_alto_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES DE IMPACTO ALTO - INFORMES DEFINITIVOS"
+      without_audits_in_the_period: "Sin auditorías de impacto alto en el periodo"
+      without_audits_in_the_interval: "Sin auditorías de impacto alto en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     period:
       title: "Intervalo"
@@ -814,11 +814,11 @@ es:
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       indicators:
         production_level: "Nivel de Producción"
-        highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
-        medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
+        highest_solution_rate: "Solución de Observaciones de Impacto Alto"
+        medium_solution_rate: "Solución de Observaciones de Impacto Medio"
         score_average: "Calificación de informes"
         digitalized: "Digitalización"
-        ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
+        ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Impacto Medio"
     synthesis_report:
       pdf_name: "resumen_ejecutivo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"
@@ -849,7 +849,7 @@ es:
         title: "Informes por etiqueta"
         footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
       weaknesses_by_score:
-        title: "Observaciones por riesgo, prioridad y calificación de informe"
+        title: "Observaciones por impacto, prioridad y calificación de informe"
         total: "Total"
     weaknesses_by_state:
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
@@ -857,9 +857,9 @@ es:
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
       total: "TOTAL"
     weaknesses_by_risk:
-      pdf_name: "observaciones_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_seguimiento_por_impacto_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO"
+      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE IMPACTO"
       total: "TOTAL"
     weaknesses_by_audit_type:
       weaknesses: "Observaciones"
@@ -872,7 +872,7 @@ es:
   follow_up_management:
     index_title: "Reportes de la gerencia"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
 
   group:
@@ -1078,8 +1078,8 @@ es:
     control_objectives_relevance: "Peso"
     oportunities_summary: "Resumen de oportunidades de mejora ordenadas por estado"
     oportunities_count_summary: "Cantidad de oportunidades de mejora ordenadas por estado"
-    weaknesses_summary: "Resumen de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
-    weaknesses_count_summary: "Cantidad de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
+    weaknesses_summary: "Resumen de observaciones que sustentan la calificación otorgada (ordenadas por importancia del impacto (%{risks}) y luego por estado de la observación)"
+    weaknesses_count_summary: "Cantidad de observaciones que sustentan la calificación otorgada (ordenadas por importancia del impacto (%{risks}) y luego por estado de la observación)"
     weaknesses_count: "Cantidad de observaciones"
     oportunities_count: "Cantidad de oportunidades de mejora"
     control_objectives_work_papers: "Objetivos de control"
@@ -1095,9 +1095,9 @@ es:
     estimated_amount: "Costo estimado en plan de trabajo"
     other_actions: "Acciones"
     recode_findings: "Recodificar hallazgos"
-    recode_weaknesses_by_risk: "Recodificar observaciones por riesgo"
-    recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y riesgo"
-    recode_weaknesses_by_risk_and_repetition: "Recodificar observaciones por riesgo y reiteración"
+    recode_weaknesses_by_risk: "Recodificar observaciones por impacto"
+    recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y impacto"
+    recode_weaknesses_by_risk_and_repetition: "Recodificar observaciones por impacto y reiteración"
     recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
     reorder: "Reordenar procedimientos por nombre"
     recode_work_papers: "Recodificar papeles de trabajo"
@@ -1500,7 +1500,7 @@ es:
         score: "Calificación"
         score_alt: "Calificación cumplimiento"
         scope: "Alcance auditoría"
-        risk_exposure: "Exposición al riesgo"
+        risk_exposure: "Exposición al impacto"
         manual_score: "Puntaje de auditoría"
         manual_score_alt: "Puntaje de auditoría cumplimiento"
         include_sox: "Incluye prueba SOX"

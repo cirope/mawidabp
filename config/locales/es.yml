@@ -16,8 +16,8 @@
     add_image: "Agregar imagen"
 
   conclusion_report:
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y proceso"
-    weaknesses_by_risk_report_title: "Observaciones por riesgo"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por impacto y proceso"
+    weaknesses_by_risk_report_title: "Observaciones por impacto"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
@@ -28,9 +28,9 @@
 
   conclusion_committee_report:
     control_objective_counts_title: "Análisis de objetivos de control"
-    weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y proceso"
-    weaknesses_by_month_title: "Observaciones por riesgo"
+    weaknesses_by_risk_report_title: "Observaciones por impacto"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por impacto y proceso"
+    weaknesses_by_month_title: "Observaciones por impacto"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
     weaknesses_by_user_title: "Observaciones por usuario"
@@ -46,11 +46,11 @@
       subtitle: "ANÁLISIS DE OBJETIVOS DE CONTROL / INFORMES DEFINITIVOS"
       without_control_objective_items: "Sin objetivos de control"
     weaknesses_by_risk_report:
-      pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_por_impacto_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES POR RIESGO - INFORMES DEFINITIVOS"
+      subtitle: "OBSERVACIONES POR IMPACTO - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -93,9 +93,9 @@
         other: "%{count} informes con observaciones en el O.C."
       download_csv: 'Descargar CSV'
     weaknesses_by_risk_and_business_unit:
-      pdf_name: "observaciones_informes_definitivos_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_informes_definitivos_por_impacto_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO Y PROCESOS"
+      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE IMPACTO Y PROCESOS"
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
@@ -253,8 +253,8 @@
       range: "desde el %{from_date} al %{to_date}"
 
   follow_up_audit:
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y proceso"
-    weaknesses_by_risk_report_title: "Observaciones por riesgo"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por impacto y proceso"
+    weaknesses_by_risk_report_title: "Observaciones por impacto"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
@@ -285,8 +285,8 @@
       cut_date: "Fecha de cómputo"
 
   follow_up_committee_report:
-    weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y proceso"
+    weaknesses_by_risk_report_title: "Observaciones por impacto"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por impacto y proceso"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
@@ -308,11 +308,11 @@
     follow_up_cost_analysis:
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
     weaknesses_by_risk_report:
-      pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_por_impacto_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES POR RIESGO - INFORMES DEFINITIVOS"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES POR IMPACTO - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -435,11 +435,11 @@
     qa_indicators:
       indicators:
         oportunities_solution_rate: "Solución de Oportunidades de Mejora"
-        ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Riesgo Alto"
+        ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Impacto Alto"
     weaknesses_by_risk_and_business_unit:
-      pdf_name: "observaciones_seguimiento_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_seguimiento_por_impacto_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO Y PROCESOS"
+      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE IMPACTO Y PROCESOS"
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"

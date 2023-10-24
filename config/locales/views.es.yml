@@ -187,7 +187,7 @@ es:
       being_implemented_stale_rescheduled: 'Reprogramada vencida'
       implemented: 'Implementada'
       implemented_audited: 'Implementada / Auditada'
-      assumed_risk: 'Riesgo asumido'
+      assumed_risk: 'Impacto asumido'
       notify: 'Notificar'
       incomplete: 'Incompleta'
       repeated: 'Reiterada'
@@ -430,7 +430,7 @@ es:
       csv_name: 'plan_periodo_%{period}.csv'
       csv_name_pat_im: 'grado_de_avance_reporte_de_gestión_interna_%{current_date}.csv'
       csv_name_pat_dprh: 'grado_de_avance_horas_de_trabajo_detallado_%{current_date}.csv'
-      number_observations_per_risk: 'Cantidad observaciones por riesgo'
+      number_observations_per_risk: 'Cantidad observaciones por impacto'
       annual_plan_hours: 'Hs Plan Anual'
       auditor: 'Auditor (Usuario)'
       time_summary_hours: 'Hs Resumen Horario'
@@ -827,8 +827,8 @@ es:
           one: '**Una** observación **pendiente**'
           other: '**%{count}** observaciones **pendientes**'
         high_risk_weaknesses:
-          one: '**Una** observación de **riesgo alto**'
-          other: '**%{count}** observaciones de **riesgo alto**'
+          one: '**Una** observación de **impacto alto**'
+          other: '**%{count}** observaciones de **impacto alto**'
         weaknesses:
           pending:
             one: '**Una** observación pendiente'
@@ -842,24 +842,24 @@ es:
 
   risk_assessments:
     edit:
-      title: 'Editar evaluación de riesgo'
+      title: 'Editar evaluación de impacto'
       other_actions: 'Acciones'
-      sort_by_risk: 'Ordenar por riesgo descendente'
+      sort_by_risk: 'Ordenar por impacto descendente'
     index:
-      new: 'Nueva evaluación de riesgo'
-      title: 'Listado de evaluaciones de riesgo'
-      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva evaluación de riesgo</span>'
-      empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
+      new: 'Nueva evaluación de impacto'
+      title: 'Listado de evaluaciones de impacto'
+      empty_html: 'No hay evaluaciones de impacto, puede crear una con el botón <span class="badge badge-primary">Nueva evaluación de impacto</span>'
+      empty_search_html: 'No hay evaluaciones de impacto que coincidan con el criterio de búsqueda'
       merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
     new:
-      title: 'Crear evaluación de riesgo'
+      title: 'Crear evaluación de impacto'
     show:
-      title: 'Ver evaluación de riesgo'
+      title: 'Ver evaluación de impacto'
       download_pdf: 'Descargar PDF'
       download_csv: 'Descargar CSV'
     form:
-      new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar ítems a la misma'
-      cloned_risk_assessment_items: 'Luego de crear la evaluación de riesgo verá los ítems copiados y podrá editarlos o agregar nuevos'
+      new_risk_assessment_items: 'Luego de crear la evaluación de impacto podrá agregar ítems a la misma'
+      cloned_risk_assessment_items: 'Luego de crear la evaluación de impacto verá los ítems copiados y podrá editarlos o agregar nuevos'
       add_risk_assessment_item: 'Agregar item'
       add_best_practice: 'Agregar buena práctica'
       add_business_unit_type: 'Agregar unidad de negocio'
@@ -877,8 +877,8 @@ es:
       final: 'Definitiva'
       merged: 'Planificada'
     pdf:
-      title: 'Evaluación de riesgo'
-      pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
+      title: 'Evaluación de impacto'
+      pdf_name: 'evaluacion_de_impacto_%{name}.pdf'
       formula: 'Fórmula'
       period:
         title: "Periodo (%{name})"
@@ -886,16 +886,16 @@ es:
 
   risk_assessment_templates:
     edit:
-      title: 'Editar plantilla de evaluación de riesgo'
+      title: 'Editar plantilla de evaluación de impacto'
     index:
-      new: 'Nueva plantilla de evaluación de riesgo'
-      title: 'Listado de plantillas de evaluación de riesgo'
-      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de evaluación de riesgo</span>'
-      empty_search_html: 'No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda'
+      new: 'Nueva plantilla de evaluación de impacto'
+      title: 'Listado de plantillas de evaluación de impacto'
+      empty_html: 'No hay plantillas de evaluación de impacto, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de evaluación de impacto</span>'
+      empty_search_html: 'No hay plantillas de evaluación de impacto que coincidan con el criterio de búsqueda'
     new:
-      title: 'Crear plantilla de evaluación de riesgo'
+      title: 'Crear plantilla de evaluación de impacto'
     show:
-      title: 'Ver plantilla de evaluación de riesgo'
+      title: 'Ver plantilla de evaluación de impacto'
     form:
       add_risk_assessment_weight: 'Agregar ponderador'
 
