@@ -239,7 +239,7 @@ module ConclusionReviews::PatPdf
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
       filtered   = weaknesses.not_revoked.not_expired.reorder(sort_weaknesses_by)
 
-      if pat_previous_weaknesses.any? || filtered.any? || pat_weaknesses_external.any?
+      if pat_previous_weaknesses.any? || pat_weaknesses_other_inspections.any? || filtered.any?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.cover.brief.details_title'), align: :justify
 
@@ -261,11 +261,11 @@ module ConclusionReviews::PatPdf
           end
         end
 
-        if pat_weaknesses_external.any?
+        if pat_weaknesses_other_inspections.any?
           pdf.move_down PDF_FONT_SIZE
           pdf.text I18n.t('conclusion_review.pat.cover.brief.external_weaknesses_title'), align: :justify
 
-          pat_weaknesses_external.each do |weakness|
+          pat_weaknesses_other_inspections.each do |weakness|
             pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
           end
         end
@@ -299,9 +299,9 @@ module ConclusionReviews::PatPdf
         pdf.text Weakness.model_name.human(count: 0).upcase, align: :center, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        put_pat_previous_weaknesses_on pdf
-        put_pat_weaknesses_on          pdf
-        put_pat_weaknesses_external_on pdf
+        put_pat_previous_weaknesses_on          pdf
+        put_pat_weaknesses_on                   pdf
+        put_pat_weaknesses_other_inspections_on pdf
       end
     end
 
@@ -432,8 +432,8 @@ module ConclusionReviews::PatPdf
       end
     end
 
-    def put_pat_weaknesses_external_on pdf
-      filtered = pat_weaknesses_external
+    def put_pat_weaknesses_other_inspections_on pdf
+      filtered = pat_weaknesses_other_inspections
 
       if filtered.any?
         pdf.text I18n.t(
@@ -453,7 +453,7 @@ module ConclusionReviews::PatPdf
       end
     end
 
-    def pat_weaknesses_external
+    def pat_weaknesses_other_inspections
       assigned = review.assigned_weaknesses
 
       assigned.not_revoked.not_expired.reorder(sort_weaknesses_by).select do |w|
