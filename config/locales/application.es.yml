@@ -579,7 +579,7 @@ es:
       without_score: "sin calificar"
       without_relevance: "sin probabilidad"
       without_audit_date: "sin fecha de auditoría"
-      without_effects: "sin efectos"
+      without_effects: "sin riesgos"
       without_controls: "sin procedimientos detallados"
       without_design_tests: "sin pruebas de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
@@ -1202,7 +1202,7 @@ es:
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
       without_auditor: "no tiene auditor"
-      without_effect: "no tiene efecto"
+      without_effect: "no tiene riesgo"
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
@@ -1351,7 +1351,7 @@ es:
       control:
         order: "Orden"
         control: "Procedimientos detallados"
-        effects: "Efectos"
+        effects: "Riesgos"
         design_tests: "Pruebas de diseño"
         compliance_tests: "Pruebas de cumplimiento"
         sustantive_tests: "Pruebas sustantivas"
@@ -1377,7 +1377,7 @@ es:
       control_objective_item/control:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (procedimientos detallados)"
-        effects: "Objetivo de control (efectos)"
+        effects: "Objetivo de control (riesgos)"
         design_tests: "Objetivo de control (pruebas de diseño)"
         compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
         sustantive_tests: "Objetivo de control (pruebas sustantivas)"
@@ -1479,7 +1479,7 @@ es:
         erase: "Baja"
         approval: "Aprobación"
       process_controls/control_objectives/control:
-        effects: "Efectos"
+        effects: "Riesgos"
         compliance_tests: "Pruebas de cumplimientos"
       related_user_relation:
         user_id: 'Usuario'
