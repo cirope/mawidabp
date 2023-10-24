@@ -237,9 +237,9 @@ module ConclusionReviews::PatPdf
     def put_pat_brief_weaknesses_section_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked.reorder(sort_weaknesses_by)
+      filtered   = weaknesses.not_revoked.not_expired.reorder(sort_weaknesses_by)
 
-      if pat_previous_weaknesses.any? || filtered.any?
+      if pat_previous_weaknesses.any? || filtered.any? || pat_weaknesses_external.any?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.cover.brief.details_title'), align: :justify
 
@@ -257,6 +257,15 @@ module ConclusionReviews::PatPdf
           pdf.text I18n.t('conclusion_review.pat.cover.brief.weaknesses_title'), align: :justify
 
           filtered.each do |weakness|
+            pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
+          end
+        end
+
+        if pat_weaknesses_external.any?
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text I18n.t('conclusion_review.pat.cover.brief.external_weaknesses_title'), align: :justify
+
+          pat_weaknesses_external.each do |weakness|
             pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
           end
         end
@@ -320,7 +329,7 @@ module ConclusionReviews::PatPdf
     def pat_previous_weaknesses
       assigned = review.assigned_weaknesses
 
-      assigned.not_revoked.reorder(sort_weaknesses_by).select do |w|
+      assigned.not_revoked.not_expired.reorder(sort_weaknesses_by).select do |w|
         w.business_unit_type.external == false
       end
     end
@@ -376,7 +385,7 @@ module ConclusionReviews::PatPdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
-      weaknesses.not_revoked.reorder(sort_weaknesses_by)
+      weaknesses.not_revoked.not_expired.reorder(sort_weaknesses_by)
     end
 
     def put_pat_weakness_on pdf, weakness, i
@@ -447,7 +456,7 @@ module ConclusionReviews::PatPdf
     def pat_weaknesses_external
       assigned = review.assigned_weaknesses
 
-      assigned.not_revoked.reorder(sort_weaknesses_by).select do |w|
+      assigned.not_revoked.not_expired.reorder(sort_weaknesses_by).select do |w|
         w.business_unit_type.external == true
       end
     end
