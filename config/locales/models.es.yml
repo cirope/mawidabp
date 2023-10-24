@@ -280,7 +280,7 @@ es:
         control_objectives: 'Objetivos de control'
       best_practice/process_controls/control_objectives:
         name: 'Objetivo de control'
-        relevance: 'Objetivo de control (importancia)'
+        relevance: 'Objetivo de control (probabilidad)'
         risk: 'Objetivo de control (impacto)'
       best_practice/process_controls/control_objectives/taggings:
         tag_id: 'Objetivo de control (etiqueta)'
@@ -315,7 +315,7 @@ es:
         controls: 'Controles mitigantes' # REVIEW: este también?
       control_objective:
         name: 'Objetivo de control'
-        relevance: 'Importancia'
+        relevance: 'Probabilidad'
         risk: 'Impacto'
         obsolete: 'Obsoleto'
         support: 'Soporte'
