@@ -214,11 +214,8 @@ module ConclusionReviews::DefaultPdf
 
     def put_default_period_title_on pdf
       title = I18n.t 'conclusion_review.audit_period_title'
-      dates = I18n.t 'conclusion_review.audit_period',
-                     start: I18n.l(review.plan_item.start, format: :long),
-                     end:   I18n.l(review.plan_item.end,   format: :long)
 
-      pdf.add_description_item title, dates
+      pdf.add_description_item title, review.survey
     end
 
     def put_default_control_objectives_on pdf, grouped_control_objectives, options = {}

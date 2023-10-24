@@ -1490,7 +1490,7 @@ es:
       review:
         identification: "Identificación"
         description: "Descripción"
-        survey: "Relevamiento"
+        survey: "Periodo auditado"
         audit_type: "Unidad organizativa"
         business_unit: "Unidad de negocio"
         period_id: "Periodo"
