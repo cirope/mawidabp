@@ -42,6 +42,7 @@ es:
                 other: 'deben tener los mismos nombres en las tres organizaciones. Actualmente las que difieren son: %{different_names}'
             organizations:
               are_misconfigured: 'están mal configuradas en las opciones de la aplicación. Por favor, comuníquese con soporte@mawidabp.com'
+
   activerecord:
     models:
       achievement:
@@ -102,8 +103,8 @@ es:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
       control_objective_auditor:
-        one: 'Auditor a cargo'
-        other: 'Auditores a cargo'
+        one: 'Auditor/Referente a cargo'
+        other: 'Auditores/Referentes a cargo'
       document:
         one: 'Documento'
         other: 'Documentos'
@@ -322,7 +323,6 @@ es:
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
         date_charge: 'Fecha de alta'
-        affected_sector_id: 'Sector del banco afectado al alerta'
         control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
