@@ -312,7 +312,7 @@ es:
       commitment_support:
         reason: 'Motivo reprogramación'
         plan: 'Nuevo plan de acción'
-        controls: 'Controles mitigantes' # REVIEW: este también?
+        controls: 'Controles mitigantes'
       control_objective:
         name: 'Objetivo de control'
         relevance: 'Probabilidad'
@@ -439,7 +439,7 @@ es:
         one: 'Sustento compromiso'
         reason: 'Motivo de reprogramación'
         plan: 'Nuevo plan de acción'
-        controls: 'Controles mitigantes' # REVIEW: este también?
+        controls: 'Controles mitigantes'
       finding/finding_answers/file_model:
         one: 'Anexo (archivo)'
         file: 'Anexo (archivo)'

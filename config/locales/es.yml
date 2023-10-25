@@ -129,7 +129,7 @@
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado **%{cost}** al seguimiento de la observación"
     commitment_support_plans: "Plan de acción"
-    commitment_support_controls: "Controles mitigantes" # REVIEW: este también?
+    commitment_support_controls: "Controles mitigantes"
     commitment_support_reasons: "Comentario de las reprogramaciones"
     commitment_date_required_level_title: "Nivel de aprobación"
     download_csv: "Descargar CSV"
