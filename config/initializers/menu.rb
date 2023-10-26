@@ -130,6 +130,12 @@ APP_AUDITOR_MENU_ITEMS = [
         ]
       ),
       MenuItem.new(
+        :risk_registries,
+        order: 6,
+        controllers: :risk_registries,
+        url: { controller: '/risk_registries' }
+      ),
+      MenuItem.new(
         :settings,
         order: 4,
         controllers: :settings,

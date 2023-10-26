@@ -899,6 +899,23 @@ es:
     form:
       add_risk_assessment_weight: 'Agregar ponderador'
 
+  risk_registries:
+    edit:
+      title: 'Editar registro de riesgo'
+    index:
+      new: 'Nuevo'
+      title: 'Listado de registros de riesgo'
+      empty_html: 'No hay registros de riesgo, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
+      empty_search_html: 'No hay registros de riesgo que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear registro de riesgo'
+    show:
+      title: 'Ver registro de riesgo'
+    risk_categories:
+      new: 'Agregar categoría de riesgo'
+    risks:
+      new: 'Agregar riesgo'
+
   risk_score_items:
     form:
       add_risk_score_item: 'Agregar valor'

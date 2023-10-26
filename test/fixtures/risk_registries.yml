@@ -1,0 +1,5 @@
+risk_registry:
+  name: Name
+  description: Description
+  organization: cirope
+  group: main_group

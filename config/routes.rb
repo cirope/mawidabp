@@ -496,6 +496,10 @@ Rails.application.routes.draw do
 
   resources :organizations
 
+  resources :risk_registries do
+    resources :risk_categories, only: [:new, :edit]
+  end
+
   resources :roles
 
   resources :error_records, only: [:index, :show]

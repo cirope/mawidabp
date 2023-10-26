@@ -1,0 +1,9 @@
+risk:
+  identifier: Identifier
+  name: Name
+  cause: Cause
+  effect: Effect
+  likelihood: Likelihood
+  consequence: Consequence
+  user: administrator
+  risk_category: risk_category
