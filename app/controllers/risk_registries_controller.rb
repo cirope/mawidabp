@@ -62,7 +62,7 @@ class RiskRegistriesController < ApplicationController
           :id, :name, :_destroy,
           risks_attributes: [
             :id, :identifier, :name, :cause, :effect, :likelihood,
-            :consequence, :user_id, :_destroy,
+            :impact, :user_id, :_destroy,
           ]
         ]
     end

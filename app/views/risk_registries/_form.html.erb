@@ -20,6 +20,12 @@
 
       <%= link_to_add_fields t('risk_registries.risk_categories.new'), f, :risk_categories %>
     </div>
+  <% else %>
+    <div class="alert alert-info">
+      <p class="mb-0">
+        <%= t '.new_risk_categories' %>
+      </p>
+    </div>
   <% end %>
 
   <hr />

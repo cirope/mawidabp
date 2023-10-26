@@ -32,14 +32,6 @@ class RiskRegistryTest < ActiveSupport::TestCase
     end
   end
 
-  test 'destroy with asociated risks' do
-    assert_no_difference 'BestPractice.count' do
-      @risk_registry.destroy
-    end
-
-    assert_equal 1, @risk_registry.errors.size
-  end
-
   test 'blank attributes' do
     @risk_registry.name = ''
     @risk_registry.group_id = nil

@@ -33,6 +33,7 @@ namespace :db do
       update_roles_identifier                    # 2023-07-24
       update_status_work_papers                  # 2023-09-25
       update_risk_assessments_changes            # 2023-10-02
+      add_risk_registries_privilege              # 2023-10-26
     end
   end
 end
@@ -863,4 +864,20 @@ private
     divisor  = raws.to_h.values.sum
 
     "(#{dividend}) / #{divisor}"
+  end
+
+  def add_risk_registries_privilege
+    if add_risk_registries_privilege?
+      Privilege.where(module: 'administration_best_practices_best_practices').find_each do |p|
+        attrs = p.attributes.
+          except('id', 'module', 'created_at', 'updated_at').
+          merge(module: 'administration_risk_registries')
+
+        Privilege.create attrs
+      end
+    end
+  end
+
+  def add_risk_registries_privilege?
+    Privilege.where(module: 'administration_risk_registries').empty?
   end

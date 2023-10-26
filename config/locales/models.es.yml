@@ -797,7 +797,7 @@ es:
         cause: 'Causa'
         effect: 'Effecto'
         likelihood: 'Probabilidad'
-        consequence: 'Consecuencia'
+        impact: 'Impacto'
         name: 'Nombre'
         user: 'Propietario'
       risk:
@@ -805,7 +805,7 @@ es:
         cause: 'Causa'
         effect: 'Effecto'
         likelihood: 'Probabilidad'
-        consequence: 'Consecuencia'
+        impact: 'Impacto'
         name: 'Nombre'
         user: 'Propietario'
       subsidiary:

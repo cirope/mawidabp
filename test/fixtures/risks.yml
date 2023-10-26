@@ -3,7 +3,7 @@ risk:
   name: Name
   cause: Cause
   effect: Effect
-  likelihood: Likelihood
-  consequence: Consequence
+  likelihood: 1
+  impact: 2
   user: administrator
   risk_category: risk_category

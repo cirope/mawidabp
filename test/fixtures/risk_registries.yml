@@ -3,3 +3,9 @@ risk_registry:
   description: Description
   organization: cirope
   group: main_group
+
+risk_registry_test:
+  name: Test
+  description: Description
+  organization: cirope
+  group: main_group
