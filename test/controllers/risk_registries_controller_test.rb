@@ -55,8 +55,8 @@ class RiskRegistriesControllerTest < ActionController::TestCase
               name: 'New name',
               cause: 'New cause',
               effect: 'New effect',
-              likelihood: 1,
-              impact: 1,
+              likelihood: Risk::LIKELIHOODS[:minor],
+              impact: Risk::IMPACTS[:rare],
               user_id: users(:administrator).id
             ]
           ]

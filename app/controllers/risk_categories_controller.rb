@@ -15,7 +15,7 @@ class RiskCategoriesController < ApplicationController
   private
 
     def set_risk_registry
-      @risk_registry = RiskRegistry.find params[:risk_registry_id]
+      @risk_registry = RiskRegistry.list.find params[:risk_registry_id]
     end
 
     def set_risk_category

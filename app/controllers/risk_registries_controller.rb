@@ -8,6 +8,7 @@ class RiskRegistriesController < ApplicationController
   # GET /risk_registries
   def index
     @risk_registries = RiskRegistry.
+      list.
       search(**search_params).
       ordered.
       page params[:page]
@@ -28,7 +29,7 @@ class RiskRegistriesController < ApplicationController
 
   # POST /risk_registries
   def create
-    @risk_registry = RiskRegistry.new risk_registry_params
+    @risk_registry = RiskRegistry.list.new risk_registry_params
 
     if @risk_registry.save
       respond_with @risk_registry, location: edit_risk_registry_url(@risk_registry)
@@ -53,7 +54,7 @@ class RiskRegistriesController < ApplicationController
   private
 
     def set_risk_registry
-      @risk_registry = RiskRegistry.find params[:id]
+      @risk_registry = RiskRegistry.list.find params[:id]
     end
 
     def risk_registry_params
