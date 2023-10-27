@@ -1,9 +1,5 @@
-module Risks::Scopes
+module Risks::I18nRiskHelpers
   extend ActiveSupport::Concern
-
-  included do
-    scope :ordered, -> { order name: :asc }
-  end
 
   def likelihood_to_s
     "#{Risk.t_likelihood Risk::LIKELIHOODS.invert[likelihood]} (#{likelihood})"

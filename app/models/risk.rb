@@ -1,7 +1,9 @@
 class Risk < ApplicationRecord
+  include Risks::I18nRiskHelpers
   include Risks::Relations
-  include Risks::Scopes
   include Risks::Validation
+
+  scope :ordered, -> { order name: :asc }
 
   def to_s
     name
