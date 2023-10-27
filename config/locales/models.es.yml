@@ -204,12 +204,21 @@ es:
       risk_assessment_weight:
         one: 'Atributo de evaluación de riesgo'
         other: 'Atributos de evaluación de riesgo'
+      risk_category:
+        one: 'Categoría de riesgo'
+        other: 'Categorías de riesgo'
+      risk_registry:
+        one: 'Registro de riesgo'
+        other: 'Registros de riesgo'
       risk_score_item:
         one: 'Valor'
         other: 'Valores'
       risk_weight:
         one: 'Valor de evaluación de riesgo'
         other: 'Valores de evaluación de riesgo'
+      risks:
+        one: 'Riesgo'
+        other: 'Riesgos'
       saml_provider:
         one: 'Configuración SAML'
         other: 'Configuraciones SAML'
@@ -769,6 +778,13 @@ es:
       risk_assessment_weights/risk_score_items:
         name: 'Nombre'
         value: 'Valor'
+      risk_registry:
+        name: 'Nombre'
+        description: 'Descripción'
+      risk_registry/risk_categories:
+        name: 'Nombre'
+      risk_category:
+        name: 'Nombre'
       risk_score_item:
         name: 'Nombre'
         value: 'Valor'
@@ -776,6 +792,22 @@ es:
         value: 'Valor'
         weight: 'Ponderador'
         identifier: 'Identificador'
+      risk_registry/risk_categories/risks:
+        identifier: 'Identificador'
+        cause: 'Causa'
+        effect: 'Efecto'
+        likelihood: 'Probabilidad'
+        impact: 'Impacto'
+        name: 'Nombre'
+        user: 'Propietario'
+      risk:
+        identifier: 'Identificador'
+        cause: 'Causa'
+        effect: 'Efecto'
+        likelihood: 'Probabilidad'
+        impact: 'Impacto'
+        name: 'Nombre'
+        user: 'Propietario'
       subsidiary:
         name: 'Nombre'
         identity: 'Identificación'
