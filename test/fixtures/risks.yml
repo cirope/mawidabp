@@ -3,7 +3,7 @@ risk:
   name: Name
   cause: Cause
   effect: Effect
-  likelihood: 1
-  impact: 2
+  likelihood: <%= Risk::LIKELIHOODS[:insignificant] %>
+  impact: <%= Risk::IMPACTS[:likely] %>
   user: administrator
   risk_category: risk_category

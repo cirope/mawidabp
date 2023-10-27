@@ -14,7 +14,7 @@ module RiskRegistriesHelper
   end
 
   def should_fetch_risks_for? risk_category
-    is_valid = risk_category.errors.empty?
+    is_valid            = risk_category.errors.empty?
     risks_are_unchanged = risk_category.risks.all? do |risk|
       risk.persisted? && risk.errors.empty? && !risk.changed?
     end

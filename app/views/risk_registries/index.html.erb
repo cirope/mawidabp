@@ -20,7 +20,7 @@
           <td>
             <%= super_truncate risk_registry.name, 40 %>
           </td>
-          <td class="d-none d-md-table-cell"><%= super_truncate(risk_registry.description, 40) %></td>
+          <td class="d-none d-md-table-cell"><%= super_truncate risk_registry.description, 40 %></td>
           <td class="text-right"><%= link_to_show risk_registry %></td>
           <td class="text-right"><%= link_to_edit edit_risk_registry_path(risk_registry) %></td>
           <td class="text-right"><%= link_to_destroy risk_registry %></td>

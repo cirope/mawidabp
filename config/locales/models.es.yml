@@ -795,7 +795,7 @@ es:
       risk_registry/risk_categories/risks:
         identifier: 'Identificador'
         cause: 'Causa'
-        effect: 'Effecto'
+        effect: 'Efecto'
         likelihood: 'Probabilidad'
         impact: 'Impacto'
         name: 'Nombre'
@@ -803,7 +803,7 @@ es:
       risk:
         identifier: 'Identificador'
         cause: 'Causa'
-        effect: 'Effecto'
+        effect: 'Efecto'
         likelihood: 'Probabilidad'
         impact: 'Impacto'
         name: 'Nombre'

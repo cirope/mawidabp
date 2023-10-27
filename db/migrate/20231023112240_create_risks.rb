@@ -7,8 +7,8 @@ class CreateRisks < ActiveRecord::Migration[6.1]
       t.integer :impact, null: false
       t.text :cause
       t.text :effect
-      t.references :user, null: false, index: true, foreign_key: true
-      t.references :risk_category, null: false, index: true, foreign_key: true
+      t.references :user, null: false, index: true, foreign_key: FOREIGN_KEY_OPTIONS.dup
+      t.references :risk_category, null: false, index: true, foreign_key: FOREIGN_KEY_OPTIONS.dup
 
       t.timestamps
     end

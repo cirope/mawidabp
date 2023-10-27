@@ -10,8 +10,8 @@ class RiskTest < ActiveSupport::TestCase
       Risk.create(
         name: 'New name',
         identifier: 'New identifier',
-        likelihood: 3,
-        impact: 1,
+        likelihood: Risk::LIKELIHOODS[:minor],
+        impact: Risk::IMPACTS[:rare],
         cause: 'New cause',
         effect: 'New effect',
         user: users(:administrator),

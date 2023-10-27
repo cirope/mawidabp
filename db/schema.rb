@@ -1554,14 +1554,14 @@ ActiveRecord::Schema.define(version: 2023_10_23_112240) do
   add_foreign_key "risk_assessments", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "plans", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "risk_categories", "risk_registries"
-  add_foreign_key "risk_registries", "groups"
-  add_foreign_key "risk_registries", "organizations"
+  add_foreign_key "risk_categories", "risk_registries", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_registries", "groups", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_registries", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_score_items", "risk_assessment_weights"
   add_foreign_key "risk_weights", "risk_assessment_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_weights", "risk_assessment_weights", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "risks", "risk_categories"
-  add_foreign_key "risks", "users"
+  add_foreign_key "risks", "risk_categories", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risks", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "roles", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "saml_providers", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "saml_providers", "roles", column: "default_role_for_users_id", on_update: :restrict, on_delete: :restrict

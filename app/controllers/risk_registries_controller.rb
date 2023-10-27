@@ -53,7 +53,7 @@ class RiskRegistriesController < ApplicationController
   private
 
     def set_risk_registry
-      @risk_registry = RiskRegistry.find(params[:id])
+      @risk_registry = RiskRegistry.find params[:id]
     end
 
     def risk_registry_params

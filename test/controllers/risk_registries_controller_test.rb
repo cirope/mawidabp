@@ -36,7 +36,7 @@ class RiskRegistriesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should create risk_registry' do
+  test 'should create risk registry' do
     counts_array = [
       'RiskRegistry.count',
       'RiskCategory.count',
@@ -67,7 +67,7 @@ class RiskRegistriesControllerTest < ActionController::TestCase
     assert_redirected_to edit_risk_registry_url(assigns(:risk_registry))
   end
 
-  test 'should show risk_registry' do
+  test 'should show risk registry' do
     get :show, params: { id: @risk_registry }
     assert_response :success
   end
@@ -77,14 +77,14 @@ class RiskRegistriesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should update risk_registry' do
+  test 'should update risk registry' do
     patch :update, params: {
       id: @risk_registry, risk_registry: { name: 'Name updated' }
     }
     assert_redirected_to risk_registry_url(assigns(:risk_registry))
   end
 
-  test 'should destroy risk_registry' do
+  test 'should destroy risk registry' do
     assert_difference 'RiskRegistry.count', -1 do
       delete :destroy, params: { id: @risk_registry }
     end
