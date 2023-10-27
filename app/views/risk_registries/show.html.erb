@@ -27,7 +27,7 @@
           <td><%= simple_format risk.name, class: 'mb-1' %></td>
           <td><%= risk.likelihood_to_s %></td>
           <td><%= risk.impact_to_s %></td>
-          <td><%= simple_format risk.user.to_s, class: 'mb-1' %></td>
+          <td><%= simple_format risk.user.informal_name, class: 'mb-1' %></td>
           <td><%= simple_format risk.cause, class: 'mb-1' %></td>
           <td><%= simple_format risk.effect, class: 'mb-1' %></td>
         </tr>
