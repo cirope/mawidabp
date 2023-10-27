@@ -23,7 +23,7 @@ module Risks::Validation
     validates :name, :identifier,
       pdf_encoding: true,
       length: { maximum: 255 },
-      uniqueness: { case_sensitive: false },
+      uniqueness: { case_sensitive: false, scope: :risk_category_id },
       allow_nil: true, allow_blank: true
     validates :likelihood,
       inclusion: { in: LIKELIHOODS.values },

@@ -6,7 +6,7 @@ module RiskCategories::Validation
     validates :name,
       pdf_encoding: true,
       length: { maximum: 255 },
-      uniqueness: { case_sensitive: false },
+      uniqueness: { case_sensitive: false, scope: :risk_registry_id },
       allow_nil: true, allow_blank: true
   end
 end

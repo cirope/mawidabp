@@ -5,6 +5,33 @@ class RiskTest < ActiveSupport::TestCase
     @risk = risks :risk
   end
 
+  test 'create' do
+    assert_difference 'Risk.count' do
+      Risk.create(
+        name: 'New name',
+        identifier: 'New identifier',
+        likelihood: 3,
+        impact: 1,
+        cause: 'New cause',
+        effect: 'New effect',
+        user: users(:administrator),
+        risk_category: @risk.risk_category
+      )
+    end
+  end
+
+  test 'update' do
+    assert @risk.update(name: 'Updated name'), @risk.errors.full_messages.join('; ')
+    @risk.reload
+    assert_equal 'Updated name', @risk.name
+  end
+
+  test 'destroy' do
+    assert_difference 'Risk.count', -1 do
+      @risk.destroy
+    end
+  end
+
   test 'blank attributes' do
     @risk.identifier = ''
     @risk.name = ''
@@ -34,5 +61,13 @@ class RiskTest < ActiveSupport::TestCase
     assert @risk.invalid?
     assert_error @risk, :likelihood, :inclusion
     assert_error @risk, :impact, :inclusion
+  end
+
+  test 'unique attributes' do
+    risk = @risk.dup
+
+    assert risk.invalid?
+    assert_error risk, :name, :taken
+    assert_error risk, :identifier, :taken
   end
 end
