@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_23_112240) do
+ActiveRecord::Schema.define(version: 2023_10_28_235740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1255,6 +1255,7 @@ ActiveRecord::Schema.define(version: 2023_10_23_112240) do
     t.integer "taggable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
     t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
   end
