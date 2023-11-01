@@ -2,14 +2,14 @@
   id = f.object.object_id
   finding = f.object.taggable || parent.object
   tagging = f.object
-  tag_include_description = tagging.tag&.include_description?
+  tag = f.object.tag
   readonly = readonly
 %>
 <fieldset class="tagging">
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <% if has_nested_tags?(kind: 'finding') && tagging.tag.blank? %>
+        <% if has_nested_tags?(kind: 'finding') && tag.blank? %>
           <%= f.input :tag_id,
             as: :grouped_select,
             group_method: :last,
@@ -18,9 +18,9 @@
             prompt: true,
             input_html: { autofocus: true }
           %>
-        <% elsif tagging.tag.blank? %>
+        <% elsif tag.blank? %>
           <%= f.input :tag, as: :string, label: false, input_html: {
-            value: tagging.tag.to_s,
+            value: tag.to_s,
             id: "finding_tagging_#{id}",
             title: t('label.search'), autocomplete: :off, autofocus: true,
             data: {
@@ -31,13 +31,15 @@
           } %>
           <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
         <% else %>
-          <%= f.input "finding_tagging_#{id}", label: false, input_html: { value: tagging.tag.to_s, readonly: true } %>
+          <%= f.input "finding_tagging_#{id}", label: false, input_html: { value: tag.to_s, readonly: true } %>
           <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
         <% end %>
       </div>
-      <div class="col-md-5" <%= 'hidden' unless tag_include_description %>>
-        <%= f.input :description, label: false, input_html: { rows: 1 } %>
-      </div>
+      <% if tag.blank? || tag.include_description? %>
+        <div class="col-md-5">
+          <%= f.input :description, label: false, input_html: { rows: 1, hidden: tag.blank?, id: "finding_tagging_#{id}_description" } %>
+        </div>
+      <% end %>
       <div class="col-md-1">
         <div class="mt-2 text-right">
           <%= link_to_remove_nested_item f unless readonly %>
@@ -46,3 +48,19 @@
     </div>
   </div>
 </fieldset>
+
+<% if tag.blank? %>
+  <script type="text/javascript">
+    $('#finding_tagging_<%= id %>').on('autocomplete:update', function() {
+      if ($(this).data('item')['include_description?']) {
+        $('#finding_tagging_<%= id %>_description').removeAttr('hidden');
+        $('#finding_tagging_<%= id %>_description').parent().removeAttr('hidden');
+        $('#finding_tagging_<%= id %>_description').parent().parent().removeAttr('hidden');
+      } else {
+        $('#finding_tagging_<%= id %>_description').val('').attr('hidden', true);
+        $('#finding_tagging_<%= id %>_description').parent().val('').attr('hidden', true);
+        $('#finding_tagging_<%= id %>_description').parent().parent().val('').attr('hidden', true);
+      }
+    });
+  </script>
+<% end %>
