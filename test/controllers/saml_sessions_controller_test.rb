@@ -246,7 +246,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
             user_to_update.reload
 
             assert_equal user_to_update.name, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.name_claim}"]).first
-            assert_equal user_to_update.last_name, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.lastname_caim}"]).first
+            assert_equal user_to_update.last_name, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.lastname_claim}"]).first
             assert user_to_update.enable
             assert_equal user_to_update.organization_roles.first.role, roles(:supervisor_role)
             assert flash[:notice].blank?
