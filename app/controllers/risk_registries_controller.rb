@@ -1,4 +1,6 @@
 class RiskRegistriesController < ApplicationController
+  include AutoCompleteFor::ControlObjective
+
   respond_to :html, :json
 
   before_action :auth, :check_privileges
@@ -41,6 +43,7 @@ class RiskRegistriesController < ApplicationController
   # PATCH/PUT /risk_registries/1
   def update
     update_resource @risk_registry, risk_registry_params
+
     respond_with @risk_registry
   end
 
@@ -63,7 +66,9 @@ class RiskRegistriesController < ApplicationController
           :id, :name, :_destroy,
           risks_attributes: [
             :id, :identifier, :name, :cause, :effect, :likelihood,
-            :impact, :user_id, :_destroy,
+            :impact, :user_id, :_destroy, risk_control_objectives_attributes: [
+              :id, :control_objective_id, :_destroy
+            ]
           ]
         ]
     end
