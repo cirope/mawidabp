@@ -207,6 +207,9 @@ es:
       risk_category:
         one: 'Categoría de riesgo'
         other: 'Categorías de riesgo'
+      risk_control_objective:
+        one: 'Objetivo de control'
+        other: 'Objetivos de control'
       risk_registry:
         one: 'Registro de riesgo'
         other: 'Registros de riesgo'
@@ -800,6 +803,8 @@ es:
         impact: 'Impacto'
         name: 'Nombre'
         user: 'Propietario'
+      risk_registry/risk_categories/risks/risk_control_objectives:
+        control_objective: 'Objetivo de control'
       risk:
         identifier: 'Identificador'
         cause: 'Causa'
@@ -808,6 +813,8 @@ es:
         impact: 'Impacto'
         name: 'Nombre'
         user: 'Propietario'
+      risk_control_objective:
+        control_objective: 'Objetivo de control'
       subsidiary:
         name: 'Nombre'
         identity: 'Identificación'

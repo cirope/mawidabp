@@ -19,6 +19,7 @@
           <th><%= Risk.human_attribute_name 'user' %></th>
           <th><%= Risk.human_attribute_name 'cause' %></th>
           <th><%= Risk.human_attribute_name 'effect' %></th>
+          <th class="w-25"><%= ControlObjective.model_name.human count: 0 %></th>
         </tr>
       </thead>
       <tbody>
@@ -31,6 +32,7 @@
             <td><%= simple_format risk.user.informal_name, class: 'mb-1' %></td>
             <td><%= simple_format risk.cause, class: 'mb-1' %></td>
             <td><%= simple_format risk.effect, class: 'mb-1' %></td>
+            <td><%= risk_control_objectives risk.control_objectives %></td>
           </tr>
         <% end %>
       </tbody>

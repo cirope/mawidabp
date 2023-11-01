@@ -1140,6 +1140,15 @@ ActiveRecord::Schema.define(version: 2023_11_01_172300) do
     t.index ["risk_registry_id"], name: "index_risk_categories_on_risk_registry_id"
   end
 
+  create_table "risk_control_objectives", force: :cascade do |t|
+    t.bigint "risk_id", null: false
+    t.bigint "control_objective_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["control_objective_id"], name: "index_risk_control_objectives_on_control_objective_id"
+    t.index ["risk_id"], name: "index_risk_control_objectives_on_risk_id"
+  end
+
   create_table "risk_registries", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -1560,6 +1569,8 @@ ActiveRecord::Schema.define(version: 2023_11_01_172300) do
   add_foreign_key "risk_assessments", "plans", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_categories", "risk_registries", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_control_objectives", "control_objectives", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_control_objectives", "risks", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_registries", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_registries", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_score_items", "risk_assessment_weights"

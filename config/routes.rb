@@ -497,6 +497,8 @@ Rails.application.routes.draw do
   resources :organizations
 
   resources :risk_registries do
+    get :auto_complete_for_control_objective, on: :collection
+
     resources :risk_categories, only: [:new, :edit]
   end
 

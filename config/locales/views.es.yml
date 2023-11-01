@@ -935,6 +935,8 @@ es:
       moderate: 'Moderado'
       likely: 'Probable'
       almost_certain: 'Muy probable'
+    new:
+      control_objective: 'Agregar objetivo de control'
 
   versions:
     index:
