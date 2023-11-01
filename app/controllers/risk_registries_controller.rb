@@ -3,7 +3,7 @@ class RiskRegistriesController < ApplicationController
 
   respond_to :html, :json
 
-  before_action :auth, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   before_action :set_risk_registry, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
 
@@ -71,5 +71,11 @@ class RiskRegistriesController < ApplicationController
             ]
           ]
         ]
+    end
+
+    def load_privileges
+      @action_privileges.update(
+        auto_complete_for_control_objective: :read
+      )
     end
 end
