@@ -15,11 +15,7 @@
             collection: grouped_tag_options(kind: 'finding'),
             label: false,
             prompt: true,
-            input_html: { autofocus: true,
-                          data: {
-                            show_include_descr: "finding_tagging_#{id}"
-                          }
-            }
+            input_html: { autofocus: true }
           %>
         <% elsif tagging.tag.blank? %>
           <%= f.input :tag, as: :string, label: false, input_html: {
