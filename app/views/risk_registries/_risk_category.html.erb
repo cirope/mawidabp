@@ -9,13 +9,13 @@
           <%= link_to_fetch_hide id, fetch ? :fetch : :show %>
         </div>
         <div class="media-body">
-          <%= f.input :name, label: false, input_html: { maxlength: 255 } %>
+          <%= f.input :name, label: false, autofocus: true,
+            input_html: { maxlength: 255 } %>
         </div>
       </div>
     </div>
     <div class="col-md-1 mt-2 text-right">
       <%= link_to_remove_nested_item(f) %>
-      <%= f.input :id, as: :hidden %>
     </div>
   </div>
 

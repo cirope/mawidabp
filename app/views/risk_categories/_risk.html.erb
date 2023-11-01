@@ -45,5 +45,21 @@
       </div>
     </div>
   </div>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">
+        <%= RiskControlObjective.model_name.human count: 0 %>
+      </h5>
+    </div>
+    <div class="card-body">
+      <%= f.simple_fields_for :risk_control_objectives do |rcof| %>
+        <%= render 'risks/risk_control_objective', f: rcof %>
+      <% end %>
+
+      <%= link_to_add_fields t('risks.new.control_objective'), f,
+        :risk_control_objectives, 'risks/risk_control_objective' %>
+    </div>
+  </div>
+
   <hr>
 </fieldset>

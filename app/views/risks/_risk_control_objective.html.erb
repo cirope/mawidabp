@@ -1,0 +1,25 @@
+<% id = f.object.object_id %>
+<fieldset class="risk_control_objective">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-10">
+        <%= f.input :control_objective, as: :string, label: false,
+          input_html: {
+            title: t('label.search'),
+            autofocus: true,
+            data: {
+              autocomplete_url: auto_complete_for_control_objective_risk_registries_path,
+              autocomplete_id_target: "#risk_control_objective_#{id}"
+            }
+          } %>
+          <%= f.input :control_objective_id, as: :hidden, input_html: {
+            value: f.object.control_objective_id, id: "risk_control_objective_#{id}" } %>
+      </div>
+      <div class="col-md-2">
+        <div class="mt-2 text-right">
+          <%= link_to_remove_nested_item f %>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

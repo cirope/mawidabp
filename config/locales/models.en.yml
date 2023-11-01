@@ -207,6 +207,9 @@ en:
       risk_category:
         one: 'Risk category'
         other: 'Risk categories'
+      risk_control_objective:
+        one: 'Control Objective'
+        other: 'Control Objectives'
       risk_registry:
         one: 'Risk registry'
         other: 'Risk registries'
@@ -792,6 +795,16 @@ en:
         value: 'Value'
         weight: 'Weight'
         identifier: 'Identifier'
+      risk_registry/risk_categories/risks:
+        identifier: 'Identifier'
+        cause: 'Cause'
+        effect: 'Effect'
+        likelihood: 'Likelihood'
+        impact: 'Impact'
+        name: 'Name'
+        user: 'Owner'
+      risk_registry/risk_categories/risks/risk_control_objectives:
+        control_objective: 'Control objective'
       risk:
         identifier: 'Identifier'
         cause: 'Cause'
@@ -800,6 +813,8 @@ en:
         impact: 'Impact'
         name: 'Name'
         user: 'Owner'
+      risk_control_objective:
+        control_objective: 'Control objective'
       subsidiary:
         name: 'Name'
         identity: 'Identification'
