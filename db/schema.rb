@@ -1224,11 +1224,11 @@ ActiveRecord::Schema.define(version: 2023_11_01_172300) do
     t.bigint "organization_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "username_attribute"
-    t.string "name_attribute"
-    t.string "lastname_attribute"
-    t.string "email_attribute"
-    t.string "roles_attribute"
+    t.string "username_claim"
+    t.string "name_claim"
+    t.string "lastname_claim"
+    t.string "email_claim"
+    t.string "roles_claim"
     t.index ["default_role_for_users_id"], name: "index_saml_providers_on_default_role_for_users_id"
     t.index ["organization_id"], name: "index_saml_providers_on_organization_id"
   end
