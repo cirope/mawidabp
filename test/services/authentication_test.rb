@@ -65,6 +65,11 @@ class AuthenticationTest < ActionController::TestCase
                                       name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
                                       assertion_consumer_service_binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
                                       idp_cert: 'cert_test',
+                                      username_attribute: 'name',
+                                      name_attribute: 'givenname',
+                                      lastname_attribute: 'surname',
+                                      email_attribute: 'name',
+                                      roles_attribute: 'groups',
                                       organization: @organization
 
     @organization.reload
@@ -287,12 +292,13 @@ class AuthenticationTest < ActionController::TestCase
         assert_difference ['User.count', 'OrganizationRole.count'] do
           assert_valid_authentication
 
+          claims    = @organization.saml_provider
           last_user = User.last
 
-          assert_equal last_user.user, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, '')
-          assert_equal last_user.name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first
-          assert_equal last_user.email, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first
-          assert_equal last_user.last_name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first
+          assert_equal last_user.user, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.username_attribute}"]).first.to_s.sub(/@.+/, '')
+          assert_equal last_user.name, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.name_attribute}"]).first
+          assert_equal last_user.email, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.email_attribute}"]).first
+          assert_equal last_user.last_name, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.lastname_attribute}"]).first
           assert last_user.enable
           assert_equal default_role_for_user, last_user.organization_roles.where(organization: @organization).take!.role
         end
@@ -453,12 +459,13 @@ class AuthenticationTest < ActionController::TestCase
 
           assert_valid_authentication redirect_url: [:edit, poll, token: poll.access_token], message: ['polls.has_unanswered', { count: user_to_update.list_unanswered_polls.count }]
 
+          claims = @organization.saml_provider
           user_to_update.reload
 
-          assert_equal user_to_update.user, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, '')
-          assert_equal user_to_update.name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first
-          assert_equal user_to_update.email, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first
-          assert_equal user_to_update.last_name, Array(hash_attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first
+          assert_equal user_to_update.user, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.username_attribute}"]).first.to_s.sub(/@.+/, '')
+          assert_equal user_to_update.name, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.name_attribute}"]).first
+          assert_equal user_to_update.email, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.email_attribute}"]).first
+          assert_equal user_to_update.last_name, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.lastname_attribute}"]).first
           assert user_to_update.enable
           assert_equal user_to_update.organization_roles.first.role, roles(:supervisor_role)
         end
@@ -656,6 +663,11 @@ class AuthenticationTest < ActionController::TestCase
                                            name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
                                            assertion_consumer_service_binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
                                            idp_cert: 'cert_test',
+                                           username_attribute: 'name',
+                                           name_attribute: 'givenname',
+                                           lastname_attribute: 'surname',
+                                           email_attribute: 'name',
+                                           roles_attribute: 'groups',
                                            organization: organization
 
       new_saml_provider.save!
