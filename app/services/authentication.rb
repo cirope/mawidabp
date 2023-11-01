@@ -131,14 +131,14 @@ class Authentication
     end
 
     def prune_azure_attributes attributes
-      claims = @current_organization.saml_provider
+      provider = @current_organization.saml_provider
 
       {
-        user:      Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.username_attribute}"]).first.to_s.sub(/@.+/, ''),
-        name:      Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.name_attribute}"]).first,
-        email:     Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.email_attribute}"]).first,
-        last_name: Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{claims.lastname_attribute}"]).first,
-        roles:     attributes["http://schemas.microsoft.com/ws/2008/06/identity/claims/#{claims.roles_attribute}"]
+        user:      Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.username_claim}"]).first.to_s.sub(/@.+/, ''),
+        name:      Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.name_claim}"]).first,
+        email:     Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.email_claim}"]).first,
+        last_name: Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.lastname_claim}"]).first,
+        roles:     attributes["http://schemas.microsoft.com/ws/2008/06/identity/claims/#{provider.roles_claim}"]
       }
     end
 
