@@ -57,11 +57,11 @@ en:
       business_unit_type:
         exec_summary_intro: "The valid key to include is: <code>%{%{keywords}}</code>"
       saml_provider:
-        idp_homepage: 'For example: https://login.microsoftonline.com/8a0d9dd/federationmetadata/2007-06/federationmetadata.xml?appid=b669cdbc'
-        idp_sso_target_url: 'For example: https://login.microsoftonline.com/8a0d9dd/saml2'
+        idp_homepage: 'For example: https://login.microsoftonline.com/xx/federationmetadata/2007-06/federationmetadata.xml?appid=xx'
+        idp_sso_target_url: 'For example: https://login.microsoftonline.com/xx/saml2'
         assertion_consumer_service_url: 'For example: https://domain.com/saml/callback'
         assertion_consumer_service_binding: 'For example: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
-        idp_entity_id: 'For example: https://sts.windows.net/8a0d9dd/'
+        idp_entity_id: 'For example: https://sts.windows.net/xx/'
         sp_entity_id: 'For example: https://domain.com/saml/metadata'
         name_identifier_format: 'For example: urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
         username_claim: 'For example: name'
