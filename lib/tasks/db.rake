@@ -900,14 +900,7 @@ private
   end
 
   def add_claim_values_in_saml_provider?
-    conditions = [
-      'username_claim IS NULL',
-      'name_claim IS NULL',
-      'lastname_claim IS NULL',
-      'email_claim IS NULL',
-      'roles_claim IS NULL'].join ' OR '
-
-      SamlProvider.where(conditions).any?
+    SamlProvider.where(username_claim: nil).any?
   end
 
   def claim_fields_empty? provider
