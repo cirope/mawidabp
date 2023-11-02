@@ -36,7 +36,7 @@
         <% end %>
       </div>
       <% if tag.blank? || tag.include_description? %>
-        <div class="col-md-5" id="finding_tagging_<%= id %>_description_container" hidden=<% tag.blank? %>>
+        <div class="col-md-5" id="finding_tagging_<%= id %>_description_container" <% "hidden" if tag.blank? %>>
           <%= f.input :description, label: false, input_html: {
             id: "finding_tagging_#{id}_description",
             hidden: tag.blank?,
