@@ -1555,11 +1555,11 @@ es:
         assertion_consumer_service_binding: 'Enlace de Servicio de consumidor de aserciones'
         idp_cert: 'Certificado (Base64)'
         default_role_for_users: 'Rol por defecto para usuarios'
-        username_attribute: 'Atributo con el nombre de usuario'
-        name_attribute: 'Atributo con el nombre'
-        lastname_attribute: 'Atributo con el apellido'
-        email_attribute: 'Atributo con el correo electrónico'
-        roles_attribute: 'Atribudo con los roles'
+        username_claim: 'Atributo con el nombre de usuario'
+        name_claim: 'Atributo con el nombre'
+        lastname_claim: 'Atributo con el apellido'
+        email_claim: 'Atributo con el correo electrónico'
+        roles_claim: 'Atribudo con los roles'
       work_paper:
         name: "Nombre"
         code: "Código"
