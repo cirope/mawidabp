@@ -803,6 +803,7 @@ en:
         impact: 'Impact'
         name: 'Name'
         user: 'Owner'
+        risk_control_objectives: 'Control objectives'
       risk_registry/risk_categories/risks/risk_control_objectives:
         control_objective: 'Control objective'
       risk:
@@ -942,6 +943,10 @@ en:
           attributes:
             taggings:
               missing_tags_for_scope: "at least one tag (among %{tags}) is required for reports with scope '%{r_scope}'"
+        risk:
+          attributes:
+            risk_control_objectives:
+              blank: 'must have at least one'
         risk_assessment_template:
           attributes:
             risk_assessment_weights:
