@@ -884,23 +884,38 @@ private
   end
 
   def add_claim_values_in_saml_provider
-    Organization.all.each do |org|
-      provider = org.saml_provider
+    if add_claim_values_in_saml_provider?
+      Organization.all.find_each do |org|
+        provider = org.saml_provider
 
-      if provider && claim_fields_empty?(provider)
-        provider.update_columns username_claim: 'name',
-          name_claim: 'givenname',
-          lastname_claim: 'surname',
-          email_claim: 'name',
-          roles_claim: 'groups'
+        if provider && claim_fields_empty?(provider)
+          provider.update_columns username_claim: 'name',
+            name_claim: 'givenname',
+            lastname_claim: 'surname',
+            email_claim: 'name',
+            roles_claim: 'groups'
+        end
       end
     end
   end
 
+  def add_claim_values_in_saml_provider?
+    conditions = [
+      'username_claim IS NULL',
+      'name_claim IS NULL',
+      'lastname_claim IS NULL',
+      'email_claim IS NULL',
+      'roles_claim IS NULL'].join ' OR '
+
+      SamlProvider.where(conditions).any?
+  end
+
   def claim_fields_empty? provider
-    provider.username_claim.blank? ||
-      provider.name_claim.blank? ||
-      provider.lastname_claim.blank?||
-      provider.email_claim.blank? ||
-      provider.roles_claim.blank?
+    [
+      provider.username_claim,
+      provider.name_claim,
+      provider.lastname_claim,
+      provider.email_claim,
+      provider.roles_claim
+    ].all? &:blank?
   end
