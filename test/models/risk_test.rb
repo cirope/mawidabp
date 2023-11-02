@@ -6,7 +6,7 @@ class RiskTest < ActiveSupport::TestCase
   end
 
   test 'create' do
-    assert_difference 'Risk.count' do
+    assert_difference ['Risk.count', 'RiskControlObjective.count'] do
       Risk.create(
         name: 'New name',
         identifier: 'New identifier',
@@ -15,7 +15,10 @@ class RiskTest < ActiveSupport::TestCase
         cause: 'New cause',
         effect: 'New effect',
         user: users(:administrator),
-        risk_category: @risk.risk_category
+        risk_category: @risk.risk_category,
+        risk_control_objectives_attributes: [
+          control_objective_id: control_objectives(:management_dependency).id
+        ]
       )
     end
   end
@@ -38,11 +41,14 @@ class RiskTest < ActiveSupport::TestCase
     @risk.likelihood = ''
     @risk.impact = ''
 
+    @risk.risk_control_objectives.destroy_all
+
     assert @risk.invalid?
     assert_error @risk, :identifier, :blank
     assert_error @risk, :name, :blank
     assert_error @risk, :likelihood, :blank
     assert_error @risk, :impact, :blank
+    assert_error @risk, :risk_control_objectives, :blank
   end
 
   test 'attribute length' do

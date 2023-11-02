@@ -803,6 +803,7 @@ es:
         impact: 'Impacto'
         name: 'Nombre'
         user: 'Propietario'
+        risk_control_objectives: 'Objetivos de control'
       risk_registry/risk_categories/risks/risk_control_objectives:
         control_objective: 'Objetivo de control'
       risk:
@@ -942,6 +943,10 @@ es:
           attributes:
             taggings:
               missing_tags_for_scope: "se requiere al menos una (entre %{tags}) para los informes con alcance '%{r_scope}'"
+        risk:
+          attributes:
+            risk_control_objectives:
+              blank: 'debe tener al menos uno'
         risk_assessment_template:
           attributes:
             risk_assessment_weights:
