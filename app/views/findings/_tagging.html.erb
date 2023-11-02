@@ -36,8 +36,12 @@
         <% end %>
       </div>
       <% if tag.blank? || tag.include_description? %>
-        <div class="col-md-5">
-          <%= f.input :description, label: false, input_html: { rows: 1, hidden: tag.blank?, id: "finding_tagging_#{id}_description" } %>
+        <div class="col-md-5" id="finding_tagging_<%= id %>_description_container" hidden=<% tag.blank? %>>
+          <%= f.input :description, label: false, input_html: {
+            id: "finding_tagging_#{id}_description",
+            hidden: tag.blank?,
+            rows: 1
+          } %>
         </div>
       <% end %>
       <div class="col-md-1">
@@ -52,14 +56,15 @@
 <% if tag.blank? %>
   <script type="text/javascript">
     $('#finding_tagging_<%= id %>').on('autocomplete:update', function() {
+      var $findingTaggingDescription          = $('#finding_tagging_<%= id %>_description');
+      var $findingTaggingDescriptionContainer = $('#finding_tagging_<%= id %>_description_container');
+
       if ($(this).data('item')['include_description?']) {
-        $('#finding_tagging_<%= id %>_description').removeAttr('hidden');
-        $('#finding_tagging_<%= id %>_description').parent().removeAttr('hidden');
-        $('#finding_tagging_<%= id %>_description').parent().parent().removeAttr('hidden');
+        $findingTaggingDescription.removeAttr('hidden');
+        $findingTaggingDescriptionContainer.removeAttr('hidden');
       } else {
-        $('#finding_tagging_<%= id %>_description').val('').attr('hidden', true);
-        $('#finding_tagging_<%= id %>_description').parent().val('').attr('hidden', true);
-        $('#finding_tagging_<%= id %>_description').parent().parent().val('').attr('hidden', true);
+        $findingTaggingDescription.val('').attr('hidden', true);
+        $findingTaggingDescriptionContainer.val('').attr('hidden', true);
       }
     });
   </script>
