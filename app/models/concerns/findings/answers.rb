@@ -3,22 +3,23 @@ module Findings::Answers
 
   COMMITMENT_REQUIREMENTS = {
     high: {
-      3    => :manager,
-      6    => :management,
+      2    => :manager,
+      4    => :management,
       12   => :ceo,
       1000 => :committee
     },
 
     medium: {
-      4    => :manager,
-      9    => :management,
-      18   => :ceo,
+      2    => :manager,
+      4    => :management,
+      12   => :ceo,
       1000 => :committee
     },
 
     low: {
-      6    => :manager,
-      18   => :management,
+      2    => :manager,
+      4   => :management,
+      12   => :ceo,
       1000 => :management
     }
   }
