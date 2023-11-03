@@ -16,7 +16,10 @@
             collection: grouped_tag_options(kind: 'finding'),
             label: false,
             prompt: true,
-            input_html: { autofocus: true }
+            input_html: {
+              id: "finding_tagging_#{id}",
+              autofocus: true
+            }
           %>
         <% elsif tag.blank? %>
           <%= f.input :tag, as: :string, label: false, input_html: {
@@ -36,7 +39,7 @@
         <% end %>
       </div>
       <% if tag.blank? || tag.include_description? %>
-        <div class="col-md-5" id="finding_tagging_<%= id %>_description_container" <% "hidden" if tag.blank? %>>
+        <div class="col-md-5" id="finding_tagging_<%= id %>_description_container" <%= "hidden" if tag.blank? %>>
           <%= f.input :description, label: false, input_html: {
             id: "finding_tagging_#{id}_description",
             hidden: tag.blank?,
@@ -55,11 +58,20 @@
 
 <% if tag.blank? %>
   <script type="text/javascript">
-    $('#finding_tagging_<%= id %>').on('autocomplete:update', function() {
+    $(document).on('change', '#finding_tagging_<%= id %>', function (event) {
       var $findingTaggingDescription          = $('#finding_tagging_<%= id %>_description');
       var $findingTaggingDescriptionContainer = $('#finding_tagging_<%= id %>_description_container');
+      var $element                            = $(event.currentTarget);
+      var includeDescription;
 
-      if ($(this).data('item')['include_description?']) {
+      if ($element.prop("tagName") === 'INPUT') {
+        includeDescription = $element.data('item')['include_description?'];
+      } else {
+        var $option        = $element.find('option:selected');
+        includeDescription = $option.data('include-description');
+      };
+
+      if (includeDescription) {
         $findingTaggingDescription.removeAttr('hidden');
         $findingTaggingDescriptionContainer.removeAttr('hidden');
       } else {
