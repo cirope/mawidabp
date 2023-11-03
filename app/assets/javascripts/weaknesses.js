@@ -78,7 +78,7 @@ $(document).on('change', '[data-finding-tagging]', function (event) {
   var $findingTaggingDescriptionContainer = $('[data-finding-tagging-description-container="' + findingTaggingValue + '"]');
   var includeDescription;
 
-  if ($element.prop("tagName") === 'INPUT') {
+  if ($element.is('input')) {
     includeDescription = $element.data('item')['include_description?'];
   } else {
     var $option        = $element.find('option:selected');
