@@ -71,3 +71,23 @@ $(document).on('change', '[data-tag-modifier]', function (event) {
 
   $input.prop('checked', select)
 })
+
+$(document).on('change', '[data-finding-tagging]', function (event) {
+  var $element                            = $(event.currentTarget);
+  var findingTaggingValue                 = $element.attr('data-finding-tagging');
+  var $findingTaggingDescriptionContainer = $('[data-finding-tagging-description-container="' + findingTaggingValue + '"]');
+  var includeDescription;
+
+  if ($element.prop("tagName") === 'INPUT') {
+    includeDescription = $element.data('item')['include_description?'];
+  } else {
+    var $option        = $element.find('option:selected');
+    includeDescription = $option.data('include-description');
+  };
+
+  if (includeDescription) {
+    $findingTaggingDescriptionContainer.removeAttr('hidden');
+  } else {
+    $findingTaggingDescriptionContainer.val('').attr('hidden', true);
+  }
+});

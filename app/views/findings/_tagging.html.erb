@@ -17,19 +17,19 @@
             label: false,
             prompt: true,
             input_html: {
-              id: "finding_tagging_#{id}",
+              data: { finding_tagging: id },
               autofocus: true
             }
           %>
         <% elsif tag.blank? %>
           <%= f.input :tag, as: :string, label: false, input_html: {
             value: tag.to_s,
-            id: "finding_tagging_#{id}",
             title: t('label.search'), autocomplete: :off, autofocus: true,
             data: {
               autocomplete_params: { kind: 'finding' },
               autocomplete_url: url_for([:auto_complete_for_tagging, finding.class]),
-              autocomplete_id_target: "#hidden_tag_#{id}"
+              autocomplete_id_target: "#hidden_tag_#{id}",
+              finding_tagging: id
             }
           } %>
           <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
@@ -39,12 +39,8 @@
         <% end %>
       </div>
       <% if tag.blank? || tag.include_description? %>
-        <div class="col-md-5" id="finding_tagging_<%= id %>_description_container" <%= "hidden" if tag.blank? %>>
-          <%= f.input :description, label: false, input_html: {
-            id: "finding_tagging_#{id}_description",
-            hidden: tag.blank?,
-            rows: 1
-          } %>
+        <div class="col-md-5" data-finding-tagging-description-container="<%= id %>" <%= "hidden" if tag.blank? %>>
+          <%= f.input :description, label: false, input_html: { rows: 1 } %>
         </div>
       <% end %>
       <div class="col-md-1">
@@ -55,29 +51,3 @@
     </div>
   </div>
 </fieldset>
-
-<% if tag.blank? %>
-  <script type="text/javascript">
-    $(document).on('change', '#finding_tagging_<%= id %>', function (event) {
-      var $findingTaggingDescription          = $('#finding_tagging_<%= id %>_description');
-      var $findingTaggingDescriptionContainer = $('#finding_tagging_<%= id %>_description_container');
-      var $element                            = $(event.currentTarget);
-      var includeDescription;
-
-      if ($element.prop("tagName") === 'INPUT') {
-        includeDescription = $element.data('item')['include_description?'];
-      } else {
-        var $option        = $element.find('option:selected');
-        includeDescription = $option.data('include-description');
-      };
-
-      if (includeDescription) {
-        $findingTaggingDescription.removeAttr('hidden');
-        $findingTaggingDescriptionContainer.removeAttr('hidden');
-      } else {
-        $findingTaggingDescription.val('').attr('hidden', true);
-        $findingTaggingDescriptionContainer.val('').attr('hidden', true);
-      }
-    });
-  </script>
-<% end %>
