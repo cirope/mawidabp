@@ -40,7 +40,7 @@
       </div>
       <% if tag.blank? || tag.include_description? || (tag.parent && tag.parent.include_description?) %>
         <div class="col-md-5" data-finding-tagging-description-container="<%= id %>" <%= "hidden" if tag.blank? %>>
-          <%= f.input :description, label: false, input_html: { rows: 1 } %>
+          <%= f.input :description, label: false, input_html: { rows: 1, readonly: readonly } %>
         </div>
       <% end %>
       <div class="col-md-1">
