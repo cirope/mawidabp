@@ -1,7 +1,6 @@
 <%
   id       = f.object.object_id
   finding  = f.object.taggable || parent.object
-  tagging  = f.object
   tag      = f.object.tag
   readonly = readonly
 %>
@@ -24,6 +23,7 @@
         <% elsif tag.blank? %>
           <%= f.input :tag, as: :string, label: false, input_html: {
             value: tag.to_s,
+            id: "finding_tagging_#{id}",
             title: t('label.search'), autocomplete: :off, autofocus: true,
             data: {
               autocomplete_params: { kind: 'finding' },
