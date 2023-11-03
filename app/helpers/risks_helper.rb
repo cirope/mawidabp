@@ -10,4 +10,14 @@ module RisksHelper
       [Risk.impact_label_for(name), value]
     end
   end
+
+  def risk_control_objectives control_objectives
+    if control_objectives.present?
+      content_tag :ul, class: 'pl-2' do
+        control_objectives.each do |control_objective|
+          concat content_tag(:li, control_objective.name)
+        end
+      end
+    end
+  end
 end

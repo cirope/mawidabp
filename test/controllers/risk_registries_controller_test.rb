@@ -40,7 +40,8 @@ class RiskRegistriesControllerTest < ActionController::TestCase
     counts_array = [
       'RiskRegistry.count',
       'RiskCategory.count',
-      'Risk.count'
+      'Risk.count',
+      'RiskControlObjective.count'
     ]
 
     assert_difference counts_array, 1 do
@@ -57,7 +58,10 @@ class RiskRegistriesControllerTest < ActionController::TestCase
               effect: 'New effect',
               likelihood: Risk::LIKELIHOODS[:minor],
               impact: Risk::IMPACTS[:rare],
-              user_id: users(:administrator).id
+              user_id: users(:administrator).id,
+              risk_control_objectives_attributes: [
+                control_objective_id: control_objectives(:management_dependency).id
+              ]
             ]
           ]
         }

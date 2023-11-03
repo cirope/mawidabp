@@ -32,17 +32,18 @@ module Risks::Validation
       inclusion: { in: IMPACTS.values },
       allow_nil: true, allow_blank: true
 
-    validate :uniqueness_name
-    validate :uniqueness_identifier
+    validate :name_uniqueness
+    validate :identifier_uniqueness
+    validate :risk_control_objectives_presence
   end
 
   private
 
-    def uniqueness_identifier
+    def identifier_uniqueness
       validate_uniqueness_for :identifier
     end
 
-    def uniqueness_name
+    def name_uniqueness
       validate_uniqueness_for :name
     end
 
@@ -55,6 +56,12 @@ module Risks::Validation
         if risks.select { |rk| rk.send(attr).strip =~ /^#{Regexp.quote(send(attr).strip)}$/i }.any?
           errors.add attr, :taken
         end
+      end
+    end
+
+    def risk_control_objectives_presence
+      unless risk_control_objectives.reject(&:marked_for_destruction?).any?
+        errors.add :risk_control_objectives, :blank
       end
     end
 end

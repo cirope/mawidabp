@@ -1555,6 +1555,11 @@ en:
         assertion_consumer_service_binding: 'Assertion consumer service binding'
         idp_cert: 'Certificate (Base64)'
         default_role_for_users: 'Default role for users'
+        username_claim: 'Username claim'
+        name_claim: 'Name claim'
+        lastname_claim: 'Last name claim'
+        email_claim: 'Email claim'
+        roles_claim: 'Roles claim'
       work_paper:
         name: "Name"
         code: "Code"

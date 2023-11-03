@@ -5,37 +5,41 @@
   <%= @risk_registry.description %>
 </p>
 
-<% @risk_registry.risk_categories.each do |risk_category| %>
-  <h5 class="my-3"><%= risk_category.name %></h5>
+<% if @risk_registry.risks.exists? %>
+  <% @risk_registry.risk_categories.each do |risk_category| %>
+    <h5 class="my-3"><%= risk_category.name %></h5>
 
-  <div class="table-responsive">
-    <table class="table table-sm table-striped table-hover">
-      <thead>
-        <tr>
-          <th><%= Risk.human_attribute_name 'identifier' %></th>
-          <th><%= Risk.human_attribute_name 'name' %></th>
-          <th><%= Risk.human_attribute_name 'likelihood' %></th>
-          <th><%= Risk.human_attribute_name 'impact' %></th>
-          <th><%= Risk.human_attribute_name 'user' %></th>
-          <th><%= Risk.human_attribute_name 'cause' %></th>
-          <th><%= Risk.human_attribute_name 'effect' %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% risk_category.risks.each do |risk| %>
+    <div class="table-responsive">
+      <table class="table table-sm table-striped table-hover">
+        <thead>
           <tr>
-            <td><%= simple_format risk.identifier, class: 'mb-1' %></td>
-            <td><%= simple_format risk.name, class: 'mb-1' %></td>
-            <td><%= risk.likelihood_to_s %></td>
-            <td><%= risk.impact_to_s %></td>
-            <td><%= simple_format risk.user.informal_name, class: 'mb-1' %></td>
-            <td><%= simple_format risk.cause, class: 'mb-1' %></td>
-            <td><%= simple_format risk.effect, class: 'mb-1' %></td>
+            <th><%= Risk.human_attribute_name 'identifier' %></th>
+            <th><%= Risk.human_attribute_name 'name' %></th>
+            <th><%= Risk.human_attribute_name 'likelihood' %></th>
+            <th><%= Risk.human_attribute_name 'impact' %></th>
+            <th><%= Risk.human_attribute_name 'user' %></th>
+            <th><%= Risk.human_attribute_name 'cause' %></th>
+            <th><%= Risk.human_attribute_name 'effect' %></th>
+            <th class="w-25"><%= ControlObjective.model_name.human count: 0 %></th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          <% risk_category.risks.each do |risk| %>
+            <tr>
+              <td><%= simple_format risk.identifier, class: 'mb-1' %></td>
+              <td><%= simple_format risk.name, class: 'mb-1' %></td>
+              <td><%= risk.likelihood_to_s %></td>
+              <td><%= risk.impact_to_s %></td>
+              <td><%= simple_format risk.user.informal_name, class: 'mb-1' %></td>
+              <td><%= simple_format risk.cause, class: 'mb-1' %></td>
+              <td><%= simple_format risk.effect, class: 'mb-1' %></td>
+              <td><%= risk_control_objectives risk.control_objectives %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
 <% end %>
 
 <hr />
