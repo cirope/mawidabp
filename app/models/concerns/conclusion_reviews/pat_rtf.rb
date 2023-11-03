@@ -351,7 +351,7 @@ module ConclusionReviews::PatRtf
 
         put_pat_previous_weaknesses_on_rtf  document
         put_pat_weaknesses_on_rtf           document
-        put_pat_weaknesses_external_on_rtf  document
+        put_pat_weaknesses_other_inspections_on_rtf  document
       end
     end
 
@@ -592,9 +592,9 @@ module ConclusionReviews::PatRtf
       end
     end
 
-    def put_pat_weaknesses_external_on_rtf document
+    def put_pat_weaknesses_other_inspections_on_rtf document
       title_style = style bold: true
-      filtered    = pat_weaknesses_external
+      filtered    = pat_weaknesses_other_inspections
 
       if filtered.any?
         document.paragraph(title_style) do |p1|

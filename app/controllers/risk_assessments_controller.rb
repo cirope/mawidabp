@@ -146,7 +146,7 @@ class RiskAssessmentsController < ApplicationController
           :id, :order, :name, :business_unit_id, :process_control_id, :risk,
           :_destroy,
           risk_weights_attributes: [
-            :id, :value, :weight, :risk_assessment_weight_id, :_destroy
+            :id, :value, :risk_assessment_weight_id, :_destroy
           ]
         ]
     end

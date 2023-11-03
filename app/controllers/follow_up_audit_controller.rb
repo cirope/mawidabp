@@ -29,6 +29,7 @@ class FollowUpAuditController < ApplicationController
   include Reports::TaggedFindingsReport
   include Reports::WeaknessesHeatmap
   include Reports::WeaknessesRiskMap
+  include Reports::ExportIssues
 
   before_action :auth, :load_privileges, :check_privileges
 

@@ -184,7 +184,8 @@ Rails.application.routes.draw do
     'auto_complete_for_process_control',
     'weaknesses_by_control_objective_process',
     'weaknesses_heatmap',
-    'weaknesses_risk_map'
+    'weaknesses_risk_map',
+    'export_issues'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -495,6 +496,12 @@ Rails.application.routes.draw do
   end
 
   resources :organizations
+
+  resources :risk_registries do
+    get :auto_complete_for_control_objective, on: :collection
+
+    resources :risk_categories, only: [:new, :edit]
+  end
 
   resources :roles
 

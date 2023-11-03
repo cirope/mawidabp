@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_22_150532) do
+ActiveRecord::Schema.define(version: 2023_11_01_172300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1089,17 +1089,23 @@ ActiveRecord::Schema.define(version: 2023_09_22_150532) do
     t.bigint "organization_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "formula"
     t.index ["organization_id"], name: "index_risk_assessment_templates_on_organization_id"
   end
 
   create_table "risk_assessment_weights", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.integer "weight", null: false
-    t.bigint "risk_assessment_template_id", null: false
+    t.integer "weight"
+    t.bigint "owner_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["risk_assessment_template_id"], name: "index_risk_assessment_weights_on_risk_assessment_template_id"
+    t.string "identifier"
+    t.boolean "heatmap", default: false, null: false
+    t.string "owner_type"
+    t.index ["heatmap"], name: "index_risk_assessment_weights_on_heatmap"
+    t.index ["owner_id"], name: "index_risk_assessment_weights_on_owner_id"
+    t.index ["owner_type", "owner_id"], name: "index_risk_assessment_weights_on_owner_type_and_owner_id"
   end
 
   create_table "risk_assessments", force: :cascade do |t|
@@ -1116,6 +1122,7 @@ ActiveRecord::Schema.define(version: 2023_09_22_150532) do
     t.bigint "file_model_id"
     t.boolean "shared", default: false, null: false
     t.bigint "group_id", null: false
+    t.string "formula"
     t.index ["file_model_id"], name: "index_risk_assessments_on_file_model_id"
     t.index ["group_id"], name: "index_risk_assessments_on_group_id"
     t.index ["organization_id"], name: "index_risk_assessments_on_organization_id"
@@ -1125,15 +1132,69 @@ ActiveRecord::Schema.define(version: 2023_09_22_150532) do
     t.index ["shared"], name: "index_risk_assessments_on_shared"
   end
 
+  create_table "risk_categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "risk_registry_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["risk_registry_id"], name: "index_risk_categories_on_risk_registry_id"
+  end
+
+  create_table "risk_control_objectives", force: :cascade do |t|
+    t.bigint "risk_id", null: false
+    t.bigint "control_objective_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["control_objective_id"], name: "index_risk_control_objectives_on_control_objective_id"
+    t.index ["risk_id"], name: "index_risk_control_objectives_on_risk_id"
+  end
+
+  create_table "risk_registries", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.bigint "group_id", null: false
+    t.bigint "organization_id", null: false
+    t.integer "lock_version", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["group_id"], name: "index_risk_registries_on_group_id"
+    t.index ["name"], name: "index_risk_registries_on_name"
+    t.index ["organization_id"], name: "index_risk_registries_on_organization_id"
+  end
+
+  create_table "risk_score_items", force: :cascade do |t|
+    t.string "name", null: false
+    t.decimal "value", null: false
+    t.bigint "risk_assessment_weight_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["risk_assessment_weight_id"], name: "index_risk_score_items_on_risk_assessment_weight_id"
+  end
+
   create_table "risk_weights", force: :cascade do |t|
-    t.integer "value"
-    t.integer "weight", null: false
+    t.decimal "value"
+    t.integer "weight"
     t.bigint "risk_assessment_weight_id", null: false
     t.bigint "risk_assessment_item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["risk_assessment_item_id"], name: "index_risk_weights_on_risk_assessment_item_id"
     t.index ["risk_assessment_weight_id"], name: "index_risk_weights_on_risk_assessment_weight_id"
+  end
+
+  create_table "risks", force: :cascade do |t|
+    t.string "identifier", null: false
+    t.string "name", null: false
+    t.integer "likelihood", null: false
+    t.integer "impact", null: false
+    t.text "cause"
+    t.text "effect"
+    t.bigint "user_id", null: false
+    t.bigint "risk_category_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["risk_category_id"], name: "index_risks_on_risk_category_id"
+    t.index ["user_id"], name: "index_risks_on_user_id"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -1163,6 +1224,11 @@ ActiveRecord::Schema.define(version: 2023_09_22_150532) do
     t.bigint "organization_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "username_claim"
+    t.string "name_claim"
+    t.string "lastname_claim"
+    t.string "email_claim"
+    t.string "roles_claim"
     t.index ["default_role_for_users_id"], name: "index_saml_providers_on_default_role_for_users_id"
     t.index ["organization_id"], name: "index_saml_providers_on_organization_id"
   end
@@ -1496,15 +1562,22 @@ ActiveRecord::Schema.define(version: 2023_09_22_150532) do
   add_foreign_key "risk_assessment_items", "process_controls", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_items", "risk_assessments", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_templates", "organizations", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "risk_assessment_weights", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "plans", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_categories", "risk_registries", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_control_objectives", "control_objectives", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_control_objectives", "risks", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_registries", "groups", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_registries", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_score_items", "risk_assessment_weights"
   add_foreign_key "risk_weights", "risk_assessment_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_weights", "risk_assessment_weights", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risks", "risk_categories", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risks", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "roles", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "saml_providers", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "saml_providers", "roles", column: "default_role_for_users_id", on_update: :restrict, on_delete: :restrict

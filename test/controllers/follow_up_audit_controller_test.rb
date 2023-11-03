@@ -2287,6 +2287,17 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
+  test 'Export issues' do
+    login
+
+    get :export_issues, :params => {
+      :controller_name => 'follow_up'
+    }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   def weaknesses_by_organization_count organization_ids
     Weakness.includes(:organization).where(created_at: 4.years.ago..).
       where.not(state: Finding::STATUS[:repeated]).

@@ -268,6 +268,8 @@
     weaknesses_by_control_objective_process_title: "Report process by control objectives"
     weaknesses_heatmap_title: "Issues heatmap"
     weaknesses_risk_map_title: "Issues risk map"
+    weaknesses_heatmap_title: "Issues heat map"
+    export_issues: "Export issues"
 
   execution_committee_report:
     weaknesses_current_situation_title: "Global report - Quarterly drafts"

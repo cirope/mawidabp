@@ -10,12 +10,14 @@ class RiskAssessmentTemplateTest < ActiveSupport::TestCase
   test 'blank attributes' do
     @risk_assessment_template.name = ''
     @risk_assessment_template.description = ''
+    @risk_assessment_template.formula = ''
 
     @risk_assessment_template.risk_assessment_weights.destroy_all
 
     assert @risk_assessment_template.invalid?
     assert_error @risk_assessment_template, :name, :blank
     assert_error @risk_assessment_template, :description, :blank
+    assert_error @risk_assessment_template, :formula, :blank
     assert_error @risk_assessment_template, :risk_assessment_weights, :blank
   end
 
@@ -28,18 +30,29 @@ class RiskAssessmentTemplateTest < ActiveSupport::TestCase
 
   test 'attribute length' do
     @risk_assessment_template.name = 'abcde' * 52
+    @risk_assessment_template.formula = 'abcde' * 52
 
     assert @risk_assessment_template.invalid?
     assert_error @risk_assessment_template, :name, :too_long, count: 255
+    assert_error @risk_assessment_template, :formula, :too_long, count: 255
   end
 
   test 'validates attributes encoding' do
     @risk_assessment_template.name = "\n\t"
     @risk_assessment_template.description = "\n\t"
+    @risk_assessment_template.formula = "\n\t"
 
     assert @risk_assessment_template.invalid?
     assert_error @risk_assessment_template, :name, :pdf_encoding
     assert_error @risk_assessment_template, :description, :pdf_encoding
+    assert_error @risk_assessment_template, :formula, :pdf_encoding
+  end
+
+  test 'validates formula' do
+    @risk_assessment_template.formula = "(A * 20) / B"
+
+    assert @risk_assessment_template.invalid?
+    assert_error @risk_assessment_template, :formula, :invalid
   end
 
   test 'destroy' do
@@ -60,7 +73,7 @@ class RiskAssessmentTemplateTest < ActiveSupport::TestCase
     new_risk_assessment_template.clone_from @risk_assessment_template
 
     all_weights_are_equal = new_risk_assessment_template.risk_assessment_weights.all? do |raw|
-      exclusion_list = %w(id risk_assessment_template_id created_at updated_at)
+      exclusion_list = %w(id owner_id owner_type created_at updated_at)
 
       @risk_assessment_template.risk_assessment_weights.any? do |original_raw|
         raw.attributes.except(*exclusion_list) ==

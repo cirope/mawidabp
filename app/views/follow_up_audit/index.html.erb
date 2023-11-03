@@ -73,6 +73,9 @@
             <%= link_to t('follow_up_audit.weaknesses_repeated_title'),
               { :action => :weaknesses_repeated, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
           <% end %>
+          <% if Current.conclusion_pdf_format == 'pat' %>
+              <%= link_to t('follow_up_audit.export_issues'), export_issues_follow_up_audit_path(format: :csv), class: 'list-group-item list-group-item-action' %>
+          <% end %>
         </div>
       </div>
     </div>

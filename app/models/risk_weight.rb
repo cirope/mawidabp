@@ -1,10 +1,9 @@
 class RiskWeight < ApplicationRecord
   include Auditable
-  include RiskWeights::Risk
+  include RiskWeights::Relations
   include RiskWeights::Validations
 
-  belongs_to :risk_assessment_weight, optional: true
-  belongs_to :risk_assessment_item, optional: true
+  delegate :identifier, to: :risk_assessment_weight
 
   def name
     risk_assessment_weight&.name

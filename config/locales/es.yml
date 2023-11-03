@@ -268,6 +268,7 @@
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
     weaknesses_heatmap_title: "Mapa de calor observaciones"
     weaknesses_risk_map_title: "Mapa de riesgo de observaciones"
+    export_issues: "Exportar casos"
 
   execution_committee_report:
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral borradores"
