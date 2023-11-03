@@ -204,12 +204,24 @@ en:
       risk_assessment_weight:
         one: 'Risk assessment attribute'
         other: 'Risk assessment attributes'
+      risk_category:
+        one: 'Risk category'
+        other: 'Risk categories'
+      risk_control_objective:
+        one: 'Control Objective'
+        other: 'Control Objectives'
+      risk_registry:
+        one: 'Risk registry'
+        other: 'Risk registries'
       risk_score_item:
         one: 'Value'
         other: 'Values'
       risk_weight:
         one: 'Risk assessment value'
         other: 'Risk assessment values'
+      risks:
+        one: 'Risk'
+        other: 'Risks'
       saml_provider:
         one: 'SAML configuration'
         other: 'SAML configurations'
@@ -769,6 +781,13 @@ en:
       risk_assessment_weights/risk_score_items:
         name: 'Name'
         value: 'Value'
+      risk_registry:
+        name: 'Name'
+        description: 'Description'
+      risk_registry/risk_categories:
+        name: 'Name'
+      risk_category:
+        name: 'Name'
       risk_score_item:
         name: 'Name'
         value: 'Value'
@@ -776,6 +795,27 @@ en:
         value: 'Value'
         weight: 'Weight'
         identifier: 'Identifier'
+      risk_registry/risk_categories/risks:
+        identifier: 'Identifier'
+        cause: 'Cause'
+        effect: 'Effect'
+        likelihood: 'Likelihood'
+        impact: 'Impact'
+        name: 'Name'
+        user: 'Owner'
+        risk_control_objectives: 'Control objectives'
+      risk_registry/risk_categories/risks/risk_control_objectives:
+        control_objective: 'Control objective'
+      risk:
+        identifier: 'Identifier'
+        cause: 'Cause'
+        effect: 'Effect'
+        likelihood: 'Likelihood'
+        impact: 'Impact'
+        name: 'Name'
+        user: 'Owner'
+      risk_control_objective:
+        control_objective: 'Control objective'
       subsidiary:
         name: 'Name'
         identity: 'Identification'
@@ -903,6 +943,10 @@ en:
           attributes:
             taggings:
               missing_tags_for_scope: "at least one tag (among %{tags}) is required for reports with scope '%{r_scope}'"
+        risk:
+          attributes:
+            risk_control_objectives:
+              blank: 'must have at least one'
         risk_assessment_template:
           attributes:
             risk_assessment_weights:
