@@ -45,11 +45,21 @@ module TagsHelper
       if root_tag.children.any?
         children = root_tag.children.where(obsolete: false).order :name
 
-        options[root_tag.name] = children.map { |tag| [tag.name, tag.id, { "data-include-description" => root_tag.include_description? }] }
+        options[root_tag.name] = children.map do |tag|
+          [
+            tag.name,
+            tag.id,
+            { "data-include-description" => root_tag.include_description? }
+          ]
+        end
       else
         options[t('tags.list.childless')] ||= []
 
-        options[t('tags.list.childless')] << [root_tag.name, root_tag.id, { "data-include-description" => root_tag.include_description? }]
+        options[t('tags.list.childless')] << [
+          root_tag.name,
+          root_tag.id,
+          { "data-include-description" => root_tag.include_description? }
+        ]
       end
     end
 
