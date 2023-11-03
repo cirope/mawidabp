@@ -38,7 +38,7 @@
           <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
         <% end %>
       </div>
-      <% if tag.blank? || tag.include_description? %>
+      <% if tag.blank? || tag.include_description? || (tag.parent && tag.parent.include_description?) %>
         <div class="col-md-5" data-finding-tagging-description-container="<%= id %>" <%= "hidden" if tag.blank? %>>
           <%= f.input :description, label: false, input_html: { rows: 1 } %>
         </div>
