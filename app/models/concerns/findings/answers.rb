@@ -3,23 +3,22 @@ module Findings::Answers
 
   COMMITMENT_REQUIREMENTS = {
     high: {
-      2    => :manager,
-      4    => :management,
+      3    => :manager,
+      6    => :management,
       12   => :ceo,
       1000 => :committee
     },
 
     medium: {
-      2    => :manager,
-      4    => :management,
-      12   => :ceo,
+      4    => :manager,
+      9    => :management,
+      18   => :ceo,
       1000 => :committee
     },
 
     low: {
-      2    => :manager,
-      4   => :management,
-      12   => :ceo,
+      6    => :manager,
+      18   => :management,
       1000 => :management
     }
   }
@@ -63,17 +62,23 @@ module Findings::Answers
     date ||= last_commitment_date
 
     if date && first_follow_up_date
-      requirements = Array(COMMITMENT_REQUIREMENTS[self.class.risks.invert[risk]])
+      requirements = Array(commitment_requirements[self.class.risks.invert[risk]])
       required     = requirements.detect do |month_number, level|
         if first_follow_up_date.at_end_of_month == first_follow_up_date
-          date <= (first_follow_up_date + month_number.months).at_end_of_month
+          date <= (first_follow_up_date + month_number.to_i.months).at_end_of_month
         else
-          date <= (first_follow_up_date + month_number.months)
+          date <= (first_follow_up_date + month_number.to_i.months)
         end
       end
 
-      required&.last || :committee
+      required&.last.to_sym || :committee
     end
+  end
+
+  def commitment_requirements
+    requirements = JSON.parse ENV['COMMITMENT_REQUIREMENTS'] || '{}'
+
+    COMMITMENT_REQUIREMENTS.merge requirements.symbolize_keys
   end
 
   def commitment_date_required_level_text date = nil
