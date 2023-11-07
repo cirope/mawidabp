@@ -62,7 +62,7 @@ module Findings::Answers
     date ||= last_commitment_date
 
     if date && first_follow_up_date
-      requirements = Array(COMMITMENT_REQUIREMENTS[self.class.risks.invert[risk]])
+      requirements = Array(commitment_requirements[self.class.risks.invert[risk]])
       required     = requirements.detect do |month_number, level|
         if first_follow_up_date.at_end_of_month == first_follow_up_date
           date <= (first_follow_up_date + month_number.months).at_end_of_month
@@ -73,6 +73,17 @@ module Findings::Answers
 
       required&.last || :committee
     end
+  end
+
+  def commitment_requirements
+    requirements = JSON.parse ENV['COMMITMENT_REQUIREMENTS'] || '{}'
+    results      = {}
+
+    requirements.each do |key, value|
+      results[key.to_sym] = requirements[key].transform_keys(&:to_i).transform_values &:to_sym
+    end
+
+    COMMITMENT_REQUIREMENTS.merge results
   end
 
   def commitment_date_required_level_text date = nil
