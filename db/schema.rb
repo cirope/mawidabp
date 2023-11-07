@@ -1269,6 +1269,7 @@ ActiveRecord::Schema.define(version: 2023_11_01_172300) do
     t.integer "taggable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
     t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
   end
