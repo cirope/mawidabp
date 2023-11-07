@@ -80,10 +80,10 @@ module Findings::Answers
     results      = {}
 
     requirements.each do |key, value|
-      results[key] = requirements[key].transform_keys(&:to_i).transform_values { |value| value.to_sym }
+      results[key.to_sym] = requirements[key].transform_keys(&:to_i).transform_values &:to_sym
     end
 
-    COMMITMENT_REQUIREMENTS.merge results.symbolize_keys
+    COMMITMENT_REQUIREMENTS.merge results
   end
 
   def commitment_date_required_level_text date = nil
