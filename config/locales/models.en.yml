@@ -594,9 +594,10 @@ en:
       tagging:
         tag: 'Tag'
         tag_id: 'Tag'
+        description: 'Description'
       task:
         code: 'Code'
-        description: 'Descripción'
+        description: 'Description'
         status: 'Status'
         due_on: 'End date'
       time_consumption:

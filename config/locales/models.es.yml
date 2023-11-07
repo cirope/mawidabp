@@ -594,6 +594,7 @@ es:
       tagging:
         tag: 'Etiqueta'
         tag_id: 'Etiqueta'
+        description: 'Descripción'
       task:
         code: 'Código'
         description: 'Descripción'
