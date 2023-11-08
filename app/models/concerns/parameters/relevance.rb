@@ -19,8 +19,9 @@ module Parameters::Relevance
       def relevance_types
         if USE_SHORT_RELEVANCE
           {
-            no:  1,
-            yes: 5
+            low:  1,
+            moderate: 3,
+            critical: 5
           }
         else
           {
