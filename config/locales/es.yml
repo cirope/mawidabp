@@ -93,7 +93,7 @@
         other: "%{count} informes con observaciones en el O.C."
       download_csv: 'Descargar CSV'
     weaknesses_by_risk_and_business_unit:
-      pdf_name: "observaciones_informes_definitivos_por_impacto_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_informes_definitivos_por_impacto_y_proceso_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
       title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE IMPACTO Y PROCESOS"
       being_implemented: "'En proceso de implementación' al %{date}"
@@ -437,7 +437,7 @@
         oportunities_solution_rate: "Solución de Oportunidades de Mejora"
         ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Impacto Alto"
     weaknesses_by_risk_and_business_unit:
-      pdf_name: "observaciones_seguimiento_por_impacto_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_seguimiento_por_impacto_y_proceso_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE IMPACTO Y PROCESOS"
       being_implemented: "'En proceso de implementación' al %{date}"
