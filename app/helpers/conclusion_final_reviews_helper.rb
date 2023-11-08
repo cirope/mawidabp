@@ -34,7 +34,7 @@ module ConclusionFinalReviewsHelper
 
       header << content_tag(:th, (score[0] != review_score ?
             raw("<span style=\"font-weight: normal;\">#{column_text}</span>"):
-            raw("<strong>#{column_text.upcase} (#{review.score}%)</strong>")),
+            raw("<strong>#{column_text.upcase}</strong>")),
         :style => "width: #{width}%;")
 
       footer << content_tag(:td, "#{max_percentage}% - #{min_percentage}%")
