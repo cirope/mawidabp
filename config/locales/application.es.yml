@@ -100,7 +100,7 @@ es:
     audited: Referentes a cargo
 
   business_unit_type:
-    index_title: "Listado de unidades organizativas"
+    index_title: "Listado de unidades de negocio"
     show_title: "Detalle unidad de negocio"
     new_title: "Agregar unidad de negocio"
     edit_title: "Modificar unidad de negocio"
@@ -1290,7 +1290,7 @@ es:
       business_unit_type:
         name: "Nombre"
         business_unit_label: "Etiqueta del proceso en el informe"
-        project_label: "Etiqueta del auditoría en el informe"
+        project_label: "Etiqueta de la auditoría en el informe"
         review_prefix: "Prefijo en el informe"
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"

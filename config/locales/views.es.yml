@@ -584,7 +584,7 @@ es:
 
   reviews:
     auxiliar_business_unit_types:
-      title: 'Unidades organizativas auxiliares'
+      title: 'Unidades de negocio auxiliares'
     index:
       control_objective_items_open:
         title: 'Objetivos de control abiertos'
@@ -708,7 +708,7 @@ es:
       workflow_amount: 'Cantidad de horas programadas:'
       time_consumption_amount: 'Cantidad de horas asignadas:'
     auxiliar_business_unit_types:
-      title: 'Unidades organizativas auxiliares'
+      title: 'Unidades de negocio auxiliares'
       activity: 'Actividad'
       review: 'Informe'
       workflow_amount: 'Cantidad de horas programadas'
@@ -722,7 +722,7 @@ es:
         quantity_hours_per_day: "Cantidad horas por día"
         task: "Tarea"
         user: "Usuario"
-        business_unit_types: "Unidades organizativas"
+        business_unit_types: "Unidades de negocio"
         detail: "Detalle"
         organization: "Organización"
         period: "Periodo"
@@ -750,7 +750,7 @@ es:
       unlink_manager: 'Desvincular'
       children: 'Personal a cargo'
       add_child: 'Agregar persona a cargo'
-      add_business_unit_type: 'Agregar unidades organizativas'
+      add_business_unit_type: 'Agregar unidades de negocio'
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
       add_tagging: 'Agregar etiqueta'
