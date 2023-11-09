@@ -121,25 +121,25 @@ es:
 
     risk_assessments:
       create:
-        notice: 'Evaluación de riesgo agregada correctamente'
+        notice: 'Evaluación de impacto agregada correctamente'
       merge_to_plan:
         notice: 'Plan actualizado correctamente'
       update:
-        notice: 'Evaluación de riesgo actualizada correctamente'
-        stale: 'La evaluación de riesgo no fue actualizada, intente nuevamente'
+        notice: 'Evaluación de impacto actualizada correctamente'
+        stale: 'La evaluación de impacto no fue actualizada, intente nuevamente'
       destroy:
-        notice: 'Evaluación de riesgo eliminada'
+        notice: 'Evaluación de impacto eliminada'
       sort_by_risk:
-        notice: 'Evaluación de riesgo ordenada correctamente'
+        notice: 'Evaluación de impacto ordenada correctamente'
 
     risk_assessment_templates:
       create:
-        notice: 'Plantilla de evaluación de riesgo agregada correctamente'
+        notice: 'Plantilla de evaluación de impacto agregada correctamente'
       update:
-        notice: 'Plantilla de evaluación de riesgo actualizada correctamente'
-        stale: 'La plantilla de evaluación de riesgo no fue actualizada, intente nuevamente'
+        notice: 'Plantilla de evaluación de impacto actualizada correctamente'
+        stale: 'La plantilla de evaluación de impacto no fue actualizada, intente nuevamente'
       destroy:
-        notice: 'Plantilla de evaluación de riesgo eliminada'
+        notice: 'Plantilla de evaluación de impacto eliminada'
 
     settings:
       update:

@@ -6,7 +6,7 @@ es:
       organization:
         management: 'Gestión'
         business_units: 'Unidades organizativas'
-        business_unit_kind: 'Tipos de unidad de negocio'
+        business_unit_kind: 'Tipos de proceso'
       security_title: 'Seguridad'
       security:
         reports: 'Reportes de seguridad'
@@ -18,7 +18,7 @@ es:
         control_objectives: 'Objetivos de control'
       settings: 'Configuraciones'
       weakness_templates: 'Plantillas de observaciones'
-      risk_assessment_templates: 'Plantillas evaluación de riesgo'
+      risk_assessment_templates: 'Plantillas evaluación de impacto'
       tags: 'Etiquetas'
       documents: 'Documentos'
       news: 'Noticias'
@@ -34,7 +34,7 @@ es:
     planning:
       periods: 'Períodos'
       resources: 'Recursos'
-      risk_assessments: 'Evaluaciones de riesgo'
+      risk_assessments: 'Evaluaciones de impacto'
       plans: 'Planes de trabajo'
     execution_title: 'Ejecución'
     execution:

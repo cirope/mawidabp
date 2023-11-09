@@ -72,7 +72,7 @@ es:
     edit:
       title: 'Modificar buena práctica'
     process_controls:
-      new: 'Agregar proceso'
+      new: 'Agregar procedimiento'
     control_objectives:
       new: 'Agregar objetivo'
 
@@ -187,7 +187,7 @@ es:
       being_implemented_stale_rescheduled: 'Reprogramada vencida'
       implemented: 'Implementada'
       implemented_audited: 'Implementada / Auditada'
-      assumed_risk: 'Riesgo asumido'
+      assumed_risk: 'Impacto asumido'
       notify: 'Notificar'
       incomplete: 'Incompleta'
       repeated: 'Reiterada'
@@ -371,9 +371,9 @@ es:
       add_human_resource_utilization: 'Agregar recurso humano'
       add_material_resource_utilization: 'Agregar recurso material'
       add_tagging: 'Agregar etiqueta'
-      add_auxiliar_business_unit_type: 'Agregar unidad organizativa auxiliar'
+      add_auxiliar_business_unit_type: 'Agregar unidad de negocio auxiliar'
     plan_items:
-      add_plan_item: 'Agregar proyecto'
+      add_plan_item: 'Agregar auditoría'
     duplication_or_overload_form:
       allow_duplication: '¿Permitir duplicados?'
       allow_overload: '¿Permitir superposición?'
@@ -430,7 +430,7 @@ es:
       csv_name: 'plan_periodo_%{period}.csv'
       csv_name_pat_im: 'grado_de_avance_reporte_de_gestión_interna_%{current_date}.csv'
       csv_name_pat_dprh: 'grado_de_avance_horas_de_trabajo_detallado_%{current_date}.csv'
-      number_observations_per_risk: 'Cantidad observaciones por riesgo'
+      number_observations_per_risk: 'Cantidad observaciones por impacto'
       annual_plan_hours: 'Hs Plan Anual'
       auditor: 'Auditor (Usuario)'
       time_summary_hours: 'Hs Resumen Horario'
@@ -455,11 +455,11 @@ es:
     calendar:
       show:
         title: 'Cronograma'
-        empty: 'No hay proyectos en el plan seleccionado'
-        empty_with_no_business_units: 'No hay unidades de negocio seleccionadas'
+        empty: 'No hay auditorías en el plan seleccionado'
+        empty_with_no_business_units: 'No hay procesos seleccionados'
         detail: 'Detalle'
-        by_business_unit: 'Ver calendario por unidad de negocio'
-        by_project: 'Ver calendario por proyecto'
+        by_business_unit: 'Ver calendario por proceso'
+        by_project: 'Ver calendario por auditoría'
     resources:
       show:
         title: 'Resumen por recurso'
@@ -487,7 +487,7 @@ es:
     download_detailed_business_unit_type_plan: 'Descargar plan %{business_unit_type} detallado'
     download_detailed_business_unit_type_plan_csv: 'Descargar plan %{business_unit_type} en CSV'
     download_business_unit_type_plan_csv: 'Descargar plan en CSV'
-    without_business_unit_type: 'Sin unidad de negocio'
+    without_business_unit_type: 'Sin proceso'
 
   profiles:
     edit:
@@ -507,7 +507,7 @@ es:
         title: 'Resumen de respuestas'
     business_units:
       index:
-        title: 'Resumen por unidad organizativa'
+        title: 'Resumen por unidad de negocio'
     reviews:
       index:
         title: 'Resumen por informe'
@@ -593,7 +593,7 @@ es:
         title: 'Objetivos de control finalizados'
         label: 'OCF'
     form:
-      add_business_unit_type: 'Agregar unidad organizativa'
+      add_business_unit_type: 'Agregar unidad de negocio'
       operational_audit: 'Auditoría operativa'
       system_audit: 'Auditoría de sistema'
 
@@ -684,7 +684,7 @@ es:
     expired: 'Fuera de tiempo'
     status:
       pending: 'Pendiente'
-      in_progress: 'En proceso'
+      in_progress: 'En procedimiento'
       finished: 'Finalizada'
 
   time_summary:
@@ -702,7 +702,7 @@ es:
     new:
       title: 'Nueva actividad'
     form:
-      add_business_unit_type: 'Agregar unidad organizativa'
+      add_business_unit_type: 'Agregar unidad de negocio'
       activity: 'Actividad'
       review: 'Informe'
       workflow_amount: 'Cantidad de horas programadas:'
@@ -728,9 +728,9 @@ es:
         period: "Periodo"
         period_start: "Periodo Inicio"
         period_end: "Periodo Fin"
-        plan_item: "Proyecto"
-        plan_item_start: "Proyecto Inicio"
-        plan_item_end: "Proyecto Fin"
+        plan_item: "Auditoría"
+        plan_item_start: "Auditoría Inicio"
+        plan_item_end: "Auditoría Fin"
 
   users:
     index:
@@ -827,8 +827,8 @@ es:
           one: '**Una** observación **pendiente**'
           other: '**%{count}** observaciones **pendientes**'
         high_risk_weaknesses:
-          one: '**Una** observación de **riesgo alto**'
-          other: '**%{count}** observaciones de **riesgo alto**'
+          one: '**Una** observación de **impacto alto**'
+          other: '**%{count}** observaciones de **impacto alto**'
         weaknesses:
           pending:
             one: '**Una** observación pendiente'
@@ -842,27 +842,27 @@ es:
 
   risk_assessments:
     edit:
-      title: 'Editar evaluación de riesgo'
+      title: 'Editar evaluación de impacto'
       other_actions: 'Acciones'
-      sort_by_risk: 'Ordenar por riesgo descendente'
+      sort_by_risk: 'Ordenar por impacto descendente'
     index:
-      new: 'Nueva evaluación de riesgo'
-      title: 'Listado de evaluaciones de riesgo'
-      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva evaluación de riesgo</span>'
-      empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
-      merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
+      new: 'Nueva evaluación de impacto'
+      title: 'Listado de evaluaciones de impacto'
+      empty_html: 'No hay evaluaciones de impacto, puede crear una con el botón <span class="badge badge-primary">Nueva evaluación de impacto</span>'
+      empty_search_html: 'No hay evaluaciones de impacto que coincidan con el criterio de búsqueda'
+      merge_to_plan: 'Crear auditorías en plan a partir de la evaluación'
     new:
-      title: 'Crear evaluación de riesgo'
+      title: 'Crear evaluación de impacto'
     show:
-      title: 'Ver evaluación de riesgo'
+      title: 'Ver evaluación de impacto'
       download_pdf: 'Descargar PDF'
       download_csv: 'Descargar CSV'
     form:
-      new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar ítems a la misma'
-      cloned_risk_assessment_items: 'Luego de crear la evaluación de riesgo verá los ítems copiados y podrá editarlos o agregar nuevos'
+      new_risk_assessment_items: 'Luego de crear la evaluación de impacto podrá agregar ítems a la misma'
+      cloned_risk_assessment_items: 'Luego de crear la evaluación de impacto verá los ítems copiados y podrá editarlos o agregar nuevos'
       add_risk_assessment_item: 'Agregar item'
       add_best_practice: 'Agregar buena práctica'
-      add_business_unit_type: 'Agregar unidad organizativa'
+      add_business_unit_type: 'Agregar unidad de negocio'
       apply: 'Aplicar'
     heatmap: 'Mapa de calor'
     risk_weight_risks: # Deprecated: remove when all clients are migrated
@@ -877,8 +877,8 @@ es:
       final: 'Definitiva'
       merged: 'Planificada'
     pdf:
-      title: 'Evaluación de riesgo'
-      pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
+      title: 'Evaluación de impacto'
+      pdf_name: 'evaluacion_de_impacto_%{name}.pdf'
       formula: 'Fórmula'
       period:
         title: "Periodo (%{name})"
@@ -886,16 +886,16 @@ es:
 
   risk_assessment_templates:
     edit:
-      title: 'Editar plantilla de evaluación de riesgo'
+      title: 'Editar plantilla de evaluación de impacto'
     index:
-      new: 'Nueva plantilla de evaluación de riesgo'
-      title: 'Listado de plantillas de evaluación de riesgo'
-      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de evaluación de riesgo</span>'
-      empty_search_html: 'No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda'
+      new: 'Nueva plantilla de evaluación de impacto'
+      title: 'Listado de plantillas de evaluación de impacto'
+      empty_html: 'No hay plantillas de evaluación de impacto, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de evaluación de impacto</span>'
+      empty_search_html: 'No hay plantillas de evaluación de impacto que coincidan con el criterio de búsqueda'
     new:
-      title: 'Crear plantilla de evaluación de riesgo'
+      title: 'Crear plantilla de evaluación de impacto'
     show:
-      title: 'Ver plantilla de evaluación de riesgo'
+      title: 'Ver plantilla de evaluación de impacto'
     form:
       add_risk_assessment_weight: 'Agregar ponderador'
 

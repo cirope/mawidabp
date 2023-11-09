@@ -1,8 +1,8 @@
 es:
   approach_types:
-    control: 'Control'
+    control: 'Procedimiento detallado'
     sustantive: 'Sustantivo'
-    control_sustantive: 'Control/Sustantivo'
+    control_sustantive: 'Procedimiento detallado/Sustantivo'
   frequency_types:
     monthly: 'Mensual'
     biyearly: 'Semestral'
