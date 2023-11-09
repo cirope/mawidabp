@@ -16,6 +16,7 @@ es:
       best_practices:
         best_practices: 'Gestión'
         control_objectives: 'Objetivos de control'
+      risk_registries: 'Registros de riesgo'
       settings: 'Configuraciones'
       weakness_templates: 'Plantillas de observaciones'
       risk_assessment_templates: 'Plantillas evaluación de riesgo'

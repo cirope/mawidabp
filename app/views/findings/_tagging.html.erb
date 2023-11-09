@@ -1,39 +1,48 @@
 <%
-  id = f.object.object_id
-  finding = f.object.taggable || parent.object
-  tagging = f.object
+  id       = f.object.object_id
+  finding  = f.object.taggable || parent.object
+  tag      = f.object.tag
   readonly = readonly
 %>
 <fieldset class="tagging">
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <% if has_nested_tags?(kind: 'finding') && tagging.tag.blank? %>
+        <% if has_nested_tags?(kind: 'finding') && tag.blank? %>
           <%= f.input :tag_id,
             as: :grouped_select,
             group_method: :last,
             collection: grouped_tag_options(kind: 'finding'),
             label: false,
             prompt: true,
-            input_html: { autofocus: true }
+            input_html: {
+              data: { finding_tagging: id },
+              autofocus: true
+            }
           %>
-        <% elsif tagging.tag.blank? %>
+        <% elsif tag.blank? %>
           <%= f.input :tag, as: :string, label: false, input_html: {
-            value: tagging.tag.to_s,
+            value: tag.to_s,
             id: "finding_tagging_#{id}",
             title: t('label.search'), autocomplete: :off, autofocus: true,
             data: {
               autocomplete_params: { kind: 'finding' },
               autocomplete_url: url_for([:auto_complete_for_tagging, finding.class]),
-              autocomplete_id_target: "#hidden_tag_#{id}"
+              autocomplete_id_target: "#hidden_tag_#{id}",
+              finding_tagging: id
             }
           } %>
           <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
         <% else %>
-          <%= f.input "finding_tagging_#{id}", label: false, input_html: { value: tagging.tag.to_s, readonly: true } %>
+          <%= f.input "finding_tagging_#{id}", label: false, input_html: { value: tag.to_s, readonly: true } %>
           <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
         <% end %>
       </div>
+      <% if tag.blank? || tag.include_description? || (tag.parent && tag.parent.include_description?) %>
+        <div class="col-md-5" data-finding-tagging-description-container="<%= id %>" <%= "hidden" if tag.blank? %>>
+          <%= f.input :description, label: false, input_html: { rows: 1, readonly: readonly } %>
+        </div>
+      <% end %>
       <div class="col-md-1">
         <div class="mt-2 text-right">
           <%= link_to_remove_nested_item f unless readonly %>

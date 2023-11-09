@@ -1,0 +1,36 @@
+<% if @risk_registries.empty? && search_params[:query].blank? %>
+  <%= render 'shared/empty_index', message: t('.empty_html') %>
+<% else %>
+  <%= render partial: 'shared/search', locals: {
+    options: {},
+    columns: search_columns_for_model(RiskRegistry)
+  } %>
+  <table class="table table-sm table-striped table-hover">
+    <thead id="column_headers">
+      <tr>
+        <%= make_filterable_column RiskRegistry.human_attribute_name('name'), nil, 'name' %>
+        <%= make_not_available_column RiskRegistry.human_attribute_name('description'), { :class => 'd-none d-md-table-cell' } %>
+        <th colspan="3" class="text-right"><%= link_to_search %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @risk_registries.each do |risk_registry| %>
+        <tr>
+          <td>
+            <%= super_truncate risk_registry.name, 40 %>
+          </td>
+          <td class="d-none d-md-table-cell"><%= super_truncate risk_registry.description, 40 %></td>
+          <td class="text-right"><%= link_to_show risk_registry %></td>
+          <td class="text-right"><%= link_to_edit edit_risk_registry_path(risk_registry) %></td>
+          <td class="text-right"><%= link_to_destroy risk_registry %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<hr />
+
+<%= paginate @risk_registries %>
+<%= link_to_new new_risk_registry_path, class: 'btn btn-primary' %>
