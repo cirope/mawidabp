@@ -5,7 +5,7 @@ es:
       organization_title: 'Organización'
       organization:
         management: 'Gestión'
-        business_units: 'Unidades organizativas'
+        business_units: 'Unidades de negocio'
         business_unit_kind: 'Tipos de proceso'
       security_title: 'Seguridad'
       security:

@@ -25,7 +25,7 @@ es:
         conclusion: 'Conclusion'
         introduction_and_scope: 'Introducción y Alcance'
         previous_period_id: 'Periodo previo'
-        business_unit_types: Unidades organizativas
+        business_unit_types: Unidades de negocio
         organizations: Organizaciones
     errors:
       models:
@@ -642,7 +642,7 @@ es:
         risk_exposure: 'Auditoría (exposición al impacto)'
         business_unit_id: 'Auditoría (proceso)'
         status: 'Auditoría (estado)'
-        auxiliar_business_unit_types: 'Unidades organizativas auxiliares'
+        auxiliar_business_unit_types: 'Unidades de negocio auxiliares'
       plan/plan_items/resource_utilizations:
         one: 'Recurso'
         other: 'Recursos'
