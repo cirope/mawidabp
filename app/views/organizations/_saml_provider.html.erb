@@ -36,12 +36,17 @@
             <%= s_p_f.input :assertion_consumer_service_url %>
             <%= s_p_f.input :assertion_consumer_service_binding %>
             <%= s_p_f.input :idp_cert, input_html: { rows: 5 } %>
+            <%= s_p_f.input :idp_entity_id %>
             <%= s_p_f.input :default_role_for_users_id, collection: default_roles_for_users(@organization) %>
           </div>
           <div class="col-md-6">
-            <%= s_p_f.input :idp_entity_id %>
             <%= s_p_f.input :sp_entity_id %>
             <%= s_p_f.input :name_identifier_format %>
+            <%= s_p_f.input :username_claim %>
+            <%= s_p_f.input :name_claim %>
+            <%= s_p_f.input :lastname_claim %>
+            <%= s_p_f.input :email_claim %>
+            <%= s_p_f.input :roles_claim %>
           </div>
         </div>
       </fieldset>

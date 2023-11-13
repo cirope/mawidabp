@@ -864,7 +864,8 @@ es:
       add_best_practice: 'Agregar buena práctica'
       add_business_unit_type: 'Agregar unidad organizativa'
       apply: 'Aplicar'
-    risk_weight_risks:
+    heatmap: 'Mapa de calor'
+    risk_weight_risks: # Deprecated: remove when all clients are migrated
       none: 'Nulo'
       low: 'Bajo'
       medium_low: 'Medio bajo'
@@ -878,6 +879,7 @@ es:
     pdf:
       title: 'Evaluación de riesgo'
       pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
+      formula: 'Fórmula'
       period:
         title: "Periodo (%{name})"
         range: "%{from_date} al %{to_date}"
@@ -896,6 +898,45 @@ es:
       title: 'Ver plantilla de evaluación de riesgo'
     form:
       add_risk_assessment_weight: 'Agregar ponderador'
+
+  risk_registries:
+    edit:
+      title: 'Editar registro de riesgo'
+    form:
+      new_risk_categories: 'Luego de crear el registro de riesgo podrá completar la carga de los riesgos'
+    index:
+      new: 'Nuevo registro de riesgo'
+      title: 'Listado de registros de riesgo'
+      empty_html: 'No hay registros de riesgo, puede crear uno con el botón <span class="badge badge-primary">Nuevo registro de riesgo</span>'
+      empty_search_html: 'No hay registros de riesgo que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear registro de riesgo'
+    show:
+      title: 'Ver registro de riesgo'
+    risk_categories:
+      new: 'Agregar categoría de riesgo'
+    risks:
+      new: 'Agregar riesgo'
+
+  risk_score_items:
+    form:
+      add_risk_score_item: 'Agregar valor'
+
+  risks:
+    likelihoods:
+      insignificant: 'Insignificante'
+      minor: 'Menor'
+      moderate: 'Moderada'
+      high: 'Alta'
+      catastrophic: 'Catastrófica'
+    impacts:
+      rare: 'Raro'
+      unlikely: 'Improbable'
+      moderate: 'Moderado'
+      likely: 'Probable'
+      almost_certain: 'Muy probable'
+    new:
+      control_objective: 'Agregar objetivo de control'
 
   versions:
     index:

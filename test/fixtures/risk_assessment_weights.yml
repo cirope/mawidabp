@@ -1,5 +1,16 @@
-sox_404:
+sox_current:
+  identifier: A
   name: Sox 404
   description: Sox section 404
   weight: 80
-  risk_assessment_template: sox
+  heatmap: false
+  owner: sox_current (RiskAssessment)
+
+sox_404:
+  identifier: A
+  name: Sox 404
+  description: Sox section 404
+  weight: 80
+  heatmap: false
+  owner: sox (RiskAssessmentTemplate)
+
