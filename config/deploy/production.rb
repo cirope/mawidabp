@@ -1,4 +1,4 @@
-set :branch,    'c-supervielle-test'
+set :branch,    'c-supervielle-production'
 set :stage,     :production
 set :rails_env, 'production'
 
@@ -8,8 +8,8 @@ set :default_env, {
   'LC_ALL':   'en_US.UTF-8'
 }
 
-role :web, %w{deployer@supervielle-test.mawidabp.com}
-role :app, %w{deployer@supervielle-test.mawidabp.com}
-role :db,  %w{deployer@supervielle-test.mawidabp.com}
+role :web, %w{deployer@spv.mawidabp.com}
+role :app, %w{deployer@spv.mawidabp.com}
+role :db,  %w{deployer@spv.mawidabp.com}
 
-server 'supervielle-test.mawidabp.com', user: 'deployer', roles: %w{web app db}
+server 'spv.mawidabp.com', user: 'deployer', roles: %w{web app db}
