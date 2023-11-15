@@ -1,6 +1,6 @@
 module Findings::WorkPapersHelper
   def show_status_work_paper work_paper
-    status = work_paper.status
+    status = work_paper.status || 'pending'
     result = work_paper_info_for status
     title  = t "work_papers.statuses.#{status}"
 
