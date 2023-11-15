@@ -8,7 +8,6 @@ module WorkPapers::Statuses
       revised:  'revised'
     }
 
-    before_validation :set_status
     after_initialize :set_status
     after_update_commit :mark_as_pending, unless: :saved_change_to_status?
     after_commit :update_review_status
