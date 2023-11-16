@@ -33,6 +33,8 @@ namespace :db do
       update_roles_identifier                    # 2023-07-24
       update_status_work_papers                  # 2023-09-25
       update_risk_assessments_changes            # 2023-10-02
+      add_risk_registries_privilege              # 2023-10-26
+      add_claim_values_in_saml_provider          # 2023-11-02
     end
   end
 end
@@ -863,4 +865,50 @@ private
     divisor  = raws.to_h.values.sum
 
     "(#{dividend}) / #{divisor}"
+  end
+
+  def add_risk_registries_privilege
+    if add_risk_registries_privilege?
+      Privilege.where(module: 'administration_best_practices_best_practices').find_each do |p|
+        attrs = p.attributes.
+          except('id', 'module', 'created_at', 'updated_at').
+          merge(module: 'administration_risk_registries')
+
+        Privilege.create attrs
+      end
+    end
+  end
+
+  def add_risk_registries_privilege?
+    Privilege.where(module: 'administration_risk_registries').empty?
+  end
+
+  def add_claim_values_in_saml_provider
+    if add_claim_values_in_saml_provider?
+      Organization.all.find_each do |org|
+        provider = org.saml_provider
+
+        if provider && claim_fields_empty?(provider)
+          provider.update_columns username_claim: 'name',
+            name_claim: 'givenname',
+            lastname_claim: 'surname',
+            email_claim: 'name',
+            roles_claim: 'groups'
+        end
+      end
+    end
+  end
+
+  def add_claim_values_in_saml_provider?
+    SamlProvider.where(username_claim: nil).any?
+  end
+
+  def claim_fields_empty? provider
+    [
+      provider.username_claim,
+      provider.name_claim,
+      provider.lastname_claim,
+      provider.email_claim,
+      provider.roles_claim
+    ].all? &:blank?
   end

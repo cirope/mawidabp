@@ -126,7 +126,7 @@ class FindingsController < ApplicationController
           :id, :code, :description, :status, :due_on, :_destroy
         ],
         taggings_attributes: [
-          :id, :tag_id, :_destroy
+          :id, :description, :tag_id, :_destroy
         ],
         costs_attributes: [
           :id, :raw_cost, :cost, :cost_type, :description, :user_id, :_destroy
@@ -141,7 +141,7 @@ class FindingsController < ApplicationController
       params.require(:finding).permit(
         :year, :nsisio, :nobs, :skip_work_paper,
         taggings_attributes: [
-          :id, :tag_id, :_destroy
+          :id, :description, :tag_id, :_destroy
         ])
     end
 

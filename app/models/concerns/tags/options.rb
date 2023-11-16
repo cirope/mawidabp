@@ -33,6 +33,10 @@ module Tags::Options
     option_label 'required_from'
   end
 
+  def include_description?
+    option_value 'include_description'
+  end
+
   def option_type option
     if option.end_with?('_from') || option.end_with?('_to')
       :date_picker
