@@ -10,20 +10,20 @@
       <%= RiskAssessmentWeight.model_name.human count: 0 %>
     </h5>
 
-    <div class="row">
+    <div class="row mt-4">
+      <div class="col-md-2">
+        <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'identifier' %></h5>
+      </div>
       <div class="col-md-4">
         <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'name' %></h5>
       </div>
       <div class="col-md-4">
         <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'description' %></h5>
       </div>
-      <div class="col-md-3">
-        <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'weight' %></h5>
-      </div>
     </div>
 
     <div id="risk_assessment_weights">
-      <%= f.simple_fields_for :risk_assessment_weights do |raw_f| %>
+      <%= f.simple_fields_for :risk_assessment_weights, risk_template_weights(f.object) do |raw_f| %>
         <%= render 'risk_assessment_weight', f: raw_f %>
       <% end %>
 
@@ -31,6 +31,8 @@
         <%= link_to_add_fields t('.add_risk_assessment_weight'), f, :risk_assessment_weights %>
       </p>
     </div>
+
+    <%= f.input :formula %>
   </div>
 
   <hr>

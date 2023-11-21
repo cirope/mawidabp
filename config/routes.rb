@@ -183,7 +183,8 @@ Rails.application.routes.draw do
     'auto_complete_for_business_unit',
     'auto_complete_for_process_control',
     'weaknesses_by_control_objective_process',
-    'weaknesses_heatmap'
+    'weaknesses_heatmap',
+    'export_issues'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -316,6 +317,7 @@ Rails.application.routes.draw do
   end
 
   resource :work_papers, only: [:show]
+  resources :work_papers, only: [:update]
 
   namespace :conclusion_draft_reviews do
     resources :users, only: [:index]

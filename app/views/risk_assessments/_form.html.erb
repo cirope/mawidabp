@@ -18,6 +18,7 @@
         <% else %>
           <%= f.input :risk_assessment_template, input_html: { readonly: true } %>
           <%= f.input :risk_assessment_template_id, as: :hidden %>
+          <%= f.input :formula, as: :hidden %>
         <% end %>
       </div>
       <div class="col-md-6">

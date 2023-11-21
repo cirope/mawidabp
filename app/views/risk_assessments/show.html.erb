@@ -18,6 +18,10 @@
   <strong><%= RiskAssessment.human_attribute_name 'status' %></strong>:
   <%= t "risk_assessments.status.#{@risk_assessment.status}" %>
 </p>
+<p class="mb-1">
+  <strong><%= RiskAssessment.human_attribute_name 'formula' %></strong>:
+  <%= @risk_assessment.formula %>
+</p>
 
 <% if @risk_assessment.file_model&.file %>
   <p class="mb-1">
@@ -63,18 +67,52 @@
         </caption>
 
         <tr>
-          <th> <%= RiskAssessmentWeight.human_attribute_name 'name' %></th>
-          <th> <%= RiskWeight.human_attribute_name 'weight' %></th>
-          <th> <%= RiskWeight.human_attribute_name 'value' %></th>
+          <th><%= RiskWeight.human_attribute_name 'identifier' %></th>
+          <th><%= RiskAssessmentWeight.human_attribute_name 'name' %></th>
+          <th><%= RiskWeight.human_attribute_name 'value' %></th>
         </tr>
 
         <% risk_assessment_item.risk_weights.each do |risk_weight| %>
           <tr>
+            <td class="w-25"><%= risk_weight.identifier %></td>
             <td><%= risk_weight.risk_assessment_weight.name %></td>
-            <td><%= risk_weight.weight %></td>
             <td><%= risk_weight.value %></td>
           </tr>
         <% end %>
+      </table>
+    </div>
+  <% end %>
+
+  <% if @risk_assessment.risk_weights_heatmaps.count == 2 %>
+    <% heatmap = @risk_assessment.build_heatmap %>
+
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered">
+        <caption>
+          <h5>
+            <%= t 'risk_assessments.heatmap' %>
+          </h5>
+        </caption>
+
+        <tbody>
+          <% heatmap[:body].each_with_index do |(name, values), indexx| %>
+            <tr>
+              <th><%= name %></th>
+              <% values.each_with_index do |value, indexy| %>
+                <td class="<%= heatmap_color(heatmap, indexx, indexy) %>"><%= value %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <th></th>
+            <% heatmap[:footer].each do |name| %>
+              <th><%= name %></th>
+            <% end %>
+          </tr>
+        </tfoot>
       </table>
     </div>
   <% end %>
