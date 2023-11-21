@@ -37,15 +37,15 @@ module RiskAssessmentsHelper
   end
 
   def heatmap_color heatmap, indexx, indexy
-    length = heatmap[:body].length
-    value  = heatmap[:value]
-    total  = heatmap[:values][indexx * length + indexy]
+    total      = heatmap[:total]
+    value      = heatmap[:values][indexx][indexy]
+    percentage = value * 100 / total.to_f
 
-    if total >= value * 0.85
+    if percentage >= 85
       'table-danger'
-    elsif total >= value * 0.5
+    elsif percentage >= 50
       'table-warning'
-    elsif total < value * 0.5
+    elsif percentage < 50
       'table-success'
     end
   end
