@@ -99,7 +99,7 @@
             <tr>
               <th><%= name %></th>
               <% values.each_with_index do |value, indexy| %>
-                <td class="<%= heatmap_color(heatmap, indexx, indexy) %>"><%= value %></td>
+                <td class="<%= heatmap_color heatmap, indexx, indexy %>"><%= value %></td>
               <% end %>
             </tr>
           <% end %>
