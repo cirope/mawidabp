@@ -28,6 +28,7 @@ en:
     download: "Download"
     download_csv: "Download CSV"
     download_rtf: "Download RTF"
+    download_pdf: "Download PDF"
     create_permalink: "Create permalink"
     edit: "Edit"
     import: "Import"
