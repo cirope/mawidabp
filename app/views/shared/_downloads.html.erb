@@ -1,7 +1,7 @@
 <% links = links || [] %>
 <% right = right %>
 <div class="dropup d-inline">
-  <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
+  <%= link_to '#', class: 'dropdown-toggle', data: { bs_toggle: 'dropdown' } do %>
     <%= t 'label.downloads' %>
   <% end %>
   <div class="dropdown-menu<%= ' dropdown-menu-right' if right %>">

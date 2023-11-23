@@ -97,7 +97,7 @@ module FindingsHelper
   def finding_show_status_change_history element_id
     link_to icon('fas', 'history'), "##{element_id}", {
       title: t('findings.form.show_status_change_history'),
-      data:  { toggle: 'collapse' }
+      data:  { bs_toggle: 'collapse' }
     }
   end
 

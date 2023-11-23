@@ -1,7 +1,7 @@
 <%= simple_form_for @user, url: users_release_path(@user) do |f| %>
   <% if @user.reallocation_errors.present? %>
     <div>
-      <%= link_to '#details', data: { toggle: 'collapse' } do %>
+      <%= link_to '#details', data: { bs_toggle: 'collapse' } do %>
         <%= t 'label.details' %>
         <%= icon 'fas', 'info-circle', class: 'text-danger' %>
       <% end %>
