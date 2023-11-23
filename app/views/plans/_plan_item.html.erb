@@ -5,10 +5,10 @@
   <div class="row">
     <div class="col-md-1">
       <div class="media">
-        <div class="float-left mt-2 mr-1">
+        <div class="float-start mt-2 mr-1">
           <%= show_plan_item_info(f.object) %>
         </div>
-        <div class="float-left mt-2 mr-2">
+        <div class="float-start mt-2 mr-2">
           <%= link_to_fetch_hide id, fetch ? :fetch : :show %>
         </div>
         <div class="media-body">
@@ -62,7 +62,7 @@
       </div>
     </div>
     <div class="col-md-1">
-      <div class="mt-2 text-right text-nowrap">
+      <div class="mt-2 text-end text-nowrap">
         <%= link_to_insert_field f %>
         <span class="text-muted">|</span>
         <% unless f.object.try(:review) %>

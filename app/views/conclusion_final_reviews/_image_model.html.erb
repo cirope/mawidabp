@@ -11,7 +11,7 @@
             <% end %>
           </p>
         <% else %>
-          <div class="file-container float-left small">
+          <div class="file-container float-start small">
             <%= link_to_upload f.object, :image %>
             <% if f.object.image_cache %>
               <%= f.input :image_cache, as: :hidden %>

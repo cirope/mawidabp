@@ -154,7 +154,7 @@
                 <%= f.hidden_field :risk, disabled: !@finding.automatic_risk?,
                   data: { bic_field_to_disabled_when_is_manual: true } %>
               </div>
-              <div class="col-3 text-right">
+              <div class="col-3 text-end">
                 <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
                   disabled: @finding.manual_risk_was,
                   data: { toggle_risk_disabled_attr: true, replace_with_original_value_when_disabled: true }
@@ -219,7 +219,7 @@
             <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
           </div>
           <% if USE_SCOPE_CYCLE %>
-            <div class="col-3 text-right">
+            <div class="col-3 text-end">
               <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' }, input_html: { readonly: @finding.tasks.any? } %>
             </div>
           <% end %>
@@ -628,7 +628,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', data: { disable_with: false }  %>
   </div>

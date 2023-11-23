@@ -21,7 +21,7 @@
     <div class="col-md-2">
       <% unless frozen %>
         <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
-          <div class="file-container float-left">
+          <div class="file-container float-start">
             <%= link_to_upload fm_f.object %>
             <% if fm_f.object.file_cache %>
               <%= fm_f.input :file_cache, as: :hidden %>
@@ -36,7 +36,7 @@
       <%= link_to_file f.object.description.to_s %>
     </div>
     <div class="col-md-1">
-      <div class="mt-2 text-right">
+      <div class="mt-2 text-end">
         <%= link_to_remove_nested_item(f) unless frozen %>
         <%= f.input :lock_version, as: :hidden %>
       </div>

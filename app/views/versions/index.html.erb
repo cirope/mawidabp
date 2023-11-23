@@ -21,7 +21,7 @@
         <td class="d-none d-sm-table-cell"><%= version.item ?
           super_truncate("#{version.item.class.model_name.human} (#{version.item})", 30) : '-' %></td>
         <td class="d-none d-sm-table-cell"><%= t("versions.events.#{version.event}") %></td>
-        <td class="text-right"><%= link_to_show version_path(version) %></td>
+        <td class="text-end"><%= link_to_show version_path(version) %></td>
       </tr>
     <% end %>
   </tbody>

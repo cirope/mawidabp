@@ -249,7 +249,7 @@ module FindingsHelper
 
   def link_to_recode_tasks
     options = {
-      class: 'float-right',
+      class: 'float-end',
       title: t('finding.recode_tasks'),
       data: {
         recode_tasks: true,

@@ -232,7 +232,7 @@
               <%= f.hidden_field :risk, disabled: !@weakness.automatic_risk? || readonly,
                 data: { bic_field_to_disabled_when_is_manual: true } %>
             </div>
-            <div class="col-3 text-right">
+            <div class="col-3 text-end">
               <%= f.input :manual_risk,
                           wrapper_html: { class: 'mt-4 pt-2' },
                           disabled: readonly,
@@ -310,7 +310,7 @@
             <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
           </div>
           <% if USE_SCOPE_CYCLE %>
-            <div class="col-3 text-right">
+            <div class="col-3 text-end">
               <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' }, input_html: { disabled: readonly }.merge(options_for_extension_checkbox) %>
             </div>
           <% end %>
@@ -693,7 +693,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', disabled: frozen %>
   </div>

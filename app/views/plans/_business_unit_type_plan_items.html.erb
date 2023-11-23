@@ -3,7 +3,7 @@
     <h5 class="mb-0">
       <%= business_unit_type&.name || t('plans.without_business_unit_type') %>
       <% unless plan_status_date.today? %>
-        <span class="float-right small">
+        <span class="float-end small">
           <%= icon 'fas', 'calendar-alt' %>
           <%= l plan_status_date.to_date %>
         </span>

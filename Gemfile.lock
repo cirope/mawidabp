@@ -75,8 +75,6 @@ GEM
     bootstrap (5.3.2)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 2.11.8, < 3)
-    bootstrap-will_paginate (1.0.0)
-      will_paginate
     builder (3.2.4)
     bullet (7.1.4)
       activesupport (>= 3.0.0)
@@ -319,7 +317,9 @@ GEM
       chronic (>= 0.6.3)
     wicked_pdf (2.7.0)
       activesupport
-    will_paginate (3.3.1)
+    will_paginate (4.0.0)
+    will_paginate-bootstrap-style (0.3.0)
+      will_paginate (~> 4.0, >= 4.0.0)
     zeitwerk (2.6.12)
 
 PLATFORMS
@@ -331,7 +331,6 @@ DEPENDENCIES
   autoprefixer-rails (< 10)
   bcrypt_pbkdf
   bootstrap
-  bootstrap-will_paginate
   bullet
   business_time
   byebug
@@ -383,7 +382,8 @@ DEPENDENCIES
   web-console
   whenever
   wicked_pdf
-  will_paginate (< 4)
+  will_paginate
+  will_paginate-bootstrap-style
 
 BUNDLED WITH
    2.4.5

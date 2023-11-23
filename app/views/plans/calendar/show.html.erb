@@ -5,7 +5,7 @@
     <table class="table table-sm table-hover">
       <% if @business_unit_type || params[:business_unit_type].present? %>
         <caption>
-          <span class="float-right small">
+          <span class="float-end small">
             <%= link_to t('label.back'), [:edit, @plan, business_unit_type: @business_unit_type.id] %>
           </span>
 

@@ -60,11 +60,11 @@
   <% f.object.build_file_model unless f.object.file_model %>
 
   <div class="row">
-    <div class="col-md-12 text-right">
+    <div class="col-md-12 text-end">
       <p class="mb-1 mr-3"><%= Workflow.human_attribute_name 'file_model_id' %></p>
-      <div class="clearfix float-right">
+      <div class="clearfix float-end">
         <%= f.simple_fields_for :file_model do |fm_f| %>
-          <div class="file-container float-left">
+          <div class="file-container float-start">
             <%= link_to_upload(fm_f.object) %>
             <% if fm_f.object.file_cache %>
               <%= fm_f.input :file_cache, as: :hidden %>
@@ -110,7 +110,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

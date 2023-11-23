@@ -48,7 +48,7 @@
       <div class="col-md-1">
         <% if for_notification && is_a_new_relation %>
             <% if f.object.new_record? %>
-              <div class="text-left custom-control custom-checkbox mt-2">
+              <div class="text-start custom-control custom-checkbox mt-2">
                 <%= check_box_tag "user_for_notification", '1', false, class: 'custom-control-input', data: { user_selector: true } %>
                 <label class="custom-control-label" for="user_for_notification"></label>
               </div>
@@ -58,7 +58,7 @@
         <% end %>
       </div>
       <div class="col-md-1">
-        <div class="mt-2 text-right">
+        <div class="mt-2 text-end">
           <%= link_to_remove_nested_item(f) unless readonly %>
         </div>
       </div>

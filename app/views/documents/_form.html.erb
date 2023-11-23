@@ -8,7 +8,7 @@
     <%= f.input :lock_version, as: :hidden %>
 
     <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
-      <div class="file-container text-right <%= 'form-group-invalid' if file_model_error f.object %>">
+      <div class="file-container text-end <%= 'form-group-invalid' if file_model_error f.object %>">
         <%= link_to_upload fm_f.object %>
 
         <% if fm_f.object.file_cache %>

@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-1">
       <div class="media">
-        <div class="float-left mr-2 mt-2">
+        <div class="float-start mr-2 mt-2">
           <%= link_to_show_hide "resource_utilizations_for_#{id}" %>
         </div>
         <div class="media-body">
@@ -22,7 +22,7 @@
       <%= f.input :end, as: :date_picker, label: false %>
     </div>
     <div class="col-md-1">
-      <div class="mt-2 text-right text-nowrap">
+      <div class="mt-2 text-end text-nowrap">
         <%= link_to_insert_field f %>
         <% unless f.object.try(:review) %>
           <span class="text-muted">|</span>
@@ -73,11 +73,11 @@
     <% f.object.build_file_model unless f.object.file_model %>
 
     <div class="row">
-      <div class="col-md-12 text-right">
+      <div class="col-md-12 text-end">
         <p class="mb-1 mr-3"><%= Workflow.human_attribute_name 'file_model_id' %></p>
-        <div class="clearfix float-right">
+        <div class="clearfix float-end">
           <%= f.simple_fields_for :file_model do |fm_f| %>
-            <div class="file-container float-left">
+            <div class="file-container float-start">
               <%= link_to_upload(fm_f.object) %>
               <% if fm_f.object.file_cache %>
                 <%= fm_f.input :file_cache, as: :hidden %>
