@@ -4,11 +4,11 @@
 
   business_unit_kind:
     errors:
-      business_unit_kind_related: "El tipo de unidad de negocio no puede ser eliminado, se encuentra relacionada con al menos una unidad de negocio"
+      business_unit_kind_related: "El tipo de proceso no puede ser eliminado, se encuentra relacionado con al menos un proceso"
 
   business_unit:
-    edit_title: "Modificar unidad de negocio"
-    correctly_updated: "Unidad de negocio actualizada correctamente."
+    edit_title: "Modificar proceso"
+    correctly_updated: "Proceso actualizado correctamente."
 
   conclusion_draft_review:
     download_rtf: "Descargar RTF"
@@ -16,8 +16,8 @@
     add_image: "Agregar imagen"
 
   conclusion_report:
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
-    weaknesses_by_risk_report_title: "Observaciones por riesgo"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por impacto y proceso"
+    weaknesses_by_risk_report_title: "Observaciones por impacto"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
@@ -28,9 +28,9 @@
 
   conclusion_committee_report:
     control_objective_counts_title: "Análisis de objetivos de control"
-    weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
-    weaknesses_by_month_title: "Observaciones por riesgo"
+    weaknesses_by_risk_report_title: "Observaciones por impacto"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por impacto y proceso"
+    weaknesses_by_month_title: "Observaciones por impacto"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
     weaknesses_by_user_title: "Observaciones por usuario"
@@ -46,11 +46,11 @@
       subtitle: "ANÁLISIS DE OBJETIVOS DE CONTROL / INFORMES DEFINITIVOS"
       without_control_objective_items: "Sin objetivos de control"
     weaknesses_by_risk_report:
-      pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_por_impacto_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES POR RIESGO - INFORMES DEFINITIVOS"
+      subtitle: "OBSERVACIONES POR IMPACTO - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -86,16 +86,16 @@
       without_weaknesses: "Sin observaciones"
       year: "Año de origen"
     process_control_stats:
-      csv_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}'
+      csv_name: 'observaciones_por_procedimiento_de_negocio_%{from_date}_al_%{to_date}'
       period_column: 'Período'
       reviews_with_weaknesses:
         one: "%{count} informe con observaciones en el O.C"
         other: "%{count} informes con observaciones en el O.C."
       download_csv: 'Descargar CSV'
     weaknesses_by_risk_and_business_unit:
-      pdf_name: "observaciones_informes_definitivos_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_informes_definitivos_por_impacto_y_proceso_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
+      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE IMPACTO Y PROCESOS"
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
@@ -219,9 +219,9 @@
   follow_up_audited:
     weaknesses_by_user_title: "Observaciones por usuario"
     status_user: "Estado de usuario"
-    process_control_stats_title: "Observaciones por proceso de negocio"
-    business_unit_type_title: "Unidad organizativa"
-    business_unit_title: "Unidad de negocio"
+    process_control_stats_title: "Observaciones por procedimiento de negocio"
+    business_unit_type_title: "Unidad de negocio"
+    business_unit_title: "Proceso"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -237,9 +237,9 @@
       reviews_with_weaknesses:
         one: "%{count} informe con observaciones en el O.C"
         other: "%{count} informes con observaciones en el O.C."
-      pdf_name: "observaciones_por_proceso_negocio.pdf"
+      pdf_name: "observaciones_por_procedimiento_negocio.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO OBSERVACIONES POR PROCESO DE NEGOCIO / INFORMES DEFINITIVOS"
+      subtitle: "SEGUIMIENTO OBSERVACIONES POR PROCEDIMIENTO DE NEGOCIO / INFORMES DEFINITIVOS"
       without_reviews_in_the_period: "Sin informes en el periodo seleccionado"
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
@@ -247,14 +247,14 @@
 
   follow_up_audited_committee_report:
     process_control_stats:
-      pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
+      pdf_name: 'observaciones_por_procedimiento_de_negocio_%{from_date}_al_%{to_date}.pdf'
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
 
   follow_up_audit:
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
-    weaknesses_by_risk_report_title: "Observaciones por riesgo"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por impacto y proceso"
+    weaknesses_by_risk_report_title: "Observaciones por impacto"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
@@ -267,6 +267,7 @@
     weaknesses_reschedules_title: "Resumen de observaciones y reprogramaciones"
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
     weaknesses_heatmap_title: "Mapa de calor observaciones"
+    export_issues: "Exportar casos"
 
   execution_committee_report:
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral borradores"
@@ -284,8 +285,8 @@
       cut_date: "Fecha de cómputo"
 
   follow_up_committee_report:
-    weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
+    weaknesses_by_risk_report_title: "Observaciones por impacto"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por impacto y proceso"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
@@ -307,11 +308,11 @@
     follow_up_cost_analysis:
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
     weaknesses_by_risk_report:
-      pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_por_impacto_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES POR RIESGO - INFORMES DEFINITIVOS"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES POR IMPACTO - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -434,11 +435,11 @@
     qa_indicators:
       indicators:
         oportunities_solution_rate: "Solución de Oportunidades de Mejora"
-        ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Riesgo Alto"
+        ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Impacto Alto"
     weaknesses_by_risk_and_business_unit:
-      pdf_name: "observaciones_seguimiento_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_seguimiento_por_impacto_y_proceso_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
+      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE IMPACTO Y PROCESOS"
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
@@ -553,18 +554,18 @@
 
   activerecord:
     models:
-      business_unit_type_review: "Unidad organizativa"
+      business_unit_type_review: "Unidad de negocio"
 
     attributes:
       business_unit_type_user:
         user_id: "Usuario"
       business_unit_type_review:
         review_id: "Informe"
-        business_unit_type_id: "Unidad organizativa"
+        business_unit_type_id: "Unidad de negocio"
       conclusion_review:
         effectiveness_notes: "Nota efectividad"
       control_objective_item:
-        scored_business_unit_type_id: "Unidad organizativa evaluada"
+        scored_business_unit_type_id: "Unidad de negocio evaluada"
       file_model:
         file: "Archivo"
       group:
@@ -597,7 +598,7 @@
         control_objective_auditor:
           attributes:
             user_id:
-              invalid: "Debe ser auditor"
+              invalid: "debe ser auditor o referente"
         file_model:
           attributes:
             file:

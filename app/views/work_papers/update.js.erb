@@ -1,0 +1,15 @@
++function () {
+  var work_paper = $('[data-work-paper-id="<%= @work_paper.id %>"]')
+
+  work_paper.closest('fieldset').find(
+    'input[name*="lock_version"]'
+  ).val('<%= @work_paper.lock_version %>')
+
+  work_paper.closest('form').find('.form-actions').find(
+    'input[name*="lock_version"]'
+  ).val('<%= @work_paper.owner.lock_version %>')
+
+  work_paper.replaceWith(
+    '<%= j render('status', work_paper: @work_paper, format: :html) %>'
+  )
+}()

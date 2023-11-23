@@ -30,9 +30,10 @@
   </p>
 <% end %>
 
-<div class="mb-1">
-  <%= show_readonly_review_survey(@review) %>
-</div>
+<p class="mb-1">
+  <strong><%= Review.human_attribute_name(:survey) %>:</strong>
+  <%= @review.survey %>
+</p>
 
 <% unless HIDE_REVIEW_DESCRIPTION %>
   <div>

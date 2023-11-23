@@ -23,8 +23,8 @@ module Parameters::Qualification
         if SHOW_SHORT_QUALIFICATIONS
           {
             ok: 10,
-            observed: 1,
-            not_apply: 0
+            observed: 5,
+            not_apply: 1
           }
         else
           {

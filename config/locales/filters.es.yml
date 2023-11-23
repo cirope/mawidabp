@@ -16,7 +16,7 @@ es:
         include_reviews: 'Asignadas y por informe'
       order_by:
         issue_date: 'Fecha de emisión'
-        risk: 'Riesgo'
+        risk: 'Impacto'
         first_follow_up_date: 'Primer fecha de implementación'
       repeated:
         allow_latest: 'Mostrar últimas reiteradas'

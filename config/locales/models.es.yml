@@ -25,7 +25,7 @@ es:
         conclusion: 'Conclusion'
         introduction_and_scope: 'Introducción y Alcance'
         previous_period_id: 'Periodo previo'
-        business_unit_types: Unidades organizativas
+        business_unit_types: Unidades de negocio
         organizations: Organizaciones
     errors:
       models:
@@ -42,6 +42,7 @@ es:
                 other: 'deben tener los mismos nombres en las tres organizaciones. Actualmente las que difieren son: %{different_names}'
             organizations:
               are_misconfigured: 'están mal configuradas en las opciones de la aplicación. Por favor, comuníquese con soporte@mawidabp.com'
+
   activerecord:
     models:
       achievement:
@@ -81,14 +82,14 @@ es:
         one: 'Comentario del auditor (buena práctica)'
         other: 'Comentarios del auditor (buena práctica)'
       business_unit:
-        one: 'Unidad de negocio'
-        other: 'Unidades de negocio'
+        one: 'Proceso'
+        other: 'Procesos'
       business_unit_kind:
         one: 'Tipo de unidad de negocio'
         other: 'Tipos de unidad de negocio'
       business_unit_score:
-        one: 'Calificación unidad de negocio'
-        other: 'Calificaciones de unidades de negocio'
+        one: 'Calificación proceso'
+        other: 'Calificaciones de procesos'
       closing_interview:
         one: 'Entrevista de cierre'
         other: 'Entrevistas de cierre'
@@ -102,8 +103,8 @@ es:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
       control_objective_auditor:
-        one: 'Auditor a cargo'
-        other: 'Auditores a cargo'
+        one: 'Auditor/Referente a cargo'
+        other: 'Auditores/Referentes a cargo'
       document:
         one: 'Documento'
         other: 'Documentos'
@@ -159,8 +160,8 @@ es:
         one: 'Plan de trabajo'
         other: 'Planes de trabajo'
       plan_item:
-        one: 'Proyecto en plan'
-        other: 'Proyectos en plan'
+        one: 'Auditoría en plan'
+        other: 'Auditorías en plan'
       paper_trail/version:
         one: 'Versión'
         other: 'Versiones'
@@ -177,8 +178,8 @@ es:
         one: 'Encuesta'
         other: 'Encuestas'
       process_control:
-        one: 'Proceso'
-        other: 'Procesos'
+        one: 'Procedimiento'
+        other: 'Procedimientos'
       question:
         one: 'Pregunta'
         other: 'Preguntas'
@@ -192,20 +193,23 @@ es:
         one: 'Clase de recurso'
         other: 'Clases de recursos'
       risk_assessment:
-        one: 'Evaluación de riesgo'
-        other: 'Evaluaciones de riesgo'
+        one: 'Evaluación de impacto'
+        other: 'Evaluaciones de impacto'
       risk_assessment_item:
         one: 'Ítem evaluado'
         other: 'Items evaluados'
       risk_assessment_template:
-        one: 'Plantilla de evaluación de riesgo'
-        other: 'Plantillas de evaluación de riesgo'
+        one: 'Plantilla de evaluación de impacto'
+        other: 'Plantillas de evaluación de impacto'
       risk_assessment_weight:
-        one: 'Atributo de evaluación de riesgo'
-        other: 'Atributos de evaluación de riesgo'
+        one: 'Atributo de evaluación de impacto'
+        other: 'Atributos de evaluación de impacto'
+      risk_score_item:
+        one: 'Valor'
+        other: 'Valores'
       risk_weight:
-        one: 'Valor de evaluación de riesgo'
-        other: 'Valores de evaluación de riesgo'
+        one: 'Valor de evaluación de impacto'
+        other: 'Valores de evaluación de impacto'
       saml_provider:
         one: 'Configuración SAML'
         other: 'Configuraciones SAML'
@@ -258,7 +262,7 @@ es:
       answers:
         answer_option: 'Opción'
       auxiliar_business_unit_type:
-        business_unit_type_id: 'Unidad organizativa auxiliar'
+        business_unit_type_id: 'Unidad de negocio auxiliar'
       benefit:
         name: 'Nombre'
         kind: 'Tipo'
@@ -267,17 +271,17 @@ es:
         description: 'Descripción'
         obsolete: 'Obsoleta'
         shared: 'Compartida'
-        process_controls: 'Proceso'
+        process_controls: 'Procedimiento'
       business_unit_type:
-        business_units: 'Unidades de negocio'
+        business_units: 'Procesos'
       best_practice/process_controls:
-        name: 'Proceso'
-        order: 'Proceso (orden)'
+        name: 'Procedimiento'
+        order: 'Procedimiento (orden)'
         control_objectives: 'Objetivos de control'
       best_practice/process_controls/control_objectives:
         name: 'Objetivo de control'
-        relevance: 'Objetivo de control (importancia)'
-        risk: 'Objetivo de control (riesgo)'
+        relevance: 'Objetivo de control (probabilidad)'
+        risk: 'Objetivo de control (impacto)'
       best_practice/process_controls/control_objectives/taggings:
         tag_id: 'Objetivo de control (etiqueta)'
       best_practice_comment:
@@ -286,10 +290,10 @@ es:
       business_unit_kind:
         name: 'Nombre'
       business_unit_type_users:
-        business_unit_type_id: "Unidad organizativa"
+        business_unit_type_id: "Unidad de negocio"
         user_id: "Usuario"
       business_unit_score:
-        business_unit_id: 'Unidad de negocio'
+        business_unit_id: 'Proceso'
         design_score: 'Calificación pruebas de diseño'
         compliance_score: 'Calificación pruebas de cumplimiento'
         sustantive_score: 'Calificación pruebas sustantivas'
@@ -311,15 +315,14 @@ es:
         controls: 'Controles mitigantes'
       control_objective:
         name: 'Objetivo de control'
-        relevance: 'Importancia'
-        risk: 'Riesgo'
+        relevance: 'Probabilidad'
+        risk: 'Impacto'
         obsolete: 'Obsoleto'
         support: 'Soporte'
         score_type: 'Tipo de calificación'
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
         date_charge: 'Fecha de alta'
-        affected_sector_id: 'Sector del banco afectado al alerta'
         control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
@@ -358,8 +361,8 @@ es:
         answer: 'Respuesta/Acciones correctivas'
         current_situation: 'Situación actual'
         current_situation_verified: 'Situación actual verificada'
-        effect: 'Efecto'
-        risk: 'Riesgo'
+        effect: 'Riesgo'
+        risk: 'Impacto'
         priority: 'Prioridad'
         user_ids: 'Usuarios'
         finding_user_assignments: 'Usuarios'
@@ -394,7 +397,7 @@ es:
         observation_originated_tests: 'Originada en prueba de'
         sample_deviation: 'Desvio de la muestra'
         external_repeated: 'Reiterada externa'
-        risk_justification: 'Justificar riesgo'
+        risk_justification: 'Justificar impacto'
         year: 'Año'
         nsisio: 'N_SISAC'
         nobs: 'N_Obs'
@@ -506,11 +509,11 @@ es:
         description: 'Descripción'
         file_model_memos: 'Archivos'
         period_id: 'Periodo'
-        plan_item_id: 'Proyecto'
+        plan_item_id: 'Auditoría'
         period: 'Periodo'
-        plan_item: 'Proyecto'
-        business_unit: 'Unidad de negocio'
-        business_unit_type: 'Unidad organizativa'
+        plan_item: 'Auditoría'
+        business_unit: 'Proceso'
+        business_unit_type: 'Unidad de negocio'
         required_by: 'Requerido por'
         required_by_text: 'Requerido por'
         close_date: 'Fecha de cierre'
@@ -631,15 +634,15 @@ es:
       plan/plan_items:
         one: 'Registro'
         other: 'Registros'
-        project: 'Proyecto'
-        start: 'Proyecto (inicio)'
-        end: 'Proyecto (fin)'
-        order_number: 'Proyecto (orden)'
-        scope: 'Proyecto (Alcance auditoría)'
-        risk_exposure: 'Proyecto (exposición al riesgo)'
-        business_unit_id: 'Proyecto (unidad de negocio)'
-        status: 'Proyecto (estado)'
-        auxiliar_business_unit_types: 'Unidades organizativas auxiliares'
+        project: 'Auditoría'
+        start: 'Auditoría (inicio)'
+        end: 'Auditoría (fin)'
+        order_number: 'Auditoría (orden)'
+        scope: 'Auditoría (Alcance)'
+        risk_exposure: 'Auditoría (exposición al impacto)'
+        business_unit_id: 'Auditoría (proceso)'
+        status: 'Auditoría (estado)'
+        auxiliar_business_unit_types: 'Unidades de negocio auxiliares'
       plan/plan_items/resource_utilizations:
         one: 'Recurso'
         other: 'Recursos'
@@ -648,13 +651,13 @@ es:
         cost: 'Recurso (costo)'
         resource_id: 'Recurso'
       plan_item:
-        project: 'Proyecto'
+        project: 'Auditoría'
         start: 'Inicio'
         end: 'Fin'
         order_number: 'Orden'
         scope: 'Alcance auditoría'
-        risk_exposure: 'Exposición al riesgo'
-        business_unit_id: 'Unidad de negocio'
+        risk_exposure: 'Exposición al impacto'
+        business_unit_id: 'Proceso'
         resources: 'Recursos'
         resource_ids: 'Recursos'
         status: 'Estado'
@@ -680,7 +683,7 @@ es:
         answer: 'Respuesta'
         answer_option: 'Opción'
       process_control:
-        name: 'Proceso'
+        name: 'Procedimiento'
         order: 'Orden'
         control_objectives: 'Objetivos de control'
         obsolete: 'Obsoleto'
@@ -726,40 +729,53 @@ es:
         name: 'Nombre'
         description: 'Descripción'
         period: 'Periodo'
-        risk_assessment_template: 'Plantilla de evaluación de riesgo'
+        risk_assessment_template: 'Plantilla de evaluación de impacto'
         status: 'Estado'
         shared: 'Compartida'
         file_model: "Anexo"
         risk_assessment_weights: 'Ponderadores'
         risk_assessment_items: 'Ítems'
+        formula: 'Fórmula'
       risk_assessment/risk_assessment_items:
         name: 'Nombre (ítem)'
-        risk: 'Riesgo (ítem)'
-        business_unit: 'Unidad de negocio'
+        risk: 'Impacto (ítem)'
+        business_unit: 'Proceso'
         risk_weights: 'Valores de la evaluación'
       risk_assessment/risk_assessment_items/risk_weights:
         value: 'Valor (ítem)'
         weight: 'Ponderador (ítem)'
       risk_assessment_item:
         name: 'Nombre'
-        risk: 'Riesgo'
-        business_unit: 'Unidad de negocio'
-        process_control: 'Proceso'
+        risk: 'Impacto'
+        business_unit: 'Proceso'
+        process_control: 'Procedimiento'
       risk_assessment_template:
         name: 'Nombre'
         description: 'Descripción'
-        risk_assessment_weights: 'Atributos de evaluación de riesgo'
+        formula: 'Fórmula'
+        risk_assessment_weights: 'Atributos de evaluación de impacto'
       risk_assessment_template/risk_assessment_weights:
+        identifier: 'Identificador'
         name: 'Atributo'
         description: 'Descripción'
-        weight: 'Ponderador'
+        heatmap: 'Principal'
+        risk_score_items: 'Valores'
       risk_assessment_weight:
         name: 'Atributo'
         description: 'Descripción'
         weight: 'Ponderador'
+        identifier: 'Identificador'
+        heatmap: 'Principal'
+      risk_assessment_weights/risk_score_items:
+        name: 'Nombre'
+        value: 'Valor'
+      risk_score_item:
+        name: 'Nombre'
+        value: 'Valor'
       risk_weight:
         value: 'Valor'
         weight: 'Ponderador'
+        identifier: 'Identificador'
       subsidiary:
         name: 'Nombre'
         identity: 'Identificación'
@@ -771,8 +787,8 @@ es:
         review_code: 'Código'
         audit_recommendations: 'Recomendaciones de auditoría'
         answer: 'Respuesta/Acciones correctivas'
-        effect: 'Efecto'
-        risk: 'Riesgo'
+        effect: 'Riesgo'
+        risk: 'Impacto'
         priority: 'Prioridad'
         user_ids: 'Usuario'
         finding_user_assignments: 'Usuarios'
@@ -783,8 +799,8 @@ es:
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
         compliance_observations: 'Norma que impacta'
-        compliance_susceptible_to_sanction: 'Susceptible a sanción'
-        operational_risk: 'Riesgo operacional'
+        compliance_maybe_sanction: 'Susceptible a sanción'
+        operational_risk: 'Impacto operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
         weakness_template: 'Buscar plantilla por título'
@@ -807,8 +823,8 @@ es:
         title: 'Título'
         description: 'Observación'
         brief: 'Resumen'
-        risk: 'Riesgo'
-        operational_risk: 'Riesgo operacional'
+        risk: 'Impacto'
+        operational_risk: 'Impacto operacional'
         impact: 'Impacto'
         notes: 'Notas'
         internal_control_components: 'Componentes de CI'
@@ -840,8 +856,8 @@ es:
               must_have_state_that_allows_extension: 'Para indicar que tiene %{extension} debe estar en estado %{states}'
               cant_have_extension_when_didnt_have_extension: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension} en los estados %{states}'
             risk_justification:
-              present: 'No debe tener justificación de riesgo'
-            compliance_susceptible_to_sanction:
+              present: 'No debe tener justificación de impacto'
+            compliance_maybe_sanction:
               inclusion: 'debe ser uno de la lista'
             draft_review_code:
               not_same_draft_review_code_parent: 'No tiene el mismo código de informe borrador que su hallazgo original'
@@ -878,7 +894,7 @@ es:
             auxiliar_business_unit_types:
               taken: 'repetidas'
             business_unit:
-              cannot_edit_business_unit: "no se puede editar debido a que el proyecto ya está tomado por un informe definitivo %{memo_condition}"
+              cannot_edit_business_unit: "no se puede editar debido a que la auditoría ya está tomada por un informe definitivo %{memo_condition}"
             start:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
@@ -891,6 +907,11 @@ es:
           attributes:
             risk_assessment_weights:
               blank: 'debe tener al menos uno'
+              numericality: 'debe tener sólo %{count} atributos marcados como principal'
+        risk_assessment_weight:
+          attributes:
+            risk_score_items:
+              blank: 'debe tener al menos uno'
         user:
           attributes:
             base:
@@ -901,7 +922,7 @@ es:
               file_model_memos_blank: 'Debe tener al menos un archivo'
               cant_change_fields: 'No puede cambiar ningún campo debido a que superó la fecha de cierre'
             plan_item_id:
-              used: 'El proyecto ya está siendo utilizado por otro informe o informe externo'
+              used: 'La auditoría ya está siendo utilizada por otro informe o informe externo'
         subsidiary:
           attributes:
             identity:

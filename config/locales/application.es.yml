@@ -54,7 +54,7 @@ es:
 
   message:
     ldap_error: 'El servidor de autenticación no está disponible en este momento. Por favor, inténtelo de nuevo más tarde'
-    change_weakness_risk: "El riesgo de la observación ha cambiado"
+    change_weakness_risk: "El impacto de la observación ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
     insufficient_privileges: "No tiene permisos para realizar la acción"
@@ -95,20 +95,24 @@ es:
     show_details: "Ver detalles"
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
+  best_practice:
+    auditors: Auditores a cargo
+    audited: Referentes a cargo
+
   business_unit_type:
-    index_title: "Listado de unidades organizativas"
-    show_title: "Detalle unidad organizativa"
-    new_title: "Agregar unidad organizativa"
-    edit_title: "Modificar unidad organizativa"
-    correctly_created: "Unidad organizativa agregada correctamente."
-    correctly_updated: "Unidad organizativa actualizada correctamente."
-    stale_object_error: "La unidad organizativa no fue actualizada, intente nuevamente."
-    add_business_unit: "Agregar unidad de negocio"
+    index_title: "Listado de unidades de negocio"
+    show_title: "Detalle unidad de negocio"
+    new_title: "Agregar unidad de negocio"
+    edit_title: "Modificar unidad de negocio"
+    correctly_created: "Unidad de negocio agregada correctamente."
+    correctly_updated: "Unidad de negocio actualizada correctamente."
+    stale_object_error: "La unidad de negocio no fue actualizada, intente nuevamente."
+    add_business_unit: "Agregar proceso"
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
     errors:
-      can_not_be_destroyed: "La unidad organizativa no puede ser eliminada"
-      business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
+      can_not_be_destroyed: "La unidad de negocio no puede ser eliminada"
+      business_unit_related: "El proceso no puede ser eliminado, se encuentra relacionado con al menos un plan de trabajo"
 
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
@@ -142,16 +146,16 @@ es:
     cost_summary_title: "Resumen de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses_report_title: "Observaciones de impacto alto"
+    fixed_weaknesses_report_title: "Observaciones por impacto solucionadas"
     cost_analysis:
       detailed_column_resource: "Recurso"
       detailed_column_estimated_amount: "Costo estimado (planificado)"
       detailed_column_real_amount: "Costo real (ejecutado)"
       detailed_column_deviation: "Desviación"
-      general_column_business_unit: "Unidad de negocio"
+      general_column_business_unit: "Proceso"
       general_column_review: "Informe"
       general_column_estimated_amount: "Costo estimado (planificado)"
       general_column_real_amount: "Costo real (ejecutado)"
@@ -178,33 +182,33 @@ es:
       empty: 'No hay observaciones para el filtro aplicado'
       hint: 'Debe realizar una búsqueda'
       users: 'Por usuario'
-      business_units: 'Por unidad de negocio'
-      process_controls: 'Por proceso de negocio'
+      business_units: 'Por proceso'
+      process_controls: 'Por procedimiento de negocio'
 
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
     control_objective_stats_title: 'Observaciones por objetivo de control'
     control_objective_stats_by_review_title: 'Observaciones por objetivo de control sin calificación'
     benefits_title: 'Beneficios / Perjuicios'
-    process_control_stats_title: 'Observaciones por proceso de negocio'
+    process_control_stats_title: 'Observaciones por procedimiento de negocio'
     synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
     review_score_details_report_title: "Calificaciones de informes detallado"
     nbc_annual_report_title: "Resumen anual"
     nbc_internal_control_qualification_as_group_of_companies: "Calificacion del control interno como grupo de sociedades"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses_report_title: "Observaciones de impacto alto"
+    fixed_weaknesses_report_title: "Observaciones por impacto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     findings_type_internal: "Hallazgos Auditoría Interna"
     findings_type_external: "Hallazgos Auditorías Externas"
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Observaciones Auditorías Externas"
-    high_risk_weaknesses: "Observaciones de riesgo alto"
-    fixed_weaknesses: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses: "Observaciones de impacto alto"
+    fixed_weaknesses: "Observaciones por impacto solucionadas"
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
@@ -241,7 +245,7 @@ es:
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
     fixed_weaknesses_report:
-      pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_por_impacto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -250,20 +254,20 @@ es:
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     high_risk_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_de_impacto_alto_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
+      subtitle: "OBSERVACIONES DE IMPACTO ALTO - INFORMES DEFINITIVOS"
+      without_audits_in_the_period: "Sin auditorías de impacto alto en el periodo"
+      without_audits_in_the_interval: "Sin auditorías de impacto alto en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
-      pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
-      title: "OBSERVACIONES AGRUPADAS POR PROCESO DE NEGOCIO"
+      pdf_name: 'observaciones_por_procedimiento_de_negocio_%{from_date}_al_%{to_date}.pdf'
+      title: "OBSERVACIONES AGRUPADAS POR PROCEDIMIENTO DE NEGOCIO"
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: 'Calificación promedio ponderada'
       average_effectiveness_resume:
@@ -271,7 +275,7 @@ es:
         other: '%{effectiveness} - %{count} informes evaluados'
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
-      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procedimientos de negocio: <b>%{score}%</b>'
     qa_indicators:
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
       subtitle: ""
@@ -280,8 +284,8 @@ es:
       pdf_name: "indicadores_de_calidad_%{from_date}_al_%{to_date}.pdf"
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       indicators:
-        highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
-        medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
+        highest_solution_rate: "Solución de Observaciones de Impacto Alto"
+        medium_solution_rate: "Solución de Observaciones de Impacto Medio"
         digitalized: "Digitalización"
     nbc_report:
       front_page:
@@ -305,7 +309,7 @@ es:
         header_number: '<b>N°</b>'
         header_qualification: '<b>Calificación</b>'
         header_weight: '<b>Ponderador</b>'
-        header_high_risk_observations: '<b>Cantidad de Observaciones de Riesgo Alto</b>'
+        header_high_risk_observations: '<b>Cantidad de Observaciones de Impacto Alto</b>'
     nbc_annual_report:
       pdf_name: "resumen_anual_%{from_date}_al_%{to_date}.pdf"
       front_page:
@@ -330,7 +334,7 @@ es:
         header_number: '<b>N°</b>'
         header_qualification: '<b>Calificación</b>'
         header_weight: '<b>Ponderador</b>'
-        header_high_risk_observations: '<b>Cantidad de Observaciones de Riesgo Alto</b>'
+        header_high_risk_observations: '<b>Cantidad de Observaciones de Impacto Alto</b>'
       internal_control_qualification:
         header_cycle: '<b>Ciclo</b>'
         header_count_findings: '<b>Cantidad de Observaciones</b>'
@@ -353,7 +357,7 @@ es:
       comparision_to_previous_period:
         classification_title: '<i><b>Cuadro II: Comparación con la calificación del año anterior (%{period})</b></i>'
         header_cycle: '<b>Ciclo</b>'
-        header_weight: '<b>Ponderador a fecha de los Informes %{period}</b>'
+        header_weight: '<b>Ponderador por fecha de los informes %{period}</b>'
         header_qualification: '<b>Calificación</b>'
         conclusions_body: 'Si bien la Calificación del Control Interno del NBCH S. A. es <b>“%{annual_qualification_period}”</b> y la misma no tiene tuvo modificaciones respecto del año anterior, es importante señalar que el ponderador actual <b>“%{annual_weight_period}”</b> es un 7% menor al <b>“%{annual_weight_previous_period}”</b> al del período anterior.'
       comparision_to_actual_situation:
@@ -371,7 +375,7 @@ es:
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin hallazgos"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procedimientos de negocio: los procedimientos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"." # REVIEW: a que se refiere con procedimiento? Podría confundirse con el cambio de proceso > procedimiento. En este texto también hablaba de procesos
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
@@ -385,14 +389,14 @@ es:
         title: "Informes por etiqueta"
         footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
       weaknesses_by_score:
-        title: "Observaciones por riesgo, prioridad y calificación de informe"
+        title: "Observaciones por impacto, prioridad y calificación de informe"
         total: "Total"
     review_scores_report:
       pdf_name: "calificaciones_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       title: "CALIFICACIONES DE INFORMES"
       subtitle: "INFORMES DEFINITIVOS"
       review_score: "Calificación informes"
-      business_unit_score: "Calificación unidades de negocio"
+      business_unit_score: "Calificación procesos"
       total_score: "Calificación total"
       empty: "Sin calificaciones para el filtro aplicado"
     review_score_details_report:
@@ -412,9 +416,9 @@ es:
       period_summary: "Resumen del periodo %{period}"
       total: "TOTAL"
     weaknesses_by_risk:
-      pdf_name: "observaciones_informes_definitivos_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_informes_definitivos_por_impacto_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO"
+      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE IMPACTO"
       total: "TOTAL"
     weaknesses_by_audit_type:
       weaknesses: "Observaciones"
@@ -459,7 +463,7 @@ es:
   conclusion_management_report:
     index_title: "Reportes de la gerencia"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
 
   conclusion_review:
@@ -475,7 +479,7 @@ es:
     audit_period: "%{start} al %{end}"
     audit_period_title: "PERIODO DE LA AUDITORÍA"
     objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
-    applied_procedures: "PROCEDIMIENTOS APLICADOS"
+    applied_procedures: "PROCEDIMIENTOS APLICADOS" # REVIEW: a que se refiere con procedimiento? Podría confundirse con el cambio de proceso > procedimiento
     conclusion: "CONCLUSIÓN"
     weaknesses_brief: "RESUMEN DE OBSERVACIONES"
     weaknesses_reschedules: "RESUMEN DE OBSERVACIONES / REPROGRAMACIONES"
@@ -495,13 +499,13 @@ es:
       review_author: "Gerencia de Auditoría Interna"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
       project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
-      risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
+      risk_exposure: "Exposición al impacto del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Impactos)"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
       main_weaknesses: "Principales debilidades"
       other_weaknesses: "Otras observaciones"
       no_weaknesses: "No hay observaciones"
-      assumed_risk_weaknesses: "Riesgo asumido"
+      assumed_risk_weaknesses: "Impacto asumido"
     detailed_review:
       title: "Informe detallado"
       legend: "Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados por el BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
@@ -560,8 +564,8 @@ es:
     add_oportunity: "Agregar nueva oportunidad de mejora"
     add_weakness: "Agregar nueva observación"
     add_work_paper: "Agregar papel de trabajo"
-    add_business_unit_score: "Agregar calificación de unidad de negocio"
-    add_business_unit_type: "Agregar unidades de negocio por tipo"
+    add_business_unit_score: "Agregar calificación de proceso"
+    add_business_unit_type: "Agregar procesos por tipo"
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     not_rated: "No evaluado"
@@ -573,10 +577,10 @@ es:
       not_finished: "no está terminado"
       audit_date_ahead_of_issue_date: "la fecha de auditoría es mayor a la fecha de emisión del informe"
       without_score: "sin calificar"
-      without_relevance: "sin importancia"
+      without_relevance: "sin probabilidad"
       without_audit_date: "sin fecha de auditoría"
-      without_effects: "sin efectos"
-      without_controls: "sin controles"
+      without_effects: "sin riesgos"
+      without_controls: "sin procedimientos detallados"
       without_design_tests: "sin pruebas de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
       without_sustantive_tests: "sin pruebas sustantivas"
@@ -603,7 +607,7 @@ es:
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
-      references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de impacto (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     detailed_management_report_title: "Resumen gerencial"
     planned_cost_summary:
       pdf_name: "resumen_de_costos_planificados_%{from_date}_al_%{to_date}.pdf"
@@ -661,17 +665,17 @@ es:
     index_title: "Reportes de auditoría"
     cost_analysis_title: "Análisis de costos"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses_report_title: "Observaciones de impacto alto"
+    fixed_weaknesses_report_title: "Observaciones por impacto solucionadas"
     weaknesses_graphs:
       title: 'Gráfico de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
       hint: 'Debe realizar una búsqueda'
       users: 'Por usuario'
-      business_units: 'Por unidad de negocio'
-      process_controls: 'Por proceso de negocio'
+      business_units: 'Por proceso'
+      process_controls: 'Por procedimiento de negocio'
     tagged_findings_report:
       empty: 'No hay hallazgos para el filtro aplicado'
       findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
@@ -688,8 +692,8 @@ es:
     others:
       title: 'Otros'
     cost_analysis:
-      column_business_unit: "Unidad de negocio"
-      column_project: "Proyecto"
+      column_business_unit: "Proceso"
+      column_project: "Auditoría"
       column_review: "Informe"
       column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)"
       column_audited_cost: "Cantidad de horas dedicas a la solución (suma de las horas de seguimiento de los auditados)"
@@ -705,17 +709,17 @@ es:
     control_objective_stats_title: 'Observaciones por objetivo de control'
     control_objective_stats_by_review_title: 'Observaciones por objetivo de control sin calificación'
     benefits_title: 'Beneficios / Perjuicios'
-    process_control_stats_title: 'Observaciones por proceso de negocio'
+    process_control_stats_title: 'Observaciones por procedimiento de negocio'
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
     synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses_report_title: "Observaciones de impacto alto"
+    fixed_weaknesses_report_title: "Observaciones por impacto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weakness_summary: "Resumen de observaciones"
-    high_risk_weaknesses: "Observaciones de riesgo alto"
-    fixed_weaknesses: "Observaciones por riesgo solucionadas"
+    high_risk_weaknesses: "Observaciones de impacto alto"
+    fixed_weaknesses: "Observaciones por impacto solucionadas"
     weaknesses_being_implemented_current:
       one: "Vigente"
       other: "Vigentes"
@@ -729,7 +733,7 @@ es:
       one: "Reprogramada vencida"
       other: "Reprogramadas vencidas"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     without_oportunities: "Sin oportunidades en el periodo"
     without_weaknesses: "Sin observaciones en el periodo"
@@ -769,7 +773,7 @@ es:
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
     fixed_weaknesses_report:
-      pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_por_impacto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -778,20 +782,20 @@ es:
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     high_risk_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_de_impacto_alto_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES DE IMPACTO ALTO - INFORMES DEFINITIVOS"
+      without_audits_in_the_period: "Sin auditorías de impacto alto en el periodo"
+      without_audits_in_the_interval: "Sin auditorías de impacto alto en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
-      pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
-      title: "OBSERVACIONES AGRUPADAS POR PROCESO DE NEGOCIO"
+      pdf_name: 'observaciones_por_procedimiento_de_negocio_%{from_date}_al_%{to_date}.pdf'
+      title: "OBSERVACIONES AGRUPADAS POR PROCEDIMIENTO DE NEGOCIO"
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: 'Calificación promedio ponderada'
       average_effectiveness_resume:
@@ -799,7 +803,7 @@ es:
         other: '%{effectiveness} - %{count} informes evaluados'
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
-      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procedimientos de negocio: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
@@ -810,11 +814,11 @@ es:
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       indicators:
         production_level: "Nivel de Producción"
-        highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
-        medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
+        highest_solution_rate: "Solución de Observaciones de Impacto Alto"
+        medium_solution_rate: "Solución de Observaciones de Impacto Medio"
         score_average: "Calificación de informes"
         digitalized: "Digitalización"
-        ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
+        ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Impacto Medio"
     synthesis_report:
       pdf_name: "resumen_ejecutivo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"
@@ -834,7 +838,7 @@ es:
         one: "Un hallazgo reiterado"
         other: "%{count} hallazgos reiterados"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procedimientos de negocio: los procedimientos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"." # REVIEW: a que se refiere con procedimiento? Podría confundirse con el cambio de proceso > procedimiento. Acá también se hablaba de procesos
     review_stats_report:
       pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       title: "ESTADÍSTICAS DE INFORMES"
@@ -845,7 +849,7 @@ es:
         title: "Informes por etiqueta"
         footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
       weaknesses_by_score:
-        title: "Observaciones por riesgo, prioridad y calificación de informe"
+        title: "Observaciones por impacto, prioridad y calificación de informe"
         total: "Total"
     weaknesses_by_state:
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
@@ -853,9 +857,9 @@ es:
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
       total: "TOTAL"
     weaknesses_by_risk:
-      pdf_name: "observaciones_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_seguimiento_por_impacto_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO"
+      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE IMPACTO"
       total: "TOTAL"
     weaknesses_by_audit_type:
       weaknesses: "Observaciones"
@@ -868,7 +872,7 @@ es:
   follow_up_management:
     index_title: "Reportes de la gerencia"
     weaknesses_by_state_title: "Hallazgos totales por estado"
-    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_title: "Hallazgos totales por impacto"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
 
   group:
@@ -1019,9 +1023,9 @@ es:
     stale_object_error: "El informe no fue actualizado, intente nuevamente."
     control_objective_items_label: "Objetivos de control"
     show_excluded_control_objectives: "Mostrar objetivos de control cargados en la buena práctica y ausentes en el informe"
-    no_excluded_control_objectives: "Todos los objetivos de control de este proceso se encuentran en el informe"
+    no_excluded_control_objectives: "Todos los objetivos de control de este procedimiento se encuentran en el informe"
     add_control_objective: "Agregar un nuevo objetivo de control"
-    add_process_control: "Agregar un nuevo proceso"
+    add_process_control: "Agregar un nuevo procedimiento"
     add_best_practice: "Agregar una nueva buena práctica"
     control_objective_tag: "Objetivos por etiquetas"
     add_control_objective_tag: "Agregar etiqueta de objetivo de control"
@@ -1074,8 +1078,8 @@ es:
     control_objectives_relevance: "Peso"
     oportunities_summary: "Resumen de oportunidades de mejora ordenadas por estado"
     oportunities_count_summary: "Cantidad de oportunidades de mejora ordenadas por estado"
-    weaknesses_summary: "Resumen de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
-    weaknesses_count_summary: "Cantidad de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
+    weaknesses_summary: "Resumen de observaciones que sustentan la calificación otorgada (ordenadas por probabilidad del impacto (%{risks}) y luego por estado de la observación)"
+    weaknesses_count_summary: "Cantidad de observaciones que sustentan la calificación otorgada (ordenadas por probabilidad del impacto (%{risks}) y luego por estado de la observación)"
     weaknesses_count: "Cantidad de observaciones"
     oportunities_count: "Cantidad de oportunidades de mejora"
     control_objectives_work_papers: "Objetivos de control"
@@ -1091,21 +1095,21 @@ es:
     estimated_amount: "Costo estimado en plan de trabajo"
     other_actions: "Acciones"
     recode_findings: "Recodificar hallazgos"
-    recode_weaknesses_by_risk: "Recodificar observaciones por riesgo"
-    recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y riesgo"
-    recode_weaknesses_by_risk_and_repetition: "Recodificar observaciones por riesgo y reiteración"
+    recode_weaknesses_by_risk: "Recodificar observaciones por impacto"
+    recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y impacto"
+    recode_weaknesses_by_risk_and_repetition: "Recodificar observaciones por impacto y reiteración"
     recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
-    reorder: "Reordenar procesos por nombre"
+    reorder: "Reordenar procedimientos por nombre"
     recode_work_papers: "Recodificar papeles de trabajo"
     findings_recoded: "Hallazgos recodificados correctamente"
-    reordered: "Procesos ordenados correctamente"
+    reordered: "Procedimientos ordenados correctamente"
     work_papers_recoded: "Se recodificaron los papeles de trabajo"
     work_papers_recode_failed: "Los papeles de trabajo no se pudieron recodificar"
-    failed_to_reorder: "Los procesos no pudieron ser ordenados"
+    failed_to_reorder: "Los procedimientos no pudieron ser ordenados"
     work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
     work_papers_marked_as_revised: "Papeles de trabajo marcados como revisados supervisor"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
-    process_control_qualification_explanation: "La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
+    process_control_qualification_explanation: "La calificación del procedimiento de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
       without_score: "no tiene puntaje de auditoría"
@@ -1198,7 +1202,7 @@ es:
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
       without_auditor: "no tiene auditor"
-      without_effect: "no tiene efecto"
+      without_effect: "no tiene riesgo"
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
@@ -1251,9 +1255,9 @@ es:
 
   activerecord:
     models:
-      business_unit: "Unidad de negocio"
-      business_unit_type: "Unidad organizativa"
-      business_unit_type_user: "Unidad organizativa"
+      business_unit: "Proceso"
+      business_unit_type: "Unidad de negocio"
+      business_unit_type_user: "Unidad de negocio"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1282,11 +1286,11 @@ es:
       business_unit:
         name: "Nombre"
         business_unit_kind_id: 'Tipo de unidad de negocio'
-        business_unit_type_id: 'Unidad organizativa'
+        business_unit_type_id: 'Unidad de negocio'
       business_unit_type:
         name: "Nombre"
-        business_unit_label: "Etiqueta de la unidad de negocio en el informe"
-        project_label: "Etiqueta del proyecto en el informe"
+        business_unit_label: "Etiqueta del proceso en el informe"
+        project_label: "Etiqueta de la auditoría en el informe"
         review_prefix: "Prefijo en el informe"
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
@@ -1296,19 +1300,19 @@ es:
         require_counts: "Requerir cantidades en objetivos de control"
         hide_review_logo: "Ocultar logo en informes"
         independent_identification: "Numeración independiente"
-        shared_business_units: "Unidades de negocio compartidas"
+        shared_business_units: "Procesos compartidos"
         without_number: "Sin número"
         reviews_for: "Informes para"
         detailed_review: "Título de Informe Detallado"
         detailed_review_legend: "Texto de Informe Detallado"
-        grouped_by_business_unit_annual_report: "Agrupado por unidad de negocio en reporte anual"
+        grouped_by_business_unit_annual_report: "Agrupado por proceso en reporte anual"
       business_unit_type/business_units:
-        one: "Unidad de negocio"
-        other: "Unidades de negocio"
-        name: "Unidad de negocio"
+        one: "Proceso"
+        other: "Procesos"
+        name: "Proceso"
         business_unit_kind_id: "Tipo de unidad de negocio"
       business_unit_type_user:
-        business_unit_type_id: "Unidad organizativa"
+        business_unit_type_id: "Unidad de negocio"
       comment:
         comment: "Comentario"
         user_id: "Usuario"
@@ -1320,10 +1324,10 @@ es:
         review_id: "Informe"
         issue_date: "Fecha de emisión"
         close_date: "Fecha de cierre"
-        applied_procedures: "Procedimientos aplicados"
+        applied_procedures: "Procedimientos aplicados" # REVIEW: a que se refiere con procedimiento? Podría confundirse con el cambio de proceso > procedimiento
         conclusion: "Conclusión"
-        business_unit: "Unidad de negocio"
-        project: "Proyecto"
+        business_unit: "Proceso"
+        project: "Auditoría"
         approved: "Aprobado"
         summary: "Acta"
         recipients: "Destinatarios del informe"
@@ -1346,15 +1350,15 @@ es:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:
         order: "Orden"
-        control: "Controles"
-        effects: "Efectos"
+        control: "Procedimientos detallados"
+        effects: "Riesgos"
         design_tests: "Pruebas de diseño"
         compliance_tests: "Pruebas de cumplimiento"
         sustantive_tests: "Pruebas sustantivas"
       control_objective_item:
         control_objective_id: "Objetivo de control"
         control_objective_text: "Objetivo de control"
-        relevance: "Importancia"
+        relevance: "Probabilidad"
         design_score: "Calificación pruebas de diseño"
         compliance_score: "Calificación pruebas de cumplimiento"
         sustantive_score: "Calificación pruebas sustantivas"
@@ -1364,7 +1368,7 @@ es:
         exclude_from_score: "No calificar"
         issues_count: "Casos observados"
         alerts_count: "Cantidad de alertas"
-        process_control_id: "Proceso de negocio"
+        process_control_id: "Procedimiento de negocio"
         effectiveness: "Efectividad de control"
         support: "Soporte"
         weaknesses: "Observaciones"
@@ -1372,8 +1376,8 @@ es:
         work_papers: "Papeles de trabajo"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
-        control: "Objetivo de control (controles)"
-        effects: "Objetivo de control (efectos)"
+        control: "Objetivo de control (procedimientos detallados)"
+        effects: "Objetivo de control (riesgos)"
         design_tests: "Objetivo de control (pruebas de diseño)"
         compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
         sustantive_tests: "Objetivo de control (pruebas sustantivas)"
@@ -1391,10 +1395,10 @@ es:
         file_content_type: "Papel de trabajo (tipo de archivo)"
         file_file_size: "Papel de trabajo (tamaño de archivo)"
       control_objective_item/business_unit_scores:
-        business_unit_id: 'Calificación de unidad de negocio (unidad de negocio)'
-        design_score: 'Calificación de unidad de negocio (pruebas de diseño)'
-        compliance_score: 'Calificación de unidad de negocio (pruebas de cumplimiento)'
-        sustantive_score: 'Calificación de unidad de negocio (pruebas sustantivas)'
+        business_unit_id: 'Calificación de proceso (proceso)'
+        design_score: 'Calificación de proceso (pruebas de diseño)'
+        compliance_score: 'Calificación de proceso (pruebas de cumplimiento)'
+        sustantive_score: 'Calificación de proceso (pruebas sustantivas)'
       cost:
         cost: "Tiempo dedicado"
         description: "Descripción de las actividades realizadas"
@@ -1475,7 +1479,7 @@ es:
         erase: "Baja"
         approval: "Aprobación"
       process_controls/control_objectives/control:
-        effects: "Efectos"
+        effects: "Riesgos"
         compliance_tests: "Pruebas de cumplimientos"
       related_user_relation:
         user_id: 'Usuario'
@@ -1486,17 +1490,17 @@ es:
       review:
         identification: "Identificación"
         description: "Descripción"
-        survey: "Relevamiento"
-        audit_type: "Unidad organizativa"
-        business_unit: "Unidad de negocio"
+        survey: "Periodo auditado"
+        audit_type: "Unidad de negocio"
+        business_unit: "Proceso"
         period_id: "Periodo"
-        plan_item_id: "Proyecto"
-        plan_item: "Proyecto"
+        plan_item_id: "Auditoría"
+        plan_item: "Auditoría"
         file_model_id: "Anexos"
         score: "Calificación"
         score_alt: "Calificación cumplimiento"
         scope: "Alcance auditoría"
-        risk_exposure: "Exposición al riesgo"
+        risk_exposure: "Exposición al impacto"
         manual_score: "Puntaje de auditoría"
         manual_score_alt: "Puntaje de auditoría cumplimiento"
         include_sox: "Incluye prueba SOX"
@@ -1652,7 +1656,7 @@ es:
             review_user_assignments:
               invalid: "debe tener al menos %{required_roles}"
             plan_item:
-              invalid: "debe tener una unidad de negocio asignada en la planificación"
+              invalid: "debe tener un proceso asignado en la planificación"
               required: "debe seleccionar uno"
         review_user_assignment:
           attributes:
@@ -1679,7 +1683,7 @@ es:
 
   actioncontroller:
     best_practices: "Buenas prácticas"
-    business_unit_types: "Unidades de negocio"
+    business_unit_types: "Procesos"
     follow_up_audit: "Reportes de seguimiento"
     conclusion_reports: "Reportes de conclusión"
     conclusion_draft_reviews: "Informe borrador"

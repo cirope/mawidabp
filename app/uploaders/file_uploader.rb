@@ -49,10 +49,10 @@ class FileUploader < CarrierWave::Uploader::Base
     end
 
     def delete_empty_upstream_dirs
-      Dir.delete(store_dir) if Dir.empty?(store_dir)
+      Dir.delete(store_dir) if Dir.exist?(store_dir) && Dir.empty?(store_dir)
 
       parent_dir = File.dirname(store_dir)
 
-      Dir.delete(parent_dir) if Dir.empty?(parent_dir)
+      Dir.delete(parent_dir) if Dir.exist?(parent_dir) && Dir.empty?(parent_dir)
     end
 end

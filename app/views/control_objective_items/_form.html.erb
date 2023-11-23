@@ -52,7 +52,7 @@
       </div>
       <div class="col-md-6">
         <%= f.input :design_score, collection: qualifications,
-          include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
+          include_blank: t('control_objective_item.not_rated'),
           prompt: SHOW_CONCLUSION_AS_OPTIONS,
           input_html: {
             disabled: readonly,
@@ -74,7 +74,7 @@
         <%= yield :compliance_tests unless HIDE_CONTROL_COMPLIANCE_TESTS %>
 
         <%= f.input :sustantive_score, collection: qualifications,
-          include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
+          include_blank: t('control_objective_item.not_rated'),
           prompt: SHOW_CONCLUSION_AS_OPTIONS,
           input_html: {
             disabled: readonly,

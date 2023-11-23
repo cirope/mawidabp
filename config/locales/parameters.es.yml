@@ -1,8 +1,8 @@
 es:
   approach_types:
-    control: 'Control'
+    control: 'Procedimiento detallado'
     sustantive: 'Sustantivo'
-    control_sustantive: 'Control/Sustantivo'
+    control_sustantive: 'Procedimiento detallado/Sustantivo'
   frequency_types:
     monthly: 'Mensual'
     biyearly: 'Semestral'
@@ -40,9 +40,9 @@ es:
     very_high: 'Muy alto'
     excellent: 'Óptimo'
     # Short qualifications
-    ok: 'OK'
-    observed: 'Observado'
-    not_apply: 'No aplica'
+    ok: 'Alto'
+    observed: 'Medio'
+    not_apply: 'Bajo'
   risk_types:
     low: 'Bajo'
     medium: 'Medio'

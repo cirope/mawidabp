@@ -40,9 +40,9 @@ en:
     very_high: 'Very high'
     excellent: 'Excellent'
     # Short qualifications
-    ok: 'OK'
-    observed: 'Observed'
-    not_apply: 'Not apply'
+    ok: 'High'
+    observed: 'Medium'
+    not_apply: 'Low'
   risk_types:
     low: 'Low'
     medium: 'Medium'
