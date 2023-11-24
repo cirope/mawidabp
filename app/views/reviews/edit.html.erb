@@ -5,7 +5,7 @@
     <%= link_to '#', class: 'dropdown-toggle', data: { bs_toggle: 'dropdown' } do %>
       <%= t 'review.other_actions' %>
     <% end %>
-    <div class="dropdown-menu dropdown-menu-right">
+    <div class="dropdown-menu dropdown-menu-end">
       <%= link_to t('review.download_work_papers'), {
         action: :download_work_papers, id: @review, _ts: Time.now.to_i
       }, class: 'dropdown-item' %>

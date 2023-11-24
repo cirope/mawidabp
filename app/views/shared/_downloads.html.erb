@@ -4,7 +4,7 @@
   <%= link_to '#', class: 'dropdown-toggle', data: { bs_toggle: 'dropdown' } do %>
     <%= t 'label.downloads' %>
   <% end %>
-  <div class="dropdown-menu<%= ' dropdown-menu-right' if right %>">
+  <div class="dropdown-menu<%= ' dropdown-menu-end' if right %>">
     <% links.each do |link| %>
       <%= link %>
     <% end %>

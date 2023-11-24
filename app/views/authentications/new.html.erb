@@ -12,7 +12,7 @@
           <%= render 'shared/flash' if flash_message %>
 
           <div class="form-inputs">
-            <div class="form-group">
+            <div class="mb-3 form-group">
               <%= label_tag :password, t('.password'), class: 'col-form-label' %>
               <div class="controls">
                 <%= password_field_tag :password, nil, class: 'form-control form-control-lg',

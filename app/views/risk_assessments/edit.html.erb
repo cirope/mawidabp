@@ -5,7 +5,7 @@
     <%= link_to '#', class: 'dropdown-toggle', data: { bs_toggle: 'dropdown' } do %>
       <%= t '.other_actions' %>
     <% end %>
-    <div class="dropdown-menu dropdown-menu-right">
+    <div class="dropdown-menu dropdown-menu-end">
       <%= link_to t('.sort_by_risk'), [:sort_by_risk, @risk_assessment], data: {
         method: :patch, confirm: t('messages.confirmation')
       }, class: 'dropdown-item' %>

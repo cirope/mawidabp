@@ -11,9 +11,9 @@
         <div id="images" class="carousel slide" data-ride="carousel" data-interval="false">
           <% if @news.image_models.size > 1 %>
             <ol class="carousel-indicators">
-              <li data-target="#images" data-slide-to="0" class="active"></li>
+              <li data-bs-target="#images" data-slide-to="0" class="active"></li>
               <% @news.image_models.size.pred.times do |i| %>
-                <li data-target="#images" data-slide-to="<%= i.next %>"></li>
+                <li data-bs-target="#images" data-slide-to="<%= i.next %>"></li>
               <% end %>
             </ol>
           <% end %>

@@ -5,19 +5,19 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <div class="form-group">
-          <%= select_tag 'conclusion_review[review_type]', send_review_options(@conclusion_final_review), class: 'form-control' %>
+        <div class="mb-3 form-group">
+          <%= select_tag 'conclusion_review[review_type]', send_review_options(@conclusion_final_review), class: 'form-select' %>
         </div>
         <% if Current.conclusion_pdf_format == 'default' %>
           <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
-            <div class="custom-control custom-checkbox mb-1">
+            <div class="form-check custom-control custom-checkbox mb-1">
               <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false,
                 id: 'conclusion_review_include_global_score_sheet', class: 'custom-control-input' %>
               <label class="custom-control-label" for="conclusion_review_include_global_score_sheet">
                 <%= t 'conclusion_review.include_global_score_sheet' %>
               </label>
             </div>
-            <div class="custom-control custom-checkbox mb-1">
+            <div class="form-check custom-control custom-checkbox mb-1">
               <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
                 id: 'conclusion_review_include_score_sheet', class: 'custom-control-input' %>
               <label class="custom-control-label" for="conclusion_review_include_score_sheet">
@@ -25,7 +25,7 @@
               </label>
             </div>
           <% end %>
-          <div class="custom-control custom-checkbox mb-3">
+          <div class="form-check custom-control custom-checkbox mb-3">
             <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false,
               id: 'export_options_hide_control_objectives_excluded_from_score', class: 'custom-control-input' %>
             <label class="custom-control-label" for="export_options_hide_control_objectives_excluded_from_score">
@@ -33,7 +33,7 @@
             </label>
           </div>
         <% end %>
-        <div class="form-group">
+        <div class="mb-3 form-group">
           <%= f.label t('conclusion_review.email_note'), for: :conclusion_review_email_note %>
           <%= text_area_tag 'conclusion_review[email_note]', nil, rows: 5, class: 'form-control' %>
         </div>

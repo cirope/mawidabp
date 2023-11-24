@@ -5,8 +5,8 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <div class="form-group">
-          <%= select_tag 'conclusion_review[review_type]', send_review_options(@conclusion_draft_review), class: 'form-control' %>
+        <div class="mb-3 form-group">
+          <%= select_tag 'conclusion_review[review_type]', send_review_options(@conclusion_draft_review), class: 'form-select' %>
         </div>
         <% if Current.conclusion_pdf_format == 'default' && ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
           <div class="custom-control custom-checkbox mb-1">
@@ -24,7 +24,7 @@
             </label>
           </div>
         <% end %>
-        <div class="form-group">
+        <div class="mb-3 form-group">
           <%= content_tag :label, t('conclusion_review.email_note'),
             for: :conclusion_review_email_note %>
           <%= text_area_tag 'conclusion_review[email_note]', nil, rows: 5,
