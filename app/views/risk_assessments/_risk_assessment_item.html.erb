@@ -5,11 +5,11 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-3">
-        <div class="media">
-          <div class="float-start mt-2 mr-3">
+        <div class="d-flex">
+          <div class="flex-shrink-0 mt-1">
             <%= link_to_fetch_hide id, fetch ? :fetch : :show %>
           </div>
-          <div class="media-body">
+          <div class="flex-grow-1 ms-3">
             <%= f.input :name, label: false, input_html: { autofocus: f.object.new_record? } %>
           </div>
         </div>
@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <div class="pl-4" data-nested hidden>
+    <div class="ps-4" data-nested hidden>
       <% url = fetch && fetch_item_risk_assessment_path(f.object.risk_assessment, risk_assessment_item_id: f.object.id) %>
       <div data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= url %>" hidden>
         <% if fetch %>

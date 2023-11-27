@@ -9,7 +9,7 @@
   <div id="finding_status_filter" class="row" <%= 'style="display: none;"' unless display %>>
 <% end %>
   <div class="col-md-6" <%= 'style="display: none;"' unless display %>>
-    <div class="form-group row">
+    <div class="mb-1 form-group row">
         <% selected = params[action] ? params[action][name] : nil %>
         <%= f.label name, Finding.human_attribute_name(label), class: 'col-md-4 col-form-label', for: nil %>
         <div class="col-md-8">

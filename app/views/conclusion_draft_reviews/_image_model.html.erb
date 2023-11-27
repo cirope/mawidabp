@@ -4,7 +4,7 @@
       <div class="col-10">
         <% if f.object.image? %>
           <p class="mb-2">
-            <%= icon 'fas', 'image', class: 'mr-2' %>
+            <%= icon 'fas', 'image', class: 'me-2' %>
             <%= f.object.image.file.filename %>
             <% if f.object.image_cache %>
               <%= f.input :image_cache, as: :hidden %>

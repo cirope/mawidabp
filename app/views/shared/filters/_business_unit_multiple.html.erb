@@ -1,7 +1,7 @@
 <div id="business_unit_filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group row">
+      <div class="mb-1 form-group row">
         <% selected = params[action] ? params[action][:business_unit_type] : nil %>
         <%= f.label :business_unit_type, BusinessUnitType.model_name.human, class: 'col-md-4 col-form-label', for: nil %>
         <div class="col-md-8">
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="form-group row">
+      <div class="mb-1 form-group row">
         <% business_unit_filter = params[action] ? params[action][:business_unit] : nil %>
         <%= f.label :business_unit, BusinessUnit.model_name.human, class: 'col-md-4 col-form-label' %>
         <div class="col-md-8">

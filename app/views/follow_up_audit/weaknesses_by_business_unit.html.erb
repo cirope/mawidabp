@@ -21,7 +21,7 @@
       <hr>
 
       <p class="mb-1">
-        <span class="badge badge-pill badge-secondary"> <%= review_index %></span>
+        <span class="badge rounded-pill bg-secondary"> <%= review_index %></span>
         <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
         <%= weakness.review.plan_item.project %>
       </p>
@@ -98,7 +98,7 @@
     </p>
   <% end %>
 <% else %>
-  <div class="ml-3">
+  <div class="ms-3">
     <p class="mb-1"><em><%= t 'follow_up_committee_report.weaknesses_by_business_unit.without_weaknesses' %></em></p>
   </div>
 <% end %>

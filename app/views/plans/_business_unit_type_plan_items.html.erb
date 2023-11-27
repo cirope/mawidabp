@@ -32,7 +32,7 @@
       <tbody>
         <% plan_items.each do |plan_item| %>
           <tr>
-            <td class="pl-2"><%= show_plan_item_info(plan_item) %></td>
+            <td class="ps-2"><%= show_plan_item_info(plan_item) %></td>
             <td><%= plan_item.order_number %></td>
             <td><%= plan_item.business_unit&.name %></td>
             <td><%= plan_item.project %></td>

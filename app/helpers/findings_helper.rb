@@ -152,7 +152,7 @@ module FindingsHelper
 
     select nil, :user_id, sort_options_array(users),
       { prompt: true },
-      { name: :user_id, id: :user_id_select, class: 'form-control' }
+      { name: :user_id, id: :user_id_select, class: 'form-select' }
   end
 
   def finding_status_options
