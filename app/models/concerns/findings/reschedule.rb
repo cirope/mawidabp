@@ -10,16 +10,17 @@ module Findings::Reschedule
   end
 
   def calculate_reschedule_count
-    follow_up_dates = [reschedule_strategy.follow_up_dates_to_check_against(self)]
-    rep_of          = repeated_of
+    count             = 0
+    last_checked_date = last_follow_up_date_for_reschedule
 
-    while rep_of
-      follow_up_dates << reschedule_strategy.follow_up_dates_to_check_against(rep_of)
-
-      rep_of = rep_of.repeated_of
+    reschedule_strategy.follow_up_dates_to_check_against(self).each do |date|
+      if last_checked_date && date < last_checked_date
+        count            += 1
+        last_checked_date = date
+      end
     end
 
-    follow_up_dates.flatten.uniq.count
+    count + (repeated_of&.calculate_reschedule_count || 0)
   end
 
   private
@@ -43,7 +44,8 @@ module Findings::Reschedule
     end
 
     def calculate_by_follow_up_date?
-      (follow_up_date_changed? && follow_up_date.present?) || repeated_of && reschedule_count == 0
+      (follow_up_date_changed? && follow_up_date.present?) ||
+        (repeated_of && reschedule_count == 0)
     end
 
     def calculate_by_state?
