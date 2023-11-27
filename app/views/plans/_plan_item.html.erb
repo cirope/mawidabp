@@ -11,7 +11,7 @@
         <div class="flex-shrink-0 mt-2 me-2">
           <%= link_to_fetch_hide id, fetch ? :fetch : :show %>
         </div>
-        <div class="flex-grow-1 ms-2">
+        <div class="flex-grow-1">
           <%= f.input :order_number, as: :string, label: false,
             input_html: { class: 'sort_number', readonly: true } %>
         </div>

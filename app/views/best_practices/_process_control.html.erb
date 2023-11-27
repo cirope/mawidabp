@@ -5,10 +5,10 @@
   <div class="form-inputs row">
     <div class="col-md-10">
       <div class="d-flex">
-        <div class="flex-shrink-0 mt-2 me-2">
+        <div class="flex-shrink-0 mt-2 me-3">
           <%= link_to_fetch_hide id, fetch ? :fetch : :show %>
         </div>
-        <div class="flex-grow-1 ms-2">
+        <div class="flex-grow-1">
           <%= f.input :name, label: false, input_html: { maxlength: 255 } %>
         </div>
       </div>
@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <div class="ps-4 mb-3" data-nested hidden>
+  <div class="ms-4 ps-1 mb-3" data-nested hidden>
     <div data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= process_control_path f.object %>" hidden>
       <% if fetch %>
         <div class="alert alert-warning">
