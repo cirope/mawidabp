@@ -3,7 +3,7 @@
 <fieldset class="work_paper" id="<%= id %>">
   <div class="row">
     <div class="col-md-3">
-      <div class="input-group">
+      <div class="input-group mb-3">
         <%= render 'work_papers/status', work_paper: f.object %>
         <%= f.text_field :name, class: 'form-control', autofocus: f.object.name.blank? %>
       </div>
