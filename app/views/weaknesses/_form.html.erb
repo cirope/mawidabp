@@ -359,7 +359,6 @@
         <div class="col-md-4">
           <%= f.input :impact,
             as: :check_boxes,
-            item_wrapper_class: 'custom-control custom-checkbox',
             collection: weakness_impact_options,
             disabled: readonly
           %>
@@ -367,7 +366,6 @@
         <div class="col-md-4">
           <%= f.input :operational_risk,
             as: :check_boxes,
-            item_wrapper_class: 'custom-control custom-checkbox',
             collection: weakness_operational_risk_options,
             disabled: readonly
           %>
@@ -375,7 +373,6 @@
         <div class="col-md-4">
           <%= f.input :internal_control_components,
             as: :check_boxes,
-            item_wrapper_class: 'custom-control custom-checkbox',
             collection: weakness_internal_control_components_options,
             disabled: readonly
           %>
@@ -495,11 +492,9 @@
 
     <%= f.input :business_unit_ids,
       label: '&nbsp;'.html_safe,
-      item_wrapper_class: 'custom-control custom-checkbox',
       collection: weakness_business_units,
       as: :check_boxes,
-      input_html: { disabled: readonly },
-      wrapper_html: { class: 'mt-n4' }
+      input_html: { disabled: readonly }
     %>
   <% end %>
 

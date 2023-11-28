@@ -182,11 +182,9 @@
 
     <%=  f.input :business_unit_ids,
       label: '&nbsp;'.html_safe,
-      item_wrapper_class: 'custom-control custom-checkbox',
       collection: @finding.control_objective_item.business_units,
       as: :check_boxes,
-      input_html: { disabled: true },
-      wrapper_html: { class: 'mt-n4' }
+      input_html: { disabled: true }
     %>
   <% end %>
 

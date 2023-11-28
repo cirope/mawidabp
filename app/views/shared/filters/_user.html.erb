@@ -33,18 +33,18 @@
     <div class="col-md-6">
       <div class="row">
         <div class="col-lg-6">
-          <div class="custom-control custom-checkbox mt-lg-2">
+          <div class="form-check mt-lg-2">
             <% check_value = params[action] && params[action][check_action] %>
-            <%= f.check_box check_action, checked: check_value == '1', id: check_action, class: 'custom-control-input' %>
-            <label class="custom-control-label" for="<%= check_action %>"><%= t ".#{check_action}" %></label>
+            <%= f.check_box check_action, checked: check_value == '1', id: check_action, class: 'form-check-input' %>
+            <label class="form-check-label" for="<%= check_action %>"><%= t ".#{check_action}" %></label>
           </div>
         </div>
         <% if secondary_check_action %>
           <div class="col-lg-6">
-            <div class="custom-control custom-checkbox mt-lg-2">
+            <div class="form-check mt-lg-2">
               <% check_value = params[action] && params[action][secondary_check_action] %>
-              <%= f.check_box secondary_check_action, checked: check_value == '1', id: secondary_check_action, class: 'custom-control-input' %>
-              <label class="custom-control-label" for="<%= secondary_check_action %>"><%= t ".#{secondary_check_action}" %></label>
+              <%= f.check_box secondary_check_action, checked: check_value == '1', id: secondary_check_action, class: 'form-check-input' %>
+              <label class="form-check-label" for="<%= secondary_check_action %>"><%= t ".#{secondary_check_action}" %></label>
             </div>
           </div>
         <% end %>

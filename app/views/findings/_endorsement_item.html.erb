@@ -2,7 +2,7 @@
   <% if @finding.being_implemented? && endorsement.pending? && endorsement.user == @auth_user %>
     <%= endorsement.user.full_name %>
 
-    <span class="mx-1 badge badge-<%= finding_endorsement_class endorsement %>" data-endorsement-status="<%= endorsement.id %>">
+    <span class="mx-1 badge bg-<%= finding_endorsement_class endorsement %>" data-endorsement-status="<%= endorsement.id %>">
       <%= t "findings.endorsements.status.#{endorsement.status}" %>
     </span>
 
@@ -29,7 +29,7 @@
   <% else %>
     <%= endorsement.user.full_name %>
 
-    <span class="mx-1 badge badge-<%= finding_endorsement_class endorsement %>">
+    <span class="mx-1 badge bg-<%= finding_endorsement_class endorsement %>">
       <%= t "findings.endorsements.status.#{endorsement.status}" %>
     </span>
 

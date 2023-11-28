@@ -28,7 +28,7 @@
         <%= f.input :user_id, as: :hidden, input_html: { value: f.object.user_id, id: "user_id_#{id}" } %>
       </div>
       <div class="col-md-1 pt-1">
-        <span class="badge badge-<%= finding_endorsement_class f.object %>">
+        <span class="badge bg-<%= finding_endorsement_class f.object %>">
           <%= t "findings.endorsements.status.#{f.object.status}" %>
         </span>
 

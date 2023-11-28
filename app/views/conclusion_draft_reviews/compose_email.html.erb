@@ -9,17 +9,17 @@
           <%= select_tag 'conclusion_review[review_type]', send_review_options(@conclusion_draft_review), class: 'form-select' %>
         </div>
         <% if Current.conclusion_pdf_format == 'default' && ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
-          <div class="custom-control custom-checkbox mb-1">
+          <div class="form-check mb-1">
             <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false,
-              id: 'conclusion_review_include_global_score_sheet', class: 'custom-control-input' %>
-            <label class="custom-control-label" for="conclusion_review_include_global_score_sheet">
+              id: 'conclusion_review_include_global_score_sheet', class: 'form-check-input' %>
+            <label class="form-check-label" for="conclusion_review_include_global_score_sheet">
               <%= t 'conclusion_review.include_global_score_sheet' %>
             </label>
           </div>
-          <div class="custom-control custom-checkbox mb-3">
+          <div class="form-check mb-3">
             <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
-              id: 'conclusion_review_include_score_sheet', class: 'custom-control-input' %>
-            <label class="custom-control-label" for="conclusion_review_include_score_sheet">
+              id: 'conclusion_review_include_score_sheet', class: 'form-check-input' %>
+            <label class="form-check-label" for="conclusion_review_include_score_sheet">
               <%= t 'conclusion_review.include_score_sheet' %>
             </label>
           </div>
