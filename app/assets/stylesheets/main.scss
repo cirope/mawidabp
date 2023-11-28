@@ -2,6 +2,14 @@
 @import "bootstrap/functions";
 @import "bootstrap/variables";
 
+.form-control:read-only{
+    background-color: #e9ecef;
+    opacity: 1;
+    transition: none;
+    appearance: none;
+    pointer-events: none;
+}
+
 .file-container {
   position: relative;
   overflow: hidden;
