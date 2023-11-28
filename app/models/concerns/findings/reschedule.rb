@@ -48,7 +48,7 @@ module Findings::Reschedule
     end
 
     def recalculate_attributes_changed?
-      calculate_by_follow_up_date? || calculate_by_state?
+      calculate_by_follow_up_date? || calculate_by_state? || calculate_by_repeated_of?
     end
 
     def calculate_by_follow_up_date?
@@ -57,6 +57,10 @@ module Findings::Reschedule
 
     def calculate_by_state?
       state_changed? && follow_up_date.present?
+    end
+
+    def calculate_by_repeated_of?
+      repeated_of_id_changed? && follow_up_date.present?
     end
 
     def repeated_or_on_final_review?
