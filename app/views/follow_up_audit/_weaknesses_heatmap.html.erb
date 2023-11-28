@@ -12,7 +12,7 @@
 
 <p class="mb-1">
   <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
-  <%= weakness.review.conclusion_final_review ? l(weakness.review.conclusion_final_review.issue_date) : '-' %>
+  <%= weakness.review&.conclusion_final_review ? l(weakness.review&.conclusion_final_review&.issue_date) : '-' %>
 </p>
 
 <p class="mb-1">
@@ -139,12 +139,12 @@
 
 <p class="mb-1">
   <span class="text-muted"><%= ConclusionReview.human_attribute_name 'conclusion' %></span>:
-  <%= weakness.review.conclusion_final_review.conclusion %>
+  <%= weakness.review&.conclusion_final_review&.conclusion %>
 </p>
 
 <p class="mb-1">
   <span class="text-muted"><%= ConclusionReview.human_attribute_name 'evolution' %></span>:
-  <%= weakness.review.conclusion_final_review.evolution %>
+  <%= weakness.review&.conclusion_final_review&.evolution %>
 </p>
 
 <p class="mb-1">

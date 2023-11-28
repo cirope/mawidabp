@@ -42,6 +42,7 @@ es:
                 other: 'deben tener los mismos nombres en las tres organizaciones. Actualmente las que difieren son: %{different_names}'
             organizations:
               are_misconfigured: 'están mal configuradas en las opciones de la aplicación. Por favor, comuníquese con soporte@mawidabp.com'
+
   activerecord:
     models:
       achievement:
@@ -102,8 +103,8 @@ es:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
       control_objective_auditor:
-        one: 'Auditor a cargo'
-        other: 'Auditores a cargo'
+        one: 'Auditor/Referente a cargo'
+        other: 'Auditores/Referentes a cargo'
       document:
         one: 'Documento'
         other: 'Documentos'
@@ -203,9 +204,24 @@ es:
       risk_assessment_weight:
         one: 'Atributo de evaluación de riesgo'
         other: 'Atributos de evaluación de riesgo'
+      risk_category:
+        one: 'Categoría de riesgo'
+        other: 'Categorías de riesgo'
+      risk_control_objective:
+        one: 'Objetivo de control'
+        other: 'Objetivos de control'
+      risk_registry:
+        one: 'Registro de riesgo'
+        other: 'Registros de riesgo'
+      risk_score_item:
+        one: 'Valor'
+        other: 'Valores'
       risk_weight:
         one: 'Valor de evaluación de riesgo'
         other: 'Valores de evaluación de riesgo'
+      risks:
+        one: 'Riesgo'
+        other: 'Riesgos'
       saml_provider:
         one: 'Configuración SAML'
         other: 'Configuraciones SAML'
@@ -319,7 +335,6 @@ es:
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
         date_charge: 'Fecha de alta'
-        affected_sector_id: 'Sector del banco afectado al alerta'
         control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
@@ -579,6 +594,7 @@ es:
       tagging:
         tag: 'Etiqueta'
         tag_id: 'Etiqueta'
+        description: 'Descripción'
       task:
         code: 'Código'
         description: 'Descripción'
@@ -732,6 +748,7 @@ es:
         file_model: "Anexo"
         risk_assessment_weights: 'Ponderadores'
         risk_assessment_items: 'Ítems'
+        formula: 'Fórmula'
       risk_assessment/risk_assessment_items:
         name: 'Nombre (ítem)'
         risk: 'Riesgo (ítem)'
@@ -748,18 +765,58 @@ es:
       risk_assessment_template:
         name: 'Nombre'
         description: 'Descripción'
+        formula: 'Fórmula'
         risk_assessment_weights: 'Atributos de evaluación de riesgo'
       risk_assessment_template/risk_assessment_weights:
+        identifier: 'Identificador'
         name: 'Atributo'
         description: 'Descripción'
-        weight: 'Ponderador'
+        heatmap: 'Principal'
+        risk_score_items: 'Valores'
       risk_assessment_weight:
         name: 'Atributo'
         description: 'Descripción'
         weight: 'Ponderador'
+        identifier: 'Identificador'
+        heatmap: 'Principal'
+      risk_assessment_weights/risk_score_items:
+        name: 'Nombre'
+        value: 'Valor'
+      risk_registry:
+        name: 'Nombre'
+        description: 'Descripción'
+      risk_registry/risk_categories:
+        name: 'Nombre'
+      risk_category:
+        name: 'Nombre'
+      risk_score_item:
+        name: 'Nombre'
+        value: 'Valor'
       risk_weight:
         value: 'Valor'
         weight: 'Ponderador'
+        identifier: 'Identificador'
+      risk_registry/risk_categories/risks:
+        identifier: 'Identificador'
+        cause: 'Causa'
+        effect: 'Efecto'
+        likelihood: 'Probabilidad'
+        impact: 'Impacto'
+        name: 'Nombre'
+        user: 'Propietario'
+        risk_control_objectives: 'Objetivos de control'
+      risk_registry/risk_categories/risks/risk_control_objectives:
+        control_objective: 'Objetivo de control'
+      risk:
+        identifier: 'Identificador'
+        cause: 'Causa'
+        effect: 'Efecto'
+        likelihood: 'Probabilidad'
+        impact: 'Impacto'
+        name: 'Nombre'
+        user: 'Propietario'
+      risk_control_objective:
+        control_objective: 'Objetivo de control'
       subsidiary:
         name: 'Nombre'
         identity: 'Identificación'
@@ -783,7 +840,7 @@ es:
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
         compliance_observations: 'Norma que impacta'
-        compliance_susceptible_to_sanction: 'Susceptible a sanción'
+        compliance_maybe_sanction: 'Susceptible a sanción'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
@@ -841,7 +898,7 @@ es:
               cant_have_extension_when_didnt_have_extension: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension} en los estados %{states}'
             risk_justification:
               present: 'No debe tener justificación de riesgo'
-            compliance_susceptible_to_sanction:
+            compliance_maybe_sanction:
               inclusion: 'debe ser uno de la lista'
             draft_review_code:
               not_same_draft_review_code_parent: 'No tiene el mismo código de informe borrador que su hallazgo original'
@@ -887,9 +944,18 @@ es:
           attributes:
             taggings:
               missing_tags_for_scope: "se requiere al menos una (entre %{tags}) para los informes con alcance '%{r_scope}'"
+        risk:
+          attributes:
+            risk_control_objectives:
+              blank: 'debe tener al menos uno'
         risk_assessment_template:
           attributes:
             risk_assessment_weights:
+              blank: 'debe tener al menos uno'
+              numericality: 'debe tener sólo %{count} atributos marcados como principal'
+        risk_assessment_weight:
+          attributes:
+            risk_score_items:
               blank: 'debe tener al menos uno'
         user:
           attributes:
