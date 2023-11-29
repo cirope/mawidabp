@@ -47,7 +47,7 @@ gem 'ruby-saml'
 
 gem 'sassc'
 gem 'sassc-rails'
-gem 'uglifier'
+gem 'terser'
 
 gem 'unicorn'
 gem 'unicorn-rails'
