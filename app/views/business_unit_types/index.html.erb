@@ -22,9 +22,9 @@
           <td class="d-none d-sm-table-cell"><%= business_unit_type.review_prefix %></td>
         <% end %>
         <td><%= t business_unit_type.external ? 'label.yes' : 'label.no' %></td>
-        <td class="text-right"><%= link_to_show business_unit_type %></td>
-        <td class="text-right"><%= link_to_edit edit_business_unit_type_path(business_unit_type) %></td>
-        <td class="text-right"><%= link_to_destroy business_unit_type %></td>
+        <td class="text-end"><%= link_to_show business_unit_type %></td>
+        <td class="text-end"><%= link_to_edit edit_business_unit_type_path(business_unit_type) %></td>
+        <td class="text-end"><%= link_to_destroy business_unit_type %></td>
       </tr>
     <% end %>
   </tbody>

@@ -13,7 +13,7 @@
 <% if @control_objective_items.any? %>
   <% @control_objective_items.each_with_index do |control_objective_item, index| %>
     <p class="mb-1 mt-3">
-      <span class="badge badge-pill badge-secondary">
+      <span class="badge rounded-pill bg-secondary">
         <%= index + 1 %>
       </span>
       <span class="text-muted"><%= BusinessUnit.model_name.human %></span>:
@@ -67,7 +67,7 @@
     <% end %>
   <% end %>
 <% else %>
-  <div class="ml-3">
+  <div class="ms-3">
     <p class="mb-1"><em><%= t 'conclusion_committee_report.control_objective_counts.without_control_objective_items' %></em></p>
   </div>
 <% end %>
@@ -76,7 +76,7 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
+  <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', target: '#customize_report' } %> |
   <%= link_to t('label.download_csv'), control_objective_counts_conclusion_reports_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 

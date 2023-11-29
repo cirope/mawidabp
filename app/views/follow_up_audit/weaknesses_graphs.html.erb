@@ -6,13 +6,13 @@
 
 <nav>
   <div class="nav nav-tabs">
-    <a class="nav-item nav-link<%= ' active' if user.present? || params[:weaknesses_graphs].blank? %>" href="#users" data-toggle="tab" data-clear="user">
+    <a class="nav-item nav-link<%= ' active' if user.present? || params[:weaknesses_graphs].blank? %>" href="#users" data-bs-toggle="tab" data-clear="user">
       <%= t '.users' %>
     </a>
-    <a class="nav-item nav-link<%= ' active' if business_unit.present? %>" href="#business_units" data-toggle="tab" data-clear="business_unit">
+    <a class="nav-item nav-link<%= ' active' if business_unit.present? %>" href="#business_units" data-bs-toggle="tab" data-clear="business_unit">
       <%= t '.business_units' %>
     </a>
-    <a class="nav-item nav-link<%= ' active' if process_control.present? %>" href="#process_controls" data-toggle="tab" data-clear="process_control">
+    <a class="nav-item nav-link<%= ' active' if process_control.present? %>" href="#process_controls" data-bs-toggle="tab" data-clear="process_control">
       <%= t '.process_controls' %>
     </a>
   </div>

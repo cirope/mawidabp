@@ -46,7 +46,7 @@
   </div>
 
   <% if question.answer_type %>
-    <ul class="mt-1 ml-2">
+    <ul class="mt-1 ms-2">
       <% question.answer_options.each do |ao| %>
         <li><%= t "answer_options.#{ao.option}" %></li>
       <% end %>

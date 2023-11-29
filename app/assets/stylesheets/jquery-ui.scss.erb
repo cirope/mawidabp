@@ -864,8 +864,8 @@ input[type="button"].ui-btn-block {
 
 .ui-button-primary {
   color: #ffffff;
-    background-color: theme-color("primary");
-    border-color: theme-color-level("primary", $alert-border-level);
+    background-color: $primary;
+    border-color: $primary;
 }
 
 .ui-button-warning {
@@ -876,8 +876,8 @@ input[type="button"].ui-btn-block {
 
 .ui-button-info {
   color: #ffffff;
-  background-color: theme-color("info");
-  border-color: theme-color-level("info", $alert-border-level);
+  background-color: $info;
+  border-color: $info;
 }
 .ui-button-danger {
   color: #ffffff;
@@ -1044,8 +1044,8 @@ input.ui-button {
 
 .ui-buttonset .ui-state-active {
   color: #ffffff;
-  background-color: theme-color("primary");
-  border-color: theme-color-level("primary", $alert-border-level);
+  background-color: $primary;
+  border-color: $primary;
 }
 
 .ui-buttonset .ui-state-active.ui-state-hover {
@@ -1134,8 +1134,8 @@ input.ui-button {
 .ui-menu .ui-menu-item a.ui-state-focus,
 .ui-menu .ui-menu-item a.ui-state-active,
 .ui-menu .ui-menu-item a.ui-widget-content{
-  background-color: theme-color("primary");
-  border-color: theme-color-level("primary", $alert-border-level);
+  background-color: $primary;
+  border-color: $primary;
   color: #FFFFFF;
   white-space: nowrap;
 
@@ -1391,8 +1391,8 @@ input.ui-button {
 
 .ui-dialog-buttonpane .ui-dialog-buttonset .ui-button {
     color: #ffffff;
-    background-color: theme-color("primary");
-    border-color: theme-color-level("primary", $alert-border-level);
+    background-color: $primary;
+    border-color: $primary;
 }
 
 .ui-dialog-buttonpane .ui-dialog-buttonset .ui-button.ui-state-hover{
@@ -1423,8 +1423,8 @@ input.ui-button {
 /* ui-dialog-buttonset UI info */
 .ui-dialog-buttonset .ui-button.ui-button-info{
   color: #ffffff;
-  background-color: theme-color("info");
-  border-color: theme-color-level("info", $alert-border-level);
+  background-color: $info;
+  border-color: $info;
 }
 
 .ui-dialog-buttonset .ui-button.ui-button-info.ui-state-hover{
@@ -2072,7 +2072,7 @@ body .ui-tooltip {
 .ui-datepicker td .ui-state-highlight{
   color: #ffffff;
   background-color: $info;
-  border-color: theme-color-level("info", $alert-border-level);
+  border-color: $info;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   border-radius: 4px;
@@ -2091,10 +2091,10 @@ body .ui-tooltip {
 
 .ui-datepicker td .ui-state-hover {
   color: #ffffff;
-  background: theme-color("primary");
+  background: $primary;
   background-color: $secondary;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  border-color: theme-color-level("primary", $alert-border-level);
+  border-color: $primary;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   border-radius: 4px;
 }
@@ -2128,7 +2128,7 @@ body .ui-tooltip {
   height: 100%;
   height:100%;
   color: #ffffff; /*this can be removed if ui-widget-header is blue*/
-  background-color: theme-color("primary");
+  background-color: $primary;
   box-sizing: border-box;
   transition: width 0.6s ease;
 }
@@ -2174,7 +2174,7 @@ input[type="password"],
 textarea,
 .uneditable-input {
   display: inline-block;
-  padding: 4px;
+  padding: $input-btn-padding-y $input-btn-padding-x;
   font-size: $font-size-base;
   line-height: 18px;
   color: #555555;

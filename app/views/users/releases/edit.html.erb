@@ -1,7 +1,7 @@
 <%= simple_form_for @user, url: users_release_path(@user) do |f| %>
   <% if @user.reallocation_errors.present? %>
     <div>
-      <%= link_to '#details', data: { toggle: 'collapse' } do %>
+      <%= link_to '#details', data: { bs_toggle: 'collapse' } do %>
         <%= t 'label.details' %>
         <%= icon 'fas', 'info-circle', class: 'text-danger' %>
       <% end %>
@@ -12,14 +12,14 @@
   <% end %>
 
   <div class="form-inputs">
-    <div class="custom-control custom-checkbox my-2">
-      <%= check_box_tag 'with_findings', 1, true, id: 'with_findings', class: 'custom-control-input', autofocus: true %>
-      <label class="custom-control-label" for="with_findings"><%= t '.with_findings' %></label>
+    <div class="form-check my-2">
+      <%= check_box_tag 'with_findings', 1, true, id: 'with_findings', class: 'form-check-input', autofocus: true %>
+      <label class="form-check-label" for="with_findings"><%= t '.with_findings' %></label>
     </div>
 
-    <div class="custom-control custom-checkbox my-2">
-      <%= check_box_tag 'with_reviews', 1, true, id: 'with_reviews', class: 'custom-control-input' %>
-      <label class="custom-control-label" for="with_reviews"><%= t '.with_reviews' %></label>
+    <div class="form-check my-2">
+      <%= check_box_tag 'with_reviews', 1, true, id: 'with_reviews', class: 'form-check-input' %>
+      <label class="form-check-label" for="with_reviews"><%= t '.with_reviews' %></label>
     </div>
   </div>
 
@@ -38,7 +38,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right">
+    <div class="float-end">
       <%= link_to_index users_path %> |
       <%= link_to_show @user %> |
       <%= link_to_edit edit_user_path(@user) %>

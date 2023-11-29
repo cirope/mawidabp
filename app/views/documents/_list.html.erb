@@ -2,7 +2,7 @@
   <caption>
     <h4>
       <%= @tag %>
-      <span class="float-right small">
+      <span class="float-end small">
         <%= link_to t('label.back'), documents_path %>
       </span>
     </h4>
@@ -14,7 +14,7 @@
       <%= make_filterable_column Document.human_attribute_name('description'), { class: 'd-none d-md-table-cell'}, 'description' %>
       <%= make_not_available_column Document.human_attribute_name('shared') %>
       <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'd-none d-sm-table-cell' }, 'tags' %>
-      <th colspan="3" class="text-right"><%= link_to_search %></th>
+      <th colspan="3" class="text-end"><%= link_to_search %></th>
     </tr>
   </thead>
 
@@ -27,9 +27,9 @@
         <td class="d-none d-md-table-cell"><%= super_truncate document.description, 25 %></td>
         <td><%= t document.shared ? 'label.yes' : 'label.no' %></td>
         <td class="d-none d-sm-table-cell"><%= tags document.tags %></td>
-        <td class="text-right"><%= link_to_show document %></td>
-        <td class="text-right"><%= link_to_edit [:edit, document] %></td>
-        <td class="text-right"><%= link_to_destroy document %></td>
+        <td class="text-end"><%= link_to_show document %></td>
+        <td class="text-end"><%= link_to_edit [:edit, document] %></td>
+        <td class="text-end"><%= link_to_destroy document %></td>
       </tr>
     <% end %>
   </tbody>

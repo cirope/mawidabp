@@ -39,7 +39,7 @@
           <% f.object.build_file_model unless f.object.file_model %>
 
           <%= f.simple_fields_for :file_model do |fm_f| %>
-            <div class="file-container float-left">
+            <div class="file-container float-start">
               <%= link_to_upload fm_f.object %>
 
               <% if fm_f.object.file_cache %>
@@ -63,7 +63,7 @@
 
       <div class="row">
         <div class="col-md-3">
-          <h5 class="h6 ml-3 pl-3"><%= RiskAssessmentItem.human_attribute_name 'name' %></h5>
+          <h5 class="h6 ms-3 ps-3"><%= RiskAssessmentItem.human_attribute_name 'name' %></h5>
         </div>
         <div class="col-md-2">
           <h5 class="h6"><%= BusinessUnitType.model_name.human %></h5>
@@ -90,12 +90,12 @@
 
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link active" href="#best-practice" data-toggle="tab">
+            <a class="nav-link active" href="#best-practice" data-bs-toggle="tab">
               <%= BestPractice.model_name.human count: 0 %>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#business-unit-type" data-toggle="tab">
+            <a class="nav-link" href="#business-unit-type" data-bs-toggle="tab">
               <%= BusinessUnitType.model_name.human count: 0 %>
             </a>
           </li>
@@ -141,7 +141,7 @@
   <hr>
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.button :submit, class: 'btn-primary' %>
   </div>
 <% end %>
