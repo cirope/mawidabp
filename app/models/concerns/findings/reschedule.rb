@@ -68,7 +68,7 @@ module Findings::Reschedule
     end
 
     def is_being_created_for_final_review?
-      new_record? && final == true
+      new_record? && final
     end
 
     def last_follow_up_date_for_reschedule
