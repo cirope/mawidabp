@@ -9,7 +9,7 @@
       <div class="card-header">
         <h5 class="mb-0">
           <%= @business_unit_type&.name || t('plans.without_business_unit_type') %>
-          <span class="float-right small">
+          <span class="float-end small">
             <%= link_to t('label.back'), [:edit, @plan] %>
           </span>
         </h5>
@@ -26,7 +26,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= hidden_field_tag :business_unit_type, params[:business_unit_type] %>
     <%= hidden_field_tag :clone_from, params[:clone_from] %>

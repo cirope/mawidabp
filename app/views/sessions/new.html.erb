@@ -9,7 +9,7 @@
           <%= render 'shared/flash' if flash_message %>
 
           <div class="form-inputs">
-            <div class="form-group">
+            <div class="mb-3 form-group">
               <%= label_tag :user, t('.user'), class: 'col-form-label' %>
               <div class="controls">
                 <%= text_field_tag :user, params[:user], class: 'form-control form-control-lg',

@@ -68,7 +68,7 @@
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
           input_html: { readonly: readonly, rows: HIDE_REVIEW_DESCRIPTION ? 8 : 5 } %>
 
-        <p class="mb-1 text-right">
+        <p class="mb-1 text-end">
           <%= link_to_unless @review.new_record?, t('review.survey.download'),
             :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
         </p>
@@ -123,7 +123,7 @@
       <% if @review.persisted? && @review.plan_item.auxiliar_business_unit_types.any? %>
         <%= render partial: 'auxiliar_business_unit_types', locals: { plan_item: @review.plan_item } %>
       <% else %>
-        <div data-target="auxiliar-business-unit-types"></div>
+        <div data-bs-target="auxiliar-business-unit-types"></div>
       <% end %>
     <% end %>
 
@@ -213,7 +213,7 @@
   <h4 class="mt-3">
     <%= t('review.control_objective_items_label') %>
     <% if @review.persisted? && !readonly %>
-      <span class="float-right small">
+      <span class="float-end small">
         <%= link_to_excluded_control_objectives %>
       </span>
     <% end %>
@@ -231,22 +231,22 @@
   <% unless readonly %>
     <ul class="nav nav-tabs mt-3">
       <li class="nav-item">
-        <a class="nav-link active" href="#control-objective" data-toggle="tab">
+        <a class="nav-link active" href="#control-objective" data-bs-toggle="tab">
           <%= ControlObjective.model_name.human %>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#process-control" data-toggle="tab">
+        <a class="nav-link" href="#process-control" data-bs-toggle="tab">
           <%= ProcessControl.model_name.human %>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#best-practice" data-toggle="tab">
+        <a class="nav-link" href="#best-practice" data-bs-toggle="tab">
           <%= BestPractice.model_name.human %>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#control-objective-tag" data-toggle="tab">
+        <a class="nav-link" href="#control-objective-tag" data-bs-toggle="tab">
           <%= t('review.control_objective_tag') %>
         </a>
       </li>
@@ -359,7 +359,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

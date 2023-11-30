@@ -182,11 +182,9 @@
 
     <%=  f.input :business_unit_ids,
       label: '&nbsp;'.html_safe,
-      item_wrapper_class: 'custom-control custom-checkbox',
       collection: @finding.control_objective_item.business_units,
       as: :check_boxes,
-      input_html: { disabled: true },
-      wrapper_html: { class: 'mt-n4' }
+      input_html: { disabled: true }
     %>
   <% end %>
 
@@ -294,7 +292,7 @@
 
   <% if @finding.costs.present? && show_follow_up_timestamps? %>
     <p class="my-3" >
-      <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
+      <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :bs_toggle => 'collapse' } %>
     </p>
 
     <div id="cost_details" class="collapse">
@@ -342,7 +340,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', data: { disable_with: false }  %>
   </div>

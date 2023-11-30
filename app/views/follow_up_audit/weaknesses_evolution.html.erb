@@ -122,7 +122,7 @@
     </p>
   <% end %>
 <% else %>
-  <div class="ml-3">
+  <div class="ms-3">
     <p class="mb-1"><em><%= t 'follow_up_committee_report.weaknesses_evolution.without_weaknesses' %></em></p>
   </div>
 <% end %>
@@ -131,7 +131,7 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
+  <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', target: '#customize_report' } %> |
   <%= link_to t('label.download_csv'), weaknesses_evolution_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 

@@ -18,7 +18,7 @@
 <% if @weaknesses.any? %>
   <% @weaknesses.each_with_index do |weakness, index| %>
     <p class="mb-1 mt-3">
-      <span class="badge badge-pill badge-secondary">
+      <span class="badge rounded-pill bg-secondary">
         <%= index + 1 %>
       </span>
       <span class="text-muted"><%= BusinessUnit.model_name.human %></span>:
@@ -67,7 +67,7 @@
     <% end %>
   <% end %>
 <% else %>
-  <div class="ml-3">
+  <div class="ms-3">
     <p class="mb-1"><em><%= t 'follow_up_committee_report.weaknesses_by_control_objective.without_weaknesses' %></em></p>
   </div>
 <% end %>
@@ -76,7 +76,7 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
+  <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', target: '#customize_report' } %> |
   <%= link_to t('label.download_csv'), weaknesses_by_control_objective_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 

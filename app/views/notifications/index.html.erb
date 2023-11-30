@@ -18,9 +18,9 @@
         <td class="d-none d-sm-table-cell"><%= notification.user_who_confirm.full_name if notification.user_who_confirm %></td>
         <td><%= l notification.created_at, :format => :short %></td>
         <td class="d-none d-sm-table-cell"><%= l notification.confirmation_date, :format => :short if notification.confirmation_date %></td>
-        <td class="text-right"><%= link_to_show notification %></td>
-        <td class="text-right"><%= link_to_edit edit_notification_path(notification) %></td>
-        <td class="text-right"><%= link_to_confirm notification %></td>
+        <td class="text-end"><%= link_to_show notification %></td>
+        <td class="text-end"><%= link_to_edit edit_notification_path(notification) %></td>
+        <td class="text-end"><%= link_to_confirm notification %></td>
       </tr>
     <% end %>
   </tbody>

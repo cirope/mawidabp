@@ -13,7 +13,7 @@
         <%= make_not_available_column News.human_attribute_name('published_at') %>
         <%= make_not_available_column News.human_attribute_name('shared'), class: 'd-none d-md-table-cell' %>
         <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'd-none d-sm-table-cell' }, 'tags' %>
-        <th colspan="3" class="text-right"><%= link_to_search %></th>
+        <th colspan="3" class="text-end"><%= link_to_search %></th>
       </tr>
     </thead>
 
@@ -24,9 +24,9 @@
           <td><%= l news.published_at.to_date %></td>
           <td class="d-none d-md-table-cell"><%= t news.shared ? 'label.yes' : 'label.no' %></td>
           <td class="d-none d-sm-table-cell"><%= tags news.tags %></td>
-          <td class="text-right"><%= link_to_show news %></td>
-          <td class="text-right"><%= link_to_edit [:edit, news] %></td>
-          <td class="text-right"><%= link_to_destroy news %></td>
+          <td class="text-end"><%= link_to_show news %></td>
+          <td class="text-end"><%= link_to_edit [:edit, news] %></td>
+          <td class="text-end"><%= link_to_destroy news %></td>
         </tr>
       <% end %>
     </tbody>

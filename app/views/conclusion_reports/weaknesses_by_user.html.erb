@@ -144,7 +144,7 @@
     </p>
 
     <% weakness.finding_answers.each do |finding_answer| %>
-      <blockquote class="blockquote ml-3">
+      <blockquote class="blockquote ms-3">
         <%= simple_format finding_answer.answer, class: 'small mb-1' %>
 
         <footer class="blockquote-footer">
@@ -166,7 +166,7 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
+  <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', target: '#customize_report' } %> |
   <%= link_to t('label.download_csv'), weaknesses_by_user_conclusion_reports_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 

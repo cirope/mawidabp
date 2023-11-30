@@ -10,10 +10,10 @@
     <% @questionnaires.each do |questionnaire| %>
       <tr>
         <td><%= questionnaire.name %></td>
-        <td class="text-right"><%= link_to_clone new_questionnaire_path(clone_from: questionnaire.id) %></td>
-        <td class="text-right"><%= link_to_show questionnaire %></td>
-        <td class="text-right"><%= link_to_edit edit_questionnaire_path(questionnaire) %></td>
-        <td class="text-right"><%= link_to_destroy questionnaire %></td>
+        <td class="text-end"><%= link_to_clone new_questionnaire_path(clone_from: questionnaire.id) %></td>
+        <td class="text-end"><%= link_to_show questionnaire %></td>
+        <td class="text-end"><%= link_to_edit edit_questionnaire_path(questionnaire) %></td>
+        <td class="text-end"><%= link_to_destroy questionnaire %></td>
       </tr>
     <% end %>
   </tbody>
