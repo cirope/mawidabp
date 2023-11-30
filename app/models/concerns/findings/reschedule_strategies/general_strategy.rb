@@ -28,7 +28,7 @@ class Findings::RescheduleStrategies::GeneralStrategy < Findings::RescheduleStra
     end
 
     if finding.repeated_of
-      initial_finding = finding.final == true ? finding.repeated_of&.latest : finding
+      initial_finding = finding.initial_finding
 
       initial_finding.versions_before_final_review.reverse.each do |v|
         prev = v.reify dup: true
