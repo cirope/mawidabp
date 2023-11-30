@@ -23,7 +23,7 @@ module Findings::Reschedule
     count + (repeated_of&.calculate_reschedule_count || 0)
   end
 
-  def initial_finding
+  def original_finding
     if is_being_created_for_final_review?
       repeated_of&.latest
     else
@@ -68,7 +68,7 @@ module Findings::Reschedule
     end
 
     def is_being_created_for_final_review?
-      id.nil? && final == true
+      new_record? && final == true
     end
 
     def last_follow_up_date_for_reschedule
