@@ -98,4 +98,16 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
   def risk_style weakness
     weakness.implemented_audited? ? 'text-green' : 'text-white'
   end
+
+  def reference_padding conclusion_review
+    if conclusion_review.reference.present?
+      'pt-5'
+    end
+  end
+
+  def conclusion_padding conclusion_review
+    if !conclusion_review.reference.present? && conclusion_review.conclusion.present?
+      'pt-5'
+    end
+  end
 end
