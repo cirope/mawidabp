@@ -141,10 +141,10 @@
   <% conclusion_review_weaknesses(conclusion_review).each_with_index do |weakness, i| %>
     <div class="alwaysbreak <%= watermark_class draft %>">
       <div class="row py-5">
-        <div class="col-3 text-white text-center py-5">
-          <p class="font-weight-bold py-5" style="font-size:2.4em;"><%= I18n.t 'conclusion_review.bic.weaknesses.plan', index: i %></p>
+        <div class="col-3 text-white py-5">
+          <p class="ml-4 text-left font-weight-bold py-5" style="font-size:2.5em;"><%= I18n.t 'conclusion_review.bic.weaknesses.plan', index: i %></p>
           <div style="min-height: 300px;">
-            <p class="font-weight-bold text-center" style="font-size:3.1em;"><%= weakness.title %></p>
+            <p class="ml-4 text-left font-weight-bold" style="font-size:2.5em;"><%= weakness.title %></p>
           </div>
           <p class="ml-4 text-left" style="font-size:1.7em;"><span class="font-weight-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p>
           <div class="row font-weight-bold ml-2">
