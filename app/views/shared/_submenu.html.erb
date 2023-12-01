@@ -1,17 +1,18 @@
-<%= link_to submenu_item, submenu_item.url, class: 'dropdown-item' %>
-<% if submenu_item.children.present? && submenu_item.submenu_names.include?(@current_module) %>
-  <%= content_for :submenu do %>
-    <div class="row">
-      <div class="col-md-12">
-        <ul class="nav nav-tabs mb-3">
-          <% submenu_item.children.each do |sub_submenu_item| %>
-            <% active = sub_submenu_item.submenu_names.include?(@current_module) %>
-            <li class="nav-item">
-              <%= link_to sub_submenu_item, sub_submenu_item.url, class: "nav-link#{' active' if active}" %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
+<li class="sidebar-item">
+  <% if submenu_item.children.present? && submenu_item.submenu_names.include?(@current_module) %>
+    <%= link_to submenu_item, submenu_item.url,
+      class: 'sidebar-link collapsed',
+      data: { bs_toggle: 'collapse', bs_target: "##{submenu_item}" } %>
+
+    <ul id="<%= submenu_item %>" class="sidebar-dropdown list-unstyled collapse">
+      <% submenu_item.children.each do |sub_submenu_item| %>
+        <% active = sub_submenu_item.submenu_names.include?(@current_module) %>
+        <li class="sidebar-item">
+          <%= link_to sub_submenu_item, sub_submenu_item.url, class: "nav-link#{' active' if active}" %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <%= link_to submenu_item, submenu_item.url, class: 'sidebar-link' %>
   <% end %>
-<% end %>
+</li>

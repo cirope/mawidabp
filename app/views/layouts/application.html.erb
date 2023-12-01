@@ -12,17 +12,29 @@
     <%= javascript_tag { yield :js_extra } %>
   </head>
 
-  <body class="pt-5 my-3" data-controller="<%= controller_name %>">
-    <div class="alert alert-warning fixed-top mx-auto text-center border-0 p-3 loading-caption" hidden>
-      <strong><%= t 'navigation.loading' %></strong>
-    </div>
-    <div class="container">
-      <%= render 'shared/compatibility_warning' %>
-      <%= render 'shared/menu'       if show_menu? %>
-      <%= render 'shared/breadcrumb' if show_breadcrumb? %>
-      <%= render 'shared/flash'      if show_flash_message? %>
-      <%= yield :submenu %>
-      <%= yield %>
+  <body
+      data-theme="default"
+      data-layout="fluid"
+      data-sidebar-position="left"
+      data-sidebar-behavior="sticky"
+      data-controller="<%= controller_name %>"i
+    >
+    <div class="wrapper">
+      <%= render 'shared/left_menu' if show_menu? %>
+
+      <div class="main">
+        <%= render 'shared/top_menu' %>
+
+        <main class="content">
+          <%= render 'shared/compatibility_warning' %>
+          <%= render 'shared/breadcrumb' if show_breadcrumb? %>
+          <%= render 'shared/flash'      if show_flash_message? %>
+
+          <%= yield %>
+        </main>
+
+        <%= render 'shared/footer' %>
+      </div>
 
       <%= javascript_tag { yield :js_extra_bottom } %>
     </div>

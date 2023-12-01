@@ -18,6 +18,7 @@
 //= require jquery.mw
 //= require popper
 //= require bootstrap
+//= require appstack/sidebar
 //
 //= require add_days_to_input
 //= require ajax

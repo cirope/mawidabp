@@ -1,14 +1,14 @@
 <% active = menu_item.submenu_names.include? @current_module %>
 
 <% if menu_item.children.present? %>
-  <li class="nav-item dropdown <%= 'active' if active %>">
-    <%= link_to '#', class: 'nav-link dropdown-toggle', data: { bs_toggle: 'dropdown' } do %>
+  <li class="sidebar-item <%= 'active' if active %>">
+    <%= link_to '#', class: 'sidebar-link collapsed', data: { bs_toggle: 'dropdown', bs_target: "##{menu_item}" } do %>
       <%= menu_item %>
     <% end %>
-    <div class="dropdown-menu">
+    <ul id="<%= menu_item %>" class="sidebar-dropdown list-unstyled collapse">
       <%= render partial: 'shared/submenu', collection: menu_item.children, as: :submenu_item %>
-    </div>
+    </ul>
   </li>
 <% else %>
-  <li class="nav-item"><%= link_to menu_item, menu_item.url, class: 'nav-link' %></li>
+  <li class="sidebar-item"><%= link_to menu_item, menu_item.url, class: 'sidebar-link collapsed' %></li>
 <% end %>
