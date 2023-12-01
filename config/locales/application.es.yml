@@ -28,6 +28,7 @@ es:
     download: "Descargar"
     download_csv: "Descargar CSV"
     download_rtf: "Descargar RTF"
+    download_pdf: "Descargar PDF"
     create_permalink: "Crear enlace permanente"
     edit: "Editar"
     import: "Importar"

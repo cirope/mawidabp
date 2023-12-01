@@ -23,6 +23,14 @@ module Findings::Reschedule
     count + (repeated_of&.calculate_reschedule_count || 0)
   end
 
+  def original_finding
+    if is_being_created_for_final_review?
+      repeated_of&.latest
+    else
+      self
+    end
+  end
+
   private
 
     def save_reschedule_count
@@ -40,7 +48,7 @@ module Findings::Reschedule
     end
 
     def recalculate_attributes_changed?
-      calculate_by_follow_up_date? || calculate_by_state?
+      calculate_by_follow_up_date? || calculate_by_state? || calculate_by_repeated_of?
     end
 
     def calculate_by_follow_up_date?
@@ -51,8 +59,16 @@ module Findings::Reschedule
       state_changed? && follow_up_date.present?
     end
 
+    def calculate_by_repeated_of?
+      repeated_of_id_changed? && follow_up_date.present?
+    end
+
     def repeated_or_on_final_review?
       repeated_of&.follow_up_date.present? || final_review_created_at.present?
+    end
+
+    def is_being_created_for_final_review?
+      new_record? && final
     end
 
     def last_follow_up_date_for_reschedule

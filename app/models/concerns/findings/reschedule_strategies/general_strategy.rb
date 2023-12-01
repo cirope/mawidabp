@@ -27,7 +27,17 @@ class Findings::RescheduleStrategies::GeneralStrategy < Findings::RescheduleStra
       end
     end
 
-    if finding.repeated_of&.follow_up_date
+    if finding.repeated_of
+      original_finding = finding.original_finding
+
+      original_finding.versions_before_final_review.reverse.each do |v|
+        prev = v.reify dup: true
+
+        if prev&.being_implemented? && prev&.follow_up_date
+          follow_up_dates << prev.follow_up_date
+        end
+      end
+
       follow_up_dates << finding.repeated_of.follow_up_date
     end
 

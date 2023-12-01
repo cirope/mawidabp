@@ -10,7 +10,7 @@
       <tr>
         <%= make_filterable_column RiskRegistry.human_attribute_name('name'), nil, 'name' %>
         <%= make_not_available_column RiskRegistry.human_attribute_name('description'), { :class => 'd-none d-md-table-cell' } %>
-        <th colspan="3" class="text-right"><%= link_to_search %></th>
+        <th colspan="3" class="text-end"><%= link_to_search %></th>
       </tr>
     </thead>
 
@@ -21,9 +21,9 @@
             <%= super_truncate risk_registry.name, 40 %>
           </td>
           <td class="d-none d-md-table-cell"><%= super_truncate risk_registry.description, 40 %></td>
-          <td class="text-right"><%= link_to_show risk_registry %></td>
-          <td class="text-right"><%= link_to_edit edit_risk_registry_path(risk_registry) %></td>
-          <td class="text-right"><%= link_to_destroy risk_registry %></td>
+          <td class="text-end"><%= link_to_show risk_registry %></td>
+          <td class="text-end"><%= link_to_edit edit_risk_registry_path(risk_registry) %></td>
+          <td class="text-end"><%= link_to_destroy risk_registry %></td>
         </tr>
       <% end %>
     </tbody>

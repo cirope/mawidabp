@@ -10,9 +10,9 @@
       <div id="images-<%= news.id %>" class="carousel slide mb-3" data-ride="carousel" data-interval="false">
         <% if news.image_models.size > 1 %>
           <ol class="carousel-indicators">
-            <li data-target="#images-<%= news.id %>" data-slide-to="0" class="active"></li>
+            <li data-bs-target="#images-<%= news.id %>" data-slide-to="0" class="active"></li>
             <% news.image_models.size.pred.times do |i| %>
-              <li data-target="#images-<%= news.id %>" data-slide-to="<%= i.next %>"></li>
+              <li data-bs-target="#images-<%= news.id %>" data-slide-to="<%= i.next %>"></li>
             <% end %>
           </ol>
         <% end %>
@@ -45,7 +45,7 @@
       <ul class="list-inline">
         <% news.taggings.each do |tagging| %>
           <li>
-            <span class="badge badge-<%= tagging.tag.style %>"><%= tagging.tag %></span>
+            <span class="badge bg-<%= tagging.tag.style %>"><%= tagging.tag %></span>
           </li>
         <% end %>
       </ul>

@@ -154,7 +154,7 @@
                 <%= f.hidden_field :risk, disabled: !@finding.automatic_risk?,
                   data: { bic_field_to_disabled_when_is_manual: true } %>
               </div>
-              <div class="col-3 text-right">
+              <div class="col-3 text-end">
                 <%= f.input :manual_risk, wrapper_html: { class: 'mt-4 pt-2' }, input_html: {
                   disabled: @finding.manual_risk_was,
                   data: { toggle_risk_disabled_attr: true, replace_with_original_value_when_disabled: true }
@@ -219,7 +219,7 @@
             <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
           </div>
           <% if USE_SCOPE_CYCLE %>
-            <div class="col-3 text-right">
+            <div class="col-3 text-end">
               <%= f.input :extension, wrapper_html: { class: 'mt-4 pt-2' }, input_html: { readonly: @finding.tasks.any? } %>
             </div>
           <% end %>
@@ -268,21 +268,18 @@
         <div class="col-md-4">
           <%= f.input :impact,
             as: :check_boxes,
-            item_wrapper_class: 'custom-control custom-checkbox',
             collection: weakness_impact_options
           %>
         </div>
         <div class="col-md-4">
           <%= f.input :operational_risk,
             as: :check_boxes,
-            item_wrapper_class: 'custom-control custom-checkbox',
             collection: weakness_operational_risk_options
           %>
         </div>
         <div class="col-md-4">
           <%= f.input :internal_control_components,
             as: :check_boxes,
-            item_wrapper_class: 'custom-control custom-checkbox',
             collection: weakness_internal_control_components_options
           %>
         </div>
@@ -295,7 +292,6 @@
       <div class="col-md-12">
         <%= f.input :tag_ids,
           as: :check_boxes,
-          item_wrapper_class: 'custom-control custom-checkbox',
           collection: finding_tag_options
         %>
       </div>
@@ -435,10 +431,8 @@
 
     <%= f.input :business_unit_ids,
       label: '&nbsp;'.html_safe,
-      item_wrapper_class: 'custom-control custom-checkbox',
       collection: @finding.control_objective_item.business_units,
-      as: :check_boxes,
-      wrapper_html: { class: 'mt-n4' }
+      as: :check_boxes
     %>
   <% end %>
 
@@ -578,7 +572,7 @@
 
   <% if @finding.costs.present? && show_follow_up_timestamps? %>
     <p class="mb-1">
-      <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
+      <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :bs_toggle => 'collapse' } %>
     </p>
 
     <div id="cost_details" class="collapse">
@@ -628,7 +622,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', data: { disable_with: false }  %>
   </div>

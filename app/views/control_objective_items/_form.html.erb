@@ -214,7 +214,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.input :control_objective_id, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', disabled: frozen %>

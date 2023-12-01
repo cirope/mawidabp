@@ -2,7 +2,7 @@
 
 <%= wicked_pdf_javascript_include_tag 'wicked_pdf/bic_pdf/set_background_image' %>
 
-<div class="text-justify">
+<div>
   <div class="alwaysbreak <%= watermark_class draft %>">
     <div class="row">
       <div class="col-3 text-white pt-5">
@@ -127,9 +127,6 @@
       </div>
     <% end %>
     <% if conclusion_review.conclusion.present? %>
-      <div class="row py-5">
-        <div class="col-3 text-white text-center <%= conclusion_padding conclusion_review %>">
-          <p class="font-weight-bold m-0 pl-5 <%= conclusion_padding conclusion_review %>" style="font-size:3.4em;"><%= I18n.t 'conclusion_review.bic.audit_comments' %></p>
         </div>
         <div class="col-9 w-100 px-0">
           <div class="col-10 offset-1">
