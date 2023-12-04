@@ -1,5 +1,5 @@
 <h2>
-  <div class="badge badge-<%= @tag.style %>">
+  <div class="badge bg-<%= @tag.style %>">
     <%= icon 'fas', @tag.icon %>
     <%= @tag %>
   </div>
@@ -30,7 +30,7 @@
   <ul class="lead">
     <% @tag.children.each do |tag| %>
       <li>
-        <span class="badge badge-<%= tag.style %>">
+        <span class="badge bg-<%= tag.style %>">
           <%= tag %>
         </span>
       </li>

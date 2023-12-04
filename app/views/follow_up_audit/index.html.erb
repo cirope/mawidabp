@@ -1,8 +1,8 @@
 <div class="card mb-3">
   <div class="card-header">
-    <h5 class="mb-0">
+    <strong>
       <%= Finding.model_name.human count: 0 %>
-    </h5>
+    </strong>
   </div>
 
   <div class="card-body">
@@ -82,9 +82,9 @@
 
 <div class="card mb-3">
   <div class="card-header">
-    <h5 class="mb-0">
+    <strong>
       <%= t 'follow_up_audit.others.title' %>
-    </h5>
+    </strong>
   </div>
 
   <div class="card-body">
@@ -102,7 +102,7 @@
           <%= link_to t('follow_up_committee_report.review_stats_report_title'),
             { action: :review_stats_report, controller_name: 'follow_up' }, class: 'list-group-item list-group-item-action' %>
           <%= link_to t('follow_up_audit.cost_analysis_title'),
-            { :action => :follow_up_cost_analysis, class: 'btn btn-outline-secondary btn-lg btn-block' }, class: 'list-group-item list-group-item-action' %>
+            { :action => :follow_up_cost_analysis }, class: 'list-group-item list-group-item-action' %>
         </div>
       </div>
     </div>
