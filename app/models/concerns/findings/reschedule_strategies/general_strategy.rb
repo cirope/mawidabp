@@ -38,7 +38,7 @@ class Findings::RescheduleStrategies::GeneralStrategy < Findings::RescheduleStra
         end
       end
 
-      follow_up_dates << finding.repeated_of.follow_up_date
+      follow_up_dates << finding.repeated_of.follow_up_date if finding.repeated_of.follow_up_date
     end
 
     follow_up_dates
