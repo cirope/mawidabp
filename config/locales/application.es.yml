@@ -1347,6 +1347,8 @@ es:
         main_recommendations: "Principales Recomendaciones de Auditoría"
         additional_comments: "Comentarios adicionales"
         exclude_regularized_findings: "Excluir hallazgos regularizados"
+        extended_conclusion: Conclusión extendida
+        robotization: Robotización
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_01_172300) do
+ActiveRecord::Schema.define(version: 2023_12_10_225609) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -293,6 +293,8 @@ ActiveRecord::Schema.define(version: 2023_11_01_172300) do
     t.text "effectiveness_notes"
     t.text "additional_comments"
     t.boolean "exclude_regularized_findings", default: false, null: false
+    t.text "extended_conclusion"
+    t.text "robotization"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
