@@ -1113,7 +1113,7 @@ es:
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
       without_score: "no tiene puntaje de auditoría"
-      without_survey: "no tiene resumen del alcance"
+      without_survey: "no tiene objetivo"
       without_audited: "no tiene usuario auditado"
       without_file_model: "no tiene anexo"
       without_control_objectives: "no tiene objetivos de control"
@@ -1123,7 +1123,7 @@ es:
         one: "Con un archivo adjunto"
         other: "Con %{count} archivos adjuntos"
       without_attachment: "Sin archivos adjuntos"
-      download: "Descargar resumen del alcance"
+      download: "Descargar objetivo"
       download_attachment: "Descargar adjunto"
     review_data:
       close_date: "Fecha de cierre: %{date}"
@@ -1334,7 +1334,7 @@ es:
         sectors: "Sectores/departamentos involucrados"
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación de la evolución"
-        observations: "Otras consideraciones"
+        observations: "Consideraciones/Recomendaciones"
         main_weaknesses_text: "Principales debilidades"
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta cumplimiento"
@@ -1490,7 +1490,7 @@ es:
       review:
         identification: "Identificación"
         description: "Descripción"
-        survey: "Resumen del alcance"
+        survey: "Objetivo"
         audit_type: "Tipo de auditoría"
         business_unit: "Ciclo"
         period_id: "Periodo"
