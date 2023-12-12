@@ -5,13 +5,13 @@ module ConclusionReviews::GalPdf
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
-    put_gal_tmp_reviews_code organization
-    put_default_watermark_on pdf
-    put_gal_header_on        pdf, organization
-    put_gal_cover_on         pdf
-    put_executive_summary_on pdf, organization
-    put_detailed_review_on   pdf, organization
-    put_annex_on             pdf, organization, options
+    put_gal_tmp_reviews_code     organization
+    put_default_watermark_on     pdf
+    put_gal_header_on            pdf, organization
+    put_gal_cover_on             pdf
+    put_gal_executive_summary_on pdf
+    put_detailed_review_on       pdf, organization
+    put_annex_on                 pdf, organization, options
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -66,50 +66,174 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def put_executive_summary_on pdf, organization
-      title                      = I18n.t 'conclusion_review.executive_summary.title'
-      review_key                 = I18n.t "conclusion_review.executive_summary.keywords.review"
-      params                     = { "#{review_key}": review.identification }
-      exec_summary_intro         = review.business_unit_type.exec_summary_intro
-      independent_identification = review.business_unit_type.independent_identification
-      project                    = review.plan_item.project
+    # def put_executive_summary_on pdf, organization
+    #   title                      = I18n.t 'conclusion_review.executive_summary.title'
+    #   review_key                 = I18n.t "conclusion_review.executive_summary.keywords.review"
+    #   params                     = { "#{review_key}": review.identification }
+    #   exec_summary_intro         = review.business_unit_type.exec_summary_intro
+    #   independent_identification = review.business_unit_type.independent_identification
+    #   project                    = review.plan_item.project
+    #
+    #   full_exec_summary_intro = if exec_summary_intro.present? &&
+    #                               created_at >= CODE_CHANGE_DATES['exec_summary_intro_custom_field'].to_date
+    #                                 exec_summary_intro % params
+    #                             elsif independent_identification
+    #                               I18n.t "conclusion_review.executive_summary.intro_alt"
+    #                             else
+    #                               I18n.t "conclusion_review.executive_summary.intro_default"
+    #                             end
+    #
+    #   pdf.start_new_page
+    #   pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
+    #   pdf.move_down PDF_FONT_SIZE * 2
+    #
+    #   pdf.text "#{full_exec_summary_intro} <b>#{project}</b>", align: :justify, inline_format: true
+    #
+    #   put_risk_exposure_on pdf
+    #   put_gal_score_on     pdf
+    #
+    #   put_main_weaknesses_on pdf
+    #
+    #   if show_observations_on_top? organization
+    #     put_observations_on pdf
+    #   end
+    #
+    #   unless show_review_best_practice_comments? organization
+    #     put_other_weaknesses_on  pdf
+    #   end
+    #
+    #   if show_scope_detail?
+    #     title = I18n.t 'conclusion_review.scope_detail.title'
+    #
+    #     pdf.start_new_page
+    #     pdf.add_title title, (PDF_FONT_SIZE).round, :center
+    #     pdf.move_down PDF_FONT_SIZE * 2
+    #
+    #     put_scope_detail_table_on pdf
+    #   end
+    # end
 
-      full_exec_summary_intro = if exec_summary_intro.present? &&
-                                  created_at >= CODE_CHANGE_DATES['exec_summary_intro_custom_field'].to_date
-                                    exec_summary_intro % params
-                                elsif independent_identification
-                                  I18n.t "conclusion_review.executive_summary.intro_alt"
-                                else
-                                  I18n.t "conclusion_review.executive_summary.intro_default"
-                                end
+    def put_gal_executive_summary_on pdf
+      title = I18n.t 'conclusion_review.executive_summary.title'
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.text "#{full_exec_summary_intro} <b>#{project}</b>", align: :justify, inline_format: true
+      pdf.table([
+        [put_risk_exposure_and_scope_on(pdf)],
+        [put_survey_on(pdf)],
+        [""],
+        [put_conclusion_and_score_image_on(pdf)],
+        [""],
+        [put_key_weaknesses_on(pdf)],
+        [put_observations_and_robotization_on(pdf)]
+      ])
+    end
 
-      put_risk_exposure_on pdf
-      put_gal_score_on     pdf
+    def put_risk_exposure_and_scope_on pdf
+      style = {
+        cell_style: { background_color: "e7e6e6", inline_format: true },
+        column_widths: risk_exposure_and_scope_column_widths(pdf)
+      }
 
-      put_main_weaknesses_on pdf
+      pdf.make_table([
+        [
+          "<b>#{Review.human_attribute_name :risk_exposure}:</b> #{review.risk_exposure}",
+          "<b>#{I18n.t 'conclusion_review.executive_summary.revision_type'}</b>: #{review.scope}"
+        ]
+      ], style)
+    end
 
-      if show_observations_on_top? organization
-        put_observations_on pdf
+    def put_survey_on pdf
+      pdf.make_cell(
+        content: "<b>#{Review.human_attribute_name :survey}:</b> #{review.survey}",
+        background_color: 'e7e6e6',
+        align: :justify,
+        inline_format: true
+      )
+    end
+
+    def put_conclusion_and_score_image_on pdf
+      data_conclusion = put_conclusion_on pdf
+      evolution_image = pdf_score_image_row get_evolution_image
+
+      headers = [
+        self.class.human_attribute_name(:conclusion),
+        I18n.t('conclusion_review.executive_summary.evolution_alt')
+      ]
+
+      content = [data_conclusion, evolution_image]
+
+      style = {
+        column_widths: conclusion_and_score_image_column_widths(pdf)
+      }
+
+      pdf.make_table([headers, content], style) do
+        row(0).style(
+          background_color: 'e7e6e6',
+          font_style: :bold,
+          size: 16,
+          align: :center
+        )
       end
+    end
 
-      unless show_review_best_practice_comments? organization
-        put_other_weaknesses_on  pdf
+    def put_conclusion_on pdf
+      style = { column_widths: [pdf.percent_width(40), pdf.percent_width(40)] }
+
+      pdf.make_table([["Graph", extended_conclusion]], style) do
+        column(1).style(align: :justify)
       end
+    end
 
-      if show_scope_detail?
-        title = I18n.t 'conclusion_review.scope_detail.title'
+    def put_key_weaknesses_on pdf
+      weaknesses = main_weaknesses
+      rows       = build_key_weaknesses_rows weaknesses
 
-        pdf.start_new_page
-        pdf.add_title title, (PDF_FONT_SIZE).round, :center
-        pdf.move_down PDF_FONT_SIZE * 2
+      style = {
+        column_widths: key_weaknesses_column_widths(pdf)
+      }
 
-        put_scope_detail_table_on pdf
+      pdf.make_table(rows, style) do
+        row(0).style(background_color: 'e7e6e6', font_style: :bold, align: :center)
+        rows(1..-1).style do |r|
+          r.style(text_color: "FF0000") if true # TODO: agregar condition
+        end
+        columns(1..2).style(align: :center)
+      end
+    end
+
+    def build_key_weaknesses_rows weaknesses
+      [
+        [
+          I18n.t('conclusion_review.executive_summary.key_weaknesses'),
+          I18n.t('conclusion_review.executive_summary.origin'),
+          I18n.t('conclusion_review.executive_summary.normalization')
+        ]
+      ].tap do |rows|
+        weaknesses.each do |weakness|
+          rows << [
+            weakness.title,
+            weakness.origination_date.year.to_s,
+            I18n.l(weakness.follow_up_date, format: "%B %Y")
+          ]
+        end
+      end
+    end
+
+    def put_observations_and_robotization_on pdf
+      style = {
+        column_widths: [pdf.percent_width(40), pdf.percent_width(60)],
+        cell_style: { inline_format: true }
+      }
+
+      pdf.make_table([
+        ["#{self.class.human_attribute_name(:observations).gsub('/', "\n")}", observations],
+        ["#{self.class.human_attribute_name :robotization}", robotization]
+      ], style) do
+        column(0).style(font_style: :bold, size: 16, align: :center, valign: :center)
+        column(1).style(align: :justify)
       end
     end
 
@@ -612,7 +736,8 @@ module ConclusionReviews::GalPdf
     end
 
     def main_weaknesses
-      _weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk
+      # _weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk
+      _weaknesses = weaknesses.with_high_risk
 
       gal_sort_weaknesses_by_review_code _weaknesses
     end
@@ -777,6 +902,18 @@ module ConclusionReviews::GalPdf
       [70, 10].map do |width|
         pdf.percent_width width
       end
+    end
+
+    def risk_exposure_and_scope_column_widths pdf
+      [60, 40].map { |percent| pdf.percent_width percent }
+    end
+
+    def conclusion_and_score_image_column_widths pdf
+      [80, 20].map { |percent| pdf.percent_width percent }
+    end
+
+    def key_weaknesses_column_widths pdf
+      [60, 20, 20].map { |percent| pdf.percent_width percent }
     end
 
     def gal_score_details_column_data
