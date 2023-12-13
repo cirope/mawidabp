@@ -207,9 +207,8 @@ module ConclusionReviews::GalPdf
 
       weaknesses.each do |weakness|
         origination_year = weakness.origination_date&.year
-        text_color       = (origination_year && origination_year < current_year) ? "FF0000" : "000000"
+        text_color       = (origination_year && origination_year < current_year - 1) ? "FF0000" : "000000"
         follow_up_date   = I18n.l(weakness.follow_up_date, format: "%B %Y")
-
 
         rows << [
           pdf.make_cell(content: weakness.title, text_color: text_color),
