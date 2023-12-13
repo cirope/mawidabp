@@ -742,8 +742,7 @@ module ConclusionReviews::GalPdf
     end
 
     def main_weaknesses
-      # _weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk
-      _weaknesses = weaknesses.with_high_risk
+      _weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk
 
       gal_sort_weaknesses_by_review_code _weaknesses
     end
