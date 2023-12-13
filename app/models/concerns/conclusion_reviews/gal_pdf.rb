@@ -189,7 +189,7 @@ module ConclusionReviews::GalPdf
 
     def put_key_weaknesses_on pdf
       weaknesses = main_weaknesses
-      rows       = build_key_weaknesses_rows weaknesses
+      rows       = key_weaknesses_rows pdf, weaknesses
 
       style = {
         column_widths: key_weaknesses_column_widths(pdf)
@@ -197,29 +197,36 @@ module ConclusionReviews::GalPdf
 
       pdf.make_table(rows, style) do
         row(0).style(background_color: 'e7e6e6', font_style: :bold, align: :center)
-        rows(1..-1).style do |r|
-          r.style(text_color: "FF0000") if true # TODO: agregar condition
-        end
         columns(1..2).style(align: :center)
       end
     end
 
-    def build_key_weaknesses_rows weaknesses
-      [
-        [
-          I18n.t('conclusion_review.executive_summary.key_weaknesses'),
-          I18n.t('conclusion_review.executive_summary.origin'),
-          I18n.t('conclusion_review.executive_summary.normalization')
+    def key_weaknesses_rows pdf, weaknesses
+      current_year = Date.today.year
+      rows         = [key_weaknesses_header]
+
+      weaknesses.each do |weakness|
+        origination_year = weakness.origination_date&.year
+        text_color       = (origination_year && origination_year < current_year) ? "FF0000" : "000000"
+        follow_up_date   = I18n.l(weakness.follow_up_date, format: "%B %Y")
+
+
+        rows << [
+          pdf.make_cell(content: weakness.title, text_color: text_color),
+          pdf.make_cell(content: origination_year.to_s, text_color: text_color),
+          pdf.make_cell(content: follow_up_date, text_color: text_color)
         ]
-      ].tap do |rows|
-        weaknesses.each do |weakness|
-          rows << [
-            weakness.title,
-            weakness.origination_date.year.to_s,
-            I18n.l(weakness.follow_up_date, format: "%B %Y")
-          ]
-        end
       end
+
+      rows
+    end
+
+    def key_weaknesses_header
+      [
+        I18n.t('conclusion_review.executive_summary.key_weaknesses'),
+        I18n.t('conclusion_review.executive_summary.origin'),
+        I18n.t('conclusion_review.executive_summary.normalization')
+      ]
     end
 
     def put_observations_and_robotization_on pdf
