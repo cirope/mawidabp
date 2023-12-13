@@ -1,5 +1,5 @@
 // Usage: https://github.com/Grsmto/simplebar
-import SimpleBar from "simplebar";
+//import SimpleBar from "simplebar";
 
 document.addEventListener("DOMContentLoaded", () => {
   const simpleBarElement = document.getElementsByClassName("js-simplebar")[0];

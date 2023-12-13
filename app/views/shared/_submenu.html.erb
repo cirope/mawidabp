@@ -1,14 +1,19 @@
-<li class="sidebar-item">
-  <% if submenu_item.children.present? && submenu_item.submenu_names.include?(@current_module) %>
-    <%= link_to submenu_item, submenu_item.url,
-      class: 'sidebar-link collapsed',
-      data: { bs_toggle: 'collapse', bs_target: "##{submenu_item}" } %>
+<%
+  active       = submenu_item.submenu_names.include? @current_module
+  has_children = submenu_item.children.present?
+%>
 
-    <ul id="<%= submenu_item %>" class="sidebar-dropdown list-unstyled collapse">
+<li class="sidebar-item <%== 'active' if active && !has_children %>">
+  <% if submenu_item.children.present? %>
+    <%= link_to submenu_item, submenu_item.url,
+      class: "sidebar-link #{'collapsed' unless active}",
+      data: { bs_toggle: 'collapse', bs_target: "##{submenu_item.name}" } %>
+
+    <ul id="<%= submenu_item.name %>" class="sidebar-dropdown list-unstyled collapse <%== 'show' if active %>">
       <% submenu_item.children.each do |sub_submenu_item| %>
         <% active = sub_submenu_item.submenu_names.include?(@current_module) %>
-        <li class="sidebar-item">
-          <%= link_to sub_submenu_item, sub_submenu_item.url, class: "nav-link#{' active' if active}" %>
+        <li class="sidebar-item <%== 'active' if active %>">
+          <%= link_to sub_submenu_item, sub_submenu_item.url, class: 'sidebar-link' %>
         </li>
       <% end %>
     </ul>

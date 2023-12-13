@@ -19,31 +19,17 @@
       data-sidebar-behavior="sticky"
       data-controller="<%= controller_name %>"
     >
-    <div class="wrapper">
-      <%= render 'shared/left_menu' %>
+    <div class="main d-flex justify-content-center w-100">
+      <main class="content d-flex p-0">
+        <div class="container d-flex flex-column">
+          <div class="h-100 mt-5">
+            <%= render 'shared/compatibility_warning' %>
+            <%= render 'shared/flash' if show_flash_message? %>
 
-      <div class="main">
-        <%= render 'shared/top_menu' %>
-
-        <main class="content p-3">
-          <%= render 'shared/compatibility_warning' %>
-          <%= render 'shared/flash' if show_flash_message? %>
-
-          <div class="container-fluid">
-            <div class="card">
-              <div class="card-body">
-                <%= render 'shared/breadcrumb' if show_breadcrumb? %>
-
-                <%= yield %>
-              </div>
-            </div>
+            <%= yield %>
           </div>
-        </main>
-
-        <%= render 'shared/footer' %>
-      </div>
-
-      <%= javascript_tag { yield :js_extra_bottom } %>
+        </div>
+      </main>
     </div>
   </body>
 </html>

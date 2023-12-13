@@ -1,16 +1,14 @@
 <nav id="sidebar" class="sidebar">
   <div class="sidebar-content js-simplebar">
     <%= link_to root_url, class: 'sidebar-brand', title: t('app_name') do %>
-      <%= image_tag 'welcome/logo.svg', alt: t('app_name'), height: 27 %>
+      <%= image_tag 'logo-menu.svg', alt: t('app_name'), height: 19 %>
     <% end %>
-  </div>
 
-  <ul class="sidebar-nav">
-    <% if show_menu? %>
+    <ul class="sidebar-nav">
       <%= render(
         partial:    'shared/menu_item',
         collection: @auth_user.get_menu
       ) %>
-   <% end %>
-  </ul>
+    </ul>
+  </div>
 </nav>

@@ -1,14 +1,15 @@
-<% active = menu_item.submenu_names.include? @current_module %>
+<% active = menu_item.submenu_names.include?(@current_module) %>
 
-<% if menu_item.children.present? %>
-  <li class="sidebar-item <%= 'active' if active %>">
-    <%= link_to '#', class: 'sidebar-link collapsed', data: { bs_toggle: 'dropdown', bs_target: "##{menu_item}" } do %>
-      <%= menu_item %>
+<li class="sidebar-item <%== 'active' if active %>">
+  <% if menu_item.children.present? %>
+    <%= link_to '#', class: "sidebar-link #{'collapsed' unless active}", data: { bs_toggle: 'collapse', bs_target: "##{menu_item.name}" } do %>
+      <%= icon 'fas fa-lg', menu_item.icon %>
+      <span class="align-middle"><%= menu_item %></span>
     <% end %>
-    <ul id="<%= menu_item %>" class="sidebar-dropdown list-unstyled collapse">
+    <ul id="<%= menu_item.name %>" class="sidebar-dropdown list-unstyled collapse <%== 'show' if active %>" data-bs-parent="#sidebar">
       <%= render partial: 'shared/submenu', collection: menu_item.children, as: :submenu_item %>
     </ul>
-  </li>
-<% else %>
-  <li class="sidebar-item"><%= link_to menu_item, menu_item.url, class: 'sidebar-link collapsed' %></li>
-<% end %>
+  <% else %>
+    <%= link_to icon('fas', 'file-lines', menu_item), menu_item.url, class: "sidebar-link #{'collapsed' unless active}" %>
+  <% end %>
+</li>

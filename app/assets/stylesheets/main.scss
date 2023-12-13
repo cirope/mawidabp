@@ -1,7 +1,9 @@
-@import "bootstrap_variables";
 @import "bootstrap/functions";
 @import "bootstrap/variables";
 
+.sidebar-brand {
+  padding: 20px 0 !important;
+}
 .form-control:read-only{
     background-color: #e9ecef;
     opacity: 1;
@@ -79,10 +81,6 @@ textarea {
   display: block;
   height: 80px;
   margin: -80px 0 0;
-}
-
-:target table {
-  border: 3px solid theme-color-level("warning", $alert-border-level) !important;
 }
 
 @keyframes pulsate {
