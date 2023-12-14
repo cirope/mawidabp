@@ -26,17 +26,12 @@
         <%= render 'shared/top_menu' %>
 
         <main class="content p-3">
-          <%= render 'shared/compatibility_warning' %>
-          <%= render 'shared/flash' if show_flash_message? %>
+          <div class="container-fluid p-0">
+            <%= render 'shared/compatibility_warning' %>
+            <%= render 'shared/flash' if show_flash_message? %>
+            <%= render 'shared/breadcrumb' if show_breadcrumb? %>
 
-          <div class="container-fluid">
-            <div class="card">
-              <div class="card-body">
-                <%= render 'shared/breadcrumb' if show_breadcrumb? %>
-
-                <%= yield %>
-              </div>
-            </div>
+            <%= yield %>
           </div>
         </main>
 
