@@ -42,7 +42,9 @@
   <%= paginate @weaknesses %>
 
   <div class="alert alert-warning text-center" hidden data-pagination-loading>
-    <strong><%= t 'navigation.loading' %></strong>
+    <div class="alert-message">
+      <strong><%= t 'navigation.loading' %></strong>
+    </div>
   </div>
 <% else %>
   <div style="margin-left: 2em">
