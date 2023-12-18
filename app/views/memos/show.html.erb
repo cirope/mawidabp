@@ -1,51 +1,55 @@
-<p class="mb-1">
-  <strong><%= Memo.human_attribute_name :name %>:</strong>
-  <%= @memo.name %>
-</p>
+<div class="card">
+  <div class="card-body">
+    <p class="mb-1">
+      <strong><%= Memo.human_attribute_name :name %>:</strong>
+      <%= @memo.name %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Memo.human_attribute_name :period %>:</strong>
-  <%= @memo.period.inspect %>
-</p>
+    <p class="mb-1">
+      <strong><%= Memo.human_attribute_name :period %>:</strong>
+      <%= @memo.period.inspect %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Memo.human_attribute_name :plan_item %>:</strong>
-  <%= @memo.plan_item.project %>
-</p>
+    <p class="mb-1">
+      <strong><%= Memo.human_attribute_name :plan_item %>:</strong>
+      <%= @memo.plan_item.project %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Memo.human_attribute_name :business_unit %>:</strong>
-  <%= @memo.business_unit %>
-</p>
+    <p class="mb-1">
+      <strong><%= Memo.human_attribute_name :business_unit %>:</strong>
+      <%= @memo.business_unit %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Memo.human_attribute_name :business_unit_type %>:</strong>
-  <%= @memo.business_unit_type %>
-</p>
+    <p class="mb-1">
+      <strong><%= Memo.human_attribute_name :business_unit_type %>:</strong>
+      <%= @memo.business_unit_type %>
+    </p>
 
-<div>
-  <strong><%= Memo.human_attribute_name :description %>:</strong>
-  <%= simple_format @memo.description, class: 'mb-1' %>
-</div>
+    <div>
+      <strong><%= Memo.human_attribute_name :description %>:</strong>
+      <%= simple_format @memo.description, class: 'mb-1' %>
+    </div>
 
-<p class="mb-1">
-  <strong><%= Memo.human_attribute_name :required_by %>:</strong>
-  <%= @memo.required_by %>
-</p>
+    <p class="mb-1">
+      <strong><%= Memo.human_attribute_name :required_by %>:</strong>
+      <%= @memo.required_by %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Memo.human_attribute_name :close_date %>:</strong>
-  <%= @memo.close_date %>
-</p>
+    <p class="mb-1">
+      <strong><%= Memo.human_attribute_name :close_date %>:</strong>
+      <%= @memo.close_date %>
+    </p>
 
-<div class="mb-1">
-  <strong><%= Memo.human_attribute_name :file_model_memos %>:</strong>
-  <%= show_file_model_memos @memo %>
-</div>
+    <div class="mb-1">
+      <strong><%= Memo.human_attribute_name :file_model_memos %>:</strong>
+      <%= show_file_model_memos @memo %>
+    </div>
 
-<hr />
+    <hr />
 
-<div>
-  <%= link_to_edit edit_memo_path(@memo) %> |
-  <%= link_to_index memos_path %>
+    <div>
+      <%= link_to_edit edit_memo_path(@memo) %> |
+      <%= link_to_index memos_path %>
+    </div>
+  </div>
 </div>
