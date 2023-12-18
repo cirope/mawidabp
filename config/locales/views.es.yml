@@ -29,7 +29,7 @@ es:
     index:
       new: 'Nuevo grupo de actividades'
       title: 'Listado de grupos de actividades'
-      empty_html: 'No hay grupos de actividades, puede crear uno con el botón <span class="badge badge-primary">Nuevo grupo de actividades</span>'
+      empty_html: 'No hay grupos de actividades, puede crear uno con el botón <span class="badge bg-primary">Nuevo grupo de actividades</span>'
     new:
       title: 'Crear grupo de actividades'
     show:
@@ -78,14 +78,14 @@ es:
 
   business_unit_kinds:
     index:
-      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
+      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge bg-primary">Nuevo</span>'
   closing_interviews:
     edit:
       title: 'Editar entrevista de cierre'
     index:
       new: 'Nueva entrevista de cierre'
       title: 'Listado de entrevistas de cierre'
-      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="badge badge-primary">Nueva entrevista de cierre</span>'
+      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de cierre</span>'
       empty_search_html: 'No hay entrevistas de cierre que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear entrevista de cierre'
@@ -119,7 +119,7 @@ es:
     index:
       new: 'Nuevo documento'
       title: 'Listado de documentos'
-      empty_html: 'No hay documentos, puede crear uno con el botón <span class="badge badge-primary">Nuevo documento</span>'
+      empty_html: 'No hay documentos, puede crear uno con el botón <span class="badge bg-primary">Nuevo documento</span>'
       empty_search_html: 'No hay documentos que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear documento'
@@ -257,12 +257,12 @@ es:
     index:
       new: 'Nuevo informe externo'
       title: 'Listado de informes externos'
-      empty_html: 'No hay informes externos, puede crear una con el botón <span class="badge badge-primary">Nuevo memo</span>'
+      empty_html: 'No hay informes externos, puede crear una con el botón <span class="badge bg-primary">Nuevo memo</span>'
       empty_search_html: 'No hay informes externos que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear informe externo'
     form:
-      markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+      markdown_help_html: '<span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}'
       add_file_model: 'Agregar archivo'
       download_cover: 'Descargar caratula'
     show:
@@ -274,14 +274,14 @@ es:
     index:
       new: 'Nueva noticia'
       title: 'Listado de noticias'
-      empty_html: 'No hay noticias, puede crear una con el botón <span class="badge badge-primary">Nueva noticia</span>'
+      empty_html: 'No hay noticias, puede crear una con el botón <span class="badge bg-primary">Nueva noticia</span>'
       empty_search_html: 'No hay noticias que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear noticia'
       tagging: 'Agregar etiqueta'
       image_model: 'Agregar imagen'
     form:
-      markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+      markdown_help_html: '<span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}'
     show:
       title: 'Ver noticia'
 
@@ -291,7 +291,7 @@ es:
     index:
       new: 'Nueva entrevista de inicio'
       title: 'Listado de entrevistas de inicio'
-      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="badge badge-primary">Nueva entrevista de inicio</span>'
+      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de inicio</span>'
       empty_search_html: 'No hay entrevistas de inicio que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear entrevista de inicio'
@@ -661,7 +661,7 @@ es:
     index:
       new: 'Nueva etiqueta'
       title: 'Listado de etiquetas'
-      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="badge badge-primary">Nueva etiqueta</span>'
+      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="badge bg-primary">Nueva etiqueta</span>'
     list:
       childless: 'Sin subetiquetas'
     new:
@@ -848,7 +848,7 @@ es:
     index:
       new: 'Nueva evaluación de riesgo'
       title: 'Listado de evaluaciones de riesgo'
-      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva evaluación de riesgo</span>'
+      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge bg-primary">Nueva evaluación de riesgo</span>'
       empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
       merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
     new:
@@ -890,7 +890,7 @@ es:
     index:
       new: 'Nueva plantilla de evaluación de riesgo'
       title: 'Listado de plantillas de evaluación de riesgo'
-      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de evaluación de riesgo</span>'
+      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de evaluación de riesgo</span>'
       empty_search_html: 'No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear plantilla de evaluación de riesgo'
@@ -907,7 +907,7 @@ es:
     index:
       new: 'Nuevo registro de riesgo'
       title: 'Listado de registros de riesgo'
-      empty_html: 'No hay registros de riesgo, puede crear uno con el botón <span class="badge badge-primary">Nuevo registro de riesgo</span>'
+      empty_html: 'No hay registros de riesgo, puede crear uno con el botón <span class="badge bg-primary">Nuevo registro de riesgo</span>'
       empty_search_html: 'No hay registros de riesgo que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear registro de riesgo'
@@ -962,7 +962,7 @@ es:
     index:
       new: 'Nueva plantilla de observación'
       title: 'Listado de plantillas de observación'
-      empty_html: 'No hay plantillas de observación, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de observación</span>'
+      empty_html: 'No hay plantillas de observación, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de observación</span>'
       empty_search_html: 'No hay plantillas de observación que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear plantilla de observación'
