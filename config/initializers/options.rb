@@ -141,6 +141,9 @@ TAG_OPTIONS = {
   },
   'user' => {
     'Usuario de recuperación' => 'recovery'
+  },
+  'plan_item' => {
+    'Incluir en Resumen Ejecutivo' => 'include_in_executive_summary'
   }
 }
 

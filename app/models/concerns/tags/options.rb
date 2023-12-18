@@ -37,6 +37,10 @@ module Tags::Options
     option_value 'include_description'
   end
 
+  def include_in_executive_summary?
+    option_value 'include_in_executive_summary'
+  end
+
   def option_type option
     if option.end_with?('_from') || option.end_with?('_to')
       :date_picker
