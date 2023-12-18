@@ -9,7 +9,7 @@ module ConclusionReviews::GalPdf
     put_default_watermark_on     pdf
     put_gal_header_on            pdf, organization
     put_gal_cover_on             pdf
-    put_gal_executive_summary_on pdf
+    put_gal_executive_summary_on pdf, organization
     put_detailed_review_on       pdf, organization
     put_annex_on                 pdf, organization, options
 
@@ -66,54 +66,62 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    # def put_executive_summary_on pdf, organization
-    #   title                      = I18n.t 'conclusion_review.executive_summary.title'
-    #   review_key                 = I18n.t "conclusion_review.executive_summary.keywords.review"
-    #   params                     = { "#{review_key}": review.identification }
-    #   exec_summary_intro         = review.business_unit_type.exec_summary_intro
-    #   independent_identification = review.business_unit_type.independent_identification
-    #   project                    = review.plan_item.project
-    #
-    #   full_exec_summary_intro = if exec_summary_intro.present? &&
-    #                               created_at >= CODE_CHANGE_DATES['exec_summary_intro_custom_field'].to_date
-    #                                 exec_summary_intro % params
-    #                             elsif independent_identification
-    #                               I18n.t "conclusion_review.executive_summary.intro_alt"
-    #                             else
-    #                               I18n.t "conclusion_review.executive_summary.intro_default"
-    #                             end
-    #
-    #   pdf.start_new_page
-    #   pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
-    #   pdf.move_down PDF_FONT_SIZE * 2
-    #
-    #   pdf.text "#{full_exec_summary_intro} <b>#{project}</b>", align: :justify, inline_format: true
-    #
-    #   put_risk_exposure_on pdf
-    #   put_gal_score_on     pdf
-    #
-    #   put_main_weaknesses_on pdf
-    #
-    #   if show_observations_on_top? organization
-    #     put_observations_on pdf
-    #   end
-    #
-    #   unless show_review_best_practice_comments? organization
-    #     put_other_weaknesses_on  pdf
-    #   end
-    #
-    #   if show_scope_detail?
-    #     title = I18n.t 'conclusion_review.scope_detail.title'
-    #
-    #     pdf.start_new_page
-    #     pdf.add_title title, (PDF_FONT_SIZE).round, :center
-    #     pdf.move_down PDF_FONT_SIZE * 2
-    #
-    #     put_scope_detail_table_on pdf
-    #   end
-    # end
+    def put_gal_executive_summary_on pdf, organization
+      if CODE_CHANGE_DATES['exec_summary_v2'] && created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
+        put_gal_executive_summary_v2_on pdf
+      else
+        put_gal_executive_summary_v1_on pdf, organization
+      end
+    end
 
-    def put_gal_executive_summary_on pdf
+    def put_gal_executive_summary_v1_on pdf, organization
+      title                      = I18n.t 'conclusion_review.executive_summary.title'
+      review_key                 = I18n.t "conclusion_review.executive_summary.keywords.review"
+      params                     = { "#{review_key}": review.identification }
+      exec_summary_intro         = review.business_unit_type.exec_summary_intro
+      independent_identification = review.business_unit_type.independent_identification
+      project                    = review.plan_item.project
+
+      full_exec_summary_intro = if exec_summary_intro.present? &&
+                                  created_at >= CODE_CHANGE_DATES['exec_summary_intro_custom_field'].to_date
+                                    exec_summary_intro % params
+                                elsif independent_identification
+                                  I18n.t "conclusion_review.executive_summary.intro_alt"
+                                else
+                                  I18n.t "conclusion_review.executive_summary.intro_default"
+                                end
+
+      pdf.start_new_page
+      pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
+      pdf.move_down PDF_FONT_SIZE * 2
+
+      pdf.text "#{full_exec_summary_intro} <b>#{project}</b>", align: :justify, inline_format: true
+
+      put_risk_exposure_on pdf
+      put_gal_score_on     pdf
+
+      put_main_weaknesses_on pdf
+
+      if show_observations_on_top? organization
+        put_observations_on pdf
+      end
+
+      unless show_review_best_practice_comments? organization
+        put_other_weaknesses_on  pdf
+      end
+
+      if show_scope_detail?
+        title = I18n.t 'conclusion_review.scope_detail.title'
+
+        pdf.start_new_page
+        pdf.add_title title, (PDF_FONT_SIZE).round, :center
+        pdf.move_down PDF_FONT_SIZE * 2
+
+        put_scope_detail_table_on pdf
+      end
+    end
+
+    def put_gal_executive_summary_v2_on pdf
       title = I18n.t 'conclusion_review.executive_summary.title'
 
       pdf.start_new_page

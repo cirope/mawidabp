@@ -22,7 +22,7 @@ ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION: 'true'
 ALLOW_FINDING_ASSUMED_RISK_TO_PENDING: 'true'
 ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION: 'true'
 AUTOMATICALLY_SORT_FINDINGS_ON_CONCLUSION: '{}' # In JSON
-CODE_CHANGE_DATES: '{"reviews_for_and_detailed_review_custom_field": "2022-03-23", "exec_summary_intro_custom_field": "2023-04-11", "detailed_review_legend_custom_field": "2023-07-05"}'
+CODE_CHANGE_DATES: '{"reviews_for_and_detailed_review_custom_field": "2022-03-23", "exec_summary_intro_custom_field": "2023-04-11", "detailed_review_legend_custom_field": "2023-07-05", "exec_summary_v2": "2023-12-18"}'
 COMMITMENT_DATE_LIMITS: '{}'
 COMMITMENT_REQUIREMENTS: '{}'
 CONCLUSION_REVIEW_SORT_BY_RISK_START: ''
