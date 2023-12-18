@@ -206,18 +206,26 @@ module ConclusionReviews::GalPdf
       rows         = [key_weaknesses_header]
 
       weaknesses.each do |weakness|
-        origination_year = weakness.origination_date&.year
-        text_color       = (origination_year && origination_year < current_year - 1) ? "FF0000" : "000000"
-        follow_up_date   = I18n.l(weakness.follow_up_date, format: "%B %Y")
+        origination_year       = weakness.origination_date&.year
+        text_color             = (origination_year && origination_year < current_year - 1) ? "FF0000" : "000000"
+        weakness_normalization = weakness_normalization weakness
 
         rows << [
           pdf.make_cell(content: weakness.title, text_color: text_color),
           pdf.make_cell(content: origination_year.to_s, text_color: text_color),
-          pdf.make_cell(content: follow_up_date, text_color: text_color)
+          pdf.make_cell(content: weakness_normalization, text_color: text_color)
         ]
       end
 
       rows
+    end
+
+    def weakness_normalization weakness
+      if weakness.implemented_audited? || weakness.expired?
+        weakness.state_text
+      else
+        weakness.follow_up_date ? I18n.l(weakness.follow_up_date, format: "%B %Y") : ''
+      end
     end
 
     def key_weaknesses_header
