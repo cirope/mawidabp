@@ -1,96 +1,101 @@
 <% forms = {:date_range => true, :business_unit => true} %>
 <% forms[:scope] = true if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
-<%= render :partial => 'shared/filter_form',
-  :locals => {:action => :synthesis_report, :extra_params => {
-    :controller_name => 'follow_up'
-  }, :forms => forms} %>
 
-<% @periods.each do |period| %>
-  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+<div class="card">
+  <div class="card-body">
+    <%= render :partial => 'shared/filter_form',
+      :locals => {:action => :synthesis_report, :extra_params => {
+        :controller_name => 'follow_up'
+      }, :forms => forms} %>
 
-  <hr>
+    <% @periods.each do |period| %>
+      <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
 
-  <% unless @selected_business_unit %>
-    <div style="margin: 1em 0;">
-      <p>
-        <strong>
-          <%= synthesis_report_organization_score_average(@audits_by_business_unit[period]) %>
-        </strong>
-      </p>
-      <p style="margin-top: 1em;">
-        <%= t('conclusion_committee_report.synthesis_report.organization_score_note',
-          :audit_types => @audits_by_business_unit[period].map {|data| data[:name]}.to_sentence) %>
-      </p>
-    </div>
-  <% end %>
+      <hr>
 
-  <% @audits_by_business_unit[period].each do |data| %>
-    <% if !data[:external] && !@internal_title_showed %>
-      <h3 class="text-center">
-        <%= t 'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
-      </h3>
-      <% @internal_title_showed = true %>
-    <% elsif data[:external] && !@external_title_showed %>
-      <h3 class="text-center">
-        <%= t 'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
-      </h3>
-      <% @external_title_showed = true %>
-    <% end %>
-    <h4><%= data[:name] %></h4>
-    <% unless data[:column_data].blank? %>
-      <table class="table table-sm table-striped table-hover">
-        <thead>
-          <tr>
-            <% @column_order.each do |col_name| %>
-              <th><%= data[:columns][col_name].first %></th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% data[:column_data].each do |row| %>
-            <tr>
-              <% @column_order.each_index do |i| %>
-                <td>
-                  <%= row[i].kind_of?(Array) ? array_to_ul(row[i], class: 'list-unstyled', skip_markdown: true) : row[i] %>
-                </td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <p style="margin: 1em 0;">
-        <%= synthesis_report_score_average(
-         t(
-           'follow_up_committee_report.synthesis_report.generic_score_average',
-           :audit_type => data[:name],
-           :count => data[:review_scores].try(:size) || 0
-         ), data[:review_scores]) %>
-      </p>
-      <% if data[:repeated_count] > 0 %>
-        <p style="margin-left: 1em;">
-          <%= t('follow_up_committee_report.synthesis_report.repeated_count',
-            :count => data[:repeated_count]) %>
-        </p>
+      <% unless @selected_business_unit %>
+        <div style="margin: 1em 0;">
+          <p>
+            <strong>
+              <%= synthesis_report_organization_score_average(@audits_by_business_unit[period]) %>
+            </strong>
+          </p>
+          <p style="margin-top: 1em;">
+            <%= t('conclusion_committee_report.synthesis_report.organization_score_note',
+              :audit_types => @audits_by_business_unit[period].map {|data| data[:name]}.to_sentence) %>
+          </p>
+        </div>
       <% end %>
-    <% else %>
-      <p style="margin: 1em;">
-        <em><%= t 'follow_up_committee_report.synthesis_report.without_audits_in_the_period' %></em>
-      </p>
+
+      <% @audits_by_business_unit[period].each do |data| %>
+        <% if !data[:external] && !@internal_title_showed %>
+          <h3 class="text-center">
+            <%= t 'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
+          </h3>
+          <% @internal_title_showed = true %>
+        <% elsif data[:external] && !@external_title_showed %>
+          <h3 class="text-center">
+            <%= t 'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
+          </h3>
+          <% @external_title_showed = true %>
+        <% end %>
+        <h4><%= data[:name] %></h4>
+        <% unless data[:column_data].blank? %>
+          <table class="table table-sm table-striped table-hover">
+            <thead>
+              <tr>
+                <% @column_order.each do |col_name| %>
+                  <th><%= data[:columns][col_name].first %></th>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <% data[:column_data].each do |row| %>
+                <tr>
+                  <% @column_order.each_index do |i| %>
+                    <td>
+                      <%= row[i].kind_of?(Array) ? array_to_ul(row[i], class: 'list-unstyled', skip_markdown: true) : row[i] %>
+                    </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <p style="margin: 1em 0;">
+            <%= synthesis_report_score_average(
+            t(
+              'follow_up_committee_report.synthesis_report.generic_score_average',
+              :audit_type => data[:name],
+              :count => data[:review_scores].try(:size) || 0
+            ), data[:review_scores]) %>
+          </p>
+          <% if data[:repeated_count] > 0 %>
+            <p style="margin-left: 1em;">
+              <%= t('follow_up_committee_report.synthesis_report.repeated_count',
+                :count => data[:repeated_count]) %>
+            </p>
+          <% end %>
+        <% else %>
+          <p style="margin: 1em;">
+            <em><%= t 'follow_up_committee_report.synthesis_report.without_audits_in_the_period' %></em>
+          </p>
+        <% end %>
+      <% end %>
     <% end %>
-  <% end %>
-<% end %>
 
-<div style="margin: 1em 0;">
-  <%= simple_format t('follow_up_committee_report.synthesis_report.references',
-    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence), class: 'mb-1' %>
-</div>
+    <div style="margin: 1em 0;">
+      <%= simple_format t('follow_up_committee_report.synthesis_report.references',
+        :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence), class: 'mb-1' %>
+    </div>
 
-<hr />
+    <hr />
 
-<div>
-  <%= link_to t('label.back'), :action => :index %> |
-  <%= link_to t('label.download'), '#',
-    data: { bs_toggle: 'modal', target: '#customize_report' } %>
+    <div>
+      <%= link_to t('label.back'), :action => :index %> |
+      <%= link_to t('label.download'), '#',
+        data: { bs_toggle: 'modal', target: '#customize_report' } %>
+    </div>
+  </div>
 </div>
 
 <%= render :partial => 'shared/customize_report_form', :locals => {

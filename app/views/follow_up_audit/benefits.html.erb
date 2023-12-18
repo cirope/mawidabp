@@ -1,57 +1,61 @@
-<%= render partial: 'shared/filter_form',
-  locals: {
-    action: :benefits, extra_params: {
-      controller_name: 'follow_up', final: false
-    },
-    forms: {
-      control_objective: 1, date_range: 2, business_unit: 3
-    }
-  }
-%>
+<div class="card">
+  <div class="card-body">
+    <%= render partial: 'shared/filter_form',
+      locals: {
+        action: :benefits, extra_params: {
+          controller_name: 'follow_up', final: false
+        },
+        forms: {
+          control_objective: 1, date_range: 2, business_unit: 3
+        }
+      }
+    %>
 
-<% @periods.each do |period| %>
-  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+    <% @periods.each do |period| %>
+      <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
 
-  <hr>
+      <hr>
 
-  <% if @benefits_data[period].blank? %>
-    <p style="margin: 1em;">
-      <em><%= t 'follow_up_committee_report.benefits.without_audits_in_the_period' %></em>
-    </p>
-  <% else %>
-    <table class="table table-sm table-striped table-hover">
-      <thead>
-        <tr>
-          <% @columns.each do |col_name, col_title, col_width| %>
-            <th><%= col_title %></th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <% @benefits_data[period].each do |data| %>
-          <tr>
-            <% @columns.each do |col_name, _| %>
-              <td><%= data[col_name] %></td>
+      <% if @benefits_data[period].blank? %>
+        <p style="margin: 1em;">
+          <em><%= t 'follow_up_committee_report.benefits.without_audits_in_the_period' %></em>
+        </p>
+      <% else %>
+        <table class="table table-sm table-striped table-hover">
+          <thead>
+            <tr>
+              <% @columns.each do |col_name, col_title, col_width| %>
+                <th><%= col_title %></th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% @benefits_data[period].each do |data| %>
+              <tr>
+                <% @columns.each do |col_name, _| %>
+                  <td><%= data[col_name] %></td>
+                <% end %>
+              </tr>
             <% end %>
-          </tr>
+          </tbody>
+        </table>
+
+        <% if @benefits_total_data[period] %>
+          <p style="margin: 1em 0;">
+            <%= raw t('follow_up_committee_report.benefits.total', amount: @benefits_total_data[period]) %>
+          </p>
         <% end %>
-      </tbody>
-    </table>
-
-    <% if @benefits_total_data[period] %>
-      <p style="margin: 1em 0;">
-        <%= raw t('follow_up_committee_report.benefits.total', amount: @benefits_total_data[period]) %>
-      </p>
+      <% end %>
     <% end %>
-  <% end %>
-<% end %>
 
-<hr />
+    <hr />
 
-<div>
-  <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#',
-    data: { bs_toggle: 'modal', target: '#customize_report' } %>
+    <div>
+      <%= link_to t('label.back'), action: :index %> |
+      <%= link_to t('label.download'), '#',
+        data: { bs_toggle: 'modal', target: '#customize_report' } %>
+    </div>
+  </div>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {

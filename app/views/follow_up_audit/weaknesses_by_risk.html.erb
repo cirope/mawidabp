@@ -1,72 +1,76 @@
-<%= render :partial => 'shared/filter_form',
-  :locals => {
-    :action => :weaknesses_by_risk,
-    :extra_params => {
-      :controller_name => 'follow_up',
-      :final => false
-    },
-    :forms => {
-      :date_range => true,
-      :repeated => true,
-      :compliance => SHOW_WEAKNESS_EXTRA_ATTRIBUTES
-    }
-  } %>
+<div class="card">
+  <div class="card-body">
+    <%= render :partial => 'shared/filter_form',
+      :locals => {
+        :action => :weaknesses_by_risk,
+        :extra_params => {
+          :controller_name => 'follow_up',
+          :final => false
+        },
+        :forms => {
+          :date_range => true,
+          :repeated => true,
+          :compliance => SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+        }
+      } %>
 
-<% @periods.each do |period| %>
-  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+    <% @periods.each do |period| %>
+      <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
 
-  <hr>
+      <hr>
 
-  <h3 class="text-center">
-    <%= t('follow_up_committee_report.weaknesses_by_risk.period_summary',
-      :period => period.inspect) %>
-  </h3>
-  <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-    :table_data => @tables_data[period]['total'],
-    :awaiting_resume => @awaiting_resumes[period]['total'],
-    :being_implemented_resume => @being_implemented_resumes[period]['total'],
-    :highest_awaiting_resume => @highest_awaiting_resumes[period]['total'],
-    :highest_being_implemented_resume => @highest_being_implemented_resumes[period]['total']} %>
-
-  <% if @repeated_counts[period]['total'] > 0 %>
-    <p>
-      <%= t('follow_up_committee_report.repeated_count',
-        :count => @repeated_counts[period]['total']) %>
-    </p>
-  <% end %>
-
-  <% @audit_types.each do |audit_type| %>
-    <% unless audit_type.last.empty? %>
-      <% audit_type_symbol = audit_type.first %>
       <h3 class="text-center">
-        <%= t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}") %>
+        <%= t('follow_up_committee_report.weaknesses_by_risk.period_summary',
+          :period => period.inspect) %>
       </h3>
-      <% audit_type.last.each do |audit_types| %>
-        <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
-        <h4><%= audit_types.first %></h4>
-        <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-          :table_data => @tables_data[period][key],
-          :awaiting_resume => @awaiting_resumes[period][key],
-          :being_implemented_resume => @being_implemented_resumes[period][key],
-          :highest_awaiting_resume => @highest_awaiting_resumes[period][key],
-          :highest_being_implemented_resume => @highest_being_implemented_resumes[period][key]} %>
-        <% if @repeated_counts[period][key] > 0 %>
-          <p>
-            <%= t('follow_up_committee_report.repeated_count',
-              :count => @repeated_counts[period][key]) %>
-          </p>
+      <%= render :partial => 'weaknesses_synthesis_table', :locals => {
+        :table_data => @tables_data[period]['total'],
+        :awaiting_resume => @awaiting_resumes[period]['total'],
+        :being_implemented_resume => @being_implemented_resumes[period]['total'],
+        :highest_awaiting_resume => @highest_awaiting_resumes[period]['total'],
+        :highest_being_implemented_resume => @highest_being_implemented_resumes[period]['total']} %>
+
+      <% if @repeated_counts[period]['total'] > 0 %>
+        <p>
+          <%= t('follow_up_committee_report.repeated_count',
+            :count => @repeated_counts[period]['total']) %>
+        </p>
+      <% end %>
+
+      <% @audit_types.each do |audit_type| %>
+        <% unless audit_type.last.empty? %>
+          <% audit_type_symbol = audit_type.first %>
+          <h3 class="text-center">
+            <%= t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}") %>
+          </h3>
+          <% audit_type.last.each do |audit_types| %>
+            <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
+            <h4><%= audit_types.first %></h4>
+            <%= render :partial => 'weaknesses_synthesis_table', :locals => {
+              :table_data => @tables_data[period][key],
+              :awaiting_resume => @awaiting_resumes[period][key],
+              :being_implemented_resume => @being_implemented_resumes[period][key],
+              :highest_awaiting_resume => @highest_awaiting_resumes[period][key],
+              :highest_being_implemented_resume => @highest_being_implemented_resumes[period][key]} %>
+            <% if @repeated_counts[period][key] > 0 %>
+              <p>
+                <%= t('follow_up_committee_report.repeated_count',
+                  :count => @repeated_counts[period][key]) %>
+              </p>
+            <% end %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>
-  <% end %>
-<% end %>
 
-<hr />
+    <hr />
 
-<div>
-  <%= link_to t('label.back'), :action => :index %> |
-  <%= link_to t('label.download'), '#',
-    data: { bs_toggle: 'modal', target: '#customize_report' } %>
+    <div>
+      <%= link_to t('label.back'), :action => :index %> |
+      <%= link_to t('label.download'), '#',
+        data: { bs_toggle: 'modal', target: '#customize_report' } %>
+    </div>
+  </div>
 </div>
 
 <%= render :partial => 'shared/customize_report_form', :locals => {

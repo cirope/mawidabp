@@ -1,81 +1,85 @@
-<%= render partial: 'shared/filter_form',
-  locals: {
-    action: :weaknesses_brief, extra_params: {
-      controller_name: 'follow_up', final: false
-    },
-    forms: [
-      [:date_range, true],
-      [:user, check_action: :user_inverted, group: 1],
-      [:cut_date, group: 1],
-      [:order_by, { order_bys: %w(issue_date risk first_follow_up_date) }]
-    ]
-  }
-%>
+<div class="card">
+  <div class="card-body">
+    <%= render partial: 'shared/filter_form',
+      locals: {
+        action: :weaknesses_brief, extra_params: {
+          controller_name: 'follow_up', final: false
+        },
+        forms: [
+          [:date_range, true],
+          [:user, check_action: :user_inverted, group: 1],
+          [:cut_date, group: 1],
+          [:order_by, { order_bys: %w(issue_date risk first_follow_up_date) }]
+        ]
+      }
+    %>
 
-<% if @weaknesses.any? %>
-  <div class="table-responsive">
-    <table class="table table-sm table-striped table-hover">
-      <thead>
-        <tr>
-          <th><%= Review.model_name.human %></th>
-          <th><%= PlanItem.human_attribute_name 'project' %></th>
-          <th><%= t 'follow_up_committee_report.weaknesses_brief.weakness_title' %></th>
-          <th><%= t 'follow_up_committee_report.weaknesses_brief.description' %></th>
-          <th><%= Weakness.human_attribute_name 'risk' %></th>
-          <th><%= t 'follow_up_committee_report.weaknesses_brief.audit_comments' %></th>
-          <th><%= FindingUserAssignment.human_attribute_name 'process_owner' %></th>
-          <th><%= t 'follow_up_committee_report.weaknesses_brief.origination_date' %></th>
-          <th><%= t 'follow_up_committee_report.weaknesses_brief.reschedule_count' %></th>
-          <th><%= t 'follow_up_committee_report.weaknesses_brief.follow_up_date' %></th>
-          <th><%= t 'follow_up_committee_report.weaknesses_brief.distance_to_cut_date' %></th>
-        </tr>
-      </thead>
+    <% if @weaknesses.any? %>
+      <div class="table-responsive">
+        <table class="table table-sm table-striped table-hover">
+          <thead>
+            <tr>
+              <th><%= Review.model_name.human %></th>
+              <th><%= PlanItem.human_attribute_name 'project' %></th>
+              <th><%= t 'follow_up_committee_report.weaknesses_brief.weakness_title' %></th>
+              <th><%= t 'follow_up_committee_report.weaknesses_brief.description' %></th>
+              <th><%= Weakness.human_attribute_name 'risk' %></th>
+              <th><%= t 'follow_up_committee_report.weaknesses_brief.audit_comments' %></th>
+              <th><%= FindingUserAssignment.human_attribute_name 'process_owner' %></th>
+              <th><%= t 'follow_up_committee_report.weaknesses_brief.origination_date' %></th>
+              <th><%= t 'follow_up_committee_report.weaknesses_brief.reschedule_count' %></th>
+              <th><%= t 'follow_up_committee_report.weaknesses_brief.follow_up_date' %></th>
+              <th><%= t 'follow_up_committee_report.weaknesses_brief.distance_to_cut_date' %></th>
+            </tr>
+          </thead>
 
-      <tbody>
-        <% @weaknesses.each do |weakness| %>
-          <tr>
-            <td><%= [
-              weakness.implemented_audited? ? '(*) ' : '',
-              weakness.review.identification
-            ].join %></td>
-            <td><%= weakness.review.plan_item.project %></td>
-            <td><%= weakness.title %></td>
-            <td><%= weakness.description %></td>
-            <td><%= weakness.risk_text %></td>
-            <td><%= weakness.audit_comments %></td>
-            <td><%= array_to_ul weaknesses_brief_audit_users(weakness), class: 'list-unstyled' %></td>
-            <td><%= weakness.origination_date ? l(weakness.origination_date) : '-' %></td>
-            <td><%= weakness.pending? ? weakness.reschedule_count : '-' %></td>
-            <td><%= weakness.follow_up_date ? l(weakness.follow_up_date) : '-' %></td>
-            <td><%= distance_in_days_to_cut_date weakness %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+          <tbody>
+            <% @weaknesses.each do |weakness| %>
+              <tr>
+                <td><%= [
+                  weakness.implemented_audited? ? '(*) ' : '',
+                  weakness.review.identification
+                ].join %></td>
+                <td><%= weakness.review.plan_item.project %></td>
+                <td><%= weakness.title %></td>
+                <td><%= weakness.description %></td>
+                <td><%= weakness.risk_text %></td>
+                <td><%= weakness.audit_comments %></td>
+                <td><%= array_to_ul weaknesses_brief_audit_users(weakness), class: 'list-unstyled' %></td>
+                <td><%= weakness.origination_date ? l(weakness.origination_date) : '-' %></td>
+                <td><%= weakness.pending? ? weakness.reschedule_count : '-' %></td>
+                <td><%= weakness.follow_up_date ? l(weakness.follow_up_date) : '-' %></td>
+                <td><%= distance_in_days_to_cut_date weakness %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        <em>
+          (*) <%= t(
+            'follow_up_committee_report.weaknesses_brief.implemented_audited_count',
+            count: @implemented_audited_weaknesses.count,
+            from_date: l(@to_date),
+            to_date: l(Time.zone.today)
+          ) %>
+        </em>
+      </p>
+    <% else %>
+      <div style="margin-left: 2em">
+        <p><em><%= t 'follow_up_committee_report.weaknesses_brief.without_weaknesses' %></em></p>
+      </div>
+    <% end %>
+
+    <hr />
+
+    <div>
+      <%= link_to t('label.back'), action: :index %> |
+      <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', target: '#customize_report' } %> |
+      <%= link_to t('label.download_csv'), weaknesses_brief_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+    </div>
   </div>
-
-  <p>
-    <em>
-      (*) <%= t(
-        'follow_up_committee_report.weaknesses_brief.implemented_audited_count',
-        count: @implemented_audited_weaknesses.count,
-        from_date: l(@to_date),
-        to_date: l(Time.zone.today)
-      ) %>
-    </em>
-  </p>
-<% else %>
-  <div style="margin-left: 2em">
-    <p><em><%= t 'follow_up_committee_report.weaknesses_brief.without_weaknesses' %></em></p>
-  </div>
-<% end %>
-
-<hr />
-
-<div>
-  <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', target: '#customize_report' } %> |
-  <%= link_to t('label.download_csv'), weaknesses_brief_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {
