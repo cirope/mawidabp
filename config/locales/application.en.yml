@@ -651,7 +651,7 @@ en:
       title: 'Issue follow-up report'
       empty: 'No issues for the applied filter'
       weaknesses_count: 'Number of issues that meet the criteria: %{count}'
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-primary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'follow_up_report_of_issues_in_execution.pdf'
 
   finding_relation:
