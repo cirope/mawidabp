@@ -34,7 +34,7 @@
   </div>
 
   <% if @poll.answered? %>
-    <blockquote class="blockquote ml-3">
+    <blockquote class="blockquote ms-3">
       <% if answer.question&.options&.any? && answer.answer_option %>
         <p class="small mb-1"><%= t "answer_options.#{answer.answer_option.option}" %></p>
       <% elsif answer.question.answer_written? %>

@@ -85,7 +85,9 @@ en:
             one: "The following report summarizes the points observed in the benchmark audit. It is intended to allow quick reading at the highest levels. The full report, which will be copied to books under the %{review}, consists of %{count} page ."
             other: "The following report summarizes the points noted in the benchmark audit. It is intended to allow quick reading at the highest levels. The full report, which will be copied to books under the %{review}, consists of %{count} pages ."
           details_title: "The main weaknesses observed are detailed below, as well as their situation at the time of issuing the respective report:"
+          previous_title: "Weaknesses of the previous period:"
           weaknesses_title: "Weaknesses of the current period:"
+          external_weaknesses_title: "Follow-up on aspects observed in other inspections"
       weaknesses:
         title: "Annex I"
         previous_title: "%{prefix} Tracking cycle weaknesses based on our previous report."

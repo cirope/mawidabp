@@ -30,7 +30,7 @@
         <%= link_to new_time_summary_path(
           date: date,
           limit: time_summary_remaining_hours(date),
-          resource_type: 'Activity'), title: t('.add'), class: 'ml-1 h6' do %>
+          resource_type: 'Activity'), title: t('.add'), class: 'ms-1 h6' do %>
             <i class="fas fa-plus-circle"></i>
           <% end %>
       <% end %>
@@ -48,7 +48,7 @@
                   limit: time_summary_remaining_hours(date) + hours
                 ),
                 title: t('.edit'),
-                class: 'ml-1 h6' do %>
+                class: 'ms-1 h6' do %>
                   <i class="fas fa-pen"></i>
                 <% end %>
             <% end %>
@@ -59,7 +59,7 @@
                   confirm: t('messages.confirmation')
                 },
                 title: t('.destroy'),
-                class: 'ml-1 h6' do %>
+                class: 'ms-1 h6' do %>
                   <i class="fas fa-trash"></i>
                 <% end %>
             <% end %>

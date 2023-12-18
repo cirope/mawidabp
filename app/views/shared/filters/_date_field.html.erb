@@ -1,7 +1,7 @@
 <div id="date_filter_<%= field_name %>" <%== 'style="display: none;"' unless display %> data-filter>
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group row">
+      <div class="mb-1 form-group row">
         <% field_value = params[action] ? params[action][field_name] : nil %>
         <div class="col-md-4">
           <%= f.label field_name, field_label, class: 'col-form-label' %>
@@ -10,7 +10,7 @@
           <% selected = params[action] ? params[action][:"#{field_name}_operator"] : nil %>
           <%= f.select "#{field_name}_operator", date_filter_operators, {
             include_blank: t('helpers.select.prompt'), selected: selected
-          }, { class: 'form-control', data: { date_operator: true } } %>
+          }, { class: 'form-select', data: { date_operator: true } } %>
         </div>
         <div class="col-md-5">
           <%= f.text_field field_name, value: field_value, autocomplete: :off, class: 'form-control', data: { date_picker: true } %>
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="form-group row">
+      <div class="mb-1 form-group row">
         <% field_value = params[action] ? params[action]["#{field_name}_until"] : nil %>
         <div class="col-md-5">
           <%= f.text_field "#{field_name}_until",

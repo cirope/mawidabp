@@ -7,7 +7,7 @@
 
   <div class="card-body">
     <%= simple_form_for action_name, url: url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
-      <% filters = %w(review finding risk_levels priority current_situation compliance process_control control_objective tags) %>
+      <% filters = %w(review review_code finding risk_levels priority current_situation compliance process_control control_objective tags) %>
       <% filters = filters - ['current_situation'] unless SHOW_FINDING_CURRENT_SITUATION %>
       <% filters = filters - ['compliance'] unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
       <% filters.each do |filter_name| %>
@@ -50,7 +50,7 @@
             <%= t '.weaknesses_count_html', count: @weaknesses.total_entries %>
           </p>
         </div>
-        <div class="col-md-4 text-md-right mt-2 mt-md-0">
+        <div class="col-md-4 text-md-end mt-2 mt-md-0">
           <%= pdf_and_csv_download_links %>
         </div>
       </div>

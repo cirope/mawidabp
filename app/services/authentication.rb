@@ -131,12 +131,13 @@ class Authentication
     end
 
     def prune_azure_attributes attributes
+      provider = @current_organization.saml_provider
       {
-        user:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, ''),
-        name:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first,
-        email:     Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']).first,
-        last_name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first,
-        roles:     attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
+        user:      Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.username_claim}"]).first.to_s.sub(/@.+/, ''),
+        name:      Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.name_claim}"]).first,
+        email:     Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.email_claim}"]).first,
+        last_name: Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.lastname_claim}"]).first,
+        roles:     attributes["http://schemas.microsoft.com/ws/2008/06/identity/claims/#{provider.roles_claim}"]
       }
     end
 

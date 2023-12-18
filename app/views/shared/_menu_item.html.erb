@@ -2,7 +2,7 @@
 
 <% if menu_item.children.present? %>
   <li class="nav-item dropdown <%= 'active' if active %>">
-    <%= link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do %>
+    <%= link_to '#', class: 'nav-link dropdown-toggle', data: { bs_toggle: 'dropdown' } do %>
       <%= menu_item %>
     <% end %>
     <div class="dropdown-menu">

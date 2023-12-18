@@ -17,7 +17,7 @@
           <%= make_filterable_column OpeningInterview.human_attribute_name('interview_date'), nil, 'interview_date' %>
           <%= make_filterable_column OpeningInterview.human_attribute_name('start_date'), { class: 'd-none d-sm-table-cell' }, 'start_date' %>
           <%= make_filterable_column OpeningInterview.human_attribute_name('end_date'), { class: 'd-none d-sm-table-cell' }, 'end_date' %>
-          <th colspan="3" class="text-right"><%= link_to_search %></th>
+          <th colspan="3" class="text-end"><%= link_to_search %></th>
         </tr>
       </thead>
 
@@ -29,9 +29,9 @@
             <td><%= l opening_interview.interview_date %></td>
             <td class="d-none d-sm-table-cell"><%= l opening_interview.start_date %></td>
             <td class="d-none d-sm-table-cell"><%= l opening_interview.end_date %></td>
-            <td class="text-right"><%= link_to_show opening_interview %></td>
-            <td class="text-right"><%= link_to_edit [:edit, opening_interview] %></td>
-            <td class="text-right"><%= link_to_destroy opening_interview if opening_interview.can_be_destroyed? %></td>
+            <td class="text-end"><%= link_to_show opening_interview %></td>
+            <td class="text-end"><%= link_to_edit [:edit, opening_interview] %></td>
+            <td class="text-end"><%= link_to_destroy opening_interview if opening_interview.can_be_destroyed? %></td>
           </tr>
         <% end %>
       </tbody>

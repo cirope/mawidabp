@@ -1,0 +1,9 @@
+risk:
+  identifier: Identifier
+  name: Name
+  cause: Cause
+  effect: Effect
+  likelihood: <%= Risk::LIKELIHOODS[:insignificant] %>
+  impact: <%= Risk::IMPACTS[:likely] %>
+  user: administrator
+  risk_category: risk_category

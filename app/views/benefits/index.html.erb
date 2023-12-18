@@ -4,7 +4,7 @@
       <th><%= Benefit.human_attribute_name 'name' %></th>
       <th><%= Benefit.human_attribute_name 'kind' %></th>
       <th colspan="3">
-        <%= link_to_new new_benefit_path, class: 'btn btn-outline-secondary btn-sm float-right' %>
+        <%= link_to_new new_benefit_path, class: 'btn btn-outline-secondary btn-sm float-end' %>
       </th>
     </tr>
   </thead>
@@ -14,9 +14,9 @@
       <tr>
         <td><%= benefit.name %></td>
         <td><%= t "benefits.kinds.#{benefit.kind}" %></td>
-        <td class="text-right"><%= link_to_show benefit %></td>
-        <td class="text-right"><%= link_to_edit [:edit, benefit] %></td>
-        <td class="text-right"><%= link_to_destroy benefit %></td>
+        <td class="text-end"><%= link_to_show benefit %></td>
+        <td class="text-end"><%= link_to_edit [:edit, benefit] %></td>
+        <td class="text-end"><%= link_to_destroy benefit %></td>
       </tr>
     <% end %>
   </tbody>

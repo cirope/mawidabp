@@ -108,7 +108,7 @@ es:
       title: 'Detalles del objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
-      add_control_objective_auditor: 'Agregar auditor a cargo'
+      add_control_objective_auditor: 'Agregar auditor/referente a cargo'
     score_type:
       option: 'Opciones'
       percentage: 'Porcentaje'
@@ -207,7 +207,7 @@ es:
       reject: 'Rechazar'
     finding_answers: 'Comentarios de'
     pdf:
-      issue: 'Ver en cuadro adjunto, los casos bajo código cam %{review_code}'
+      issue: 'Ver en la tabla adjunta los casos bajo el código %{review_code}'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -434,6 +434,9 @@ es:
       annual_plan_hours: 'Hs Plan Anual'
       auditor: 'Auditor (Usuario)'
       time_summary_hours: 'Hs Resumen Horario'
+      main_or_aux_but: UO Principal/Auxiliar
+      main_but: UO Principal
+      aux_but: UO Auxiliar
     csv_prs_pat:
       csv_name: 'grado_de_avance_estados_de_trabajos_%{current_date}.csv'
       business_unit: 'Sector'
@@ -861,7 +864,8 @@ es:
       add_best_practice: 'Agregar buena práctica'
       add_business_unit_type: 'Agregar unidad organizativa'
       apply: 'Aplicar'
-    risk_weight_risks:
+    heatmap: 'Mapa de calor'
+    risk_weight_risks: # Deprecated: remove when all clients are migrated
       none: 'Nulo'
       low: 'Bajo'
       medium_low: 'Medio bajo'
@@ -875,6 +879,7 @@ es:
     pdf:
       title: 'Evaluación de riesgo'
       pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
+      formula: 'Fórmula'
       period:
         title: "Periodo (%{name})"
         range: "%{from_date} al %{to_date}"
@@ -893,6 +898,45 @@ es:
       title: 'Ver plantilla de evaluación de riesgo'
     form:
       add_risk_assessment_weight: 'Agregar ponderador'
+
+  risk_registries:
+    edit:
+      title: 'Editar registro de riesgo'
+    form:
+      new_risk_categories: 'Luego de crear el registro de riesgo podrá completar la carga de los riesgos'
+    index:
+      new: 'Nuevo registro de riesgo'
+      title: 'Listado de registros de riesgo'
+      empty_html: 'No hay registros de riesgo, puede crear uno con el botón <span class="badge badge-primary">Nuevo registro de riesgo</span>'
+      empty_search_html: 'No hay registros de riesgo que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear registro de riesgo'
+    show:
+      title: 'Ver registro de riesgo'
+    risk_categories:
+      new: 'Agregar categoría de riesgo'
+    risks:
+      new: 'Agregar riesgo'
+
+  risk_score_items:
+    form:
+      add_risk_score_item: 'Agregar valor'
+
+  risks:
+    likelihoods:
+      insignificant: 'Insignificante'
+      minor: 'Menor'
+      moderate: 'Moderada'
+      high: 'Alta'
+      catastrophic: 'Catastrófica'
+    impacts:
+      rare: 'Raro'
+      unlikely: 'Improbable'
+      moderate: 'Moderado'
+      likely: 'Probable'
+      almost_certain: 'Muy probable'
+    new:
+      control_objective: 'Agregar objetivo de control'
 
   versions:
     index:
@@ -931,3 +975,13 @@ es:
     show:
       title: 'Papel de trabajo'
       error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'
+    statuses:
+      pending: 'Pendiente'
+      finished: 'En revisión'
+      revised: 'Revisado'
+      auditor:
+        next_to_pending: 'Marcar para revisión'
+        next_to_finished: 'Volver a pendiente'
+      supervisor:
+        next_to_finished: 'Marcar como revisado'
+        next_to_revised: 'Volver a pendiente'

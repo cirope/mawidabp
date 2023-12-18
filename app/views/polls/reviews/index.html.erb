@@ -51,7 +51,7 @@
 
 <div>
   <%= link_to t('label.back'), reports_polls_path %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
+  <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', target: '#customize_report' } %> |
   <%= link_to t('label.download_csv'), polls_reviews_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 

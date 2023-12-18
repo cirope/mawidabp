@@ -13,9 +13,9 @@
         <td><%= organization.name %></td>
         <td class="d-none d-sm-table-cell"><%= t organization.corporate? ? 'label.yes' : 'label.no' %></td>
         <td class="d-none d-sm-table-cell"><strong><%= organization.prefix %></strong></td>
-        <td class="text-right"><%= link_to_show organization %></td>
-        <td class="text-right"><%= link_to_edit [:edit, organization] %></td>
-        <td class="text-right"><%= link_to_destroy organization %></td>
+        <td class="text-end"><%= link_to_show organization %></td>
+        <td class="text-end"><%= link_to_edit [:edit, organization] %></td>
+        <td class="text-end"><%= link_to_destroy organization %></td>
       </tr>
     <% end %>
   </tbody>
