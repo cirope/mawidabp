@@ -9,7 +9,7 @@ en:
       # When using html, text and mark won't be used.
       # html: '<abbr title="required">*</abbr>'
     error_notification:
-      default_message: 'Please review the problems below:'
+      default_message: "Please review the problems below:"
     # Examples
     # labels:
     #   defaults:
@@ -29,30 +29,3 @@ en:
     # prompts:
     #   defaults:
     #     age: 'Select your age'
-    hints:
-      ldap_config:
-        hostname: 'Domain or IP address'
-        port: 'For example: 389'
-        alternative_hostname: 'Domain or IP address'
-        alternative_port: 'For example: 389'
-        basedn: 'CN=Users,DC=domain,DC=com'
-        filter: 'CN=*'
-        login_mask: '&#37;{user}@dominio.com, Domain\&#37;{user} or &#37;{user},&#37;{basedn}'
-        username_attribute: 'For example: samaccountname'
-        name_attribute: 'For example: givenname'
-        last_name_attribute: 'For example: sn'
-        email_attribute: 'For example: email'
-        function_attribute: 'For example: title'
-        office_attribute: 'For example: postofficebox'
-        roles_attribute: 'For example: memberof'
-        manager_attribute: 'For example: manager'
-        tls: 'Possible values: TLSv1_1 or TLSv1_2'
-        ca_path: 'For example: /tmp/ca.pem'
-        test_user: 'Valid user on the server to test the connection'
-        test_password: 'User password to test the connection'
-        user: 'Service user for automatic user import'
-        password: 'Service user password for automatic user import'
-      import:
-        username: 'User with permissions to query the LDAP user database'
-      business_unit_type:
-        exec_summary_intro: "The valid key to include is: <code>%{%{keywords}}</code>"

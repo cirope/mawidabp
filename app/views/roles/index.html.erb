@@ -12,9 +12,9 @@
       <tr>
         <td><%= role.name %></td>
         <td><%= role_type_text(role.role_type) %></td>
-        <td class="text-right"><%= link_to_show role %></td>
-        <td class="text-right"><%= link_to_edit edit_role_path(role) %></td>
-        <td class="text-right"><%= link_to_destroy role %></td>
+        <td class="text-end"><%= link_to_show role %></td>
+        <td class="text-end"><%= link_to_edit edit_role_path(role) %></td>
+        <td class="text-end"><%= link_to_destroy role %></td>
       </tr>
     <% end %>
   </tbody>

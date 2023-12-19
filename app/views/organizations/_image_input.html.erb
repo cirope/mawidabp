@@ -8,7 +8,7 @@
       <p><%= organization_image_tag %></p>
 
       <%= f.simple_fields_for :image_model, organization_image do |im_f| %>
-        <div class="file-container float-left">
+        <div class="file-container float-start">
           <%= link_to_upload im_f.object, :image %>
           <%= im_f.input :image, label: false %>
         </div>
@@ -24,7 +24,7 @@
         <p><%= organization_image_tag model: :co_brand_image_model %></p>
 
         <%= f.simple_fields_for :co_brand_image_model, organization_image(:co_brand_image_model) do |im_f| %>
-          <div class="file-container float-left">
+          <div class="file-container float-start">
             <%= link_to_upload im_f.object, :image %>
             <%= im_f.input :image, label: false %>
           </div>

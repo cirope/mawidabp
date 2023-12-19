@@ -76,7 +76,7 @@
       subtitle: "ISSUES BY USER / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     weaknesses_by_business_unit:
       pdf_name: "issues_by_cycle_%{from_date}_to_%{to_date}.pdf"
       title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
@@ -228,7 +228,7 @@
       subtitle: "MONITORING ISSUES BY USER / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     process_control_stats:
       average_effectiveness: 'Weighted average rating'
       average_effectiveness_resume:
@@ -242,7 +242,7 @@
       subtitle: "MONITORING ISSUES BY BUSINESS PROCESS / FINAL AUDIT REPORTS"
       without_reviews_in_the_period: "Without audit reports in the selected period"
       without_weaknesses: "Without issues"
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       review_effectiveness_average: 'Weighted average of control objective ratings: <b>%{score}%</b>'
 
   follow_up_audited_committee_report:
@@ -267,6 +267,7 @@
     weaknesses_reschedules_title: "Summary of issues and reschedules"
     weaknesses_by_control_objective_process_title: "Report process by control objectives"
     weaknesses_heatmap_title: "Issues heat map"
+    export_issues: "Export issues"
 
   execution_committee_report:
     weaknesses_current_situation_title: "Global report - Quarterly drafts"
@@ -348,7 +349,7 @@
       pdf_name: "process_report_by_control_objective_%{from_date}_to_%{to_date}.pdf"
       title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
       subtitle: "MONITORING PROCESS ISSUES BY CONTROL OBJECTIVE / FINAL AUDIT REPORTS"
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_weaknesses: "Without issues"
       origination_year: "Origin year"
       control_objective_tags: "Control objective tags"
@@ -360,7 +361,7 @@
       subtitle: "MONITORING ISSUES BY USER / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     weaknesses_by_business_unit:
       pdf_name: "issues_by_cycle_%{from_date}_to_%{to_date}.pdf"
       title: "SUMMARY REPORT TO THE BOARD OF DIRECTORS\nINTERNAL CONTROL SYSTEM EVALUATION\nCOMM. \"A\" 5042"
@@ -375,7 +376,7 @@
       subtitle: "HEAT MAP MONITORING ISSUES / FINAL AUDIT REPORTS"
       without_audits_in_the_interval: "Without audits in the selected interval"
       without_weaknesses: "Without issues"
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       process_owner_parents: "Responsible line managers"
       process_owner_intermediates: "Intermediate owners"
       process_owner_roots: "Top owners"

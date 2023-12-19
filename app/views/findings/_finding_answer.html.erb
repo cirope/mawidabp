@@ -27,7 +27,7 @@
       <% if !finding_answer.file_model.try(:file?) || finding_answer.file_model.new_record? %>
         <% if finding_answer.new_record? %>
           <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
-            <div class="file-container float-left">
+            <div class="file-container float-start">
               <%= link_to_upload(fm_f.object) %>
               <% if fm_f.object.file_cache %>
                 <%= fm_f.input :file, label: false %>
@@ -36,7 +36,7 @@
                 <%= fm_f.input :file, label: false %>
               <% end %>
             </div>
-            <%= link_to '#', class: 'float-left', hidden: fm_f.object.file_cache.blank?, data: { clear_file: 'file' } do %>
+            <%= link_to '#', class: 'float-start', hidden: fm_f.object.file_cache.blank?, data: { clear_file: 'file' } do %>
               <%= icon 'fas', 'times' %>
             <% end %>
           <% end %>
@@ -48,9 +48,9 @@
         <%= link_to_create_work_paper finding_answer %>
       <% end %>
     </div>
-    <div class="col-md-2 text-right">
+    <div class="col-md-2 text-end">
       <% if finding_answer.persisted? %>
-        <div class="<%= show_follow_up_timestamps? ? 'text-right' : 'float-right' %>">
+        <div class="<%= show_follow_up_timestamps? ? 'text-end' : 'float-end' %>">
           <%= render 'readings/reading', finding_answer: finding_answer %>
         </div>
         <% if finding_answer.commitment_date %>
@@ -60,10 +60,10 @@
       <% else %>
         <% if finding_answer.user.can_act_as_audited? || bic_committee?(finding_answer) %>
           <% unless show_commitment_date?(finding_answer) %>
-            <%= link_to t('finding.show_commitment_date'), '#commitment-date', data: { toggle: 'collapse' } %>
+            <%= link_to t('finding.show_commitment_date'), '#commitment-date', data: { bs_toggle: 'collapse' } %>
           <% end %>
 
-          <div id="commitment-date" class="text-left mt-1 collapse <%= 'show' if show_commitment_date?(finding_answer) %>">
+          <div id="commitment-date" class="text-start mt-1 collapse <%= 'show' if show_commitment_date?(finding_answer) %>">
             <%= f.input :commitment_date, as: :date_picker, label: false,
               hint: FindingAnswer.human_attribute_name(:commitment_date),
               input_html: {

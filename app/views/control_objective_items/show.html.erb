@@ -34,7 +34,7 @@
     <strong><%= Tag.model_name.human count: 0 %>:</strong>
 
     <% @control_objective_item.tags.each do |tag| %>
-      <span class="badge badge-<%= tag.style %>">
+      <span class="badge bg-<%= tag.style %>">
         <%= icon 'fas', tag.icon %>
         <%= tag %>
       </span>

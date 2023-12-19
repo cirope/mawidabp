@@ -9,10 +9,10 @@
   <% end %>
 
   <%= link_to_download f.object %>
-  <span class="ml-2 text-muted"><%= f.object.file_model.file_file_name %></span>
+  <span class="ms-2 text-muted"><%= f.object.file_model.file_file_name %></span>
 
   <% unless readonly %>
-    <span class="ml-2">
+    <span class="ms-2">
       <%= link_to_remove_nested_item f %>
     </span>
   <% end %>
