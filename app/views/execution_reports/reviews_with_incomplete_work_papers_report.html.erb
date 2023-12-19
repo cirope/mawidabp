@@ -25,7 +25,9 @@
       </ul>
     <% else %>
       <div class="alert alert-info">
-        <%= t ".empty_#{params[:revised].present? ? 'revised' : 'incomplete'}" %>
+        <div class="alert-message">
+          <%= t ".empty_#{params[:revised].present? ? 'revised' : 'incomplete'}" %>
+        </div>
       </div>
     <% end %>
 

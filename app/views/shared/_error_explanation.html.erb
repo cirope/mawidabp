@@ -1,7 +1,7 @@
 <% model = f.object %>
 <% if model.errors.any? %>
-  <div class="card border-danger mb-3">
-    <div class="card-header bg-danger py-2 px-3">
+  <div class="card border-1 border-danger mb-3">
+    <div class="card-header bg-danger">
       <h5 class="m-0 text-white">
         <%= t 'errors.template.header', count: model.errors.count %>
       </h5>

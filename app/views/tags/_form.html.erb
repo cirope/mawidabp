@@ -46,8 +46,8 @@
           </p>
         </div>
 
-        <div class="card mb-3">
-          <div class="card-header">
+        <div class="card border-1 border-light mb-3">
+          <div class="card-header bg-light">
             <h5 class="mb-0">
               <%= Tag.human_attribute_name 'icon' %>
             </h5>
@@ -69,8 +69,6 @@
         <%= f.input :icon, as: :hidden %>
         <%= f.input :lock_version, as: :hidden %>
       </div>
-
-      <hr>
 
       <div class="form-actions">
         <div class="float-end"><%= yield :form_actions %></div>

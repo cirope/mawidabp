@@ -130,9 +130,11 @@
           </div>
         <% else %>
           <div class="alert alert-info">
-            <p class="mb-0">
-              <%= t @clone_from.blank? ? '.new_risk_assessment_items' : '.cloned_risk_assessment_items' %>
-            </p>
+            <div class="alert-message">
+              <p class="mb-0">
+                <%= t @clone_from.blank? ? '.new_risk_assessment_items' : '.cloned_risk_assessment_items' %>
+              </p>
+            </div>
           </div>
         <% end %>
 

@@ -77,11 +77,15 @@
       </div>
     <% elsif params[:business_unit_type] == 'nil' %>
       <div class="alert alert-info">
-        <p class="mb-0"><%= t '.empty_with_no_business_units' %></p>
+        <div class="alert-message">
+          <p class="mb-0"><%= t '.empty_with_no_business_units' %></p>
+        </div>
       </div>
     <% else %>
       <div class="alert alert-info">
-        <p class="mb-0"><%= t '.empty' %></p>
+        <div class="alert-message">
+          <p class="mb-0"><%= t '.empty' %></p>
+        </div>
       </div>
     <% end %>
 

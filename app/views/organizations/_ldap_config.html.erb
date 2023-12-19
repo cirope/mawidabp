@@ -20,7 +20,9 @@
     <div id="ldap_config" class="card-body collapse<%= ' show' if collapse_in %>" data-enable-disable-card-fieldset="true">
       <% if l_f.object.errors[:base].present? %>
         <div class="alert alert-danger">
-          <%= l_f.object.errors[:base].to_sentence %>
+          <div class="alert-message">
+            <%= l_f.object.errors[:base].to_sentence %>
+          </div>
         </div>
       <% end %>
       <fieldset <%= 'disabled' unless collapse_in %>>
