@@ -100,7 +100,7 @@
     <div>
       <%= link_to t('label.back'), reports_polls_path %> |
       <%= link_to t('label.download'), '#',
-        data: { bs_toggle: 'modal', target: '#customize_report' } %>
+        data: { bs_toggle: 'modal', bs_target: '#customize_report' } %>
     </div>
 
     <%= render partial: 'shared/customize_report_form', locals: {

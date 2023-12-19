@@ -108,7 +108,7 @@
 
     <div>
       <%= link_to t('label.back'), action: :index %> |
-      <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', target: '#customize_report' } %> |
+      <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', bs_target: '#customize_report' } %> |
       <%= link_to t('label.download_csv'), review_score_details_report_conclusion_reports_path(request.query_parameters.merge(format: :csv)) %>
     </div>
   </div>
