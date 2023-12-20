@@ -5,7 +5,8 @@
  *= require_self
  *= require fonts
  *= require font_awesome
- *= require bootstrap_sass
+ *= require simplebar
+ *= require appstack
  *= require jquery-ui
  *= require jquery-ui-theme
  *= require chartist.min
@@ -31,7 +32,6 @@
  *= require risk_assessments
  *= require risk_assessment_templates
  *= require roles
- *= require sessions
  *= require tags
  *= require time_summary
  *= require weakness_templates

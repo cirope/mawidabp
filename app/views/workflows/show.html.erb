@@ -1,88 +1,90 @@
-<h3><%= @workflow.review %></h3>
+<div class="card">
+  <div class="card-body">
+    <h3><%= @workflow.review %></h3>
 
-<p class="mb-1">
-  <strong><%= Workflow.human_attribute_name :period_id %>:</strong>
-  <%= @workflow.period.inspect %>
-</p>
+    <p class="mb-1">
+      <strong><%= Workflow.human_attribute_name :period_id %>:</strong>
+      <%= @workflow.period.inspect %>
+    </p>
 
-<% if @workflow.file_model %>
-  <p class="mb-1">
-    <strong><%= Workflow.human_attribute_name :file_model_id %>:</strong>
-    <%= link_to_download @workflow, extra_classes: 'btn-sm ms-1' %>
-  </p>
-<% end %>
-
-<table class="table table-sm table-striped table-hover mt-3">
-  <thead>
-    <tr>
-      <th><%= WorkflowItem.human_attribute_name :order_number %></th>
-      <th><%= WorkflowItem.human_attribute_name(:task) %></th>
-      <th><%= WorkflowItem.human_attribute_name :start %></th>
-      <th><%= WorkflowItem.human_attribute_name :end %></th>
-      <th><%= WorkflowItem.human_attribute_name :human_resource_units %></th>
-      <th><%= WorkflowItem.human_attribute_name :material_resource_units %></th>
-      <th><%= WorkflowItem.human_attribute_name :total_resource_units %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @workflow.workflow_items.each do |workflow_item| %>
-      <tr>
-        <td><%= workflow_item.order_number %></td>
-        <td><%= simple_format workflow_item.task, class: 'mb-1' %></td>
-        <td><%= l workflow_item.start %></td>
-        <td><%= l workflow_item.end %></td>
-        <td><%= '%.2f' % workflow_item.human_units %></td>
-        <td><%= '%.2f' % workflow_item.material_units %></td>
-        <td><%= '%.2f' % workflow_item.units %></td>
-      </tr>
+    <% if @workflow.file_model %>
+      <p class="mb-1">
+        <strong><%= Workflow.human_attribute_name :file_model_id %>:</strong>
+        <%= link_to_download @workflow, extra_classes: 'btn-sm ms-1' %>
+      </p>
     <% end %>
-    <tr>
-      <td colspan="6"></td>
-      <td><strong><%= '%.2f' % @workflow.units %></strong></td>
-    </tr>
-  </tbody>
-</table>
 
-<% unless @workflow.workflow_items.all? { |wi| wi.resource_utilizations.blank? } %>
-  <h4><%= t('workflow.pdf.resources_utilization') %></h4>
+    <table class="table table-sm table-striped table-hover mt-3">
+      <thead>
+        <tr>
+          <th><%= WorkflowItem.human_attribute_name :order_number %></th>
+          <th><%= WorkflowItem.human_attribute_name(:task) %></th>
+          <th><%= WorkflowItem.human_attribute_name :start %></th>
+          <th><%= WorkflowItem.human_attribute_name :end %></th>
+          <th><%= WorkflowItem.human_attribute_name :human_resource_units %></th>
+          <th><%= WorkflowItem.human_attribute_name :material_resource_units %></th>
+          <th><%= WorkflowItem.human_attribute_name :total_resource_units %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @workflow.workflow_items.each do |workflow_item| %>
+          <tr>
+            <td><%= workflow_item.order_number %></td>
+            <td><%= simple_format workflow_item.task, class: 'mb-1' %></td>
+            <td><%= l workflow_item.start %></td>
+            <td><%= l workflow_item.end %></td>
+            <td><%= '%.2f' % workflow_item.human_units %></td>
+            <td><%= '%.2f' % workflow_item.material_units %></td>
+            <td><%= '%.2f' % workflow_item.units %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td colspan="6"></td>
+          <td><strong><%= '%.2f' % @workflow.units %></strong></td>
+        </tr>
+      </tbody>
+    </table>
 
-  <% @workflow.workflow_items.each do |workflow_item| %>
-    <% unless workflow_item.resource_utilizations.blank? %>
-      <h5>
-        (<%= workflow_item.order_number %>) <%= workflow_item.task %>
-      </h5>
-      <table class="table table-sm table-striped table-hover">
-        <thead>
-          <tr>
-            <th><%= ResourceUtilization.human_attribute_name :resource %></th>
-            <th><%= ResourceUtilization.human_attribute_name :units %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% workflow_item.resource_utilizations.each do |ru| %>
-            <tr>
-              <td><%= ru.resource.resource_name %></td>
-              <td><%= ru.units %></td>
-            </tr>
-          <% end %>
-          <tr>
-            <td></td>
-            <td><strong><%= '%.2f' % workflow_item.units %></strong></td>
-          </tr>
-        </tbody>
-      </table>
+    <% unless @workflow.workflow_items.all? { |wi| wi.resource_utilizations.blank? } %>
+      <h4><%= t('workflow.pdf.resources_utilization') %></h4>
+
+      <% @workflow.workflow_items.each do |workflow_item| %>
+        <% unless workflow_item.resource_utilizations.blank? %>
+          <h5>
+            (<%= workflow_item.order_number %>) <%= workflow_item.task %>
+          </h5>
+          <table class="table table-sm table-striped table-hover">
+            <thead>
+              <tr>
+                <th><%= ResourceUtilization.human_attribute_name :resource %></th>
+                <th><%= ResourceUtilization.human_attribute_name :units %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% workflow_item.resource_utilizations.each do |ru| %>
+                <tr>
+                  <td><%= ru.resource.resource_name %></td>
+                  <td><%= ru.units %></td>
+                </tr>
+              <% end %>
+              <tr>
+                <td></td>
+                <td><strong><%= '%.2f' % workflow_item.units %></strong></td>
+              </tr>
+            </tbody>
+          </table>
+        <% end %>
+      <% end %>
     <% end %>
-  <% end %>
-<% end %>
 
-<hr />
-
-<div>
-  <%= link_to_edit edit_workflow_path(@workflow) %> |
-  <%= link_to_index workflows_path %> |
-  <%= link_to t('workflow.download_global_workflow'),
-    export_to_pdf_workflow_path(:_ts => Time.now.to_i) %> |
-  <%= link_to t('workflow.download_detailed_workflow'),
-    export_to_pdf_workflow_path(:include_details => 1,
-    :_ts => Time.now.to_i) %>
+    <div>
+      <%= link_to_edit edit_workflow_path(@workflow) %> |
+      <%= link_to_index workflows_path %> |
+      <%= link_to t('workflow.download_global_workflow'),
+        export_to_pdf_workflow_path(:_ts => Time.now.to_i) %> |
+      <%= link_to t('workflow.download_detailed_workflow'),
+        export_to_pdf_workflow_path(:include_details => 1,
+        :_ts => Time.now.to_i) %>
+    </div>
+  </div>
 </div>

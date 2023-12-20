@@ -1,30 +1,32 @@
-<table class="table table-sm table-striped table-hover">
-  <thead>
-    <tr>
-      <th><%= Period.human_attribute_name 'name' %></th>
-      <th class="d-none d-sm-table-cell"><%= Period.human_attribute_name 'description' %></th>
-      <th class="d-none d-sm-table-cell"><%= Period.human_attribute_name 'start' %></th>
-      <th class="d-none d-sm-table-cell"><%= Period.human_attribute_name 'end' %></th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="card">
+  <div class="card-body">
+    <table class="table table-sm table-striped table-hover">
+      <thead>
+        <tr>
+          <th><%= Period.human_attribute_name 'name' %></th>
+          <th class="d-none d-sm-table-cell"><%= Period.human_attribute_name 'description' %></th>
+          <th class="d-none d-sm-table-cell"><%= Period.human_attribute_name 'start' %></th>
+          <th class="d-none d-sm-table-cell"><%= Period.human_attribute_name 'end' %></th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @periods.each do |period| %>
-      <tr>
-        <td><%= period.name %></td>
-        <td class="d-none d-sm-table-cell"><%= super_truncate period.description, 40 %></td>
-        <td class="d-none d-sm-table-cell"><%= l(period.start, format: :short) %></td>
-        <td class="d-none d-sm-table-cell"><%= l(period.end, format: :short) %></td>
-        <td class="text-end"><%= link_to_show period %></td>
-        <td class="text-end"><%= link_to_edit edit_period_path(period) %></td>
-        <td class="text-end"><%= link_to_destroy period %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @periods.each do |period| %>
+          <tr>
+            <td><%= period.name %></td>
+            <td class="d-none d-sm-table-cell"><%= super_truncate period.description, 40 %></td>
+            <td class="d-none d-sm-table-cell"><%= l(period.start, format: :short) %></td>
+            <td class="d-none d-sm-table-cell"><%= l(period.end, format: :short) %></td>
+            <td class="text-end"><%= link_to_show period %></td>
+            <td class="text-end"><%= link_to_edit edit_period_path(period) %></td>
+            <td class="text-end"><%= link_to_destroy period %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<hr />
-
-<%= paginate @periods %>
-<%= link_to_new new_period_path, class: 'btn btn-primary' %>
+    <%= paginate @periods %>
+    <%= link_to_new new_period_path, class: 'btn btn-primary' %>
+  </div>
+</div>

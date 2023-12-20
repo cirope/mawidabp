@@ -1,0 +1,63 @@
+// Variables
+@import "appstack/variables/app";
+
+// Bootstrap
+@import "bootstrap";
+
+// Theme mixins
+@import "appstack/mixins/background";
+@import "appstack/mixins/badge";
+@import "appstack/mixins/button";
+@import "appstack/mixins/modal";
+@import "appstack/mixins/switch";
+@import "appstack/mixins/tabs";
+@import "appstack/mixins/theme";
+@import "appstack/mixins/wizard";
+
+// Theme components
+@import "appstack/components/accordion";
+@import "appstack/components/alert";
+@import "appstack/components/avatar";
+@import "appstack/components/badge";
+@import "appstack/components/buttons";
+@import "appstack/components/card";
+@import "appstack/components/chart";
+@import "appstack/components/chat";
+@import "appstack/components/content";
+@import "appstack/components/dropdown";
+@import "appstack/components/feather";
+@import "appstack/components/footer";
+@import "appstack/components/forms";
+@import "appstack/components/hamburger";
+@import "appstack/components/illustrations";
+@import "appstack/components/landing";
+@import "appstack/components/main";
+@import "appstack/components/modal";
+@import "appstack/components/navbar";
+@import "appstack/components/progress";
+@import "appstack/components/reboot";
+@import "appstack/components/root";
+@import "appstack/components/settings";
+@import "appstack/components/sidebar";
+@import "appstack/components/sizing";
+@import "appstack/components/stats";
+@import "appstack/components/tables";
+@import "appstack/components/tabs";
+@import "appstack/components/timeline";
+@import "appstack/components/type";
+@import "appstack/components/wizard";
+@import "appstack/components/wrapper";
+
+// Theme utilities
+@import "appstack/utilities/background";
+@import "appstack/utilities/borders";
+@import "appstack/utilities/cursors";
+@import "appstack/utilities/font";
+@import "appstack/utilities/overflow";
+@import "appstack/utilities/position";
+@import "appstack/utilities/z-index";
+
+// 3rd party plugin styles
+@import "appstack/vendor/daterangepicker";
+@import "appstack/vendor/datetimepicker";
+@import "appstack/vendor/simplebar";

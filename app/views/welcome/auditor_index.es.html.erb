@@ -1,38 +1,42 @@
-<%= render 'header' %>
+<div class="card">
+  <div class="card-body">
+    <%= render 'header' %>
 
-<% if @news.size > 1 && can?(:read, :administration_news) %>
-  <div class="row help">
-    <div class="col-md-12">
-      <% @news.each_slice(3) do |news| %>
-        <div class="row">
-          <% news.each do |_news| %>
-            <div class="col-md-4">
-              <%= render 'news', news: _news %>
+    <% if @news.size > 1 && can?(:read, :administration_news) %>
+      <div class="row help">
+        <div class="col-md-12">
+          <% @news.each_slice(3) do |news| %>
+            <div class="row">
+              <% news.each do |_news| %>
+                <div class="col-md-4">
+                  <%= render 'news', news: _news %>
+                </div>
+              <% end %>
             </div>
           <% end %>
+
+          <p>
+            <%= link_to 'Ver todas las noticias', news_index_path %>
+          </p>
         </div>
-      <% end %>
+      </div>
+    <% elsif @news.size == 1 && can?(:read, :administration_news) %>
+      <div class="row help">
+        <div class="col-md-4">
+          <%= render 'news', news: @news.take %>
+        </div>
+        <div class="col-md-8">
+          <%= render 'auditor_default' %>
+        </div>
+      </div>
+    <% else %>
+      <div class="row help">
+        <div class="col-md-12">
+          <%= render 'auditor_default' %>
+        </div>
+      </div>
+    <% end %>
 
-      <p>
-        <%= link_to 'Ver todas las noticias', news_index_path %>
-      </p>
-    </div>
+    <%= render 'footer' %>
   </div>
-<% elsif @news.size == 1 && can?(:read, :administration_news) %>
-  <div class="row help">
-    <div class="col-md-4">
-      <%= render 'news', news: @news.take %>
-    </div>
-    <div class="col-md-8">
-      <%= render 'auditor_default' %>
-    </div>
-  </div>
-<% else %>
-  <div class="row help">
-    <div class="col-md-12">
-      <%= render 'auditor_default' %>
-    </div>
-  </div>
-<% end %>
-
-<%= render 'footer' %>
+</div>

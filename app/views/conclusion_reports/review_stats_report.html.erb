@@ -1,146 +1,148 @@
-<%= render partial: 'shared/filter_form', locals: {
-  action:       :review_stats_report,
-  forms:        { date_range: true, business_unit: true },
-  extra_params: { controller_name: 'conclusion' }
-} %>
+<div class="card">
+  <div class="card-body">
+    <%= render partial: 'shared/filter_form', locals: {
+      action:       :review_stats_report,
+      forms:        { date_range: true, business_unit: true },
+      extra_params: { controller_name: 'conclusion' }
+    } %>
 
-<br>
+    <br>
 
-<div class="card mb-3">
-  <% score_count = @reviews_by_score.values.map(&:size).sum %>
+    <div class="card border-1 border-light mb-3">
+      <% score_count = @reviews_by_score.values.map(&:size).sum %>
 
-  <div class="card-header">
-    <h5 class="mb-0">
-      <%= Review.model_name.human count: 0 %>
-    </h5>
-  </div>
+      <div class="card-header bg-light">
+        <h5 class="mb-0">
+          <%= Review.model_name.human count: 0 %>
+        </h5>
+      </div>
 
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th><%= Review.human_attribute_name 'score' %></th>
-        <th class="text-end">
-          <%= t 'conclusion_committee_report.review_stats_report.ratio' %>
-        </th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% Review.scores.each do |score, value| %>
-        <% scores = @reviews_by_score[score] %>
-        <tr>
-          <td><%= t "score_types.#{score}" %></td>
-          <td class="text-end">
-            <%= scores.size > 0 ? '%.2f%%' % (scores.size.to_f / score_count * 100) : '0.00%' %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <div class="card-footer">
-    <%= t 'conclusion_committee_report.review_stats_report.review_count' %>:
-    <mark><%= score_count %></mark>
-  </div>
-</div>
-
-<% if @reviews_by_tag.present? %>
-  <div class="card mb-3">
-    <% reviews_by_tag_count = @reviews_by_tag.values.sum %>
-
-    <div class="card-header">
-      <h5 class="mb-0">
-        <%= t 'conclusion_committee_report.review_stats_report.reviews_by_tag.title' %>
-      </h5>
-    </div>
-
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th><%= Tag.model_name.human %></th>
-          <th class="text-end">
-            <%= t 'conclusion_committee_report.review_stats_report.ratio' %>
-          </th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @reviews_by_tag.each do |tag, count| %>
+      <table class="table table-hover">
+        <thead>
           <tr>
-            <td>
-              <span class="text-<%= tag.style %>">
-                <%= icon 'fas', tag.icon %>
-                <%= tag %>
-              </span>
-            </td>
-            <td class="text-end">
-              <%= count > 0 ? '%.2f%%' % (count.to_f / reviews_by_tag_count * 100) : '0.00%' %>
-            </td>
+            <th><%= Review.human_attribute_name 'score' %></th>
+            <th class="text-end">
+              <%= t 'conclusion_committee_report.review_stats_report.ratio' %>
+            </th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
 
-    <div class="card-footer">
-      <%= t 'conclusion_committee_report.review_stats_report.review_count' %>:
-      <mark><%= reviews_by_tag_count %></mark> <sup>(*)</sup>
+        <tbody>
+          <% Review.scores.each do |score, value| %>
+            <% scores = @reviews_by_score[score] %>
+            <tr>
+              <td><%= t "score_types.#{score}" %></td>
+              <td class="text-end">
+                <%= scores.size > 0 ? '%.2f%%' % (scores.size.to_f / score_count * 100) : '0.00%' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <div class="card-footer">
+        <%= t 'conclusion_committee_report.review_stats_report.review_count' %>:
+        <mark><%= score_count %></mark>
+      </div>
+    </div>
+
+    <% if @reviews_by_tag.present? %>
+      <div class="card border-1 border-light mb-3">
+        <% reviews_by_tag_count = @reviews_by_tag.values.sum %>
+
+        <div class="card-header bg-light">
+          <h5 class="mb-0">
+            <%= t 'conclusion_committee_report.review_stats_report.reviews_by_tag.title' %>
+          </h5>
+        </div>
+
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th><%= Tag.model_name.human %></th>
+              <th class="text-end">
+                <%= t 'conclusion_committee_report.review_stats_report.ratio' %>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @reviews_by_tag.each do |tag, count| %>
+              <tr>
+                <td>
+                  <span class="text-<%= tag.style %>">
+                    <%= icon 'fas', tag.icon %>
+                    <%= tag %>
+                  </span>
+                </td>
+                <td class="text-end">
+                  <%= count > 0 ? '%.2f%%' % (count.to_f / reviews_by_tag_count * 100) : '0.00%' %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <div class="card-footer">
+          <%= t 'conclusion_committee_report.review_stats_report.review_count' %>:
+          <mark><%= reviews_by_tag_count %></mark> <sup>(*)</sup>
+        </div>
+      </div>
+
+      <p class="text-muted small">
+        <sup>(*)</sup> <%= t 'conclusion_committee_report.review_stats_report.reviews_by_tag.footnote' %>
+      </p>
+    <% end %>
+
+    <div class="card border-1 border-light mb-3">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">
+          <%= t 'conclusion_committee_report.review_stats_report.weaknesses_by_score.title' %>
+        </h5>
+      </div>
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              <%= Weakness.human_attribute_name 'risk' %>
+              <%= "/ #{Weakness.human_attribute_name 'priority'}" %>
+            </th>
+            <% Review.scores.each do |score, value| %>
+              <th class="text-end"><%= t "score_types.#{score}" %></th>
+            <% end %>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @weaknesses_by_score.each do |label, weaknesses_by_score| %>
+            <tr>
+              <td><%= label %></td>
+              <% Review.scores.keys.each do |score| %>
+                <td class="text-end"><%= weaknesses_by_score[score] %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+
+        <tfoot>
+          <tr class="text-muted">
+            <td>
+              <%= t 'conclusion_committee_report.review_stats_report.weaknesses_by_score.total' %>
+            </td>
+            <% Review.scores.keys.each do |score| %>
+              <td class="text-end"><%= @total_weaknesses_by_score[score] %></td>
+            <% end %>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div>
+      <%= link_to t('label.back'), action: :index %> |
+      <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', bs_target: '#customize_report' } %>
     </div>
   </div>
-
-  <p class="text-muted small">
-    <sup>(*)</sup> <%= t 'conclusion_committee_report.review_stats_report.reviews_by_tag.footnote' %>
-  </p>
-<% end %>
-
-<div class="card mb-3">
-  <div class="card-header">
-    <h5 class="mb-0">
-      <%= t 'conclusion_committee_report.review_stats_report.weaknesses_by_score.title' %>
-    </h5>
-  </div>
-
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>
-          <%= Weakness.human_attribute_name 'risk' %>
-          <%= "/ #{Weakness.human_attribute_name 'priority'}" %>
-        </th>
-        <% Review.scores.each do |score, value| %>
-          <th class="text-end"><%= t "score_types.#{score}" %></th>
-        <% end %>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @weaknesses_by_score.each do |label, weaknesses_by_score| %>
-        <tr>
-          <td><%= label %></td>
-          <% Review.scores.keys.each do |score| %>
-            <td class="text-end"><%= weaknesses_by_score[score] %></td>
-          <% end %>
-        </tr>
-      <% end %>
-    </tbody>
-
-    <tfoot>
-      <tr class="text-muted">
-        <td>
-          <%= t 'conclusion_committee_report.review_stats_report.weaknesses_by_score.total' %>
-        </td>
-        <% Review.scores.keys.each do |score| %>
-          <td class="text-end"><%= @total_weaknesses_by_score[score] %></td>
-        <% end %>
-      </tr>
-    </tfoot>
-  </table>
-</div>
-
-<hr>
-
-<div>
-  <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', target: '#customize_report' } %>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {
