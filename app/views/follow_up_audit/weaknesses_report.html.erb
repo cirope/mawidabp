@@ -6,10 +6,9 @@
       <div class="card-header bg-light">
         <h5 class="mb-0"><%= t 'label.search' %></h5>
       </div>
-
       <div class="card-body">
         <%= simple_form_for action_name, url: url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
-          <% filters = %w(review finding risk_levels priority current_situation compliance process_control control_objective tags) %>
+          <% filters = %w(review review_code finding risk_levels priority current_situation compliance process_control control_objective tags) %>
           <% filters = filters - ['current_situation'] unless SHOW_FINDING_CURRENT_SITUATION %>
           <% filters = filters - ['compliance'] unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
           <% filters.each do |filter_name| %>
@@ -44,7 +43,7 @@
     </div>
 
     <% if @weaknesses.try(:total_entries)&.positive? %>
-      <div class="card my-3 bg-light">
+      <div class="card border-1 border-light my-3 bg-light">
         <div class="card-body">
           <div class="row">
             <div class="col-md-8">
