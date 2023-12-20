@@ -1,38 +1,42 @@
-<%= simple_form_for @group do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @group do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <%= f.input :name, input_html: { maxlength: 255 } %>
-    <%= f.input :admin_email, input_html: { maxlength: 100 } %>
-    <%= f.input :description %>
-    <%= f.input :send_notification_email, as: :boolean %>
-  </div>
+      <div class="form-inputs">
+        <%= f.input :name, input_html: { maxlength: 255 } %>
+        <%= f.input :admin_email, input_html: { maxlength: 100 } %>
+        <%= f.input :description %>
+        <%= f.input :send_notification_email, as: :boolean %>
+      </div>
 
-  <div class="row">
-    <div class="col-md-4">
-      <h5 class="h6"><%= Organization.human_attribute_name :name %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= Organization.human_attribute_name :prefix %></h5>
-    </div>
-    <div class="col-md-4">
-      <h5 class="h6"><%= Organization.human_attribute_name :description %></h5>
-    </div>
-  </div>
+      <div class="row">
+        <div class="col-md-4">
+          <h5 class="h6"><%= Organization.human_attribute_name :name %></h5>
+        </div>
+        <div class="col-md-2">
+          <h5 class="h6"><%= Organization.human_attribute_name :prefix %></h5>
+        </div>
+        <div class="col-md-4">
+          <h5 class="h6"><%= Organization.human_attribute_name :description %></h5>
+        </div>
+      </div>
 
-  <div id="organizations">
-    <%= f.simple_fields_for :organizations do |o_f| %>
-      <%= render 'organization', f: o_f %>
+      <div id="organizations">
+        <%= f.simple_fields_for :organizations do |o_f| %>
+          <%= render 'organization', f: o_f %>
+        <% end %>
+
+        <%= link_to_add_fields(t('group.add_organization'), f, :organizations) %>
+      </div>
+
+      <hr />
+
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.input :lock_version, as: :hidden %>
+        <%= f.submit class: 'btn btn-primary' %>
+      </div>
     <% end %>
-
-    <%= link_to_add_fields(t('group.add_organization'), f, :organizations) %>
   </div>
-
-  <hr />
-
-  <div class="form-actions">
-    <div class="float-end"><%= yield :form_actions %></div>
-    <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary' %>
-  </div>
-<% end %>
+</div>
