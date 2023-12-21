@@ -988,7 +988,7 @@ module ConclusionReviews::GalPdf
     end
 
     def key_weaknesses_column_widths pdf
-      [60, 20, 20].map { |percent| pdf.percent_width percent }
+      [70, 10, 20].map { |percent| pdf.percent_width percent }
     end
 
     def observations_or_robotization_column_widths pdf
