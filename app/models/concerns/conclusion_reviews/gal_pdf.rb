@@ -147,13 +147,13 @@ module ConclusionReviews::GalPdf
 
       pdf.make_table([
         [
-          "<b>#{Review.human_attribute_name :risk_exposure}:</b> #{review.risk_exposure} #{add_tag}",
+          "<b>#{Review.human_attribute_name :risk_exposure}:</b> #{review.risk_exposure} #{put_tag_name}",
           "<b>#{I18n.t 'conclusion_review.executive_summary.revision_type'}</b>: #{review.scope}"
         ]
       ], style)
     end
 
-    def add_tag
+    def put_tag_name
       if plan_item.tags.take&.include_in_executive_summary?
         "- (#{plan_item.tags.take.name})"
       end
