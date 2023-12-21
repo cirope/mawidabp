@@ -292,12 +292,12 @@ module ConclusionReviews::GalPdf
     end
 
     def put_observations_v2_on(pdf)
-      title = "#{self.class.human_attribute_name(:observations).gsub('/', "\n")}"
+      title = I18n.t('conclusion_review.executive_summary.observations')
       create_observations_or_robotization_table(pdf, title, observations)
     end
 
     def put_robotization_on(pdf)
-      title = "#{self.class.human_attribute_name :robotization}"
+      title = self.class.human_attribute_name :robotization
       create_observations_or_robotization_table(pdf, title, robotization)
     end
 
