@@ -32,6 +32,30 @@ CONCLUSION_IMAGES = {
   'No aplica'                    => 'score_not_apply.png'
 }
 
+CONCLUSION_CHARTS = {
+  'Satisfactorio'                => 'score_success_chart.png',
+  'Satisfactorio con salvedades' => 'score_success_with_exceptions_chart.png',
+  'Necesita mejorar'             => 'score_warning_chart.png',
+  'No satisfactorio'             => 'score_danger_chart.png',
+  'No aplica'                    => 'score_not_apply_chart.png'
+}
+
+CONCLUSION_CHART_LEGENDS = {
+  'Satisfactorio'                => 'score_success_legend.png',
+  'Satisfactorio con salvedades' => 'score_success_with_exceptions_legend.png',
+  'Necesita mejorar'             => 'score_warning_legend.png',
+  'No satisfactorio'             => 'score_danger_legend.png',
+  'No aplica'                    => 'score_not_apply_legend.png'
+}
+
+CONCLUSION_CHART_LEGENDS_CHECKED = {
+  'Satisfactorio'                => 'score_success_legend_checked.png',
+  'Satisfactorio con salvedades' => 'score_success_with_exceptions_legend_checked.png',
+  'Necesita mejorar'             => 'score_warning_legend_checked.png',
+  'No satisfactorio'             => 'score_danger_legend_checked.png',
+  'No aplica'                    => 'score_not_apply_legend_checked.png'
+}
+
 CONCLUSION_EVOLUTION_IMAGES = {
   [
     'Satisfactorio con salvedades',
@@ -87,7 +111,8 @@ EVOLUTION_IMAGES = {
   'No aplica'                          => 'evolution_not_apply.png'
 }
 
-PDF_IMAGE_PATH = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
+PDF_IMAGE_PATH          = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
+PDF_GAL_IMAGE_PATH      = Rails.root.join('app', 'assets', 'images', 'gal_pdf').freeze
 PDF_DEFAULT_SCORE_IMAGE = 'score_none.png'
 
 PLAN_ITEM_STATS_EXCLUDED_SCOPES = [

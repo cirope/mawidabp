@@ -196,9 +196,48 @@ module ConclusionReviews::GalPdf
     def put_conclusion_on pdf
       style = { column_widths: [pdf.percent_width(40), pdf.percent_width(40)] }
 
-      pdf.make_table([["Graph", extended_conclusion]], style) do
+      pdf.make_table([[put_chart_on(pdf), extended_conclusion]], style) do
         column(1).style(align: :justify)
       end
+    end
+
+    def put_chart_on pdf
+      image      = CONCLUSION_CHARTS[conclusion]
+      image_path = PDF_GAL_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
+      size       = 150
+
+      pdf.make_table([
+        [{ image: image_path, fit: [size, size], position: :center, vposition: :center }],
+        [put_legend_on(pdf, conclusion)]
+      ], column_widths: [pdf.percent_width(40)], cell_style: { borders: [] })
+    end
+
+    def put_legend_on pdf, conclusion
+      legend_texts  = CONCLUSION_OPTIONS
+      legend_images = legend_texts.map { |label| legend_image(conclusion, label) }
+
+      rows = [
+        [legend_images[4], legend_texts[4], legend_images[2], legend_texts[2]],
+        [legend_images[0], legend_texts[0], legend_images[3], legend_texts[3]],
+        [legend_images[1], { content: legend_texts[1], colspan: 3 }]
+      ]
+
+      style = {
+       column_widths: legend_column_widths,
+       cell_style: { borders: [], :padding => [0, 0, 1, 5] }
+      }
+
+      pdf.make_table(rows, style) do
+        row(-1).padding_bottom = 5
+      end
+    end
+
+    def legend_image conclusion, label
+      size       = 9
+      image      = conclusion == label ? CONCLUSION_CHART_LEGENDS_CHECKED[label] : CONCLUSION_CHART_LEGENDS[label]
+      image_path = PDF_GAL_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
+
+      { image: image_path, fit: [size, size] }
     end
 
     def put_key_weaknesses_on pdf
@@ -941,6 +980,10 @@ module ConclusionReviews::GalPdf
 
     def key_weaknesses_column_widths pdf
       [60, 20, 20].map { |percent| pdf.percent_width percent }
+    end
+
+    def legend_column_widths
+      [3, 14, 3, 20].map { |percent| pdf.percent_width percent }
     end
 
     def gal_score_details_column_data
