@@ -984,19 +984,19 @@ module ConclusionReviews::GalPdf
     end
 
     def conclusion_and_score_image_column_widths pdf
-      [80, 20].map { |percent| pdf.percent_width percent }
+      [81, 19].map { |percent| pdf.percent_width percent }
     end
 
     def conclusion_column_width pdf
-      [40, 40].map { |percent| pdf.percent_width percent }
+      [40, 41].map { |percent| pdf.percent_width percent }
     end
 
     def key_weaknesses_column_widths pdf
-      [70, 10, 20].map { |percent| pdf.percent_width percent }
+      [67, 10, 23].map { |percent| pdf.percent_width percent }
     end
 
     def observations_or_robotization_column_widths pdf
-      [35, 65].map { |percent| pdf.percent_width percent }
+      [33, 67].map { |percent| pdf.percent_width percent }
     end
 
     def legend_column_widths pdf
