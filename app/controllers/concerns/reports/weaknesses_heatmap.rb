@@ -78,7 +78,15 @@ module Reports::WeaknessesHeatmap
       ].map { |o| Arel.sql o }
       weaknesses = Weakness.list_with_final_review.or(
         Weakness.list_without_final_review).
-        by_origination_or_issue_date(@from_date, @to_date)
+        by_origination_or_issue_date(@from_date, @to_date).
+        with_status_for_report.
+        finals(final).
+        includes(
+          :business_unit,
+          :business_unit_type,
+          finding_answers: :user,
+          review: [:plan_item, :conclusion_final_review]
+        )
 
       if params[:weaknesses_heatmap]
         weaknesses = filter_weaknesses_heatmap weaknesses
@@ -101,15 +109,7 @@ module Reports::WeaknessesHeatmap
       end
 
       @weaknesses = if ids.present?
-                      Weakness.where(conditions.map { |c| "(#{c})" }.join(' OR '), parameters).
-                        with_status_for_report.
-                        finals(final).
-                        includes(
-                          :business_unit,
-                          :business_unit_type,
-                          finding_answers: :user,
-                          review: [:plan_item, :conclusion_final_review]
-                        )
+                      Weakness.where(conditions.map { |c| "(#{c})" }.join(' OR '), parameters)
                     else
                       Weakness.none
                     end
