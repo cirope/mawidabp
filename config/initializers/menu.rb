@@ -3,6 +3,7 @@ APP_AUDITED_MENU_ITEMS = [
   MenuItem.new(
     :follow_up,
     order: 1,
+    icon: 'comments',
     children: [
       MenuItem.new(
         :pending_findings,
@@ -55,6 +56,7 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :administration,
     order: 1,
+    icon: 'screwdriver-wrench',
     children: [
       MenuItem.new(
         :organization,
@@ -221,6 +223,7 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :planning,
     order: 2,
+    icon: 'table',
     children: [
       MenuItem.new(
         :resources,
@@ -252,6 +255,7 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :execution,
     order: 3,
+    icon: 'chalkboard',
     children: [
       MenuItem.new(
         :reviews,
@@ -327,6 +331,7 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :conclusion,
     order: 4,
+    icon: 'chalkboard-user',
     children: [
       MenuItem.new(
         :draft_reviews,
@@ -352,6 +357,7 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :follow_up,
     order: 5,
+    icon: 'comments',
     children: [
       MenuItem.new(
         :pending_findings,

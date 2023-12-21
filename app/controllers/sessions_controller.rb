@@ -1,6 +1,8 @@
 class SessionsController < ApplicationController
   include Sessions
 
+  layout 'public'
+
   before_action :auth, only: [:destroy]
   before_action :set_title, except: [:destroy]
 

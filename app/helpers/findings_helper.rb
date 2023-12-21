@@ -156,7 +156,7 @@ module FindingsHelper
   end
 
   def finding_status_options
-    Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).map do |k, v|
+    Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS - [:assumed_risk]).map do |k, v|
       [t("findings.state.#{k}"), v.to_s]
     end
   end

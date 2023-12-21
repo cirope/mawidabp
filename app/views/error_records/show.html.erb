@@ -1,23 +1,27 @@
-<p class="mb-1">
-  <strong><%= ErrorRecord.human_attribute_name 'user_id' %></strong>:
-  <%= @error_record %>
-</p>
+<div class="card">
+  <div class="card-body">
+    <p class="mb-1">
+      <strong><%= ErrorRecord.human_attribute_name 'user_id' %></strong>:
+      <%= @error_record %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= ErrorRecord.human_attribute_name 'error' %></strong>:
-  <%= @error_record.error_text %>
-</p>
+    <p class="mb-1">
+      <strong><%= ErrorRecord.human_attribute_name 'error' %></strong>:
+      <%= @error_record.error_text %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= ErrorRecord.human_attribute_name 'data' %></strong>:
-  <%= @error_record.data %>
-</p>
+    <p class="mb-1">
+      <strong><%= ErrorRecord.human_attribute_name 'data' %></strong>:
+      <%= @error_record.data %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= ErrorRecord.human_attribute_name 'created_at' %></strong>:
-  <%= l @error_record.created_at, format: :short %>
-</p>
+    <p class="mb-1">
+      <strong><%= ErrorRecord.human_attribute_name 'created_at' %></strong>:
+      <%= l @error_record.created_at, format: :short %>
+    </p>
 
-<hr />
+    <hr />
 
-<%= link_to_index error_records_path %>
+    <%= link_to_index error_records_path %>
+  </div>
+</div>

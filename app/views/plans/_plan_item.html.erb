@@ -87,7 +87,11 @@
 
     <div data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= plan_item_path f.object %>" hidden>
       <% if fetch %>
-        <div class="alert alert-warning"><%= t 'navigation.loading' %></div>
+        <div class="alert alert-warning">
+          <div class="alert-message">
+            <%= t 'navigation.loading' %>
+          </div>
+        </div>
       <% else %>
         <%= render 'plan_items/form', plan_item: f.object, index: f.index %>
       <% end %>
