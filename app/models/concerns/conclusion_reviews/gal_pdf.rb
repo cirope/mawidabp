@@ -273,20 +273,20 @@ module ConclusionReviews::GalPdf
       rows
     end
 
-    def weakness_normalization weakness
-      if weakness.implemented_audited? || weakness.expired?
-        weakness.state_text
-      else
-        weakness.follow_up_date ? I18n.l(weakness.follow_up_date, format: "%B %Y") : ''
-      end
-    end
-
     def key_weaknesses_header
       [
         I18n.t('conclusion_review.executive_summary.key_weaknesses'),
         I18n.t('conclusion_review.executive_summary.origin'),
         I18n.t('conclusion_review.executive_summary.normalization')
       ]
+    end
+
+    def weakness_normalization weakness
+      if weakness.implemented_audited? || weakness.expired?
+        weakness.state_text
+      else
+        weakness.follow_up_date ? I18n.l(weakness.follow_up_date, format: "%B %Y") : ''
+      end
     end
 
     def put_observations_and_robotization_on pdf
