@@ -223,7 +223,7 @@ module ConclusionReviews::GalPdf
       ]
 
       style = {
-       column_widths: legend_column_widths,
+       column_widths: legend_column_widths(pdf),
        cell_style: { borders: [], :padding => [0, 0, 1, 5] }
       }
 
@@ -982,7 +982,7 @@ module ConclusionReviews::GalPdf
       [60, 20, 20].map { |percent| pdf.percent_width percent }
     end
 
-    def legend_column_widths
+    def legend_column_widths pdf
       [3, 14, 3, 20].map { |percent| pdf.percent_width percent }
     end
 
