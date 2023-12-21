@@ -101,7 +101,7 @@ module Reports::WeaknessesHeatmap
       conditions = []
       parameters = {}
 
-      ids = weaknesses.reorder(order).pluck('id')
+      ids = weaknesses.pluck('id')
 
       ids.each_slice(1000).with_index do |finding_ids, i|
         conditions << "#{Finding.quoted_table_name}.#{Finding.qcn 'id'} IN (:ids_#{i})"
@@ -109,7 +109,11 @@ module Reports::WeaknessesHeatmap
       end
 
       @weaknesses = if ids.present?
-                      Weakness.where(conditions.map { |c| "(#{c})" }.join(' OR '), parameters)
+                      Weakness.where(
+                        conditions.map { |c| "(#{c})" }.join(' OR '), parameters
+                      ).includes(
+                        review: [:plan_item, :conclusion_final_review]
+                      ).order(order)
                     else
                       Weakness.none
                     end
