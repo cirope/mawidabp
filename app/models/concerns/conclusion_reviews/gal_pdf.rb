@@ -196,7 +196,7 @@ module ConclusionReviews::GalPdf
     end
 
     def put_conclusion_on pdf
-      style = { column_widths: [pdf.percent_width(40), pdf.percent_width(40)] }
+      style = { column_widths: conclusion_column_width(pdf) }
 
       pdf.make_table([[put_chart_on(pdf), extended_conclusion]], style) do
         column(1).style(align: :justify)
@@ -985,6 +985,10 @@ module ConclusionReviews::GalPdf
 
     def conclusion_and_score_image_column_widths pdf
       [80, 20].map { |percent| pdf.percent_width percent }
+    end
+
+    def conclusion_column_width pdf
+      [40, 40].map { |percent| pdf.percent_width percent }
     end
 
     def key_weaknesses_column_widths pdf
