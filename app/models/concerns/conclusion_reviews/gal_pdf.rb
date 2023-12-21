@@ -135,7 +135,9 @@ module ConclusionReviews::GalPdf
         [put_conclusion_and_score_image_on(pdf)],
         [""],
         [put_key_weaknesses_on(pdf)],
-        [put_observations_and_robotization_on(pdf)]
+        [put_observations_v2_on(pdf)],
+        [put_robotization_on(pdf)]
+
       ])
     end
 
@@ -289,16 +291,23 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def put_observations_and_robotization_on pdf
+    def put_observations_v2_on(pdf)
+      title = "#{self.class.human_attribute_name(:observations).gsub('/', "\n")}"
+      create_observations_or_robotization_table(pdf, title, observations)
+    end
+
+    def put_robotization_on(pdf)
+      title = "#{self.class.human_attribute_name :robotization}"
+      create_observations_or_robotization_table(pdf, title, robotization)
+    end
+
+    def create_observations_or_robotization_table(pdf, title, content)
       style = {
-        column_widths: [pdf.percent_width(40), pdf.percent_width(60)],
+        column_widths: observations_or_robotization_column_widths(pdf),
         cell_style: { inline_format: true }
       }
 
-      pdf.make_table([
-        ["#{self.class.human_attribute_name(:observations).gsub('/', "\n")}", observations],
-        ["#{self.class.human_attribute_name :robotization}", robotization]
-      ], style) do
+      pdf.make_table([[title, content]], style) do
         column(0).style(font_style: :bold, size: 16, align: :center, valign: :center)
         column(1).style(align: :justify)
       end
@@ -980,6 +989,10 @@ module ConclusionReviews::GalPdf
 
     def key_weaknesses_column_widths pdf
       [60, 20, 20].map { |percent| pdf.percent_width percent }
+    end
+
+    def observations_or_robotization_column_widths pdf
+      [35, 65].map { |percent| pdf.percent_width percent }
     end
 
     def legend_column_widths pdf
