@@ -3,11 +3,10 @@
 @import "bootstrap/variables";
 
 .form-control:read-only{
-    background-color: #e9ecef;
-    opacity: 1;
-    transition: none;
-    appearance: none;
-    pointer-events: none;
+  background-color: #e9ecef;
+  opacity: 1;
+  transition: none;
+  appearance: none;
 }
 
 .file-container {
