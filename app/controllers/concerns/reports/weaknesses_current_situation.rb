@@ -148,7 +148,7 @@ module Reports::WeaknessesCurrentSituation
       conditions = []
       parameters = {}
 
-      ids = weaknesses.pluck('id')
+      ids = weaknesses.pluck 'id'
 
       ids.each_slice(1000).with_index do |finding_ids, i|
         conditions << "#{Finding.quoted_table_name}.#{Finding.qcn 'id'} IN (:ids_#{i})"
