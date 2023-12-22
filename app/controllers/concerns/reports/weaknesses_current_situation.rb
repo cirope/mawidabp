@@ -158,7 +158,7 @@ module Reports::WeaknessesCurrentSituation
       if ids.present?
         Weakness.where(
           conditions.map { |c| "(#{c})" }.join(' OR '), parameters
-        ) .includes(
+        ).includes(
           review: [:plan_item, :conclusion_final_review]
         )
       else
