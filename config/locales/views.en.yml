@@ -29,7 +29,7 @@ en:
     index:
       new: 'New activity group'
       title: 'Activity group list'
-      empty_html: 'There are no activity groups, you can create one with the <span class="badge badge-primary">New activity group</span> button'
+      empty_html: 'There are no activity groups, you can create one with the <span class="badge bg-primary">New activity group</span> button'
     new:
       title: 'Create activity group'
     show:
@@ -78,14 +78,14 @@ en:
 
   business_unit_kinds:
     index:
-      empty_html: 'There are no types of business units, you can create one with the <span class="badge badge-primary">New</span> button'
+      empty_html: 'There are no types of business units, you can create one with the <span class="badge bg-primary">New</span> button'
   closing_interviews:
     edit:
       title: 'Edit closing interview'
     index:
       new: 'New closing interview'
       title: 'Closing interview list'
-      empty_html: 'There are no closing interviews, you can create one with the <span class="badge badge-primary">New closing interview</span> button'
+      empty_html: 'There are no closing interviews, you can create one with the <span class="badge bg-primary">New closing interview</span> button'
       empty_search_html: 'There are no closing interviews that match the search criteria'
     new:
       title: 'Create closing interview'
@@ -119,7 +119,7 @@ en:
     index:
       new: 'New document'
       title: 'Document list'
-      empty_html: 'There are no documents, you can create one with the <span class="badge badge-primary">New document</span> button'
+      empty_html: 'There are no documents, you can create one with the <span class="badge bg-primary">New document</span> button'
       empty_search_html: 'There are no documents that match the search criteria'
     new:
       title: 'Create document'
@@ -207,7 +207,7 @@ en:
       reject: 'Reject'
     finding_answers: 'Comments of'
     pdf:
-      issue: 'Refer to the attached table for cases under the code cam %{review_code}'
+      issue: 'Refer to the attached table for records under the code %{review_code}'
 
   licenses:
     trial_valid_until: 'End of trial period'
@@ -257,12 +257,12 @@ en:
     index:
       new: 'New external audit report'
       title: 'External audit report list'
-      empty_html: 'There are no external audit reports, you can create one with the <span class="badge badge-primary">New memo</span> button'
+      empty_html: 'There are no external audit reports, you can create one with the <span class="badge bg-primary">New memo</span> button'
       empty_search_html: 'No external audit reports that match the search criteria'
     new:
       title: 'Create external audit report'
     form:
-      markdown_help_html: '<span class="badge badge-info">Attention</span> within the content you can use %{link}'
+      markdown_help_html: '<span class="badge bg-info">Attention</span> within the content you can use %{link}'
       add_file_model: 'Add file'
       download_cover: 'Download cover'
     show:
@@ -274,14 +274,14 @@ en:
     index:
       new: 'New news'
       title: 'News list'
-      empty_html: 'There is no news, you can create one with the <span class="badge badge-primary">New news</span> button'
+      empty_html: 'There is no news, you can create one with the <span class="badge bg-primary">New news</span> button'
       empty_search_html: 'There are no news that match the search criteria'
     new:
       title: 'Create news'
       tagging: 'Add tag'
       image_model: 'Add image'
     form:
-      markdown_help_html: '<span class="badge badge-info">Attention</span> within the content you can use %{link}'
+      markdown_help_html: '<span class="badge bg-info">Attention</span> within the content you can use %{link}'
     show:
       title: 'Show news'
 
@@ -291,7 +291,7 @@ en:
     index:
       new: 'New opening interview'
       title: 'Opening interview list'
-      empty_html: 'There are no opening interviews, you can create one with the <span class="badge badge-primary">New opening interview</span> button'
+      empty_html: 'There are no opening interviews, you can create one with the <span class="badge bg-primary">New opening interview</span> button'
       empty_search_html: 'There are no opening interviews that match the search criteria'
     new:
       title: 'Create opening interview'
@@ -662,7 +662,7 @@ en:
     index:
       new: 'New tag'
       title: 'Tag list'
-      empty_html: 'No tags, you can create one with the <span class="badge badge-primary">New tag</span> button'
+      empty_html: 'No tags, you can create one with the <span class="badge bg-primary">New tag</span> button'
     list:
       childless: 'No subtags'
     new:
@@ -849,7 +849,7 @@ en:
     index:
       new: 'New risk assessment'
       title: 'Risk assessment list'
-      empty_html: 'There are no risk assessments, you can create one with the <span class="badge badge-primary">New risk assessment</span> button'
+      empty_html: 'There are no risk assessments, you can create one with the <span class="badge bg-primary">New risk assessment</span> button'
       empty_search_html: 'There are no risk assessments that match the search criteria'
       merge_to_plan: 'Create projects in plan from evaluation'
     new:
@@ -865,7 +865,8 @@ en:
       add_best_practice: 'Add best practice'
       add_business_unit_type: 'Add organizational unit'
       apply: 'Apply'
-    risk_weight_risks:
+    heatmap: 'Heat map'
+    risk_weight_risks: # Deprecated: remove when all clients are migrated
       none: 'None'
       low: 'Low'
       medium_low: 'Medium low'
@@ -879,6 +880,7 @@ en:
     pdf:
       title: 'Risk assessment'
       pdf_name: 'risk_assessment_%{name}.pdf'
+      formula: 'Formula'
       period:
         title: "Period (%{name})"
         range: "%{from_date} to %{to_date}"
@@ -889,7 +891,7 @@ en:
     index:
       new: 'New risk assessment template'
       title: 'Risk assessment template list'
-      empty_html: 'There are no risk assessment templates, you can create one with the <span class="badge badge-primary">New risk assessment template</span> button'
+      empty_html: 'There are no risk assessment templates, you can create one with the <span class="badge bg-primary">New risk assessment template</span> button'
       empty_search_html: 'There are no risk assessment templates that match the search criteria'
     new:
       title: 'Create risk assessment template'
@@ -897,6 +899,45 @@ en:
       title: 'Show risk assessment template'
     form:
       add_risk_assessment_weight: 'Add weight'
+
+  risk_registries:
+    edit:
+      title: 'Edit risk registry'
+    form:
+      new_risk_categories: 'After creating the risk registry you will be able to add risk categories to it'
+    index:
+      new: 'New risk registry'
+      title: 'Risk registry list'
+      empty_html: 'There are no risk registries, you can create one with the <span class="badge bg-primary">New risk registry</span> button'
+      empty_search_html: 'There are no risk registries that match the search criteria'
+    new:
+      title: 'Create risk registry'
+    show:
+      title: 'Show risk registry'
+    risk_categories:
+      new: 'Add risk category'
+    risks:
+      new: 'Add risk'
+
+  risk_score_items:
+    form:
+      add_risk_score_item: 'Add value'
+
+  risks:
+    likelihoods:
+      insignificant: 'Insignificant'
+      minor: 'Minor'
+      moderate: 'Moderate'
+      high: 'High'
+      catastrophic: 'Catastrophic'
+    impacts:
+      rare: 'Rare'
+      unlikely: 'Unlikely'
+      moderate: 'Moderate'
+      likely: 'Likely'
+      almost_certain: 'Almost certain'
+    new:
+      control_objective: 'Add control objective'
 
   versions:
     index:
@@ -922,7 +963,7 @@ en:
     index:
       new: 'New issue template'
       title: 'Issue template list'
-      empty_html: 'There are no issue templates, you can create one with the <span class="badge badge-primary">New issue template</span> button'
+      empty_html: 'There are no issue templates, you can create one with the <span class="badge bg-primary">New issue template</span> button'
       empty_search_html: 'There are no issue templates that match the search criteria'
     new:
       title: 'Create issue template'
@@ -935,3 +976,13 @@ en:
     show:
       title: 'Working paper'
       error: 'Please remember that you must be authenticated or have permissions to view the document'
+    statuses:
+      pending: 'Pending'
+      finished: 'Finished'
+      revised: 'Revised'
+      auditor:
+        next_to_pending: 'Mark for revision'
+        next_to_finished: 'Return to pending'
+      supervisor:
+        next_to_finished: 'Mark as revised'
+        next_to_revised: 'Return to pending'

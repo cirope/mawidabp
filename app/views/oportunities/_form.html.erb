@@ -220,11 +220,9 @@
 
     <%= f.input :business_unit_ids,
       label: '&nbsp;'.html_safe,
-      item_wrapper_class: 'custom-control custom-checkbox',
       collection: oportunity_business_units,
       as: :check_boxes,
-      input_html: { disabled: readonly },
-      wrapper_html: { class: 'mt-n4' }
+      input_html: { disabled: readonly }
     %>
   <% end %>
 
@@ -301,7 +299,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', disabled: frozen %>
   </div>

@@ -6,11 +6,11 @@
   </li>
 
   <li class="nav-item dropdown">
-    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
       <%= icon 'fas', 'user' %>
     </a>
 
-    <div class="dropdown-menu dropdown-menu-right">
+    <div class="dropdown-menu dropdown-menu-end">
       <% if current_organization && (current_organization.ldap_config.blank? && current_organization.saml_provider.blank?) %>
         <%= link_to t('users.profiles.edit.title'), edit_users_profile_path(user), class: 'dropdown-item' %>
       <% else %>

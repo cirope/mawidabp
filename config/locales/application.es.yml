@@ -28,6 +28,7 @@ es:
     download: "Descargar"
     download_csv: "Descargar CSV"
     download_rtf: "Descargar RTF"
+    download_pdf: "Descargar PDF"
     create_permalink: "Crear enlace permanente"
     edit: "Editar"
     import: "Importar"
@@ -642,7 +643,7 @@ es:
     tagged_findings_report:
       empty: 'No hay observaciones para el filtro aplicado'
       findings_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
-      findings_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      findings_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'seguimiento_de_observaciones_en_ejecucion_etiquetadas.pdf'
       tags_count_label: 'Cantidad máxima de etiquetas'
       title: 'Observaciones por cantidad máxima de etiquetas'
@@ -650,7 +651,7 @@ es:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion.pdf'
 
   finding_relation:
@@ -679,7 +680,7 @@ es:
     tagged_findings_report:
       empty: 'No hay observaciones para el filtro aplicado'
       findings_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
-      findings_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      findings_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'seguimiento_de_observaciones_etiquetadas.pdf'
       tags_count_label: "Cantidad máxima de etiquetas"
       title: 'Observaciones por cantidad máxima de etiquetas'
@@ -687,7 +688,7 @@ es:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones.pdf'
     others:
       title: 'Otros'
@@ -1555,6 +1556,11 @@ es:
         assertion_consumer_service_binding: 'Enlace de Servicio de consumidor de aserciones'
         idp_cert: 'Certificado (Base64)'
         default_role_for_users: 'Rol por defecto para usuarios'
+        username_claim: 'Atributo con el nombre de usuario'
+        name_claim: 'Atributo con el nombre'
+        lastname_claim: 'Atributo con el apellido'
+        email_claim: 'Atributo con el correo electrónico'
+        roles_claim: 'Atribudo con los roles'
       work_paper:
         name: "Nombre"
         code: "Código"

@@ -4,13 +4,13 @@
   <div id="repeated_filter" class="row" <%== 'style="display: none;"' unless display %>>
 <% end %>
   <div class="col-md-6" <%== 'style="display: none;"' unless display %>>
-    <div class="form-group row">
+    <div class="mb-1 form-group row">
       <% selected = params[action] ? params[action][:repeated] : nil %>
       <%= f.label :repeated, t('findings.state.repeated'), class: 'col-md-4 col-form-label' %>
       <div class="col-md-8">
         <%= f.select :repeated, [[t('label.yes'), true], [t('label.no'), false]],
           { selected: selected, include_blank: t('helpers.select.prompt') },
-          class: 'form-control' %>
+          class: 'form-select' %>
       </div>
     </div>
   </div>

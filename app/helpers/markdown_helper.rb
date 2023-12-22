@@ -13,7 +13,7 @@ module MarkdownHelper
   end
 
   def markdown_help_link
-    link = link_to 'markdown', '#markdown-help', data: { toggle: 'modal' }
+    link = link_to 'markdown', '#markdown-help', data: { bs_toggle: 'modal' }
 
     t '.markdown_help_html', link: link
   end

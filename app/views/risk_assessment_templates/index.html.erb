@@ -14,7 +14,7 @@
         <tr>
           <%= make_filterable_column RiskAssessmentTemplate.human_attribute_name('name'), nil, 'name' %>
           <%= make_filterable_column RiskAssessmentTemplate.human_attribute_name('description'), { class: 'd-none d-md-table-cell' }, 'description' %>
-          <th colspan="4" class="text-right"><%= link_to_search %></th>
+          <th colspan="4" class="text-end"><%= link_to_search %></th>
         </tr>
       </thead>
 
@@ -23,10 +23,10 @@
           <tr>
             <td><%= super_truncate risk_assessment_template.name, 30 %></td>
             <td class="d-none d-md-table-cell"><%= super_truncate risk_assessment_template.description, 30 %></td>
-            <td class="text-right"><%= link_to_clone new_risk_assessment_template_path(clone_from: risk_assessment_template.id) %></td>
-            <td class="text-right"><%= link_to_show risk_assessment_template %></td>
-            <td class="text-right"><%= link_to_edit [:edit, risk_assessment_template] %></td>
-            <td class="text-right"><%= link_to_destroy risk_assessment_template if risk_assessment_template.can_be_destroyed? %></td>
+            <td class="text-end"><%= link_to_clone new_risk_assessment_template_path(clone_from: risk_assessment_template.id) %></td>
+            <td class="text-end"><%= link_to_show risk_assessment_template %></td>
+            <td class="text-end"><%= link_to_edit [:edit, risk_assessment_template] %></td>
+            <td class="text-end"><%= link_to_destroy risk_assessment_template if risk_assessment_template.can_be_destroyed? %></td>
           </tr>
         <% end %>
       </tbody>

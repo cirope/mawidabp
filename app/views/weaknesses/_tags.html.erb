@@ -3,7 +3,6 @@
     <div class="col-md-12">
       <%= f.input :tag_ids,
         as: :check_boxes,
-        item_wrapper_class: 'custom-control custom-checkbox',
         collection: finding_tag_options,
         disabled: readonly
       %>
@@ -17,6 +16,9 @@
   <div class="row">
     <div class="col-md-6">
       <h5 class="h6"><%= Tag.human_attribute_name :name %></h5>
+    </div>
+    <div class="col-md-5">
+      <h5 class="h6"><%= Tagging.human_attribute_name :description %></h5>
     </div>
   </div>
 

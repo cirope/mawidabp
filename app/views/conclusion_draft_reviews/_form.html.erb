@@ -160,10 +160,10 @@
 
   <div id="approval_text">
     <%= content_tag(:span, t('conclusion_draft_review.approved'),
-      :class => 'badge badge-success mr-1', :id => :approved,
+      :class => 'badge bg-success me-1', :id => :approved,
       :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
     <span id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
-      <span class="badge badge-danger mr-1">
+      <span class="badge bg-danger me-1">
         <%= t('conclusion_draft_review.not_approved') %>
       </span>
       <% @conclusion_draft_review.review.try(:must_be_approved?) %>
@@ -212,7 +212,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
+    <div class="float-end"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>
@@ -265,13 +265,13 @@
           }
 
           $('#not_approved').
-            find('.badge-danger').
-            toggleClass('badge-danger badge-warning')
+            find('.bg-danger').
+            toggleClass('bg-danger bg-warning')
 
           setTimeout(function () {
             $('#not_approved').
-              find('.badge-warning').
-              toggleClass('badge-warning badge-danger')
+              find('.bg-warning').
+              toggleClass('bg-warning bg-danger')
           }, 2000)
         }
       });
