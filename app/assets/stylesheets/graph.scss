@@ -3,3 +3,16 @@
     fill: #333;
   }
 }
+
+.ct-chart {
+  .ct-series-a {
+    .ct-bar {
+      stroke: #3b82ec;
+    }
+  }
+  .ct-series-b {
+    .ct-bar {
+      stroke: #84aef2;
+    }
+  }
+}
