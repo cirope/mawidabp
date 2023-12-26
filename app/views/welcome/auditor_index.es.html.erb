@@ -1,13 +1,38 @@
 <%= javascript_include_tag 'welcome' %>
 
-<div class="card">
-  <div class="card-header">
-    <h5 class="mb-0">
-      <%= Finding.model_name.human count: 0 %>
-    </h5>
+<div class="row">
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          <%= Finding.model_name.human count: 0 %>
+        </h5>
+      </div>
+      <div class="card-body">
+        <%= welcome_findings_graph %>
+      </div>
+    </div>
   </div>
-  <div class="card-body">
-    <%= welcome_findings_graph %>
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          <%= t 'welcome.latest_comments' %>
+        </h5>
+      </div>
+      <div class="card-body">
+        <% @auth_user.finding_answers.latest.each do |fa| %>
+          <div class="d-flex align-items-start">
+            <div class="flex-grow-1">
+              <small class="float-end"><%= l fa.created_at.to_date %></small>
+              <strong class="text-info"><%= fa.user %> comentó en <%= fa %></strong><br>
+              <%= fa.answer %>
+            </div>
+          </div>
+          <hr>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 

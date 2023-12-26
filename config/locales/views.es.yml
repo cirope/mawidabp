@@ -971,6 +971,9 @@ es:
     form:
       add_control_objective: 'Agregar objetivo de control'
 
+  welcome:
+    latest_comments: 'Últimos comentarios'
+
   work_papers:
     show:
       title: 'Papel de trabajo'

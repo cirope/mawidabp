@@ -972,6 +972,9 @@ en:
     form:
       add_control_objective: 'Add control objective'
 
+  welcome:
+    latest comments: 'Latest comments'
+
   work_papers:
     show:
       title: 'Working paper'
