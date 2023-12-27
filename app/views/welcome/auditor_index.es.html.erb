@@ -1,5 +1,93 @@
-<%= javascript_include_tag 'welcome' %>
-
+<div class="row">
+  <div class="col-md-6 col-xxl-3 d-flex">
+    <div class="card illustration flex-fill">
+      <div class="card-body p-0 d-flex flex-fill">
+        <div class="row g-0 w-100">
+          <div class="col-6">
+            <div class="illustration-text p-3 m-1">
+              <h3 class="illustration-text">
+                ¡Bienvenido!
+              </h3>
+              <h4 class="illustration-text">
+                <%= @auth_user.informal_name %>
+              </h4>
+            </div>
+          </div>
+          <div class="col-6 align-self-end text-end">
+            <%= image_tag 'welcome/customer.svg', class: 'img-fluid illustration-img' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xxl-3 d-flex">
+    <div class="card flex-fill">
+      <%= link_to findings_url(completion_state: 'incomplete'), class: 'text-decoration-none' do %>
+        <div class="card-body">
+          <div class="row">
+            <div class="col mt-0">
+              <h5 class="card-title text-info">
+                Hallazgos pendientes
+              </h5>
+            </div>
+            <div class="col-auto">
+              <div class="stat stat-sm text-center">
+                <%= icon 'fas', 'eye' %>
+              </div>
+            </div>
+          </div>
+          <strong class="h1 d-inline-block">
+            <%= @auth_user.findings.with_pending_status.count %>
+          </strong>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-md-6 col-xxl-3 d-flex">
+    <div class="card flex-fill">
+      <%= link_to findings_url(completion_state: 'complete'), class: 'text-decoration-none' do %>
+        <div class="card-body">
+          <div class="row">
+            <div class="col mt-0">
+              <h5 class="card-title text-info">
+                Hallazgos solucionados
+              </h5>
+            </div>
+            <div class="col-auto">
+              <div class="stat stat-sm text-center">
+                <%= icon 'fas', 'check' %>
+              </div>
+            </div>
+          </div>
+          <strong class="h1 d-inline-block">
+            <%= @auth_user.findings.with_completed_status.count %>
+          </strong>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-md-6 col-xxl-3 d-flex">
+    <div class="card flex-fill">
+      <div class="card-body">
+        <div class="row">
+          <div class="col mt-0">
+            <h5 class="card-title text-info">
+              Comentarios propios
+            </h5>
+          </div>
+          <div class="col-auto">
+            <div class="stat stat-sm text-center">
+              <%= icon 'fas', 'comments' %>
+            </div>
+          </div>
+        </div>
+        <strong class="h1 d-inline-block">
+          <%= @auth_user.finding_answers.count %>
+        </strong>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col-md-7">
     <div class="card">
@@ -9,7 +97,7 @@
         </h5>
       </div>
       <div class="card-body">
-        <%= welcome_findings_graph %>
+        <%= column_chart Finding.findings_for_graph(@auth_user.findings), stacked: true %>
       </div>
     </div>
   </div>
@@ -17,7 +105,7 @@
     <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0">
-          <%= t 'welcome.latest_comments' %>
+          Últimos comentarios
         </h5>
       </div>
       <div class="card-body">
@@ -36,43 +124,22 @@
   </div>
 </div>
 
-<div class="card">
-  <div class="card-body">
-    <% if @news.size > 1 && can?(:read, :administration_news) %>
-      <div class="row help">
-        <div class="col-md-12">
-          <% @news.each_slice(3) do |news| %>
-            <div class="row">
-              <% news.each do |_news| %>
-                <div class="col-md-4">
-                  <%= render 'news', news: _news %>
-                </div>
-              <% end %>
+<% if @news.size > 1 && can?(:read, :administration_news) %>
+  <div class="row">
+    <div class="col-md-12">
+      <% @news.each_slice(4) do |news| %>
+        <div class="row">
+          <% news.each do |_news| %>
+            <div class="col-md-6 col-xxl-3 d-flex">
+              <%= render 'news', news: _news %>
             </div>
           <% end %>
-
-          <p>
-            <%= link_to 'Ver todas las noticias', news_index_path %>
-          </p>
         </div>
-      </div>
-    <% elsif @news.size == 1 && can?(:read, :administration_news) %>
-      <div class="row help">
-        <div class="col-md-4">
-          <%= render 'news', news: @news.take %>
-        </div>
-        <div class="col-md-8">
-          <%= render 'auditor_default' %>
-        </div>
-      </div>
-    <% else %>
-      <div class="row help">
-        <div class="col-md-12">
-          <%= render 'auditor_default' %>
-        </div>
-      </div>
-    <% end %>
-
-    <%= render 'footer' %>
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>
+
+<footer class="text-end">
+  <strong>Versión: <%= APP_REVISION[0,8] %></strong>
+</footer>

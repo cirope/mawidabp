@@ -30,7 +30,8 @@ gem 'will_paginate-bootstrap-style'
 gem 'jbuilder'
 gem 'sidekiq', '< 7'
 gem 'ruby-ntlm'
-gem 'chartist-rails'
+gem 'groupdate'
+gem 'apexcharts'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 gem 'execjs', '< 2.8'
