@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="<%= locale %>">
+  <head>
+    <meta charset="utf-8">
+    <title><%= page_title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tags %>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <%= javascript_tag { yield :js_extra } %>
+  </head>
+
+  <body
+      data-theme="default"
+      data-layout="fluid"
+      data-sidebar-position="left"
+      data-sidebar-behavior="sticky"
+      data-controller="<%= controller_name %>"
+    >
+    <div class="main d-flex justify-content-center w-100">
+      <main class="content d-flex p-0">
+        <div class="container d-flex flex-column">
+          <div class="h-100 mt-5">
+            <%= render 'shared/compatibility_warning' %>
+            <%= render 'shared/flash' if show_flash_message? %>
+
+            <%= yield %>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

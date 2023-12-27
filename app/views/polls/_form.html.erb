@@ -1,76 +1,80 @@
-<%= simple_form_for @poll do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @poll do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <% if @poll.persisted? %>
-    <h1><%= Question.model_name.human count: 0 %></h1>
+      <% if @poll.persisted? %>
+        <h1><%= Question.model_name.human count: 0 %></h1>
 
-    <% if @poll.conclusion_review || @poll.about %>
-      <ul class="lead list-unstyled">
-        <% if @poll.conclusion_review %>
-          <li>
-            <%= Poll.human_attribute_name :pollable %>
-            <strong>
-              <%= Review.model_name.human %> <%= @poll.conclusion_review.review %>
-            </strong>
-          </li>
+        <% if @poll.conclusion_review || @poll.about %>
+          <ul class="lead list-unstyled">
+            <% if @poll.conclusion_review %>
+              <li>
+                <%= Poll.human_attribute_name :pollable %>
+                <strong>
+                  <%= Review.model_name.human %> <%= @poll.conclusion_review.review %>
+                </strong>
+              </li>
+            <% end %>
+            <% if @poll.about %>
+              <li><%= t 'polls.about_html', entity: @poll.about.display_name %></li>
+            <% end %>
+          </ul>
+
+          <hr>
         <% end %>
-        <% if @poll.about %>
-          <li><%= t 'polls.about_html', entity: @poll.about.display_name %></li>
+
+        <%= f.simple_fields_for :answers do |a_f| %>
+          <%= render 'answer', f: a_f %>
         <% end %>
-      </ul>
 
-      <hr>
-    <% end %>
+        <hr />
+      <% end %>
 
-    <%= f.simple_fields_for :answers do |a_f| %>
-      <%= render 'answer', f: a_f %>
-    <% end %>
-
-    <hr />
-  <% end %>
-
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <% if @poll.new_record? %>
-          <%= f.input :user, autofocus: true, input_html: {
-            title: t('label.search'),
-            value: @poll.user.try(:label),
-            data: {
-              'autocomplete-url' => polls_users_path,
-              'autocomplete-id-target' => '#poll_user_id'
-            }
-          } %>
-          <%= f.input :user_id, as: :hidden %>
-          <%= f.association :questionnaire,
-            collection: Questionnaire.list.not_pollable.pluck(:name, :id), prompt: true
-          %>
-          <%= f.input :about, autofocus: true, input_html: {
-            title: t('label.search'),
-            value: @poll.about&.display_name,
-            data: {
-              'autocomplete-url' => auto_complete_for_business_unit_polls_path,
-              'autocomplete-id-target' => '#poll_about_id'
-            }
-          } %>
-          <%= f.input :about_id, as: :hidden %>
-          <%= f.input :about_type, as: :hidden, input_html: {
-            value: BusinessUnit.name
-          } %>
-        <% elsif !SHOW_ALTERNATIVE_QUESTIONNAIRES %>
-          <%= f.input :comments, label: "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})" %>
-        <% end %>
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-md-6">
+            <% if @poll.new_record? %>
+              <%= f.input :user, autofocus: true, input_html: {
+                title: t('label.search'),
+                value: @poll.user.try(:label),
+                data: {
+                  'autocomplete-url' => polls_users_path,
+                  'autocomplete-id-target' => '#poll_user_id'
+                }
+              } %>
+              <%= f.input :user_id, as: :hidden %>
+              <%= f.association :questionnaire,
+                collection: Questionnaire.list.not_pollable.pluck(:name, :id), prompt: true
+              %>
+              <%= f.input :about, autofocus: true, input_html: {
+                title: t('label.search'),
+                value: @poll.about&.display_name,
+                data: {
+                  'autocomplete-url' => auto_complete_for_business_unit_polls_path,
+                  'autocomplete-id-target' => '#poll_about_id'
+                }
+              } %>
+              <%= f.input :about_id, as: :hidden %>
+              <%= f.input :about_type, as: :hidden, input_html: {
+                value: BusinessUnit.name
+              } %>
+            <% elsif !SHOW_ALTERNATIVE_QUESTIONNAIRES %>
+              <%= f.input :comments, label: "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})" %>
+            <% end %>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <% if @poll.new_record? || !SHOW_ALTERNATIVE_QUESTIONNAIRES %>
-    <hr />
-  <% end %>
+      <% if @poll.new_record? || !SHOW_ALTERNATIVE_QUESTIONNAIRES %>
+        <hr />
+      <% end %>
 
-  <div class="form-actions">
-    <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-outline-secondary btn-primary' %>
-    <div class="float-end"><%= yield :form_actions %></div>
+      <div class="form-actions">
+        <%= f.input :lock_version, as: :hidden %>
+        <%= f.submit class: 'btn btn-outline-secondary btn-primary' %>
+        <div class="float-end"><%= yield :form_actions %></div>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

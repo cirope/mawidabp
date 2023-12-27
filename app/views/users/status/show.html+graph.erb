@@ -31,11 +31,13 @@
         <%= pending_weaknesses_graph_placeholder %>
       </div>
     </div>
-  </div>
 
-  <div class="card-footer">
-    <%= link_to_show user_path(@user) %> |
-    <%= link_to_index users_path %> |
-    <%= link_to t('.table'), users_status_path %>
+    <hr>
+
+    <div>
+      <%= link_to_show user_path(@user) %> |
+      <%= link_to_index users_path %> |
+      <%= link_to t('.table'), users_status_path %>
+    </div>
   </div>
 </div>

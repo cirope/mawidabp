@@ -69,11 +69,13 @@
         </table>
       </div>
     </div>
-  </div>
 
-  <div class="card-footer">
-    <%= link_to_show user_path(@user) %> |
-    <%= link_to_index users_path %> |
-    <%= link_to t('.graph'), users_status_path(graph: true) %>
+    <hr>
+
+    <div>
+      <%= link_to_show user_path(@user) %> |
+      <%= link_to_index users_path %> |
+      <%= link_to t('.graph'), users_status_path(graph: true) %>
+    </div>
   </div>
 </div>

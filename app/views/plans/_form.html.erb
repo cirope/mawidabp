@@ -1,35 +1,37 @@
-<%= simple_form_for @plan do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
-  <%= render 'common_form', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @plan do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
+      <%= render 'common_form', f: f %>
 
-  <% if params[:business_unit_type].blank? %>
-    <%= render 'business_unit_types' %>
-  <% else %>
-    <div class="card mb-3">
-      <div class="card-header">
-        <h5 class="mb-0">
-          <%= @business_unit_type&.name || t('plans.without_business_unit_type') %>
-          <span class="float-end small">
-            <%= link_to t('label.back'), [:edit, @plan] %>
-          </span>
-        </h5>
+      <% if params[:business_unit_type].blank? %>
+        <%= render 'business_unit_types' %>
+      <% else %>
+        <div class="card border-1 boder-light mb-3">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">
+              <%= @business_unit_type&.name || t('plans.without_business_unit_type') %>
+              <span class="float-end small">
+                <%= link_to t('label.back'), [:edit, @plan] %>
+              </span>
+            </h5>
+          </div>
+
+          <div class="card-body">
+            <%= render 'plan_items', f: f %>
+          </div>
+        </div>
+      <% end %>
+
+      <%= render 'duplication_or_overload_form', f: f %>
+
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.input :lock_version, as: :hidden %>
+        <%= hidden_field_tag :business_unit_type, params[:business_unit_type] %>
+        <%= hidden_field_tag :clone_from, params[:clone_from] %>
+        <%= f.submit class: 'btn btn-primary' %>
       </div>
-
-      <div class="card-body">
-        <%= render 'plan_items', f: f %>
-      </div>
-    </div>
-  <% end %>
-
-  <%= render 'duplication_or_overload_form', f: f %>
-
-  <hr />
-
-  <div class="form-actions">
-    <div class="float-end"><%= yield :form_actions %></div>
-    <%= f.input :lock_version, as: :hidden %>
-    <%= hidden_field_tag :business_unit_type, params[:business_unit_type] %>
-    <%= hidden_field_tag :clone_from, params[:clone_from] %>
-    <%= f.submit class: 'btn btn-primary' %>
+    <% end %>
   </div>
-<% end %>
+</div>

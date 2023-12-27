@@ -1,6 +1,8 @@
 <% if @findings.empty? %>
   <div class="alert alert-success">
-    <p class="mb-0"><%= t 'review.without_past_implemented_audited_findings' %></p>
+    <div class="alert-message">
+      <p class="mb-0"><%= t 'review.without_past_implemented_audited_findings' %></p>
+    </div>
   </div>
 <% else %>
   <% @findings.each_with_index do |finding, i| %>
