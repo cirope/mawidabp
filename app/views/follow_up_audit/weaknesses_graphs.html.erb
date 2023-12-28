@@ -1,5 +1,3 @@
-<%= javascript_include_tag :graphs %>
-
 <% user = params[:weaknesses_graphs] && params[:weaknesses_graphs][:user] %>
 <% business_unit = params[:weaknesses_graphs] && params[:weaknesses_graphs][:business_unit] %>
 <% process_control = params[:weaknesses_graphs] && params[:weaknesses_graphs][:process_control] %>
@@ -95,8 +93,7 @@
           <div class="col-md-6">
             <div class="card mb-3">
               <div class="card-body p-0">
-                <div id="graph" class="ct-chart ct-golden-section" data-graph data-weaknesses="<%= @weaknesses_data.to_json %>">
-                </div>
+                <%= pie_chart @weaknesses_data %>
               </div>
             </div>
           </div>
@@ -109,13 +106,12 @@
                 </tr>
               </thead>
               <tbody>
-                <% labels, values = *@weaknesses_data.values %>
-                <% labels.zip(values).each do |label, value| %>
+                <% @weaknesses_data.each do |hsh| %>
                   <tr>
-                    <td><%= label %></td>
+                    <td><%= hsh[:name] %></td>
                     <td>
                       <% if @weaknesses.count > 0 %>
-                        <%= "#{value} (#{(value.to_f / @weaknesses.count * 100).round(2)}%)" %>
+                        <%= "#{hsh[:data]} (#{(hsh[:data].to_f / @weaknesses.count * 100).round(2)}%)" %>
                       <% else %>
                         0
                       <% end %>

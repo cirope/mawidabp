@@ -6,11 +6,8 @@
           <div class="col-6">
             <div class="illustration-text p-3 m-1">
               <h3 class="illustration-text">
-                ¡Bienvenido!
+                ¡Bienvenido <%= @auth_user.name %>!
               </h3>
-              <h4 class="illustration-text">
-                <%= @auth_user.informal_name %>
-              </h4>
             </div>
           </div>
           <div class="col-6 align-self-end text-end">
