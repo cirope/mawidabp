@@ -10,7 +10,7 @@ module Users::Findings
     has_many :oportunities, through: :finding_user_assignments,
       source_type: 'Oportunity', source: :finding
     has_many :tasks, through: :findings
-    has_many :finding_answers, through: :findings
+    has_many :finding_answers, -> { merge Finding.list }, through: :findings
   end
 
   def has_pending_findings?
