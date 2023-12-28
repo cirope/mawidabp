@@ -11,12 +11,12 @@
           <%= markdown_without_paragraph t('.high_risk_weaknesses', count: @weaknesses.with_highest_risk.count) %>
         </h5>
         <table class="table table-sm table-striped table-hover">
-          <% Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk).each do |hsh| %>
+          <% Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk).each do |values| %>
             <tr>
-              <td><%= hsh[:name] %></td>
+              <td><%= values[:name] %></td>
               <td>
                 <% if @weaknesses.with_highest_risk.count > 0 %>
-                  <%= "#{hsh[:data]} (#{(hsh[:data].to_f / @weaknesses.with_highest_risk.count * 100).round(2)}%)" %>
+                  <%= "#{values[:data]} (#{(values[:data].to_f / @weaknesses.with_highest_risk.count * 100).round(2)}%)" %>
                 <% else %>
                   0
                 <% end %>
@@ -31,12 +31,12 @@
           <%== user_weaknesses_links %>
         </h5>
         <table class="table table-sm table-striped table-hover">
-          <% Weakness.weaknesses_for_graph(@weaknesses).each do |hsh| %>
+          <% Weakness.weaknesses_for_graph(@weaknesses).each do |values| %>
             <tr>
-              <td><%= hsh[:name] %></td>
+              <td><%= values[:name] %></td>
               <td>
                 <% if @weaknesses.count > 0 %>
-                  <%= "#{hsh[:data]} (#{(hsh[:data].to_f / @weaknesses.count * 100).round(2)}%)" %>
+                  <%= "#{values[:data]} (#{(values[:data].to_f / @weaknesses.count * 100).round(2)}%)" %>
                 <% else %>
                   0
                 <% end %>
@@ -51,12 +51,12 @@
           <%= markdown_without_paragraph t('.pending_weaknesses', count: @weaknesses.with_pending_status.count) %>
         </h5>
         <table class="table table-sm table-striped table-hover">
-          <% Weakness.pending_weaknesses_for_graph(@weaknesses).each do |hsh| %>
+          <% Weakness.pending_weaknesses_for_graph(@weaknesses).each do |values| %>
             <tr>
-              <td><%= hsh[:name] %></td>
+              <td><%= values[:name] %></td>
               <td>
                 <% if @weaknesses.with_pending_status.count > 0 %>
-                  <%= "#{hsh[:data]} (#{(hsh[:data].to_f / @weaknesses.with_pending_status.count * 100).round(2)}%)" %>
+                  <%= "#{values[:data]} (#{(values[:data].to_f / @weaknesses.with_pending_status.count * 100).round(2)}%)" %>
                 <% else %>
                   0
                 <% end %>
