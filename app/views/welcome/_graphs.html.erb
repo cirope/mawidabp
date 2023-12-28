@@ -7,7 +7,7 @@
         </h5>
       </div>
       <div class="card-body">
-        <%= column_chart Finding.findings_for_graph(@auth_user.findings), stacked: true %>
+        <%= column_chart Finding.findings_for_graph(@auth_user.findings.list), stacked: true %>
       </div>
     </div>
   </div>
