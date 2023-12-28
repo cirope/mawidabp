@@ -23,6 +23,9 @@ es:
     _yes: 'Sí'
     _no: 'No'
 
+  footer:
+    support: 'Soporte'
+
   activity_groups:
     edit:
       title: 'Editar grupo de actividades'
@@ -208,6 +211,9 @@ es:
     finding_answers: 'Comentarios de'
     pdf:
       issue: 'Ver en la tabla adjunta los casos bajo el código %{review_code}'
+    graphs:
+      incomplete: 'Hallazgos pendientes'
+      completed: 'Hallazgos solucionados'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -970,6 +976,15 @@ es:
       title: 'Ver plantilla de observación'
     form:
       add_control_objective: 'Agregar objetivo de control'
+
+  welcome:
+    completed_findings: 'Hallazgos solucionados'
+    commented_on: 'comentó en'
+    current_user_answers: 'Comentarios propios'
+    latest_answers: 'Últimos comentarios'
+    pending_findings: 'Hallazgos pendientes'
+    version: 'Versión'
+    welcome: 'Bienvenido'
 
   work_papers:
     show:
