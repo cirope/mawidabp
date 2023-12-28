@@ -2,9 +2,9 @@ module Findings::GraphHelpers
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def findings_for_graph findings
+    def graph_findings findings
       from_date = 11.months.ago.beginning_of_month.to_date
-      end_date  = Date.today.beginning_of_month
+      end_date  = Date.today
 
       latest_findings = findings.
         where(origination_date: from_date..end_date).
