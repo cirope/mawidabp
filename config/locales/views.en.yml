@@ -978,6 +978,15 @@ en:
     form:
       add_control_objective: 'Add control objective'
 
+  welcome:
+    index:
+      completed_findings: 'Completed findings'
+      current_user_answers: 'Current user answers'
+      latest_answers: 'Latest answers'
+      pending_findings: 'Pending findings'
+      version: 'Version'
+      welcome: 'Welcome'
+
   work_papers:
     show:
       title: 'Working paper'

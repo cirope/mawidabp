@@ -6,7 +6,7 @@
           <div class="col-6">
             <div class="illustration-text p-3 m-1">
               <h3 class="illustration-text">
-                ¡Bienvenido <%= @auth_user.name %>!
+                ¡<%= t '.welcome' %> <%= @auth_user.name %>!
               </h3>
             </div>
           </div>
@@ -24,7 +24,7 @@
           <div class="row">
             <div class="col mt-0">
               <h5 class="card-title text-info">
-                Hallazgos pendientes
+                <%= t '.pending_findings' %>
               </h5>
             </div>
             <div class="col-auto">
@@ -47,7 +47,7 @@
           <div class="row">
             <div class="col mt-0">
               <h5 class="card-title text-info">
-                Hallazgos solucionados
+                <%= t '.completed_findings' %>
               </h5>
             </div>
             <div class="col-auto">
@@ -69,7 +69,7 @@
         <div class="row">
           <div class="col mt-0">
             <h5 class="card-title text-info">
-              Comentarios propios
+              <%= t '.current_user_answers' %>
             </h5>
           </div>
           <div class="col-auto">
@@ -102,7 +102,7 @@
     <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0">
-          Últimos comentarios
+          <%= t '.latest_answers' %>
         </h5>
       </div>
       <div class="card-body">
@@ -121,7 +121,7 @@
   </div>
 </div>
 
-<% if @news.size > 1 && can?(:read, :administration_news) %>
+<% if @news && @news.size > 1 && can?(:read, :administration_news) %>
   <div class="row">
     <div class="col-md-12">
       <% @news.each_slice(4) do |news| %>
@@ -138,5 +138,5 @@
 <% end %>
 
 <footer class="text-end">
-  <strong>Versión: <%= APP_REVISION[0,8] %></strong>
+  <strong><%= t '.version' %>: <%= APP_REVISION[0,8] %></strong>
 </footer>

@@ -977,6 +977,15 @@ es:
     form:
       add_control_objective: 'Agregar objetivo de control'
 
+  welcome:
+    index:
+      completed_findings: 'Hallazgos solucionados'
+      current_user_answers: 'Comentarios propios'
+      latest_answers: 'Últimos comentarios'
+      pending_findings: 'Hallazgos pendientes'
+      version: 'Versión'
+      welcome: 'Bienvenido'
+
   work_papers:
     show:
       title: 'Papel de trabajo'
