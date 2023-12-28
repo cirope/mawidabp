@@ -27,7 +27,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-10 offset-1 border-left">
+          <div class="col-10 offset-1 text-quote">
             <p style="font-size:1.7em;"><%= (put_bic_cover_note_on conclusion_review).html_safe %></p>
           </div>
         </div>
@@ -70,7 +70,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-10 offset-1 border-left">
+          <div class="col-10 offset-1 text-quote">
             <p class="fw-bold" style="font-size:1.7em;"><%= Review.human_attribute_name :description %></p>
             <%= simple_format conclusion_review.review.description, style: "font-size:1.7em;", class: "pt-5" %>
           </div>
