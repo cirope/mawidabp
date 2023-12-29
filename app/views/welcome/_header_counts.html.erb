@@ -3,14 +3,14 @@
     <div class="card illustration flex-fill">
       <div class="card-body p-0 d-flex flex-fill">
         <div class="row g-0 w-100">
-          <div class="col-6">
+          <div class="col-7">
             <div class="illustration-text p-3 m-1">
-              <h4 class="illustration-text">
-                ¡<%= t 'welcome.welcome' %> <%= @auth_user.name %>!
-              </h4>
+              <h3 class="illustration-text">
+                ¡<%= t 'welcome.welcome' %><br /><%= @auth_user.name %>!
+              </h3>
             </div>
           </div>
-          <div class="col-6 align-self-end text-end">
+          <div class="col-5 align-self-end text-end">
             <%= image_tag 'welcome/customer.svg', class: 'img-fluid illustration-img' %>
           </div>
         </div>
