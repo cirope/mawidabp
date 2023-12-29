@@ -3,10 +3,10 @@
   finding_answer.user ||= @auth_user
   show = show
 %>
-<fieldset id="comment-<%= finding_answer.id %>" class="finding_answer">
+<fieldset class="finding_answer">
   <hr />
 
-  <div class="row">
+  <div class="row" id="comment-<%= finding_answer.id %>">
     <div class="col-md-2">
       <%= finding_answer.user.full_name %>
       <% if finding_answer.new_record? %>
