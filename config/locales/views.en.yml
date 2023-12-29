@@ -983,6 +983,7 @@ en:
     commented_on: 'commented on'
     current_user_answers: 'Current user answers'
     latest_answers: 'Latest answers'
+    latest_findings: 'Latest findings'
     pending_findings: 'Pending findings'
     version: 'Version'
     welcome: 'Welcome'
