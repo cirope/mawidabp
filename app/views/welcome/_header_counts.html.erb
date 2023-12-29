@@ -34,7 +34,7 @@
             </div>
           </div>
           <strong class="h1 d-inline-block">
-            <%= @auth_user.findings.list.with_pending_status.count %>
+            <%= @auth_user.findings.list.finals(false).with_pending_status.count %>
           </strong>
         </div>
       <% end %>
@@ -57,7 +57,7 @@
             </div>
           </div>
           <strong class="h1 d-inline-block">
-            <%= @auth_user.findings.list.with_completed_status.count %>
+            <%= @auth_user.findings.list.finals(false).with_completed_status.count %>
           </strong>
         </div>
       <% end %>
