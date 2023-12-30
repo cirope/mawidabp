@@ -28,7 +28,7 @@
         </div>
         <div class="row">
           <div class="col-10 offset-1 text-quote">
-            <p style="font-size:1.7em;"><%= (put_bic_cover_note_on conclusion_review).html_safe %></p>
+            <p class="text-justify" style="font-size:1.7em;"><%= (put_bic_cover_note_on conclusion_review).html_safe %></p>
           </div>
         </div>
         <div class="row pt-5" style="padding-bottom: 160px;">
@@ -43,7 +43,7 @@
         </div>
         <div class="row">
           <div class="col-10 offset-1">
-            <%= simple_format conclusion_review.recipients, style: "font-size:1.7em;" %>
+            <%= simple_format conclusion_review.recipients, style: "font-size:1.7em;", class: 'text-justify' %>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
         <div class="row">
           <div class="col-10 offset-1 text-quote">
             <p class="fw-bold" style="font-size:1.7em;"><%= Review.human_attribute_name :description %></p>
-            <%= simple_format conclusion_review.review.description, style: "font-size:1.7em;", class: "pt-5" %>
+            <%= simple_format conclusion_review.review.description, style: "font-size:1.7em;", class: "pt-5 text-justify" %>
           </div>
         </div>
         <div class="row">
@@ -98,7 +98,7 @@
 
   <div class="alwaysbreak <%= watermark_class draft %>">
     <div class="row">
-      <div class="col-3 text-bg-primary pt-5">
+      <div class="col-3 text-bg-primary pt-5 text-center">
         <div class="pt-5">
           <p class="fw-bold pt-5 ps-5" style="font-size:4.2em;"><%= I18n.t 'conclusion_review.bic.scope' %></p>
         </div>
@@ -106,7 +106,7 @@
       <div class="col-9" >
         <div class="row pt-5">
           <div class="col-10 offset-1">
-            <%= simple_format conclusion_review.applied_procedures, style: "font-size:1.7em;"%>
+            <%= simple_format conclusion_review.applied_procedures, style: "font-size:1.7em;", class: "text-justify"%>
           </div>
         </div>
       </div>
@@ -121,7 +121,7 @@
         </div>
         <div class="col-9 px-0">
           <div class="col-10 offset-1">
-            <%= simple_format conclusion_review.reference, style: "font-size:1.7em;", class: "m-0" %>
+            <%= simple_format conclusion_review.reference, style: "font-size:1.7em;", class: "m-0 text-justify" %>
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@
         </div>
         <div class="col-9 px-0">
           <div class="col-10 offset-1">
-            <%= simple_format conclusion_review.conclusion, style: "font-size:1.7em;", class: "m-0" %>
+            <%= simple_format conclusion_review.conclusion, style: "font-size:1.7em;", class: "m-0 text-justify" %>
           </div>
         </div>
       </div>
@@ -150,10 +150,10 @@
           </div>
           <p class="ms-4 text-start" style="font-size:1.7em;"><span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p>
           <div class="row fw-bold ms-2">
-            <div class="col-5 text-center vertical-align-center pr-0">
-              <p class="border border-white bg-black w-100 mb-0" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :risk).upcase %></p>
+            <div class="col-5 text-center vertical-align-center pe-0 ps-3">
+              <p class="bg-black-border-white w-100 mb-0 p-1" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :risk).upcase %></p>
             </div>
-            <div class="col-1">
+            <div class="col-1 px-2">
               <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'key.png')), height: 80 %>
             </div>
             <div class="col-6 vertical-align-center">
@@ -161,10 +161,10 @@
             </div>
           </div>
           <div class="row fw-bold ms-2">
-            <div class="col-5 text-center vertical-align-center pr-0">
-              <p class="border border-white bg-black w-100 mb-0" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :state).upcase %></p>
+            <div class="col-5 text-center vertical-align-center pe-0 ps-3">
+              <p class="bg-black-border-white w-100 mb-0 p-1" style="font-size:1.7em;"><%= (Weakness.human_attribute_name :state).upcase %></p>
             </div>
-            <div class="col-1">
+            <div class="col-1 px-2">
               <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'key.png')), height: 80 %>
             </div>
             <div class="col-6 vertical-align-center">
@@ -181,7 +181,7 @@
           <div class="row">
             <div class="col-10 offset-1">
               <p class="pt-5 fw-bold" style="font-size:1.7em;"><%= Weakness.model_name.human count: 1 %></p>
-              <%= simple_format weakness.description, style: "font-size:1.7em;", class: 'pt-4' %>
+              <%= simple_format weakness.description, style: "font-size:1.7em;", class: 'pt-4 text-justify' %>
               <p class="pt-4" style="font-size:1.7em;"><span class="fw-bold"><%= Weakness.human_attribute_name :effect %>:</span> <%= weakness.effect %></p>
               <p class="pt-4" style="font-size:1.7em;"><span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.audit_recommendations' %></span> <%= weakness.audit_recommendations %></p>
               <p class="pt-4" style="font-size:1.7em;"><span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.follow_up_date' %></span> <%= follow_up_date_weakness weakness %></p>
