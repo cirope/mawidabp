@@ -1,5 +1,3 @@
-<%= javascript_include_tag :graphs %>
-
 <div class="card">
   <div class="card-header">
     <%= render 'status_controls' %>
@@ -12,14 +10,14 @@
         <h5>
           <%= markdown_without_paragraph t('.high_risk_weaknesses', count: @weaknesses.with_highest_risk.count) %>
         </h5>
-        <%= high_risk_weaknesses_graph_placeholder %>
+        <%= pie_chart Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk) %>
       </div>
 
       <div class="col-lg-6 text-center">
         <h5>
           <%== user_weaknesses_links %>
         </h5>
-        <%= weaknesses_graph_placeholder %>
+        <%= pie_chart Weakness.pending_weaknesses_for_graph(@weaknesses) %>
       </div>
     </div>
 
@@ -28,7 +26,7 @@
         <h5>
           <%= markdown_without_paragraph t('.pending_weaknesses', count: @weaknesses.with_pending_status.count) %>
         </h5>
-        <%= pending_weaknesses_graph_placeholder %>
+        <%= pie_chart Weakness.weaknesses_for_graph(@weaknesses) %>
       </div>
     </div>
 

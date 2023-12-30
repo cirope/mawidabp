@@ -9,10 +9,8 @@
  *= require appstack
  *= require jquery-ui
  *= require jquery-ui-theme
- *= require chartist.min
  *= require autocomplete
  *= require main
- *= require graph
  *= require activity_groups
  *= require closing_interviews
  *= require documents

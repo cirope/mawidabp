@@ -2,6 +2,7 @@
 @import "bootstrap/variables";
 
 .sidebar-brand {
+  margin-left: 25px;
   padding: 30px 0 20px 0 !important;
 }
 
@@ -81,6 +82,13 @@ textarea {
   display: block;
   height: 80px;
   margin: -80px 0 0;
+}
+
+.finding_answer {
+  :target {
+    padding: 10px 0;
+    border: 2px solid $warning-border-subtle;
+  }
 }
 
 @keyframes pulsate {
