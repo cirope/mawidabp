@@ -680,8 +680,8 @@
     endorsements: "Revisores"
     recode_tasks: "Recodificar tareas"
     create_work_paper: "Agregar como papel de trabajo"
-    follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
-    follow_up_date_last_changed: "Último cambio de fecha de implementación"
+    follow_up_date_changed_warning: "La fecha estimada de regularización cambió para adecuarse a las tareas"
+    follow_up_date_last_changed: "Último cambio de fecha estimada de regularización"
     assignment_confirm_message: "No ha seleccionado auditores referentes ni responsables ¿Desea continuar?"
     weakness_template_previous: 'Repite Observación'
     repeated_ancestors: "Reiterada de"
@@ -1269,7 +1269,7 @@
       clarification: "Si usted **no pidió** el restablecimiento **no haga nada**, su usuario y contraseña siguen vigentes"
     being_implemented_and_stale_finding_to_manager:
       title: "Notificación de observaciones en proceso de implementación vencidas"
-      the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
+      the_following_finding_is_being_implemented_and_stale: "La fecha estimada de regularización de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
@@ -1280,12 +1280,12 @@
     expired_finding_to_manager:
       subject: "Hallazgo vencido [#%{finding_id}]"
       title: "Hallazgo vencido"
-      the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
+      the_following_finding_is_expired: "No se ha propuesto una nueva fecha estimada de regularización del siguiente hallazgo"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
     notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
       title: "Vencimiento de observación implementada"
-      finding_follow_up_date_last_changed_is_grerater_90_days: "Han pasado 90 días desde el último cambio en la fecha de implementación de la observación"
-      follow_up_date_last_changed: "Último cambio en fecha de implementación: %{follow_up_date_last_changed}"
+      finding_follow_up_date_last_changed_is_grerater_90_days: "Han pasado 90 días desde el último cambio en la fecha estimada de regularización de la observación"
+      follow_up_date_last_changed: "Último cambio en fecha estimada de regularización: %{follow_up_date_last_changed}"
     unanswered_finding:
       subject: "Notificación de cambio a hallazgo [#%{finding_id}]"
       title: "Notificación de cambio"
@@ -1531,20 +1531,20 @@
     stale_object_error: "La observación no fue actualizada, intente nuevamente."
     see_all: "Ver todas"
     edit_control_objective: "Editar objetivo de control"
-    previous_follow_up_dates: "Fechas de implementación anteriores"
+    previous_follow_up_dates: "Fechas estimadas de regularización anteriores"
     show_follow_up: 'Ver en seguimiento'
     edit_follow_up: 'Editar en seguimiento'
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
       with_expired_tasks: "tiene tareas pendientes o en proceso vencidas"
-      with_follow_up_date: "tiene fecha de implementación (y no debería)"
+      with_follow_up_date: "tiene fecha estimada de regularización (y no debería)"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
       without_auditor: "no tiene auditor"
       without_effect: "no tiene efecto"
-      without_follow_up_date: "no tiene fecha de implementación"
+      without_follow_up_date: "no tiene fecha estimada de regularización"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
       without_audit_recommendations: "no tiene recomendaciones de auditoria"
