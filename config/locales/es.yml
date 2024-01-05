@@ -346,7 +346,7 @@
       without_weaknesses: "Sin observaciones"
       origination_year: "Año de origen"
     weaknesses_by_control_objective_process:
-      pdf_name: "Reporte_de_proceso_por_objectivo_de_control_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "Reporte_de_proceso_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO OBSERVACIONES PROCESO POR OBJETIVO DE CONTROL / INFORMES DEFINITIVO"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
