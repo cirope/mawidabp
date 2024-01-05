@@ -1174,8 +1174,8 @@ es:
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar"
-    pdf:
-      pdf_name: "listado_de_usuarios.pdf"
+    pdf_csv:
+      pdf_csv_name: "listado_de_usuarios"
       users_count: "Cantidad de usuarios: %{count}"
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
