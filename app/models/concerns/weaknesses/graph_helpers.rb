@@ -3,20 +3,19 @@ module Weaknesses::GraphHelpers
 
   module ClassMethods
     def weaknesses_for_graph weaknesses
-      labels = []
       series = []
       grouped_weaknesses = weaknesses.group_by(&:state)
 
       grouped_weaknesses.each do |status, weaknesses|
-        labels << weaknesses.first.state_text
-        series << weaknesses.size
+        series << {
+          name: weaknesses.first.state_text, data: weaknesses.size
+        }
       end
 
-      { labels: labels, series: series }
+      series
     end
 
     def pending_weaknesses_for_graph weaknesses
-      labels = []
       series = []
       being_implemented_counts = {
         current: 0, current_rescheduled: 0, stale: 0 , stale_rescheduled: 0
@@ -40,12 +39,14 @@ module Weaknesses::GraphHelpers
 
       being_implemented_counts.each do |label, value|
         unless value == 0
-          labels << I18n.t("follow_up_committee_report.weaknesses_being_implemented_#{label}", count: value)
-          series << value
+          series << {
+            name: I18n.t("follow_up_committee_report.weaknesses_being_implemented_#{label}", count: value),
+            data: value
+          }
         end
       end
 
-      { labels: labels, series: series }
+      series
     end
   end
 end

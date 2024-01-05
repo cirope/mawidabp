@@ -35,10 +35,12 @@
 
       <div><%= organization_image_tag model: :co_brand_image_model %></div>
     <% end %>
-  </div>
 
-  <div class="card-footer">
-    <%= link_to_edit edit_organization_path(@organization) %> |
-    <%= link_to_index organizations_path %>
+    <hr>
+
+    <div>
+      <%= link_to_edit edit_organization_path(@organization) %> |
+      <%= link_to_index organizations_path %>
+    </div>
   </div>
 </div>

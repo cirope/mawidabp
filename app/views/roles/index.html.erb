@@ -1,28 +1,30 @@
-<table class="table table-sm table-striped table-hover">
-  <thead>
-    <tr>
-      <th><%= Role.human_attribute_name :name %></th>
-      <th><%= Role.human_attribute_name :role_type %></th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="card">
+  <div class="card-body">
+    <table class="table table-sm table-striped table-hover">
+      <thead>
+        <tr>
+          <th><%= Role.human_attribute_name :name %></th>
+          <th><%= Role.human_attribute_name :role_type %></th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @roles.each do |role| %>
-      <tr>
-        <td><%= role.name %></td>
-        <td><%= role_type_text(role.role_type) %></td>
-        <td class="text-end"><%= link_to_show role %></td>
-        <td class="text-end"><%= link_to_edit edit_role_path(role) %></td>
-        <td class="text-end"><%= link_to_destroy role %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @roles.each do |role| %>
+          <tr>
+            <td><%= role.name %></td>
+            <td><%= role_type_text(role.role_type) %></td>
+            <td class="text-end"><%= link_to_show role %></td>
+            <td class="text-end"><%= link_to_edit edit_role_path(role) %></td>
+            <td class="text-end"><%= link_to_destroy role %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<hr />
-
-<div class="form-actions">
-  <%= paginate @roles %>
-  <%= link_to t('label.new'), new_role_path, class: 'btn btn-primary' %>
+    <div class="form-actions">
+      <%= paginate @roles %>
+      <%= link_to t('label.new'), new_role_path, class: 'btn btn-primary' %>
+    </div>
+  </div>
 </div>
