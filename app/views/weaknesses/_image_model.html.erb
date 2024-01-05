@@ -4,7 +4,7 @@
   <p class="mb-1"><%= ImageModel.model_name.human %></p>
   <%= f.simple_fields_for :image_model do |im_f| %>
     <% unless readonly %>
-      <div class="file-container float-left">
+      <div class="file-container float-start">
         <%= link_to_upload im_f.object, :image %>
         <% if im_f.object.image_cache %>
           <%= im_f.input :image_cache, as: :hidden %>

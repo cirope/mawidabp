@@ -3,14 +3,18 @@
     <% if @plan.has_duplication? %>
       <div class="col-md-6">
         <div class="alert alert-danger py-0 px-2">
-          <%= f.input :allow_duplication, as: :boolean, label: t('.allow_duplication'), wrapper_html: { class: 'my-3' } %>
+          <div class="alert-message">
+            <%= f.input :allow_duplication, as: :boolean, label: t('.allow_duplication'), wrapper_html: { class: 'my-3' } %>
+          </div>
         </div>
       </div>
     <% end %>
     <% if @plan.overloaded? %>
       <div class="col-md-6">
         <div class="alert alert-danger py-0 px-2">
-          <%= f.input :allow_overload, as: :boolean, label: t('.allow_overload'), wrapper_html: { class: 'my-3' } %>
+          <div class="alert-message">
+            <%= f.input :allow_overload, as: :boolean, label: t('.allow_overload'), wrapper_html: { class: 'my-3' } %>
+          </div>
         </div>
       </div>
     <% end %>

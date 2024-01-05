@@ -1,0 +1,23 @@
+<%= render 'welcome/header_counts' %>
+
+<%= render 'welcome/graphs' %>
+
+<% if @news && @news.size > 1 && can?(:read, :administration_news) %>
+  <div class="row">
+    <div class="col-md-12">
+      <% @news.each_slice(4) do |news| %>
+        <div class="row">
+          <% news.each do |_news| %>
+            <div class="col-md-6 col-xxl-3 d-flex">
+              <%= render 'news', news: _news %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<footer class="text-end">
+  <strong><%= t 'welcome.version' %>: <%= APP_REVISION[0,8] %></strong>
+</footer>

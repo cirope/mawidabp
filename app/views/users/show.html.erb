@@ -1,86 +1,92 @@
-<h1>
-  <%= @user.informal_name %>
-  <small class="ml-2 text-muted"><%= @user %></small>
-</h1>
-
-<div class="row">
-  <div class="col-md-6">
-    <p class="mb-1">
-      <strong><%= User.human_attribute_name 'email' %></strong>:
-      <%= @user.email %>
-    </p>
-
-    <p class="mb-1">
-      <strong><%= User.human_attribute_name 'function' %></strong>:
-      <%= @user.function %>
-    </p>
-
-    <p class="mb-1">
-      <strong><%= User.human_attribute_name 'language' %></strong>:
-      <%= @user.language %>
-    </p>
-
-    <p class="mb-1">
-      <strong><%= User.human_attribute_name 'enable' %></strong>:
-      <%= t_boolean @user.enable? %>
-    </p>
-
-    <p class="mb-1">
-      <strong><%= User.human_attribute_name 'logged_in' %></strong>:
-      <%= t_boolean @user.logged_in? %>
-    </p>
-
-    <p class="mb-1">
-      <strong><%= User.human_attribute_name 'failed_attempts' %></strong>:
-      <%= @user.failed_attempts %>
-    </p>
-
-    <p class="mb-1">
-      <strong><%= User.human_attribute_name 'password_changed' %></strong>:
-      <%= l @user.password_changed, format: :long %>
-    </p>
+<div class="card">
+  <div class="card-header">
+    <h1>
+      <%= @user.informal_name %>
+      <small class="ms-2 text-muted"><%= @user %></small>
+    </h1>
   </div>
-  <div class="col-md-6">
-    <% organization_ids = current_organization.group.organizations.ids %>
-    <% group_roles = @user.organization_roles.where organization_id: organization_ids %>
 
-    <% if group_roles.any? %>
-      <p class="mb-1"><strong><%= t '.profiles' %></strong></p>
-      <ul>
-        <% group_roles.each do |organization_role| %>
-          <li><%= organization_role %></li>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <p class="mb-1">
+          <strong><%= User.human_attribute_name 'email' %></strong>:
+          <%= @user.email %>
+        </p>
+
+        <p class="mb-1">
+          <strong><%= User.human_attribute_name 'function' %></strong>:
+          <%= @user.function %>
+        </p>
+
+        <p class="mb-1">
+          <strong><%= User.human_attribute_name 'language' %></strong>:
+          <%= @user.language %>
+        </p>
+
+        <p class="mb-1">
+          <strong><%= User.human_attribute_name 'enable' %></strong>:
+          <%= t_boolean @user.enable? %>
+        </p>
+
+        <p class="mb-1">
+          <strong><%= User.human_attribute_name 'logged_in' %></strong>:
+          <%= t_boolean @user.logged_in? %>
+        </p>
+
+        <p class="mb-1">
+          <strong><%= User.human_attribute_name 'failed_attempts' %></strong>:
+          <%= @user.failed_attempts %>
+        </p>
+
+        <p class="mb-1">
+          <strong><%= User.human_attribute_name 'password_changed' %></strong>:
+          <%= l @user.password_changed, format: :long %>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <% organization_ids = current_organization.group.organizations.ids %>
+        <% group_roles = @user.organization_roles.where organization_id: organization_ids %>
+
+        <% if group_roles.any? %>
+          <p class="mb-1"><strong><%= t '.profiles' %></strong></p>
+          <ul>
+            <% group_roles.each do |organization_role| %>
+              <li><%= organization_role %></li>
+            <% end %>
+          </ul>
         <% end %>
-      </ul>
-    <% end %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <% if @user.parent %>
+          <p class="mb-1">
+            <strong><%= User.human_attribute_name 'manager_id' %></strong>:
+            <%= link_to @user.parent.full_name, @user.parent %>
+          </p>
+        <% end %>
+
+        <% if @user.children.not_hidden.enabled.any? %>
+          <p class="mb-1"><strong><%= t 'users.form.children' %></strong></p>
+          <ul>
+            <% @user.children.not_hidden.enabled.each do |child| %>
+              <li><%= link_to child.full_name, child %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+      <div class="col-md-6">
+        <strong><%= User.human_attribute_name 'notes' %></strong>
+        <%= simple_format @user.notes, class: 'mb-1' %>
+      </div>
+    </div>
+
+    <hr />
+
+    <%= link_to_edit edit_user_path(@user) %> |
+    <%= link_to t('users.status.show.title'), users_status_path(@user, graph: true) %> |
+    <%= link_to_index users_path %>
   </div>
 </div>
-
-<div class="row">
-  <div class="col-md-6">
-    <% if @user.parent %>
-      <p class="mb-1">
-        <strong><%= User.human_attribute_name 'manager_id' %></strong>:
-        <%= link_to @user.parent.full_name, @user.parent %>
-      </p>
-    <% end %>
-
-    <% if @user.children.not_hidden.enabled.any? %>
-      <p class="mb-1"><strong><%= t 'users.form.children' %></strong></p>
-      <ul>
-        <% @user.children.not_hidden.enabled.each do |child| %>
-          <li><%= link_to child.full_name, child %></li>
-        <% end %>
-      </ul>
-    <% end %>
-  </div>
-  <div class="col-md-6">
-    <strong><%= User.human_attribute_name 'notes' %></strong>
-    <%= simple_format @user.notes, class: 'mb-1' %>
-  </div>
-</div>
-
-<hr />
-
-<%= link_to_edit edit_user_path(@user) %> |
-<%= link_to t('users.status.show.title'), users_status_path(@user, graph: true) %> |
-<%= link_to_index users_path %>

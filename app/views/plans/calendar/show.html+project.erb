@@ -1,83 +1,91 @@
 <% plan_items = params[:business_unit_type].present? ? plan_items_for_selected_business_unit_type : @plan.plan_items %>
 
-<% if plan_items.any? %>
-  <% months = @plan.period.months %>
+<div class="card">
+  <div class="card-body">
+    <% if plan_items.any? %>
+      <% months = @plan.period.months %>
 
-  <div class="table-responsive">
-    <table class="table table-sm table-hover">
-      <% if @business_unit_type || params[:business_unit_type].present? %>
-        <caption>
-          <span class="float-right small">
-            <%= link_to t('label.back'), [:edit, @plan, business_unit_type: @business_unit_type.id] %>
-          </span>
+      <div class="table-responsive">
+        <table class="table table-sm table-hover">
+          <% if @business_unit_type || params[:business_unit_type].present? %>
+            <caption>
+              <span class="float-end small">
+                <%= link_to t('label.back'), [:edit, @plan, business_unit_type: @business_unit_type.id] %>
+              </span>
 
-          <h5>
-            <%= @business_unit_type&.name || t('plans.without_business_unit_type') %>
-          </h5>
-        </caption>
-      <% end %>
-      <thead>
-        <tr>
-          <th rowspan="2"><%= t '.detail' %></th>
-          <th colspan="<%= months.size %>" class="text-center"><%= @plan.period.name %></th>
-        </tr>
-        <tr>
-          <% months.each do |month| %>
-            <th><%= l month, format: '%b' %></th>
+              <h5>
+                <%= @business_unit_type&.name || t('plans.without_business_unit_type') %>
+              </h5>
+            </caption>
           <% end %>
-        </tr>
-      </thead>
+          <thead>
+            <tr>
+              <th rowspan="2"><%= t '.detail' %></th>
+              <th colspan="<%= months.size %>" class="text-center"><%= @plan.period.name %></th>
+            </tr>
+            <tr>
+              <% months.each do |month| %>
+                <th><%= l month, format: '%b' %></th>
+              <% end %>
+            </tr>
+          </thead>
 
-      <tbody>
-        <% plan_items_sorted_for_calendar(plan_items).each do |plan_item| %>
-          <tr>
-            <td>
+          <tbody>
+            <% plan_items_sorted_for_calendar(plan_items).each do |plan_item| %>
+              <tr>
+                <td>
 
-              <p class="mb-0">
-                <% if params[:business_unit_type].blank? && plan_item.business_unit_type %>
-                  <%= plan_item.business_unit_type.name %> /
-                <% end %>
-                <%= plan_item.business_unit&.name || t('plans.without_business_unit_type') %>
-              </p>
-              <p class="mb-0 small"><%= plan_item.project %></p>
-            </td>
-
-            <% months.each do |month| %>
-              <td>
-                <table class="table table-weeks">
-                  <tbody>
-                    <% month_in_weeks(month).each do |week| %>
-                      <% if week.overlaps? (plan_item.start)..(plan_item.end) %>
-                        <td class="table-info">&nbsp;</td>
-                      <% else %>
-                        <td>&nbsp;</td>
-                      <% end %>
+                  <p class="mb-0">
+                    <% if params[:business_unit_type].blank? && plan_item.business_unit_type %>
+                      <%= plan_item.business_unit_type.name %> /
                     <% end %>
-                  </tbody>
-                </table>
-              </td>
+                    <%= plan_item.business_unit&.name || t('plans.without_business_unit_type') %>
+                  </p>
+                  <p class="mb-0 small"><%= plan_item.project %></p>
+                </td>
+
+                <% months.each do |month| %>
+                  <td>
+                    <table class="table table-weeks">
+                      <tbody>
+                        <% month_in_weeks(month).each do |week| %>
+                          <% if week.overlaps? (plan_item.start)..(plan_item.end) %>
+                            <td class="table-info">&nbsp;</td>
+                          <% else %>
+                            <td>&nbsp;</td>
+                          <% end %>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </td>
+                <% end %>
+              </tr>
             <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-<% elsif params[:business_unit_type] == 'nil' %>
-  <div class="alert alert-info">
-    <p class="mb-0"><%= t '.empty_with_no_business_units' %></p>
-  </div>
-<% else %>
-  <div class="alert alert-info">
-    <p class="mb-0"><%= t '.empty' %></p>
-  </div>
-<% end %>
+          </tbody>
+        </table>
+      </div>
+    <% elsif params[:business_unit_type] == 'nil' %>
+      <div class="alert alert-info">
+        <div class="alert-message">
+          <p class="mb-0"><%= t '.empty_with_no_business_units' %></p>
+        </div>
+      </div>
+    <% else %>
+      <div class="alert alert-info">
+        <div class="alert-message">
+          <p class="mb-0"><%= t '.empty' %></p>
+        </div>
+      </div>
+    <% end %>
 
-<hr>
+    <hr>
 
-<div>
-  <%= link_to_show @plan %> |
-  <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
-  <%= link_to_edit edit_plan_path(@plan, business_unit_type: params[:business_unit_type]) %> |
-  <%= link_to t('.by_business_unit'), [:calendar, @plan, business_unit_type: params[:business_unit_type]] %> |
-  <%= link_to_index plans_path %>
+    <div>
+      <%= link_to_show @plan %> |
+      <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
+      <%= link_to_edit edit_plan_path(@plan, business_unit_type: params[:business_unit_type]) %> |
+      <%= link_to t('.by_business_unit'), [:calendar, @plan, business_unit_type: params[:business_unit_type]] %> |
+      <%= link_to_index plans_path %>
+    </div>
+  </div>
 </div>

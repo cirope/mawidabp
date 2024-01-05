@@ -3,7 +3,6 @@
     <div class="col-md-12">
       <%= f.input :tag_ids,
         as: :check_boxes,
-        item_wrapper_class: 'custom-control custom-checkbox',
         collection: finding_tag_options,
         disabled: readonly
       %>
