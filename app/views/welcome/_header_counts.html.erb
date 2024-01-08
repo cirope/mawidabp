@@ -1,0 +1,87 @@
+<div class="row">
+  <div class="col-md-6 col-xxl-3 d-flex">
+    <div class="card illustration flex-fill">
+      <div class="card-body p-0 d-flex flex-fill">
+        <div class="row g-0 w-100">
+          <div class="col-7">
+            <div class="illustration-text p-3 m-1">
+              <h3 class="illustration-text">
+                ¡<%= t 'welcome.welcome' %><br /><%= @auth_user.name %>!
+              </h3>
+            </div>
+          </div>
+          <div class="col-5 align-self-end text-end">
+            <%= image_tag 'welcome/customer.svg', class: 'img-fluid illustration-img' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xxl-3 d-flex">
+    <div class="card flex-fill">
+      <%= link_to findings_url(completion_state: 'incomplete'), class: 'text-decoration-none' do %>
+        <div class="card-body">
+          <div class="row">
+            <div class="col mt-0">
+              <h5 class="card-title text-info">
+                <%= t 'welcome.pending_findings' %>
+              </h5>
+            </div>
+            <div class="col-auto">
+              <div class="stat stat-sm text-center">
+                <%= icon 'fas', 'eye' %>
+              </div>
+            </div>
+          </div>
+          <strong class="h1 d-inline-block">
+            <%= @auth_user.findings.list.finals(false).with_pending_status.count %>
+          </strong>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-md-6 col-xxl-3 d-flex">
+    <div class="card flex-fill">
+      <%= link_to findings_url(completion_state: 'complete'), class: 'text-decoration-none' do %>
+        <div class="card-body">
+          <div class="row">
+            <div class="col mt-0">
+              <h5 class="card-title text-info">
+                <%= t 'welcome.completed_findings' %>
+              </h5>
+            </div>
+            <div class="col-auto">
+              <div class="stat stat-sm text-center">
+                <%= icon 'fas', 'check' %>
+              </div>
+            </div>
+          </div>
+          <strong class="h1 d-inline-block">
+            <%= @auth_user.findings.list.finals(false).with_completed_status.count %>
+          </strong>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-md-6 col-xxl-3 d-flex">
+    <div class="card flex-fill">
+      <div class="card-body">
+        <div class="row">
+          <div class="col mt-0">
+            <h5 class="card-title text-info">
+              <%= t 'welcome.current_user_answers' %>
+            </h5>
+          </div>
+          <div class="col-auto">
+            <div class="stat stat-sm text-center">
+              <%= icon 'fas', 'comments' %>
+            </div>
+          </div>
+        </div>
+        <strong class="h1 d-inline-block">
+          <%= @auth_user.finding_answers.count %>
+        </strong>
+      </div>
+    </div>
+  </div>
+</div>

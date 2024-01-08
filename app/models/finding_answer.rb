@@ -16,4 +16,8 @@ class FindingAnswer < ApplicationRecord
 
   belongs_to :finding, touch: true
   belongs_to :user, -> { where users: { hidden: [true, false] } }, optional: true
+
+  def label
+    [finding&.review&.identification, finding&.review_code].join ' | '
+  end
 end

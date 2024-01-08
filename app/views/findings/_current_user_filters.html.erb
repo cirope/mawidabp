@@ -43,7 +43,7 @@
         ) %>
       </li>
     <% end %>
-    <% if params[:completion_state] == 'incomplete' %>
+    <% if params[:completion_state] == 'incomplete' && FINDING_ANSWER_COMMITMENT_SUPPORT %>
       <li class="nav-item">
         <%= link_to(
           t('.pending_to_endorsement'),

@@ -1,22 +1,26 @@
-<%= simple_form_for @setting do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @setting do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-inputs">
-        <%= f.input :name, readonly: true,
-          input_html: { value: t("settings.#{@setting.name}") } %>
-        <%= f.input :value, input_html: { autofocus: true } %>
-        <%= f.input :description %>
-        <%= f.input :lock_version, as: :hidden %>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-inputs">
+            <%= f.input :name, readonly: true,
+              input_html: { value: t("settings.#{@setting.name}") } %>
+            <%= f.input :value, input_html: { autofocus: true } %>
+            <%= f.input :description %>
+            <%= f.input :lock_version, as: :hidden %>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <hr />
+      <hr />
 
-  <div class="form-actions">
-    <%= f.submit class: 'btn btn-primary' %>
-    <div class="float-end"><%= yield :form_actions %></div>
+      <div class="form-actions">
+        <%= f.submit class: 'btn btn-primary' %>
+        <div class="float-end"><%= yield :form_actions %></div>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

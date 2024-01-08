@@ -31,12 +31,14 @@
       <%= render 'saml_provider', f: f %>
 
       <%= render 'ldap_config', f: f %>
-    </div>
 
-    <div class="card-footer">
-      <%= f.input :lock_version, as: :hidden %>
-      <%= f.submit class: 'btn btn-primary' %>
-      <div class="float-end"><%= yield :form_actions %></div>
+      <hr>
+
+      <div class="form-actions">
+        <%= f.input :lock_version, as: :hidden %>
+        <%= f.submit class: 'btn btn-primary' %>
+        <div class="float-end"><%= yield :form_actions %></div>
+      </div>
     </div>
   <% end %>
 </div>

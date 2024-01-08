@@ -1,120 +1,125 @@
-<%= simple_form_for @workflow do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @workflow do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <% if @workflow.new_record? %>
-          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
-        <% else %>
-          <%= f.input :period_description, label: Workflow.human_attribute_name('period_id'),
-            input_html: { value: @workflow.period.inspect, readonly: true } %>
-        <% end %>
-      </div>
-      <div class="col-md-6">
-        <% if @workflow.new_record? %>
-          <%= review_id_field f %>
-        <% else %>
-          <%= f.input :review_description, label: Workflow.human_attribute_name('review_id'),
-            input_html: { value: @workflow.review, readonly: true } %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-
-  <table class="table table-sm table-hover mt-3">
-    <thead>
-      <tr>
-        <th></th>
-        <th><%= t('workflow.column_real') %></th>
-        <th><%= t('workflow.column_estimated') %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong><%= t('workflow.row_time') %></strong></td>
-        <td>
-          <%= @workflow.new_record? ? '-' : show_detailed_distance_of_time(@workflow.begining, @workflow.ending) %>
-        </td>
-        <td><%= @workflow.plan_item ? show_detailed_distance_of_time(@workflow.plan_item.start, @workflow.plan_item.end) : '-' %></td>
-      </tr>
-      <tr style="vertical-align: text-top;">
-        <td><strong><%= t('workflow.row_cost') %></strong></td>
-        <td>
-          <abbr title="<%= t 'workflow.human_resources' %>"><%= t 'workflow.human_resources_abbr' %></abbr>:
-          <%= '%.2f' % @workflow.human_units %> /
-          <%= '%.2f' % @workflow.review&.time_consumptions&.sum(&:amount).to_f %>
-          <abbr title="<%= t 'workflow.material_resources' %>"><%= t 'workflow.material_resources_abbr' %></abbr>:
-          <%= '%.2f' % @workflow.material_units %>
-
-        </td>
-        <td style="width: 30%;">
-          <div id="estimated_amount">
-            <%= render 'estimated_amount', plan_item: @workflow.review.try(:plan_item) %>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <% f.object.build_file_model unless f.object.file_model %>
-
-  <div class="row">
-    <div class="col-md-12 text-end">
-      <p class="mb-1 me-3"><%= Workflow.human_attribute_name 'file_model_id' %></p>
-      <div class="clearfix float-end">
-        <%= f.simple_fields_for :file_model do |fm_f| %>
-          <div class="file-container float-start">
-            <%= link_to_upload(fm_f.object) %>
-            <% if fm_f.object.file_cache %>
-              <%= fm_f.input :file_cache, as: :hidden %>
-              <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-md-6">
+            <% if @workflow.new_record? %>
+              <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
             <% else %>
-              <%= fm_f.input :file, label: false %>
+              <%= f.input :period_description, label: Workflow.human_attribute_name('period_id'),
+                input_html: { value: @workflow.period.inspect, readonly: true } %>
             <% end %>
           </div>
-        <% end %>
-        <%= link_to_download f.object %>
+          <div class="col-md-6">
+            <% if @workflow.new_record? %>
+              <%= review_id_field f %>
+            <% else %>
+              <%= f.input :review_description, label: Workflow.human_attribute_name('review_id'),
+                input_html: { value: @workflow.review, readonly: true } %>
+            <% end %>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-md-6 offset-md-1">
-      <h5 class="h6"><%= WorkflowItem.human_attribute_name(:task) %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= WorkflowItem.human_attribute_name :start %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= WorkflowItem.human_attribute_name :end %></h5>
-    </div>
-  </div>
+      <table class="table table-sm table-hover mt-3">
+        <thead>
+          <tr>
+            <th></th>
+            <th><%= t('workflow.column_real') %></th>
+            <th><%= t('workflow.column_estimated') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><%= t('workflow.row_time') %></strong></td>
+            <td>
+              <%= @workflow.new_record? ? '-' : show_detailed_distance_of_time(@workflow.begining, @workflow.ending) %>
+            </td>
+            <td><%= @workflow.plan_item ? show_detailed_distance_of_time(@workflow.plan_item.start, @workflow.plan_item.end) : '-' %></td>
+          </tr>
+          <tr style="vertical-align: text-top;">
+            <td><strong><%= t('workflow.row_cost') %></strong></td>
+            <td>
+              <abbr title="<%= t 'workflow.human_resources' %>"><%= t 'workflow.human_resources_abbr' %></abbr>:
+              <%= '%.2f' % @workflow.human_units %> /
+              <%= '%.2f' % @workflow.review&.time_consumptions&.sum(&:amount).to_f %>
+              <abbr title="<%= t 'workflow.material_resources' %>"><%= t 'workflow.material_resources_abbr' %></abbr>:
+              <%= '%.2f' % @workflow.material_units %>
 
-  <div id="workflow_items">
-    <%= f.simple_fields_for :workflow_items, workflow_items do |wi_f| %>
-      <%= render 'workflow_item', f: wi_f %>
+            </td>
+            <td style="width: 30%;">
+              <div id="estimated_amount">
+                <%= render 'estimated_amount', plan_item: @workflow.review.try(:plan_item) %>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <% f.object.build_file_model unless f.object.file_model %>
+
+      <div class="row">
+        <div class="col-md-12 text-end">
+          <p class="mb-1 me-3"><%= Workflow.human_attribute_name 'file_model_id' %></p>
+          <div class="clearfix float-end">
+            <%= f.simple_fields_for :file_model do |fm_f| %>
+              <div class="file-container float-start">
+                <%= link_to_upload(fm_f.object) %>
+                <% if fm_f.object.file_cache %>
+                  <%= fm_f.input :file_cache, as: :hidden %>
+                  <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
+                <% else %>
+                  <%= fm_f.input :file, label: false %>
+                <% end %>
+              </div>
+            <% end %>
+            <%= link_to_download f.object %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 offset-md-1">
+          <h5 class="h6"><%= WorkflowItem.human_attribute_name(:task) %></h5>
+        </div>
+        <div class="col-md-2">
+          <h5 class="h6"><%= WorkflowItem.human_attribute_name :start %></h5>
+        </div>
+        <div class="col-md-2">
+          <h5 class="h6"><%= WorkflowItem.human_attribute_name :end %></h5>
+        </div>
+      </div>
+
+      <div id="workflow_items">
+        <%= f.simple_fields_for :workflow_items, workflow_items do |wi_f| %>
+          <%= render 'workflow_item', f: wi_f %>
+        <% end %>
+
+        <p class="mb-1">
+          <%= link_to_add_fields(t('label.add_item'), f, :workflow_items) %>
+        </p>
+      </div>
+
+      <% if @workflow.overloaded? %>
+        <p class="mb-1">
+          <%= f.input :allow_overload, as: :boolean, label: t('workflow.allow_overload') %>
+        </p>
+      <% end %>
+
+      <hr />
+
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.input :lock_version, as: :hidden %>
+        <%= f.submit class: 'btn btn-primary' %>
+      </div>
     <% end %>
-
-    <p class="mb-1">
-      <%= link_to_add_fields(t('label.add_item'), f, :workflow_items) %>
-    </p>
   </div>
+</div>
 
-  <% if @workflow.overloaded? %>
-    <p class="mb-1">
-      <%= f.input :allow_overload, as: :boolean, label: t('workflow.allow_overload') %>
-    </p>
-  <% end %>
-
-  <hr />
-
-  <div class="form-actions">
-    <div class="float-end"><%= yield :form_actions %></div>
-    <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary' %>
-  </div>
-<% end %>
 <script type="text/javascript">
 jQuery(function() {
   $('#workflow_period_id').change(function() {

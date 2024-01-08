@@ -1,108 +1,112 @@
-<div class="card mb-3">
-  <div class="card-header">
-    <strong>
-      <%= Finding.model_name.human count: 0 %>
-    </strong>
-  </div>
-
+<div class="card">
   <div class="card-body">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="list-group">
-          <%= link_to t('follow_up_audit.weaknesses_by_audit_type_title'),
-            { :action => :weaknesses_by_audit_type, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_audit.weaknesses_by_state_title'),
-            { :action => :weaknesses_by_state, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_audit.weaknesses_by_risk_and_business_unit_title'),
-            { :action => :weaknesses_by_risk_and_business_unit, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_committee_report.control_objective_stats_title'),
-            { :action => :control_objective_stats, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_committee_report.process_control_stats_title'),
-            { :action => :process_control_stats, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_audit.weaknesses_by_risk_report_title'),
-            { :action => :weaknesses_by_risk_report, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_committee_report.benefits_title'),
-            { :action => :benefits, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_audit.weaknesses_brief_title'),
-            { :action => :weaknesses_brief, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <% if Finding.show_commitment_support? %>
-            <%= link_to t('follow_up_audit.weaknesses_reschedules_title'),
-              { :action => :weaknesses_reschedules, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <% end %>
-          <% if Current.conclusion_pdf_format == 'gal' %>
-            <%= link_to t('follow_up_audit.weaknesses_current_situation_title'),
-              { :action => :weaknesses_current_situation, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-            <%= link_to t('follow_up_audit.weaknesses_list_title'),
-              { :action => :weaknesses_list, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-            <%= link_to t('follow_up_audit.weaknesses_by_business_unit_title'),
-              { :action => :weaknesses_by_business_unit, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-            <%= link_to t('follow_up_audit.weaknesses_by_control_objective_process_title'),
-              { :action => :weaknesses_by_control_objective_process, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <% end %>
-        </div>
+    <div class="card border-1 border-light mb-3">
+      <div class="card-header bg-light">
+        <strong>
+          <%= Finding.model_name.human count: 0 %>
+        </strong>
       </div>
-      <div class="col-md-6">
-        <div class="list-group">
-          <%= link_to t('follow_up_audit.weaknesses_by_risk_title'),
-            { :action => :weaknesses_by_risk, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_committee_report.control_objective_stats_by_review_title'),
-            { :action => :control_objective_stats_by_review, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_audit.fixed_weaknesses_report_title'),
-            { :action => :fixed_weaknesses_report, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_audit.weaknesses_graphs.title'),
-            { action: :weaknesses_graphs, controller_name: 'follow_up', final: false }, class: 'list-group-item list-group-item-action' %>
-          <% if Current.conclusion_pdf_format == 'gal' %>
-            <%= link_to t('follow_up_audit.weaknesses_by_month_title'),
-              { :action => :weaknesses_by_month, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-            <%= link_to t('follow_up_audit.weaknesses_evolution_title'),
-              { :action => :weaknesses_evolution, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-            <%= link_to t('follow_up_audit.weaknesses_by_control_objective_title'),
-              { :action => :weaknesses_by_control_objective, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-            <%= link_to t('follow_up_audit.weaknesses_heatmap_title'),
-              { :action => :weaknesses_heatmap, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <% end %>
-          <%= link_to t('follow_up_audit.weaknesses_report.title'),
-            { action: :weaknesses_report, controller_name: 'follow_up', final: false }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_audit.tagged_findings_report.title'),
-            { action: :tagged_findings_report }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_audit.weaknesses_by_user_title'),
-            { :action => :weaknesses_by_user, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <% if POSTGRESQL_ADAPTER %>
-            <%= link_to t('follow_up_audit.weaknesses_repeated_title'),
-              { :action => :weaknesses_repeated, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
-          <% end %>
-          <% if Current.conclusion_pdf_format == 'pat' %>
-              <%= link_to t('follow_up_audit.export_issues'), export_issues_follow_up_audit_path(format: :csv), class: 'list-group-item list-group-item-action' %>
-          <% end %>
+
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="list-group">
+              <%= link_to t('follow_up_audit.weaknesses_by_audit_type_title'),
+                { :action => :weaknesses_by_audit_type, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_audit.weaknesses_by_state_title'),
+                { :action => :weaknesses_by_state, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_audit.weaknesses_by_risk_and_business_unit_title'),
+                { :action => :weaknesses_by_risk_and_business_unit, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_committee_report.control_objective_stats_title'),
+                { :action => :control_objective_stats, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_committee_report.process_control_stats_title'),
+                { :action => :process_control_stats, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_audit.weaknesses_by_risk_report_title'),
+                { :action => :weaknesses_by_risk_report, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_committee_report.benefits_title'),
+                { :action => :benefits, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_audit.weaknesses_brief_title'),
+                { :action => :weaknesses_brief, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <% if Finding.show_commitment_support? %>
+                <%= link_to t('follow_up_audit.weaknesses_reschedules_title'),
+                  { :action => :weaknesses_reschedules, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <% end %>
+              <% if Current.conclusion_pdf_format == 'gal' %>
+                <%= link_to t('follow_up_audit.weaknesses_current_situation_title'),
+                  { :action => :weaknesses_current_situation, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+                <%= link_to t('follow_up_audit.weaknesses_list_title'),
+                  { :action => :weaknesses_list, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+                <%= link_to t('follow_up_audit.weaknesses_by_business_unit_title'),
+                  { :action => :weaknesses_by_business_unit, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+                <%= link_to t('follow_up_audit.weaknesses_by_control_objective_process_title'),
+                  { :action => :weaknesses_by_control_objective_process, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <% end %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="list-group">
+              <%= link_to t('follow_up_audit.weaknesses_by_risk_title'),
+                { :action => :weaknesses_by_risk, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_committee_report.control_objective_stats_by_review_title'),
+                { :action => :control_objective_stats_by_review, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_audit.fixed_weaknesses_report_title'),
+                { :action => :fixed_weaknesses_report, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_audit.weaknesses_graphs.title'),
+                { action: :weaknesses_graphs, controller_name: 'follow_up', final: false }, class: 'list-group-item list-group-item-action' %>
+              <% if Current.conclusion_pdf_format == 'gal' %>
+                <%= link_to t('follow_up_audit.weaknesses_by_month_title'),
+                  { :action => :weaknesses_by_month, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+                <%= link_to t('follow_up_audit.weaknesses_evolution_title'),
+                  { :action => :weaknesses_evolution, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+                <%= link_to t('follow_up_audit.weaknesses_by_control_objective_title'),
+                  { :action => :weaknesses_by_control_objective, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+                <%= link_to t('follow_up_audit.weaknesses_heatmap_title'),
+                  { :action => :weaknesses_heatmap, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <% end %>
+              <%= link_to t('follow_up_audit.weaknesses_report.title'),
+                { action: :weaknesses_report, controller_name: 'follow_up', final: false }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_audit.tagged_findings_report.title'),
+                { action: :tagged_findings_report }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_audit.weaknesses_by_user_title'),
+                { :action => :weaknesses_by_user, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <% if POSTGRESQL_ADAPTER %>
+                <%= link_to t('follow_up_audit.weaknesses_repeated_title'),
+                  { :action => :weaknesses_repeated, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+              <% end %>
+              <% if Current.conclusion_pdf_format == 'pat' %>
+                  <%= link_to t('follow_up_audit.export_issues'), export_issues_follow_up_audit_path(format: :csv), class: 'list-group-item list-group-item-action' %>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="card mb-3">
-  <div class="card-header">
-    <strong>
-      <%= t 'follow_up_audit.others.title' %>
-    </strong>
-  </div>
-
-  <div class="card-body">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="list-group">
-          <%= link_to t('follow_up_committee_report.synthesis_report_title'),
-            { :action => :synthesis_report, :controller_name => 'follow_up' }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_committee_report.qa_indicators_title'),
-            { :action => :qa_indicators }, class: 'list-group-item list-group-item-action' %>
-        </div>
+    <div class="card border-1 border-light mb-3">
+      <div class="card-header bg-light">
+        <strong>
+          <%= t 'follow_up_audit.others.title' %>
+        </strong>
       </div>
-      <div class="col-md-6">
-        <div class="list-group">
-          <%= link_to t('follow_up_committee_report.review_stats_report_title'),
-            { action: :review_stats_report, controller_name: 'follow_up' }, class: 'list-group-item list-group-item-action' %>
-          <%= link_to t('follow_up_audit.cost_analysis_title'),
-            { :action => :follow_up_cost_analysis }, class: 'list-group-item list-group-item-action' %>
+
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="list-group">
+              <%= link_to t('follow_up_committee_report.synthesis_report_title'),
+                { :action => :synthesis_report, :controller_name => 'follow_up' }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_committee_report.qa_indicators_title'),
+                { :action => :qa_indicators }, class: 'list-group-item list-group-item-action' %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="list-group">
+              <%= link_to t('follow_up_committee_report.review_stats_report_title'),
+                { action: :review_stats_report, controller_name: 'follow_up' }, class: 'list-group-item list-group-item-action' %>
+              <%= link_to t('follow_up_audit.cost_analysis_title'),
+                { :action => :follow_up_cost_analysis }, class: 'list-group-item list-group-item-action' %>
+            </div>
+          </div>
         </div>
       </div>
     </div>

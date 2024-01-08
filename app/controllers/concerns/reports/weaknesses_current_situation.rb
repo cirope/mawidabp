@@ -145,7 +145,25 @@ module Reports::WeaknessesCurrentSituation
         weaknesses = filter_weaknesses_current_situation_by_scope weaknesses
       end
 
-      weaknesses
+      conditions = []
+      parameters = {}
+
+      ids = weaknesses.pluck 'id'
+
+      ids.each_slice(1000).with_index do |finding_ids, i|
+        conditions << "#{Finding.quoted_table_name}.#{Finding.qcn 'id'} IN (:ids_#{i})"
+        parameters[:"ids_#{i}"] = finding_ids
+      end
+
+      if ids.present?
+        Weakness.where(
+          conditions.map { |c| "(#{c})" }.join(' OR '), parameters
+        ).includes(
+          review: [:plan_item, :conclusion_final_review]
+        )
+      else
+        Weakness.none
+      end
     end
 
     def current_situation_weaknesses_scope

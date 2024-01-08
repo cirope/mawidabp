@@ -1,142 +1,146 @@
-<%= javascript_include_tag :graphs %>
-
 <% user = params[:weaknesses_graphs] && params[:weaknesses_graphs][:user] %>
 <% business_unit = params[:weaknesses_graphs] && params[:weaknesses_graphs][:business_unit] %>
 <% process_control = params[:weaknesses_graphs] && params[:weaknesses_graphs][:process_control] %>
 
-<nav>
-  <div class="nav nav-tabs">
-    <a class="nav-item nav-link<%= ' active' if user.present? || params[:weaknesses_graphs].blank? %>" href="#users" data-bs-toggle="tab" data-clear="user">
-      <%= t '.users' %>
-    </a>
-    <a class="nav-item nav-link<%= ' active' if business_unit.present? %>" href="#business_units" data-bs-toggle="tab" data-clear="business_unit">
-      <%= t '.business_units' %>
-    </a>
-    <a class="nav-item nav-link<%= ' active' if process_control.present? %>" href="#process_controls" data-bs-toggle="tab" data-clear="process_control">
-      <%= t '.process_controls' %>
-    </a>
-  </div>
-</nav>
-
-<br />
-
-<% url_params = { action: :weaknesses_graphs, final: true } %>
-
-<%= simple_form_for :weaknesses_graphs, url: url_params, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
-  <div class="row">
-    <div class="col-md-10">
-      <div class="tab-content">
-        <div class="tab-pane <%= 'active' if user.present? || params[:weaknesses_graphs].blank? %>" id="users">
-          <%= f.input :user, as: :string, label: false,
-            input_html: {
-              value: user,
-              title: t('label.search'),
-              autofocus: true,
-              data: {
-                clear: 'user',
-                autocomplete_url: users_completions_path,
-                autocomplete_id_target: '#weaknesses_graphs_user_id'
-              }
-            }
-          %>
-          <%= f.input :user_id, as: :hidden, input_html: {
-            value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:user_id],
-            data: { clear: 'user' }
-          } %>
-        </div>
-        <div class="tab-pane <%= 'active' if business_unit.present? %>" id="business_units">
-          <%= f.input :business_unit, as: :string, label: false,
-            input_html: {
-              value: business_unit,
-              title: t('label.search'),
-              data: {
-                clear: 'business_unit',
-                autocomplete_url: auto_complete_for_business_unit_conclusion_reports_path,
-                autocomplete_id_target: '#weaknesses_graphs_business_unit_id'
-              }
-            }
-          %>
-          <%= f.input :business_unit_id, as: :hidden, input_html: {
-            value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:business_unit_id],
-            data: { clear: 'business_unit' }
-          } %>
-        </div>
-        <div class="tab-pane <%= 'active' if process_control.present? %>" id="process_controls">
-          <%= f.input :process_control, as: :string, label: false,
-            input_html: {
-              value: process_control,
-              title: t('label.search'),
-              data: {
-                clear: 'process_control',
-                autocomplete_url: auto_complete_for_process_control_conclusion_reports_path,
-                autocomplete_id_target: '#weaknesses_graphs_process_control_id'
-              }
-            }
-          %>
-          <%= f.input :process_control_id, as: :hidden, input_html: {
-            value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:process_control_id],
-            data: { clear: 'process_control' }
-          } %>
-        </div>
+<div class="card">
+  <div class="card-body">
+    <nav>
+      <div class="nav nav-tabs">
+        <a class="nav-item nav-link<%= ' active' if user.present? || params[:weaknesses_graphs].blank? %>" href="#users" data-bs-toggle="tab" data-clear="user">
+          <%= t '.users' %>
+        </a>
+        <a class="nav-item nav-link<%= ' active' if business_unit.present? %>" href="#business_units" data-bs-toggle="tab" data-clear="business_unit">
+          <%= t '.business_units' %>
+        </a>
+        <a class="nav-item nav-link<%= ' active' if process_control.present? %>" href="#process_controls" data-bs-toggle="tab" data-clear="process_control">
+          <%= t '.process_controls' %>
+        </a>
       </div>
-    </div>
+    </nav>
 
-    <div class="col-md-2">
-      <%= hidden_field_tag :final, params[:final] %>
-      <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-outline-secondary' %> |
-      <%= link_to t('label.cancel'), url_params %>
-    </div>
-  </div>
+    <br />
 
-  <% if @info.blank? && @weaknesses_data %>
-    <div class="row" data-hide-on="tab-change">
-      <div class="col-md-6">
-        <div class="card mb-3">
-          <div class="card-body p-0">
-            <div id="graph" class="ct-chart ct-golden-section" data-graph data-weaknesses="<%= @weaknesses_data.to_json %>">
+    <% url_params = { action: :weaknesses_graphs, final: true } %>
+
+    <%= simple_form_for :weaknesses_graphs, url: url_params, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
+      <div class="row">
+        <div class="col-md-10">
+          <div class="tab-content">
+            <div class="tab-pane <%= 'active' if user.present? || params[:weaknesses_graphs].blank? %>" id="users">
+              <%= f.input :user, as: :string, label: false,
+                input_html: {
+                  value: user,
+                  title: t('label.search'),
+                  autofocus: true,
+                  data: {
+                    clear: 'user',
+                    autocomplete_url: users_completions_path,
+                    autocomplete_id_target: '#weaknesses_graphs_user_id'
+                  }
+                }
+              %>
+              <%= f.input :user_id, as: :hidden, input_html: {
+                value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:user_id],
+                data: { clear: 'user' }
+              } %>
+            </div>
+            <div class="tab-pane <%= 'active' if business_unit.present? %>" id="business_units">
+              <%= f.input :business_unit, as: :string, label: false,
+                input_html: {
+                  value: business_unit,
+                  title: t('label.search'),
+                  data: {
+                    clear: 'business_unit',
+                    autocomplete_url: auto_complete_for_business_unit_conclusion_reports_path,
+                    autocomplete_id_target: '#weaknesses_graphs_business_unit_id'
+                  }
+                }
+              %>
+              <%= f.input :business_unit_id, as: :hidden, input_html: {
+                value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:business_unit_id],
+                data: { clear: 'business_unit' }
+              } %>
+            </div>
+            <div class="tab-pane <%= 'active' if process_control.present? %>" id="process_controls">
+              <%= f.input :process_control, as: :string, label: false,
+                input_html: {
+                  value: process_control,
+                  title: t('label.search'),
+                  data: {
+                    clear: 'process_control',
+                    autocomplete_url: auto_complete_for_process_control_conclusion_reports_path,
+                    autocomplete_id_target: '#weaknesses_graphs_process_control_id'
+                  }
+                }
+              %>
+              <%= f.input :process_control_id, as: :hidden, input_html: {
+                value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:process_control_id],
+                data: { clear: 'process_control' }
+              } %>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-6">
-        <table class="table table-sm table-striped table-hover">
-          <thead>
-            <tr>
-              <th><%= Finding.human_attribute_name 'state' %></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% labels, values = *@weaknesses_data.values %>
-            <% labels.zip(values).each do |label, value| %>
-              <tr>
-                <td><%= label %></td>
-                <td>
-                  <% if @weaknesses.count > 0 %>
-                    <%= "#{value} (#{(value.to_f / @weaknesses.count * 100).round(2)}%)" %>
-                  <% else %>
-                    0
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  <% elsif @info.present? %>
-    <div class="alert alert-info" data-hide-on="tab-change">
-      <p class="mb-0"><%= @info %></p>
-    </div>
-  <% end %>
 
-  <div class="alert alert-info" data-show-on="tab-change" <%= 'hidden' if @weaknesses_data %>>
-    <p class="mb-0"><%= t '.hint' %></p>
+        <div class="col-md-2">
+          <%= hidden_field_tag :final, params[:final] %>
+          <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-outline-secondary' %> |
+          <%= link_to t('label.cancel'), url_params %>
+        </div>
+      </div>
+
+      <% if @info.blank? && @weaknesses_data %>
+        <div class="row" data-hide-on="tab-change">
+          <div class="col-md-6">
+            <div class="card mb-3">
+              <div class="card-body p-0">
+                <%= pie_chart @weaknesses_data %>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <table class="table table-sm table-striped table-hover">
+              <thead>
+                <tr>
+                  <th><%= Finding.human_attribute_name 'state' %></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @weaknesses_data.each do |values| %>
+                  <tr>
+                    <td><%= values[:name] %></td>
+                    <td>
+                      <% if @weaknesses.count > 0 %>
+                        <%= "#{values[:data]} (#{(values[:data].to_f / @weaknesses.count * 100).round(2)}%)" %>
+                      <% else %>
+                        0
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% elsif @info.present? %>
+        <div class="alert alert-info" data-hide-on="tab-change">
+          <div class="alert-message">
+            <p class="mb-0"><%= @info %></p>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="alert alert-info" data-show-on="tab-change" <%= 'hidden' if @weaknesses_data %>>
+        <div class="alert-message">
+          <p class="mb-0"><%= t '.hint' %></p>
+        </div>
+      </div>
+    <% end %>
+
+    <hr />
+
+    <div>
+      <%= link_to t('label.back'), action: :index %>
+    </div>
   </div>
-<% end %>
-
-<hr />
-
-<div>
-  <%= link_to t('label.back'), action: :index %>
 </div>
