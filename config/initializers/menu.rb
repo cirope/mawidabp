@@ -3,6 +3,7 @@ APP_AUDITED_MENU_ITEMS = [
   MenuItem.new(
     :follow_up,
     order: 1,
+    icon: 'comments',
     children: [
       MenuItem.new(
         :pending_findings,
@@ -55,6 +56,7 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :administration,
     order: 1,
+    icon: 'screwdriver-wrench',
     children: [
       MenuItem.new(
         :organization,
@@ -130,62 +132,68 @@ APP_AUDITOR_MENU_ITEMS = [
         ]
       ),
       MenuItem.new(
-        :settings,
+        :risk_registries,
         order: 4,
+        controllers: :risk_registries,
+        url: { controller: '/risk_registries' }
+      ),
+      MenuItem.new(
+        :settings,
+        order: 5,
         controllers: :settings,
         url: { controller: '/settings' }
       ),
       MenuItem.new(
         :weakness_templates,
-        order: 5,
+        order: 6,
         controllers: :weakness_templates,
         url: { controller: '/weakness_templates' }
       ),
       MenuItem.new(
         :risk_assessment_templates,
-        order: 6,
+        order: 7,
         controllers: :risk_assessment_templates,
         url: { controller: '/risk_assessment_templates' }
       ),
       MenuItem.new(
         :tags,
-        order: 7,
+        order: 8,
         controllers: :tags,
         url: { controller: '/tags', kind: 'finding' }
       ),
       MenuItem.new(
         :documents,
-        order: 8,
+        order: 9,
         controllers: :documents,
         url: { controller: '/documents' }
       ),
       MenuItem.new(
         :news,
-        order: 9,
+        order: 10,
         controllers: :news,
         url: { controller: '/news' }
       ),
       MenuItem.new(
         :benefits,
-        order: 10,
+        order: 11,
         controllers: :benefits,
         url: { controller: '/benefits' }
       ),
       MenuItem.new(
         :e_mails,
-        order: 11,
+        order: 12,
         controllers: :e_mails,
         url: { controller: '/e_mails' }
       ),
       MenuItem.new(
         :activity_groups,
-        order: 12,
+        order: 13,
         controllers: :activity_groups,
         url: { controller: '/activity_groups' }
       ),
       MenuItem.new(
         :questionnaires,
-        order: 13,
+        order: 14,
         url: { controller: '/questionnaires' },
         drop_down_menu: true,
         children: [
@@ -215,6 +223,7 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :planning,
     order: 2,
+    icon: 'table',
     children: [
       MenuItem.new(
         :resources,
@@ -246,6 +255,7 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :execution,
     order: 3,
+    icon: 'chalkboard',
     children: [
       MenuItem.new(
         :reviews,
@@ -321,6 +331,7 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :conclusion,
     order: 4,
+    icon: 'chalkboard-user',
     children: [
       MenuItem.new(
         :draft_reviews,
@@ -346,6 +357,7 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :follow_up,
     order: 5,
+    icon: 'comments',
     children: [
       MenuItem.new(
         :pending_findings,

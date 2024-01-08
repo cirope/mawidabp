@@ -29,7 +29,7 @@ module OrganizationsHelper
       out << link_to(
         icon('fas', 'times-circle'), '#',
         title: t('label.delete'),
-        class: 'float-right',
+        class: 'float-end',
         data: {
           'dynamic-target' => "##{configuration.class.name.underscore}",
           'dynamic-form-event' => 'hideCard',
@@ -53,7 +53,7 @@ module OrganizationsHelper
 
         image_tag @organization.send(model).image.url(thumb_name),
           size: @organization.send(model).image_size(thumb_name),
-          alt: 'Logo'
+          alt: 'Logo' if @organization.send(model).image?
       end.resume
     end
 end

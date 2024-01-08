@@ -7,8 +7,11 @@ Rails.application.routes.draw do
   post   'sessions', to: 'sessions#create',  as: 'sessions'
   delete 'logout',   to: 'sessions#destroy', as: 'logout'
 
+  # Authentication
+  get  'signin', to: 'authentications#new',    as: 'signin'
+  post 'auth',   to: 'authentications#create', as: 'auth'
+
   # SAML
-  get 'saml/auth', to: 'saml_sessions#new', as: :new_saml_session
   post 'saml/callback', to: 'saml_sessions#create', as: :saml_session
   get 'saml/metadata', to: 'saml_sessions#metadata', as: :saml_metadata
 
@@ -180,7 +183,8 @@ Rails.application.routes.draw do
     'auto_complete_for_business_unit',
     'auto_complete_for_process_control',
     'weaknesses_by_control_objective_process',
-    'weaknesses_heatmap'
+    'weaknesses_heatmap',
+    'export_issues'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -235,6 +239,13 @@ Rails.application.routes.draw do
   post 'conclusion_reports/create_nbc_annual_report',
     as: 'create_nbc_annual_report_conclusion_reports',
     to: 'conclusion_reports#create_nbc_annual_report'
+
+  get 'conclusion_reports/nbc_internal_control_qualification_as_group_of_companies',
+      as: 'nbc_internal_control_qualification_as_group_of_companies_conclusion_reports',
+      to: 'conclusion_reports#nbc_internal_control_qualification_as_group_of_companies'
+  post 'conclusion_reports/create_nbc_internal_control_qualification_as_group_of_companies',
+       as: 'create_nbc_internal_control_qualification_as_group_of_companies_conclusion_reports',
+       to: 'conclusion_reports#create_nbc_internal_control_qualification_as_group_of_companies'
 
   get 'conclusion_reports/cost_analysis',
     as: 'cost_analysis_conclusion_reports',
@@ -306,6 +317,7 @@ Rails.application.routes.draw do
   end
 
   resource :work_papers, only: [:show]
+  resources :work_papers, only: [:update]
 
   namespace :conclusion_draft_reviews do
     resources :users, only: [:index]
@@ -483,6 +495,12 @@ Rails.application.routes.draw do
   end
 
   resources :organizations
+
+  resources :risk_registries do
+    get :auto_complete_for_control_objective, on: :collection
+
+    resources :risk_categories, only: [:new, :edit]
+  end
 
   resources :roles
 

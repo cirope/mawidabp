@@ -1,6 +1,8 @@
 class Users::PasswordsController < ApplicationController
   include Users::Finders
 
+  layout 'public'
+
   before_action :set_title
   before_action :set_user, only: [:edit, :update]
 

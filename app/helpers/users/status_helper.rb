@@ -3,39 +3,6 @@ module Users::StatusHelper
     [pending_link, repeated_link, complete_link].join ' | '
   end
 
-  def high_risk_weaknesses_graph_placeholder
-    content_tag(
-      :div, nil, id: 'high_risk_weaknesses_graph', class: 'ct-chart ct-golden-section',
-      data: {
-        graph: true,
-        weaknesses: Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk),
-        total: @weaknesses.with_highest_risk.count
-      }
-    )
-  end
-
-  def weaknesses_graph_placeholder
-    content_tag(
-      :div, nil, id: 'status_weaknesses_graph', class: 'ct-chart ct-golden-section',
-      data: {
-        graph: true,
-        weaknesses: Weakness.weaknesses_for_graph(@weaknesses),
-        total: @weaknesses.count
-      }
-    )
-  end
-
-  def pending_weaknesses_graph_placeholder
-    content_tag(
-      :div, nil, id: 'pending_weaknesses_graph', class: 'ct-chart ct-golden-section',
-      data: {
-        graph: true,
-        weaknesses: Weakness.pending_weaknesses_for_graph(@weaknesses),
-        total: @weaknesses.with_pending_status.count
-      }
-    )
-  end
-
   def self_and_descendants_findings_path
     findings_path(
       completion_state: 'incomplete',

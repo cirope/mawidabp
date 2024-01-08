@@ -25,6 +25,11 @@ class OrganizationsHelperTest < ActionView::TestCase
                                          name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
                                          assertion_consumer_service_binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
                                          idp_cert: 'cert_test',
+                                         username_claim: 'name',
+                                         name_claim: 'givenname',
+                                         lastname_claim: 'surname',
+                                         email_claim: 'name',
+                                         roles_claim: 'groups',
                                          organization: organizations(:cirope)
 
     new_saml_provider.save!
@@ -48,7 +53,7 @@ class OrganizationsHelperTest < ActionView::TestCase
     expected << link_to(
       icon('fas', 'times-circle'), '#',
       title: t('label.delete'),
-      class: 'float-right',
+      class: 'float-end',
       data: {
         'dynamic-target' => "##{new_saml_provider.class.name.underscore}",
         'dynamic-form-event' => 'hideCard',

@@ -1,0 +1,73 @@
+en:
+  menu:
+    administration_title: 'Administration'
+    administration:
+      organization_title: 'Organization'
+      organization:
+        management: 'Management'
+        business_units: 'Business units'
+        business_unit_kind: 'Type of business unit'
+      security_title: 'Security'
+      security:
+        reports: 'Security reports'
+        users: 'Users'
+        roles: 'Profiles and Privileges'
+      best_practices_title: 'Best practices'
+      best_practices:
+        best_practices: 'Management'
+        control_objectives: 'Control objectives'
+      risk_registries: 'Risk Registries'
+      settings: 'Settings'
+      weakness_templates: 'Issue templates'
+      risk_assessment_templates: 'Risk assessment templates'
+      tags: 'Labels'
+      documents: 'Documents'
+      news: 'News'
+      benefits: 'Benefits / Detriments'
+      e_mails: 'Emails'
+      activity_groups: 'Activities'
+      questionnaires_title: 'Questionnaires'
+      questionnaires:
+        definition: 'Definition'
+        polls: 'Polls'
+        reports: 'Reports'
+    planning_title: 'Planning'
+    planning:
+      periods: 'Periods'
+      resources: 'Resources'
+      risk_assessments: 'Risk assessments'
+      plans: 'Work plans'
+    execution_title: 'Execution'
+    execution:
+      reviews: 'Audit reports'
+      workflows: 'Workflows'
+      time_summary: 'Time summary'
+      control_objectives: 'Control objectives'
+      weaknesses: 'Issues'
+      oportunities: 'Improvement opportunities'
+      interviews_title: 'Interviews'
+      interviews:
+        opening_interviews: 'Opening interviews'
+        closing_interviews: 'Closing interviews'
+      reports: 'Other reports'
+      findings_title: 'Findings'
+      findings:
+        weaknesses: 'Issues'
+        oportunities: 'Improvement opportunities'
+      memos: 'External reports'
+    conclusion_title: 'Conclusion'
+    conclusion:
+      draft_reviews: 'Draft audit reports'
+      final_reviews: 'Final audit reports'
+      reports: 'Other reports'
+    follow_up_title: 'Follow-Up'
+    follow_up:
+      pending_findings: 'Pending findings'
+      complete_findings: 'Resolved findings'
+      repeated_findings: 'Repeated findings'
+      notifications: 'Notifications'
+      reports_title: 'Other reports'
+      reports:
+        audited: 'Generals'
+        audit: 'Audit'
+    help_title: 'Help'

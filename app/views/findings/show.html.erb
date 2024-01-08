@@ -1,419 +1,403 @@
-<p class="mb-1">
-  <strong><%= Review.model_name.human %></strong>:
-  <%= @finding.review.try(:identification) %>
-</p>
-<p class="mb-1">
-  <strong><%= PlanItem.human_attribute_name(:project) %></strong>:
-  <%= @finding.review.try(:plan_item).try(:project) %>
-</p>
-<p class="mb-1">
-  <strong><%= Finding.human_attribute_name :review_code %></strong>
-  <%= @finding.review_code %>
-</p>
-<p class="mb-1">
-  <strong><%= Finding.human_attribute_name :title %></strong>
-  <%= @finding.title %>
-</p>
-<% if @finding.control_objective_item %>
-  <div>
-    <strong><%= ControlObjective.model_name.human %></strong>:
-    <%= simple_format "#{@finding.control_objective_item.to_s} (#{@finding.control_objective_item.process_control.name})", class: 'mb-1' %>
-  </div>
-<% end %>
-<p class="mb-1">
-  <strong><%= ConclusionFinalReview.human_attribute_name(:issue_date) %></strong>:
-  <%= @finding.issue_date ? l(@finding.issue_date, :format => :long) :
-    t('finding.without_conclusion_final_review') %>
-</p>
-
-<div>
-  <strong><%= Finding.human_attribute_name :description %></strong>
-  <%= simple_format @finding.description, class: 'mb-1' %>
-</div>
-
-<% if USE_SCOPE_CYCLE %>
-  <div>
-    <strong><%= Finding.human_attribute_name :brief %></strong>
-    <%= simple_format @finding.brief, class: 'mb-1' %>
-  </div>
-<% end %>
-
-<% if @finding.kind_of? Weakness %>
-  <div>
-    <strong><%= Weakness.human_attribute_name :audit_recommendations %></strong>:
-    <%= simple_format @finding.audit_recommendations, class: 'mb-1' %>
-  </div>
-
-  <% if %w(bic).include? Current.conclusion_pdf_format %>
-    <div>
-      <strong><%= Weakness.human_attribute_name :year %>:</strong>
-      <%= @finding.year.to_s %>
-    </div>
-
-    <div>
-      <strong><%= Weakness.human_attribute_name :nsisio %>:</strong>
-      <%= @finding.nsisio.to_s %>
-    </div>
-
-    <div>
-      <strong><%= Weakness.human_attribute_name :nobs %>:</strong>
-      <%= @finding.nobs.to_s %>
-    </div>
-  <% end %>
-
-  <p class="mb-1">
-    <strong><%= Weakness.human_attribute_name :risk %></strong>:
-    <%= @finding.risk_text %>
-  </p>
-
-  <p class="mb-1">
-    <strong><%= Weakness.human_attribute_name :priority %></strong>:
-    <%= @finding.priority_text %>
-  </p>
-<% end %>
-<p class="mb-1">
-  <strong><%= Finding.human_attribute_name(:state) %></strong>:
-  <%= @finding.state_text %>
-</p>
-<p class="mb-1">
-  <strong><%= Finding.human_attribute_name(:origination_date) %></strong>:
-  <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>
-</p>
-<% if @finding.kind_of? Weakness %>
-  <p class="mb-1">
-    <strong><%= Weakness.human_attribute_name(:follow_up_date) %></strong>:
-    <%= l(@finding.follow_up_date, :format => :long) if @finding.follow_up_date %>
-  </p>
-  <% if show_follow_up_timestamps? %>
-    <%= show_weakness_previous_follow_up_dates @finding %>
-  <% end %>
-<% end %>
-<p class="mb-1">
-  <strong><%= Finding.human_attribute_name(:solution_date) %></strong>:
-  <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
-</p>
-<% unless HIDE_WEAKNESS_EFFECT %>
-  <div>
-    <strong><%= Finding.human_attribute_name :effect %></strong>:
-    <%= simple_format @finding.effect, class: 'mb-1' %>
-  </div>
-<% end %>
-<div>
-  <strong><%= Finding.human_attribute_name :answer %></strong>:
-  <%= simple_format @finding.answer, class: 'mb-1' %>
-</div>
-<% if SHOW_FINDING_CURRENT_SITUATION %>
-  <div>
-    <strong><%= Finding.human_attribute_name :current_situation %></strong>:
-    <%= simple_format @finding.current_situation, class: 'mb-1' %>
-  </div>
-
-  <% unless USE_SCOPE_CYCLE %>
-    <div>
-      <strong><%= Finding.human_attribute_name :current_situation_verified %></strong>:
-      <%= t "label.#{@finding.current_situation_verified ? 'yes' : 'no'}" %>
-    </div>
-  <% end %>
-<% end %>
-
-<div>
-  <strong><%= Finding.human_attribute_name :audit_comments %></strong>:
-  <%= simple_format @finding.audit_comments, class: 'mb-1' %>
-</div>
-
-<% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
-  <p class="mb-1">
-    <strong><%= Weakness.human_attribute_name :compliance %>:</strong>
-    <%= t "label.#{@finding.compliance}" if @finding.compliance.present? %>
-  </p>
-
-  <p class="mb-1">
-    <strong><%= Weakness.human_attribute_name :operational_risk %>:</strong>
-    <%= Array(@finding.operational_risk).to_sentence %>
-  </p>
-
-  <p class="mb-1">
-    <strong><%= Weakness.human_attribute_name :impact %>:</strong>
-    <%= Array(@finding.impact).to_sentence %>
-  </p>
-
-  <p class="mb-1">
-    <strong><%= Weakness.human_attribute_name :internal_control_components %>:</strong>
-    <%= Array(@finding.internal_control_components).to_sentence %>
-  </p>
-<% end %>
-
-<% unless @finding.important_dates.blank? %>
-  <h5 class="mb-3">
-    <%= t('finding.important_dates.title') %>
-  </h5>
-
-  <ul class="mb-1">
-    <% @finding.important_dates.each do |important_date| %>
-      <li><%= markdown_without_paragraph important_date %></li>
+<div class="card">
+  <div class="card-body">
+    <p class="mb-1">
+      <strong><%= Review.model_name.human %></strong>:
+      <%= @finding.review.try(:identification) %>
+    </p>
+    <p class="mb-1">
+      <strong><%= PlanItem.human_attribute_name(:project) %></strong>:
+      <%= @finding.review.try(:plan_item).try(:project) %>
+    </p>
+    <p class="mb-1">
+      <strong><%= Finding.human_attribute_name :review_code %></strong>
+      <%= @finding.review_code %>
+    </p>
+    <p class="mb-1">
+      <strong><%= Finding.human_attribute_name :title %></strong>
+      <%= @finding.title %>
+    </p>
+    <% if @finding.control_objective_item %>
+      <div>
+        <strong><%= ControlObjective.model_name.human %></strong>:
+        <%= simple_format "#{@finding.control_objective_item.to_s} (#{@finding.control_objective_item.process_control.name})", class: 'mb-1' %>
+      </div>
     <% end %>
-  </ul>
-<% end %>
+    <p class="mb-1">
+      <strong><%= ConclusionFinalReview.human_attribute_name(:issue_date) %></strong>:
+      <%= @finding.issue_date ? l(@finding.issue_date, :format => :long) :
+        t('finding.without_conclusion_final_review') %>
+    </p>
 
-<h5 class="mb-3"><%= t('finding.responsibles', :count => @finding.users.size) %></h5>
-<%= finding_responsibles_list(@finding) %>
+    <div>
+      <strong><%= Finding.human_attribute_name :description %></strong>
+      <%= simple_format @finding.description, class: 'mb-1' %>
+    </div>
 
-<% unless @finding.taggings.blank? %>
-  <h5 class="my-3">
-    <%= Tag.model_name.human count: 0 %>
-  </h5>
-
-  <ul class="list-unstyled mb-3 lead">
-    <% @finding.taggings.each do |tagging| %>
-      <%= tagging_item tagging %>
+    <% if USE_SCOPE_CYCLE %>
+      <div>
+        <strong><%= Finding.human_attribute_name :brief %></strong>
+        <%= simple_format @finding.brief, class: 'mb-1' %>
+      </div>
     <% end %>
-  </ul>
-<% end %>
 
-<% unless @finding.finding_relations.blank? %>
-  <h5 class="my-3">
-    <%= t('finding.finding_relations') %>
-  </h5>
+    <% if @finding.kind_of? Weakness %>
+      <div>
+        <strong><%= Weakness.human_attribute_name :audit_recommendations %></strong>:
+        <%= simple_format @finding.audit_recommendations, class: 'mb-1' %>
+      </div>
 
-  <table class="table table-sm table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
-        <th><%= FindingRelation.human_attribute_name :description %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @finding.finding_relations.each do |fr| %>
-        <tr>
-          <td><%= fr.related_finding %></td>
-          <td><%= fr.description %></td>
-        </tr>
+      <% if %w(bic).include? Current.conclusion_pdf_format %>
+        <div>
+          <strong><%= Weakness.human_attribute_name :year %>:</strong>
+          <%= @finding.year.to_s %>
+        </div>
+
+        <div>
+          <strong><%= Weakness.human_attribute_name :nsisio %>:</strong>
+          <%= @finding.nsisio.to_s %>
+        </div>
+
+        <div>
+          <strong><%= Weakness.human_attribute_name :nobs %>:</strong>
+          <%= @finding.nobs.to_s %>
+        </div>
       <% end %>
-    </tbody>
-  </table>
-<% end %>
 
-<% unless @finding.inverse_finding_relations.blank? %>
-  <h5 class="my-3">
-    <%= t('finding.inverse_finding_relations') %>
-  </h5>
+      <p class="mb-1">
+        <strong><%= Weakness.human_attribute_name :risk %></strong>:
+        <%= @finding.risk_text %>
+      </p>
 
-  <table class="table table-sm table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= FindingRelation.human_attribute_name :finding_id %></th>
-        <th><%= FindingRelation.human_attribute_name :description %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @finding.inverse_finding_relations.each do |ifr| %>
-        <tr>
-          <td><%= ifr.finding %></td>
-          <td><%= ifr.description %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
-
-<% unless @finding.business_units.blank? %>
-  <h5 class="my-3">
-    <%= BusinessUnit.model_name.human count: 0 %>
-  </h5>
-
-  <ul class="mb-1">
-    <% @finding.business_units.each do |bu| %>
-      <li><%= bu.name %></li>
+      <p class="mb-1">
+        <strong><%= Weakness.human_attribute_name :priority %></strong>:
+        <%= @finding.priority_text %>
+      </p>
     <% end %>
-  </ul>
-<% end %>
-
-<% if @finding.tasks.any? %>
-  <h5 class="my-3">
-    <%= Task.model_name.human count: 0 %>
-  </h5>
-
-  <table class="table table-sm table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= Task.human_attribute_name 'code' %></th>
-        <th><%= Task.human_attribute_name 'description' %></th>
-        <th><%= Task.human_attribute_name 'status' %></th>
-        <th><%= Task.human_attribute_name 'due_on' %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @finding.tasks.each do |task| %>
-        <tr>
-          <td><%= task.code %></td>
-          <td><%= task.description %></td>
-          <td><%= t "tasks.status.#{task.status}" %></td>
-          <td><%= l task.due_on %></td>
-        </tr>
+    <p class="mb-1">
+      <strong><%= Finding.human_attribute_name(:state) %></strong>:
+      <%= @finding.state_text %>
+    </p>
+    <p class="mb-1">
+      <strong><%= Finding.human_attribute_name(:origination_date) %></strong>:
+      <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>
+    </p>
+    <% if @finding.kind_of? Weakness %>
+      <p class="mb-1">
+        <strong><%= Weakness.human_attribute_name(:follow_up_date) %></strong>:
+        <%= l(@finding.follow_up_date, :format => :long) if @finding.follow_up_date %>
+      </p>
+      <% if show_follow_up_timestamps? %>
+        <%= show_weakness_previous_follow_up_dates @finding %>
       <% end %>
-    </tbody>
-  </table>
-<% end %>
+    <% end %>
+    <p class="mb-1">
+      <strong><%= Finding.human_attribute_name(:solution_date) %></strong>:
+      <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
+    </p>
+    <% unless HIDE_WEAKNESS_EFFECT %>
+      <div>
+        <strong><%= Finding.human_attribute_name :effect %></strong>:
+        <%= simple_format @finding.effect, class: 'mb-1' %>
+      </div>
+    <% end %>
+    <div>
+      <strong><%= Finding.human_attribute_name :answer %></strong>:
+      <%= simple_format @finding.answer, class: 'mb-1' %>
+    </div>
+    <% if SHOW_FINDING_CURRENT_SITUATION %>
+      <div>
+        <strong><%= Finding.human_attribute_name :current_situation %></strong>:
+        <%= simple_format @finding.current_situation, class: 'mb-1' %>
+      </div>
 
-<h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
-
-<%= render 'findings/read_only_issues' %>
-
-<h5 class="my-3">
-  <%= t('finding.finding_answers') %>
-</h5>
-
-<div class="row">
-  <div class="col-md-2">
-    <h5 class="h6"><%= User.model_name.human %></h5>
-  </div>
-  <div class="col-md-6">
-    <h5 class="h6"><%= FindingAnswer.human_attribute_name 'answer' %></h5>
-  </div>
-  <div class="col-md-2">
-    <h5 class="h6"><%= FindingAnswer.human_attribute_name 'file_model' %></h5>
-  </div>
-</div>
-
-<div id="finding_answers" class="clearfix">
-  <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
-
-  <% @finding.finding_answers.each do |fa| %>
-    <% if fa.persisted? %>
-      <%= render 'findings/finding_answer', finding_answer: fa, show: true, readonly: true %>
-    <% elsif params[:completion_state] == 'incomplete' %>
-      <%= simple_form_for fa, url: finding_answers_path(params[:completion_state], @finding) do |f| %>
-        <%= render 'findings/finding_answer', f: f, show: true, readonly: true %>
-
-        <div class="text-right">
-          <%= f.submit t('finding.submit_answer'), class: 'btn btn-outline-secondary', data: { disable_with: false } %>
+      <% unless USE_SCOPE_CYCLE %>
+        <div>
+          <strong><%= Finding.human_attribute_name :current_situation_verified %></strong>:
+          <%= t "label.#{@finding.current_situation_verified ? 'yes' : 'no'}" %>
         </div>
       <% end %>
     <% end %>
-  <% end %>
 
-  <hr>
-</div>
-
-<% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-  <h5 class="mb-3"><%= t('finding.repeated_ancestors') %></h5>
-
-  <ul class="mb-3">
-    <% repeated_ancestors.each do |repeated_ancestor| %>
-      <li>
-        <%= link_to(
-          repeated_ancestor,
-          finding_path(repeated_ancestor.pending? ? 'incomplete' : 'complete', repeated_ancestor)
-        ) %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
-
-<% unless (repeated_children = @finding.repeated_children).blank? %>
-  <h5 class="mb-3"><%= t('finding.repeated_children') %></h5>
-
-  <ul class="mb-1">
-    <% repeated_children.each do |repeated_child| %>
-      <li>
-        <%= link_to(
-          repeated_child,
-          finding_path(repeated_child.pending? ? 'incomplete' : 'complete', repeated_child)
-        ) %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
-
-<% unless @finding.work_papers.blank? %>
-  <h5 class="mb-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
-
-  <table class="table table-sm table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= WorkPaper.human_attribute_name :name %></th>
-        <th><%= WorkPaper.human_attribute_name :code %></th>
-        <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
-        <th><%= WorkPaper.human_attribute_name :description %></th>
-        <th><%= WorkPaper.human_attribute_name :file_model %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @finding.work_papers.each do |work_paper| %>
-        <tr>
-          <td><%= work_paper.name %></td>
-          <td><%= work_paper.code %></td>
-          <td><%= work_paper.number_of_pages %></td>
-          <td><%= simple_format work_paper.description, class: 'mb-1' %></td>
-          <td><%= work_paper.file_model.try(:file?) ?
-            link_to(t('label.download'), work_paper.file_model.file.url) : '-' %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
-
-<% if show_follow_up_timestamps? %>
-  <div class="my-3">
-    <%= markdown t('finding.costs', :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
-  </div>
-<% end %>
-
-<% if @finding.costs.present? && show_follow_up_timestamps? %>
-  <p class="mb-1">
-    <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
-  </p>
-
-  <div id="cost_details" class="collapse">
     <div>
-      <table class="table table-sm table-striped table-hover my-3">
+      <strong><%= Finding.human_attribute_name :audit_comments %></strong>:
+      <%= simple_format @finding.audit_comments, class: 'mb-1' %>
+    </div>
+
+    <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+      <p class="mb-1">
+        <strong><%= Weakness.human_attribute_name :compliance %>:</strong>
+        <%= t "label.#{@finding.compliance}" if @finding.compliance.present? %>
+      </p>
+
+      <p class="mb-1">
+        <strong><%= Weakness.human_attribute_name :operational_risk %>:</strong>
+        <%= Array(@finding.operational_risk).to_sentence %>
+      </p>
+
+      <p class="mb-1">
+        <strong><%= Weakness.human_attribute_name :impact %>:</strong>
+        <%= Array(@finding.impact).to_sentence %>
+      </p>
+
+      <p class="mb-1">
+        <strong><%= Weakness.human_attribute_name :internal_control_components %>:</strong>
+        <%= Array(@finding.internal_control_components).to_sentence %>
+      </p>
+    <% end %>
+
+    <% unless @finding.important_dates.blank? %>
+      <h5 class="mb-3">
+        <%= t('finding.important_dates.title') %>
+      </h5>
+
+      <ul class="mb-1">
+        <% @finding.important_dates.each do |important_date| %>
+          <li><%= markdown_without_paragraph important_date %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <h5 class="mb-3"><%= t('finding.responsibles', :count => @finding.users.size) %></h5>
+    <%= finding_responsibles_list(@finding) %>
+
+    <% unless @finding.taggings.blank? %>
+      <h5 class="my-3">
+        <%= Tag.model_name.human count: 0 %>
+      </h5>
+
+      <ul class="list-unstyled mb-3 lead">
+        <% @finding.taggings.each do |tagging| %>
+          <%= tagging_item tagging %>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% unless @finding.finding_relations.blank? %>
+      <h5 class="my-3">
+        <%= t('finding.finding_relations') %>
+      </h5>
+
+      <table class="table table-sm table-striped table-hover">
         <thead>
           <tr>
-            <th><%= Cost.human_attribute_name :created_at %></th>
-            <th><%= Cost.human_attribute_name :cost %></th>
-            <th><%= Cost.human_attribute_name :description %></th>
-            <th><%= Cost.human_attribute_name :user_id %></th>
+            <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
+            <th><%= FindingRelation.human_attribute_name :description %></th>
           </tr>
         </thead>
         <tbody>
-          <% @finding.costs.each do |cost| %>
+          <% @finding.finding_relations.each do |fr| %>
             <tr>
-              <td><%= l(cost.created_at, :format => :long) %></td>
-              <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
-              <td><%= simple_format cost.description.blank? ? '-' : cost.description, class: 'mb-1' %></td>
-              <td><%= cost.user.full_name %></td>
+              <td><%= fr.related_finding %></td>
+              <td><%= fr.description %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
+    <% end %>
+
+    <% unless @finding.inverse_finding_relations.blank? %>
+      <h5 class="my-3">
+        <%= t('finding.inverse_finding_relations') %>
+      </h5>
+
+      <table class="table table-sm table-striped table-hover">
+        <thead>
+          <tr>
+            <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+            <th><%= FindingRelation.human_attribute_name :description %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @finding.inverse_finding_relations.each do |ifr| %>
+            <tr>
+              <td><%= ifr.finding %></td>
+              <td><%= ifr.description %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
+    <% unless @finding.business_units.blank? %>
+      <h5 class="my-3">
+        <%= BusinessUnit.model_name.human count: 0 %>
+      </h5>
+
+      <ul class="mb-1">
+        <% @finding.business_units.each do |bu| %>
+          <li><%= bu.name %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% if @finding.tasks.any? %>
+      <h5 class="my-3">
+        <%= Task.model_name.human count: 0 %>
+      </h5>
+
+      <table class="table table-sm table-striped table-hover">
+        <thead>
+          <tr>
+            <th><%= Task.human_attribute_name 'code' %></th>
+            <th><%= Task.human_attribute_name 'description' %></th>
+            <th><%= Task.human_attribute_name 'status' %></th>
+            <th><%= Task.human_attribute_name 'due_on' %></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @finding.tasks.each do |task| %>
+            <tr>
+              <td><%= task.code %></td>
+              <td><%= task.description %></td>
+              <td><%= t "tasks.status.#{task.status}" %></td>
+              <td><%= l task.due_on %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
+    <% if USE_SCOPE_CYCLE %>
+      <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
+
+      <%= render 'findings/read_only_issues' %>
+    <% end %>
+
+    <h5 class="my-3">
+      <%= t('finding.finding_answers') %>
+    </h5>
+
+    <div id="finding_answers" class="clearfix">
+      <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
+
+      <% @finding.repeated_ancestors.reverse.each do |finding| %>
+        <%= render 'findings/finding_answers', finding: finding %>
+      <% end %>
+
+      <%= render 'findings/finding_answers', finding: @finding %>
+    </div>
+
+    <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
+      <h5 class="mb-3"><%= t('finding.repeated_ancestors') %></h5>
+
+      <ul class="mb-3">
+        <% repeated_ancestors.each do |repeated_ancestor| %>
+          <li>
+            <%= link_to(
+              repeated_ancestor,
+              finding_path(repeated_ancestor.pending? ? 'incomplete' : 'complete', repeated_ancestor)
+            ) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% unless (repeated_children = @finding.repeated_children).blank? %>
+      <h5 class="mb-3"><%= t('finding.repeated_children') %></h5>
+
+      <ul class="mb-1">
+        <% repeated_children.each do |repeated_child| %>
+          <li>
+            <%= link_to(
+              repeated_child,
+              finding_path(repeated_child.pending? ? 'incomplete' : 'complete', repeated_child)
+            ) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% unless @finding.work_papers.blank? %>
+      <h5 class="mb-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
+
+      <table class="table table-sm table-striped table-hover">
+        <thead>
+          <tr>
+            <th><%= WorkPaper.human_attribute_name :name %></th>
+            <th><%= WorkPaper.human_attribute_name :code %></th>
+            <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+            <th><%= WorkPaper.human_attribute_name :description %></th>
+            <th><%= WorkPaper.human_attribute_name :file_model %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @finding.work_papers.each do |work_paper| %>
+            <tr>
+              <td><%= work_paper.name %></td>
+              <td><%= work_paper.code %></td>
+              <td><%= work_paper.number_of_pages %></td>
+              <td><%= simple_format work_paper.description, class: 'mb-1' %></td>
+              <td><%= work_paper.file_model.try(:file?) ?
+                link_to(t('label.download'), work_paper.file_model.file.url) : '-' %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
+    <% if show_follow_up_timestamps? %>
+      <div class="my-3">
+        <%= markdown t('finding.costs', :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+      </div>
+    <% end %>
+
+    <% if @finding.costs.present? && show_follow_up_timestamps? %>
+      <p class="mb-1">
+        <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :bs_toggle => 'collapse' } %>
+      </p>
+
+      <div id="cost_details" class="collapse">
+        <div>
+          <table class="table table-sm table-striped table-hover my-3">
+            <thead>
+              <tr>
+                <th><%= Cost.human_attribute_name :created_at %></th>
+                <th><%= Cost.human_attribute_name :cost %></th>
+                <th><%= Cost.human_attribute_name :description %></th>
+                <th><%= Cost.human_attribute_name :user_id %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @finding.costs.each do |cost| %>
+                <tr>
+                  <td><%= l(cost.created_at, :format => :long) %></td>
+                  <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
+                  <td><%= simple_format cost.description.blank? ? '-' : cost.description, class: 'mb-1' %></td>
+                  <td><%= cost.user.full_name %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <hr />
+
+    <div>
+      <% if @finding.pending? && (!@auth_user.can_act_as_audited? || @finding.users.reload.include?(@auth_user)) %>
+        <strong><%= link_to_edit edit_finding_path(params[:completion_state],
+          @finding, :user_id => params[:user_id]) %></strong> |
+      <% end %>
+      <%= link_to_index findings_path(params[:completion_state], :user_id => params[:user_id]) %> |
+      <%= render('shared/downloads',
+        right: true,
+        links: [
+          link_to(
+            t('finding.follow_up_report.download_brief'),
+            follow_up_pdf_finding_path(params[:completion_state], @finding, :brief => true, :_ts => Time.now.to_i),
+            class: 'dropdown-item'
+          ),
+          (
+            link_to(
+              t('finding.follow_up_report.download'),
+              follow_up_pdf_finding_path(params[:completion_state], @finding, :_ts => Time.now.to_i),
+              class: 'dropdown-item'
+            ) if show_follow_up_timestamps?
+          )
+        ].compact
+      ) %>
     </div>
   </div>
-<% end %>
-
-<hr />
-
-<div>
-  <% if @finding.pending? && (!@auth_user.can_act_as_audited? || @finding.users.reload.include?(@auth_user)) %>
-    <strong><%= link_to_edit edit_finding_path(params[:completion_state],
-      @finding, :user_id => params[:user_id]) %></strong> |
-  <% end %>
-  <%= link_to_index findings_path(params[:completion_state], :user_id => params[:user_id]) %> |
-  <%= render('shared/downloads',
-    right: true,
-    links: [
-      link_to(
-        t('finding.follow_up_report.download_brief'),
-        follow_up_pdf_finding_path(params[:completion_state], @finding, :brief => true, :_ts => Time.now.to_i),
-        class: 'dropdown-item'
-      ),
-      (
-        link_to(
-          t('finding.follow_up_report.download'),
-          follow_up_pdf_finding_path(params[:completion_state], @finding, :_ts => Time.now.to_i),
-          class: 'dropdown-item'
-        ) if show_follow_up_timestamps?
-      )
-    ].compact
-  ) %>
 </div>

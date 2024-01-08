@@ -1,72 +1,79 @@
-<%= simple_form_for @tag, url: [@tag, kind: @tag.kind] do |f| %>
-  <%= f.error_notification %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @tag, url: [@tag, kind: @tag.kind] do |f| %>
+      <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-sm-8">
-        <%= f.input :name, input_html: { autofocus: true } %>
-      </div>
-      <div class="col-sm-4">
-        <%= f.input :style, collection: styles, prompt: false %>
-      </div>
-    </div>
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-sm-8">
+            <%= f.input :name, input_html: { autofocus: true } %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.input :style, collection: styles, prompt: false %>
+          </div>
+        </div>
 
-    <%= f.input :shared, input_html: { disabled: @tag.shared_was } %>
-    <%= f.input :obsolete %>
+        <%= f.input :shared, input_html: { disabled: @tag.shared_was } %>
+        <%= f.input :obsolete %>
 
-    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES && tags_options_collection(kind: @tag.kind).any? || @tag.user? %>
-      <%= f.input :options,
-        label: '',
-        as: :check_boxes,
-        item_wrapper_class: 'custom-control custom-checkbox',
-        collection: tags_options_collection(kind: @tag.kind) %>
-    <% end %>
-
-    <h5><%= t '.children' %></h5>
-
-    <hr>
-
-    <div class="row">
-      <div class="col-md-10">
-        <h5 class="h6"><%= Tag.human_attribute_name 'name' %></h5>
-      </div>
-    </div>
-
-    <div id="tags">
-      <%= f.simple_fields_for :children do |c_f| %>
-        <%= render 'child', f: c_f %>
-      <% end %>
-
-      <p>
-        <%= link_to_add_fields t('.add_child'), f, :children %>
-      </p>
-    </div>
-
-    <div class="card mb-3">
-      <div class="card-header">
-        <h5 class="mb-0">
-          <%= Tag.human_attribute_name 'icon' %>
-        </h5>
-      </div>
-
-      <div class="card-body">
-        <ul class="nav nav-pills lead">
-          <% Tag.available_icons.each do |icon| %>
-            <li class="nav-item">
-              <a class="nav-link<%= ' active' if @tag.icon == icon %>" href="#" data-icon="<%= icon %>">
-                <%= icon 'fas', icon %>
-              </a>
-            </li>
+        <% if SHOW_REVIEW_EXTRA_ATTRIBUTES || tags_options_collection(kind: @tag.kind).any? %>
+          <% tags_options_collection(kind: @tag.kind).each do |option| %>
+            <div class="row">
+              <div class="col-md-6">
+                <%= tag_input_option f, @tag, option %>
+              </div>
+            </div>
           <% end %>
-        </ul>
+        <% end %>
+
+        <h5 class="mt-4"><%= t '.children' %></h5>
+
+        <hr>
+
+        <div class="row">
+          <div class="col-md-10">
+            <h5 class="h6"><%= Tag.human_attribute_name 'name' %></h5>
+          </div>
+        </div>
+
+        <div id="tags">
+          <%= f.simple_fields_for :children do |c_f| %>
+            <%= render 'child', f: c_f %>
+          <% end %>
+
+          <p>
+            <%= link_to_add_fields t('.add_child'), f, :children %>
+          </p>
+        </div>
+
+        <div class="card border-1 border-light mb-3">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">
+              <%= Tag.human_attribute_name 'icon' %>
+            </h5>
+          </div>
+
+          <div class="card-body">
+            <ul class="nav nav-pills lead">
+              <% Tag.available_icons.each do |icon| %>
+                <li class="nav-item">
+                  <a class="nav-link<%= ' active' if @tag.icon == icon %>" href="#" data-icon="<%= icon %>">
+                    <%= icon 'fas', icon %>
+                  </a>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+
+        <%= f.input :icon, as: :hidden %>
+        <%= f.input :lock_version, as: :hidden %>
       </div>
-    </div>
 
-    <%= f.input :icon, as: :hidden %>
-    <%= f.input :lock_version, as: :hidden %>
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.button :submit, class: 'btn-primary' %>
+      </div>
+    <% end %>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, class: 'btn-primary' %>
-  </div>
-<% end %>
+</div>

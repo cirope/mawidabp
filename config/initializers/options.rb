@@ -3,7 +3,7 @@ COMPLIANCE_OPTIONS = {
   'no'  => { data: { tag: 'Compliance', select: 'no' } }
 }
 
-COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS = {
+COMPLIANCE_MAYBE_SANCTION_OPTIONS = {
   'no'  => false,
   'yes' => true
 }
@@ -130,6 +130,12 @@ TAGS_READONLY = [
 ]
 
 TAG_OPTIONS = {
+  'finding' => {
+    'Mínimo requerido'    => 'required_min_count',
+    'Máximo requerido'    => 'required_max_count',
+    'Requerido desde'     => 'required_from',
+    'Incluir Descripción' => 'include_description'
+  },
   'review' => {
     'Requerida en informes `Trabajo especial`' => 'required_on_special_reviews'
   },

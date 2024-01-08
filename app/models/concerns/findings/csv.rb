@@ -11,15 +11,17 @@ module Findings::Csv
     row = [
       review.identification,
       review.plan_item.project,
+      ((review.score || '-') if USE_SCOPE_CYCLE),
       (final_created_at_text if USE_SCOPE_CYCLE),
       issue_date_text,
       review.conclusion_final_review&.summary || '-',
       business_unit_type.name,
       business_unit.name,
+      (review.subsidiary.to_s if USE_SCOPE_CYCLE),
       review_code,
       id,
       (taggings_format if self.class.show_follow_up_timestamps?),
-      title,
+      title.to_s,
       description,
       state_text,
       full_state_text,
@@ -51,6 +53,7 @@ module Findings::Csv
       ((try(:weakness_template)&.notes).to_s if USE_SCOPE_CYCLE),
       ((try(:weakness_template)&.title).to_s if USE_SCOPE_CYCLE),
       ((try(:weakness_template)&.reference).to_s if USE_SCOPE_CYCLE),
+      ((try(:weakness_template)&.subreference).to_s if USE_SCOPE_CYCLE),
       (review.period if USE_SCOPE_CYCLE),
       (has_previous_review_label if USE_SCOPE_CYCLE),
       (commitment_support_plans_text if Finding.show_commitment_support?),
@@ -160,15 +163,16 @@ module Findings::Csv
 
     def audited_users
       process_owners = self.process_owners
-      auditeds = users.select do |u|
-        u.can_act_as_audited? && process_owners.exclude?(u)
-      end
 
-      auditeds.map &:full_name
+      users.select do |u|
+        u.can_act_as_audited_on?(organization_id) && process_owners.exclude?(u)
+      end.map &:full_name
     end
 
     def auditor_users
-      users.select(&:auditor?).map &:full_name
+      users.select do |u|
+        u.auditor_on?(organization_id)
+      end.map &:full_name
     end
 
     def process_control
@@ -350,11 +354,13 @@ module Findings::Csv
           (Organization.model_name.human if corporate),
           Review.model_name.human,
           PlanItem.human_attribute_name('project'),
+          (Review.human_attribute_name('score') if USE_SCOPE_CYCLE),
           (I18n.t('attributes.created_at') if USE_SCOPE_CYCLE),
           ConclusionFinalReview.human_attribute_name('issue_date'),
           ConclusionFinalReview.human_attribute_name('summary'),
           BusinessUnitType.model_name.human,
           BusinessUnit.model_name.human,
+          (Review.human_attribute_name('subsidiary') if USE_SCOPE_CYCLE),
           Weakness.human_attribute_name('review_code'),
           Finding.human_attribute_name('id'),
           (Tag.model_name.human(count: 0) if show_follow_up_timestamps?),
@@ -390,6 +396,7 @@ module Findings::Csv
           (WeaknessTemplate.human_attribute_name('notes') if USE_SCOPE_CYCLE),
           (WeaknessTemplate.human_attribute_name('title') if USE_SCOPE_CYCLE),
           (WeaknessTemplate.human_attribute_name('reference') if USE_SCOPE_CYCLE),
+          (WeaknessTemplate.human_attribute_name('subreference') if USE_SCOPE_CYCLE),
           (Plan.human_attribute_name('period_id') if USE_SCOPE_CYCLE),
           (I18n.t('finding.weakness_template_previous') if USE_SCOPE_CYCLE),
           (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),

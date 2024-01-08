@@ -1,6 +1,8 @@
 class RegistrationsController < ApplicationController
   before_action :check_public_registration_enabled?, :set_title
 
+  layout 'public'
+
   respond_to :html
 
   def show

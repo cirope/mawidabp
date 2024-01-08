@@ -18,6 +18,10 @@
 //= require jquery.mw
 //= require popper
 //= require bootstrap
+//= require simplebar
+//= require appstack/sidebar
+//= require apexcharts
+//= require apexcharts/es
 //
 //= require add_days_to_input
 //= require ajax

@@ -28,7 +28,7 @@
         <% if user.can_act_as_audited? || user.new_record? %>
           <%= select_tag "user[#{id}][questionnaire_id]", options_from_collection_for_select(
             @questionnaires, :id, :name), prompt: t('label.no'),
-            class: 'form-control', hidden: user.new_record? %>
+            class: 'form-select', hidden: user.new_record? %>
         <% end %>
       </div>
       <% unless SHOW_ALTERNATIVE_QUESTIONNAIRES %>
@@ -36,11 +36,11 @@
           <% if user.can_act_as_audited? || user.new_record? %>
             <%= select_tag "user[#{id}][affected_user_id]", options_from_collection_for_select(
               users_for_conclusion_review_questionnaire, :id, :name),
-              prompt: t('label.all'), class: 'form-control', hidden: user.new_record? %>
+              prompt: t('label.all'), class: 'form-select', hidden: user.new_record? %>
           <% end %>
         </div>
       <% end %>
-      <div class="col-md-1 mt-2 text-right">
+      <div class="col-md-1 mt-2 text-end">
         <%= link_to_remove_child_item nil %>
       </div>
     </div>

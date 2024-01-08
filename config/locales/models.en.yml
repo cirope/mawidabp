@@ -1,0 +1,974 @@
+en:
+  attributes:
+    created_at: 'Creation'
+    updated_at: 'Last update'
+    lock_version: 'Version'
+
+  activemodel:
+    models:
+      registration:
+        one: 'Organization'
+        other: 'Organizations'
+    attributes:
+      registration:
+        email: 'Email'
+        last_name: 'Last name'
+        name: 'Name'
+        organization_name: 'Organization name'
+        user: 'Username'
+      nbc_annual_report_form:
+        period_id: 'Period'
+        date: 'Date'
+        cc: 'CC'
+        name: 'Name'
+        objective: 'Objective'
+        conclusion: 'Conclusion'
+        introduction_and_scope: 'Introduction and Scope'
+        previous_period_id: 'Previous period'
+        business_unit_types: 'Organizational units'
+        organizations: 'Organizations'
+    errors:
+      models:
+        nbc_internal_control_qualification_as_group_of_companies:
+          attributes:
+            period_id:
+              must_have_the_same_name: 'must have the same name in all organizations. Currently differs in: %{organizations}'
+            previous_period_id:
+              must_have_the_same_name: 'must have the same name in all organizations. Currently differs in: %{organizations}'
+              must_be_before_period: 'must have a start date before the Period start date'
+            business_unit_types:
+              must_have_the_same_business_unit_type_names:
+                one: 'must have the same names in all three organizations. Currently, the one that differs is: %{different_names}'
+                other: 'must have the same names in all three organizations. Currently, the ones that differ are: %{different_names}'
+            organizations:
+              are_misconfigured: 'are misconfigured in the application settings. Please contact soporte@mawidabp.com'
+
+  activerecord:
+    models:
+      achievement:
+        one: 'Estimated benefit / detriment'
+        other: 'Estimated benefits / detriments'
+      annex:
+        one: 'Attachment'
+        other: 'Attachments'
+      activity:
+        one: 'Activity'
+        other: 'Activities'
+      activity_group:
+        one: 'Activity group'
+        other: 'Activity groups'
+      answer:
+        one: 'Response'
+        other: 'Responses'
+      answer_multi_choice:
+        one: 'Multiple choice'
+        other: 'Multiple choices'
+      answer_option:
+        one: 'Response option'
+        other: 'Response options'
+      answer_written:
+        one: 'Written response'
+        other: 'Written responses'
+      answer_yes_no:
+        one: 'Option yes or no'
+        other: 'Options yes or no'
+      benefit:
+        one: 'Benefit / Detriment'
+        other: 'Benefits / Detriments'
+      best_practice:
+        one: 'Best practice'
+        other: 'Best practices'
+      best_practice_comment:
+        one: 'Auditor comment (best practice)'
+        other: 'Auditor comments (best practice)'
+      business_unit:
+        one: 'Business unit'
+        other: 'Business units'
+      business_unit_kind:
+        one: 'Type of business unit'
+        other: 'Types of business unit'
+      business_unit_score:
+        one: 'Business unit rating'
+        other: 'Business unit ratings'
+      closing_interview:
+        one: 'Closing interview'
+        other: 'Closing interviews'
+      closing_interview_user:
+        one: 'Interview wizard'
+        other: 'Interview wizards'
+      commitment_support:
+        one: 'Support commitment'
+        other: 'Support commitments'
+      control_objective:
+        one: 'Control objective'
+        other: 'Control objectives'
+      control_objective_auditor:
+        one: 'Auditor/Auditee in charge'
+        other: 'Auditors/Auditees in charge'
+      document:
+        one: 'Document'
+        other: 'Documents'
+      e_mail:
+        one: 'Email'
+        other: 'Emails'
+      endorsement:
+        one: 'Endorsement'
+        other: 'Endorsements'
+      error_record:
+        one: 'Error record'
+        other: 'Error records'
+      external_review:
+        one: 'External audit report'
+        other: 'External audit reports'
+      finding:
+        one: 'Finding'
+        other: 'Findings'
+      image_model:
+        one: 'Image'
+        other: 'Images'
+      issue:
+        one: 'Record'
+        other: 'Records'
+      ldap_config:
+        one: 'LDAP configuration'
+        other: 'LDAP configurations'
+      license:
+        one: 'License'
+        other: 'Licenses'
+      login_record:
+        one: 'Login record'
+        other: 'Login records'
+      memo:
+        one: 'External audit report'
+        other: 'External audit reports'
+      news:
+        one: 'News'
+        other: 'News'
+      opening_interview:
+        one: 'Opening interview'
+        other: 'Opening interviews'
+      opening_interview_user:
+        one: 'Interview participant'
+        other: 'Interview participant'
+      oportunity:
+        one: 'Improvement opportunity'
+        other: 'Improvement opportunities'
+      organization:
+        one: 'Organization'
+        other: 'Organizations'
+      plan:
+        one: 'Workplan'
+        other: 'Workplans'
+      plan_item:
+        one: 'Project in workplan'
+        other: 'Projects in workplan'
+      paper_trail/version:
+        one: 'Version'
+        other: 'Versions'
+      period:
+        one: 'Period'
+        other: 'Periods'
+      permalink:
+        one: 'Permalink'
+        other: 'Permalinks'
+      permalink_model:
+        one: 'Permalink association'
+        other: 'Permalink associations'
+      poll:
+        one: 'Poll'
+        other: 'Polls'
+      process_control:
+        one: 'Process'
+        other: 'Processes'
+      question:
+        one: 'Question'
+        other: 'Questions'
+      questionnaire:
+        one: 'Questionnaire'
+        other: 'Questionnaires'
+      resource:
+        one: 'Resource'
+        other: 'Resources'
+      resource_class:
+        one: 'Resource class'
+        other: 'Resource classes'
+      risk_assessment:
+        one: 'Risk assessment'
+        other: 'Risk assessments'
+      risk_assessment_item:
+        one: 'Item evaluated'
+        other: 'Items evaluated'
+      risk_assessment_template:
+        one: 'Risk assessment template'
+        other: 'Risk assessment templates'
+      risk_assessment_weight:
+        one: 'Risk assessment attribute'
+        other: 'Risk assessment attributes'
+      risk_category:
+        one: 'Risk category'
+        other: 'Risk categories'
+      risk_control_objective:
+        one: 'Control Objective'
+        other: 'Control Objectives'
+      risk_registry:
+        one: 'Risk registry'
+        other: 'Risk registries'
+      risk_score_item:
+        one: 'Value'
+        other: 'Values'
+      risk_weight:
+        one: 'Risk assessment value'
+        other: 'Risk assessment values'
+      risks:
+        one: 'Risk'
+        other: 'Risks'
+      saml_provider:
+        one: 'SAML configuration'
+        other: 'SAML configurations'
+      setting:
+        one: 'Settings'
+        other: 'Settings'
+      tag:
+        one: 'Tag'
+        other: 'Tags'
+      tagging:
+        one: 'Tagged'
+        other: 'Tagged'
+      task:
+        one: 'Task'
+        other: 'Tasks'
+      time_consumption:
+        one: 'Activity'
+        other: 'Activities'
+      user:
+        one: 'User'
+        other: 'Users'
+      weakness:
+        one: 'Issue'
+        other: 'Issues'
+      weakness_template:
+        one: 'Issue template'
+        other: 'Issue templates'
+      work_paper:
+        one: 'Working paper'
+        other: 'Working papers'
+
+    attributes:
+      achievement:
+        benefit: 'Name'
+        amount: 'Amount'
+        comment: 'Comment'
+      annex:
+        title: 'Title'
+        description: 'Description'
+        image_models: 'Images'
+      activity:
+        name: 'Name'
+        require_detail: 'Require detail'
+      activity_group:
+        name: 'Name'
+      answer:
+        answer: 'Answer'
+        comments: 'Answer comments'
+        question: 'Question'
+      answers:
+        answer_option: 'Option'
+      auxiliar_business_unit_type:
+        business_unit_type_id: 'Auxiliary organizational unit'
+      benefit:
+        name: 'Name'
+        kind: 'Kind'
+      best_practice:
+        name: 'Name'
+        description: 'Description'
+        obsolete: 'Obsolete'
+        shared: 'Shared'
+        process_controls: 'Process'
+      business_unit_type:
+        business_units: 'Business units'
+      best_practice/process_controls:
+        name: 'Process'
+        order: 'Process (order)'
+        control_objectives: 'Control objectives'
+      best_practice/process_controls/control_objectives:
+        name: 'Control objective'
+        relevance: 'Control objective (importance)'
+        risk: 'Control objective (risk)'
+      best_practice/process_controls/control_objectives/taggings:
+        tag_id: 'Control objective (tag)'
+      best_practice_comment:
+        auditor_comment: 'Auditor conclusions'
+        best_practice: 'Best practice'
+      business_unit_kind:
+        name: 'Name'
+      business_unit_type_users:
+        business_unit_type_id: "Organizational unit"
+        user_id: "User"
+      business_unit_score:
+        business_unit_id: 'Business unit'
+        design_score: 'Design test rating'
+        compliance_score: 'Compliance test rating'
+        sustantive_score: 'Substantive test rating'
+      closing_interview:
+        interview_date: 'Interview date'
+        findings_summary: 'Summary of findings'
+        recommendations_summary: 'Summary of recommendations'
+        suggestions: 'Suggestions and concerns'
+        comments: 'Additional comments'
+        audit_comments: 'Audit Comments'
+        responsible_comments: 'Responsible comments'
+        review: 'Audit report'
+        review_id: 'Audit report'
+      closing_interview_user:
+        user: 'User'
+      commitment_support:
+        reason: 'Reschedule reason'
+        plan: 'New action plan'
+        controls: 'Mitigating controls'
+      control_objective:
+        name: 'Control objective'
+        relevance: 'Relevance'
+        risk: 'Risk'
+        obsolete: 'Obsolete'
+        support: 'Support'
+        score_type: 'Rating type'
+        control_objective_id: 'Control objective'
+        audit_sector: 'Audit Sector'
+        date_charge: 'Date of creation'
+        control_objective_auditors: 'Auditors in charge'
+      review/control_objective_items:
+        control_objective_id: 'Control objective'
+      document:
+        name: 'Name'
+        description: 'Description'
+        shared: 'Shared'
+        tags: 'Tags'
+      e_mail:
+        to: 'To'
+        subject: 'Subject'
+        body: 'Body'
+        attachments: 'Attachments'
+      endorsement:
+        reason: 'Include comment'
+        status: 'Status'
+      error_record:
+        data: 'Data'
+        error: 'Error'
+        user_id: 'User'
+      external_review:
+        review: 'Audit report'
+        review_id: 'Audit report'
+        alternative_review_id: 'External audit report'
+      file_model_reviews/file_model:
+        file: 'File'
+      finding:
+        control_objective_item_id: 'Control objective'
+        title: 'Title'
+        description: 'Issue / Opportunity'
+        brief: 'Brief'
+        type: 'Type'
+        repeated_of_id: 'Repeated of'
+        review_code: 'Code'
+        audit_recommendations: 'Audit recommendations'
+        answer: 'Answer/Corrective actions'
+        current_situation: 'Current situation'
+        current_situation_verified: 'Current situation verified'
+        effect: 'Effect'
+        risk: 'Risk'
+        priority: 'Priority'
+        user_ids: 'Users'
+        finding_user_assignments: 'Users'
+        origination_date: 'Origin date'
+        first_follow_up_date: 'First implementation date'
+        follow_up_date: 'Implementation date'
+        audit_comments: 'Audit comments'
+        state: 'Status'
+        state_was: 'Previous status'
+        count: 'Count'
+        solution_date: 'Solution date'
+        skip_work_paper: 'Does not require working paper'
+        users: 'Users'
+        work_papers: 'Working papers'
+        finding_answers: 'Answers'
+        tag_ids: 'Tags'
+        rescheduled: 'Rescheduled'
+        reschedule_count: 'Number of reschedules'
+        implemented_at: 'Date of change to "Implemented"'
+        closed_at: 'Date of last status change'
+        probability: 'Probability'
+        impact_risk: 'Impact'
+        manual_risk: 'Manual'
+        use_suggested_impact: 'Suggested impact'
+        use_suggested_probability: 'Suggested probability'
+        impact_amount: 'Universe amount'
+        probability_amount: 'Universe in number of records'
+        organization: 'Organization'
+        frequency: 'Frequency'
+        state_regulations: 'State Regulations'
+        degree_compliance: 'Regulatory Compliance Degree'
+        observation_originated_tests: 'Originated in test of'
+        sample_deviation: 'Sample deviation'
+        external_repeated: 'External repeated'
+        risk_justification: 'Justify risk'
+        year: 'Year'
+        nsisio: 'N_SISAC'
+        nobs: 'N_Obs'
+      finding/achievements:
+        one: 'Estimated profit'
+        amount: 'Amount'
+        comment: 'Comment'
+      finding/costs:
+        one: 'Time spent'
+        cost: 'Time spent'
+        description: 'Description of the activities executed'
+      finding/finding_relations:
+        one: 'Relation'
+        other: 'Relations'
+        related_finding_id: 'Relation (Related issue / improvement opportunity)'
+        description: 'Relation (description)'
+      finding/tasks:
+        code: 'Code'
+        description: 'Description'
+        status: 'Status'
+        due_on: 'End date'
+      finding/taggings:
+        one: 'Tag'
+        other: 'Tags'
+        tag_id: 'Tag'
+      finding/finding_user_assignments:
+        one: 'Related user'
+        user: 'Related user (user)'
+        user_id: 'Related user (user)'
+        process_owner: 'Responsible (user)'
+      finding/finding_answers:
+        one: 'Comment'
+        answer: 'Comments'
+        commitment_date: 'Commitment date'
+        user_id: 'Comment (user)'
+        notify_users: 'Comment (send notification)'
+        skip_commitment_support: 'Check if the issue is resolved'
+      finding/finding_answers/commitment_support:
+        one: 'Basis of commitment'
+        reason: 'Reason for rescheduling'
+        plan: 'New action plan'
+        controls: 'Mitigating controls'
+      finding/finding_answers/file_model:
+        one: 'Attachment (file)'
+        file: 'Attachment (file)'
+        file_file_name: 'Attachment (file name)'
+        file_content_type: 'Attachment (file type)'
+        file_file_size: 'Attachment (file size)'
+      finding/work_papers:
+        one: 'Working paper'
+        other: 'Working papers'
+        name: 'Working paper (name)'
+        code: 'Working paper (code)'
+        description: 'Working paper (description)'
+        number_of_pages: 'Working paper (pages)'
+      finding/work_papers/file_model:
+        one: 'Working paper (file)'
+        file_file_name: 'Working paper (file name)'
+        file_content_type: 'Working paper (file type)'
+        file_file_size: 'Working paper (file size)'
+      image_model:
+        image: 'Image'
+        uploaded_data: 'Image'
+        content_type: 'Image (type)'
+        size: 'Image (size)'
+      issue:
+        customer: 'Customer'
+        entry: 'Item'
+        operation: 'Operation'
+        currency: 'Currency'
+        amount: 'Amount'
+        comments: 'Comments'
+        close_date: 'Regularization date'
+      ldap_config:
+        hostname: 'Server address'
+        port: 'Port'
+        alternative_hostname: 'Alternative hostname address'
+        alternative_port: 'Alternative port'
+        basedn: 'Base distinguished name'
+        filter: 'Filter'
+        login_mask: 'Authentication mask'
+        username_attribute: 'Username attribute'
+        name_attribute: 'Name attribute'
+        last_name_attribute: 'Last name attribute'
+        email_attribute: 'Email attribute'
+        function_attribute: 'Function attribute'
+        office_attribute: 'Department attribute'
+        roles_attribute: 'Profiles attribute'
+        manager_attribute: 'Manager attribute'
+        tls: 'TLS version'
+        ca_path: 'CA path'
+        test_user: 'User'
+        test_password: 'Password'
+        user: 'Service user'
+        password: 'Service password'
+        organizational_unit_attribute: "Organizational unit (OU)"
+        organizational_unit: "Default organizational unit (OU)"
+      license:
+        paid_until: 'Paid until'
+        auditors_limit: 'Auditor user limit'
+        status: 'Status'
+      login_record:
+        data: 'Data'
+        end: 'End'
+        start: 'Start'
+        user_id: 'User'
+      memo:
+        name: 'Name'
+        description: 'Description'
+        file_model_memos: 'Files'
+        period_id: 'Period'
+        plan_item_id: 'Project'
+        period: 'Period'
+        plan_item: 'Project'
+        business_unit: 'Business unit'
+        business_unit_type: 'Organizational unit'
+        required_by: 'Required by'
+        required_by_text: 'Required by'
+        close_date: 'Closing date'
+        manual_required_by: 'Manual'
+      news:
+        title: 'Title'
+        description: 'Description'
+        body: 'Body'
+        shared: 'Shared'
+        published_at: 'Date published'
+      opening_interview:
+        interview_date: 'Interview date'
+        start_date: 'Estimated start date'
+        end_date: 'Estimated closing date'
+        objective: 'Objective of the audit'
+        program: 'Work program'
+        scope: 'Audit scope'
+        suggestions: 'Suggestions and concerns'
+        comments: 'Additional comments'
+        review: 'Audit report'
+        review_id: 'Audit report'
+      opening_interview_user:
+        user: 'User'
+      oportunity:
+        control_objective_item_id: 'Control objective'
+        title: 'Title'
+        description: 'Improvement opportunity'
+        brief: 'Brief'
+        review_code: 'Code'
+        answer: 'Answer/Corrective actions'
+        user_ids: 'User'
+        finding_user_assignments: 'Users'
+        work_papers: 'Working Papers'
+        state: 'State'
+        origination_date: 'Origin date'
+        solution_date: 'Solution date'
+      organization:
+        description: 'Description'
+        name: 'Name'
+        prefix: 'Prefix'
+        logo_style: 'Logo style'
+        corporate: 'Corporate'
+        image_model: 'Image'
+        co_brand_image_model: 'Secondary image'
+        saml_provider: 'SAML provider'
+      organization/image_model:
+        image_file_name: 'Isologotype (filename)'
+        image_content_type: 'Isologotype (file type)'
+        image_file_size: 'Isologotype (size)'
+        one: 'Isologotype'
+      organization/co_brand_image_model:
+        image_file_name: 'Secondary isologotype (filename)'
+        image_content_type: 'Secondary isologotype (file type)'
+        image_file_size: 'Secondary isologotype (size)'
+        one: 'Secondary isologotype'
+      setting:
+        name: 'Name'
+        value: 'Value'
+        description: 'Description'
+      tag:
+        name: 'Name'
+        style: 'Style'
+        icon: 'Icon'
+        shared: 'Shared'
+        obsolete: 'Obsolete'
+      tagging:
+        tag: 'Tag'
+        tag_id: 'Tag'
+        description: 'Description'
+      task:
+        code: 'Code'
+        description: 'Description'
+        status: 'Status'
+        due_on: 'End date'
+      time_consumption:
+        date: 'Date'
+        activity: 'Activity'
+        resource_id: 'Resource'
+        amount: 'Time in hours'
+        detail: 'Detail'
+      user:
+        email: 'Email'
+        enable: 'Enabled'
+        failed_attempts: 'Failed attempts'
+        function: 'Function'
+        office: 'Department'
+        hidden: 'Hidden'
+        language: 'Language'
+        last_access: 'Last access'
+        last_name: 'Last Name'
+        logged_in: 'Logged in'
+        manager_id: 'Superior'
+        children: 'Responsible of'
+        name: 'Name'
+        notes: 'Notes'
+        organization_roles: 'Profiles'
+        password: 'Password'
+        password_changed: 'Password changed'
+        password_confirmation: 'Confirmation'
+        roles: 'Roles'
+        send_notification_email: 'Send notification'
+        user: 'User'
+      user/organization_roles:
+        role_id: 'Profile'
+      paper_trail/version:
+        created_at: 'Date'
+        event: 'Event'
+        item: 'Item'
+        whodunnit: 'Responsible user'
+      period:
+        name: 'Name'
+        description: 'Description'
+        start: 'Start'
+        end: 'End'
+      plan:
+        organization_id: 'Organization'
+        period_id: 'Period'
+        estimated_amount: 'Estimated cost'
+      plan/plan_items:
+        one: 'Log'
+        other: 'Logs'
+        project: 'Project'
+        start: 'Project (start)'
+        end: 'Project (end)'
+        order_number: 'Project (order)'
+        scope: 'Project (Audit scope)'
+        risk_exposure: 'Project (risk exposure)'
+        business_unit_id: 'Project (business unit)'
+        status: 'Project (status)'
+        auxiliar_business_unit_types: 'Auxiliary organizational units'
+      plan/plan_items/resource_utilizations:
+        one: 'Resource'
+        other: 'Resources'
+        units: 'Resource (number of units)'
+        cost_per_unit: 'Resource (cost per unit)'
+        cost: 'Resource (cost)'
+        resource_id: 'Resource'
+      plan_item:
+        project: 'Project'
+        start: 'Start'
+        end: 'End'
+        order_number: 'Order'
+        scope: 'Audit scope'
+        risk_exposure: 'Risk exposure'
+        business_unit_id: 'Business unit'
+        resources: 'Resources'
+        resource_ids: 'Resources'
+        status: 'Status'
+        human_resource_units: 'Human resource cost'
+        material_resource_units: 'Material resource cost'
+        total_resource_units: 'Total cost'
+        tags: 'Tags'
+      permalink:
+        action: 'Action'
+        token: 'Code'
+      permalink_model:
+        model: 'Model'
+      poll:
+        comments: 'Comments'
+        send_date: 'Send date'
+        answer_date: 'Answer date'
+        answered: 'Answered'
+        questionnaire: 'Questionnaire'
+        user: 'User'
+        pollable: 'About'
+        about: 'About'
+      poll/answers:
+        answer: 'Answer'
+        answer_option: 'Option'
+      process_control:
+        name: 'Process'
+        order: 'Order'
+        control_objectives: 'Control objectives'
+        obsolete: 'Obsolete'
+      process_controls/control_objectives:
+        control_objective_auditors: 'Auditor in charge'
+      process_controls/control_objectives/control_objective_auditors:
+        user_id: 'Auditor in charge'
+      question:
+        sort_order: 'Order'
+        question: 'Question'
+        answer_type: 'Answer type'
+      questionnaire:
+        name: 'Name'
+        questions: 'Questions'
+        polls: 'Polls'
+        pollable_type: 'Pollable class'
+        email_subject: 'Email subject'
+        email_link: 'Link text'
+        email_text: 'Email text'
+        email_clarification: 'Email clarification'
+      questionnaire/questions:
+        sort_order: 'Order'
+        question: 'Question'
+        answer_type: 'Answer type'
+      resource:
+        name: 'Resource'
+        description: 'Description'
+        cost_per_unit: 'Cost per unit'
+        resource_class: 'Class'
+      resource_class:
+        name: 'Resource class'
+        unit: 'Unit of measure'
+      resource_class/resources:
+        name: 'Resource'
+        resource_class: 'Class'
+      resource_utilization:
+        units: 'Number of units'
+        cost_per_unit: 'Cost per unit'
+        cost: 'Cost'
+        resource: 'Resource'
+        resource_consumer: 'Resource utilization'
+      risk_assessment:
+        name: 'Name'
+        description: 'Description'
+        period: 'Period'
+        risk_assessment_template: 'Risk assessment template'
+        status: 'Status'
+        shared: 'Shared'
+        file_model: "Attachment"
+        risk_assessment_weights: 'Weights'
+        risk_assessment_items: 'Items'
+        formula: 'Formula'
+      risk_assessment/risk_assessment_items:
+        name: 'Name (item)'
+        risk: 'Risk (item)'
+        business_unit: 'Business unit'
+        risk_weights: 'Evaluation values'
+      risk_assessment/risk_assessment_items/risk_weights:
+        value: 'Value (item)'
+        weight: 'Weight (item)'
+      risk_assessment_item:
+        name: 'Name'
+        risk: 'Risk'
+        business_unit: 'Business unit'
+        process_control: 'Process'
+      risk_assessment_template:
+        name: 'Name'
+        description: 'Description'
+        formula: 'Formula'
+        risk_assessment_weights: 'Risk assessment attributes'
+      risk_assessment_template/risk_assessment_weights:
+        identifier: 'Identifier'
+        name: 'Attribute'
+        description: 'Description'
+        risk_score_items: 'Values'
+        heatmap: 'Heatmap'
+      risk_assessment_weight:
+        name: 'Attribute'
+        description: 'Description'
+        weight: 'Weight'
+        identifier: 'Identifier'
+        heatmap: 'Heatmap'
+      risk_assessment_weights/risk_score_items:
+        name: 'Name'
+        value: 'Value'
+      risk_registry:
+        name: 'Name'
+        description: 'Description'
+      risk_registry/risk_categories:
+        name: 'Name'
+      risk_category:
+        name: 'Name'
+      risk_score_item:
+        name: 'Name'
+        value: 'Value'
+      risk_weight:
+        value: 'Value'
+        weight: 'Weight'
+        identifier: 'Identifier'
+      risk_registry/risk_categories/risks:
+        identifier: 'Identifier'
+        cause: 'Cause'
+        effect: 'Effect'
+        likelihood: 'Likelihood'
+        impact: 'Impact'
+        name: 'Name'
+        user: 'Owner'
+        risk_control_objectives: 'Control objectives'
+      risk_registry/risk_categories/risks/risk_control_objectives:
+        control_objective: 'Control objective'
+      risk:
+        identifier: 'Identifier'
+        cause: 'Cause'
+        effect: 'Effect'
+        likelihood: 'Likelihood'
+        impact: 'Impact'
+        name: 'Name'
+        user: 'Owner'
+      risk_control_objective:
+        control_objective: 'Control objective'
+      subsidiary:
+        name: 'Name'
+        identity: 'Identification'
+      weakness:
+        control_objective_item_id: 'Control objective'
+        title: 'Title'
+        description: 'Issue'
+        brief: 'Brief'
+        review_code: 'Code'
+        audit_recommendations: 'Audit recommendations'
+        answer: 'Answer/Corrective actions'
+        effect: 'Effect'
+        risk: 'Risk'
+        priority: 'Priority'
+        user_ids: 'User'
+        finding_user_assignments: 'Users'
+        origination_date: 'Origin date'
+        first_follow_up_date: 'First implementation date'
+        follow_up_date: 'Implementation date'
+        state: 'Status'
+        solution_date: 'Solution date'
+        compliance: 'Compliance'
+        compliance_observations: 'Norm impacting'
+        compliance_maybe_sanction: 'Susceptible to sanction'
+        operational_risk: 'Operational risk'
+        impact: 'Impact'
+        internal_control_components: 'CI components'
+        weakness_template: 'Search template by title'
+        weakness_template_from_control_objective: 'Suggested template from control objective'
+        work_papers: 'Working papers'
+        implemented_at: 'Date of change to "Implemented"'
+        closed_at: 'Date of last status change'
+        probability: 'Probability of occurrence'
+        impact_risk: 'Impact'
+        manual_risk: 'Manual'
+        extension: 'Days of grace'
+        year: 'Year'
+        nsisio: 'N_SISAC'
+        nobs: 'N_Obs'
+      weakness/image_model:
+        image: 'Image'
+      weakness_template:
+        reference: 'Reference'
+        subreference: 'Subreference'
+        title: 'Title'
+        description: 'Issue'
+        brief: 'Brief'
+        risk: 'Risk'
+        operational_risk: 'Operational risk'
+        impact: 'Impact'
+        notes: 'Notes'
+        internal_control_components: 'CI components'
+        allow_duplication: 'Allow duplicate title'
+        audit_recommendations: 'Audit recommendations'
+        failure: 'Failure'
+      work_papers/file_model:
+        file: 'Work paper (file)'
+
+    errors:
+      models:
+        finding:
+          attributes:
+            follow_up_date:
+              must_be_blank: 'must be blank for the selected status'
+            solution_date:
+              must_be_blank: 'must be blank for the selected status'
+            state:
+              must_have_a_comment: 'must have a comment attached for this transition'
+              can_not_be_revoked: 'cannot be "Revoked", possibly due to a repetition or because the issue is already included in a final report'
+              must_have_a_work_paper: 'must have at least one working paper associated with it'
+              must_be_done_by_proper_role: 'can only be changed by a supervisor or manager user'
+            finding_user_assignments:
+              invalid: 'must contain at least one auditor, one auditee, one manager and/or one supervisor'
+              required: 'must have a responsible auditee'
+              must_have_a_manager: 'must contain an audit manager'
+              reference_auditor_required: 'must have a referring auditor'
+            extension:
+              must_have_state_that_allows_extension: 'To indicate that it has %{extension}, it must be in the %{states} status'
+              cant_have_extension_when_didnt_have_extension: 'It cannot have %{extension}, since at most once in its history it was without %{extension} in the %{states} status'
+            risk_justification:
+              present: 'Should not have risk justification'
+            compliance_maybe_sanction:
+              inclusion: 'must be one of the list'
+            draft_review_code:
+              not_same_draft_review_code_parent: 'Does not have the same draft audit report code as its original finding'
+              not_same_draft_review_code_children: 'Does not have the same draft audit report code as your final finding'
+        finding_user_assignment:
+          attributes:
+            user:
+              required: 'cannot be blank'
+            process_owner:
+              invalid: 'can only be assigned to users of type auditee'
+              taken: 'there can only be one'
+        ldap_config:
+          attributes:
+            user:
+              invalid_credentials: 'Invalid credentials'
+        license:
+          attributes:
+            auditors_limit:
+              cannot_downgrade: 'You cannot downgrade, please contact soporte@mawidabp.com'
+            base:
+              general_problem: 'A problem occurred, please try again'
+              subscription_status_invalid: 'The license must be active in order to change it'
+              invalid_resource_id: 'License not found'
+        questionnaire:
+          attributes:
+            base:
+              cannot_destroy_with_answered_poll: "The questionnaire cannot be deleted, it has already answered polls"
+        plan:
+          attributes:
+            plan_items:
+              locked: 'cannot be removed, already used in at least one audit report'
+        plan_item:
+          attributes:
+            auxiliar_business_unit_types:
+              taken: 'repeated'
+            business_unit:
+              cannot_edit_business_unit: "cannot be edited because the project is already taken by a final report %{memo_condition}"
+            start:
+              resource_overload: 'overloads with another item that occupies the same resource'
+            end:
+              resource_overload: 'overloads with another item that occupies the same resource'
+        review:
+          attributes:
+            taggings:
+              missing_tags_for_scope: "at least one tag (among %{tags}) is required for reports with scope '%{r_scope}'"
+        risk:
+          attributes:
+            risk_control_objectives:
+              blank: 'must have at least one'
+        risk_assessment_template:
+          attributes:
+            risk_assessment_weights:
+              blank: 'must have at least one'
+              numericality: 'must have %{count} main attributes'
+        risk_assessment_weight:
+          attributes:
+            risk_score_items:
+              blank: 'must have at least one'
+        user:
+          attributes:
+            base:
+              auditors_limit_reached: 'Auditor limit reached, please update your license.'
+        memo:
+          attributes:
+            base:
+              file_model_memos_blank: 'It must have at least one file.'
+              cant_change_fields: 'You cannot change any field because the closing date has passed'
+            plan_item_id:
+              used: 'The project is already being used by another audit report or external audit report'
+        subsidiary:
+          attributes:
+            identity:
+              only_numerics: 'can only contain numeric values'

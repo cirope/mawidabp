@@ -20,8 +20,11 @@ es:
     stats: 'Estadísticas'
     warning: 'Advertencia'
     upload: 'Adjuntar'
-    _yes: 'Si'
+    _yes: 'Sí'
     _no: 'No'
+
+  footer:
+    support: 'Soporte'
 
   activity_groups:
     edit:
@@ -29,7 +32,7 @@ es:
     index:
       new: 'Nuevo grupo de actividades'
       title: 'Listado de grupos de actividades'
-      empty_html: 'No hay grupos de actividades, puede crear uno con el botón <span class="badge badge-primary">Nuevo grupo de actividades</span>'
+      empty_html: 'No hay grupos de actividades, puede crear uno con el botón <span class="badge bg-primary">Nuevo grupo de actividades</span>'
     new:
       title: 'Crear grupo de actividades'
     show:
@@ -44,7 +47,7 @@ es:
     neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
     agree: 'De acuerdo'
     strongly_agree: 'Muy de acuerdo'
-    'yes': 'Si'
+    'yes': 'Sí'
     'no': 'No'
 
   benefits:
@@ -66,11 +69,11 @@ es:
     index:
       title: 'Listado de buenas prácticas'
     show:
-      title: 'Detalle buenas prácticas'
+      title: 'Detalles de la buena práctica'
     new:
-      title: 'Agregar buenas prácticas'
+      title: 'Agregar buena práctica'
     edit:
-      title: 'Modificar buenas prácticas'
+      title: 'Modificar buena práctica'
     process_controls:
       new: 'Agregar proceso'
     control_objectives:
@@ -78,14 +81,14 @@ es:
 
   business_unit_kinds:
     index:
-      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
+      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge bg-primary">Nuevo</span>'
   closing_interviews:
     edit:
       title: 'Editar entrevista de cierre'
     index:
       new: 'Nueva entrevista de cierre'
       title: 'Listado de entrevistas de cierre'
-      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="badge badge-primary">Nueva entrevista de cierre</span>'
+      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de cierre</span>'
       empty_search_html: 'No hay entrevistas de cierre que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear entrevista de cierre'
@@ -105,10 +108,10 @@ es:
     index:
       title: 'Listado de objetivos de control'
     show:
-      title: 'Detalle objetivo de control'
+      title: 'Detalles del objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
-      add_control_objective_auditor: 'Agregar auditor a cargo'
+      add_control_objective_auditor: 'Agregar auditor/referente a cargo'
     score_type:
       option: 'Opciones'
       percentage: 'Porcentaje'
@@ -119,7 +122,7 @@ es:
     index:
       new: 'Nuevo documento'
       title: 'Listado de documentos'
-      empty_html: 'No hay documentos, puede crear uno con el botón <span class="badge badge-primary">Nuevo documento</span>'
+      empty_html: 'No hay documentos, puede crear uno con el botón <span class="badge bg-primary">Nuevo documento</span>'
       empty_search_html: 'No hay documentos que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear documento'
@@ -163,11 +166,11 @@ es:
     form:
       show_status_change_history: 'Ver historial de cambios de estado'
       follow_up_date_label_append: ' - Sugerida: '
-      confirm_finding_without_extension: '¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo.'
+      confirm_finding_without_extension: '¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo'
     auditor_form:
       origin: 'origen'
     edit_bic_sigen_fields:
-      title: 'Editar campos sigen de observacion.'
+      title: 'Editar campos sigen de observación'
     current_user_filters:
       pending_to_endorsement: 'Pendientes de aprobación'
       as_owner: '%{kind} como responsable'
@@ -205,6 +208,12 @@ es:
     endorsement_item:
       approve: 'Aprobar'
       reject: 'Rechazar'
+    finding_answers: 'Comentarios de'
+    pdf:
+      issue: 'Ver en la tabla adjunta los casos bajo el código %{review_code}'
+    graphs:
+      incomplete: 'Hallazgos pendientes'
+      completed: 'Hallazgos solucionados'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -216,7 +225,7 @@ es:
       cancelled: 'Cancelado'
     blocked:
       show:
-        body: 'Su organización está inhabilitada, contacte sopore@mawidabp.com'
+        body: 'Su organización está inhabilitada, contacte soporte@mawidabp.com'
         check: 'Volver a comprobar pago'
     license:
       check: 'Volver a comprobar pago'
@@ -233,7 +242,7 @@ es:
         title: 'Licencia'
     paypal_button:
       create: 'Suscribirse'
-      create_error: 'Ha ocurrido un problema, por favor comuníquese con soporte@mawidabp.com para comprobar si el pago está acreditado.'
+      create_error: 'Se ha detectado un problema. Por favor, comuníquese con soporte@mawidabp.com para verificar si el pago ha sido acreditado'
 
   login_records:
     choose:
@@ -250,16 +259,16 @@ es:
 
   memos:
     edit:
-      title: 'Editar Informe externo'
+      title: 'Editar informe externo'
     index:
-      new: 'Nuevo Informe externo'
-      title: 'Listado de Informes externos'
-      empty_html: 'No hay Informes externos, puede crear una con el botón <span class="badge badge-primary">Nuevo memo</span>'
-      empty_search_html: 'No hay Informes externos que coincidan con el criterio de búsqueda'
+      new: 'Nuevo informe externo'
+      title: 'Listado de informes externos'
+      empty_html: 'No hay informes externos, puede crear una con el botón <span class="badge bg-primary">Nuevo memo</span>'
+      empty_search_html: 'No hay informes externos que coincidan con el criterio de búsqueda'
     new:
-      title: 'Crear Informe externo'
+      title: 'Crear informe externo'
     form:
-      markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+      markdown_help_html: '<span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}'
       add_file_model: 'Agregar archivo'
       download_cover: 'Descargar caratula'
     show:
@@ -271,14 +280,14 @@ es:
     index:
       new: 'Nueva noticia'
       title: 'Listado de noticias'
-      empty_html: 'No hay noticias, puede crear una con el botón <span class="badge badge-primary">Nueva noticia</span>'
+      empty_html: 'No hay noticias, puede crear una con el botón <span class="badge bg-primary">Nueva noticia</span>'
       empty_search_html: 'No hay noticias que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear noticia'
       tagging: 'Agregar etiqueta'
       image_model: 'Agregar imagen'
     form:
-      markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+      markdown_help_html: '<span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}'
     show:
       title: 'Ver noticia'
 
@@ -288,7 +297,7 @@ es:
     index:
       new: 'Nueva entrevista de inicio'
       title: 'Listado de entrevistas de inicio'
-      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="badge badge-primary">Nueva entrevista de inicio</span>'
+      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de inicio</span>'
       empty_search_html: 'No hay entrevistas de inicio que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear entrevista de inicio'
@@ -313,7 +322,7 @@ es:
       title: 'Agregar organización'
     edit:
       title: 'Modificar organización'
-    new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de haberla creado'
+    new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de crearla'
     logo_styles:
       default: 'Por defecto'
       success: 'Exitoso'
@@ -431,6 +440,9 @@ es:
       annual_plan_hours: 'Hs Plan Anual'
       auditor: 'Auditor (Usuario)'
       time_summary_hours: 'Hs Resumen Horario'
+      main_or_aux_but: UO Principal/Auxiliar
+      main_but: UO Principal
+      aux_but: UO Auxiliar
     csv_prs_pat:
       csv_name: 'grado_de_avance_estados_de_trabajos_%{current_date}.csv'
       business_unit: 'Sector'
@@ -491,7 +503,7 @@ es:
       success: 'Tus datos se actualizaron correctamente'
 
   polls:
-    access_denied: 'La encuesta ya ha sido contestada.'
+    access_denied: 'La encuesta ya ha sido contestada'
     already_exists: 'Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente'
     answer_poll: '¿Contestar encuesta?'
     about: 'Acerca de'
@@ -514,7 +526,7 @@ es:
       other: 'Tiene %{count} encuestas pendientes por responder'
     new:
       title: 'Agregar encuesta'
-    not_found: 'No se encontró la encuesta o la misma ya ha sido contestada.'
+    not_found: 'No se encontró la encuesta o ya ha sido contestada'
     pdf:
       name: 'resumen_encuestas_del_%{from_date}_al_%{to_date}.pdf'
     questionnaires:
@@ -539,7 +551,7 @@ es:
     show:
       title: 'Detalles del cuestionario'
     questions:
-      new: 'Agregar cuestión'
+      new: 'Agregar pregunta'
 
   readings:
     reading:
@@ -551,7 +563,7 @@ es:
       title: 'Nueva Organización'
     show:
       title: 'Organización creada'
-      body: 'Su registro está completo, recibirá un correo con instrucciones para ingresar.'
+      body: 'Su registro está completo, recibirá un correo con instrucciones para ingresar'
 
   report:
     index_title: 'Listado de reportes'
@@ -591,15 +603,20 @@ es:
       operational_audit: 'Auditoría operativa'
       system_audit: 'Auditoría de sistema'
 
+  authentications:
+    new:
+      title: 'Autenticación'
+      password: 'Contraseña'
+      log_in: 'Ingresar'
+
   sessions:
     new:
       title: 'Ingreso'
       log_in: 'Ingresar'
       email: 'Correo'
       user: 'Usuario'
-      password: 'Contraseña'
       remember_me: 'Recordarme'
-      try_again: 'Ingresar nuevamente'
+      try_again: 'Intentar nuevamente'
       forgot_password: '¿Olvidaste tu contraseña?'
     create:
       invalid: 'Tu correo y/o contraseña no están bien =('
@@ -638,7 +655,8 @@ es:
     hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
     hours_of_work_per_day: 'Horas de trabajo por día'
     conclusion_review_receiver: 'Receptor/es del informe'
-    temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas. '
+    temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.'
+    finding_warning_expire_days: 'Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad'
 
   tags:
     edit:
@@ -649,7 +667,7 @@ es:
     index:
       new: 'Nueva etiqueta'
       title: 'Listado de etiquetas'
-      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="badge badge-primary">Nueva etiqueta</span>'
+      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="badge bg-primary">Nueva etiqueta</span>'
     list:
       childless: 'Sin subetiquetas'
     new:
@@ -663,6 +681,8 @@ es:
       info: 'Informativa'
       warning: 'Advertencia'
       danger: 'Peligro'
+    options:
+      origination_audit: 'Origen auditoria'
 
   tasks:
     on_time: 'A tiempo, sin reprogramación'
@@ -724,7 +744,7 @@ es:
       import_from_ldap: 'Importar desde LDAP'
       show_hidden: 'Mostrar ocultos'
     show:
-      title: 'Detalles de usuario'
+      title: 'Detalles del usuario'
       profiles: 'Perfiles'
       organizations: 'Organizaciones'
     new:
@@ -834,7 +854,7 @@ es:
     index:
       new: 'Nueva evaluación de riesgo'
       title: 'Listado de evaluaciones de riesgo'
-      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva evaluación de riesgo</span>'
+      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge bg-primary">Nueva evaluación de riesgo</span>'
       empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
       merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
     new:
@@ -850,7 +870,8 @@ es:
       add_best_practice: 'Agregar buena práctica'
       add_business_unit_type: 'Agregar unidad organizativa'
       apply: 'Aplicar'
-    risk_weight_risks:
+    heatmap: 'Mapa de calor'
+    risk_weight_risks: # Deprecated: remove when all clients are migrated
       none: 'Nulo'
       low: 'Bajo'
       medium_low: 'Medio bajo'
@@ -864,6 +885,7 @@ es:
     pdf:
       title: 'Evaluación de riesgo'
       pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
+      formula: 'Fórmula'
       period:
         title: "Periodo (%{name})"
         range: "%{from_date} al %{to_date}"
@@ -874,7 +896,7 @@ es:
     index:
       new: 'Nueva plantilla de evaluación de riesgo'
       title: 'Listado de plantillas de evaluación de riesgo'
-      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de evaluación de riesgo</span>'
+      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de evaluación de riesgo</span>'
       empty_search_html: 'No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear plantilla de evaluación de riesgo'
@@ -882,6 +904,45 @@ es:
       title: 'Ver plantilla de evaluación de riesgo'
     form:
       add_risk_assessment_weight: 'Agregar ponderador'
+
+  risk_registries:
+    edit:
+      title: 'Editar registro de riesgo'
+    form:
+      new_risk_categories: 'Luego de crear el registro de riesgo podrá completar la carga de los riesgos'
+    index:
+      new: 'Nuevo registro de riesgo'
+      title: 'Listado de registros de riesgo'
+      empty_html: 'No hay registros de riesgo, puede crear uno con el botón <span class="badge bg-primary">Nuevo registro de riesgo</span>'
+      empty_search_html: 'No hay registros de riesgo que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear registro de riesgo'
+    show:
+      title: 'Ver registro de riesgo'
+    risk_categories:
+      new: 'Agregar categoría de riesgo'
+    risks:
+      new: 'Agregar riesgo'
+
+  risk_score_items:
+    form:
+      add_risk_score_item: 'Agregar valor'
+
+  risks:
+    likelihoods:
+      insignificant: 'Insignificante'
+      minor: 'Menor'
+      moderate: 'Moderada'
+      high: 'Alta'
+      catastrophic: 'Catastrófica'
+    impacts:
+      rare: 'Raro'
+      unlikely: 'Improbable'
+      moderate: 'Moderado'
+      likely: 'Probable'
+      almost_certain: 'Muy probable'
+    new:
+      control_objective: 'Agregar objetivo de control'
 
   versions:
     index:
@@ -906,9 +967,9 @@ es:
       title: 'Editar plantilla de observación'
     index:
       new: 'Nueva plantilla de observación'
-      title: 'Listado de plantillas de observaciones'
-      empty_html: 'No hay plantillas de observaciones, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de observación</span>'
-      empty_search_html: 'No hay plantillas de observaciones que coincidan con el criterio de búsqueda'
+      title: 'Listado de plantillas de observación'
+      empty_html: 'No hay plantillas de observación, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de observación</span>'
+      empty_search_html: 'No hay plantillas de observación que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear plantilla de observación'
     show:
@@ -916,7 +977,27 @@ es:
     form:
       add_control_objective: 'Agregar objetivo de control'
 
+  welcome:
+    completed_findings: 'Hallazgos solucionados'
+    commented_on: 'comentó en'
+    current_user_answers: 'Comentarios propios'
+    latest_answers: 'Últimos comentarios'
+    latest_findings: 'Hallazgos de los últimos meses'
+    pending_findings: 'Hallazgos pendientes'
+    version: 'Versión'
+    welcome: 'Bienvenido'
+
   work_papers:
     show:
       title: 'Papel de trabajo'
       error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'
+    statuses:
+      pending: 'Pendiente'
+      finished: 'En revisión'
+      revised: 'Revisado'
+      auditor:
+        next_to_pending: 'Marcar para revisión'
+        next_to_finished: 'Volver a pendiente'
+      supervisor:
+        next_to_finished: 'Marcar como revisado'
+        next_to_revised: 'Volver a pendiente'

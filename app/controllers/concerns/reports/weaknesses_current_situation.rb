@@ -145,12 +145,30 @@ module Reports::WeaknessesCurrentSituation
         weaknesses = filter_weaknesses_current_situation_by_scope weaknesses
       end
 
-      weaknesses
+      conditions = []
+      parameters = {}
+
+      ids = weaknesses.pluck 'id'
+
+      ids.each_slice(1000).with_index do |finding_ids, i|
+        conditions << "#{Finding.quoted_table_name}.#{Finding.qcn 'id'} IN (:ids_#{i})"
+        parameters[:"ids_#{i}"] = finding_ids
+      end
+
+      if ids.present?
+        Weakness.where(
+          conditions.map { |c| "(#{c})" }.join(' OR '), parameters
+        ).includes(
+          review: [:plan_item, :conclusion_final_review]
+        )
+      else
+        Weakness.none
+      end
     end
 
     def current_situation_weaknesses_scope
       scoped = if @controller == 'follow_up'
-        Weakness.list_for_report
+        Weakness.list_with_final_review.or(Weakness.list_without_final_review)
       elsif @controller == 'execution'
         Weakness.list_without_final_review
       end
@@ -158,7 +176,7 @@ module Reports::WeaknessesCurrentSituation
       if @permalink
         scoped
       elsif @controller == 'follow_up'
-        scoped.by_issue_date 'BETWEEN', @from_date, @to_date
+        scoped.by_origination_or_issue_date @from_date, @to_date
       elsif @controller == 'execution'
         scoped.by_origination_date 'BETWEEN', @from_date, @to_date
       end
