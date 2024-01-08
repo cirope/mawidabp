@@ -1,9 +1,15 @@
-<h2><%= Benefit.model_name.human %>: <%= @benefit.name %></h2>
+<div class="card">
+  <div class="card-body">
+    <h2><%= Benefit.model_name.human %>: <%= @benefit.name %></h2>
 
-<p>
-  <strong><%= Benefit.human_attribute_name 'kind' %></strong>:
-  <%= t "benefits.kinds.#{@benefit.kind}" %>
-</p>
+    <p>
+      <strong><%= Benefit.human_attribute_name 'kind' %></strong>:
+      <%= t "benefits.kinds.#{@benefit.kind}" %>
+    </p>
 
-<%= link_to_edit [:edit, @benefit] %> |
-<%= link_to_index benefits_path %>
+    <hr>
+
+    <%= link_to_edit [:edit, @benefit] %> |
+    <%= link_to_index benefits_path %>
+  </div>
+</div>

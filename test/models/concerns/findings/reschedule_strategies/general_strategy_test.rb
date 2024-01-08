@@ -77,7 +77,17 @@ class Findings::RescheduleStrategies::GeneralStrategyTest < ActiveSupport::TestC
       end
     end
 
-    expected << finding.repeated_of.follow_up_date
+    if finding.repeated_of
+      finding.versions_before_final_review.reverse.each do |v|
+        prev = v.reify dup: true
+
+        if prev&.being_implemented? && prev&.follow_up_date
+          expected << prev.follow_up_date
+        end
+      end
+
+      expected << finding.repeated_of.follow_up_date
+    end
 
     assert_equal expected, strategy.follow_up_dates_to_check_against(finding)
   end

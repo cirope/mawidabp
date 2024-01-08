@@ -1,26 +1,30 @@
-<%= simple_form_for @period do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @period do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <%= f.input :name, as: :string, autofocus: true,
-          label: Period.human_attribute_name('name')
-        %>
-        <%= f.input :start, as: :date_picker %>
-        <%= f.input :end, as: :date_picker %>
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :name, as: :string, autofocus: true,
+              label: Period.human_attribute_name('name')
+            %>
+            <%= f.input :start, as: :date_picker %>
+            <%= f.input :end, as: :date_picker %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :description, input_html: { rows: 5 } %>
+          </div>
+        </div>
       </div>
-      <div class="col-md-6">
-        <%= f.input :description, input_html: { rows: 5 } %>
+
+      <hr />
+
+      <div class="form-actions">
+        <%= f.input :lock_version, as: :hidden %>
+        <%= f.submit class: 'btn btn-primary' %>
+        <div class="float-end"><%= yield :form_actions %></div>
       </div>
-    </div>
+    <% end %>
   </div>
-
-  <hr />
-
-  <div class="form-actions">
-    <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary' %>
-    <div class="float-right"><%= yield :form_actions %></div>
-  </div>
-<% end %>
+</div>
