@@ -53,7 +53,7 @@ class OrganizationsHelperTest < ActionView::TestCase
     expected << link_to(
       icon('fas', 'times-circle'), '#',
       title: t('label.delete'),
-      class: 'float-right',
+      class: 'float-end',
       data: {
         'dynamic-target' => "##{new_saml_provider.class.name.underscore}",
         'dynamic-form-event' => 'hideCard',

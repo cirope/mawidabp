@@ -1,61 +1,67 @@
-<%= render partial: 'shared/filter_form',
-  locals: {
-    action: :weaknesses_heatmap, extra_params: {
-      controller_name: 'follow_up', final: false
-    },
-    forms: [
-      [:date_range, true],
-      [:user, { hide_comments: true }],
-      [:finding_multiple, true],
-      [:risk_levels_multiple, { group: 1 }],
-      [:business_unit_type_multiple, { group: 1 }],
-      [:priority, true],
-      [
-        :tags, {
-          field_name: :weakness_tags,
-          can_negate: true,
-          field_label: t('follow_up_committee_report.weaknesses_current_situation.weakness_tags'),
-          check_label: t('follow_up_committee_report.weaknesses_current_situation.negate_weakness_tags')
-        }
-      ]
-    ]
-  }
-%>
+<div class="card">
+  <div class="card-body">
+    <%= render partial: 'shared/filter_form',
+      locals: {
+        action: :weaknesses_heatmap, extra_params: {
+          controller_name: 'follow_up', final: false
+        },
+        forms: [
+          [:date_range, true],
+          [:user, { hide_comments: true }],
+          [:finding_multiple, true],
+          [:risk_levels_multiple, { group: 1 }],
+          [:business_unit_type_multiple, { group: 1 }],
+          [:priority, true],
+          [
+            :tags, {
+              field_name: :weakness_tags,
+              can_negate: true,
+              field_label: t('follow_up_committee_report.weaknesses_current_situation.weakness_tags'),
+              check_label: t('follow_up_committee_report.weaknesses_current_situation.negate_weakness_tags')
+            }
+          ]
+        ]
+      }
+    %>
 
-<% if @weaknesses.try(:total_entries)&.positive? %>
-  <div class="card my-3 bg-light">
-    <div class="card-body">
-      <div class="float-right">
-        <%= link_to t('label.back'), action: :index %> |
-        <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
-        <%= link_to t('label.download_csv'), weaknesses_heatmap_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+    <% if @weaknesses.try(:total_entries)&.positive? %>
+      <div class="card my-3 bg-light">
+        <div class="card-body">
+          <div class="float-end">
+            <%= link_to t('label.back'), action: :index %> |
+            <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', bs_target: '#customize_report' } %> |
+            <%= link_to t('label.download_csv'), weaknesses_heatmap_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+          </div>
+          <p class="mb-0">
+            <%= t 'follow_up_committee_report.weaknesses_heatmap.weaknesses_count_html', count: @weaknesses.count %>
+          </p>
+        </div>
       </div>
-      <p class="mb-0">
-        <%= t 'follow_up_committee_report.weaknesses_heatmap.weaknesses_count_html', count: @weaknesses.count %>
-      </p>
+      <div class="endless-pagination">
+        <%= render partial: 'weaknesses_heatmap', collection: @weaknesses, as: :weakness %>
+      </div>
+
+      <%= paginate @weaknesses %>
+
+      <div class="alert alert-warning text-center" hidden data-pagination-loading>
+        <div class="alert-message">
+          <strong><%= t 'navigation.loading' %></strong>
+        </div>
+      </div>
+    <% else %>
+      <div style="margin-left: 2em">
+        <p class="mb-1"><em><%= t 'follow_up_committee_report.weaknesses_heatmap.without_weaknesses' %></em></p>
+      </div>
+    <% end %>
+
+    <hr />
+
+    <div>
+      <%= link_to t('label.back'), action: :index %> |
+      <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', bs_target: '#customize_report' } %> |
+      <%= link_to t('label.download_csv'), weaknesses_heatmap_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
     </div>
   </div>
-  <div class="endless-pagination">
-    <%= render partial: 'weaknesses_heatmap', collection: @weaknesses, as: :weakness %>
-  </div>
-
-  <%= paginate @weaknesses %>
-
-  <div class="alert alert-warning text-center" hidden data-pagination-loading>
-    <strong><%= t 'navigation.loading' %></strong>
-  </div>
-<% else %>
-  <div style="margin-left: 2em">
-    <p class="mb-1"><em><%= t 'follow_up_committee_report.weaknesses_heatmap.without_weaknesses' %></em></p>
-  </div>
-<% end %>
-
-<hr />
-
-<div>
-  <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
-  <%= link_to t('label.download_csv'), weaknesses_heatmap_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {

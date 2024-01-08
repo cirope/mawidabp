@@ -28,6 +28,7 @@ en:
     download: "Download"
     download_csv: "Download CSV"
     download_rtf: "Download RTF"
+    download_pdf: "Download PDF"
     create_permalink: "Create permalink"
     edit: "Edit"
     import: "Import"
@@ -642,7 +643,7 @@ en:
     tagged_findings_report:
       empty: 'No findings for the applied filter'
       findings_count: 'Number of findings that meet the criteria: %{count}'
-      findings_count_html: 'Number of findings that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      findings_count_html: 'Number of findings that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'follow_up_of_findings_in_execution_tagged.pdf'
       tags_count_label: 'Maximum number of tags'
       title: 'Findings by maximum number of tags'
@@ -650,7 +651,7 @@ en:
       title: 'Issue follow-up report'
       empty: 'No issues for the applied filter'
       weaknesses_count: 'Number of issues that meet the criteria: %{count}'
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'follow_up_report_of_issues_in_execution.pdf'
 
   finding_relation:
@@ -679,7 +680,7 @@ en:
     tagged_findings_report:
       empty: 'No findings for the applied filter'
       findings_count: 'Number of findings that meet the criteria: %{count}'
-      findings_count_html: 'Number of findings that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      findings_count_html: 'Number of findings that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'follow-up_tagged_findings.pdf'
       tags_count_label: "Maximum number of tags"
       title: 'Findings by maximum number of labels'
@@ -687,7 +688,7 @@ en:
       title: 'Issue follow-up report'
       empty: 'No issues for the applied filter'
       weaknesses_count: 'Number of issues that meet the criteria: %{count}'
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'issues_follow-up_report.pdf'
     others:
       title: 'Others'

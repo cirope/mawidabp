@@ -5,7 +5,7 @@
     <% parent_name_attribute = "data-parent=\"#{menu_item.parent.menu_name}\"" if menu_item.parent %>
     <tr id="<%= menu_item.menu_name %>" <%= raw parent_name_attribute %>>
       <td>
-        <span class="pl-<%= (menu_item.self_and_ancestors.size - 1) * 2 %><%= ' text-danger' if privilege.errors.size > 0 %>">
+        <span class="ps-<%= (menu_item.self_and_ancestors.size - 1) * 2 %><%= ' text-danger' if privilege.errors.size > 0 %>">
           <% if menu_item.parent %>
             <%= menu_item.to_s %>
           <% else %>

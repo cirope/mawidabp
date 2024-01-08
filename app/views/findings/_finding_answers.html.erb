@@ -23,7 +23,7 @@
     <%= simple_form_for fa, url: finding_answers_path(params[:completion_state], finding) do |f| %>
       <%= render 'findings/finding_answer', f: f, show: true, readonly: true %>
 
-      <div class="text-right">
+      <div class="text-end">
         <%= f.submit t('finding.submit_answer'), class: 'btn btn-outline-secondary', data: { disable_with: false } %>
       </div>
     <% end %>

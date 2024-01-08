@@ -80,6 +80,10 @@ module Findings::Scopes
         references(:reviews)
     end
 
+    def by_review_code review_code
+      where("LOWER(#{Finding.quoted_table_name}.#{Finding.qcn 'review_code'}) LIKE ?", "%#{review_code.mb_chars.downcase}%")
+    end
+
     def by_project project
       includes(review: :plan_item).
         where("LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'project'}) LIKE ?", "%#{project.mb_chars.downcase}%").

@@ -73,7 +73,7 @@
     })
 
     <% if @plan_item.auxiliar_business_unit_types.any? %>
-      $('[data-target="auxiliar-business-unit-types"]').html('<%= j render('auxiliar_business_unit_types', format: :html, plan_item: @plan_item) %>')
+      $('[data-bs-target="auxiliar-business-unit-types"]').html('<%= j render('auxiliar_business_unit_types', format: :html, plan_item: @plan_item) %>')
     <% end %>
 
   <% else %>

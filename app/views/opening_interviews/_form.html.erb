@@ -1,91 +1,95 @@
 <% frozen = !@opening_interview.can_be_modified? %>
 
-<%= simple_form_for @opening_interview do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @opening_interview do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <% if @opening_interview.new_record? %>
-          <%= opening_interview_review_field f %>
-        <% else %>
-          <%= f.input :review_description, label: OpeningInterview.human_attribute_name('review'),
-            input_html: { value: @opening_interview.review, readonly: true } %>
-        <% end %>
-        <%= f.input :start_date, as: :date_picker, input_html: { readonly: frozen } %>
-        <%= f.input :objective, input_html: { rows: 4, readonly: frozen } %>
-        <%= f.input :program, input_html: { rows: 4, readonly: frozen } %>
-        <%= f.input :scope, input_html: { rows: 4, readonly: frozen } %>
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-md-6">
+            <% if @opening_interview.new_record? %>
+              <%= opening_interview_review_field f %>
+            <% else %>
+              <%= f.input :review_description, label: OpeningInterview.human_attribute_name('review'),
+                input_html: { value: @opening_interview.review, readonly: true } %>
+            <% end %>
+            <%= f.input :start_date, as: :date_picker, input_html: { readonly: frozen } %>
+            <%= f.input :objective, input_html: { rows: 4, readonly: frozen } %>
+            <%= f.input :program, input_html: { rows: 4, readonly: frozen } %>
+            <%= f.input :scope, input_html: { rows: 4, readonly: frozen } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :interview_date, as: :date_picker, input_html: { readonly: frozen } %>
+            <%= f.input :end_date, as: :date_picker, input_html: { readonly: frozen } %>
+            <%= f.input :suggestions, input_html: { rows: 4, readonly: frozen } %>
+            <%= f.input :comments, input_html: { rows: 4, readonly: frozen } %>
+          </div>
+        </div>
+
+        <%= f.input :lock_version, as: :hidden %>
+
+        <h5 class="mt-3"><%= t 'opening_interviews.show.auditeds' %></h5>
+
+        <div class="row">
+          <div class="col-md-6">
+            <h5 class="h6"><%= OpeningInterviewUser.human_attribute_name 'user' %></h5>
+          </div>
+        </div>
+
+        <div id="responsibles">
+          <%= f.simple_fields_for :responsibles do |r_f| %>
+            <%= render 'opening_interview_user', f: r_f, frozen: frozen %>
+          <% end %>
+
+          <p>
+            <%= link_to_add_fields t('.add_responsible'), f, :responsibles, 'opening_interview_user' unless frozen %>
+          </p>
+        </div>
+
+        <h5 class="mt-3"><%= t 'opening_interviews.show.auditors' %></h5>
+
+        <div class="row">
+          <div class="col-md-6">
+            <h5 class="h6"><%= OpeningInterviewUser.human_attribute_name 'user' %></h5>
+          </div>
+        </div>
+
+        <div id="auditors">
+          <%= f.simple_fields_for :auditors do |a_f| %>
+            <%= render 'opening_interview_user', f: a_f, frozen: frozen %>
+          <% end %>
+
+          <p class="mb-1">
+            <%= link_to_add_fields t('.add_auditor'), f, :auditors, 'opening_interview_user' unless frozen %>
+          </p>
+        </div>
+
+        <h5 class="mt-3"><%= OpeningInterviewUser.model_name.human count: 0 %></h5>
+
+        <div class="row">
+          <div class="col-md-6">
+            <h5 class="h6"><%= OpeningInterviewUser.human_attribute_name 'user' %></h5>
+          </div>
+        </div>
+
+        <div id="assistants">
+          <%= f.simple_fields_for :assistants do |a_f| %>
+            <%= render 'opening_interview_user', f: a_f, frozen: frozen %>
+          <% end %>
+
+          <p class="mb-1">
+            <%= link_to_add_fields t('.add_assistant'), f, :assistants, 'opening_interview_user' unless frozen %>
+          </p>
+        </div>
       </div>
-      <div class="col-md-6">
-        <%= f.input :interview_date, as: :date_picker, input_html: { readonly: frozen } %>
-        <%= f.input :end_date, as: :date_picker, input_html: { readonly: frozen } %>
-        <%= f.input :suggestions, input_html: { rows: 4, readonly: frozen } %>
-        <%= f.input :comments, input_html: { rows: 4, readonly: frozen } %>
+
+      <hr>
+
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.button :submit, class: 'btn-primary', disabled: frozen %>
       </div>
-    </div>
-
-    <%= f.input :lock_version, as: :hidden %>
-
-    <h5 class="mt-3"><%= t 'opening_interviews.show.auditeds' %></h5>
-
-    <div class="row">
-      <div class="col-md-6">
-        <h5 class="h6"><%= OpeningInterviewUser.human_attribute_name 'user' %></h5>
-      </div>
-    </div>
-
-    <div id="responsibles">
-      <%= f.simple_fields_for :responsibles do |r_f| %>
-        <%= render 'opening_interview_user', f: r_f, frozen: frozen %>
-      <% end %>
-
-      <p>
-        <%= link_to_add_fields t('.add_responsible'), f, :responsibles, 'opening_interview_user' unless frozen %>
-      </p>
-    </div>
-
-    <h5 class="mt-3"><%= t 'opening_interviews.show.auditors' %></h5>
-
-    <div class="row">
-      <div class="col-md-6">
-        <h5 class="h6"><%= OpeningInterviewUser.human_attribute_name 'user' %></h5>
-      </div>
-    </div>
-
-    <div id="auditors">
-      <%= f.simple_fields_for :auditors do |a_f| %>
-        <%= render 'opening_interview_user', f: a_f, frozen: frozen %>
-      <% end %>
-
-      <p class="mb-1">
-        <%= link_to_add_fields t('.add_auditor'), f, :auditors, 'opening_interview_user' unless frozen %>
-      </p>
-    </div>
-
-    <h5 class="mt-3"><%= OpeningInterviewUser.model_name.human count: 0 %></h5>
-
-    <div class="row">
-      <div class="col-md-6">
-        <h5 class="h6"><%= OpeningInterviewUser.human_attribute_name 'user' %></h5>
-      </div>
-    </div>
-
-    <div id="assistants">
-      <%= f.simple_fields_for :assistants do |a_f| %>
-        <%= render 'opening_interview_user', f: a_f, frozen: frozen %>
-      <% end %>
-
-      <p class="mb-1">
-        <%= link_to_add_fields t('.add_assistant'), f, :assistants, 'opening_interview_user' unless frozen %>
-      </p>
-    </div>
+    <% end %>
   </div>
-
-  <hr>
-
-  <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
-    <%= f.button :submit, class: 'btn-primary', disabled: frozen %>
-  </div>
-<% end %>
+</div>
