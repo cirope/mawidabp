@@ -10,6 +10,8 @@ module Findings::State
     REPEATED_STATUS                      = repeated_status
     EXCLUDE_FROM_REPORTS_STATUS          = exclude_from_reports_status
     PENDING_FOR_REVIEW_STATUS            = pending_for_review_status
+    COMPLETED_STATUS                     = completed_status
+    INCOMPLETE_STATUS                    = incomplete_status
 
     define_state_scopes
     define_state_methods
@@ -34,6 +36,10 @@ module Findings::State
 
     def with_pending_status_for_report
       where state: report_pending_status
+    end
+
+    def with_completed_status
+      where state: COMPLETED_STATUS
     end
 
     private
@@ -104,6 +110,18 @@ module Findings::State
 
       def repeated_status
         STATUS[:repeated]
+      end
+
+      def incomplete_status
+        PENDING_STATUS - [STATUS[:incomplete]]
+      end
+
+      def completed_status
+        STATUS.values           -
+          PENDING_STATUS        -
+          [STATUS[:revoked]]    -
+          [STATUS[:repeated]]   -
+          [STATUS[:incomplete]]
       end
 
       def define_state_scopes

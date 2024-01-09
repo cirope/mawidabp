@@ -1,4 +1,6 @@
 <div class="alert <%= flash_class %> alert-dismissible fade show">
-  <p class="mb-0"><%= flash_message %></p>
   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <div class="alert-message">
+    <%= flash_message %>
+  </div>
 </div>

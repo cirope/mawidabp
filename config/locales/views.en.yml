@@ -23,6 +23,9 @@ en:
     _yes: 'Yes'
     _no: 'No'
 
+  footer:
+    support: 'Support'
+
   activity_groups:
     edit:
       title: 'Edit activity group'
@@ -208,6 +211,9 @@ en:
     finding_answers: 'Comments of'
     pdf:
       issue: 'Refer to the attached table for records under the code %{review_code}'
+    graphs:
+      incomplete: 'Pending findings'
+      completed: 'Completed findings'
 
   licenses:
     trial_valid_until: 'End of trial period'
@@ -971,6 +977,16 @@ en:
       title: 'Show issue template'
     form:
       add_control_objective: 'Add control objective'
+
+  welcome:
+    completed_findings: 'Completed findings'
+    commented_on: 'commented on'
+    current_user_answers: 'Current user answers'
+    latest_answers: 'Latest answers'
+    latest_findings: 'Latest findings'
+    pending_findings: 'Pending findings'
+    version: 'Version'
+    welcome: 'Welcome'
 
   work_papers:
     show:

@@ -1,69 +1,76 @@
-<%= simple_form_for @news do |f| %>
-  <%= f.error_notification %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @news do |f| %>
+      <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.input :title, input_html: { autofocus: true } %>
-    <%= f.input :description, input_html: { rows: 2 } %>
-    <%= f.input :body, hint: markdown_help_link, input_html: { rows: 6 } %>
-    <%= f.input :lock_version, as: :hidden %>
+      <div class="form-inputs">
+        <%= f.input :title, input_html: { autofocus: true } %>
+        <%= f.input :description, input_html: { rows: 2 } %>
+        <%= f.input :body, hint: markdown_help_link, input_html: { rows: 6 } %>
+        <%= f.input :lock_version, as: :hidden %>
 
-    <div class="row">
-      <div class="col-md-6">
-        <%= f.input :published_at, as: :date_picker, input_html: { value: l(@news.published_at.to_date) } %>
-      </div>
-      <div class="col-md-6 mt-4 pt-2">
-        <%= f.input :shared, input_html: { disabled: @news.persisted? && @news.shared } %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card mb-3 <%= 'border-danger' if @news.errors[:tags].present? %>">
-          <div class="card-header <%= 'bg-danger text-light' if @news.errors[:tags].present? %>">
-            <h5 class="mb-0">
-              <%= Tag.model_name.human count: 0 %>
-            </h5>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :published_at, as: :date_picker, input_html: { value: l(@news.published_at.to_date) } %>
           </div>
-          <div class="card-body">
-            <% @news.errors.full_messages_for(:tags).each do |error| %>
-              <p class="text-danger"><%= error %></p>
-            <% end %>
+          <div class="col-md-6 mt-4 pt-2">
+            <%= f.input :shared, input_html: { disabled: @news.persisted? && @news.shared } %>
+          </div>
+        </div>
 
-            <%= f.simple_fields_for :taggings do |tf| %>
-              <%= render 'tagging', f: tf, kind: 'news' %>
-            <% end %>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-3 border-1 <%= @news.errors[:tags].present? ? 'border-danger' : 'border-light' %>">
+              <div class="card-header <%= @news.errors[:tags].present? ? 'bg-danger' : 'bg-light' %>">
+                <h5 class="mb-0 <%= 'text-light' if @news.errors[:tags].present? %>">
+                  <%= Tag.model_name.human count: 0 %>
+                </h5>
+              </div>
+              <div class="card-body">
+                <% @news.errors.full_messages_for(:tags).each do |error| %>
+                  <p class="text-danger"><%= error %></p>
+                <% end %>
 
-            <%= link_to_add_fields t('news.new.tagging'), f, :taggings, 'news/tagging' %>
+                <%= f.simple_fields_for :taggings do |tf| %>
+                  <%= render 'tagging', f: tf, kind: 'news' %>
+                <% end %>
+
+                <%= link_to_add_fields t('news.new.tagging'), f, :taggings, 'news/tagging' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card border-1 <%= @news.errors[:image_models].present? ? 'border-danger' : 'border-light' %>">
+              <div class="card-header <%= @news.errors[:image_models].present? ? 'bg-danger' : 'bg-light' %>">
+                <h5 class="mb-0 <%= 'text-light' if @news.errors[:image_models].present? %>">
+                  <%= ImageModel.model_name.human count: 0 %>
+                </h5>
+              </div>
+              <div class="card-body">
+                <% @news.errors.full_messages_for(:image_models).each do |error| %>
+                  <p class="text-danger"><%= error %></p>
+                <% end %>
+
+                <%= f.simple_fields_for :image_models do |imf| %>
+                  <%= render 'image_model', f: imf %>
+                <% end %>
+
+                <%= link_to_add_fields t('news.new.image_model'), f, :image_models, 'news/image_model' %>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-md-6">
-        <div class="card <%= 'border-danger' if @news.errors[:image_models].present? %>">
-          <div class="card-header <%= 'bg-danger text-light' if @news.errors[:image_models].present? %>">
-            <h5 class="mb-0">
-              <%= ImageModel.model_name.human count: 0 %>
-            </h5>
-          </div>
-          <div class="card-body">
-            <% @news.errors.full_messages_for(:image_models).each do |error| %>
-              <p class="text-danger"><%= error %></p>
-            <% end %>
+      <hr>
 
-            <%= f.simple_fields_for :image_models do |imf| %>
-              <%= render 'image_model', f: imf %>
-            <% end %>
-
-            <%= link_to_add_fields t('news.new.image_model'), f, :image_models, 'news/image_model' %>
-          </div>
-        </div>
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.button :submit, class: 'btn-primary' %>
       </div>
-    </div>
+    <% end %>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, class: 'btn-primary' %>
-  </div>
-<% end %>
+</div>
 
 <%= render 'markdown_inline' %>
