@@ -321,7 +321,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses by state report' do
     login
 
-    get :weaknesses_by_state
+    get :weaknesses_by_state, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/weaknesses_by_state'
 
@@ -363,7 +363,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses by risk' do
     login
 
-    get :weaknesses_by_risk
+    get :weaknesses_by_risk, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/weaknesses_by_risk'
 
@@ -407,7 +407,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses by audit type report' do
     login
 
-    get :weaknesses_by_audit_type
+    get :weaknesses_by_audit_type, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/weaknesses_by_audit_type'
 
@@ -415,10 +415,10 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       get :weaknesses_by_audit_type, :params => {
         :weaknesses_by_audit_type => {
           :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date,
-          :controller_name => 'conclusion',
-          :final => true
-        }
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => true
       }
     end
 
@@ -635,7 +635,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses by risk report' do
     login
 
-    get :weaknesses_by_risk_report
+    get :weaknesses_by_risk_report, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/weaknesses_by_risk_report'
 
@@ -696,7 +696,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses by business unit' do
     login
 
-    get :weaknesses_by_business_unit
+    get :weaknesses_by_business_unit, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/weaknesses_by_business_unit'
 
@@ -718,7 +718,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses by business unit as CSV' do
     login
 
-    get :weaknesses_by_business_unit, as: :csv
+    get :weaknesses_by_business_unit, :params => { :controller_name => 'conclusion' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -740,7 +740,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses by business unit as RTF' do
     login
 
-    get :weaknesses_by_business_unit, as: :rtf
+    get :weaknesses_by_business_unit, :params => { :controller_name => 'conclusion' }, as: :rtf
     assert_response :success
     assert_match Mime[:rtf].to_s, @response.content_type
 
@@ -804,7 +804,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses by user' do
     login
 
-    get :weaknesses_by_user
+    get :weaknesses_by_user, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/weaknesses_by_user'
 
@@ -826,7 +826,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses by user as CSV' do
     login
 
-    get :weaknesses_by_user, as: :csv
+    get :weaknesses_by_user, :params => { :controller_name => 'conclusion' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -890,7 +890,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses by month' do
     login
 
-    get :weaknesses_by_month
+    get :weaknesses_by_month, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/weaknesses_by_month'
 
@@ -953,7 +953,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'fixed weaknesses report' do
     login
 
-    get :fixed_weaknesses_report
+    get :fixed_weaknesses_report, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/fixed_weaknesses_report'
 
@@ -1014,7 +1014,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'control objective stats report' do
     login
 
-    get :control_objective_stats
+    get :control_objective_stats, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/control_objective_stats'
 
@@ -1076,7 +1076,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'control objective stats by review report' do
     login
 
-    get :control_objective_stats_by_review
+    get :control_objective_stats_by_review, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/control_objective_stats_by_review'
 
@@ -1138,7 +1138,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'process control stats report' do
     login
 
-    get :process_control_stats
+    get :process_control_stats, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/process_control_stats'
 
@@ -1202,7 +1202,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     login
 
     assert_nothing_raised do
-      get :process_control_stats_csv, format: :csv
+      get :process_control_stats_csv, :params => { :controller_name => 'conclusion' }, format: :csv
     end
 
     assert_response :success
@@ -1254,7 +1254,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'benefits report' do
     login
 
-    get :benefits
+    get :benefits, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/benefits'
 
@@ -1316,7 +1316,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'control objective counts' do
     login
 
-    get :control_objective_counts
+    get :control_objective_counts, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/control_objective_counts'
 
@@ -1337,7 +1337,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'control objective counts as CSV' do
     login
 
-    get :control_objective_counts, as: :csv
+    get :control_objective_counts, :params => { :controller_name => 'conclusion' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
