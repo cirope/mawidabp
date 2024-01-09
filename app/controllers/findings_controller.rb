@@ -16,7 +16,8 @@ class FindingsController < ApplicationController
   before_action :check_if_editable, only: [:edit, :update]
   before_action :check_if_editable_bic_sigen_fields, only: [:edit_bic_sigen_fields,
                                                             :update_bic_sigen_fields]
-  before_action :set_title, except: [:destroy]
+  before_action :set_title, except: [:destroy, :auto_complete_for_finding_relation,
+                                     :auto_complete_for_tagging]
 
   # * GET /incomplete/findings
   def index

@@ -6,7 +6,7 @@ class DocumentsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_tag, only: [:index]
   before_action :set_document, only: [:show, :edit, :update, :destroy, :download]
-  before_action :set_title, except: [:destroy]
+  before_action :set_title, except: [:destroy, :auto_complete_for_tagging]
 
   def index
     if @tag
