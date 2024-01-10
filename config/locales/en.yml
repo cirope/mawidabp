@@ -618,4 +618,4 @@
   actioncontroller:
     findings: "Findings"
     licenses: "license"
-    blocked: "Locked license"
+    blocked: "Blocked license"
