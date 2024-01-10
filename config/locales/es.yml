@@ -618,3 +618,4 @@
   actioncontroller:
     findings: "Hallazgos"
     licenses: "Licencia"
+    blocked: "Licencia bloqueda"
