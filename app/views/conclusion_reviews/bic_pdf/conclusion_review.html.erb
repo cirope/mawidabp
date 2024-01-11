@@ -67,11 +67,11 @@
             <%= simple_format conclusion_review.review.description, class: "text-justify fs-bice-3 text-quote" %>
           </div>
         </div>
-        <div class="row pt-5">
+        <div class="row pt-5 text-center">
           <div class="col-1 offset-1">
             <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'lupa.png')), height: 56 %>
           </div>
-          <div class="col-6">
+          <div class="col-8">
             <p class="pt-3 fw-bold fs-bice-2"><%= I18n.t 'conclusion_review.bic.cover.cycle_qualification' %> <span class="text-aqua"><%= I18n.t("score_types.#{conclusion_review_score}") %></span></p>
           </div>
           <div class="col-1">
