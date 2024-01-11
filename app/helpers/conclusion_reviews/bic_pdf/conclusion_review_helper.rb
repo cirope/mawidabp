@@ -87,10 +87,6 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     draft ? 'watermark-bic' : ''
   end
 
-  def legend_weakness_repeated weakness
-    weakness.repeated_of.present? ? I18n.t('conclusion_review.bic.weaknesses.repeated') : ''
-  end
-
   def follow_up_date_weakness weakness
     weakness.follow_up_date ? I18n.l(weakness.follow_up_date) : '-'
   end
@@ -99,15 +95,9 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     weakness.implemented_audited? ? 'text-green' : 'text-white'
   end
 
-  def reference_padding conclusion_review
-    if conclusion_review.reference.present?
-      'pt-5'
-    end
-  end
-
   def conclusion_padding conclusion_review
-    if !conclusion_review.reference.present? && conclusion_review.conclusion.present?
-      'pt-5'
+    if !conclusion_review.reference.present?
+      'pt-15'
     end
   end
 end
