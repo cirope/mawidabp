@@ -49,6 +49,8 @@ es:
     strongly_agree: 'Muy de acuerdo'
     'yes': 'Sí'
     'no': 'No'
+    t: 'Sí'
+    f: 'No'
 
   benefits:
     index:
