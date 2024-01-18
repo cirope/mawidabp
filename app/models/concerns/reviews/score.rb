@@ -155,7 +155,7 @@ module Reviews::Score
   def implemented_audited_or_being_implemented_w
     total_weaknesses = conclusion_final_review ? [final_weaknesses] : [weaknesses]
 
-    assigned_findings = finding_review_assignments.map(&:finding)
+    assigned_findings = finding_review_assignments.map(&:finding).select { |f| f.is_a?(Weakness) }
     total_weaknesses << assigned_findings
 
     total_weaknesses.flatten.select do |w|
