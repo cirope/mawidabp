@@ -42,8 +42,16 @@
   }
 }
 .loading-caption {
+  position: fixed;
+  margin: 7px auto;
+  left: 0;
+  right: 0;
   width: 10em;
   z-index: $zindex-tooltip;
+
+  .alert-message {
+    padding: 15px;
+  }
 }
 
 .pulsate {
