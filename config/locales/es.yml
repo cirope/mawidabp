@@ -1115,7 +1115,7 @@
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
       without_score: "no tiene puntaje de auditoría"
-      without_survey: "no tiene objetivo"
+      without_survey: "no tiene resumen del alcance"
       without_audited: "no tiene usuario auditado"
       without_file_model: "no tiene anexo"
       without_control_objectives: "no tiene objetivos de control"
@@ -1125,7 +1125,7 @@
         one: "Con un archivo adjunto"
         other: "Con %{count} archivos adjuntos"
       without_attachment: "Sin archivos adjuntos"
-      download: "Descargar objetivo"
+      download: "Descargar resumen del alcance"
       download_attachment: "Descargar adjunto"
     review_data:
       close_date: "Fecha de cierre: %{date}"
@@ -1280,7 +1280,7 @@
         sectors: "Sectores/departamentos involucrados"
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación de la evolución"
-        observations: "Consideraciones/Recomendaciones"
+        observations: "Otras consideraciones"
         main_weaknesses_text: "Principales debilidades"
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"
