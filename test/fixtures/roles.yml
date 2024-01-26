@@ -4,8 +4,8 @@
   role_type: <%= value %>
   identifier: <%= role_name.to_s.upcase %>
   organization: cirope
-  created_at: <%= 3.days.ago.to_s(:db) %>
-  updated_at: <%= 2.days.ago.to_s(:db) %>
+  created_at: <%= 3.days.ago.to_fs(:db) %>
+  updated_at: <%= 2.days.ago.to_fs(:db) %>
 <% end %>
 
 admin_google_role:

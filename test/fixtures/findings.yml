@@ -18,9 +18,9 @@ being_implemented_weakness:
   effect: Effect 1w
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
-  follow_up_date: <%= 7.business_days.from_now.to_date.to_s(:db) %>
-  first_follow_up_date: <%= 7.business_days.from_now.to_date.to_s(:db) %>
-  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
+  follow_up_date: <%= 7.business_days.from_now.to_date.to_fs(:db) %>
+  first_follow_up_date: <%= 7.business_days.from_now.to_date.to_fs(:db) %>
+  origination_date: <%= 2.years.ago.to_date.to_fs(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -53,9 +53,9 @@ being_implemented_weakness_final:
   effect: Effect 1w
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
-  follow_up_date: <%= 7.business_days.from_now.to_date.to_s(:db) %>
-  first_follow_up_date: <%= 7.business_days.from_now.to_date.to_s(:db) %>
-  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
+  follow_up_date: <%= 7.business_days.from_now.to_date.to_fs(:db) %>
+  first_follow_up_date: <%= 7.business_days.from_now.to_date.to_fs(:db) %>
+  origination_date: <%= 2.years.ago.to_date.to_fs(:db) %>
   final: true
   parent: being_implemented_weakness
   compliance: no
@@ -89,7 +89,7 @@ unconfirmed_for_notification_weakness:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
-  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.business_days.ago.to_date.to_s(:db) %>
+  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.business_days.ago.to_date.to_fs(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -122,8 +122,8 @@ unanswered_for_level_<%= level %>_notification:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
-  origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
-  first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.business_days.ago.to_date.to_s(:db) %>
+  origination_date: <%= 1.year.ago.to_date.to_fs(:db) %>
+  first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.business_days.ago.to_date.to_fs(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -156,8 +156,8 @@ incomplete_weakness:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
-  origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
-  first_notification_date: <%= Date.today.to_s(:db) %>
+  origination_date: <%= 1.year.ago.to_date.to_fs(:db) %>
+  first_notification_date: <%= Date.today.to_fs(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -189,7 +189,7 @@ other_unconfirmed_for_notification_weakness:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
-  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.business_days.ago.to_date.to_s(:db) %>
+  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.business_days.ago.to_date.to_fs(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -256,7 +256,7 @@ being_implemented_oportunity:
   origination_date:
   solution_date:
   effect: Effect 1o
-  follow_up_date: <%= 1.year.from_now.to_date.to_s(:db) %>
+  follow_up_date: <%= 1.year.from_now.to_date.to_fs(:db) %>
   final: false
   notification_level: 0
   organization: cirope
@@ -279,7 +279,7 @@ being_implemented_weakness_on_draft:
   effect: Effect 3w
   risk: <%= Finding.risks_values.first %>
   priority: <%= Finding.priorities_values.first %>
-  follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
+  follow_up_date: <%= 2.days.ago.to_date.to_fs(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -402,8 +402,8 @@ unconfirmed_oportunity:
   state: <%= Finding::STATUS[:unconfirmed] %>
   origination_date:
   solution_date:
-  confirmation_date: <%= stale_confirmed_days.pred.business_days.ago.to_s(:db) %>
-  first_notification_date: <%= stale_confirmed_days.pred.business_days.ago.to_date.to_s(:db) %>
+  confirmation_date: <%= stale_confirmed_days.pred.business_days.ago.to_fs(:db) %>
+  first_notification_date: <%= stale_confirmed_days.pred.business_days.ago.to_date.to_fs(:db) %>
   final: false
   notification_level: 0
   organization: cirope
@@ -422,7 +422,7 @@ confirmed_oportunity_on_draft:
   state: <%= Finding::STATUS[:confirmed] %>
   origination_date:
   solution_date:
-  confirmation_date: <%= Date.today.to_s(:db) %>
+  confirmation_date: <%= Date.today.to_fs(:db) %>
   final: false
   notification_level: 0
   organization: cirope
@@ -442,8 +442,8 @@ confirmed_oportunity:
   state: <%= Finding::STATUS[:confirmed] %>
   origination_date:
   solution_date:
-  confirmation_date: <%= 1.day.ago.to_s(:db) %>
-  first_notification_date: <%= stale_confirmed_days.next.business_days.ago.to_s(:db) %>
+  confirmation_date: <%= 1.day.ago.to_fs(:db) %>
+  first_notification_date: <%= stale_confirmed_days.next.business_days.ago.to_fs(:db) %>
   final: false
   notification_level: 0
   organization: cirope
@@ -463,8 +463,8 @@ confirmed_oportunity_final:
   state: <%= Finding::STATUS[:confirmed] %>
   origination_date:
   solution_date:
-  confirmation_date: <%= 1.day.ago.to_s(:db) %>
-  first_notification_date: <%= stale_confirmed_days.next.business_days.ago.to_s(:db) %>
+  confirmation_date: <%= 1.day.ago.to_fs(:db) %>
+  first_notification_date: <%= stale_confirmed_days.next.business_days.ago.to_fs(:db) %>
   final: true
   parent: confirmed_oportunity
   notification_level: 0
@@ -482,13 +482,13 @@ being_implemented_weakness_on_final:
   current_situation_verified: false
   audit_comments: Audit comment 1w
   state: <%= Finding::STATUS[:being_implemented] %>
-  origination_date: <%= 2.days.ago.to_date.to_s(:db) %>
+  origination_date: <%= 2.days.ago.to_date.to_fs(:db) %>
   solution_date:
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
   risk: <%= Finding.risks_values.first %>
   priority: <%= Finding.priorities_values.first %>
-  follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
+  follow_up_date: <%= 2.days.ago.to_date.to_fs(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -519,7 +519,7 @@ being_implemented_weakness_on_approved_draft:
   effect: Effect 1w
   risk: <%= Finding.risks_values.first %>
   priority: <%= Finding.priorities_values.first %>
-  follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
+  follow_up_date: <%= 2.days.ago.to_date.to_fs(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
