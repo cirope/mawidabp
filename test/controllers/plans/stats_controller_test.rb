@@ -15,7 +15,7 @@ class Plans::StatsControllerTest < ActionController::TestCase
   test 'should get show with until date' do
     month_before_end = @plan.period.end.advance(months: -1).at_end_of_month
 
-    get :show, params: { id: @plan, until: month_before_end.to_s(:db) }
+    get :show, params: { id: @plan, until: month_before_end.to_fs(:db) }
     assert_response :success
   end
 end

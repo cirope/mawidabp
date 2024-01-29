@@ -6,7 +6,7 @@
   $('[name$="[audit_comments]"]').val("<%== j @oportunity.audit_comments %>").trigger('change')
 
   <% %w(follow_up_date origination_date).each do |date_field| %>
-    var <%= date_field %>Date = new Date('<%= @oportunity.attributes[date_field]&.to_s(:db) %>')
+    var <%= date_field %>Date = new Date('<%= @oportunity.attributes[date_field]&.to_fs(:db) %>')
 
     <%= date_field %>Date.setMinutes(new Date().getTimezoneOffset())
 

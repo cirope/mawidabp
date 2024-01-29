@@ -333,10 +333,10 @@ class ApplicationControllerTest < ActionController::TestCase
 
     generated_range = @controller.send(:make_date_range, {
         :from_date => '2011-10-09', :to_date => '2000-10-09'
-      }).map { |d| d.to_s(:db) }
+      }).map { |d| d.to_fs(:db) }
 
     # Fechas válidas con el orden invertido
-    assert_equal [to_date.to_s(:db), from_date.to_s(:db)], generated_range
+    assert_equal [to_date.to_fs(:db), from_date.to_fs(:db)], generated_range
   end
 
   test 'extract operator' do

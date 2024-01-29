@@ -88,6 +88,6 @@ class LoginRecordPdf < Prawn::Document
 
     def pdf_name
       I18n.t 'login_records.pdf_list_name',
-        from_date: @from.to_s(:db), to_date: @to.to_s(:db)
+        from_date: @from.to_fs(:db), to_date: @to.to_fs(:db)
     end
 end

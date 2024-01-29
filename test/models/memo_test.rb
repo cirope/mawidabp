@@ -118,7 +118,7 @@ class MemoTest < ActiveSupport::TestCase
   test 'invalid because another memo have same plan item' do
     memo = Memo.create!(
       name: 'Second memo',
-      close_date: 15.days.from_now.to_date.to_s(:db),
+      close_date: 15.days.from_now.to_date.to_fs(:db),
       required_by: '',
       required_by_text: 'required by test',
       manual_required_by: true,
@@ -134,7 +134,7 @@ class MemoTest < ActiveSupport::TestCase
   end
 
   test 'invalid because cant change fields' do
-    @memo.update_attribute 'close_date', 1.days.ago.to_date.to_s(:db)
+    @memo.update_attribute 'close_date', 1.days.ago.to_date.to_fs(:db)
 
     @memo.name = 'test'
 
@@ -143,7 +143,7 @@ class MemoTest < ActiveSupport::TestCase
   end
 
   test 'invalid because cant change images' do
-    @memo.update_attribute 'close_date', 1.days.ago.to_date.to_s(:db)
+    @memo.update_attribute 'close_date', 1.days.ago.to_date.to_fs(:db)
 
     @memo.file_model_memos.each &:mark_for_destruction
 
@@ -172,17 +172,17 @@ class MemoTest < ActiveSupport::TestCase
   end
 
   test 'should return false read only fields because close_date_was is less than today' do
-    @memo.close_date = 15.days.ago.to_date.to_s(:db)
+    @memo.close_date = 15.days.ago.to_date.to_fs(:db)
 
     refute @memo.readonly_fields?
   end
 
   test 'should return true read only fields because close_date_was is greater than today' do
-    @memo.close_date = 15.days.ago.to_date.to_s(:db)
+    @memo.close_date = 15.days.ago.to_date.to_fs(:db)
 
     @memo.save!
 
-    @memo.close_date = 15.days.from_now.to_date.to_s(:db)
+    @memo.close_date = 15.days.from_now.to_date.to_fs(:db)
 
     assert @memo.readonly_fields?
   end

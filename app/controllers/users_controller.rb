@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.pdf  { redirect_to pdf.relative_path }
+      format.pdf  { redirect_to pdf.relative_path, allow_other_host: true }
       format.csv  { render csv: csv, filename: filename }
     end
   end

@@ -2463,7 +2463,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.update_attribute :extension, true
 
     finding.state          = Finding::STATUS[:being_implemented]
-    finding.follow_up_date = Date.today.to_date.to_s(:db)
+    finding.follow_up_date = Date.today.to_date.to_fs(:db)
     finding.extension      = true
 
     assert finding.valid?
@@ -2477,7 +2477,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.update_attribute :extension, true
 
     finding.state          = Finding::STATUS[:awaiting]
-    finding.follow_up_date = Date.today.to_date.to_s(:db)
+    finding.follow_up_date = Date.today.to_date.to_fs(:db)
     finding.extension      = true
 
     assert finding.valid?
@@ -2490,19 +2490,19 @@ class FindingTest < ActiveSupport::TestCase
 
     assert_equal expected_reschedules, finding.calculate_reschedule_count
 
-    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_fs(:db)
 
     assert_equal expected_reschedules + 1, finding.calculate_reschedule_count
 
     finding.save!
 
-    finding.follow_up_date = (7.business_days.from_now.to_date + 1.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 1.days).to_fs(:db)
 
     assert_equal expected_reschedules + 1, finding.calculate_reschedule_count
 
     finding.save!
 
-    finding.follow_up_date = (7.business_days.from_now.to_date + 4.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 4.days).to_fs(:db)
 
     assert_equal expected_reschedules + 2, finding.calculate_reschedule_count
 
@@ -2510,13 +2510,13 @@ class FindingTest < ActiveSupport::TestCase
       finding.save!
 
       finding.state = Finding::STATUS[:awaiting]
-      finding.follow_up_date = (7.business_days.from_now.to_date + 6.days).to_s(:db)
+      finding.follow_up_date = (7.business_days.from_now.to_date + 6.days).to_fs(:db)
 
       assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
 
       finding.save!
 
-      finding.follow_up_date = (7.business_days.from_now.to_date + 5.days).to_s(:db)
+      finding.follow_up_date = (7.business_days.from_now.to_date + 5.days).to_fs(:db)
 
       assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
     end
@@ -2536,7 +2536,7 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     finding.extension      = false
-    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_fs(:db)
     reschedules            = finding.calculate_reschedule_count
 
     assert reschedules.zero?
@@ -2549,7 +2549,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'store follow_up_date_last_changed when change' do
     finding                = findings :being_implemented_weakness
-    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_fs(:db)
 
     finding.save!
 
@@ -2558,7 +2558,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'store follow_up_date_last_changed when change to nil' do
     finding                = findings :incomplete_weakness
-    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_fs(:db)
 
     finding.save!
 
@@ -2571,7 +2571,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'store follow_up_date_last_changed when change from nil' do
     finding                = findings :incomplete_weakness
-    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_fs(:db)
 
     finding.save!
 
@@ -2610,7 +2610,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'should return follow_up_date_last_changed when in past didnt have' do
     finding                = findings :incomplete_weakness
-    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_fs(:db)
 
     finding.save!
 
@@ -2619,7 +2619,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'should return follow_up_date when dont have follow_up_date but in past have' do
     finding                = findings :incomplete_weakness
-    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_fs(:db)
 
     finding.save!
 

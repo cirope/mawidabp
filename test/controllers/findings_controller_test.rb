@@ -161,7 +161,7 @@ class FindingsControllerTest < ActionController::TestCase
   test 'list findings pending_to_endorsement' do
     finding            = findings :being_implemented_weakness
     new_finding_answer = FindingAnswer.new(answer: 'This date for me',
-                                           commitment_date: Date.today.to_s(:db),
+                                           commitment_date: Date.today.to_fs(:db),
                                            user_id: users(:audited).id)
 
     finding.finding_answers << new_finding_answer
@@ -417,7 +417,7 @@ class FindingsControllerTest < ActionController::TestCase
               current_situation_verified: '1',
               audit_comments: 'Updated audit comments',
               state: Finding::STATUS[:unconfirmed],
-              origination_date: 1.day.ago.to_date.to_s(:db),
+              origination_date: 1.day.ago.to_date.to_fs(:db),
               audit_recommendations: 'Updated proposed action',
               effect: 'Updated effect',
               risk: Finding.risks_values.last,
@@ -592,7 +592,7 @@ class FindingsControllerTest < ActionController::TestCase
           current_situation_verified: '1',
           audit_comments: 'Updated audit comments',
           state: Finding::STATUS[:unconfirmed],
-          origination_date: 1.day.ago.to_date.to_s(:db),
+          origination_date: 1.day.ago.to_date.to_fs(:db),
           audit_recommendations: 'Updated proposed action',
           effect: 'Updated effect',
           priority: Finding.priorities_values.first,
@@ -651,7 +651,7 @@ class FindingsControllerTest < ActionController::TestCase
           current_situation_verified: '1',
           audit_comments: 'Updated audit comments',
           state: Finding::STATUS[:unconfirmed],
-          origination_date: 1.day.ago.to_date.to_s(:db),
+          origination_date: 1.day.ago.to_date.to_fs(:db),
           audit_recommendations: 'Updated proposed action',
           effect: 'Updated effect',
           priority: Finding.priorities_values.first,
@@ -927,7 +927,7 @@ class FindingsControllerTest < ActionController::TestCase
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
 
     finding.save!
 
@@ -972,7 +972,7 @@ class FindingsControllerTest < ActionController::TestCase
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
 
     finding.save!
 
@@ -994,7 +994,7 @@ class FindingsControllerTest < ActionController::TestCase
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
 
     finding.save!
 
@@ -1013,7 +1013,7 @@ class FindingsControllerTest < ActionController::TestCase
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
     work_paper            = work_papers :text_work_paper_being_implemented_weakness
 
     finding.save!
@@ -1086,7 +1086,7 @@ class FindingsControllerTest < ActionController::TestCase
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
     work_paper            = work_papers :text_work_paper_being_implemented_weakness
 
     finding.save!
@@ -1117,7 +1117,7 @@ class FindingsControllerTest < ActionController::TestCase
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
     work_paper            = work_papers :text_work_paper_being_implemented_weakness
 
     finding.save!
@@ -1150,7 +1150,7 @@ class FindingsControllerTest < ActionController::TestCase
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
     work_paper            = work_papers :text_work_paper_being_implemented_weakness
 
     finding.save!

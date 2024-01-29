@@ -175,7 +175,7 @@ class FindingsHelperTest < ActionView::TestCase
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
 
     finding.save!
 
@@ -189,7 +189,7 @@ class FindingsHelperTest < ActionView::TestCase
     Current.user          = auth_user
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
 
     finding.save!
 
@@ -207,7 +207,7 @@ class FindingsHelperTest < ActionView::TestCase
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
 
     finding.save!
 
@@ -222,7 +222,7 @@ class FindingsHelperTest < ActionView::TestCase
     Current.user          = auth_user
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
-    finding.solution_date = Date.today.to_s(:db)
+    finding.solution_date = Date.today.to_fs(:db)
 
     finding.save!
 

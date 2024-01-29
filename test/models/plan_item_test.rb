@@ -147,8 +147,8 @@ class PlanItemTest < ActiveSupport::TestCase
 
     new_free_plan_item = PlanItem.create!(
       project: 'free plan item',
-      start: 10.days.ago.to_date.to_s(:db),
-      end: 10.days.from_now.to_date.to_s(:db),
+      start: 10.days.ago.to_date.to_fs(:db),
+      end: 10.days.from_now.to_date.to_fs(:db),
       order_number: 7,
       scope: users(:committee),
       risk_exposure: 'high',
@@ -169,8 +169,8 @@ class PlanItemTest < ActiveSupport::TestCase
 
     new_free_plan_item = PlanItem.create!(
       project: 'free plan item',
-      start: 10.days.ago.to_date.to_s(:db),
-      end: 10.days.from_now.to_date.to_s(:db),
+      start: 10.days.ago.to_date.to_fs(:db),
+      end: 10.days.from_now.to_date.to_fs(:db),
       order_number: 7,
       scope: users(:committee),
       risk_exposure: 'high',
@@ -194,8 +194,8 @@ class PlanItemTest < ActiveSupport::TestCase
 
     new_free_plan_item = PlanItem.create!(
       project: 'free plan item',
-      start: 10.days.ago.to_date.to_s(:db),
-      end: 10.days.from_now.to_date.to_s(:db),
+      start: 10.days.ago.to_date.to_fs(:db),
+      end: 10.days.from_now.to_date.to_fs(:db),
       order_number: 7,
       scope: users(:committee),
       risk_exposure: 'high',
@@ -212,8 +212,8 @@ class PlanItemTest < ActiveSupport::TestCase
   test 'should return unused plan item because user does not have business units' do
     new_free_plan_item = PlanItem.create!(
       project: 'free plan item',
-      start: 10.days.ago.to_date.to_s(:db),
-      end: 10.days.from_now.to_date.to_s(:db),
+      start: 10.days.ago.to_date.to_fs(:db),
+      end: 10.days.from_now.to_date.to_fs(:db),
       order_number: 7,
       scope: users(:committee),
       risk_exposure: 'high',

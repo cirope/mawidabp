@@ -82,7 +82,7 @@
 
     <div>
       <%= link_to_show @plan %> |
-      <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
+      <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_fs(:db)] %> |
       <%= link_to_edit edit_plan_path(@plan, business_unit_type: params[:business_unit_type]) %> |
       <%= link_to t('.by_business_unit'), [:calendar, @plan, business_unit_type: params[:business_unit_type]] %> |
       <%= link_to_index plans_path %>

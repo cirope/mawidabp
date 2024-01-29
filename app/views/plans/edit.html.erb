@@ -1,7 +1,7 @@
 <%= content_for :form_actions do %>
   <%= link_to_show @plan %> |
   <%= link_to_calendar [:calendar, @plan, business_unit_type: params[:business_unit_type]] %> |
-  <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
+  <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_fs(:db)] %> |
   <%= link_to_index plans_path %> |
   <%= render 'shared/downloads', links: plan_download_options, right: true %>
 <% end %>

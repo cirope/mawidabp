@@ -2003,14 +2003,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
           :priority                  => Finding.priorities_values.first,
           :compliance                => 'yes',
           :repeated                  => 'false',
-          :issue_date                => Date.today.to_s(:db),
+          :issue_date                => Date.today.to_fs(:db),
           :issue_date_operator       => '=',
-          :origination_date          => Date.today.to_s(:db),
+          :origination_date          => Date.today.to_fs(:db),
           :origination_date_operator => '>',
-          :follow_up_date            => Date.today.to_s(:db),
-          :follow_up_date_until      => Date.today.to_s(:db),
+          :follow_up_date            => Date.today.to_fs(:db),
+          :follow_up_date_until      => Date.today.to_fs(:db),
           :follow_up_date_operator   => 'between',
-          :solution_date             => Date.today.to_s(:db),
+          :solution_date             => Date.today.to_fs(:db),
           :solution_date_operator    => '='
         }
       }
