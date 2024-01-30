@@ -48,7 +48,8 @@ module Findings::CurrentUserScopes
       corporate_not_audited   ||
         @auth_user.committee? ||
         @selected_user        ||
-        @selected_user_ids
+        @selected_user_ids    ||
+        !current_organization.finding_by_current_user?
     end
 
     def by_selected_user_conditions

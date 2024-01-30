@@ -26,9 +26,7 @@ module Parameters::Relevance
           {
             not_rated:    0,
             low:          1,
-            moderate_low: 2,
             moderate:     3,
-            high:         4,
             critical:     5
           }
         end
