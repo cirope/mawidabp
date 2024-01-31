@@ -254,4 +254,14 @@ module ConclusionFinalReviewsHelper
       content_tag(:div, out, :style => 'margin-bottom: 1em;')
     end
   end
+
+  def enable_close_date_edition conclusion_final_review
+    setting = Current.organization.settings.find_by name: 'enable_close_date_edition'
+
+    if conclusion_final_review.new_record?
+      false
+    else
+      setting.value == '1' ? true : false
+    end
+  end
 end

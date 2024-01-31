@@ -658,6 +658,7 @@ es:
     temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.'
     finding_warning_expire_days: 'Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad'
     finding_by_current_user: 'Filtrar observaciones por usuario actual'
+    enable_close_date_edition: 'Habilitar la edición de fecha de cierre'
 
   tags:
     edit:
