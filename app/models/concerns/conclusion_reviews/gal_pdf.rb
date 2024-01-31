@@ -162,7 +162,7 @@ module ConclusionReviews::GalPdf
 
       pdf.make_table([
         [
-          "<b>#{Review.human_attribute_name :risk_exposure}:</b> #{review.risk_exposure} #{put_tag_name}",
+          "<b>#{Review.human_attribute_name :risk_exposure}:</b> #{review.risk_exposure}",
           "<b>#{I18n.t 'conclusion_review.executive_summary.revision_type'}</b>: #{review.scope}"
         ]
       ], style)
@@ -179,12 +179,6 @@ module ConclusionReviews::GalPdf
         background_color: 'e7e6e6',
         inline_format: true
       )
-    end
-
-    def put_tag_name
-      if plan_item.tags.take&.include_in_executive_summary?
-        "- (#{plan_item.tags.take.name})"
-      end
     end
 
     def put_survey_on pdf
