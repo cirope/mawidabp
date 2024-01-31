@@ -255,13 +255,13 @@ module ConclusionFinalReviewsHelper
     end
   end
 
-  def enable_close_date_edition conclusion_final_review
+  def enable_close_date_edition? conclusion_final_review
     setting = Current.organization.settings.find_by name: 'enable_close_date_edition'
 
-    if conclusion_final_review.new_record?
-      false
+    if conclusion_final_review.new_record? || setting.value == '1'
+      true
     else
-      setting.value == '1' ? true : false
+      false
     end
   end
 end
