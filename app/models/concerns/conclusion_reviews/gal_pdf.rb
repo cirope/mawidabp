@@ -129,16 +129,28 @@ module ConclusionReviews::GalPdf
       pdf.move_down PDF_FONT_SIZE * 2
 
       pdf.table([
+        [put_project_on(pdf)],
         [put_risk_exposure_and_scope_on(pdf)],
         [put_survey_on(pdf)],
-        [""],
         [put_conclusion_and_score_image_on(pdf)],
-        [""],
         [put_key_weaknesses_on(pdf)],
         [put_observations_v2_on(pdf)],
         [put_robotization_on(pdf)]
 
       ])
+    end
+
+    def put_project_on pdf
+      project_text = I18n.t(
+        'conclusion_review.executive_summary.project',
+        project: review.plan_item.project
+      )
+
+      pdf.make_cell(
+        content: project_text,
+        background_color: 'e7e6e6',
+        inline_format: true
+      )
     end
 
     def put_risk_exposure_and_scope_on pdf
