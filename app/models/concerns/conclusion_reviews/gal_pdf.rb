@@ -131,6 +131,7 @@ module ConclusionReviews::GalPdf
       pdf.table([
         [put_project_on(pdf)],
         [put_risk_exposure_and_scope_on(pdf)],
+        [put_risk_exposure_v2_on(pdf)],
         [put_survey_on(pdf)],
         [put_conclusion_and_score_image_on(pdf)],
         [put_key_weaknesses_on(pdf)],
@@ -165,6 +166,19 @@ module ConclusionReviews::GalPdf
           "<b>#{I18n.t 'conclusion_review.executive_summary.revision_type'}</b>: #{review.scope}"
         ]
       ], style)
+    end
+
+    def put_risk_exposure_v2_on pdf
+      risk_exposure_text = I18n.t(
+        'conclusion_review.executive_summary.risk_exposure_alt',
+        risk: review.risk_exposure
+      )
+
+      pdf.make_cell(
+        content: risk_exposure_text,
+        background_color: 'e7e6e6',
+        inline_format: true
+      )
     end
 
     def put_tag_name
