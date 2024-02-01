@@ -509,7 +509,7 @@ es:
       other_weaknesses: "Otras observaciones"
       no_weaknesses: "No hay observaciones"
       assumed_risk_weaknesses: "Riesgo asumido"
-      revision_type: Tipo de revisión
+      period: Fecha
       key_weaknesses: Hallazgos claves
       origin: Origen
       normalization: Normalización
