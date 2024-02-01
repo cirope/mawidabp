@@ -510,6 +510,7 @@ es:
       no_weaknesses: "No hay observaciones"
       assumed_risk_weaknesses: "Riesgo asumido"
       period: Fecha
+      survey: <b>Alcance <i>(Audit scope)</i>:</b> %{survey}
       key_weaknesses: Hallazgos claves
       origin: Origen
       normalization: Normalización

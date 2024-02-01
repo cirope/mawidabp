@@ -182,9 +182,13 @@ module ConclusionReviews::GalPdf
     end
 
     def put_survey_on pdf
+      survey_text = I18n.t(
+        'conclusion_review.executive_summary.survey',
+        survey: review.survey
+      )
+
       pdf.make_cell(
-        content: "<b>#{Review.human_attribute_name :survey}:</b> #{review.survey}",
-        background_color: 'e7e6e6',
+        content: survey_text,
         align: :justify,
         inline_format: true
       )
