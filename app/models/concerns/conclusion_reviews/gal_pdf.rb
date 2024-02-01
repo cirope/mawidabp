@@ -143,7 +143,7 @@ module ConclusionReviews::GalPdf
 
     def put_project_on pdf
       project_text = I18n.t(
-        'conclusion_review.executive_summary.project',
+        'conclusion_review.executive_summary.project_alt',
         project: review.plan_item.project
       )
 
