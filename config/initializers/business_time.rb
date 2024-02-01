@@ -6,4 +6,4 @@ holidays_file_path = "#{Rails.root}/db/holidays.txt"
 
 File.foreach(holidays_file_path) do |line|
   BusinessTime::Config.holidays << Date.parse(line)
-end if File.exists?(holidays_file_path)
+end if File.exist?(holidays_file_path)

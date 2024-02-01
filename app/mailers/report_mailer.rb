@@ -3,11 +3,11 @@ class ReportMailer < ApplicationMailer
 
   helper :markdown
 
-  def attached_report filename:, file:, user_id:, organization_id:
-    @user = User.find user_id
-    organization = Organization.find organization_id
+  def attached_report args = nil, kwargs
+    @user        = User.find kwargs[:user_id]
+    organization = Organization.find kwargs[:organization_id]
 
-    attachments[filename] = { mime_type: 'application/zip', content: File.read(file) }
+    attachments[kwargs[:filename]] = { mime_type: 'application/zip', content: File.read(kwargs[:file]) }
 
     mail(
       to: @user.email,
