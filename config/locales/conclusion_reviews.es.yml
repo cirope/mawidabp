@@ -12,7 +12,7 @@ es:
         versions:
           draft: 'BORRADOR'
           final: 'FINAL'
-        draft_with_weaknesses: 'Adjunto al presente distribuimos el informe de referencia en versión borrador, solicitando tenga a bien considerar las observaciones y <span class="font-weight-bold">responder</span>, conforme lo requerido por el Directorio (*).'
+        draft_with_weaknesses: 'Adjunto al presente distribuimos el informe de referencia en versión borrador, solicitando tenga a bien considerar las observaciones y <span class="fw-bold">responder</span>, conforme lo requerido por el Directorio (*).'
         final_with_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia conteniendo las respuestas de cada una de las áreas.'
         final_without_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia, el que no contiene observaciones de relevancia que formular.'
         recipients: 'Destinatarios'
