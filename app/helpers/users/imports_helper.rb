@@ -1,11 +1,11 @@
 module Users::ImportsHelper
   def users_import_state_badge_class(state)
     badge = {
-      created:   'badge-success',
-      deleted:   'badge-warning',
-      errored:   'badge-danger',
-      unchanged: 'badge-secondary',
-      updated:   'badge-info'
+      created:   'bg-success',
+      deleted:   'bg-warning',
+      errored:   'bg-danger',
+      unchanged: 'bg-secondary',
+      updated:   'bg-info'
     }[state]
 
     content_tag(:span, t(".#{state}"), class: "badge #{badge}")

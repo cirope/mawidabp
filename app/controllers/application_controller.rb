@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  before_action :set_locale
   before_action :set_paper_trail_whodunnit
   before_action :scope_current_organization
   before_action :set_conclusion_pdf_format
@@ -71,6 +72,11 @@ class ApplicationController < ActionController::Base
   helper_method :order_param
 
   private
+
+    def set_locale
+      current_user
+      I18n.locale = Current.user ? Current.user.language.to_sym : I18n.default_locale
+    end
 
     def scope_current_organization
       Current.group         = current_organization&.group

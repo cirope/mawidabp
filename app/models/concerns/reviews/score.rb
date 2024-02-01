@@ -139,21 +139,28 @@ module Reviews::Score
   def score_by_weakness_reviews date
     weaknesses_total = []
 
-    _weaknesses = conclusion_final_review ? final_weaknesses : weaknesses
+    weaknesses_total << implemented_audited_or_being_implemented_w
 
-    if external_reviews.any?
-      external_reviews.each do |er|
-        er.alternative_review.final_weaknesses.each { |w| weaknesses_total << w }
-      end
+    weaknesses_total << external_reviews.flat_map do |er|
+      er.alternative_review.implemented_audited_or_being_implemented_w
     end
 
-    _weaknesses.each { |w| weaknesses_total << w }
-
-    scores = weaknesses_total.select { |w| w.state_weight > 0 }.group_by do |w|
+    scores = weaknesses_total.flatten.group_by do |w|
       [w.risk_weight, w.state_weight, w.age_weight(date: date)]
     end
 
     scores
+  end
+
+  def implemented_audited_or_being_implemented_w
+    total_weaknesses = conclusion_final_review ? [final_weaknesses] : [weaknesses]
+
+    assigned_findings = finding_review_assignments.map(&:finding).select { |f| f.is_a?(Weakness) }
+    total_weaknesses << assigned_findings
+
+    total_weaknesses.flatten.select do |w|
+      w.being_implemented? || w.implemented_audited?
+    end
   end
 
   def scored_by_weaknesses?

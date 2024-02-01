@@ -237,17 +237,37 @@ module ConclusionReviews::PatPdf
     def put_pat_brief_weaknesses_section_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked.reorder(sort_weaknesses_by)
+      filtered   = weaknesses.not_revoked.not_expired.reorder(sort_weaknesses_by)
 
-      if filtered.any?
+      if pat_previous_weaknesses.any? || pat_weaknesses_other_inspections.any? || filtered.any?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.cover.brief.details_title'), align: :justify
 
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text I18n.t('conclusion_review.pat.cover.brief.weaknesses_title'), align: :justify
+        if pat_previous_weaknesses.any?
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text I18n.t('conclusion_review.pat.cover.brief.previous_title'), align: :justify
 
-        filtered.each do |weakness|
-          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
+          pat_previous_weaknesses.each do |weakness|
+            pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
+          end
+        end
+
+        if filtered.any?
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text I18n.t('conclusion_review.pat.cover.brief.weaknesses_title'), align: :justify
+
+          filtered.each do |weakness|
+            pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
+          end
+        end
+
+        if pat_weaknesses_other_inspections.any?
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text I18n.t('conclusion_review.pat.cover.brief.external_weaknesses_title'), align: :justify
+
+          pat_weaknesses_other_inspections.each do |weakness|
+            pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.state_text})", align: :justify
+          end
         end
       end
     end
@@ -279,18 +299,14 @@ module ConclusionReviews::PatPdf
         pdf.text Weakness.model_name.human(count: 0).upcase, align: :center, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        put_pat_previous_weaknesses_on pdf
-        put_pat_weaknesses_on           pdf
-        put_pat_weaknesses_external_on  pdf
+        put_pat_previous_weaknesses_on          pdf
+        put_pat_weaknesses_on                   pdf
+        put_pat_weaknesses_other_inspections_on pdf
       end
     end
 
     def put_pat_previous_weaknesses_on pdf
-      use_finals = kind_of? ConclusionFinalReview
-      assigned   = review.assigned_weaknesses
-      filtered   = assigned.not_revoked.reorder(sort_weaknesses_by).select do |w|
-                     w.business_unit_type.external == false
-                   end
+      filtered = pat_previous_weaknesses
 
       if filtered.any?
         previous_title = I18n.t(
@@ -307,6 +323,14 @@ module ConclusionReviews::PatPdf
         end
 
         @_next_prefix = @_next_prefix.next
+      end
+    end
+
+    def pat_previous_weaknesses
+      assigned = review.assigned_weaknesses
+
+      assigned.not_revoked.not_expired.reorder(sort_weaknesses_by).select do |w|
+        w.business_unit_type.external == false
       end
     end
 
@@ -335,9 +359,7 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_weaknesses_on pdf
-      use_finals = kind_of? ConclusionFinalReview
-      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-      filtered   = weaknesses.not_revoked.reorder(sort_weaknesses_by)
+      filtered = pat_weaknesses
 
       if filtered.any?
         i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
@@ -357,6 +379,13 @@ module ConclusionReviews::PatPdf
 
         @_next_prefix = @_next_prefix.next
       end
+    end
+
+    def pat_weaknesses
+      use_finals = kind_of? ConclusionFinalReview
+      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+
+      weaknesses.not_revoked.not_expired.reorder(sort_weaknesses_by)
     end
 
     def put_pat_weakness_on pdf, weakness, i
@@ -403,16 +432,10 @@ module ConclusionReviews::PatPdf
       end
     end
 
-    def put_pat_weaknesses_external_on pdf
-      use_finals = kind_of? ConclusionFinalReview
-      assigned   = review.assigned_weaknesses
-      filtered   = assigned.not_revoked.reorder(sort_weaknesses_by).select do |w|
-                     w.business_unit_type.external == true
-                   end
+    def put_pat_weaknesses_other_inspections_on pdf
+      filtered = pat_weaknesses_other_inspections
 
       if filtered.any?
-        i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
-
         pdf.text I18n.t(
           'conclusion_review.pat.weaknesses.external',
           prefix: "#{@_next_prefix}.",
@@ -427,6 +450,14 @@ module ConclusionReviews::PatPdf
         end
 
         @_next_prefix = @_next_prefix.next
+      end
+    end
+
+    def pat_weaknesses_other_inspections
+      assigned = review.assigned_weaknesses
+
+      assigned.not_revoked.not_expired.reorder(sort_weaknesses_by).select do |w|
+        w.business_unit_type.external == true
       end
     end
 
@@ -515,7 +546,9 @@ module ConclusionReviews::PatPdf
 
         pdf.text Annex.model_name.human(count: 0).upcase, align: :center, style: :bold
 
-        annexes.order(:id).each_with_index do |annex, idx|
+        filtered_annexes = pat_annexes
+
+        filtered_annexes.each_with_index do |annex, idx|
           pdf.move_down PDF_FONT_SIZE * 2
           pdf.text annex.title, style: :bold
 
@@ -537,6 +570,10 @@ module ConclusionReviews::PatPdf
           pdf.start_new_page if idx < annexes.size - 1
         end
       end
+    end
+
+    def pat_annexes
+      annexes.order(:id)
     end
 
     def sort_weaknesses_by

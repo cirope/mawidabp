@@ -1,38 +1,42 @@
-<%= simple_form_for @best_practice do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @best_practice do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <%= f.input :name, autofocus: true, input_html: { maxlength: 255 } %>
-    <%= f.input :description %>
-    <%= f.input :obsolete %>
-    <%= f.input :shared, input_html: { disabled: @best_practice.shared } %>
-  </div>
-
-  <% if @best_practice.persisted? %>
-    <div class="row">
-      <div class="col-md-10">
-        <h5 class="h6 ml-3 pl-1"><%= ProcessControl.model_name.human count: 0 %></h5>
+      <div class="form-inputs">
+        <%= f.input :name, autofocus: true, input_html: { maxlength: 255 } %>
+        <%= f.input :description %>
+        <%= f.input :obsolete %>
+        <%= f.input :shared, input_html: { disabled: @best_practice.shared } %>
       </div>
-      <div class="col-md-1">
-        <h5 class="h6"><%= ProcessControl.human_attribute_name 'obsolete' %></h5>
-      </div>
-    </div>
 
-    <div id="process_controls">
-      <%= f.simple_fields_for :process_controls, nested_process_controls do |p_f| %>
-        <%= render 'process_control', f: p_f %>
+      <% if @best_practice.persisted? %>
+        <div class="row mt-2">
+          <div class="col-md-10">
+            <h5 class="h6 ms-4 ps-2"><%= ProcessControl.model_name.human count: 0 %></h5>
+          </div>
+          <div class="col-md-1">
+            <h5 class="h6"><%= ProcessControl.human_attribute_name 'obsolete' %></h5>
+          </div>
+        </div>
+
+        <div id="process_controls">
+          <%= f.simple_fields_for :process_controls, nested_process_controls do |p_f| %>
+            <%= render 'process_control', f: p_f %>
+          <% end %>
+
+          <%= link_to_add_fields t('best_practices.process_controls.new'), f, :process_controls %>
+        </div>
       <% end %>
 
-      <%= link_to_add_fields t('best_practices.process_controls.new'), f, :process_controls %>
-    </div>
-  <% end %>
+      <hr />
 
-  <hr />
-
-  <div class="form-actions">
-    <%= f.input :organization_id, as: :hidden %>
-    <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary' %>
-    <div class="float-right"><%= yield :form_actions %></div>
+      <div class="form-actions">
+        <%= f.input :organization_id, as: :hidden %>
+        <%= f.input :lock_version, as: :hidden %>
+        <%= f.submit class: 'btn btn-primary' %>
+        <div class="float-end"><%= yield :form_actions %></div>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

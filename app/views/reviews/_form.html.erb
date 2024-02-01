@@ -1,368 +1,380 @@
 <% readonly = @review.has_final_review? %>
 <% frozen = @review.is_frozen? %>
-<%= simple_form_for @review do |f| %>
-  <% js_extra = "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
-  <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <% if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION && !readonly %>
-          <%= render 'automatic_identification', f: f %>
-        <% else %>
-          <%= f.input :identification, label: Review.human_attribute_name(:identification), input_html: {
-            autofocus: !SHOW_REVIEW_AUTOMATIC_IDENTIFICATION && !readonly,
-            readonly: readonly
-          } %>
-        <% end %>
-        <% if @review.new_record? %>
-          <%= f.input :period_id, collection: Period.list_all_with_plans.map { |p| [p.inspect, p.id] },
-            prompt: true,
-            input_html: {
-              data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
-            }
-          %>
-        <% else %>
-          <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
-            input_html: { value: @review.period.inspect, readonly: true } %>
-        <% end %>
-        <% if @review.new_record? %>
-          <div class="form-group">
-            <%= f.label :plan_item_id %>
-            <%= review_plan_item_field(f, readonly) %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @review do |f| %>
+      <% js_extra = "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
+      <%= render 'shared/error_explanation', f: f %>
+
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-md-6">
+            <% if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION && !readonly %>
+              <%= render 'automatic_identification', f: f %>
+            <% else %>
+              <%= f.input :identification, label: Review.human_attribute_name(:identification), input_html: {
+                autofocus: !SHOW_REVIEW_AUTOMATIC_IDENTIFICATION && !readonly,
+                readonly: readonly
+              } %>
+            <% end %>
+            <% if @review.new_record? %>
+              <%= f.input :period_id, collection: Period.list_all_with_plans.map { |p| [p.inspect, p.id] },
+                prompt: true,
+                input_html: {
+                  data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
+                }
+              %>
+            <% else %>
+              <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
+                input_html: { value: @review.period.inspect, readonly: true } %>
+            <% end %>
+            <% if @review.new_record? %>
+              <div class="form-group">
+                <%= f.label :plan_item_id %>
+                <%= review_plan_item_field(f, readonly) %>
+              </div>
+            <% else %>
+              <%= f.input :plan_item,
+                input_html: { value: @review.plan_item.project, readonly: true } %>
+            <% end %>
+            <%= f.input :business_unit,
+              input_html: { value: review_business_unit_text(@review), readonly: true } %>
+            <%= f.input :audit_type, label: Review.human_attribute_name(:audit_type), input_html: {
+              value: review_business_unit_type_text(@review), readonly: true } %>
+
+            <% if USE_SCOPE_CYCLE %>
+              <%= f.input :subsidiary_id,
+                          collection: subsidiaries_options,
+                          include_blank: true,
+                          input_html: { readonly: @review.weaknesses.any? }
+              %>
+            <% end %>
+
+            <% if Current.conclusion_pdf_format == 'nbc' %>
+              <%= f.input :review_objective, input_html: {
+                rows: 4,
+                disabled: readonly }
+              %>
+            <% end %>
           </div>
-        <% else %>
-          <%= f.input :plan_item,
-            input_html: { value: @review.plan_item.project, readonly: true } %>
-        <% end %>
-        <%= f.input :business_unit,
-          input_html: { value: review_business_unit_text(@review), readonly: true } %>
-        <%= f.input :audit_type, label: Review.human_attribute_name(:audit_type), input_html: {
-          value: review_business_unit_type_text(@review), readonly: true } %>
+          <div class="col-md-6">
+            <% if USE_SCOPE_CYCLE %>
+              <%= f.input :scope %>
+            <% end %>
+
+            <% unless HIDE_REVIEW_DESCRIPTION %>
+              <%= f.input :description, label: Review.human_attribute_name(:description),
+                input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 4 : 5 } %>
+            <% end %>
+
+            <%= f.input :survey, label: Review.human_attribute_name(:survey),
+              input_html: { readonly: readonly, rows: HIDE_REVIEW_DESCRIPTION ? 8 : 5 } %>
+
+            <p class="mb-1 text-end">
+              <%= link_to_unless @review.new_record?, t('review.survey.download'),
+                :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
+            </p>
+
+            <div class="row">
+              <div class="col-md-6">
+                <p class="mb-1"><%= Review.human_attribute_name 'file_model_id' %></p>
+
+                <div class="clearfix">
+                  <%= f.simple_fields_for :file_model_reviews do |fm_r| %>
+                    <%= render 'file_model_review', f: fm_r, frozen: frozen %>
+                  <% end %>
+
+                  <%= link_to_add_fields t('review.add_file_model'), f, :file_model_reviews, 'file_model_review' unless frozen %>
+                </div>
+              </div>
+              <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? current_organization.prefix %>
+                <div class="col-md-6">
+                  <%= f.input(
+                    :score_type,
+                    label:           t('review.without_score'),
+                    as:              :boolean,
+                    checked_value:   'none',
+                    unchecked_value: 'weaknesses',
+                    input_html:      { disabled: readonly }
+                  ) %>
+                </div>
+              <% end %>
+            </div>
+
+            <div id="estimated_amount" class="mt-3">
+              <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
+            </div>
+            <% if Current.conclusion_pdf_format == 'nbc' %>
+              <%= f.input :type_review, collection: type_review, include_blank: t('helpers.select.prompt'), input_html: { disabled: readonly } %>
+            <% end %>
+          </div>
+        </div>
 
         <% if USE_SCOPE_CYCLE %>
-          <%= f.input :subsidiary_id,
-                      collection: subsidiaries_options,
-                      include_blank: true,
-                      input_html: { readonly: @review.weaknesses.any? }
-          %>
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <%= f.input :manual_score, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
+            </div>
+            <% if @review.new_record? || @review.plan_item&.cycle? %>
+              <div class="col-md-6" data-manual-score-alt>
+                <%= f.input :manual_score_alt, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
+              </div>
+            <% end %>
+          </div>
+
+          <% if @review.persisted? && @review.plan_item.auxiliar_business_unit_types.any? %>
+            <%= render partial: 'auxiliar_business_unit_types', locals: { plan_item: @review.plan_item } %>
+          <% else %>
+            <div data-bs-target="auxiliar-business-unit-types"></div>
+          <% end %>
         <% end %>
 
-        <% if Current.conclusion_pdf_format == 'nbc' %>
-          <%= f.input :review_objective, input_html: {
-            rows: 4,
-            disabled: readonly }
-          %>
+        <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :scope, collection: review_scope_options, prompt: true, input_html: { disabled: readonly } %>
+              <%= f.input :include_sox, collection: review_include_sox_options, prompt: true, input_html: { disabled: readonly } %>
+            </div>
+            <div class="col-md-6">
+              <%= f.input :risk_exposure, collection: review_risk_exposure_options, prompt: true, input_html: { disabled: readonly } %>
+              <%= f.input :manual_score, input_html: { min: 0, max: 1000, step: 1, disabled: readonly } %>
+            </div>
+          </div>
         <% end %>
       </div>
-      <div class="col-md-6">
-        <% if USE_SCOPE_CYCLE %>
-          <%= f.input :scope %>
+
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'user' %></h5>
+        </div>
+        <div class="col-md-<%= Current.conclusion_pdf_format == 'gal' ? 5 : 3 %>">
+          <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'assignment_type' %></h5>
+        </div>
+        <% unless Current.conclusion_pdf_format == 'gal' %>
+          <div class="col-md-1">
+            <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'include_signature' %></h5>
+          </div>
+          <div class="col-md-1">
+            <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'owner' %></h5>
+          </div>
+        <% end %>
+      </div>
+
+      <div id="review_user_assignments">
+        <% audit_team, others = @review.review_user_assignments.partition &:in_audit_team? %>
+
+        <% if audit_team.present? %>
+          <h5 class="text-muted"><%= t 'review.user_assignment.audit_team' %></h5>
+
+          <%= f.simple_fields_for :review_user_assignments, audit_team do |rua_f| %>
+            <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+          <% end %>
         <% end %>
 
-        <% unless HIDE_REVIEW_DESCRIPTION %>
-          <%= f.input :description, label: Review.human_attribute_name(:description),
-            input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 4 : 5 } %>
+        <% if others.present? %>
+          <h5 class="text-muted"><%= t 'review.user_assignment.others' %></h5>
+
+          <%= f.simple_fields_for :review_user_assignments, others do |rua_f| %>
+            <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+          <% end %>
         <% end %>
 
-        <%= f.input :survey, label: Review.human_attribute_name(:survey),
-          input_html: { readonly: readonly, rows: HIDE_REVIEW_DESCRIPTION ? 8 : 5 } %>
+        <% unless readonly %>
+          <hr>
 
-        <p class="mb-1 text-right">
-          <%= link_to_unless @review.new_record?, t('review.survey.download'),
-            :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
-        </p>
+          <div data-review-user-assignments-container></div>
+
+          <%= link_to_add_fields(
+            t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
+          ) %>
+        <% end %>
+      </div>
+
+      <% if !readonly || @review.taggings.any? %>
+        <h4 class="mt-4<%= ' text-danger' if @review.errors[:taggings].present? %>">
+          <%= Tag.model_name.human count: 0 %>
+        </h4>
 
         <div class="row">
           <div class="col-md-6">
-            <p class="mb-1"><%= Review.human_attribute_name 'file_model_id' %></p>
+            <h5 class="h6"><%= Tag.human_attribute_name :name %></h5>
+          </div>
+        </div>
 
-            <div class="clearfix">
-              <%= f.simple_fields_for :file_model_reviews do |fm_r| %>
-                <%= render 'file_model_review', f: fm_r, frozen: frozen %>
-              <% end %>
+        <div id="taggings">
+          <%= f.simple_fields_for :taggings do |fr_f| %>
+            <%= render 'reviews/tagging', f: fr_f, readonly: readonly %>
+          <% end %>
 
-              <%= link_to_add_fields t('review.add_file_model'), f, :file_model_reviews, 'file_model_review' unless frozen %>
+          <p class="mb-1">
+            <%= link_to_add_fields(t('review.add_tagging'), f, :taggings, 'reviews/tagging', {}, { readonly: readonly }) unless readonly %>
+          </p>
+        </div>
+      <% end %>
+
+      <h4 class="mt-4">
+        <%= t('review.control_objective_items_label') %>
+        <% if @review.persisted? && !readonly %>
+          <span class="float-end small">
+            <%= link_to_excluded_control_objectives %>
+          </span>
+        <% end %>
+      </h4>
+
+      <hr />
+
+      <div data-control-objective-items-container>
+      </div>
+
+      <% if @review.control_objective_items.any? %>
+        <%= render 'control_objective_items', f: f, readonly: readonly, frozen: frozen %>
+      <% end %>
+
+      <% unless readonly %>
+        <ul class="nav nav-tabs mt-4">
+          <li class="nav-item">
+            <a class="nav-link active" href="#control-objective" data-bs-toggle="tab">
+              <%= ControlObjective.model_name.human %>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#process-control" data-bs-toggle="tab">
+              <%= ProcessControl.model_name.human %>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#best-practice" data-bs-toggle="tab">
+              <%= BestPractice.model_name.human %>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#control-objective-tag" data-bs-toggle="tab">
+              <%= t('review.control_objective_tag') %>
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content pt-3">
+          <div class="tab-pane active" id="control-objective">
+            <div id="control_objectives">
+              <%= link_to_add_fields(
+                t('review.add_control_objective'), f, :control_objective_items, 'control_objective', action: 'add-control-objective'
+              ) %>
             </div>
           </div>
-          <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? current_organization.prefix %>
-            <div class="col-md-6">
-              <%= f.input(
-                :score_type,
-                label:           t('review.without_score'),
-                as:              :boolean,
-                checked_value:   'none',
-                unchecked_value: 'weaknesses',
-                input_html:      { disabled: readonly }
+
+          <div class="tab-pane" id="process-control">
+            <div id="process_controls">
+              <%= link_to_add_fields(
+                t('review.add_process_control'), f, :control_objective_items, 'process_control'
               ) %>
+            </div>
+          </div>
+
+          <div class="tab-pane" id="best-practice">
+            <div id="best_practices">
+              <%= link_to_add_fields(
+                t('review.add_best_practice'), f, :control_objective_items, 'best_practice'
+              ) %>
+            </div>
+          </div>
+          <div class="tab-pane" id="control-objective-tag">
+            <div id="control_objective_tags">
+              <%= link_to_add_fields t('review.add_control_objective_tag'), f, :control_objective_items, 'control_objective_tag' %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <h4 class="mt-3"><%= t 'review.findings_label' %></h4>
+
+      <hr />
+
+      <div id="suggested_process_control_findings"></div>
+      <div id="suggested_findings"></div>
+      <div id="past_implemented_audited_findings"></div>
+
+      <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>
+      <% unless finding_relations.empty? %>
+        <%= f.simple_fields_for :finding_review_assignments, finding_relations do |fra_f| %>
+          <%= render 'finding_review_assignment_readonly', f: fra_f, readonly: readonly %>
+        <% end %>
+      <% end %>
+
+      <% unless readonly %>
+        <h5 class="h6 mt-4"><%= FindingReviewAssignment.human_attribute_name 'finding' %></h5>
+
+        <div id="finding_review_assignments"></div>
+        <div id="finding_review_dynamic_assignments"></div>
+        <p class="mb-1">
+          <%= link_to_add_fields(
+            t('review.add_finding_assignment'), f,
+            :finding_review_assignments, nil,
+            { insert_into: '#finding_review_dynamic_assignments' }
+          ) %>
+          <%= link_to_add_fields(
+            t('review.add_past_findings'), f,
+            :finding_review_assignments,
+            'implemented_audited_finding',
+            { insert_into: '#finding_review_dynamic_assignments' }
+          ) %>
+          <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
+            suggested_findings_review_path(id: @review.plan_item_id) : '#',
+            :remote => true, :id => :link_to_suggested_findings,
+            :class => 'btn btn-outline-secondary btn-sm' %>
+          <%= link_to t('review.suggest_past_findings'), @review.plan_item_id ?
+            past_implemented_audited_findings_review_path(id: @review.plan_item_id) : '#',
+            :remote => true, :id => :link_to_past_implemented_audited_findings,
+            :class => 'btn btn-outline-secondary btn-sm' %>
+        </p>
+      <% end %>
+
+      <% if @review.work_papers_finished? %>
+        <div class="alert alert-info mt-3">
+          <div class="alert-message">
+            <%= t 'review.work_papers_marked_as_finished' %>
+          </div>
+        </div>
+      <% elsif @review.work_papers_revised? %>
+        <div class="alert alert-success mt-3">
+          <div class="alert-message">
+            <%= t 'review.work_papers_marked_as_revised' %>
+          </div>
+        </div>
+      <% end %>
+
+      <hr />
+
+      <% if Current.conclusion_pdf_format == 'nbc' %>
+        <div>
+          <h4 class="mt-3"><%= t 'review.external_reviews_label' %></h4>
+
+          <div>
+            <%= f.simple_fields_for :external_reviews do |er| %>
+              <%= render 'external_review', f: er, readonly: readonly %>
+            <% end %>
+          </div>
+          <% unless readonly %>
+            <div>
+              <%= link_to_add_fields((t 'review.external_reviews_title'), f, :external_reviews) %>
             </div>
           <% end %>
         </div>
-
-        <div id="estimated_amount" class="mt-3">
-          <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
-        </div>
-        <% if Current.conclusion_pdf_format == 'nbc' %>
-          <%= f.input :type_review, collection: type_review, include_blank: t('helpers.select.prompt') %>
-        <% end %>
-      </div>
-    </div>
-
-    <% if USE_SCOPE_CYCLE %>
-      <div class="row mt-3">
-        <div class="col-md-6">
-          <%= f.input :manual_score, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
-        </div>
-        <% if @review.new_record? || @review.plan_item&.cycle? %>
-          <div class="col-md-6" data-manual-score-alt>
-            <%= f.input :manual_score_alt, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
-          </div>
-        <% end %>
-      </div>
-
-      <% if @review.persisted? && @review.plan_item.auxiliar_business_unit_types.any? %>
-        <%= render partial: 'auxiliar_business_unit_types', locals: { plan_item: @review.plan_item } %>
-      <% else %>
-        <div data-target="auxiliar-business-unit-types"></div>
-      <% end %>
-    <% end %>
-
-    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :scope, collection: review_scope_options, prompt: true, input_html: { disabled: readonly } %>
-          <%= f.input :include_sox, collection: review_include_sox_options, prompt: true, input_html: { disabled: readonly } %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :risk_exposure, collection: review_risk_exposure_options, prompt: true, input_html: { disabled: readonly } %>
-          <%= f.input :manual_score, input_html: { min: 0, max: 1000, step: 1, disabled: readonly } %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-
-  <div class="row mt-3">
-    <div class="col-md-6">
-      <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'user' %></h5>
-    </div>
-    <div class="col-md-<%= Current.conclusion_pdf_format == 'gal' ? 5 : 3 %>">
-      <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'assignment_type' %></h5>
-    </div>
-    <% unless Current.conclusion_pdf_format == 'gal' %>
-      <div class="col-md-1">
-        <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'include_signature' %></h5>
-      </div>
-      <div class="col-md-1">
-        <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'owner' %></h5>
-      </div>
-    <% end %>
-  </div>
-
-  <div id="review_user_assignments">
-    <% audit_team, others = @review.review_user_assignments.partition &:in_audit_team? %>
-
-    <% if audit_team.present? %>
-      <h5 class="text-muted"><%= t 'review.user_assignment.audit_team' %></h5>
-
-      <%= f.simple_fields_for :review_user_assignments, audit_team do |rua_f| %>
-        <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
-      <% end %>
-    <% end %>
-
-    <% if others.present? %>
-      <h5 class="text-muted"><%= t 'review.user_assignment.others' %></h5>
-
-      <%= f.simple_fields_for :review_user_assignments, others do |rua_f| %>
-        <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
-      <% end %>
-    <% end %>
-
-    <% unless readonly %>
-      <hr>
-
-      <div data-review-user-assignments-container></div>
-
-      <%= link_to_add_fields(
-        t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
-      ) %>
-    <% end %>
-  </div>
-
-  <% if !readonly || @review.taggings.any? %>
-    <h4 class="mt-3<%= ' text-danger' if @review.errors[:taggings].present? %>">
-      <%= Tag.model_name.human count: 0 %>
-    </h4>
-
-    <div class="row">
-      <div class="col-md-6">
-        <h5 class="h6"><%= Tag.human_attribute_name :name %></h5>
-      </div>
-    </div>
-
-    <div id="taggings">
-      <%= f.simple_fields_for :taggings do |fr_f| %>
-        <%= render 'reviews/tagging', f: fr_f, readonly: readonly %>
       <% end %>
 
-      <p class="mb-1">
-        <%= link_to_add_fields(t('review.add_tagging'), f, :taggings, 'reviews/tagging', {}, { readonly: readonly }) unless readonly %>
-      </p>
-    </div>
-  <% end %>
-
-  <h4 class="mt-3">
-    <%= t('review.control_objective_items_label') %>
-    <% if @review.persisted? && !readonly %>
-      <span class="float-right small">
-        <%= link_to_excluded_control_objectives %>
-      </span>
-    <% end %>
-  </h4>
-
-  <hr />
-
-  <div data-control-objective-items-container>
-  </div>
-
-  <% if @review.control_objective_items.any? %>
-    <%= render 'control_objective_items', f: f, readonly: readonly, frozen: frozen %>
-  <% end %>
-
-  <% unless readonly %>
-    <ul class="nav nav-tabs mt-3">
-      <li class="nav-item">
-        <a class="nav-link active" href="#control-objective" data-toggle="tab">
-          <%= ControlObjective.model_name.human %>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#process-control" data-toggle="tab">
-          <%= ProcessControl.model_name.human %>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#best-practice" data-toggle="tab">
-          <%= BestPractice.model_name.human %>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#control-objective-tag" data-toggle="tab">
-          <%= t('review.control_objective_tag') %>
-        </a>
-      </li>
-    </ul>
-
-    <div class="tab-content pt-3">
-      <div class="tab-pane active" id="control-objective">
-        <div id="control_objectives">
-          <%= link_to_add_fields(
-            t('review.add_control_objective'), f, :control_objective_items, 'control_objective', action: 'add-control-objective'
-          ) %>
-        </div>
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.input :lock_version, as: :hidden %>
+        <%= f.submit class: 'btn btn-primary' %>
       </div>
-
-      <div class="tab-pane" id="process-control">
-        <div id="process_controls">
-          <%= link_to_add_fields(
-            t('review.add_process_control'), f, :control_objective_items, 'process_control'
-          ) %>
-        </div>
-      </div>
-
-      <div class="tab-pane" id="best-practice">
-        <div id="best_practices">
-          <%= link_to_add_fields(
-            t('review.add_best_practice'), f, :control_objective_items, 'best_practice'
-          ) %>
-        </div>
-      </div>
-      <div class="tab-pane" id="control-objective-tag">
-        <div id="control_objective_tags">
-          <%= link_to_add_fields t('review.add_control_objective_tag'), f, :control_objective_items, 'control_objective_tag' %>
-        </div>
-      </div>
-    </div>
-  <% end %>
-
-  <h4 class="mt-3"><%= t 'review.findings_label' %></h4>
-
-  <hr />
-
-  <div id="suggested_process_control_findings"></div>
-  <div id="suggested_findings"></div>
-  <div id="past_implemented_audited_findings"></div>
-
-  <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>
-  <% unless finding_relations.empty? %>
-    <%= f.simple_fields_for :finding_review_assignments, finding_relations do |fra_f| %>
-      <%= render 'finding_review_assignment_readonly', f: fra_f, readonly: readonly %>
-    <% end %>
-  <% end %>
-
-  <% unless readonly %>
-    <h5 class="h6 mt-3"><%= FindingReviewAssignment.human_attribute_name 'finding' %></h5>
-
-    <div id="finding_review_assignments"></div>
-    <div id="finding_review_dynamic_assignments"></div>
-    <p class="mb-1">
-      <%= link_to_add_fields(
-        t('review.add_finding_assignment'), f,
-        :finding_review_assignments, nil,
-        { insert_into: '#finding_review_dynamic_assignments' }
-      ) %>
-      <%= link_to_add_fields(
-        t('review.add_past_findings'), f,
-        :finding_review_assignments,
-        'implemented_audited_finding',
-        { insert_into: '#finding_review_dynamic_assignments' }
-      ) %>
-      <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
-        suggested_findings_review_path(id: @review.plan_item_id) : '#',
-        :remote => true, :id => :link_to_suggested_findings,
-        :class => 'btn btn-outline-secondary btn-sm' %>
-      <%= link_to t('review.suggest_past_findings'), @review.plan_item_id ?
-        past_implemented_audited_findings_review_path(id: @review.plan_item_id) : '#',
-        :remote => true, :id => :link_to_past_implemented_audited_findings,
-        :class => 'btn btn-outline-secondary btn-sm' %>
-    </p>
-  <% end %>
-
-  <% if @review.work_papers_finished? %>
-    <div class="alert alert-info mt-3">
-      <%= t 'review.work_papers_marked_as_finished' %>
-    </div>
-  <% elsif @review.work_papers_revised? %>
-    <div class="alert alert-success mt-3">
-      <%= t 'review.work_papers_marked_as_revised' %>
-    </div>
-  <% end %>
-
-  <hr />
-
-  <div>
-    <h4 class="mt-3"><%= t 'review.external_reviews_label' %></h4>
-
-    <div>
-      <%= f.simple_fields_for :external_reviews do |er| %>
-        <%= render 'external_review', f: er, readonly: readonly %>
+      <%= content_for :js_extra do %>
+        <%= raw js_extra %>
       <% end %>
-    </div>
-    <div>
-      <%= link_to_add_fields((t 'review.external_reviews_title'), f, :external_reviews) %>
-    </div>
+    <% end %>
   </div>
+</div>
 
-  <hr />
-
-  <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
-    <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary' %>
-  </div>
-  <%= content_for :js_extra do %>
-    <%= raw js_extra %>
-  <% end %>
-<% end %>
 <script type="text/javascript">
 jQuery(function() {
   $('#review_plan_item_id').change(function () {

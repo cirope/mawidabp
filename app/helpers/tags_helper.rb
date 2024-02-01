@@ -6,7 +6,8 @@ module TagsHelper
       finding:           Finding.model_name.human(count: 0),
       news:              News.model_name.human(count: 0),
       plan_item:         PlanItem.model_name.human(count: 0),
-      review:            Review.model_name.human(count: 0)
+      review:            Review.model_name.human(count: 0),
+      user:              User.model_name.human(count: 0)
     }.with_indifferent_access
   end
 
@@ -44,11 +45,21 @@ module TagsHelper
       if root_tag.children.any?
         children = root_tag.children.where(obsolete: false).order :name
 
-        options[root_tag.name] = children.map { |tag| [tag.name, tag.id] }
+        options[root_tag.name] = children.map do |tag|
+          [
+            tag.name,
+            tag.id,
+            { "data-include-description" => root_tag.include_description? }
+          ]
+        end
       else
         options[t('tags.list.childless')] ||= []
 
-        options[t('tags.list.childless')] << [root_tag.name, root_tag.id]
+        options[t('tags.list.childless')] << [
+          root_tag.name,
+          root_tag.id,
+          { "data-include-description" => root_tag.include_description? }
+        ]
       end
     end
 
@@ -56,6 +67,28 @@ module TagsHelper
   end
 
   def tags_options_collection kind:
-    Array(TAG_OPTIONS[kind])
+    tag_options = TAG_OPTIONS[kind].dup
+
+    if kind == 'finding' && Current.conclusion_pdf_format == 'nbc'
+      tag_options.merge! I18n.t('tags.options.origination_audit') => 'origination_audit'
+    end
+
+    Array tag_options
+  end
+
+  def tag_input_option form, tag, value
+    option     = value.last
+    input_html = {
+      id:    "#{option}_tag_options",
+      name:  "tag[options][#{option}]",
+      value: tag.option_value(option),
+    }
+
+    input_html.merge!(checked: tag.option_value(option)) if tag.is_boolean?(option)
+
+    form.input :options,
+      as:         tag.option_type(option),
+      label:      value.first,
+      input_html: input_html
   end
 end

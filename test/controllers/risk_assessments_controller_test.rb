@@ -62,8 +62,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
               risk: 100,
               risk_weights_attributes: [
                 {
-                  value: RiskWeight.risks_values.last,
-                  weight: 100,
+                  value: risk_score_items(:sox_404a).value,
                   risk_assessment_weight_id: risk_assessment_weights(:sox_404).id
                 }
               ]

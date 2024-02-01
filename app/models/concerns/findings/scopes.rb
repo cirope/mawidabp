@@ -80,6 +80,10 @@ module Findings::Scopes
         references(:reviews)
     end
 
+    def by_review_code review_code
+      where("LOWER(#{Finding.quoted_table_name}.#{Finding.qcn 'review_code'}) LIKE ?", "%#{review_code.mb_chars.downcase}%")
+    end
+
     def by_project project
       includes(review: :plan_item).
         where("LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'project'}) LIKE ?", "%#{project.mb_chars.downcase}%").
@@ -206,9 +210,28 @@ module Findings::Scopes
     def review_sort_options
       if ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
         [risk: :desc, review_code: :asc]
+      elsif ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk_origination_date'
+        [risk: :desc, origination_date: :asc, review_code: :asc]
       else
         [risk: :desc, priority: :desc, review_code: :asc]
       end
+    end
+
+    def by_origination_or_issue_date from_date, to_date
+      where(reviews: {
+        conclusion_reviews: {
+          issue_date: from_date..to_date
+        }
+      }).or(
+        where(
+          origination_date: from_date..to_date,
+          reviews: {
+            conclusion_reviews: {
+              id: nil
+            }
+          }
+        )
+      )
     end
 
     private

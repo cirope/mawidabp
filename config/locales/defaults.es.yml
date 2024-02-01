@@ -99,11 +99,11 @@ es:
         one: 1 semana
         other: ! '%{count} semanas'
     prompts:
-      day: Día
+      second: Segundo
+      minute: Minuto
       hour: Hora
-      minute: Minutos
+      day: Día
       month: Mes
-      second: Segundos
       year: Año
   errors: &errors
     format: ! '%{attribute} %{message}'
@@ -132,7 +132,6 @@ es:
       too_long: es demasiado largo (%{count} caracteres máximo)
       too_short: es demasiado corto (%{count} caracteres mínimo)
       wrong_length: no tiene la longitud correcta (%{count} caracteres exactos)
-      extension_whitelist_error: no tiene un formato permitido
       unknown_format: Formato desconocido
     template:
       body: ! 'Se encontraron problemas con los siguientes campos:'
@@ -149,16 +148,15 @@ es:
   number:
     currency:
       format:
-        delimiter: .
+        delimiter: '.'
         format: ! '%u%n'
         precision: 2
         separator: ! ','
-        delimiter: '.'
         significant: false
         strip_insignificant_zeros: false
         unit: $
     format:
-      delimiter: .
+      delimiter: '.'
       precision: 2
       separator: ! ','
       significant: false

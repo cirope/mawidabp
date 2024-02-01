@@ -15,6 +15,32 @@ module OrganizationsHelper
     end
   end
 
+  def link_to_remove_authentication_configuration form
+    configuration = form.object
+    out           = ''
+
+    if configuration.persisted?
+      out << form.hidden_field(
+        :_destroy,
+        class: 'destroy',
+        value: 0,
+        id: "remove_#{configuration.class.name.underscore}_hidden_#{configuration.object_id}"
+      )
+      out << link_to(
+        icon('fas', 'times-circle'), '#',
+        title: t('label.delete'),
+        class: 'float-end',
+        data: {
+          'dynamic-target' => "##{configuration.class.name.underscore}",
+          'dynamic-form-event' => 'hideCard',
+          'show-tooltip' => true
+        }
+      )
+    end
+
+    raw out
+  end
+
   private
 
     def image_persisted? model
@@ -27,7 +53,7 @@ module OrganizationsHelper
 
         image_tag @organization.send(model).image.url(thumb_name),
           size: @organization.send(model).image_size(thumb_name),
-          alt: 'Logo'
+          alt: 'Logo' if @organization.send(model).image?
       end.resume
     end
 end

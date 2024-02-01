@@ -57,8 +57,9 @@ module ConclusionReviews::GalPdf
 
       pdf.move_down PDF_FONT_SIZE * 2
 
-      if review.business_unit_type.reviews_for.present?
-        pdf.text review.business_unit_type.reviews_for, size: items_font_size
+      if review.business_unit_type.reviews_for.present? &&
+        created_at >= CODE_CHANGE_DATES['reviews_for_and_detailed_review_custom_field'].to_date
+          pdf.text review.business_unit_type.reviews_for, size: items_font_size
       else
         pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
                  size: items_font_size
@@ -66,17 +67,27 @@ module ConclusionReviews::GalPdf
     end
 
     def put_executive_summary_on pdf, organization
-      title           = I18n.t 'conclusion_review.executive_summary.title'
-      use_alt_project = review.business_unit_type.independent_identification
-      project_label   = use_alt_project ? 'project_alt' : 'project'
-      project_title   = I18n.t "conclusion_review.executive_summary.#{project_label}"
-      project         = review.plan_item.project
+      title                      = I18n.t 'conclusion_review.executive_summary.title'
+      review_key                 = I18n.t "conclusion_review.executive_summary.keywords.review"
+      params                     = { "#{review_key}": review.identification }
+      exec_summary_intro         = review.business_unit_type.exec_summary_intro
+      independent_identification = review.business_unit_type.independent_identification
+      project                    = review.plan_item.project
+
+      full_exec_summary_intro = if exec_summary_intro.present? &&
+                                  created_at >= CODE_CHANGE_DATES['exec_summary_intro_custom_field'].to_date
+                                    exec_summary_intro % params
+                                elsif independent_identification
+                                  I18n.t "conclusion_review.executive_summary.intro_alt"
+                                else
+                                  I18n.t "conclusion_review.executive_summary.intro_default"
+                                end
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.text "#{project_title} <b>#{project}</b>", inline_format: true
+      pdf.text "#{full_exec_summary_intro} <b>#{project}</b>", align: :justify, inline_format: true
 
       put_risk_exposure_on pdf
       put_gal_score_on     pdf
@@ -103,13 +114,19 @@ module ConclusionReviews::GalPdf
     end
 
     def put_detailed_review_on pdf, organization
-      title  = if review.business_unit_type.detailed_review.present?
-                 review.business_unit_type.detailed_review
+      title  = if review.business_unit_type.detailed_review.present? &&
+                created_at >= CODE_CHANGE_DATES['reviews_for_and_detailed_review_custom_field'].to_date
+                   review.business_unit_type.detailed_review
                else
                  I18n.t 'conclusion_review.detailed_review.title'
                end
 
-      legend = I18n.t 'conclusion_review.detailed_review.legend'
+      legend = if review.business_unit_type.detailed_review_legend.present? &&
+                 created_at >= CODE_CHANGE_DATES['detailed_review_legend_custom_field'].to_date
+                   review.business_unit_type.detailed_review_legend
+               else
+                 I18n.t 'conclusion_review.detailed_review.legend'
+               end
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center

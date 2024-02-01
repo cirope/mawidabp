@@ -13,7 +13,7 @@ module AutoCompleteFor::ControlObjectiveAuditor
     control_objective = ControlObjective.list.find params[:control_objective_id]
     excluded_ids      = control_objective.control_objective_auditors.map { |coa| coa.user.id }
 
-    @users = User.list.where.not(id: excluded_ids).auditors.not_hidden.where(conditions).limit(10)
+    @users = User.list.include_tags.where.not(id: excluded_ids).auditors_and_act_as_audited.not_hidden.where(conditions).limit(10)
 
     respond_to do |format|
       format.js { render template: 'control_objectives/auto_complete_for_control_objective_auditor.json' }

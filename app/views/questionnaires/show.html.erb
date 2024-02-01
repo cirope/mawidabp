@@ -1,65 +1,69 @@
-<p class="mb-1">
-  <strong><%= Questionnaire.human_attribute_name 'name' %></strong>:
-  <%= @questionnaire.name %>
-</p>
+<div class="card">
+  <div class="card-body">
+    <p class="mb-1">
+      <strong><%= Questionnaire.human_attribute_name 'name' %></strong>:
+      <%= @questionnaire.name %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Questionnaire.human_attribute_name 'email_subject' %></strong>:
-  <%= @questionnaire.email_subject %>
-</p>
+    <p class="mb-1">
+      <strong><%= Questionnaire.human_attribute_name 'email_subject' %></strong>:
+      <%= @questionnaire.email_subject %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Questionnaire.human_attribute_name 'email_link' %></strong>:
-  <%= @questionnaire.email_link %>
-</p>
+    <p class="mb-1">
+      <strong><%= Questionnaire.human_attribute_name 'email_link' %></strong>:
+      <%= @questionnaire.email_link %>
+    </p>
 
-<% if @questionnaire.email_text.present? %>
-  <div>
-    <strong><%= Questionnaire.human_attribute_name 'email_text' %></strong>:
-    <%= simple_format @questionnaire.email_text, class: 'mb-1' %>
-  </div>
-<% end %>
+    <% if @questionnaire.email_text.present? %>
+      <div>
+        <strong><%= Questionnaire.human_attribute_name 'email_text' %></strong>:
+        <%= simple_format @questionnaire.email_text, class: 'mb-1' %>
+      </div>
+    <% end %>
 
-<% if @questionnaire.email_clarification.present? %>
-  <div>
-    <strong><%= Questionnaire.human_attribute_name 'email_clarification' %></strong>:
-    <%= simple_format @questionnaire.email_clarification, class: 'mb-1' %>
-  </div>
-<% end %>
+    <% if @questionnaire.email_clarification.present? %>
+      <div>
+        <strong><%= Questionnaire.human_attribute_name 'email_clarification' %></strong>:
+        <%= simple_format @questionnaire.email_clarification, class: 'mb-1' %>
+      </div>
+    <% end %>
 
-<% if @questionnaire.pollable_type? %>
-  <p class="mb-1">
-    <strong><%= Questionnaire.human_attribute_name 'pollable_type' %></strong>:
-    <%= @questionnaire.pollable_type.constantize.model_name.human %>
-  </p>
-<% end %>
+    <% if @questionnaire.pollable_type? %>
+      <p class="mb-1">
+        <strong><%= Questionnaire.human_attribute_name 'pollable_type' %></strong>:
+        <%= @questionnaire.pollable_type.constantize.model_name.human %>
+      </p>
+    <% end %>
 
-<hr>
+    <hr>
 
-<h5 class="mb-2">
-  <%= Questionnaire.human_attribute_name 'questions' %>
-</h5>
+    <h5 class="mb-2">
+      <%= Questionnaire.human_attribute_name 'questions' %>
+    </h5>
 
-<% @questionnaire.questions.each do |question| %>
-  <div class="font-weight-bold">
-    <%= simple_format "#{question.sort_order}. #{question.question}", class: 'mb-1' %>
-  </div>
+    <% @questionnaire.questions.each do |question| %>
+      <div class="font-weight-bold">
+        <%= simple_format "#{question.sort_order}. #{question.question}", class: 'mb-1' %>
+      </div>
 
-  <% if question.answer_type %>
-    <ul class="mt-1 ml-2">
-      <% question.answer_options.each do |ao| %>
-        <li><%= t "answer_options.#{ao.option}" %></li>
+      <% if question.answer_type %>
+        <ul class="mt-1 ms-2">
+          <% question.answer_options.each do |ao| %>
+            <li><%= t "answer_options.#{ao.option}" %></li>
+          <% end %>
+        </ul>
       <% end %>
-    </ul>
-  <% end %>
-<% end %>
+    <% end %>
 
-<hr />
+    <hr />
 
-<%= link_to_edit edit_questionnaire_path(@questionnaire) %> |
-<%= link_to_index questionnaires_path %>
+    <%= link_to_edit edit_questionnaire_path(@questionnaire) %> |
+    <%= link_to_index questionnaires_path %>
 
-<% if @questionnaire.polls.present? %>
-  | <%= link_to Poll.model_name.human(count: 0),
-    questionnaire_polls_path(@questionnaire) %>
-<% end %>
+    <% if @questionnaire.polls.present? %>
+      | <%= link_to Poll.model_name.human(count: 0),
+        questionnaire_polls_path(@questionnaire) %>
+    <% end %>
+  </div>
+</div>

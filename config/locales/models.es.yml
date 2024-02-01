@@ -23,7 +23,25 @@ es:
         name: 'Nombre'
         objective: 'Objetivo'
         conclusion: 'Conclusion'
-        introduction_and_scope: 'Introduccion y Alcance'
+        introduction_and_scope: 'Introducción y Alcance'
+        previous_period_id: 'Periodo previo'
+        business_unit_types: Unidades organizativas
+        organizations: Organizaciones
+    errors:
+      models:
+        nbc_internal_control_qualification_as_group_of_companies:
+          attributes:
+            period_id:
+              must_have_the_same_name: 'debe tener el mismo nombre en todas las organizaciones. Actualmente difiere en: %{organizations}'
+            previous_period_id:
+              must_have_the_same_name: 'debe tener el mismo nombre en todas las organizaciones. Actualmente difiere en: %{organizations}'
+              must_be_before_period: 'debe tener una fecha de inicio anterior a la fecha de inicio del Periodo'
+            business_unit_types:
+              must_have_the_same_business_unit_type_names:
+                one: 'deben tener los mismos nombres en las tres organizaciones. Actualmente la que difiere es: %{different_names}'
+                other: 'deben tener los mismos nombres en las tres organizaciones. Actualmente las que difieren son: %{different_names}'
+            organizations:
+              are_misconfigured: 'están mal configuradas en las opciones de la aplicación. Por favor, comuníquese con soporte@mawidabp.com'
 
   activerecord:
     models:
@@ -85,8 +103,8 @@ es:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
       control_objective_auditor:
-        one: 'Auditor a cargo'
-        other: 'Auditores a cargo'
+        one: 'Auditor/Referente a cargo'
+        other: 'Auditores/Referentes a cargo'
       document:
         one: 'Documento'
         other: 'Documentos'
@@ -100,8 +118,8 @@ es:
         one: 'Registro de error'
         other: 'Registros de errores'
       external_review:
-        one: 'Informe Externo'
-        other: 'Informes Externos'
+        one: 'Informe externo'
+        other: 'Informes externos'
       finding:
         one: 'Hallazgo'
         other: 'Hallazgos'
@@ -186,9 +204,27 @@ es:
       risk_assessment_weight:
         one: 'Atributo de evaluación de riesgo'
         other: 'Atributos de evaluación de riesgo'
+      risk_category:
+        one: 'Categoría de riesgo'
+        other: 'Categorías de riesgo'
+      risk_control_objective:
+        one: 'Objetivo de control'
+        other: 'Objetivos de control'
+      risk_registry:
+        one: 'Registro de riesgo'
+        other: 'Registros de riesgo'
+      risk_score_item:
+        one: 'Valor'
+        other: 'Valores'
       risk_weight:
         one: 'Valor de evaluación de riesgo'
         other: 'Valores de evaluación de riesgo'
+      risks:
+        one: 'Riesgo'
+        other: 'Riesgos'
+      saml_provider:
+        one: 'Configuración SAML'
+        other: 'Configuraciones SAML'
       setting:
         one: 'Configuración'
         other: 'Configuraciones'
@@ -212,7 +248,7 @@ es:
         other: 'Observaciones'
       weakness_template:
         one: 'Plantilla de observación'
-        other: 'Plantillas de observaciones'
+        other: 'Plantillas de observación'
       work_paper:
         one: 'Papel de trabajo'
         other: 'Papeles de trabajo'
@@ -299,7 +335,6 @@ es:
         control_objective_id: 'Objetivo de control'
         audit_sector: 'Sector de Auditoría'
         date_charge: 'Fecha de alta'
-        affected_sector_id: 'Sector del banco afectado al alerta'
         control_objective_auditors: 'Auditores a cargo'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
@@ -324,6 +359,8 @@ es:
         review: 'Informe'
         review_id: 'Informe'
         alternative_review_id: 'Informe externo'
+      file_model_reviews/file_model:
+        file: 'Archivo'
       finding:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -368,7 +405,7 @@ es:
         organization: 'Organización'
         frequency: 'Frecuencia'
         state_regulations: 'Normativa Estado'
-        degree_compliance: 'Grado Cumpliento Normativa'
+        degree_compliance: 'Grado de Cumplimiento de la Normativa'
         observation_originated_tests: 'Originada en prueba de'
         sample_deviation: 'Desvio de la muestra'
         external_repeated: 'Reiterada externa'
@@ -412,7 +449,7 @@ es:
         skip_commitment_support: 'Tildar si la observación está solucionada'
       finding/finding_answers/commitment_support:
         one: 'Sustento compromiso'
-        reason: 'Motivo reprogramación'
+        reason: 'Motivo de reprogramación'
         plan: 'Nuevo plan de acción'
         controls: 'Controles mitigantes'
       finding/finding_answers/file_model:
@@ -434,6 +471,7 @@ es:
         file_content_type: 'Papel de trabajo (tipo de archivo)'
         file_file_size: 'Papel de trabajo (tamaño de archivo)'
       image_model:
+        image: 'Imagen'
         uploaded_data: 'Imagen'
         content_type: 'Imagen (tipo)'
         size: 'Imagen (tamaño)'
@@ -556,6 +594,7 @@ es:
       tagging:
         tag: 'Etiqueta'
         tag_id: 'Etiqueta'
+        description: 'Descripción'
       task:
         code: 'Código'
         description: 'Descripción'
@@ -579,6 +618,7 @@ es:
         last_name: 'Apellido'
         logged_in: 'Conectado'
         manager_id: 'Superior'
+        children: 'Personal a cargo'
         name: 'Nombre'
         notes: 'Notas'
         organization_roles: 'Perfiles'
@@ -708,6 +748,7 @@ es:
         file_model: "Anexo"
         risk_assessment_weights: 'Ponderadores'
         risk_assessment_items: 'Ítems'
+        formula: 'Fórmula'
       risk_assessment/risk_assessment_items:
         name: 'Nombre (ítem)'
         risk: 'Riesgo (ítem)'
@@ -724,21 +765,61 @@ es:
       risk_assessment_template:
         name: 'Nombre'
         description: 'Descripción'
+        formula: 'Fórmula'
         risk_assessment_weights: 'Atributos de evaluación de riesgo'
       risk_assessment_template/risk_assessment_weights:
+        identifier: 'Identificador'
         name: 'Atributo'
         description: 'Descripción'
-        weight: 'Ponderador'
+        heatmap: 'Principal'
+        risk_score_items: 'Valores'
       risk_assessment_weight:
         name: 'Atributo'
         description: 'Descripción'
         weight: 'Ponderador'
+        identifier: 'Identificador'
+        heatmap: 'Principal'
+      risk_assessment_weights/risk_score_items:
+        name: 'Nombre'
+        value: 'Valor'
+      risk_registry:
+        name: 'Nombre'
+        description: 'Descripción'
+      risk_registry/risk_categories:
+        name: 'Nombre'
+      risk_category:
+        name: 'Nombre'
+      risk_score_item:
+        name: 'Nombre'
+        value: 'Valor'
       risk_weight:
         value: 'Valor'
         weight: 'Ponderador'
+        identifier: 'Identificador'
+      risk_registry/risk_categories/risks:
+        identifier: 'Identificador'
+        cause: 'Causa'
+        effect: 'Efecto'
+        likelihood: 'Probabilidad'
+        impact: 'Impacto'
+        name: 'Nombre'
+        user: 'Propietario'
+        risk_control_objectives: 'Objetivos de control'
+      risk_registry/risk_categories/risks/risk_control_objectives:
+        control_objective: 'Objetivo de control'
+      risk:
+        identifier: 'Identificador'
+        cause: 'Causa'
+        effect: 'Efecto'
+        likelihood: 'Probabilidad'
+        impact: 'Impacto'
+        name: 'Nombre'
+        user: 'Propietario'
+      risk_control_objective:
+        control_objective: 'Objetivo de control'
       subsidiary:
         name: 'Nombre'
-        identity: 'Identificacion'
+        identity: 'Identificación'
       weakness:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -759,7 +840,7 @@ es:
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
         compliance_observations: 'Norma que impacta'
-        compliance_susceptible_to_sanction: 'Suceptible a sanción'
+        compliance_maybe_sanction: 'Susceptible a sanción'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
@@ -791,6 +872,8 @@ es:
         allow_duplication: 'Permitir título duplicado'
         audit_recommendations: 'Recomendaciones de auditoría'
         failure: 'Falla'
+      work_papers/file_model:
+        file: 'Papel de trabajo (archivo)'
 
     errors:
       models:
@@ -814,12 +897,12 @@ es:
               must_have_state_that_allows_extension: 'Para indicar que tiene %{extension} debe estar en estado %{states}'
               cant_have_extension_when_didnt_have_extension: 'No puede tener %{extension}, ya que a lo sumo una vez en su historial estuvo sin %{extension} en los estados %{states}'
             risk_justification:
-              present: 'No debe tener justificacion de riesgo'
-            compliance_susceptible_to_sanction:
+              present: 'No debe tener justificación de riesgo'
+            compliance_maybe_sanction:
               inclusion: 'debe ser uno de la lista'
             draft_review_code:
-              not_same_draft_review_code_parent: 'No tiene el mismo review code borrador que su finding original'
-              not_same_draft_review_code_children: 'No tiene el mismo review code borrador que su finding final'
+              not_same_draft_review_code_parent: 'No tiene el mismo código de informe borrador que su hallazgo original'
+              not_same_draft_review_code_children: 'No tiene el mismo código de informe borrador que su hallazgo final'
         finding_user_assignment:
           attributes:
             user:
@@ -852,7 +935,7 @@ es:
             auxiliar_business_unit_types:
               taken: 'repetidas'
             business_unit:
-              cannot_edit_business_unit: "no se puede editar debido a que el proyecto ya esta tomado por un informe definitivo %{memo_condition}"
+              cannot_edit_business_unit: "no se puede editar debido a que el proyecto ya está tomado por un informe definitivo %{memo_condition}"
             start:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
@@ -861,22 +944,31 @@ es:
           attributes:
             taggings:
               missing_tags_for_scope: "se requiere al menos una (entre %{tags}) para los informes con alcance '%{r_scope}'"
+        risk:
+          attributes:
+            risk_control_objectives:
+              blank: 'debe tener al menos uno'
         risk_assessment_template:
           attributes:
             risk_assessment_weights:
               blank: 'debe tener al menos uno'
+              numericality: 'debe tener sólo %{count} atributos marcados como principal'
+        risk_assessment_weight:
+          attributes:
+            risk_score_items:
+              blank: 'debe tener al menos uno'
         user:
           attributes:
             base:
-              auditors_limit_reached: 'Limite de auditores alcanzado, por favor actualice su licencia.'
+              auditors_limit_reached: 'Límite de auditores alcanzado, por favor actualice su licencia.'
         memo:
           attributes:
             base:
               file_model_memos_blank: 'Debe tener al menos un archivo'
-              cant_change_fields: 'No puede cambiar ningun campo debido a que supero la fecha de cierre'
+              cant_change_fields: 'No puede cambiar ningún campo debido a que superó la fecha de cierre'
             plan_item_id:
-              used: 'El proyecto ya esta siendo utilizado por otro Informe o Informe externo'
+              used: 'El proyecto ya está siendo utilizado por otro informe o informe externo'
         subsidiary:
           attributes:
             identity:
-              only_numerics: 'solo puede contener valores numericos'
+              only_numerics: 'solo puede contener valores numéricos'

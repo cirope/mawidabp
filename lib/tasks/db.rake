@@ -29,6 +29,12 @@ namespace :db do
       add_commitment_data_on_findings            # 2020-12-01
       update_finding_follow_up_date_last_changed # 2021-12-22
       update_draft_review_code                   # 2022-07-20
+      update_options_tags                        # 2023-06-05
+      update_roles_identifier                    # 2023-07-24
+      update_status_work_papers                  # 2023-09-25
+      update_risk_assessments_changes            # 2023-10-02
+      add_risk_registries_privilege              # 2023-10-26
+      add_claim_values_in_saml_provider          # 2023-11-02
     end
   end
 end
@@ -107,6 +113,30 @@ private
                            description: I18n.t('settings.conclusion_review_receiver')
       end
     end
+
+    if add_temporary_polls? # 2023-02-01
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'temporary_polls',
+                           value:       DEFAULT_SETTINGS[:temporary_polls][:value],
+                           description: I18n.t('settings.temporary_polls')
+      end
+    end
+
+    if add_finding_warning_expire_days? #2023-06-06
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'finding_warning_expire_days',
+                           value:       DEFAULT_SETTINGS[:finding_warning_expire_days][:value],
+                           description: I18n.t('settings.finding_warning_expire_days')
+      end
+    end
+
+    if add_finding_by_current_user? #2024-01-26
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'finding_by_current_user',
+                           value:       DEFAULT_SETTINGS[:finding_by_current_user][:value],
+                           description: I18n.t('settings.finding_by_current_user')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -143,6 +173,18 @@ private
 
   def add_brief_period_in_weeks?
     Setting.where(name: 'brief_period_in_weeks').empty?
+  end
+
+  def add_temporary_polls?
+    Setting.where(name: 'temporary_polls').empty?
+  end
+
+  def add_finding_warning_expire_days?
+    Setting.where(name: 'finding_warning_expire_days').empty?
+  end
+
+  def add_finding_by_current_user?
+    Setting.where(name: 'finding_by_current_user').empty?
   end
 
   def add_new_answer_options
@@ -715,4 +757,170 @@ private
 
   def update_draft_review_code?
     Finding.where.not(draft_review_code: nil).blank?
+  end
+
+  def update_options_tags
+    if update_options_tags?
+      Tag.find_each do |tag|
+        options = Array(tag.options).each_with_object({}) do |option, hsh|
+          hsh[option] = '1'
+        end
+
+        tag.update_column :options, options
+      end
+    end
+  end
+
+  def update_options_tags?
+    if POSTGRESQL_ADAPTER
+      if tag = Tag.where.not(options: nil).take
+
+        tag.options.kind_of? Array
+      end
+    end
+  end
+
+  def update_roles_identifier
+    unless roles_identifier_updated?
+      Organization.all.each do |org|
+        if (org.saml_provider || org.ldap_config) && org.roles.map(&:identifier).all?(&:blank?)
+          org.roles.each { |role| role.update_column :identifier, role.name }
+        end
+      end
+    end
+  end
+
+  def roles_identifier_updated?
+    Role.where.not(identifier: nil).exists?
+  end
+
+  def update_status_work_papers
+    if update_status_work_papers?
+      Review.find_each do |review|
+        status = case review.finished_work_papers
+        when 'work_papers_not_finished' then 'pending'
+        when 'work_papers_finished'     then 'finished'
+        when 'work_papers_revised'      then 'revised'
+        end
+
+        review.work_papers.each { |wp| wp.update_column :status, status }
+      end
+    end
+  end
+
+  def update_status_work_papers?
+    WorkPaper.where(status: nil).exists?
+  end
+
+  def update_risk_assessments_changes
+    if should_update_risk_assessment_changes?
+      update_risk_assessment_weights
+      update_risk_assessment_templates
+      update_risk_assessments
+    end
+  end
+
+  def update_risk_assessment_weights
+    RiskAssessmentWeight.update_all owner_type: 'RiskAssessmentTemplate'
+  end
+
+  def update_risk_assessment_templates
+    RiskAssessmentTemplate.find_each do |rat|
+      identifier = 'A'
+
+      rat.risk_assessment_weights.each_with_index do |raw, idx|
+        raw.update_column :heatmap, true if idx <= 1
+        raw.update_column :identifier, identifier
+
+        risk_weights.each do |risk, value|
+          raw.risk_score_items.create!(
+            name: I18n.t("risk_assessments.risk_weight_risks.#{risk}"),
+            value: value
+          )
+        end
+
+        identifier.next!
+      end
+
+      formula = risk_template_make_formula rat
+
+      rat.risk_assessments.update_all formula: formula
+      rat.update_column :formula, formula
+    end
+  end
+
+  def update_risk_assessments
+    RiskAssessment.find_each { |ra| ra.send :clone_risk_assessment_weights }
+  end
+
+  def should_update_risk_assessment_changes?
+    RiskAssessmentTemplate.where(formula: nil).exists?
+  end
+
+  def risk_weights
+    risk_types = {
+      none:        0,
+      low:         1,
+      medium_low:  2,
+      medium:      3,
+      medium_high: 4,
+      high:        5
+    }
+
+    RISK_WEIGHTS.present? ? RISK_WEIGHTS : risk_types
+  end
+
+  def risk_template_make_formula rat
+    raws = rat.reload.risk_assessment_weights.ordered.pluck :identifier, :weight
+
+    dividend = raws.map { |raw| raw.join(' * ') }.join(' + ')
+    divisor  = raws.to_h.values.sum
+
+    "(#{dividend}) / #{divisor}"
+  end
+
+  def add_risk_registries_privilege
+    if add_risk_registries_privilege?
+      Privilege.where(module: 'administration_best_practices_best_practices').find_each do |p|
+        attrs = p.attributes.
+          except('id', 'module', 'created_at', 'updated_at').
+          merge(module: 'administration_risk_registries')
+
+        Privilege.create attrs
+      end
+    end
+  end
+
+  def add_risk_registries_privilege?
+    Privilege.where(module: 'administration_risk_registries').empty?
+  end
+
+  def add_claim_values_in_saml_provider
+    if add_claim_values_in_saml_provider?
+      Organization.all.find_each do |org|
+        provider = org.saml_provider
+
+        if provider && claim_fields_empty?(provider)
+          provider.update_columns username_claim: 'name',
+            name_claim: 'givenname',
+            lastname_claim: 'surname',
+            email_claim: 'name',
+            roles_claim: 'groups'
+        end
+      end
+    end
+  end
+
+  def add_claim_values_in_saml_provider?
+    SamlProvider.where(username_claim: nil).any?
+  end
+
+  def claim_fields_empty? provider
+    [
+      provider.username_claim,
+      provider.name_claim,
+      provider.lastname_claim,
+      provider.email_claim,
+      provider.roles_claim
+    ].all? &:blank?
   end

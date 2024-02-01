@@ -4,6 +4,7 @@ module RiskAssessments::RiskAssessmentItems
   included do
     has_many :risk_assessment_items, -> { order :order }, dependent: :destroy,
       inverse_of: :risk_assessment
+    has_many :risk_weights, through: :risk_assessment_items
     has_many :best_practices, through: :risk_assessment_items
     has_many :business_unit_types, through: :risk_assessment_items
 

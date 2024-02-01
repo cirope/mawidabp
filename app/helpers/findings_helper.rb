@@ -97,7 +97,7 @@ module FindingsHelper
   def finding_show_status_change_history element_id
     link_to icon('fas', 'history'), "##{element_id}", {
       title: t('findings.form.show_status_change_history'),
-      data:  { toggle: 'collapse' }
+      data:  { bs_toggle: 'collapse' }
     }
   end
 
@@ -152,11 +152,11 @@ module FindingsHelper
 
     select nil, :user_id, sort_options_array(users),
       { prompt: true },
-      { name: :user_id, id: :user_id_select, class: 'form-control' }
+      { name: :user_id, id: :user_id_select, class: 'form-select' }
   end
 
   def finding_status_options
-    Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).map do |k, v|
+    Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS - [:assumed_risk]).map do |k, v|
       [t("findings.state.#{k}"), v.to_s]
     end
   end
@@ -249,7 +249,7 @@ module FindingsHelper
 
   def link_to_recode_tasks
     options = {
-      class: 'float-right',
+      class: 'float-end',
       title: t('finding.recode_tasks'),
       data: {
         recode_tasks: true,
@@ -353,7 +353,7 @@ module FindingsHelper
   end
 
   def link_to_edit_finding finding, auth_user
-    if !auth_user.can_act_as_audited? || finding.users.reload.include?(auth_user)
+    if auth_user.can_act_as_auditor? || finding.users.reload.include?(auth_user)
       if finding.pending?
         link_to_edit(edit_finding_path('incomplete', finding, user_id: params[:user_id]))
       elsif !finding.repeated? && %w(bic).include?(Current.conclusion_pdf_format)
@@ -511,5 +511,9 @@ module FindingsHelper
 
     def finding_bic_risks_types finding
       finding.bic_risks_types.invert.reverse_each.to_json
+    end
+
+    def show_pdf_issues finding
+      finding.issues.any? && finding.issues.without_close_date.count > 0
     end
 end

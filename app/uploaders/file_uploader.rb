@@ -6,6 +6,16 @@ class FileUploader < CarrierWave::Uploader::Base
     guess_path
   end
 
+  def extension_allowlist
+    FILE_UPLOADS_CONSTRAINTS&.fetch 'extensions', nil
+  end
+
+  def size_range
+    size_limit = FILE_UPLOADS_CONSTRAINTS&.fetch 'size_limit', nil
+
+    1.byte..size_limit.megabytes if size_limit
+  end
+
   private
 
     def organization_id_path organization_id = Current.organization&.id
@@ -39,10 +49,10 @@ class FileUploader < CarrierWave::Uploader::Base
     end
 
     def delete_empty_upstream_dirs
-      Dir.delete(store_dir) if Dir.empty?(store_dir)
+      Dir.delete(store_dir) if Dir.exist?(store_dir) && Dir.empty?(store_dir)
 
       parent_dir = File.dirname(store_dir)
 
-      Dir.delete(parent_dir) if Dir.empty?(parent_dir)
+      Dir.delete(parent_dir) if Dir.exist?(parent_dir) && Dir.empty?(parent_dir)
     end
 end

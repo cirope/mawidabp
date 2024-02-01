@@ -11,6 +11,7 @@ module Reviews::Approval
 
     errors  = control_objective_items_errors
     errors += finding_review_assignment_errors
+    errors += alternative_reviews_errors if Current.conclusion_pdf_format == 'nbc'
 
     errors << [Review.model_name.human, review_errors] if review_errors.present?
 
@@ -143,6 +144,25 @@ module Reviews::Approval
           ]
         end
       end
+
+      errors
+    end
+
+    def alternative_reviews_errors
+      errors = []
+
+      external_reviews.map(&:alternative_review).each do |alt_review|
+        alt_issue_date = alt_review.conclusion_final_review.issue_date
+
+        if conclusion_draft_review && alt_issue_date > conclusion_draft_review.issue_date
+          errors << [
+            "#{ExternalReview.model_name.human}: #{alt_review.identification}",
+            [I18n.t('external_review.errors.issue_date_after_review_issue_date', date: alt_review.issue_date)]
+          ]
+        end
+      end
+
+      self.can_be_approved_by_force = false if errors.present?
 
       errors
     end

@@ -1,0 +1,64 @@
+.text-aqua {
+  color: #5bc4e4;
+}
+
+.text-green {
+  color: #04b38c;
+}
+
+.vertical-align-center {
+  display: -webkit-box;
+  -webkit-box-align: center;
+}
+
+.header-background-image {
+  background-image: asset-data-url("bic_pdf/header-background-image.png");
+  background-size: 1582px;
+}
+
+.body-background-image {
+  background-image: asset-data-url("bic_pdf/body-background-image.png");
+  background-size: 1582px;
+}
+
+.footer-background-image {
+  background-image: asset-data-url("bic_pdf/footer-background-image.png");
+  background-size: 1582px;
+}
+
+.watermark-bic {
+  background-image: asset-data-url("bic_pdf/watermark.png");
+  background-size: 300px 300px;
+}
+
+.text-quote {
+  border-left: 1px solid #dee2e6 !important;
+  padding-left: 1rem
+}
+
+.text-justify {
+  text-align: justify !important;
+}
+
+.bg-black-border-white {
+  border: 1px solid #dee2e6 !important;
+  border-color: #fff !important;
+  background-color: #000;
+  padding: 1rem
+}
+
+.pt-15 {
+  padding-top: 9rem !important;
+}
+
+.fs-bice-1 {
+  font-size: 3.4rem !important;
+}
+
+.fs-bice-2 {
+  font-size: 2.5rem !important;
+}
+
+.fs-bice-3 {
+  font-size: 1.7rem !important;
+}

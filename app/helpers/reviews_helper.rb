@@ -26,7 +26,7 @@ module ReviewsHelper
 
     form.grouped_collection_select :plan_item_id, business_unit_types,
       :plan_items, :name, :id, :project_with_dates, {:prompt => true},
-      {:class => 'form-control', :disabled => readonly}
+      {:class => 'form-select', :disabled => readonly}
   end
 
   def review_business_unit_type_text(review)
@@ -249,7 +249,14 @@ module ReviewsHelper
   end
 
   def show_external_review_options review
-    Review.list.map { |r| [r.identification, r.id] }
+    Review.list.map do |r|
+      if r.conclusion_final_review &&
+        r.type_review == Review::TYPES_REVIEW[:system_audit] &&
+        r.period_id == review.period_id &&
+        r.id != review.id
+          [r.identification, r.id]
+      end
+    end.compact
   end
 
   def subsidiaries_options

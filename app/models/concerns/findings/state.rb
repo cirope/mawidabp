@@ -10,6 +10,8 @@ module Findings::State
     REPEATED_STATUS                      = repeated_status
     EXCLUDE_FROM_REPORTS_STATUS          = exclude_from_reports_status
     PENDING_FOR_REVIEW_STATUS            = pending_for_review_status
+    COMPLETED_STATUS                     = completed_status
+    INCOMPLETE_STATUS                    = incomplete_status
 
     define_state_scopes
     define_state_methods
@@ -30,6 +32,10 @@ module Findings::State
 
     def with_pending_status_for_report
       where state: report_pending_status
+    end
+
+    def with_completed_status
+      where state: COMPLETED_STATUS
     end
 
     private
@@ -102,14 +108,26 @@ module Findings::State
         STATUS[:repeated]
       end
 
+      def incomplete_status
+        PENDING_STATUS - [STATUS[:incomplete]]
+      end
+
+      def completed_status
+        STATUS.values           -
+          PENDING_STATUS        -
+          [STATUS[:revoked]]    -
+          [STATUS[:repeated]]   -
+          [STATUS[:incomplete]]
+      end
+
       def define_state_scopes
         scope :revoked,     -> { where     state: STATUS[:revoked] }
         scope :not_revoked, -> { where.not state: STATUS[:revoked] }
+        scope :not_expired, -> { where.not state: STATUS[:expired] }
 
         scope :assumed_risk,     -> { where     state: STATUS[:assumed_risk] }
         scope :not_assumed_risk, -> { where.not state: STATUS[:assumed_risk] }
 
-        scope :being_implemented, -> { where state: STATUS[:being_implemented] }
         scope :implemented_audited, -> { where state: STATUS[:implemented_audited] }
       end
 

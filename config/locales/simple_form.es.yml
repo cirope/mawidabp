@@ -54,3 +54,18 @@ es:
         password: 'Contraseña del usuario de servicio para la importación automática de usuarios'
       import:
         username: 'Usuario con permisos para consultar la base de usuarios LDAP'
+      business_unit_type:
+        exec_summary_intro: "La clave válida a incluir es: <code>%{%{keywords}}</code>"
+      saml_provider:
+        idp_homepage: 'Por ejemplo: https://login.microsoftonline.com/xx/federationmetadata/2007-06/federationmetadata.xml?appid=xx'
+        idp_sso_target_url: 'Por ejemplo: https://login.microsoftonline.com/xx/saml2'
+        assertion_consumer_service_url: 'Por ejemplo: https://dominio.com/saml/callback'
+        assertion_consumer_service_binding: 'Por ejemplo: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
+        idp_entity_id: 'Por ejemplo: https://sts.windows.net/xx/'
+        sp_entity_id: 'Por ejemplo: https://dominio.com/saml/metadata'
+        name_identifier_format: 'Por ejemplo: urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
+        username_claim: 'Por ejemplo: name'
+        name_claim: 'Por ejemplo: givenname'
+        lastname_claim: 'Por ejemplo: surname'
+        email_claim: 'Por ejemplo: emailaddress'
+        roles_claim: 'Por ejemplo: groups'
