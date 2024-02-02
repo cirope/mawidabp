@@ -133,7 +133,7 @@ module ConclusionReviews::GalPdf
         [put_review_indentifier_and_period_on(pdf)],
         [put_risk_exposure_v2_on(pdf)],
         [put_survey_on(pdf)],
-        [put_conclusion_and_score_image_on(pdf)],
+        [put_conclusion_on(pdf)],
         [put_key_weaknesses_on(pdf)],
         [put_observations_v2_on(pdf)],
         [put_robotization_on(pdf)]
@@ -194,37 +194,44 @@ module ConclusionReviews::GalPdf
       )
     end
 
-    def put_conclusion_and_score_image_on pdf
-      data_conclusion = put_conclusion_on pdf
-      evolution_image = pdf_score_image_row get_evolution_image
+    def put_conclusion_on pdf
+      conclusion_header = I18n.t('conclusion_review.executive_summary.conclusion')
+      conclusion_data   = put_conclusion_data_on pdf
 
-      headers = [
-        self.class.human_attribute_name(:conclusion),
-        I18n.t('conclusion_review.executive_summary.evolution_alt')
-      ]
+      data  = [[conclusion_header], [conclusion_data]]
+      style = { column_widths: [pdf.percent_width(100)] }
 
-      content = [data_conclusion, evolution_image]
-
-      style = {
-        column_widths: conclusion_and_score_image_column_widths(pdf)
-      }
-
-      pdf.make_table([headers, content], style) do
+      pdf.make_table(data, style) do
         row(0).style(
           background_color: 'e7e6e6',
-          font_style: :bold,
-          size: 16,
-          align: :center
+          align: :center,
+          inline_format: true
         )
       end
     end
 
-    def put_conclusion_on pdf
-      style = { column_widths: conclusion_column_width(pdf) }
+    def put_conclusion_data_on pdf
+      conclusion_chart_and_evolution_image = put_chart_and_image pdf
 
-      pdf.make_table([[put_chart_on(pdf), extended_conclusion]], style) do
+      data  = [[conclusion_chart_and_evolution_image, extended_conclusion]]
+      style = { column_widths: conclusion_data_column_width(pdf) }
+
+      pdf.make_table(data, style) do
         column(1).style(align: :justify)
       end
+    end
+
+    def put_chart_and_image pdf
+      evolution_image  = pdf_score_image_row get_evolution_image
+      conclusion_chart = put_chart_on pdf
+
+      data  = [[conclusion_chart, evolution_image]]
+      style = {
+        column_widths: chart_and_image_column_width(pdf),
+        cell_style: { borders: [] }
+      }
+
+      pdf.make_table(data, style)
     end
 
     def put_chart_on pdf
@@ -1007,12 +1014,12 @@ module ConclusionReviews::GalPdf
       [60, 40].map { |percent| pdf.percent_width percent }
     end
 
-    def conclusion_and_score_image_column_widths pdf
-      [81, 19].map { |percent| pdf.percent_width percent }
+    def conclusion_data_column_width pdf
+      [50, 50].map { |percent| pdf.percent_width percent }
     end
 
-    def conclusion_column_width pdf
-      [40, 41].map { |percent| pdf.percent_width percent }
+    def chart_and_image_column_width pdf
+      [42, 8].map { |percent| pdf.percent_width percent }
     end
 
     def key_weaknesses_column_widths pdf

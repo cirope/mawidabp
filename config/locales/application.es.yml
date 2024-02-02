@@ -510,6 +510,7 @@ es:
       no_weaknesses: "No hay observaciones"
       assumed_risk_weaknesses: "Riesgo asumido"
       period: Fecha
+      conclusion: <b>Conclusión <i>(Assurance opinion)</i></b>
       survey: <b>Alcance <i>(Audit scope)</i>:</b> %{survey}
       key_weaknesses: Hallazgos claves
       origin: Origen
