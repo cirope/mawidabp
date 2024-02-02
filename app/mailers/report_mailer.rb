@@ -3,7 +3,7 @@ class ReportMailer < ApplicationMailer
 
   helper :markdown
 
-  def attached_report args = nil, kwargs
+  def attached_report kwargs
     @user        = User.find kwargs[:user_id]
     organization = Organization.find kwargs[:organization_id]
 
