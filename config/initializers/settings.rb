@@ -26,5 +26,5 @@ DEFAULT_SETTINGS = {
   temporary_polls: { value: '0', validates: 'numericality' },
   finding_warning_expire_days: { value: '7,1', validates: 'presence' },
   finding_by_current_user: { value: '1', validates: 'numericality' },
-  enable_close_date_edition: { value: '1', validates: 'numericality' }
+  enable_close_date_edition: { value: '0', validates: 'numericality' }
 }.with_indifferent_access.freeze
