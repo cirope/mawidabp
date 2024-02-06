@@ -195,7 +195,7 @@ es:
       incomplete: 'Incompleta'
       repeated: 'Reiterada'
       revoked: 'Anulada'
-      criteria_mismatch: 'Difiere criterio'
+      criteria_mismatch: 'Planes no implementados'
       expired: 'Desestimada / No aplica'
     work_papers:
       create:
