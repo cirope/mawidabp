@@ -1,30 +1,34 @@
-<%= simple_form_for @business_unit, 
-                    url: business_unit_type_business_unit_path(
-                      business_unit_type_id: @business_unit.business_unit_type_id, 
-                      id: @business_unit.id
-                    ) do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @business_unit, 
+                        url: business_unit_type_business_unit_path(
+                          business_unit_type_id: @business_unit.business_unit_type_id, 
+                          id: @business_unit.id
+                        ) do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :business_unit_type_id, collection: business_unit_types, include_blank: false %>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <%= f.input :business_unit_type_id, collection: business_unit_types, include_blank: false %>
+
+      <hr />
+
+      <div class="form-inputs">
+        <div class="float-end">
+          <%= link_to_index business_unit_types_path %>
+        </div>
+        <%= f.submit class: 'btn btn-primary' %>
+        <%= f.input :lock_version, as: :hidden %>
       </div>
-    </div>
+    <% end %>
   </div>
-
-  <hr />
-
-  <div class="form-inputs">
-    <div class="float-right">
-      <%= link_to_index business_unit_types_path %>
-    </div>
-    <%= f.submit class: 'btn btn-primary' %>
-    <%= f.input :lock_version, as: :hidden %>
-  </div>
-<% end %>
+</div>

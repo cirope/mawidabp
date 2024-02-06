@@ -1,178 +1,185 @@
-<p class="mb-1">
-  <strong><%= Review.human_attribute_name(:identification) %>:</strong>
-  <%= @review.identification %>
-</p>
+<div class="card">
+  <div class="card-body">
+    <p class="mb-1">
+      <strong><%= Review.human_attribute_name(:identification) %>:</strong>
+      <%= @review.identification %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Review.human_attribute_name :period_id %>:</strong>
-  <%= @review.period.inspect %>
-</p>
+    <p class="mb-1">
+      <strong><%= Review.human_attribute_name :period_id %>:</strong>
+      <%= @review.period.inspect %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Review.human_attribute_name :plan_item %>:</strong>
-  <%= @review.plan_item.project %>
-</p>
+    <p class="mb-1">
+      <strong><%= Review.human_attribute_name :plan_item %>:</strong>
+      <%= @review.plan_item.project %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Review.human_attribute_name :business_unit %>:</strong>
-  <%= review_business_unit_text(@review) %>
-</p>
+    <p class="mb-1">
+      <strong><%= Review.human_attribute_name :business_unit %>:</strong>
+      <%= review_business_unit_text(@review) %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Review.human_attribute_name(:audit_type) %>:</strong>
-  <%= review_business_unit_type_text(@review) %>
-</p>
+    <p class="mb-1">
+      <strong><%= Review.human_attribute_name(:audit_type) %>:</strong>
+      <%= review_business_unit_type_text(@review) %>
+    </p>
 
-<% if USE_SCOPE_CYCLE %>
-  <p class="mb-1">
-    <strong><%= Review.human_attribute_name :subsidiary %>:</strong>
-    <%= @review.subsidiary.to_s %>
-  </p>
-<% end %>
-
-<p class="mb-1">
-  <strong><%= Review.human_attribute_name(:survey) %>:</strong>
-  <%= @review.survey %>
-</p>
-
-<% unless HIDE_REVIEW_DESCRIPTION %>
-  <div>
-    <strong><%= Review.human_attribute_name(:description) %>:</strong>
-    <%= simple_format @review.description, class: 'mb-1' %>
-  </div>
-<% end %>
-
-<% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
-  <p class="mb-1">
-    <strong><%= Review.human_attribute_name :scope %>:</strong>
-    <%= @review.scope %>
-  </p>
-
-  <p class="mb-1">
-    <strong><%= Review.human_attribute_name :risk_exposure %>:</strong>
-    <%= @review.risk_exposure %>
-  </p>
-
-  <p class="mb-1">
-    <strong><%= Review.human_attribute_name :manual_score %>:</strong>
-    <%= @review.manual_score %>
-  </p>
-
-  <p class="mb-1">
-    <strong><%= Review.human_attribute_name :include_sox %>:</strong>
-    <%= t "label.#{@review.include_sox}" unless @review.include_sox.nil? %>
-  </p>
-<% end %>
-
-<table class="table table-sm table-striped table-hover mt-3">
-  <thead>
-    <tr>
-      <th><%= ReviewUserAssignment.human_attribute_name :user %></th>
-      <th><%= ReviewUserAssignment.human_attribute_name(:assignment_type) %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @review.review_user_assignments.each do |rua| %>
-      <tr>
-        <td><%= rua.user.full_name %></td>
-        <td><%= rua.type_text %></td>
-      </tr>
+    <% if USE_SCOPE_CYCLE %>
+      <p class="mb-1">
+        <strong><%= Review.human_attribute_name :subsidiary %>:</strong>
+        <%= @review.subsidiary.to_s %>
+      </p>
     <% end %>
-  </tbody>
-</table>
 
-<% @review.grouped_control_objective_items.each do |pc, cois| %>
-  <h4><%= pc.name %></h4>
-
-  <% cois.sort.each do |coi| %>
-    <h5><%= coi.to_s %></h5>
-    <div class="m-3">
-      <p class="mb-1">
-        <strong><%= ControlObjectiveItem.human_attribute_name :relevance %>:</strong>
-        <%= coi.relevance_text %>
-      </p>
-      <p class="mb-1">
-        <strong><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</strong>
-        <%= l(coi.audit_date) if coi.audit_date %>
-      </p>
-      <% unless HIDE_CONTROL_EFFECTS %>
-        <div>
-          <strong><%= Control.human_attribute_name :effects %>:</strong>
-          <%= simple_format coi.control.effects, class: 'mb-1' %>
-        </div>
-      <% end %>
-      <div>
-        <strong><%= Control.human_attribute_name :control %>:</strong>
-        <%= simple_format coi.control.control, class: 'mb-1' %>
-      </div>
-      <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
-        <p class="mb-1">
-          <strong><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</strong>
-          <%= "#{coi.effectiveness}%" %>
-        </p>
-      <% end %>
-      <p class="mb-1">
-        <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
-        <%= coi.design_score_text %>
-      </p>
-      <div>
-        <strong><%= Control.human_attribute_name :design_tests %>:</strong>
-        <%= simple_format coi.control.design_tests, class: 'mb-1' %>
-      </div>
-      <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
-        <p class="mb-1">
-          <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
-          <%= coi.compliance_score_text %>
-        </p>
-        <div>
-          <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
-          <%= simple_format coi.control.compliance_tests, class: 'mb-1' %>
-        </div>
-      <% end %>
-      <p class="mb-1">
-        <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
-        <%= coi.sustantive_score_text %>
-      </p>
-      <div>
-        <strong><%= Control.human_attribute_name :sustantive_tests %>:</strong>
-        <%= simple_format coi.control.sustantive_tests, class: 'mb-1' %>
-      </div>
-      <div>
-        <strong><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</strong>
-        <%= simple_format coi.auditor_comment, class: 'mb-1' %>
-      </div>
-      <p class="mb-1">
-        <strong><%= ControlObjectiveItem.human_attribute_name :finished %>:</strong>
-        <%= t coi.finished ? 'label.yes' : 'label.no' %>
-      </p>
+    <div class="mb-1">
+      <%= show_readonly_review_survey(@review) %>
     </div>
-  <% end %>
-<% end %>
 
-<% unless @review.finding_review_assignments.empty? %>
-  <h4><%= t('review.findings_label') %></h4>
-
-  <ul class="mb-1">
-    <% @review.finding_review_assignments.each do |fra| %>
-      <li><%= fra.finding %></li>
+    <% unless HIDE_REVIEW_DESCRIPTION %>
+      <div>
+        <strong><%= Review.human_attribute_name(:description) %>:</strong>
+        <%= simple_format @review.description, class: 'mb-1' %>
+      </div>
     <% end %>
-  </ul>
-<% end %>
 
-<% if @review.work_papers_finished? %>
-  <div class="alert alert-info mt-3">
-    <%= t 'review.work_papers_marked_as_finished' %>
+    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+      <p class="mb-1">
+        <strong><%= Review.human_attribute_name :scope %>:</strong>
+        <%= @review.scope %>
+      </p>
+
+      <p class="mb-1">
+        <strong><%= Review.human_attribute_name :risk_exposure %>:</strong>
+        <%= @review.risk_exposure %>
+      </p>
+
+      <p class="mb-1">
+        <strong><%= Review.human_attribute_name :manual_score %>:</strong>
+        <%= @review.manual_score %>
+      </p>
+
+      <p class="mb-1">
+        <strong><%= Review.human_attribute_name :include_sox %>:</strong>
+        <%= t "label.#{@review.include_sox}" unless @review.include_sox.nil? %>
+      </p>
+    <% end %>
+
+    <table class="table table-sm table-striped table-hover mt-3">
+      <thead>
+        <tr>
+          <th><%= ReviewUserAssignment.human_attribute_name :user %></th>
+          <th><%= ReviewUserAssignment.human_attribute_name(:assignment_type) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @review.review_user_assignments.each do |rua| %>
+          <tr>
+            <td><%= rua.user.full_name %></td>
+            <td><%= rua.type_text %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <% @review.grouped_control_objective_items.each do |pc, cois| %>
+      <h4><%= pc.name %></h4>
+
+      <% cois.sort.each do |coi| %>
+        <h5><%= coi.to_s %></h5>
+        <div class="m-3">
+          <p class="mb-1">
+            <strong><%= ControlObjectiveItem.human_attribute_name :relevance %>:</strong>
+            <%= coi.relevance_text %>
+          </p>
+          <p class="mb-1">
+            <strong><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</strong>
+            <%= l(coi.audit_date) if coi.audit_date %>
+          </p>
+          <% unless HIDE_CONTROL_EFFECTS %>
+            <div>
+              <strong><%= Control.human_attribute_name :effects %>:</strong>
+              <%= simple_format coi.control.effects, class: 'mb-1' %>
+            </div>
+          <% end %>
+          <div>
+            <strong><%= Control.human_attribute_name :control %>:</strong>
+            <%= simple_format coi.control.control, class: 'mb-1' %>
+          </div>
+          <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+            <p class="mb-1">
+              <strong><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</strong>
+              <%= "#{coi.effectiveness}%" %>
+            </p>
+          <% end %>
+          <p class="mb-1">
+            <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
+            <%= coi.design_score_text %>
+          </p>
+          <div>
+            <strong><%= Control.human_attribute_name :design_tests %>:</strong>
+            <%= simple_format coi.control.design_tests, class: 'mb-1' %>
+          </div>
+          <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
+            <p class="mb-1">
+              <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
+              <%= coi.compliance_score_text %>
+            </p>
+            <div>
+              <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
+              <%= simple_format coi.control.compliance_tests, class: 'mb-1' %>
+            </div>
+          <% end %>
+          <p class="mb-1">
+            <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
+            <%= coi.sustantive_score_text %>
+          </p>
+          <div>
+            <strong><%= Control.human_attribute_name :sustantive_tests %>:</strong>
+            <%= simple_format coi.control.sustantive_tests, class: 'mb-1' %>
+          </div>
+          <div>
+            <strong><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</strong>
+            <%= simple_format coi.auditor_comment, class: 'mb-1' %>
+          </div>
+          <p class="mb-1">
+            <strong><%= ControlObjectiveItem.human_attribute_name :finished %>:</strong>
+            <%= t coi.finished ? 'label.yes' : 'label.no' %>
+          </p>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% unless @review.finding_review_assignments.empty? %>
+      <h4><%= t('review.findings_label') %></h4>
+
+      <ul class="mb-1">
+        <% @review.finding_review_assignments.each do |fra| %>
+          <li><%= fra.finding %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% if @review.work_papers_finished? %>
+      <div class="alert alert-info mt-3">
+        <div class="alert-message">
+          <%= t 'review.work_papers_marked_as_finished' %>
+        </div>
+      </div>
+    <% elsif @review.work_papers_revised? %>
+      <div class="alert alert-success mt-3">
+        <div class="alert-message">
+          <%= t 'review.work_papers_marked_as_revised' %>
+        </div>
+      </div>
+    <% end %>
+
+    <hr />
+
+    <div>
+      <%= link_to_edit edit_review_path(@review) %> |
+      <%= link_to t('label.download'), [@review, format: :pdf] %> |
+      <%= link_to_index reviews_path %>
+    </div>
   </div>
-<% elsif @review.work_papers_revised? %>
-  <div class="alert alert-success mt-3">
-    <%= t 'review.work_papers_marked_as_revised' %>
-  </div>
-<% end %>
-
-<hr />
-
-<div>
-  <%= link_to_edit edit_review_path(@review) %> |
-  <%= link_to t('label.download'), [@review, format: :pdf] %> |
-  <%= link_to_index reviews_path %>
 </div>

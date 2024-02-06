@@ -1,74 +1,82 @@
 <% url = weaknesses_report_path execution: params[:execution] %>
 
-<div class="card mb-3">
-  <div class="card-header">
-    <h5 class="mb-0"><%= t 'label.search' %></h5>
-  </div>
-
+<div class="card">
   <div class="card-body">
-    <%= simple_form_for action_name, url: url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
-      <% filters = %w(review finding risk_levels priority current_situation repeated compliance process_control control_objective tags) %>
-      <% filters = filters - ['current_situation'] unless SHOW_FINDING_CURRENT_SITUATION %>
-      <% filters = filters - ['compliance'] unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
-      <% filters.each do |filter_name| %>
-        <%= render "shared/filters/#{filter_name}", f: f, display: true, action: action_name %>
-      <% end %>
-
-      <%= render 'shared/filters/user', f: f, display: true, action: action_name, secondary_check_action: :include_user_tree %>
-
-      <%= render 'shared/filters/date_field', {
-        f: f, display: true, action: action_name, field_name: 'issue_date',
-        field_label: ConclusionFinalReview.human_attribute_name('issue_date')
-      } %>
-
-      <% %w(origination_date follow_up_date solution_date).each do |date_field| %>
-        <%= render 'shared/filters/date_field', {
-          f: f, display: true, action: action_name, field_name: date_field, field_label: Finding.human_attribute_name(date_field)
-        } %>
-      <% end %>
-
-      <div class="form-actions">
-        <%= hidden_field_tag :execution, params[:execution] %>
-        <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-outline-secondary' %> |
-        <%= link_to t('label.cancel'), url %>
+    <div class="card border-1 border-light mb-3">
+      <div class="card-header bg-light">
+        <h5 class="mb-0"><%= t 'label.search' %></h5>
       </div>
-    <% end %>
-  </div>
-</div>
 
-<% if @weaknesses.try(:total_entries)&.positive? %>
-  <div class="card my-3 bg-light">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-8">
-          <p class="mb-0">
-            <%= t '.weaknesses_count_html', count: @weaknesses.total_entries %>
-          </p>
-        </div>
-        <div class="col-md-4 text-md-right mt-2 mt-md-0">
-          <%= pdf_and_csv_download_links %>
-        </div>
+      <div class="card-body">
+        <%= simple_form_for action_name, url: url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
+          <% filters = %w(review finding risk_levels priority current_situation repeated compliance process_control control_objective tags) %>
+          <% filters = filters - ['current_situation'] unless SHOW_FINDING_CURRENT_SITUATION %>
+          <% filters = filters - ['compliance'] unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+          <% filters.each do |filter_name| %>
+            <%= render "shared/filters/#{filter_name}", f: f, display: true, action: action_name %>
+          <% end %>
+
+          <%= render 'shared/filters/user', f: f, display: true, action: action_name, secondary_check_action: :include_user_tree %>
+
+          <%= render 'shared/filters/date_field', {
+            f: f, display: true, action: action_name, field_name: 'issue_date',
+            field_label: ConclusionFinalReview.human_attribute_name('issue_date')
+          } %>
+
+          <% %w(origination_date follow_up_date solution_date).each do |date_field| %>
+            <%= render 'shared/filters/date_field', {
+              f: f, display: true, action: action_name, field_name: date_field, field_label: Finding.human_attribute_name(date_field)
+            } %>
+          <% end %>
+
+          <div class="form-actions">
+            <%= hidden_field_tag :execution, params[:execution] %>
+            <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-outline-secondary' %> |
+            <%= link_to t('label.cancel'), url %>
+          </div>
+        <% end %>
       </div>
     </div>
-  </div>
 
-  <div class="endless-pagination">
-    <%= render partial: 'weakness', collection: @weaknesses, as: :weakness %>
-  </div>
+    <% if @weaknesses.try(:total_entries)&.positive? %>
+      <div class="card border-1 my-3 bg-light">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <p class="mb-0">
+                <%= t '.weaknesses_count_html', count: @weaknesses.total_entries %>
+              </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-2 mt-md-0">
+              <%= pdf_and_csv_download_links %>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <%= paginate @weaknesses %>
-  <div class="alert alert-warning text-center" hidden data-pagination-loading>
-    <strong><%= t 'navigation.loading' %></strong>
-  </div>
-<% else %>
-  <div class="alert alert-info">
-    <%= t '.empty' %>
-  </div>
-<% end %>
+      <div class="endless-pagination">
+        <%= render partial: 'weakness', collection: @weaknesses, as: :weakness %>
+      </div>
 
-<div>
-  <%= link_to t('label.back'), action: :index %> |
-  <%= pdf_and_csv_download_links %>
+      <%= paginate @weaknesses %>
+      <div class="alert alert-warning text-center" hidden data-pagination-loading>
+        <div class="alert-message">
+          <strong><%= t 'navigation.loading' %></strong>
+        </div>
+      </div>
+    <% else %>
+      <div class="alert alert-info">
+        <div class="alert-message">
+          <%= t '.empty' %>
+        </div>
+      </div>
+    <% end %>
+
+    <div>
+      <%= link_to t('label.back'), action: :index %> |
+      <%= pdf_and_csv_download_links %>
+    </div>
+  </div>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {

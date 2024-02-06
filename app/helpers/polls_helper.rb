@@ -5,9 +5,7 @@ module PollsHelper
       label: '&nbsp;'.html_safe,
       value_method: :first,
       label_method: :second,
-      collection: answer_options(form.object.question),
-      wrapper_html: { class: 'mt-n3' },
-      item_wrapper_class: 'custom-control custom-radio'
+      collection: answer_options(form.object.question)
   end
 
   def link_to_download_answer_attached answer, options = {}

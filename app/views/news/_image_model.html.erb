@@ -4,14 +4,14 @@
       <div class="col-10">
         <% if f.object.image? %>
           <p class="mb-2">
-            <%= icon 'fas', 'image', class: 'mr-2' %>
+            <%= icon 'fas', 'image', class: 'me-2' %>
             <%= f.object.image.file.filename %>
             <% if f.object.image_cache %>
               <%= f.input :image_cache, as: :hidden %>
             <% end %>
           </p>
         <% else %>
-          <div class="file-container float-left small">
+          <div class="file-container float-start small">
             <%= link_to_upload f.object, :image %>
             <% if f.object.image_cache %>
               <%= f.input :image_cache, as: :hidden %>
@@ -22,7 +22,7 @@
         <% end %>
       </div>
       <div class="col-2">
-        <div class="text-right">
+        <div class="text-end">
           <%= link_to_remove_nested_item f %>
         </div>
       </div>

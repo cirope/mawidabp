@@ -11,7 +11,9 @@ module RiskAssessments::RiskAssessemntWeights
   private
 
     def clone_risk_assessment_weights
-      risk_assessment_template.risk_assessment_weights.each do |raw|
+      clone_risk_assessment_weights_from = cloned_from || risk_assessment_template
+
+      clone_risk_assessment_weights_from.risk_assessment_weights.each do |raw|
         attributes = raw.attributes.except 'id',
                                            'owner_id',
                                            'owner_type',
@@ -25,6 +27,8 @@ module RiskAssessments::RiskAssessemntWeights
 
         new_raw.save!
       end
+
+      _clone_risk_weights_from cloned_from if cloned_from
     end
 
     def clone_risk_score_items_from raw, new_raw
@@ -35,6 +39,16 @@ module RiskAssessments::RiskAssessemntWeights
                                                             'updated_at'
 
         new_raw.risk_score_items.build risk_score_items_attributes
+      end
+    end
+
+    def _clone_risk_weights_from cloned_from
+      raws = risk_assessment_weights.to_a
+
+      risk_assessment_items.each do |rai|
+        rai.risk_weights.each_with_index do |rw, idx|
+          rw.update_column :risk_assessment_weight_id, raws[idx].id
+        end
       end
     end
 end

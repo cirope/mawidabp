@@ -1,76 +1,78 @@
-<%= render 'current_user_filters' %>
-<%= render 'shared/search', {
-  options: {
-    url:              findings_path(completion_state: params[:completion_state]),
-    extra_parameters: { completion_state: params[:completion_state] },
-    columns_for_sort: Finding.columns_for_sort
-  },
+<div class="card">
+  <div class="card-body">
+    <%= render 'current_user_filters' %>
+    <%= render 'shared/search', {
+      options: {
+        url:              findings_path(completion_state: params[:completion_state]),
+        extra_parameters: { completion_state: params[:completion_state] },
+        columns_for_sort: Finding.columns_for_sort
+      },
 
-  columns: @query.blank? ?
-    Finding::COLUMNS_FOR_SEARCH.keys - (current_organization.corporate? ? [] : ['organization']) :
-    @columns
-} %>
+      columns: @query.blank? ?
+        Finding::COLUMNS_FOR_SEARCH.keys - (current_organization.corporate? ? [] : ['organization']) :
+        @columns
+    } %>
 
-<table class="table table-sm table-striped table-hover">
-  <thead id="column_headers">
-    <tr>
-      <%= make_filterable_column(
-        icon('fas', 'calendar-alt', title: j(Finding.human_attribute_name('updated_at'))),
-        nil,
-        'updated_at'
-      ) %>
-      <%= make_filterable_column(
-        Finding.human_attribute_name('organization'), { class: 'd-none d-md-table-cell' }, 'organization'
-      ) if current_organization.corporate? %>
-      <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
-      <%= make_filterable_column PlanItem.human_attribute_name('project'), { class: 'd-none d-md-table-cell' }, 'project' %>
-      <%= make_filterable_column Finding.human_attribute_name('review_code'), nil, 'review_code' %>
-      <%= make_filterable_column Finding.human_attribute_name('title'), { class: 'd-none d-md-table-cell' }, 'title' %>
-      <%= make_not_available_column Finding.human_attribute_name('state'), class: 'd-none d-sm-table-cell' %>
-      <%= make_not_available_column Finding.human_attribute_name(
-          params[:completion_state] == 'incomplete' ? 'follow_up_date' : 'solution_date'), class: 'd-none d-sm-table-cell' %>
-      <%= make_not_available_column Weakness.human_attribute_name('risk'), class: 'd-none d-sm-table-cell' %>
-      <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'd-none d-sm-table-cell' }, 'tags' %>
-      <%= make_not_available_column Finding.human_attribute_name('finding_answers'), class: 'd-none d-lg-table-cell' %>
-      <%= make_not_available_column WorkPaper.model_name.human(count: 0), class: 'd-none d-lg-table-cell' %>
-      <th colspan="2" class="text-right"><%= link_to_search %></th>
-    </tr>
-  </thead>
+    <table class="table table-sm table-striped table-hover">
+      <thead id="column_headers">
+        <tr>
+          <%= make_filterable_column(
+            icon('fas', 'calendar-alt', title: j(Finding.human_attribute_name('updated_at'))),
+            nil,
+            'updated_at'
+          ) %>
+          <%= make_filterable_column(
+            Finding.human_attribute_name('organization'), { class: 'd-none d-md-table-cell' }, 'organization'
+          ) if current_organization.corporate? %>
+          <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
+          <%= make_filterable_column PlanItem.human_attribute_name('project'), { class: 'd-none d-md-table-cell' }, 'project' %>
+          <%= make_filterable_column Finding.human_attribute_name('review_code'), nil, 'review_code' %>
+          <%= make_filterable_column Finding.human_attribute_name('title'), { class: 'd-none d-md-table-cell' }, 'title' %>
+          <%= make_not_available_column Finding.human_attribute_name('state'), class: 'd-none d-sm-table-cell' %>
+          <%= make_not_available_column Finding.human_attribute_name(
+              params[:completion_state] == 'incomplete' ? 'follow_up_date' : 'solution_date'), class: 'd-none d-sm-table-cell' %>
+          <%= make_not_available_column Weakness.human_attribute_name('risk'), class: 'd-none d-sm-table-cell' %>
+          <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'd-none d-sm-table-cell' }, 'tags' %>
+          <%= make_not_available_column Finding.human_attribute_name('finding_answers'), class: 'd-none d-lg-table-cell' %>
+          <%= make_not_available_column WorkPaper.model_name.human(count: 0), class: 'd-none d-lg-table-cell' %>
+          <th colspan="2" class="text-end"><%= link_to_search %></th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @findings.each do |finding| %>
-      <tr>
-        <td><%= finding_updated_at_text finding %></td>
-        <% if current_organization.corporate? %>
-          <td><%= finding.organization.prefix %></td>
+      <tbody>
+        <% @findings.each do |finding| %>
+          <tr>
+            <td><%= finding_updated_at_text finding %></td>
+            <% if current_organization.corporate? %>
+              <td><%= finding.organization.prefix %></td>
+            <% end %>
+            <td><%= show_review_with_conclusion_status_as_abbr(finding.review) %></td>
+            <td class="d-none d-md-table-cell"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
+            <td><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
+            <td class="d-none d-md-table-cell"><%= super_truncate(finding.title, 17) %></td>
+            <td class="d-none d-sm-table-cell"><%= super_truncate finding.state_text, 19 %></td>
+            <% if params[:completion_state] == 'incomplete' %>
+              <td class="d-none d-sm-table-cell"><%= finding_follow_up_date_text(finding) %><%= next_task_expiration(finding) %></td>
+            <% else %>
+              <td class="d-none d-sm-table-cell"><%= l(finding.solution_date, format: :short) if finding.solution_date %></td>
+            <% end %>
+            <td class="d-none d-sm-table-cell"><%= finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
+            <td class="d-none d-sm-table-cell"><%= tags finding.tags.reload %></td>
+            <td class="d-none d-lg-table-cell"><%= show_finding_answers_count finding %> <%= show_finding_reading_warning finding %></td>
+            <td class="d-none d-lg-table-cell"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
+            <td class="text-end"><%= link_to_show finding_path(params[:completion_state], finding, user_id: params[:user_id]) %></td>
+            <td class="text-end"><%= link_to_edit_finding finding, @auth_user %></td>
+          </tr>
         <% end %>
-        <td><%= show_review_with_conclusion_status_as_abbr(finding.review) %></td>
-        <td class="d-none d-md-table-cell"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
-        <td><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
-        <td class="d-none d-md-table-cell"><%= super_truncate(finding.title, 17) %></td>
-        <td class="d-none d-sm-table-cell"><%= super_truncate finding.state_text, 19 %></td>
-        <% if params[:completion_state] == 'incomplete' %>
-          <td class="d-none d-sm-table-cell"><%= finding_follow_up_date_text(finding) %><%= next_task_expiration(finding) %></td>
-        <% else %>
-          <td class="d-none d-sm-table-cell"><%= l(finding.solution_date, format: :short) if finding.solution_date %></td>
-        <% end %>
-        <td class="d-none d-sm-table-cell"><%= finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
-        <td class="d-none d-sm-table-cell"><%= tags finding.tags.reload %></td>
-        <td class="d-none d-lg-table-cell"><%= show_finding_answers_count finding %> <%= show_finding_reading_warning finding %></td>
-        <td class="d-none d-lg-table-cell"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
-        <td class="text-right"><%= link_to_show finding_path(params[:completion_state], finding, user_id: params[:user_id]) %></td>
-        <td class="text-right"><%= link_to_edit_finding finding, @auth_user %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      </tbody>
+    </table>
 
-<hr />
+    <%= paginate @findings %>
 
-<%= paginate @findings %>
-
-<%= link_to t('finding.download_csv'), findings_path(request.query_parameters.merge(format: :csv)) %> |
-<%= link_to t('finding.download_pdf'), findings_path(request.query_parameters.merge(format: :pdf)) %>
+    <%= link_to t('finding.download_csv'), findings_path(request.query_parameters.merge(format: :csv)) %> |
+    <%= link_to t('finding.download_pdf'), findings_path(request.query_parameters.merge(format: :pdf)) %>
+  </div>
+</div>
 
 <script type="text/javascript">
   $('#user_id_select').change(function() {
