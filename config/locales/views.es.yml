@@ -195,8 +195,8 @@ es:
       incomplete: 'Incompleta'
       repeated: 'Reiterada'
       revoked: 'Anulada'
-      criteria_mismatch: 'Planes no implementados'
-      expired: 'Desestimada / No aplica'
+      criteria_mismatch: 'Difiere Criterio'
+      expired: 'Planes no implementados'
     work_papers:
       create:
         from_comment: 'De comentario por %{user} el %{date}'
