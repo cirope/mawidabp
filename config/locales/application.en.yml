@@ -5,6 +5,8 @@ en:
   label:
     'yes': "Yes"
     'no': "No"
+    t: "Yes" # remove after fixing tests that use this key
+    f: "No" # remove after fixing tests that use this key
     total: "Total"
     by: "by"
     add: "Add"

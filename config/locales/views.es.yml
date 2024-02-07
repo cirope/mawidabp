@@ -49,8 +49,8 @@ es:
     strongly_agree: 'Muy de acuerdo'
     'yes': 'Sí'
     'no': 'No'
-    t: 'Sí'
-    f: 'No'
+    t: 'Sí' # remove after fixing tests that use this key
+    f: 'No' # remove after fixing tests that use this key
 
   benefits:
     index:
