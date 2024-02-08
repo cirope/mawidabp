@@ -31,7 +31,6 @@ on:
       - c-smg-test
       - c-supervielle-production
       - c-supervielle-test
-      - c-undec
   pull_request:
     branches:
       - master
@@ -63,7 +62,6 @@ on:
       - c-smg-test
       - c-supervielle-production
       - c-supervielle-test
-      - c-undec
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -98,7 +96,6 @@ jobs:
             || contains(github.ref_name, 'petersen')
             || contains(github.ref_name, 'smg')
             || contains(github.ref_name, 'supervielle')
-            || contains(github.ref_name, 'undec')
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'china')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
@@ -116,8 +113,7 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'patagonia')
             || contains(github.event.pull_request.base.ref, 'petersen')
             || contains(github.event.pull_request.base.ref, 'smg')
-            || contains(github.event.pull_request.base.ref, 'supervielle')
-            || contains(github.event.pull_request.base.ref, 'undec') }}
+            || contains(github.event.pull_request.base.ref, 'supervielle') }}
         use_bh:
           - >-
             ${{ contains(github.ref_name, 'master')
@@ -157,7 +153,6 @@ jobs:
             || contains(github.ref_name, 'petersen')
             || contains(github.ref_name, 'smg')
             || contains(github.ref_name, 'supervielle')
-            || contains(github.ref_name, 'undec')
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'china')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
@@ -170,8 +165,7 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'mariva')
             || contains(github.event.pull_request.base.ref, 'petersen')
             || contains(github.event.pull_request.base.ref, 'smg')
-            || contains(github.event.pull_request.base.ref, 'supervielle')
-            || contains(github.event.pull_request.base.ref, 'undec') }}
+            || contains(github.event.pull_request.base.ref, 'supervielle') }}
         use_reviews_scored_by_weakness:
           - >-
             ${{ contains(github.ref_name, 'master')
