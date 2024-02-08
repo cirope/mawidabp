@@ -169,7 +169,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: update ubuntu packages
+      - name: Update ubuntu packages
         run: sudo apt-get update
       - name: Install sldap
         run: sudo apt -y install slapd ldap-utils
