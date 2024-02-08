@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         ruby-version:
-          - 2.7
+          - 3.1
         config-type:
           - normal
           - gal
@@ -52,7 +52,7 @@ jobs:
           - bh
           - cycle_score
           - reviews_scored_by_weakness
-        use_v27:
+        use_v31:
           - >-
             ${{ contains(github.ref_name, 'master')
             || contains(github.ref_name, 'bancotdf')
@@ -125,8 +125,8 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'nbch') }}
         exclude:
-          - use_v27: false
-            ruby-version: 2.7
+          - use_v31: false
+            ruby-version: 3.1
           - use_bh: false
             config-type: bh
           - use_normal: false
