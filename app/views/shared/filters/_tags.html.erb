@@ -1,9 +1,12 @@
-<% group        ||= nil %>
-<% can_negate   ||= nil %>
-<% field_label  ||= Tag.model_name.human %>
-<% field_name   ||= :tags %>
-<% check_action ||= :"negate_#{field_name}" if can_negate %>
-<% check_label  ||= t ".#{check_action}" if can_negate %>
+<% group       ||= nil %>
+<% can_negate  ||= nil %>
+<% field_label ||= Tag.model_name.human %>
+<% field_name  ||= :tags %>
+
+<% if can_negate %>
+  <% check_action ||= :"negate_#{field_name}" if can_negate %>
+  <% check_label  ||= t ".#{check_action}" if can_negate %>
+<% end %>
 
 <% unless group %>
   <div id="<%= field_name %>_filter" class="row" <%== 'style="display: none;"' unless display %>>
