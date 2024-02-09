@@ -1,6 +1,4 @@
 class LoginRecordsController < ApplicationController
-  respond_to :html, :pdf
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_login_record, only: [:show]
   before_action :set_title

@@ -182,7 +182,7 @@ GEM
     minitest (5.21.2)
     mutex_m (0.2.0)
     nakayoshi_fork (0.0.4)
-    net-imap (0.4.9.1)
+    net-imap (0.4.10)
       date
       net-protocol
     net-ldap (0.19.0)
@@ -198,7 +198,7 @@ GEM
       net-protocol
     net-ssh (7.2.1)
     nio4r (2.7.0)
-    nokogiri (1.16.0-x86_64-linux)
+    nokogiri (1.16.2-x86_64-linux)
       racc (~> 1.4)
     paper_trail (15.1.0)
       activerecord (>= 6.1)
@@ -217,7 +217,7 @@ GEM
     puma (6.4.2)
       nio4r (~> 2.0)
     racc (1.7.3)
-    rack (3.0.8)
+    rack (3.0.9)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -282,9 +282,6 @@ GEM
       uber (< 0.2.0)
     request_store (1.5.1)
       rack (>= 1.4)
-    responders (3.1.1)
-      actionpack (>= 5.2)
-      railties (>= 5.2)
     rexml (3.2.6)
     ruby-ntlm (0.0.4)
     ruby-saml (1.16.0)
@@ -407,7 +404,6 @@ DEPENDENCIES
   rails-controller-testing
   redcarpet
   reform-rails
-  responders
   rexml
   ruby-ntlm
   ruby-saml

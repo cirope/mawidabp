@@ -1,6 +1,4 @@
 class ActivityGroupsController < ApplicationController
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :set_activity_group, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
@@ -27,23 +25,26 @@ class ActivityGroupsController < ApplicationController
   def create
     @activity_group = ActivityGroup.list.new activity_group_params
 
-    @activity_group.save
-
-    respond_with @activity_group
+    if @activity_group.save
+      redirect_with_notice @activity_group
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /activity_groups/1
   def update
-    update_resource @activity_group, activity_group_params
-
-    respond_with @activity_group
+    if @activity_group.update activity_group_params
+      redirect_with_notice @activity_group
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # DELETE /activity_groups/1
   def destroy
     @activity_group.destroy
-
-    respond_with @activity_group
+    redirect_with_notice @activity_group
   end
 
   private

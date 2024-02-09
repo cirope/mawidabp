@@ -1,8 +1,6 @@
 class Users::ReleasesController < ApplicationController
   include Users::Finders
 
-  respond_to :html
-
   before_action :auth, :check_privileges, :set_user, :set_title
 
   # * GET /users/releases/1/edit

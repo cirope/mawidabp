@@ -1,5 +1,4 @@
 class EMailsController < ApplicationController
-  respond_to :html
 
   before_action :auth, :check_privileges
   before_action :set_title

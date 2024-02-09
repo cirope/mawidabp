@@ -1,8 +1,6 @@
 class DocumentsController < ApplicationController
   include AutoCompleteFor::Tagging
 
-  respond_to :html
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_tag, only: [:index]
   before_action :set_document, only: [:show, :edit, :update, :destroy, :download]
@@ -37,18 +35,24 @@ class DocumentsController < ApplicationController
   def create
     @document = documents.new document_params
 
-    @document.save
-    respond_with @document
+    if @document.save
+      redirect_with_notice @document
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   def update
-    update_resource @document, document_params
-    respond_with @document
+    if @document.update document_params
+      redirect_with_notice @document
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   def destroy
     @document.destroy
-    respond_with @document
+    redirect_with_notice @document
   end
 
   def download

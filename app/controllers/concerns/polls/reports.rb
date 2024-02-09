@@ -5,8 +5,6 @@ module Polls::Reports
     before_action :auth, :set_current_module, :set_report, :set_date_range,
       :set_questionnaire, :set_user, :set_business_unit, :set_questionnaires,
       :set_title, :process_report
-
-    respond_to :html, :js
   end
 
   def polls_calification polls

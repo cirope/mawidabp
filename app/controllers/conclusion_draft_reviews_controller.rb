@@ -2,7 +2,7 @@ class ConclusionDraftReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_draft_review, only: [
     :show, :edit, :update, :export_to_pdf, :export_to_rtf,
-    :score_sheet, :download_work_papers, :create_bundle, 
+    :score_sheet, :download_work_papers, :create_bundle,
     :compose_email, :send_by_email
   ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
@@ -76,13 +76,10 @@ class ConclusionDraftReviewsController < ApplicationController
     @conclusion_draft_review = ConclusionDraftReview.list.new(
       conclusion_draft_review_params)
 
-    respond_to do |format|
-      if @conclusion_draft_review.save
-        flash.notice = t 'conclusion_draft_review.correctly_created'
-        format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
-      else
-        format.html { render action: :new }
-      end
+    if @conclusion_draft_review.save
+      redirect_with_notice @conclusion_draft_review, url: edit_conclusion_draft_review_url(@conclusion_draft_review)
+    else
+      render 'new', status: :unprocessable_entity
     end
   end
 
@@ -93,13 +90,10 @@ class ConclusionDraftReviewsController < ApplicationController
   def update
     @title = t 'conclusion_draft_review.edit_title'
 
-    respond_to do |format|
-      if @conclusion_draft_review.update(conclusion_draft_review_params)
-        flash.notice = t 'conclusion_draft_review.correctly_updated'
-        format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
-      else
-        format.html { render action: :edit }
-      end
+    if @conclusion_draft_review.update(conclusion_draft_review_params)
+      redirect_with_notice @conclusion_draft_review, url: edit_conclusion_draft_review_url(@conclusion_draft_review)
+    else
+      render 'edit', status: :unprocessable_entity
     end
 
     rescue ActiveRecord::StaleObjectError

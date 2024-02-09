@@ -15,8 +15,6 @@ class Plan < ApplicationRecord
   include Plans::ValidationCallbacks
   include Plans::Validations
 
-  attr_readonly :period_id
-
   belongs_to :period
   belongs_to :organization
   has_one :risk_assessment, dependent: :nullify

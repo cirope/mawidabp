@@ -92,7 +92,7 @@ class ReviewsController < ApplicationController
         flash.notice = t 'review.correctly_created'
         format.html { redirect_to(edit_review_url(@review)) }
       else
-        format.html { render action: :new }
+        format.html { render action: :new, status: :unprocessable_entity }
       end
     end
   end
@@ -110,7 +110,7 @@ class ReviewsController < ApplicationController
         flash.notice = t 'review.correctly_updated'
         format.html { redirect_to(edit_review_url(@review)) }
       else
-        format.html { render action: :edit }
+        format.html { render action: :edit, status: :unprocessable_entity }
       end
     end
 

@@ -89,7 +89,7 @@ class ControlObjectiveItemsController < ApplicationController
           redirect_to(back_to || edit_control_objective_item_url(@control_objective_item))
         }
       else
-        format.html { render action: :edit }
+        render 'edit', status: :unprocessable_entity
       end
     end
 

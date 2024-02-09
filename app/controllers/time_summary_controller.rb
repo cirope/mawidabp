@@ -1,6 +1,4 @@
 class TimeSummaryController < ApplicationController
-  respond_to :html, :csv, :js
-
   before_action :auth, :check_privileges, :set_title, :set_descendants,
                 :set_user
   before_action :set_time_consumption, only: [:edit, :update, :destroy]
@@ -30,24 +28,28 @@ class TimeSummaryController < ApplicationController
     @time_consumption = TimeConsumption.new time_consumption_params.merge(
       user: @auth_user
     )
-    @time_consumption.save
-
-    respond_with @time_consumption, location: time_summary_index_url(
-      start_date: @time_consumption.date.at_beginning_of_week,
-      end_date:   @time_consumption.date.at_end_of_week
-    )
+    if @time_consumption.save
+      redirect_with_notice @time_consumption, url: time_summary_index_url(
+        start_date: @time_consumption.date.at_beginning_of_week,
+        end_date:   @time_consumption.date.at_end_of_week
+      )
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   def edit
   end
 
   def update
-    update_resource @time_consumption, time_consumption_params
-
-    respond_with @time_consumption, location: time_summary_index_url(
-      start_date: @time_consumption.date.at_beginning_of_week,
-      end_date:   @time_consumption.date.at_end_of_week
-    )
+    if @time_consumption.update time_consumption_params
+      redirect_with_notice @time_consumption, url: time_summary_index_url(
+        start_date: @time_consumption.date.at_beginning_of_week,
+        end_date:   @time_consumption.date.at_end_of_week
+      )
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   def show
@@ -57,14 +59,12 @@ class TimeSummaryController < ApplicationController
       workflow:         review.plan_item.human_units.to_f,
       time_consumption: review.time_consumptions.sum(&:amount).to_f
     }
-
-    respond_to :js
   end
 
   def destroy
     @time_consumption.destroy
 
-    respond_with @time_consumption, location: time_summary_index_url(
+    redirect_with_notice @time_consumption, url: time_summary_index_url(
       start_date: @time_consumption.date.at_beginning_of_week,
       end_date:   @time_consumption.date.at_end_of_week
     )

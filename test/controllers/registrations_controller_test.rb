@@ -51,7 +51,7 @@ class RegistrationsControllerTest < ActionController::TestCase
       end
     end
 
-    assert_response :success
+    assert_response :unprocessable_entity
     assert_template 'registrations/new'
   end
 

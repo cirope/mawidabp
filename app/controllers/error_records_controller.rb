@@ -1,5 +1,4 @@
 class ErrorRecordsController < ApplicationController
-  respond_to :html, :pdf
 
   before_action :auth, :check_privileges
   before_action :set_error_record, only: [:show]

@@ -12,6 +12,6 @@ class LoginRecord < ApplicationRecord
   belongs_to :organization
 
   def to_s
-    user
+    user.to_s
   end
 end

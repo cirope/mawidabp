@@ -1,6 +1,4 @@
 class OpeningInterviewsController < ApplicationController
-  respond_to :html, :js
-
   before_action :auth, :check_privileges
   before_action :set_opening_interview, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
@@ -42,23 +40,26 @@ class OpeningInterviewsController < ApplicationController
   def create
     @opening_interview = OpeningInterview.list.new opening_interview_params
 
-    @opening_interview.save
-
-    respond_with @opening_interview
+    if @opening_interview.save
+      redirect_with_notice @opening_interview
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /opening_interviews/1
   def update
-    update_resource @opening_interview, opening_interview_params
-
-    respond_with @opening_interview
+    if @opening_interview.update opening_interview_params
+      redirect_with_notice @opening_interview
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # DELETE /opening_interviews/1
   def destroy
     @opening_interview.destroy
-
-    respond_with @opening_interview
+    redirect_with_notice @opening_interview
   end
 
   private

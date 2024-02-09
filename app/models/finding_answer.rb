@@ -12,7 +12,8 @@ class FindingAnswer < ApplicationRecord
   include FindingAnswers::Validations
   include ParameterSelector
 
-  attr_readonly :answer, :file_model_id, :finding_id, :user_id, :created_at
+  attr_readonly :answer, :file_model_id, :user_id, :created_at
+  attr_accessor :finding_id
 
   belongs_to :finding, touch: true
   belongs_to :user, -> { where users: { hidden: [true, false] } }, optional: true

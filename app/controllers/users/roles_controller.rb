@@ -1,6 +1,4 @@
 class Users::RolesController < ApplicationController
-  respond_to :json
-
   before_action :auth, :check_privileges
 
   # * GET /users/roles/1

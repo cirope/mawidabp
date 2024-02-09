@@ -1,6 +1,4 @@
 class SettingsController < ApplicationController
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :set_setting, only: [:show, :edit, :update]
   before_action :set_title
@@ -20,8 +18,11 @@ class SettingsController < ApplicationController
 
   # PATCH/PUT /settings/1
   def update
-    update_resource @setting, setting_params
-    respond_with @setting unless response_body
+    if @setting.update setting_params
+      redirect_with_notice @setting
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   private

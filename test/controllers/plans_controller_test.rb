@@ -423,7 +423,8 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_response :success
 
-    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+    Current.organization = organizations :cirope
+    business_unit_types  = ActiveSupport::JSON.decode(@response.body)
 
     expected_business_unit_types = BusinessUnitType.where(organization_id: Current.organization.id)
                                                    .where.not(id: business_unit_types(:cycle).id).map { |but| but.name}

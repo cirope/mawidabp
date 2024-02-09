@@ -5,8 +5,6 @@ class UsersController < ApplicationController
   include Users::Params
   include AutoCompleteFor::Tagging
 
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :check_ldap, only: [:new, :create]
   before_action :set_user, only: [:show, :edit, :update, :destroy]

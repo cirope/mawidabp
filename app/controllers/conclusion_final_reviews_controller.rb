@@ -78,13 +78,10 @@ class ConclusionFinalReviewsController < ApplicationController
 
     @conclusion_final_review.duplicate_annexes_and_images_from_draft
 
-    respond_to do |format|
-      if @conclusion_final_review.save
-        flash.notice = t 'conclusion_final_review.correctly_created'
-        format.html { redirect_to(conclusion_final_reviews_url) }
-      else
-        format.html { render action: :new }
-      end
+    if @conclusion_final_review.save
+      redirect_with_notice @conclusion_final_review, url: conclusion_final_reviews_url
+    else
+      render 'new', status: :unprocessable_entity
     end
   end
 
@@ -95,13 +92,10 @@ class ConclusionFinalReviewsController < ApplicationController
   def update
     @title = t 'conclusion_final_review.edit_title'
 
-    respond_to do |format|
-      if @conclusion_final_review.update(conclusion_final_review_params)
-        flash.notice = t 'conclusion_final_review.correctly_updated'
-        format.html { redirect_to(conclusion_final_reviews_url) }
-      else
-        format.html { render action: :edit }
-      end
+    if @conclusion_final_review.update(conclusion_final_review_params)
+      redirect_with_notice @conclusion_final_review, url: conclusion_final_reviews_url
+    else
+      render 'edit', status: :unprocessable_entity
     end
 
   rescue ActiveRecord::StaleObjectError
@@ -114,10 +108,7 @@ class ConclusionFinalReviewsController < ApplicationController
   # * DELETE /conclusion_final_reviews/1
   def destroy
     @conclusion_final_review.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to(conclusion_final_reviews_url) }
-    end
+    redirect_with_notice @conclusion_final_review, url: conclusion_final_reviews_url
   end
 
   # Exporta el informe en formato PDF

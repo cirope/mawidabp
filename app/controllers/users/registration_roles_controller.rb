@@ -1,6 +1,4 @@
 class Users::RegistrationRolesController < ApplicationController
-  respond_to :json
-
   before_action :set_group, :check_stale_group
 
   # * GET /users/registration_roles

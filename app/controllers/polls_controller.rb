@@ -8,8 +8,6 @@ class PollsController < ApplicationController
   before_action :set_title, except: :destroy
   before_action :set_current_module, except: [:reports]
 
-  respond_to :html
-
   # GET /polls
   # GET /polls.json
   def index
@@ -19,8 +17,6 @@ class PollsController < ApplicationController
       default_order.
       references(:questionnaire, :user).
       page params[:page]
-
-    respond_with @polls
   end
 
   # GET /polls/1
@@ -62,14 +58,17 @@ class PollsController < ApplicationController
 
   # PATCH /polls/1
   def update
-    update_resource @poll, poll_params
-    respond_with @poll, location: poll_url(@poll) unless response_body
+    if @poll.update poll_params
+      redirect_with_notice @poll
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # DELETE /polls/1
   def destroy
     @poll.destroy
-    respond_with @poll
+    redirect_with_notice @poll
   end
 
   def reports

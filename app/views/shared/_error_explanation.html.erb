@@ -18,6 +18,14 @@
   </div>
 
   <script type="text/javascript">
-    State.unsavedData = true;
+    function unsavedData() {
+      State.unsavedData = true;
+    }
+
+    if (document.readyState === "complete") {
+      unsavedData();
+    } else {
+      document.addEventListener("DOMContentLoaded", unsavedData);
+    }
   </script>
 <% end %>

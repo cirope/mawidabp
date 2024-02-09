@@ -12,8 +12,23 @@ en:
         notice: '%{resource_name} deleted'
         alert: '%{resource_name} could not be deleted'
 
-    benefits:
+    activity_groups:
+      create:
+        notice: 'Activity successfully created'
+      update:
+        notice: 'Activity successfully updated'
+        stale: 'Activity were not updated, please try again'
       destroy:
+        notice: 'Activity deleted'
+
+    benefits:
+      create:
+        notice: 'Benefit successfully created'
+      update:
+        notice: 'Benefit successfully updated'
+        stale: 'Benefit were not updated, please try again'
+      destroy:
+        notice: 'Benefit deleted'
         alert: 'Benefit could not be deleted, it was already used in observations'
 
     best_practices:

@@ -1,6 +1,4 @@
 class QuestionnairesController < ApplicationController
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :set_questionnaire, only: [:show, :edit, :update, :destroy]
   before_action :set_title
@@ -37,15 +35,21 @@ class QuestionnairesController < ApplicationController
   def create
     @questionnaire = Questionnaire.list.new questionnaire_params
 
-    @questionnaire.save
-    respond_with @questionnaire
+    if @questionnaire.save
+      redirect_with_notice @questionnaire
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # PATCH /questionnaires/1
   # PATCH /questionnaires/1.json
   def update
-    update_resource @questionnaire, questionnaire_params
-    respond_with @questionnaire unless response_body
+    if @questionnaire.update questionnaire_params
+      redirect_with_notice @questionnaire
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # DELETE /questionnaires/1
@@ -55,7 +59,7 @@ class QuestionnairesController < ApplicationController
 
     flash.alert = @questionnaire.errors.full_messages.to_sentence if @questionnaire.errors.any?
 
-    respond_with @questionnaire
+    redirect_with_notice @questionnaire
   end
 
   private

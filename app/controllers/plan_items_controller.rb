@@ -2,8 +2,6 @@ class PlanItemsController < ApplicationController
   include AutoCompleteFor::BestPractice
   include AutoCompleteFor::ControlObjective
 
-  respond_to :js
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_plan
   before_action :set_partial, only: [:show, :update]
@@ -20,7 +18,7 @@ class PlanItemsController < ApplicationController
   end
 
   def update
-    update_resource @plan_item, plan_item_params
+    @plan_item.update plan_item_params
   end
 
   private

@@ -1,6 +1,4 @@
 class TagsController < ApplicationController
-  respond_to :html, :json
-
   before_action :auth, :check_privileges
   before_action :set_tag, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
@@ -11,8 +9,6 @@ class TagsController < ApplicationController
       limit(request.xhr? && 10).
       reorder(:obsolete, :name).
       page params[:page]
-
-    respond_with @tags
   end
 
   def show
@@ -28,18 +24,24 @@ class TagsController < ApplicationController
   def create
     @tag = scope.new tag_params
 
-    @tag.save
-    respond_with @tag, location: [@tag, kind: @tag.kind]
+    if @tag.save
+      redirect_with_notice @tag, url: [@tag, kind: @tag.kind]
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   def update
-    update_resource @tag, tag_params
-    respond_with @tag, location: [@tag, kind: @tag.kind]
+    if @tag.update tag_params
+      redirect_with_notice @tag, url: [@tag, kind: @tag.kind]
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   def destroy
     @tag.destroy
-    respond_with @tag, location: [@tag, kind: @tag.kind]
+    redirect_with_notice @tag, url: [@tag, kind: @tag.kind]
   end
 
   private

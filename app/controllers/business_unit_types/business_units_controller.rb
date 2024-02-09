@@ -17,11 +17,11 @@ class BusinessUnitTypes::BusinessUnitsController < ApplicationController
       flash.notice = t 'business_unit.correctly_updated'
       redirect_to(business_unit_types_path)
     else
-      render action: :edit
+      render 'edit', status: :unprocessable_entity
     end
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'business_unit_type.stale_object_error'
-    redirect_to action: :edit
+    redirect_to 'edit', status: :unprocessable_entity
   end
 
   private

@@ -1,6 +1,4 @@
 class ClosingInterviewsController < ApplicationController
-  respond_to :html, :js
-
   before_action :auth, :check_privileges
   before_action :set_closing_interview, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
@@ -42,23 +40,26 @@ class ClosingInterviewsController < ApplicationController
   def create
     @closing_interview = ClosingInterview.list.new closing_interview_params
 
-    @closing_interview.save
-
-    respond_with @closing_interview
+    if @closing_interview.save
+      redirect_with_notice @closing_interview
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /closing_interviews/1
   def update
-    update_resource @closing_interview, closing_interview_params
-
-    respond_with @closing_interview
+    if @closing_interview.update closing_interview_params
+      redirect_with_notice @closing_interview
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # DELETE /closing_interviews/1
   def destroy
     @closing_interview.destroy
-
-    respond_with @closing_interview
+    redirect_with_notice @closing_interview
   end
 
   private

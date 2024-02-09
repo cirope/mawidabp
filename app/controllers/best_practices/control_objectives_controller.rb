@@ -1,5 +1,4 @@
 class BestPractices::ControlObjectivesController < ApplicationController
-  respond_to :html
 
   before_action :auth
   before_action :set_best_practice, :set_control_objective, only: [:download]

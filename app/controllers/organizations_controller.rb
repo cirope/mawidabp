@@ -1,6 +1,4 @@
 class OrganizationsController < ApplicationController
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: :destroy
@@ -8,18 +6,15 @@ class OrganizationsController < ApplicationController
   # * GET /organizations
   def index
     @organizations = Organization.with_group(group).ordered.page(params[:page])
-    respond_with @organizations
   end
 
   # * GET /organizations/1
   def show
-    respond_with @organization
   end
 
   # * GET /organizations/new
   def new
     @organization = Organization.new
-    respond_with @organization
   end
 
   # * GET /organizations/1/edit
@@ -30,20 +25,26 @@ class OrganizationsController < ApplicationController
   def create
     @organization = Organization.new organization_params
 
-    @organization.save
-    respond_with @organization
+    if @organization.save
+      redirect_with_notice @organization
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # * PATCH /organizations/1
   def update
-    update_resource @organization, organization_params
-    respond_with @organization, location: organizations_url unless response_body
+    if @organization.update organization_params
+      redirect_with_notice @organization, url: organizations_url
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # * DELETE /organizations/1
   def destroy
     @organization.destroy
-    respond_with @organization
+    redirect_with_notice @organization
   end
 
   private

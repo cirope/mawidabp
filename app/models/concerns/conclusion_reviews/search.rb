@@ -6,7 +6,7 @@ module ConclusionReviews::Search
     GENERIC_COLUMNS_FOR_SEARCH = {
       issue_date: {
         column:            "#{quoted_table_name}.#{qcn 'issue_date'}",
-        conversion_method: -> (value) { Timeliness.parse(value, :date).to_s :db },
+        conversion_method: -> (value) { Timeliness.parse(value, :date).to_fs :db },
         mask:              '%s',
         operator:          SEARCH_ALLOWED_OPERATORS.values,
         regexp:            SEARCH_DATE_REGEXP

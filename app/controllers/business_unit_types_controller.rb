@@ -1,7 +1,3 @@
-# =Controlador de tipos de unidades de negocio
-#
-# Lista, muestra, crea, modifica y elimina tipos de unidades de negocio
-# (#BusinessUnitType) y unidades de negocio (#BusinessUnit)
 class BusinessUnitTypesController < ApplicationController
   before_action :auth, :check_privileges
   before_action :set_business_unit_type, only: [:show, :edit, :update, :destroy]
@@ -56,13 +52,12 @@ class BusinessUnitTypesController < ApplicationController
     @title = t 'business_unit_type.new_title'
     @business_unit_type = BusinessUnitType.list.new(business_unit_type_params)
 
-    respond_to do |format|
-      if @business_unit_type.save
-        flash.notice = t 'business_unit_type.correctly_created'
-        format.html { redirect_to(business_unit_types_url) }
-      else
-        format.html { render :action => :new }
-      end
+    if @business_unit_type.save
+      flash.notice = t 'business_unit_type.correctly_created'
+
+      redirect_to business_unit_types_url
+    else
+      render 'new', status: :unprocessable_entity
     end
   end
 
@@ -74,18 +69,17 @@ class BusinessUnitTypesController < ApplicationController
   def update
     @title = t 'business_unit_type.edit_title'
 
-    respond_to do |format|
-      if @business_unit_type.update(business_unit_type_params)
-        flash.notice = t 'business_unit_type.correctly_updated'
-        format.html { redirect_to(business_unit_types_url) }
-      else
-        format.html { render :action => :edit }
-      end
+    if @business_unit_type.update business_unit_type_params
+      flash.notice = t 'business_unit_type.correctly_updated'
+
+      redirect_to business_unit_types_url
+    else
+      render 'edit', status: :unprocessable_entity
     end
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'business_unit_type.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to 'edit', status: :unprocessable_entity
   end
 
   # Elimina el tipo de unidad de negocio
