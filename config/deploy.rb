@@ -12,7 +12,7 @@ set :linked_files, %w{config/application.yml}
 set :linked_dirs, %w{log private tmp/pids}
 
 set :rbenv_type, :user
-set :rbenv_ruby, '3.1.4'
+set :rbenv_ruby, '3.1.2'
 
 set :keep_releases, 5
 
