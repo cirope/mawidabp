@@ -18,8 +18,6 @@ class DocumentsController < ApplicationController
       @document_tags   = Tagging.grouped_with_document_count
       @documents_count = @document_tags.values.sum
     end
-
-    respond_with @documents
   end
 
   def show

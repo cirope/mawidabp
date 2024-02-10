@@ -16,7 +16,6 @@ class ControlObjectivesController < ApplicationController
 
   # * GET /control_objectives/1
   def show
-    respond_with @control_objective
   end
 
   private

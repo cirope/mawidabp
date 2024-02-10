@@ -44,7 +44,7 @@ class UsersController < ApplicationController
 
     notice_users_left
 
-    respond_with @user, location: users_url
+    redirect_with_notice @user, url: users_url
   end
 
   # * PATCH /users/1
@@ -52,18 +52,18 @@ class UsersController < ApplicationController
     params[:user][:child_ids] ||= []
     params[:user].delete :lock_version if @user == @auth_user
 
-    update_resource @user, user_params
+    @user.update user_params
 
     @user.send_notification_if_necesary if @user.errors.empty?
 
-    respond_with @user, location: users_url unless performed?
+    redirect_with_notice @user, url: users_url unless performed?
   end
 
   # * DELETE /users/1
   def destroy
     @user.disable
 
-    respond_with @user, location: users_url
+    redirect_with_notice @user, url: users_url
   end
 
   private

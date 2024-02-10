@@ -113,6 +113,7 @@ es:
       <<: *female
 
     users:
+      <<: *male
       profiles:
         update:
           notice: 'Actualización de perfil correcta'

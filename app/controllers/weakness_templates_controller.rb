@@ -29,23 +29,26 @@ class WeaknessTemplatesController < ApplicationController
   def create
     @weakness_template = WeaknessTemplate.list.new weakness_template_params
 
-    @weakness_template.save
-
-    respond_with @weakness_template
+    if @weakness_template.save
+      redirect_with_notice @weakness_template
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /weakness_templates/1
   def update
-    update_resource @weakness_template, weakness_template_params
-
-    respond_with @weakness_template
+    if @weakness_template.update weakness_template_params
+      redirect_with_notice @weakness_template
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # DELETE /weakness_templates/1
   def destroy
     @weakness_template.destroy
-
-    respond_with @weakness_template
+    redirect_with_notice @weakness_template
   end
 
   private

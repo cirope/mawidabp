@@ -14,6 +14,6 @@ class Users::ReleasesController < ApplicationController
       with_reviews:  params[:with_reviews]  == '1'
     )
 
-    respond_with @user, location: users_path
+    redirect_with_notice @user, url: users_url
   end
 end
