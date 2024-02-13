@@ -1347,8 +1347,8 @@ en:
         main_recommendations: "Main Audit Recommendations"
         additional_comments: "Additional comments"
         exclude_regularized_findings: "Exclude regularized findings"
-        extended_conclusion: Extended conclusion
-        robotization: Robotization
+        review_conclusion: Review conclusion
+        applied_data_analytics: Applied Data Analytics
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Auditor conclusions (process)"
       control:

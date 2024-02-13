@@ -89,7 +89,7 @@
 
           <div class="row">
             <div class="col-md-6">
-              <%= f.input :extended_conclusion, input_html: { rows: 4 } %>
+              <%= f.input :review_conclusion, input_html: { rows: 4 } %>
             </div>
             <div class="col-md-6 mt-4">
               <% if show_review_best_practice_comments? %>
@@ -109,7 +109,7 @@
               <%= f.input :observations, input_html: { rows: 4 } %>
             </div>
             <div class="col-md-6">
-              <%= f.input :robotization, input_html: { rows: 4 } %>
+              <%= f.input :applied_data_analytics, input_html: { rows: 4 } %>
             </div>
           </div>
         <% elsif Current.conclusion_pdf_format == 'bic' %>

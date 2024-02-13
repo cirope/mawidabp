@@ -136,7 +136,7 @@ module ConclusionReviews::GalPdf
         [put_conclusion_on(pdf)],
         [put_key_weaknesses_on(pdf)],
         [put_observations_v2_on(pdf)],
-        [put_robotization_on(pdf)]
+        [put_applied_data_analytics_on(pdf)]
       ])
     end
 
@@ -213,7 +213,7 @@ module ConclusionReviews::GalPdf
     def put_conclusion_data_on pdf
       conclusion_chart_and_evolution_image = put_chart_and_image pdf
 
-      data  = [[conclusion_chart_and_evolution_image, extended_conclusion]]
+      data  = [[conclusion_chart_and_evolution_image, review_conclusion]]
       style = { column_widths: conclusion_data_column_width(pdf) }
 
       pdf.make_table(data, style) do
@@ -324,17 +324,17 @@ module ConclusionReviews::GalPdf
 
     def put_observations_v2_on(pdf)
       title = I18n.t('conclusion_review.executive_summary.observations')
-      create_observations_or_robotization_table(pdf, title, observations)
+      create_observations_or_applied_data_analytics_table(pdf, title, observations)
     end
 
-    def put_robotization_on(pdf)
-      title = self.class.human_attribute_name :robotization
-      create_observations_or_robotization_table(pdf, title, robotization)
+    def put_applied_data_analytics_on(pdf)
+      title = I18n.t('conclusion_review.executive_summary.applied_data_analytics')
+      create_observations_or_applied_data_analytics_table(pdf, title, applied_data_analytics)
     end
 
-    def create_observations_or_robotization_table(pdf, title, content)
+    def create_observations_or_applied_data_analytics_table(pdf, title, content)
       style = {
-        column_widths: observations_or_robotization_column_widths(pdf),
+        column_widths: observations_or_applied_data_analytics_column_widths(pdf),
         cell_style: { inline_format: true }
       }
 
@@ -1026,8 +1026,8 @@ module ConclusionReviews::GalPdf
       [67, 10, 23].map { |percent| pdf.percent_width percent }
     end
 
-    def observations_or_robotization_column_widths pdf
-      [33, 67].map { |percent| pdf.percent_width percent }
+    def observations_or_applied_data_analytics_column_widths pdf
+      [35, 65].map { |percent| pdf.percent_width percent }
     end
 
     def legend_column_widths pdf
