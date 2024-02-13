@@ -132,6 +132,7 @@ module ConclusionReviews::GalPdf
         [put_project_on(pdf)],
         [put_review_indentifier_and_period_on(pdf)],
         [put_risk_exposure_v2_on(pdf)],
+        [put_objective_on(pdf)],
         [put_survey_on(pdf)],
         [put_conclusion_on(pdf)],
         [put_key_weaknesses_on(pdf)],
@@ -177,6 +178,19 @@ module ConclusionReviews::GalPdf
       pdf.make_cell(
         content: risk_exposure_text,
         background_color: 'e7e6e6',
+        inline_format: true
+      )
+    end
+
+    def put_objective_on pdf
+      objective_text = I18n.t(
+        'conclusion_review.executive_summary.objective',
+        objective: review.review_objective
+      )
+
+      pdf.make_cell(
+        content: objective_text,
+        align: :justify,
         inline_format: true
       )
     end

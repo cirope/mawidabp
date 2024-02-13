@@ -63,6 +63,13 @@
               <%= f.input :scope %>
             <% end %>
 
+            <% if Current.conclusion_pdf_format == 'gal' %>
+              <%= f.input :review_objective, input_html: {
+                rows: 4,
+                disabled: readonly }
+              %>
+            <% end %>
+
             <% unless HIDE_REVIEW_DESCRIPTION %>
               <%= f.input :description, label: Review.human_attribute_name(:description),
                 input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 4 : 5 } %>
