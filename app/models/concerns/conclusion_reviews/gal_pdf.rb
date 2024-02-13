@@ -130,7 +130,7 @@ module ConclusionReviews::GalPdf
 
       pdf.table([
         [put_project_on(pdf)],
-        [put_review_indentifier_and_period_on(pdf)],
+        [put_review_indentifier_and_issue_date_on(pdf)],
         [put_risk_exposure_v2_on(pdf)],
         [put_objective_on(pdf)],
         [put_survey_on(pdf)],
@@ -154,17 +154,16 @@ module ConclusionReviews::GalPdf
       )
     end
 
-    def put_review_indentifier_and_period_on pdf
+    def put_review_indentifier_and_issue_date_on pdf
       style = {
         cell_style: { background_color: "e7e6e6", inline_format: true },
-        column_widths: review_indentifier_and_period_column_widths(pdf)
+        column_widths: review_indentifier_and_issue_date_column_widths(pdf)
       }
 
-      # QUESTION: consultar si es la fecha del fin del periodo u otra...
       pdf.make_table([
         [
           "<b>#{Review.model_name.human}:</b> #{review.identification}",
-          "<b>#{I18n.t 'conclusion_review.executive_summary.period'}</b>: #{review.period.end.strftime('%d/%m/%Y')}"
+          "<b>#{I18n.t 'conclusion_review.executive_summary.issue_date'}</b>: #{issue_date.strftime('%d/%m/%Y')}"
         ]
       ], style)
     end
@@ -1024,7 +1023,7 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def review_indentifier_and_period_column_widths pdf
+    def review_indentifier_and_issue_date_column_widths pdf
       [60, 40].map { |percent| pdf.percent_width percent }
     end
 

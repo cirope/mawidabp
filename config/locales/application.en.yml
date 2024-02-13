@@ -507,6 +507,7 @@ en:
       other_weaknesses: "Other issues"
       no_weaknesses: "No issues"
       assumed_risk_weaknesses: "Assumed risk weaknesses"
+      issue_date: Date
       objective: <b>Audit objective:</b> %{objective}
     detailed_review:
       title: "Detailed audit report"

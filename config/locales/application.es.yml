@@ -509,8 +509,8 @@ es:
       other_weaknesses: "Otras observaciones"
       no_weaknesses: "No hay observaciones"
       assumed_risk_weaknesses: "Riesgo asumido"
-      period: Fecha
       conclusion: <b>Conclusión <i>(Assurance opinion)</i></b>
+      issue_date: Fecha
       objective: <b>Objetivo <i>(Audit objective)</i>:</b> %{objective}
       survey: <b>Alcance <i>(Audit scope)</i>:</b> %{survey}
       key_weaknesses: Hallazgos claves
