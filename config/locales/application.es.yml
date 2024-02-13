@@ -513,8 +513,9 @@ es:
       issue_date: Fecha
       objective: <b>Objetivo <i>(Audit objective)</i>:</b> %{objective}
       survey: <b>Alcance <i>(Audit scope)</i>:</b> %{survey}
-      key_weaknesses: Hallazgos claves
+      key_weaknesses: <b>Hallazgos significativos <i>(Key findings)</i></b>
       origin: Origen
+      origin_footnote: ¹Antigua data
       normalization: Normalización
       observations: "Consideraciones\nRecomendaciones"
     detailed_review:

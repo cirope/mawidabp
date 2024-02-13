@@ -291,7 +291,8 @@ module ConclusionReviews::GalPdf
       rows       = key_weaknesses_rows pdf, weaknesses
 
       style = {
-        column_widths: key_weaknesses_column_widths(pdf)
+        column_widths: key_weaknesses_column_widths(pdf),
+        cell_style: { inline_format: true }
       }
 
       pdf.make_table(rows, style) do
@@ -301,22 +302,30 @@ module ConclusionReviews::GalPdf
     end
 
     def key_weaknesses_rows pdf, weaknesses
-      current_year = Date.today.year
-      rows         = [key_weaknesses_header]
+      rows              = [key_weaknesses_header]
+      footnote_required = weaknesses.any? { |w| needs_old_data_footnote?(w) }
+
+      if footnote_required
+        pdf.add_footnote I18n.t('conclusion_review.executive_summary.origin_footnote')
+      end
 
       weaknesses.each do |weakness|
-        origination_year       = weakness.origination_date&.year
-        text_color             = (origination_year && origination_year < current_year - 1) ? "FF0000" : "000000"
+        weakness_origin        = weakness_origin pdf, weakness
         weakness_normalization = weakness_normalization weakness
 
         rows << [
-          pdf.make_cell(content: weakness.title, text_color: text_color),
-          pdf.make_cell(content: origination_year.to_s, text_color: text_color),
-          pdf.make_cell(content: weakness_normalization, text_color: text_color)
+          pdf.make_cell(content: weakness.title),
+          pdf.make_cell(weakness_origin),
+          pdf.make_cell(weakness_normalization)
         ]
       end
 
       rows
+    end
+
+    def needs_old_data_footnote?(weakness)
+      origination_year = weakness.origination_date&.year
+      origination_year && origination_year < Date.today.year - 1
     end
 
     def key_weaknesses_header
@@ -327,11 +336,20 @@ module ConclusionReviews::GalPdf
       ]
     end
 
+    def weakness_origin pdf, weakness
+      needs_old_data_footnote = needs_old_data_footnote?(weakness)
+      origination_text        = weakness.origination_date ? I18n.l(weakness.origination_date, format: "%b %Y") : ''
+      origination_text        = needs_old_data_footnote ? origination_text + '<sup>1</sup>' : origination_text
+      origination_text_color  = needs_old_data_footnote ? "FF0000" : "000000"
+
+      { content: origination_text, text_color: origination_text_color }
+    end
+
     def weakness_normalization weakness
       if weakness.implemented_audited? || weakness.expired?
-        weakness.state_text
+        { content: weakness.state_text, text_color: "538135", font_style: :bold }
       else
-        weakness.follow_up_date ? I18n.l(weakness.follow_up_date, format: "%B %Y") : ''
+        { content: weakness.follow_up_date ? I18n.l(weakness.follow_up_date, format: "%b %Y") : '' }
       end
     end
 
@@ -1036,7 +1054,7 @@ module ConclusionReviews::GalPdf
     end
 
     def key_weaknesses_column_widths pdf
-      [67, 10, 23].map { |percent| pdf.percent_width percent }
+      [64, 13, 23].map { |percent| pdf.percent_width percent }
     end
 
     def observations_or_applied_data_analytics_column_widths pdf
