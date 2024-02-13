@@ -370,7 +370,7 @@ module ConclusionReviews::GalPdf
       }
 
       pdf.make_table([[title, content]], style) do
-        column(0).style(font_style: :bold, size: 16, align: :center, valign: :center)
+        column(0).style(font_style: :bold, valign: :center)
         column(1).style(align: :justify)
       end
     end
