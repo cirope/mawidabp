@@ -499,8 +499,9 @@ en:
       title: "Executive Summary"
       review_author: "Internal Audit Management"
       project: "The audit carried out was circumscribed to the review of:"
-      project_alt: "In accordance with the provisions of the Professional Services Rental proposal, accepted in all its terms and conditions by Naranja Digital Compañía Financiera S.A.U. dated January 21, 2021, we present the Audit report corresponding to the following process:"
+      project_alt: <b>Audit:</b> %{project}
       risk_exposure: "Risk exposure of the evaluated process: <b>%{risk}</b> (Risk Matrix algorithmic formula)"
+      risk_exposure_alt: "<b>Reviewed risk assessment:</b> %{risk}"
       score: "Rating"
       evolution: "EVOLUTION (*)"
       main_weaknesses: "Main Weaknesses"
@@ -509,10 +510,14 @@ en:
       assumed_risk_weaknesses: "Assumed risk weaknesses"
       issue_date: Date
       objective: <b>Audit objective:</b> %{objective}
+      survey: <b>Audit scope:</b> %{survey}
+      conclusion: <b>Assurance opinion</b>
       key_weaknesses: <b>Key findings</b>
       origin: Origin
       origin_footnote: ¹Old data
       normalization: Normalization
+      observations: "<b>New Steps\nAdditional information</b>"
+      applied_data_analytics: Applied Data Analytics
     detailed_review:
       title: "Detailed audit report"
       legend: "An audit has been conducted on the referenced process during the current month.\nIn compliance with the “Minimum Standards on Internal Controls”, the “Guidelines for Risk Management in Financial Institutions”, the “Guidelines for Corporate Governance” in their respective texts ordered by the BCRA as of the date of this audit report, and of the “Minimum Requirements for Management, Implementation and Control of Risks Related to Information Technology, Information Systems and Associated Resources for Financial Entities” regulated by the BCRA, the internal control has been evaluated as a process designed to provide reasonable assurance regarding the achievement of the following objectives: Entity Objectives, Effectiveness and Efficiency of operations, Reliability of the Accounting Information and Compliance with applicable laws and regulations in the analyzed operation.\nThe implementation of the recommendations mentioned in this report will allow compliance with: i) the requirements of the report prepared by the so-called Committee of Sponsoring Organizations of the Treadway Commission (COSO) on internal control assessment, an international methodology used by this Audit; ii) the requirements of the COBIT Control Model (Governance, Control and Audit for Information and Related Technology), an international methodology used by this Systems Audit which includes, among others, ISO Technical Standards and ISO 9000 qualification criteria, allowing the Bank to align with International Standards for Security and Quality Control."
