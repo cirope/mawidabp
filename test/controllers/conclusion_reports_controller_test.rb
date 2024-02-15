@@ -88,6 +88,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :controller_name => 'conclusion'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.synthesis_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -170,6 +171,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :controller_name => 'conclusion'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.review_stats_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -229,6 +231,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :controller_name => 'conclusion'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.review_scores_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -311,6 +314,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :controller_name => 'conclusion'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.review_score_details_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -353,6 +357,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_state.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -397,6 +402,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_risk.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -439,6 +445,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -479,6 +486,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_report.cost_analysis.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -542,6 +550,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_report.cost_analysis.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -604,6 +613,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_report.cost_summary.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -686,6 +696,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_risk_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -794,6 +805,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_business_unit.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -880,6 +892,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_user.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -943,6 +956,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_month.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1004,6 +1018,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1066,6 +1081,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1128,6 +1144,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.control_objective_stats_by_review.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1191,6 +1208,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.process_control_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1306,6 +1324,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.benefits.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1384,6 +1403,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :controller_name => 'conclusion'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.control_objective_counts.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1422,6 +1442,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       }
     end
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.nbc_annual_report.pdf_name',
         from_date: period.start,
@@ -1476,6 +1497,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       }
     end
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.nbc_internal_control_qualification_as_group_of_companies_report.pdf_name',
         from_date: period.start,

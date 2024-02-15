@@ -214,6 +214,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       get :export_to_pdf, :params => { :id => conclusion_review.id }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
@@ -230,6 +231,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
@@ -246,6 +248,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
@@ -259,12 +262,14 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       get :score_sheet, :params => { :id => conclusion_review.id }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.review.relative_score_sheet_path
 
     assert_nothing_raised do
       get :score_sheet, :params => { :id => conclusion_review.id, :global => 1 }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to(
       conclusion_review.review.relative_global_score_sheet_path)
   end
@@ -279,6 +284,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       get :download_work_papers, :params => { :id => conclusion_review.id }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.review.relative_work_papers_zip_path
   end
 
@@ -295,6 +301,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.relative_bundle_zip_path
     FileUtils.rm conclusion_review.absolute_bundle_zip_path
   end
@@ -467,6 +474,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     assert_nothing_raised { get :export_list_to_pdf }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_final_review.pdf.pdf_name'),
       ConclusionFinalReview.table_name)
@@ -484,6 +492,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_final_review.pdf.pdf_name'),
       ConclusionFinalReview.table_name)

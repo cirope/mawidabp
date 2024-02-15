@@ -208,6 +208,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       get :export_to_pdf, :params => { :id => conclusion_review.id }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
@@ -224,6 +225,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
@@ -240,6 +242,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
@@ -267,12 +270,14 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       get :score_sheet, :params => { :id => conclusion_review.id }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.review.relative_score_sheet_path
 
     assert_nothing_raised do
       get :score_sheet, :params => { :id => conclusion_review.id, :global => 1 }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to(
       conclusion_review.review.relative_global_score_sheet_path)
   end
@@ -287,6 +292,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       get :download_work_papers, :params => { :id => conclusion_review.id }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.review.relative_work_papers_zip_path
   end
 
@@ -303,6 +309,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    Current.organization = conclusion_review.organization
     assert_redirected_to conclusion_review.relative_bundle_zip_path
     FileUtils.rm conclusion_review.absolute_bundle_zip_path
   end

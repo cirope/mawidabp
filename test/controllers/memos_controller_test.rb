@@ -119,6 +119,7 @@ class MemosControllerTest < ActionController::TestCase
       get :export_to_pdf, params: { id: @memo.id }
     end
 
+    Current.organization = @memo.organization
     assert_redirected_to @memo.relative_pdf_path
   end
 end

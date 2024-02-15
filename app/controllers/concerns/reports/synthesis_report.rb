@@ -297,7 +297,7 @@ module Reports::SynthesisReport
         end
 
         total = internal_audits_by_business_unit.inject(0) do |sum, data|
-          scores = data[:review_scores]
+          scores = data[:review_scores].compact!
 
           if scores.blank?
             sum

@@ -10,6 +10,7 @@ class Findings::FollowUpPdfControllerTest < ActionController::TestCase
   test 'should get show' do
     get :show, params: { completion_state: 'incomplete', id: @finding }
 
+    Current.organization = @finding.organization
     assert_redirected_to @finding.relative_follow_up_pdf_path
   end
 end

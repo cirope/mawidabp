@@ -64,6 +64,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
       report_subtitle: 'New subtitle'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('execution_reports.detailed_management_report.pdf_name',
         from_date: 10.years.ago.to_date.to_formatted_s(:db),
@@ -102,6 +103,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
       report_title: 'New title'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('execution_reports.weaknesses_by_state.pdf_name',
         from_date: 10.years.ago.to_date.to_formatted_s(:db),
@@ -179,7 +181,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     assert_response :redirect
 
     assert_match I18n.t('execution_reports.weaknesses_report.pdf_name'),
-      @response.body
+      response.location
   end
 
   test 'queue async weaknesses report' do
@@ -204,7 +206,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = old_count }
 
     assert_response :redirect
-    assert_match back_url, @response.body
+    assert_match back_url, response.location
   end
 
   test 'weaknesses report as CSV' do
@@ -268,6 +270,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
       report_title: 'New title'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('execution_reports.planned_cost_summary.pdf_name',
         from_date: 10.years.ago.to_date.to_formatted_s(:db),
@@ -473,6 +476,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('execution_committee_report.weaknesses_current_situation.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),

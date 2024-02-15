@@ -19,6 +19,8 @@ class PlansControllerTest < ActionController::TestCase
 
   test 'show plan as pdf' do
     get :show, params: { id: @plan }, as: :pdf
+
+    Current.organization = @plan.organization
     assert_redirected_to @plan.relative_pdf_path
   end
 

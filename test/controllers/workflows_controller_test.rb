@@ -311,6 +311,7 @@ class WorkflowsControllerTest < ActionController::TestCase
       get :export_to_pdf, :params => { :id => workflow.id }
     end
 
+    Current.organization = workflow.organization
     assert_redirected_to workflow.relative_pdf_path
   end
 
