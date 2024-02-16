@@ -123,6 +123,7 @@ GEM
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
     crass (1.0.6)
+    csv (3.2.8)
     date (3.3.4)
     declarative (0.0.20)
     disposable (0.6.3)
@@ -378,6 +379,7 @@ DEPENDENCIES
   capistrano-rbenv
   carrierwave
   clbustos-rtf
+  csv
   ed25519
   execjs
   figaro
@@ -424,4 +426,4 @@ DEPENDENCIES
   will_paginate-bootstrap-style
 
 BUNDLED WITH
-   2.4.5
+   2.5.3

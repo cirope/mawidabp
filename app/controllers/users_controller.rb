@@ -39,12 +39,17 @@ class UsersController < ApplicationController
     @user = User.new user_params
 
     @user.roles.each { |r| r.inject_auth_privileges @auth_privileges }
-    @user.send_welcome_email if @user.save
-    @user.password = @user.password_confirmation = nil
 
-    notice_users_left
+    if @user.save
+      @user.send_welcome_email
+      @user.password = @user.password_confirmation = nil
 
-    redirect_with_notice @user, url: users_url
+      notice_users_left
+
+      redirect_with_notice @user, url: users_url
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # * PATCH /users/1
@@ -52,11 +57,13 @@ class UsersController < ApplicationController
     params[:user][:child_ids] ||= []
     params[:user].delete :lock_version if @user == @auth_user
 
-    @user.update user_params
+    if @user.update user_params
+      @user.send_notification_if_necesary
 
-    @user.send_notification_if_necesary if @user.errors.empty?
-
-    redirect_with_notice @user, url: users_url unless performed?
+      redirect_with_notice @user, url: users_url unless performed?
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # * DELETE /users/1
