@@ -14,6 +14,8 @@ class Workflow < ApplicationRecord
   # Atributos no persistentes
   attr_accessor :allow_overload
 
+  attr_readonly :period_id, :review_id
+
   # Restricciones
   validates :period_id, :review_id, :organization_id, :presence => true
   validates :review_id, :uniqueness => true, :allow_nil => true,

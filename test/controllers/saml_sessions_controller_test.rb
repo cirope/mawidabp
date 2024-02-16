@@ -290,6 +290,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
             provider = @organization.saml_provider
             user_to_update.reload
 
+            Current.organization = @organization
             assert_equal user_to_update.user, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.username_claim}"]).first.to_s.sub(/@.+/, '')
             assert_equal user_to_update.name, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.name_claim}"]).first
             assert_equal user_to_update.email, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.email_claim}"]).first
@@ -399,6 +400,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
             provider = @organization.saml_provider
             user_to_update.reload
 
+            Current.organization = @organization
             assert_equal user_to_update.user, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.username_claim}"]).first.to_s.sub(/@.+/, '')
             assert_equal user_to_update.name, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.name_claim}"]).first
             assert_equal user_to_update.email, Array(hash_attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.email_claim}"]).first

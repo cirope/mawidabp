@@ -13,6 +13,8 @@ class ConclusionFinalReview < ConclusionReview
                 :duplicate_review_findings,
                 :assign_audit_date_to_control_objective_items
 
+  attr_readonly :issue_date, :conclusion, :applied_procedures
+
   # Relaciones
   has_one :conclusion_draft_review, through: :review
 

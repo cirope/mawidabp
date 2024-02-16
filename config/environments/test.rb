@@ -68,4 +68,11 @@ Rails.application.configure do
 
     Timecop.travel t
   end
+
+  ###
+  # Enable raising on assignment to attr_readonly attributes. The previous
+  # behavior would allow assignment but silently not persist changes to the
+  # database.
+  #++
+  Rails.application.config.active_record.raise_on_assign_to_attr_readonly = false
 end

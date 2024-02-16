@@ -2,6 +2,8 @@ module Organizations::Group
   extend ActiveSupport::Concern
 
   included do
+    attr_readonly :group_id
+
     before_create :set_group
 
     belongs_to :group, optional: true

@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class ApplicationControllerTest < ActionController::TestCase
-  fixtures :users, :organizations
-
   setup do
     @request.host = "#{organizations(:cirope).prefix}.test.host.co"
 

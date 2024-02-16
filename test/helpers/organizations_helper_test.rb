@@ -38,6 +38,7 @@ class OrganizationsHelperTest < ActionView::TestCase
 
     template.extend ActionView::Helpers::FormHelper
     template.extend ActionView::Helpers::FormOptionsHelper
+    template.extend ActionView::Helpers::FormTagHelper
 
     form_builder = SimpleForm::FormBuilder.new :saml_provider, new_saml_provider, template, {}
     link_to      = link_to_remove_authentication_configuration form_builder

@@ -15,6 +15,7 @@ class WorkPaper < ApplicationRecord
 
   # Restricciones de los atributos
   attr_accessor :code_prefix
+  attr_readonly :organization_id
 
   # Callbacks
   before_save :check_for_modifications

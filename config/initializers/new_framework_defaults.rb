@@ -22,3 +22,10 @@ Rails.application.config.ssl_options = {
   hsts:     { subdomains: true, preload: true },
   redirect: { exclude: -> request { /healthy/.match? request.path } }
 }
+
+###
+# Enable raising on assignment to attr_readonly attributes. The previous
+# behavior would allow assignment but silently not persist changes to the
+# database.
+#++
+Rails.application.config.active_record.raise_on_assign_to_attr_readonly = false

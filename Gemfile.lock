@@ -152,7 +152,7 @@ GEM
       activesupport (>= 6.0.0)
       railties (>= 6.0.0)
     io-console (0.7.2)
-    irb (1.11.1)
+    irb (1.11.2)
       rdoc
       reline (>= 0.4.2)
     jbuilder (2.11.5)
@@ -179,7 +179,7 @@ GEM
     matrix (0.4.2)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    minitest (5.21.2)
+    minitest (5.22.2)
     mutex_m (0.2.0)
     nakayoshi_fork (0.0.4)
     net-imap (0.4.10)
@@ -204,7 +204,7 @@ GEM
       activerecord (>= 6.1)
       request_store (~> 1.4)
     pdf-core (0.9.0)
-    pg (1.5.4)
+    pg (1.5.5)
     popper_js (2.11.8)
     prawn (2.4.0)
       pdf-core (~> 0.9.0)
@@ -265,7 +265,7 @@ GEM
     rdoc (6.6.2)
       psych (>= 4.0.0)
     redcarpet (3.6.0)
-    redis-client (0.19.1)
+    redis-client (0.20.0)
       connection_pool
     reform (2.6.2)
       disposable (>= 0.5.0, < 1.0.0)
@@ -280,7 +280,7 @@ GEM
       declarative (< 0.1.0)
       trailblazer-option (>= 0.1.1, < 0.2.0)
       uber (< 0.2.0)
-    request_store (1.5.1)
+    request_store (1.6.0)
       rack (>= 1.4)
     rexml (3.2.6)
     ruby-ntlm (0.0.4)
@@ -332,7 +332,7 @@ GEM
     timeout (0.4.1)
     trailblazer-option (0.1.2)
     ttfunk (1.7.0)
-    turbo-rails (1.5.0)
+    turbo-rails (2.0.2)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
@@ -358,7 +358,7 @@ GEM
     will_paginate (4.0.0)
     will_paginate-bootstrap-style (0.3.0)
       will_paginate (~> 4.0, >= 4.0.0)
-    zeitwerk (2.6.12)
+    zeitwerk (2.6.13)
 
 PLATFORMS
   x86_64-linux

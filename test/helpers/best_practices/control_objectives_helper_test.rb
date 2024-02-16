@@ -63,6 +63,7 @@ class BestPractices::ControlObjectivesHelperTest < ActionView::TestCase
 
     template.extend ActionView::Helpers::FormHelper
     template.extend ActionView::Helpers::FormOptionsHelper
+    template.extend ActionView::Helpers::FormTagHelper
 
     form_builder = SimpleForm::FormBuilder.new :control_objective, @control_objective, template, {}
 
@@ -76,6 +77,7 @@ class BestPractices::ControlObjectivesHelperTest < ActionView::TestCase
 
     template.extend ActionView::Helpers::FormHelper
     template.extend ActionView::Helpers::FormOptionsHelper
+    template.extend ActionView::Helpers::FormTagHelper
 
     form_builder = SimpleForm::FormBuilder.new :control_objective, @control_objective, template, {}
     link_to      = link_to_remove_support_file form_builder

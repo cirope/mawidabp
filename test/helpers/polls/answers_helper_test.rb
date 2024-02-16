@@ -76,6 +76,7 @@ class Polls::AnswersHelperTest < ActionView::TestCase
 
     template.extend ActionView::Helpers::FormHelper
     template.extend ActionView::Helpers::FormOptionsHelper
+    template.extend ActionView::Helpers::FormTagHelper
 
     form_builder = SimpleForm::FormBuilder.new :answer, @answer, template, {}
     link_to      = link_to_remove_attached_file form_builder

@@ -5,9 +5,10 @@ module FlashResponders
 		url = options.delete(:url) || object
 
     notice = {
-      notice: t(
-        '.notice', resource_name: object.model_name.human, scope: [:flash]
-      )
+      notice: flash.notice ||
+        t(
+          '.notice', resource_name: object.model_name.human, scope: [:flash]
+        )
     }
 
     redirect_to url, notice.merge(options)
