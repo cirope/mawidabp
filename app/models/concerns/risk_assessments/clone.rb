@@ -3,7 +3,7 @@ module RiskAssessments::Clone
 
   def clone_from other
     on_same_organization = organization == other.organization
-    new_attributes       = {}
+    new_attributes       = { cloned_from: other }
     original_attributes  = attributes.dup
     other_attributes     = other.attributes.except(
       *except_attributes(on_same_organization)

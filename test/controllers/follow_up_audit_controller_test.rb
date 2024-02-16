@@ -1991,6 +1991,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :weaknesses_report, :params => {
         :weaknesses_report => {
           :review                    => '1',
+          :review_code               => 'O001',
           :project                   => '2',
           :process_control           => '3',
           :control_objective         => '4',

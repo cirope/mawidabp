@@ -1,29 +1,33 @@
-<% if @activity_groups.empty? %>
-  <%= render 'shared/empty_index', message: t('.empty_html') %>
-<% else %>
-  <table class="table table-condensed table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= ActivityGroup.human_attribute_name 'name' %></th>
-        <th colspan="3">
-          <%= link_to_new new_activity_group_path, class: 'btn btn-secondary btn-sm float-right' %>
-        </th>
-      </tr>
-    </thead>
+<div class="card">
+  <div class="card-body">
+    <% if @activity_groups.empty? %>
+      <%= render 'shared/empty_index', message: t('.empty_html') %>
+    <% else %>
+      <table class="table table-condensed table-striped table-hover">
+        <thead>
+          <tr>
+            <th><%= ActivityGroup.human_attribute_name 'name' %></th>
+            <th colspan="3">
+              <%= link_to_new new_activity_group_path, class: 'btn btn-secondary btn-sm float-end' %>
+            </th>
+          </tr>
+        </thead>
 
-    <tbody>
-      <% @activity_groups.each do |activity_group| %>
-        <tr>
-          <td><%= activity_group.name %></td>
-          <td class="text-right"><%= link_to_show activity_group %></td>
-          <td class="text-right"><%= link_to_edit [:edit, activity_group] %></td>
-          <td class="text-right"><%= link_to_destroy activity_group if activity_group.can_be_destroyed? %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+        <tbody>
+          <% @activity_groups.each do |activity_group| %>
+            <tr>
+              <td><%= activity_group.name %></td>
+              <td class="text-end"><%= link_to_show activity_group %></td>
+              <td class="text-end"><%= link_to_edit [:edit, activity_group] %></td>
+              <td class="text-end"><%= link_to_destroy activity_group if activity_group.can_be_destroyed? %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
 
-  <%= paginate @activity_groups %>
-<% end %>
+      <%= paginate @activity_groups %>
+    <% end %>
 
-<%= link_to_new new_activity_group_path, class: 'btn btn-primary' %>
+    <%= link_to_new new_activity_group_path, class: 'btn btn-primary' %>
+  </div>
+</div>

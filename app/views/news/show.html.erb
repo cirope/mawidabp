@@ -1,68 +1,72 @@
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <h1><%= @news %></h1>
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-8">
+        <h1><%= @news %></h1>
 
-    <h3 class="mb-4">
-      <em><%= @news.description %></em>
-    </h3>
+        <h3 class="mb-4">
+          <em><%= @news.description %></em>
+        </h3>
 
-    <% if @news.image_models.any? %>
-      <div class="float-left image-container mr-3 mb-1">
-        <div id="images" class="carousel slide" data-ride="carousel" data-interval="false">
-          <% if @news.image_models.size > 1 %>
-            <ol class="carousel-indicators">
-              <li data-target="#images" data-slide-to="0" class="active"></li>
-              <% @news.image_models.size.pred.times do |i| %>
-                <li data-target="#images" data-slide-to="<%= i.next %>"></li>
+        <% if @news.image_models.any? %>
+          <div class="float-start image-container me-3 mb-1">
+            <div id="images" class="carousel slide" data-ride="carousel" data-interval="false">
+              <% if @news.image_models.size > 1 %>
+                <ol class="carousel-indicators">
+                  <li data-bs-target="#images" data-slide-to="0" class="active"></li>
+                  <% @news.image_models.size.pred.times do |i| %>
+                    <li data-bs-target="#images" data-slide-to="<%= i.next %>"></li>
+                  <% end %>
+                </ol>
               <% end %>
-            </ol>
-          <% end %>
 
-          <div class="carousel-inner">
-            <% @news.image_models.each_with_index do |image_model, i| %>
-              <div class="carousel-item <%= 'active' if i == 0 %>">
-                <%= image_tag image_model.image.url(:medium), class: 'img-fluid' %>
+              <div class="carousel-inner">
+                <% @news.image_models.each_with_index do |image_model, i| %>
+                  <div class="carousel-item <%= 'active' if i == 0 %>">
+                    <%= image_tag image_model.image.url(:medium), class: 'img-fluid' %>
+                  </div>
+                <% end %>
               </div>
-            <% end %>
+
+              <% if @news.image_models.size > 1 %>
+                <a class="carousel-control-prev" href="#images" data-slide="prev">
+                  <span class="carousel-control-prev-icon"></span>
+                </a>
+
+                <a class="carousel-control-next" href="#images" data-slide="next">
+                  <span class="carousel-control-next-icon"></span>
+                </a>
+              <% end %>
+            </div>
           </div>
-
-          <% if @news.image_models.size > 1 %>
-            <a class="carousel-control-prev" href="#images" data-slide="prev">
-              <span class="carousel-control-prev-icon"></span>
-            </a>
-
-            <a class="carousel-control-next" href="#images" data-slide="next">
-              <span class="carousel-control-next-icon"></span>
-            </a>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-
-    <div class="lead clearfix">
-      <%= markdown @news.body %>
-    </div>
-
-    <% if @news.taggings.any? %>
-      <ul class="list-inline lead">
-        <% @news.taggings.each do |tagging| %>
-          <li>
-            <span class="badge badge-<%= tagging.tag.style %>"><%= tagging.tag %></span>
-          </li>
         <% end %>
-      </ul>
-    <% end %>
 
-    <footer>
-      <p>
-        <strong><%= News.human_attribute_name 'published_at' %></strong>:
-        <%= l @news.published_at.to_date %>
-      </p>
-    </footer>
+        <div class="lead clearfix">
+          <%= markdown @news.body %>
+        </div>
 
-    <hr>
+        <% if @news.taggings.any? %>
+          <ul class="list-inline lead">
+            <% @news.taggings.each do |tagging| %>
+              <li>
+                <span class="badge bg-<%= tagging.tag.style %>"><%= tagging.tag %></span>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
 
-    <%= link_to_edit [:edit, @news] %> |
-    <%= link_to_index news_index_path %>
+        <footer>
+          <p>
+            <strong><%= News.human_attribute_name 'published_at' %></strong>:
+            <%= l @news.published_at.to_date %>
+          </p>
+        </footer>
+
+        <hr>
+
+        <%= link_to_edit [:edit, @news] %> |
+        <%= link_to_index news_index_path %>
+      </div>
+    </div>
   </div>
 </div>

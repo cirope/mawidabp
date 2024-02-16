@@ -1,0 +1,19 @@
+<nav class="navbar sticky-top navbar-expand navbar-light navbar-bg">
+  <a class="sidebar-toggle">
+    <i class="hamburger align-self-center"></i>
+  </a>
+
+  <div class="navbar-collapse collapse">
+    <ul class="navbar-nav navbar-align">
+      <% if show_menu? %>
+        <%= show_unanswered_poll_link %>
+
+        <%= render partial: 'shared/user_actions', locals: { user: @auth_user } %>
+      <% elsif show_logout? %>
+        <li class="nav-item">
+          <%= link_to t('navigation.logout'), logout_path, class: 'nav-link', data: { method: :delete } %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</nav>
