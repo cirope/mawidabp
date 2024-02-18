@@ -402,6 +402,12 @@ var Util = {
 
 // Funciones ejecutadas cuando se carga cada página
 jQuery(function($) {
+  window.State    = State;
+  window.Helper   = Helper;
+  window.FormUtil = FormUtil;
+  window.HTMLUtil = HTMLUtil;
+  window.Search   = Search;
+
   var eventList = $.map(EventHandler, function(v, k ) {return k;});
 
   // Para que los navegadores que no soportan HTML5 funcionen con autofocus
@@ -439,9 +445,3 @@ jQuery(function($) {
     }
   });
 });
-
-window.State    = State;
-window.Helper   = Helper;
-window.FormUtil = FormUtil;
-window.HTMLUtil = HTMLUtil;
-window.Search   = Search;

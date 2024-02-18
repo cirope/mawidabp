@@ -21,7 +21,7 @@ class FileModelTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'FileModel.count' do
       file = Rack::Test::UploadedFile.new(
-        "#{self.class.fixture_path}files/test.txt", 'text/plain'
+        "#{self.class.fixture_paths.first}files/test.txt", 'text/plain'
       )
 
       new_file_model      = FileModel.new
@@ -40,7 +40,7 @@ class FileModelTest < ActiveSupport::TestCase
   # Prueba de actualización de un modelo de archivo
   test 'update and delete file' do
     file = Rack::Test::UploadedFile.new(
-      "#{self.class.fixture_path}files/test.pdf", 'application/pdf'
+      "#{self.class.fixture_paths.first}files/test.pdf", 'application/pdf'
     )
 
     assert @file_model.update(file: file)
@@ -85,7 +85,7 @@ class FileModelTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates file must have an extension' do
     @file_model.file = Rack::Test::UploadedFile.new(
-      "#{self.class.fixture_path}/files/test", 'text/plain'
+      "#{self.class.fixture_paths.first}/files/test", 'text/plain'
     )
 
     assert @file_model.invalid?
@@ -94,7 +94,7 @@ class FileModelTest < ActiveSupport::TestCase
 
   test 'validates file extension constraints' do
     @file_model.file = Rack::Test::UploadedFile.new(
-      "#{self.class.fixture_path}/files/test.csv", 'text/plain'
+      "#{self.class.fixture_paths.first}/files/test.csv", 'text/plain'
     )
 
     if @file_model.file.extension_allowlist.present?

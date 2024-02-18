@@ -7,9 +7,8 @@ class ApplicationControllerTest < ActionController::TestCase
     @controller.send(:reset_session)
     @controller.send(:session)[:user_id] = users(:administrator).id
     @controller.send(:session)[:last_access] = 30.seconds.ago
-    @controller.send('response=', @response)
-    @controller.send('request=', @request)
-
+    @controller.send(:set_response!, response)
+    @controller.request = @request
     @controller.class.instance_variable_set(:@controller_name, nil)
     @controller.class.instance_variable_set(:@controller_path, nil)
 

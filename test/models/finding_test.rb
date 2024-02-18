@@ -667,6 +667,7 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     @finding.finding_user_assignments.build(user: new_user)
+    @finding.users_for_notification = [new_user.id]
 
     assert_enqueued_emails 1 do
       @finding.save!

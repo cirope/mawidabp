@@ -2,9 +2,9 @@ module LinksHelper
   def link_to_destroy(*args)
     options = args.extract_options!
 
-    options[:data]           ||= {}
-    options[:data][:method]  ||= :delete
-    options[:data][:confirm] ||= t('messages.confirmation')
+    options[:data]                 ||= {}
+    options[:data][:turbo_method]  ||= :delete
+    options[:data][:turbo_confirm] ||= t('messages.confirmation')
 
     link_with_icon({ action: 'destroy', icon: 'trash' }, *(args << options))
   end
