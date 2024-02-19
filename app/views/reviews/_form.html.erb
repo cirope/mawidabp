@@ -376,67 +376,76 @@
 </div>
 
 <script type="text/javascript">
-jQuery(function() {
-  $('#review_plan_item_id').change(function () {
-    var element = $('#review_plan_item_id');
-    var url = '<%= plan_item_data_reviews_path %>';
+  var codeExecuted = false;
 
-    $('#review_scope').val('');
-    $('#review_risk_exposure').val('');
-    $('#review_business_unit').val('');
-    $('#review_audit_type').val('');
-    $('#estimated_amount').html('');
+  document.addEventListener('DOMContentLoaded', function(e) {
+    if ("importmapScriptsLoaded" in window) {
+      if (!codeExecuted) {
+        $(function() {
+          $('#review_plan_item_id').change(function () {
+            var element = $('#review_plan_item_id');
+            var url = '<%= plan_item_data_reviews_path %>';
 
-    if(!element.val().match(/^\s*$/)) {
-      Helper.showLoading(element);
+            $('#review_scope').val('');
+            $('#review_risk_exposure').val('');
+            $('#review_business_unit').val('');
+            $('#review_audit_type').val('');
+            $('#estimated_amount').html('');
 
-      $.ajax({
-        url: url,
-        dataType: 'script',
-        data: {
-          id: element.val()
-        }
-      }).always(function () {
-        Helper.hideLoading(element);
-      });
-    } else {
-      $('#review_identification_prefix').prop('disabled', false).val('');
-      $('#review_identification_number').val('');
-      $('#link_to_suggested_findings').attr('href', '#');
-      $('#link_to_suggested_findings').addClass('link_without_action');
-      $('#link_to_past_implemented_audited_findings').attr('href', '#');
-      $('#link_to_past_implemented_audited_findings').addClass('link_without_action');
-      $('#control_objectives').find('fieldset.control_objective[data-dynamic]').remove();
-      $('[data-review-user-assignments-container]').html('')
-      $('[data-control-objective-items-container]').html('')
-      $('[data-manual-score-alt]').removeClass('d-none')
+            if(!element.val().match(/^\s*$/)) {
+              Helper.showLoading(element);
+
+              $.ajax({
+                url: url,
+                dataType: 'script',
+                data: {
+                  id: element.val()
+                }
+              }).always(function () {
+                Helper.hideLoading(element);
+              });
+            } else {
+              $('#review_identification_prefix').prop('disabled', false).val('');
+              $('#review_identification_number').val('');
+              $('#link_to_suggested_findings').attr('href', '#');
+              $('#link_to_suggested_findings').addClass('link_without_action');
+              $('#link_to_past_implemented_audited_findings').attr('href', '#');
+              $('#link_to_past_implemented_audited_findings').addClass('link_without_action');
+              $('#control_objectives').find('fieldset.control_objective[data-dynamic]').remove();
+              $('[data-review-user-assignments-container]').html('')
+              $('[data-control-objective-items-container]').html('')
+              $('[data-manual-score-alt]').removeClass('d-none')
+            }
+          });
+
+          $('#link_to_suggested_findings').click(function() {
+            if($('#link_to_suggested_findings').attr('href') == '#') {
+              return false;
+            }
+          });
+
+          $('#link_to_suggested_findings').bind('ajax:success', function(event, data) {
+            $('#suggested_findings').html(data);
+          });
+
+          $('#link_to_past_implemented_audited_findings').click(function() {
+            if($('#link_to_past_implemented_audited_findings').attr('href') == '#') {
+              return false;
+            }
+          });
+
+          $('#link_to_past_implemented_audited_findings').bind('ajax:success', function(event, data) {
+            $('#past_implemented_audited_findings').html(data);
+          });
+
+          Helper.makeSortable(
+            '#control_objective_items', 'div.process_control', 'a.process_control_move'
+          );
+
+          FormUtil.completeSortNumbers();
+        });
+        codeExecuted = true;
+      }
     }
   });
-
-  $('#link_to_suggested_findings').click(function() {
-    if($('#link_to_suggested_findings').attr('href') == '#') {
-      return false;
-    }
-  });
-
-  $('#link_to_suggested_findings').bind('ajax:success', function(event, data) {
-    $('#suggested_findings').html(data);
-  });
-
-  $('#link_to_past_implemented_audited_findings').click(function() {
-    if($('#link_to_past_implemented_audited_findings').attr('href') == '#') {
-      return false;
-    }
-  });
-
-  $('#link_to_past_implemented_audited_findings').bind('ajax:success', function(event, data) {
-    $('#past_implemented_audited_findings').html(data);
-  });
-
-  Helper.makeSortable(
-    '#control_objective_items', 'div.process_control', 'a.process_control_move'
-  );
-
-  FormUtil.completeSortNumbers();
-});
 </script>

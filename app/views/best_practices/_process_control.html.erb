@@ -44,4 +44,16 @@
   </div>
 </fieldset>
 
-<script type="text/javascript">FormUtil.completeSortNumbers();</script>
+<script type="text/javascript">
+  var codeExecuted = false;
+
+  document.addEventListener('DOMContentLoaded', function(e) {
+    if ("importmapScriptsLoaded" in window) {
+      if (!codeExecuted) {
+        FormUtil.completeSortNumbers();
+
+        codeExecuted = true;
+      }
+    }
+  });
+</script>

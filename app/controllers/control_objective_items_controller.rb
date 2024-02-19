@@ -69,28 +69,24 @@ class ControlObjectiveItemsController < ApplicationController
     @title = t 'control_objective_item.edit_title'
     review = @control_objective_item.review
 
-    respond_to do |format|
-      updated = review.update(
-        control_objective_items_attributes: {
-          @control_objective_item.id => control_objective_item_params.merge(
-            id: @control_objective_item.id
-          )
-        }
-      )
-      # Se carga el objetivo del informe para poder reportar los errores
-      @control_objective_item = review.control_objective_items.detect do |coi|
-        coi.id == @control_objective_item.id
-      end
+    updated = review.update(
+      control_objective_items_attributes: {
+        @control_objective_item.id => control_objective_item_params.merge(
+          id: @control_objective_item.id
+        )
+      }
+    )
+    # Se carga el objetivo del informe para poder reportar los errores
+    @control_objective_item = review.control_objective_items.detect do |coi|
+      coi.id == @control_objective_item.id
+    end
 
-      if updated
-        flash.notice = t 'control_objective_item.correctly_updated'
-        back_to, session[:back_to] = session[:back_to], nil
-        format.html {
-          redirect_to(back_to || edit_control_objective_item_url(@control_objective_item))
-        }
-      else
-        render 'edit', status: :unprocessable_entity
-      end
+    if updated
+      flash.notice = t 'control_objective_item.correctly_updated'
+      back_to, session[:back_to] = session[:back_to], nil
+      redirect_to(back_to || edit_control_objective_item_url(@control_objective_item))
+    else
+      render 'edit', status: :unprocessable_entity
     end
 
   rescue ActiveRecord::StaleObjectError

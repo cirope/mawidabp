@@ -95,5 +95,7 @@
   </div>
 </fieldset>
 <script type="text/javascript">
-  FormUtil.completeSortNumbers();
+  if ("importmapScriptsLoaded" in window) {
+    FormUtil.completeSortNumbers();
+  }
 </script>

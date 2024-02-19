@@ -15,7 +15,17 @@
       <div data-messages></div>
     </div>
     <script type="text/javascript">
-      Helper.makeSortable('#process_control_<%= pc.id %>', 'fieldset.control_objective_item', 'a.move');
+      var codeExecuted = false;
+
+      document.addEventListener('DOMContentLoaded', function(e) {
+        if ("importmapScriptsLoaded" in window) {
+          if (!codeExecuted) {
+            Helper.makeSortable('#process_control_<%= pc.id %>', 'fieldset.control_objective_item', 'a.move');
+
+            codeExecuted = true;
+          }
+        }
+      });
     </script>
   <% end %>
 </div>

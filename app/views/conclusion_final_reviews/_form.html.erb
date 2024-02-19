@@ -191,20 +191,27 @@
 <%= render 'bundle' %>
 
 <script type="text/javascript">
-//<![CDATA[
-  $('#conclusion_final_review_review_id').change(function() {
-    var element = $(this);
-    var url = '<%= new_conclusion_final_review_path %>';
+  var codeExecuted = false;
 
-    Helper.showLoading(element);
+  document.addEventListener('DOMContentLoaded', function(e) {
+    if ("importmapScriptsLoaded" in window) {
+      if (!codeExecuted) {
+        $('#conclusion_final_review_review_id').change(function() {
+          var element = $(this);
+          var url = '<%= new_conclusion_final_review_path %>';
 
-    $.ajax({
-      url:      url,
-      dataType: 'script',
-      data:     { review: element.val() }
-    }).done(function() {
-      Helper.hideLoading(element);
-    });
+          Helper.showLoading(element);
+
+          $.ajax({
+            url:      url,
+            dataType: 'script',
+            data:     { review: element.val() }
+          }).done(function() {
+            Helper.hideLoading(element);
+          });
+        });
+        codeExecuted = true;
+      }
+    }
   });
-//]]>
 </script>
