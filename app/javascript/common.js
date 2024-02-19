@@ -402,11 +402,14 @@ var Util = {
 
 // Funciones ejecutadas cuando se carga cada página
 jQuery(function($) {
-  window.State    = State;
-  window.Helper   = Helper;
-  window.FormUtil = FormUtil;
-  window.HTMLUtil = HTMLUtil;
-  window.Search   = Search;
+  window.State               = State;
+  window.BrowserManipulation = BrowserManipulation;
+  window.EventHandler        = EventHandler;
+  window.Helper              = Helper;
+  window.FormUtil            = FormUtil;
+  window.HTMLUtil            = HTMLUtil;
+  window.Search              = Search;
+  window.Util                = Util;
 
   var eventList = $.map(EventHandler, function(v, k ) {return k;});
 
