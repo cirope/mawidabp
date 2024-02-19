@@ -514,7 +514,7 @@ es:
       conclusion: <b>Conclusión <i>(Assurance opinion)</i></b>
       key_weaknesses: <b>Hallazgos significativos <i>(Key findings)</i></b>
       origin: Origen
-      origin_footnote: ¹Antigua data
+      origin_footnote: ²Antigua data
       normalization: Normalización
       observations: "<b>Próximos pasos <i>(New Steps)</i>\nInformación Adicional\n<i>(Additional information)</i></b>"
       applied_data_analytics: Data Analytics aplicada

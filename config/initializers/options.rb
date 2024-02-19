@@ -111,6 +111,23 @@ EVOLUTION_IMAGES = {
   'No aplica'                          => 'evolution_not_apply.png'
 }
 
+EVOLUTION_SUPERSCRIPT = 'evolution_footnote.png'
+
+CONCLUSION_EVOLUTION_FOOTNOTES = {
+  [
+    'Satisfactorio con salvedades',
+    'Empeora calficación'
+  ] => '¹Desmejora (dentro de Satisfactorio) respecto a la auditoría anterior'
+}
+
+EVOLUTION_FOOTNOTES = {
+  'Mantiene calificación desfavorable' => '¹Mantiene calificación desfavorable respecto a la auditoría anterior',
+  'Mantiene calificación favorable'    => '¹Mantiene calificación favorable respecto a la auditoría anterior',
+  'Mejora calificación'                => '¹Mejora calificación respecto a la auditoría anterior',
+  'Empeora calficación'                => '¹Desmejora calificación respecto a la auditoría anterior',
+  'No aplica'                          => '¹No puede compararse con un trabajo anterior'
+}
+
 PDF_IMAGE_PATH          = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
 PDF_GAL_IMAGE_PATH      = Rails.root.join('app', 'assets', 'images', 'gal_pdf').freeze
 PDF_DEFAULT_SCORE_IMAGE = 'score_none.png'

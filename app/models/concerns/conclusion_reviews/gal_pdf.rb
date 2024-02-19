@@ -235,10 +235,17 @@ module ConclusionReviews::GalPdf
     end
 
     def put_chart_and_image pdf
-      evolution_image  = pdf_score_image_row get_evolution_image
-      conclusion_chart = put_chart_on pdf
+      conclusion_chart      = put_chart_on pdf
+      evolution_image       = pdf_score_image_row get_evolution_image
+      evolution_superscript = {
+        image: PDF_IMAGE_PATH.join(EVOLUTION_SUPERSCRIPT),
+        position: :center,
+        vposition: :center
+      }
 
-      data  = [[conclusion_chart, evolution_image]]
+      pdf.add_footnote get_evolution_footnote
+
+      data  = [[conclusion_chart, evolution_image, evolution_superscript]]
       style = {
         column_widths: chart_and_image_column_width(pdf),
         cell_style: { borders: [] }
@@ -306,7 +313,7 @@ module ConclusionReviews::GalPdf
       footnote_required = weaknesses.any? { |w| needs_old_data_footnote?(w) }
 
       if footnote_required
-        pdf.add_footnote I18n.t('conclusion_review.executive_summary.origin_footnote')
+        pdf.add_footnote I18n.t('conclusion_review.executive_summary.origin_footnote'), 8, :normal, 2
       end
 
       weaknesses.each do |weakness|
@@ -339,7 +346,7 @@ module ConclusionReviews::GalPdf
     def weakness_origin pdf, weakness
       needs_old_data_footnote = needs_old_data_footnote?(weakness)
       origination_text        = weakness.origination_date ? I18n.l(weakness.origination_date, format: "%b %Y") : ''
-      origination_text        = needs_old_data_footnote ? origination_text + '<sup>1</sup>' : origination_text
+      origination_text        = needs_old_data_footnote ? origination_text + '<sup>2</sup>' : origination_text
       origination_text_color  = needs_old_data_footnote ? "FF0000" : "000000"
 
       { content: origination_text, text_color: origination_text_color }
@@ -1046,11 +1053,11 @@ module ConclusionReviews::GalPdf
     end
 
     def conclusion_data_column_width pdf
-      [50, 50].map { |percent| pdf.percent_width percent }
+      [47, 53].map { |percent| pdf.percent_width percent }
     end
 
     def chart_and_image_column_width pdf
-      [42, 8].map { |percent| pdf.percent_width percent }
+      [40, 3, 4].map { |percent| pdf.percent_width percent }
     end
 
     def key_weaknesses_column_widths pdf
@@ -1156,6 +1163,11 @@ module ConclusionReviews::GalPdf
     def get_evolution_image
       CONCLUSION_EVOLUTION_IMAGES[[conclusion, evolution]] ||
         EVOLUTION_IMAGES[evolution]
+    end
+
+    def get_evolution_footnote
+      CONCLUSION_EVOLUTION_FOOTNOTES[[conclusion, evolution]] ||
+        EVOLUTION_FOOTNOTES[evolution]
     end
 
     def show_review_best_practice_comments? organization
