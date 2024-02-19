@@ -59,10 +59,6 @@ CONCLUSION_CHART_LEGENDS_CHECKED = {
 CONCLUSION_EVOLUTION_IMAGES = {
   [
     'Satisfactorio con salvedades',
-    'Mantiene calificación desfavorable'
-  ] => 'evolution_equal_success.png',
-  [
-    'Satisfactorio con salvedades',
     'Empeora calficación'
   ] => 'evolution_down_success.png'
 }
