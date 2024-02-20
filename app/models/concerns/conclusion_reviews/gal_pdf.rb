@@ -64,6 +64,8 @@ module ConclusionReviews::GalPdf
         pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
                  size: items_font_size
       end
+
+      pdf.start_new_page
     end
 
     def put_gal_executive_summary_on pdf, organization
@@ -91,7 +93,6 @@ module ConclusionReviews::GalPdf
                                   I18n.t "conclusion_review.executive_summary.intro_default"
                                 end
 
-      pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
       pdf.move_down PDF_FONT_SIZE * 2
 
@@ -124,7 +125,6 @@ module ConclusionReviews::GalPdf
     def put_gal_executive_summary_v2_on pdf
       title = I18n.t 'conclusion_review.executive_summary.title'
 
-      pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
       pdf.move_down PDF_FONT_SIZE * 2
 
