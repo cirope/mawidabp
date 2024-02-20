@@ -123,7 +123,6 @@ module Findings::State
       def define_state_scopes
         scope :revoked,     -> { where     state: STATUS[:revoked] }
         scope :not_revoked, -> { where.not state: STATUS[:revoked] }
-        scope :expired,     -> { where     state: STATUS[:expired] }
         scope :not_expired, -> { where.not state: STATUS[:expired] }
 
         scope :assumed_risk,     -> { where     state: STATUS[:assumed_risk] }
