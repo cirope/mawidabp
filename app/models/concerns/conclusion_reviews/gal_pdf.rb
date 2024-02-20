@@ -5,13 +5,18 @@ module ConclusionReviews::GalPdf
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
-    put_gal_tmp_reviews_code     organization
-    put_default_watermark_on     pdf
-    put_gal_header_on            pdf, organization
-    put_gal_cover_on             pdf
-    put_gal_executive_summary_on pdf, organization
-    put_detailed_review_on       pdf, organization
-    put_annex_on                 pdf, organization, options
+    if options[:only_executive_summary]
+      put_gal_tmp_reviews_code     organization
+      put_gal_executive_summary_on pdf, organization
+    else
+      put_gal_tmp_reviews_code     organization
+      put_default_watermark_on     pdf
+      put_gal_header_on            pdf, organization
+      put_gal_cover_on             pdf
+      put_gal_executive_summary_on pdf, organization
+      put_detailed_review_on       pdf, organization
+      put_annex_on                 pdf, organization, options
+    end
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
