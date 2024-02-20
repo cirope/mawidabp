@@ -261,7 +261,7 @@ module ConclusionReviews::GalPdf
 
     def put_chart_on pdf
       image      = CONCLUSION_CHARTS[conclusion]
-      image_path = PDF_GAL_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
+      image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
       size       = 150
 
       pdf.make_table([
@@ -293,7 +293,7 @@ module ConclusionReviews::GalPdf
     def legend_image conclusion, label
       size       = 9
       image      = conclusion == label ? CONCLUSION_CHART_LEGENDS_CHECKED[label] : CONCLUSION_CHART_LEGENDS[label]
-      image_path = PDF_GAL_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
+      image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
 
       { image: image_path, fit: [size, size] }
     end

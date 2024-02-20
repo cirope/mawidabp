@@ -125,7 +125,6 @@ EVOLUTION_FOOTNOTES = {
 }
 
 PDF_IMAGE_PATH          = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
-PDF_GAL_IMAGE_PATH      = Rails.root.join('app', 'assets', 'images', 'gal_pdf').freeze
 PDF_DEFAULT_SCORE_IMAGE = 'score_none.png'
 
 PLAN_ITEM_STATS_EXCLUDED_SCOPES = [
