@@ -23,6 +23,9 @@ en:
     _yes: 'Yes'
     _no: 'No'
 
+  footer:
+    support: 'Support'
+
   activity_groups:
     edit:
       title: 'Edit activity group'
@@ -46,6 +49,8 @@ en:
     strongly_agree: 'Strongly agree'
     'yes': 'Yes'
     'no': 'No'
+    t: 'Yes' # remove after fixing tests that use this key
+    f: 'No' # remove after fixing tests that use this key
 
   benefits:
     index:
@@ -208,6 +213,9 @@ en:
     finding_answers: 'Comments of'
     pdf:
       issue: 'Refer to the attached table for records under the code %{review_code}'
+    graphs:
+      incomplete: 'Pending findings'
+      completed: 'Completed findings'
 
   licenses:
     trial_valid_until: 'End of trial period'
@@ -652,6 +660,8 @@ en:
     conclusion_review_receiver: 'Audit report receiver(s)'
     temporary_polls: 'Temporarily save poll responses. A poll is complete when all of its questions are answered.'
     finding_warning_expire_days: 'Number of days before the expiration of an observation in which the system will notify its proximity'
+    finding_by_current_user: 'Filter findings by current user'
+    enable_close_date_edition: 'Enable close date edition'
 
   tags:
     edit:
@@ -971,6 +981,16 @@ en:
       title: 'Show issue template'
     form:
       add_control_objective: 'Add control objective'
+
+  welcome:
+    completed_findings: 'Completed findings'
+    commented_on: 'commented on'
+    current_user_answers: 'Current user answers'
+    latest_answers: 'Latest answers'
+    latest_findings: 'Latest findings'
+    pending_findings: 'Pending findings'
+    version: 'Version'
+    welcome: 'Welcome'
 
   work_papers:
     show:

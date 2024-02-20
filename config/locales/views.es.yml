@@ -23,6 +23,9 @@ es:
     _yes: 'Sí'
     _no: 'No'
 
+  footer:
+    support: 'Soporte'
+
   activity_groups:
     edit:
       title: 'Editar grupo de actividades'
@@ -46,6 +49,8 @@ es:
     strongly_agree: 'Muy de acuerdo'
     'yes': 'Sí'
     'no': 'No'
+    t: 'Sí' # remove after fixing tests that use this key
+    f: 'No' # remove after fixing tests that use this key
 
   benefits:
     index:
@@ -208,6 +213,9 @@ es:
     finding_answers: 'Comentarios de'
     pdf:
       issue: 'Ver en la tabla adjunta los casos bajo el código %{review_code}'
+    graphs:
+      incomplete: 'Hallazgos pendientes'
+      completed: 'Hallazgos solucionados'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -651,6 +659,8 @@ es:
     conclusion_review_receiver: 'Receptor/es del informe'
     temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.'
     finding_warning_expire_days: 'Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad'
+    finding_by_current_user: 'Filtrar observaciones por usuario actual'
+    enable_close_date_edition: 'Habilitar edición de fecha de cierre'
 
   tags:
     edit:
@@ -701,6 +711,8 @@ es:
         other: 'Total de horas acumuladas por %{count} personas: %{amount}'
     new:
       title: 'Nueva actividad'
+    edit:
+      title: Editar actividad
     form:
       add_business_unit_type: 'Agregar unidad organizativa'
       activity: 'Actividad'
@@ -970,6 +982,16 @@ es:
       title: 'Ver plantilla de observación'
     form:
       add_control_objective: 'Agregar objetivo de control'
+
+  welcome:
+    completed_findings: 'Hallazgos solucionados'
+    commented_on: 'comentó en'
+    current_user_answers: 'Comentarios propios'
+    latest_answers: 'Últimos comentarios'
+    latest_findings: 'Hallazgos de los últimos meses'
+    pending_findings: 'Hallazgos pendientes'
+    version: 'Versión'
+    welcome: 'Bienvenido'
 
   work_papers:
     show:

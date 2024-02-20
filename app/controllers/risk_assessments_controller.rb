@@ -6,7 +6,17 @@ class RiskAssessmentsController < ApplicationController
   respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_title, except: [:destroy]
+  before_action :set_title, except: [
+    :destroy,
+    :new_item,
+    :add_items,
+    :fetch_item,
+    :sort_by_risk,
+    :merge_to_plan,
+    :auto_complete_for_best_practice,
+    :auto_complete_for_business_unit_type,
+    :auto_complete_for_business_unit
+  ]
   before_action :set_clone_from, only: [:new, :create]
   before_action :set_risk_assessment, only: [
     :show,
