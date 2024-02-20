@@ -217,9 +217,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      # - name: Update
-      #   run: sudo apt update -y
-      - name: Install sldap
+      - name: Update package lists
+        run: sudo apt update -y
+      - name: Install slapd and ldap-utils
         run: sudo apt -y install slapd ldap-utils
       - name: Install wkhtmltopdf
         run: sudo apt -y install wkhtmltopdf
