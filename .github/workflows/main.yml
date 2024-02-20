@@ -217,9 +217,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Update
+        run: sudo apt update -y
       - name: Install sldap
         run: sudo apt -y install slapd ldap-utils
-      - name: Install wkhtmltopdf1
+      - name: Install wkhtmltopdf
         run: sudo apt -y install wkhtmltopdf
       - name: Install ruby and gems
         uses: ruby/setup-ruby@v1
