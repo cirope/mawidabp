@@ -5,6 +5,8 @@ en:
   label:
     'yes': "Yes"
     'no': "No"
+    t: "Yes" # remove after fixing tests that use this key
+    f: "No" # remove after fixing tests that use this key
     total: "Total"
     by: "by"
     add: "Add"
@@ -1174,8 +1176,8 @@ en:
     responsibility_release:
       title: "Disclaimer"
     unconfirmed_findings: "Unconfirmed issues to this date"
-    pdf:
-      pdf_name: "user_list.pdf"
+    pdf_csv:
+      pdf_csv_name: "user_list"
       users_count: "Number of users: %{count}"
       filtered_by:
         one: "The list was filtered with the query '%{query}' on the column %{columns}"
