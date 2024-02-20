@@ -221,10 +221,6 @@ jobs:
       #   run: sudo apt update -y
       - name: Install sldap
         run: sudo apt -y install slapd ldap-utils
-      - name: Install libegl-mesa0 directly
-        run: |
-          wget http://mirrors.kernel.org/ubuntu/pool/main/m/mesa/libegl-mesa0_23.2.1-1ubuntu3.1~22.04.2_amd64.deb
-          sudo dpkg -i libegl-mesa0_23.2.1-1ubuntu3.1~22.04.2_amd64.deb
       - name: Install wkhtmltopdf
         run: sudo apt -y install wkhtmltopdf
       - name: Install ruby and gems
