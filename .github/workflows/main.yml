@@ -219,7 +219,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Install sldap
         run: sudo apt -y install slapd ldap-utils
-      - name: Install wkhtmltopdf
+      - name: Install wkhtmltopdf1
         run: sudo apt -y install wkhtmltopdf
       - name: Install ruby and gems
         uses: ruby/setup-ruby@v1
