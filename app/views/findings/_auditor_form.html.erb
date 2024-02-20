@@ -633,18 +633,28 @@
 </div>
 
 <script type="text/javascript">
-  $(document).on('click', '[data-user-selector]', function() {
-    var id = $(this).closest('fieldset').find('[name$="[user_id]"]').val();
-    var userField = $(this).closest('fieldset').find('[name$="[users_for_notification][]"]');
+  var codeExecuted = false;
 
-    if($(this).is(':checked')) {
-      userField.val(id).attr('data-auto-complete', true);
-    } else {
-      userField.val('').attr('data-auto-complete', false);
+  document.addEventListener('DOMContentLoaded', function(e) {
+    if ("importmapScriptsLoaded" in window) {
+      if (!codeExecuted) {
+        $(document).on('click', '[data-user-selector]', function() {
+          var id = $(this).closest('fieldset').find('[name$="[user_id]"]').val();
+          var userField = $(this).closest('fieldset').find('[name$="[users_for_notification][]"]');
+
+          if($(this).is(':checked')) {
+            userField.val(id).attr('data-auto-complete', true);
+          } else {
+            userField.val('').attr('data-auto-complete', false);
+          }
+        });
+
+        $(document).on('change', '#finding_risk', function() {
+          alert('<%= I18n.t 'message.change_weakness_risk' %>');
+        });
+
+        codeExecuted = true;
+      }
     }
-  });
-
-  $(document).on('change', '#finding_risk', function() {
-    alert('<%= I18n.t 'message.change_weakness_risk' %>');
   });
 </script>

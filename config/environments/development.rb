@@ -76,4 +76,11 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = false
+
+  ###
+  # Enable raising on assignment to attr_readonly attributes. The previous
+  # behavior would allow assignment but silently not persist changes to the
+  # database.
+  #++
+  config.active_record.raise_on_assign_to_attr_readonly = false
 end

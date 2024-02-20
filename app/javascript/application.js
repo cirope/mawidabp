@@ -79,5 +79,4 @@ import 'work_papers'
 import '@rails/activestorage'
 import 'direct_upload'
 
-import * as jq from 'jquery';
 window.importmapScriptsLoaded = true;

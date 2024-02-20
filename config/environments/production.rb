@@ -96,4 +96,12 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+
+  ###
+  # Enable raising on assignment to attr_readonly attributes. The previous
+  # behavior would allow assignment but silently not persist changes to the
+  # database.
+  #++
+  config.active_record.raise_on_assign_to_attr_readonly = false
 end
