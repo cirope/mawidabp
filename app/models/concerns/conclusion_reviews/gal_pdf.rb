@@ -1049,7 +1049,7 @@ module ConclusionReviews::GalPdf
     end
 
     def review_indentifier_and_issue_date_column_widths pdf
-      [60, 40].map { |percent| pdf.percent_width percent }
+      [78, 22].map { |percent| pdf.percent_width percent }
     end
 
     def conclusion_data_column_width pdf
@@ -1061,7 +1061,7 @@ module ConclusionReviews::GalPdf
     end
 
     def key_weaknesses_column_widths pdf
-      [64, 13, 23].map { |percent| pdf.percent_width percent }
+      [69, 13, 18].map { |percent| pdf.percent_width percent }
     end
 
     def observations_or_applied_data_analytics_column_widths pdf
