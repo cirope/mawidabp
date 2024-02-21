@@ -141,9 +141,9 @@ module ConclusionReviews::GalPdf
         [put_survey_on(pdf)],
         [put_conclusion_on(pdf)],
         [put_key_weaknesses_on(pdf)],
-        [put_observations_v2_on(pdf)],
-        [put_applied_data_analytics_on(pdf)]
-      ])
+        ([put_observations_v2_on(pdf)] if observations.present?),
+        ([put_applied_data_analytics_on(pdf)] if applied_data_analytics.present?)
+      ].compact)
     end
 
     def put_project_on pdf
