@@ -1,6 +1,6 @@
 class TimeSummaryController < ApplicationController
-  before_action :auth, :check_privileges, :set_title, :set_descendants,
-                :set_user
+  before_action :auth, :check_privileges, :set_descendants, :set_user
+  before_action :set_title, except: [:show, :destroy]
   before_action :set_time_consumption, only: [:edit, :update, :destroy]
 
   def index

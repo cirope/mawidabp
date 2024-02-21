@@ -7,7 +7,8 @@ class PlansController < ApplicationController
   before_action :set_business_unit_type, only: [:show, :new, :edit, :update]
   before_action :set_plan, only: [:show, :edit, :update, :destroy, :export_to_pdf]
   before_action :set_plan_clone, only: [:new, :create]
-  before_action :set_title, except: [:destroy]
+  before_action :set_title, except: [:destroy, :auto_complete_for_business_unit_type,
+                                     :auto_complete_for_business_unit]
 
   # * GET /plans
   def index

@@ -49,6 +49,8 @@ en:
     strongly_agree: 'Strongly agree'
     'yes': 'Yes'
     'no': 'No'
+    t: 'Yes' # remove after fixing tests that use this key
+    f: 'No' # remove after fixing tests that use this key
 
   benefits:
     index:
@@ -659,6 +661,7 @@ en:
     temporary_polls: 'Temporarily save poll responses. A poll is complete when all of its questions are answered.'
     finding_warning_expire_days: 'Number of days before the expiration of an observation in which the system will notify its proximity'
     finding_by_current_user: 'Filter findings by current user'
+    enable_close_date_edition: 'Enable close date edition'
 
   tags:
     edit:

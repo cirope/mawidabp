@@ -31,7 +31,7 @@ class FollowUpAuditedControllerTest < ActionController::TestCase
   test 'weaknesses by user' do
     login user: users(:coordinator_manager)
 
-    get :weaknesses_by_user
+    get :weaknesses_by_user, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audited/weaknesses_by_user'
 
@@ -49,7 +49,7 @@ class FollowUpAuditedControllerTest < ActionController::TestCase
   test 'weaknesses by user as CSV' do
     login user: users(:coordinator_manager)
 
-    get :weaknesses_by_user, as: :csv
+    get :weaknesses_by_user, :params => { :controller_name => 'follow_up' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
