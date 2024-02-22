@@ -26,8 +26,8 @@ class FindingsController < ApplicationController
     respond_to do |format|
       format.html { paginate_findings }
       format.csv  { render_index_csv }
-      format.pdf  { render_index_pdf }
-      # format.pdf  { redirect_to pdf.relative_path }
+      # format.pdf  { render_index_pdf }
+      format.pdf  { redirect_to pdf.relative_path }
     end
   end
 
