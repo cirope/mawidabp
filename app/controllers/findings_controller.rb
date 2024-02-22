@@ -27,6 +27,7 @@ class FindingsController < ApplicationController
       format.html { paginate_findings }
       format.csv  { render_index_csv }
       format.pdf  { render_index_pdf }
+      # format.pdf  { redirect_to pdf.relative_path }
     end
   end
 
@@ -164,6 +165,25 @@ class FindingsController < ApplicationController
       @action_privileges.update(
         auto_complete_for_tagging: :read,
         auto_complete_for_finding_relation: :read
+      )
+    end
+
+    def pdf
+      title_partial = case params[:completion_state]
+                      when'incomplete'
+                        'pending'
+                      when 'repeated'
+                        'repeated'
+                      else
+                        'complete'
+                      end
+
+      FindingPdf.create(
+        title: t("menu.follow_up.#{title_partial}_findings"),
+        columns: @columns,
+        query: @query,
+        findings: @findings.except(:limit),
+        current_organization: current_organization
       )
     end
 
