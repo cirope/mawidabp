@@ -209,9 +209,9 @@
       work_papers: "Papeles de trabajo"
       pdf_name: "seguimiento_de_hallazgo_%{code}.pdf"
     pdf:
-      filtered_by_html:
-        one: "El listado fue filtrado con la consulta <span class=\"font-weight-bold\">'%{query}'</span> en la columna <span class=\"font-weight-bold\">'%{columns}'</span>"
-        other: "El listado fue filtrado con la consulta <span class=\"font-weight-bold\">'%{query}'</span> en las columnas <span class=\"font-weight-bold\">'%{columns}'</span>"
+      filtered_by:
+        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
+        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
     user_assignment:
       audit_team: "Auditoría"
       others: "Usuarios"

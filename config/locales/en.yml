@@ -210,8 +210,8 @@
       pdf_name: "track_finding_%{code}.pdf"
     pdf:
       filtered_by_html:
-        one: "The list was filtered with the query <span class=\"font-weight-bold\">'%{query}'</span> on the <span class=\"font-weight-bold\" column >'%{columns}'</span>"
-        other: "The list was filtered with the query <span class=\"font-weight-bold\">'%{query}'</span> on the <span class=\"font-weight-bold\" columns >'%{columns}'</span>"
+        one: "The list was filtered with the query '%{query}' on the column %{columns}"
+        other: "The list was filtered with the query '%{query}' on the columns %{columns}"
     user_assignment:
       audit_team: "Audit"
       others: "Users"
