@@ -39,42 +39,43 @@ class FindingPdf < Prawn::Document
       pdf.add_title @title
     end
 
-    def add_filter_text
-      if @columns.present? || @query.present?
-        query   = @query.flatten.map { |q| "<b>#{q}</b>" }
-        columns = @columns.map do |c|
-          f = filter_columns[c]
+    def add_body
+      preloaded_findings = preload_findings_data
 
-          f && "<b>#{f}</b>"
-        end.compact
+      findings_data = generate_table_data preloaded_findings
+      put_table findings_data, column_headers, column_widths
 
-        text = I18n.t 'finding.pdf.filtered_by',
-          query:   query.to_sentence,
-          columns: columns.to_sentence,
-          count:   columns.size
-
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text text, font_size: (PDF_FONT_SIZE * 0.75).round, inline_format: true
+      if Current.conclusion_pdf_format == 'pat'
+        issues_data = generate_table_data preloaded_findings, format: :issues
+        put_table issues_data, issue_column_headers, issue_column_widths
       end
     end
 
-    def add_body
-      put_findings @findings.preload(:review, control_objective: {
-        process_control: :best_practice
-      })
-
-      put_issues if Current.conclusion_pdf_format == 'pat'
+    def preload_findings_data
+      if Current.conclusion_pdf_format == 'pat'
+        @findings.preload :review
+      else
+        @findings.preload :review, control_objective: { process_control: :best_practice }
+      end
     end
 
-    def put_findings findings
+    def generate_table_data findings, format: :finding
       row_data = []
 
-      findings.each { |finding| row_data << row_data_for(finding) }
+      findings.each do |finding|
+        if format == :finding
+          row_data << finding_row_data_for(finding)
+        elsif format == :issues
+          finding.issues.without_close_date.each do |issue|
+            row_data << issue_row_data_for(issue, finding.review_code)
+          end
+        end
+      end
 
-      put_findings_table row_data
+      row_data
     end
 
-    def row_data_for finding
+    def finding_row_data_for finding
       rows = [
         finding.review.identification,
         finding.review_code,
@@ -99,14 +100,26 @@ class FindingPdf < Prawn::Document
       finding.issues.any? && finding.issues.without_close_date.count > 0
     end
 
-    def put_findings_table row_data
+    def issue_row_data_for issue, review_code 
+      [
+        review_code,
+        issue.customer,
+        issue.entry,
+        issue.operation,
+        issue.comments,
+        issue.currency,
+        issue.amount
+      ]
+    end
+
+    def put_table data, headers, column_widths
       pdf.move_down PDF_FONT_SIZE
 
-      if row_data.present?
+      if data.present?
         pdf.font_size (PDF_FONT_SIZE * 0.75).round do
           table_options = pdf.default_table_options column_widths
 
-          pdf.table row_data.insert(0, column_headers), table_options do
+          pdf.table data.insert(0, headers), table_options do
             row(0).style(
               background_color: 'cccccc',
               padding: [
@@ -119,12 +132,31 @@ class FindingPdf < Prawn::Document
       end
     end
 
+    def add_filter_text
+      if @columns.present? || @query.present?
+        query   = @query.flatten.map { |q| "<b>#{q}</b>" }
+        columns = @columns.map do |c|
+          f = filter_columns[c]
+
+          f && "<b>#{f}</b>"
+        end.compact
+
+        text = I18n.t 'finding.pdf.filtered_by',
+          query:   query.to_sentence,
+          columns: columns.to_sentence,
+          count:   columns.size
+
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text text, font_size: (PDF_FONT_SIZE * 0.75).round, inline_format: true
+      end
+    end
+
     def column_order
       headers = [
         ['review', Review.model_name.human, 10],
         ['review_code', Finding.human_attribute_name('review_code'), 5],
         (['best_practice', BestPractice.model_name.human, 16] unless Current.conclusion_pdf_format == 'pat'),
-        (['process_control', ProcessControl.model_name.human, 19] unless Current.conclusion_pdf_format == 'pat'),
+        (['process_control', ProcessControl.model_name.human, 20] unless Current.conclusion_pdf_format == 'pat'),
         ['title', Finding.human_attribute_name('title'), 49]
       ].compact
 
@@ -134,9 +166,9 @@ class FindingPdf < Prawn::Document
 
     def pat_extra_headers
       [
-        ['description', Finding.human_attribute_name('description'), 12],
-        ['state', Finding.human_attribute_name('state'), 12],
-        ['issue', Issue.model_name.human.pluralize, 12]
+        ['description', Finding.human_attribute_name('description'), 13],
+        ['state', Finding.human_attribute_name('state'), 10],
+        ['issue', Issue.model_name.human.pluralize, 13]
       ]
     end
 
@@ -160,68 +192,24 @@ class FindingPdf < Prawn::Document
       }
     end
 
-    def put_issues
-      row_data = []
-
-      @findings.each do |finding|
-        finding.issues.without_close_date.each do |issue|
-          row_data << [
-            finding.review_code,
-            issue.customer,
-            issue.entry,
-            issue.operation,
-            issue.comments,
-            issue.currency,
-            issue.amount
-          ]
-        end
-      end
-
-      put_issues_table row_data
-    end
-
-    def put_issues_table(row_data)
-      pdf.move_down PDF_FONT_SIZE
-
-      if row_data.present?
-        pdf.font_size (PDF_FONT_SIZE * 0.75).round do
-          table_options = pdf.default_table_options issue_column_widths
-
-          pdf.table row_data.insert(0, issue_column_headers), table_options do
-            row(0).style(
-              background_color: 'cccccc',
-              padding: [
-                (PDF_FONT_SIZE * 0.5).round,
-                (PDF_FONT_SIZE * 0.3).round
-              ]
-            )
-          end
-        end
-      end
+    def issue_column_order
+      [
+        ['review_code', Finding.human_attribute_name('review_code'), 5],
+        ['customer', Issue.human_attribute_name('customer'), 20],
+        ['entry', Issue.human_attribute_name('entry'), 20],
+        ['operation', Issue.human_attribute_name('operation'), 20],
+        ['comments', Issue.human_attribute_name('comments'), 20],
+        ['currency', Issue.human_attribute_name('currency'), 5],
+        ['amount', Issue.human_attribute_name('amount'), 10]
+      ]
     end
 
     def issue_column_headers
-      [
-        "<b>#{Finding.human_attribute_name('review_code')}</b>",
-        "<b>#{Issue.human_attribute_name('customer')}</b>",
-        "<b>#{Issue.human_attribute_name('entry')}</b>",
-        "<b>#{Issue.human_attribute_name('operation')}</b>",
-        "<b>#{Issue.human_attribute_name('comments')}</b>",
-        "<b>#{Issue.human_attribute_name('currency')}</b>",
-        "<b>#{Issue.human_attribute_name('amount')}</b>"
-      ]
+      issue_column_order.map { |_, label, _| "<b>#{label}</b>" }
     end
 
     def issue_column_widths
-      [
-        pdf.percent_width(10),
-        pdf.percent_width(20),
-        pdf.percent_width(20),
-        pdf.percent_width(15),
-        pdf.percent_width(20),
-        pdf.percent_width(5),
-        pdf.percent_width(10)
-      ]
+      issue_column_order.map { |_, _, width| pdf.percent_width(width) }
     end
 
     def save
