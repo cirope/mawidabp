@@ -11,8 +11,8 @@ module Findings::ByRiskMap
       (I18n.t "label.#{review&.conclusion_draft_review&.approved ? 'yes' : 'no'}"),
       title,
       [organization.name, review.identification, review_code].join,
-      taggings_findings('finding'),
-      taggings_findings('review'),
+      taggings_findings,
+      taggings_review,
       control_objective_item_id,
       control_objective_item.control_objective_text,
       control_objective_item.relevance,
@@ -66,10 +66,12 @@ module Findings::ByRiskMap
       end
     end
 
-    def taggings_findings kind
-      tags = taggings.includes(:tag).where(tag: {kind: kind}).pluck(:name)
+    def taggings_findings
+      taggings.includes(:tag).pluck(:name).join(' - ')
+    end
 
-      tags.join(' - ')
+    def taggings_review
+      review.taggings.includes(:tag).pluck(:name).join(' - ')
     end
 
     def antiquity_finding options
