@@ -169,7 +169,7 @@ class FindingsController < ApplicationController
 
     def pdf
       title_partial = case params[:completion_state]
-                      when'incomplete'
+                      when 'incomplete'
                         'pending'
                       when 'repeated'
                         'repeated'
