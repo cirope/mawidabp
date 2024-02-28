@@ -362,20 +362,6 @@ module FindingsHelper
     end
   end
 
-  def translate_filter_columns columns
-    translated_columns = {
-      'organization' => Finding.human_attribute_name('organization'),
-      'review'       => Review.model_name.human,
-      'project'      => PlanItem.human_attribute_name('project'),
-      'review_code'  => Finding.human_attribute_name('review_code'),
-      'title'        => Finding.human_attribute_name('title'),
-      'updated_at'   => Finding.human_attribute_name('updated_at'),
-      'tags'         => Tag.model_name.human(count: 0)
-    }
-
-    columns.map { |c| translated_columns[c] }.compact.to_sentence
-  end
-
   private
 
     def finding_state_options_for finding
