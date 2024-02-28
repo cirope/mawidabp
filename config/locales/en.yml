@@ -546,9 +546,6 @@
     errors:
       issue_date_after_review_issue_date: "issue date (%{date}) is greater than the audit report issue date"
 
-  wicked_pdf:
-    number_pages_html: 'Page <span class="page"></span> of <span class="topage"></span>'
-
   workflow:
     maximum_exceeded_by_human_resource: "%{user} has exceeded the maximum time for task: %{item}"
 

@@ -27,6 +27,7 @@ en:
         audit_recommendations: 'Recommendation:'
         follow_up_date: 'Implementation:'
         repeated: 'REPEATED ISSUE'
+      number_pages_html: 'Page <span class="page"></span> of <span class="topage"></span>'
     cro:
       header:
         legend_html: "<b>Bértora y Asociados</b>\r\nBernardo de Irigoyen 330 Piso 3\r\n\r\nCiudad Autónoma de Buenos Aires\r\nC1072AAF\r\nTeléfono +54 (11)4342 2544\r\n\r\nwww.crowe.com.ar"
