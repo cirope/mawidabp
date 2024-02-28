@@ -219,8 +219,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     get :index, params: { completion_state: 'incomplete' }, as: :pdf
 
-    assert_response :success
-    assert_match Mime[:pdf].to_s, @response.content_type
+    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
   end
 
   test 'list repeated findings as PDF' do
@@ -231,8 +230,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     get :index, params: { completion_state: 'repeated' }, as: :pdf
 
-    assert_response :success
-    assert_match Mime[:pdf].to_s, @response.content_type
+    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
   end
 
   test 'list complete findings as PDF' do
@@ -243,8 +241,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     get :index, params: { completion_state: 'complete' }, as: :pdf
 
-    assert_response :success
-    assert_match Mime[:pdf].to_s, @response.content_type
+    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
   end
 
   test 'list findings as corporate user' do
@@ -885,8 +882,7 @@ class FindingsControllerTest < ActionController::TestCase
       }
     }, as: :pdf
     # we can't check the order inside the PDF so...
-    assert_response :success
-    assert_match Mime[:pdf].to_s, @response.content_type
+    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
 
     assert_equal(
       html_findings,
@@ -1134,7 +1130,7 @@ class FindingsControllerTest < ActionController::TestCase
       }
     }
 
-    assert_match I18n.t('activerecord.errors.models.finding.attributes.state.must_have_a_work_paper'), 
+    assert_match I18n.t('activerecord.errors.models.finding.attributes.state.must_have_a_work_paper'),
                  response.body
 
     finding.reload
