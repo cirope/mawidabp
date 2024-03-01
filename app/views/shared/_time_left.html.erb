@@ -1,7 +1,7 @@
 <% time_left = parameter_in(current_organization.try(:id), :session_expire_time).to_i %>
 <% if current_organization && time_left > 0 %>
   <span class="navbar-text" data-time-left hidden>
-    <span data-toggle="popover" data-trigger="hover" data-placement="bottom" title="<%= t 'navigation.warning' %>" data-content="">
+    <span data-bs-toggle="popover" data-trigger="hover" data-placement="bottom" title="<%= t 'navigation.warning' %>" data-content="">
       <span class="text-warning pulsate" data-text-style>
         <%= icon 'fas', 'exclamation-circle' %>
       </span>

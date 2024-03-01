@@ -21,7 +21,7 @@ module Findings::Csv
       review_code,
       id,
       (taggings_format if self.class.show_follow_up_timestamps?),
-      title,
+      title.to_s,
       description,
       state_text,
       full_state_text,

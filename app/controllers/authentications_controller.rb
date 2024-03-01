@@ -1,6 +1,8 @@
 class AuthenticationsController < ApplicationController
   include Sessions
 
+  layout 'public'
+
   before_action :set_title, except: [:destroy]
 
   def new

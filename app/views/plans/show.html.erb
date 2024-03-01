@@ -1,21 +1,23 @@
-<%= render 'header' %>
+<div class="card">
+  <div class="card-body">
+    <%= render 'header' %>
 
-<% plan_business_unit_type_list.each do |business_unit_type, plan_items| %>
-  <% if plan_items.any? %>
-    <%= render 'business_unit_type_plan_items', {
-      business_unit_type: business_unit_type,
-      plan_items: plan_items,
-      show_resource_utilization: true
-    } %>
-  <% end %>
-<% end %>
+    <% plan_business_unit_type_list.each do |business_unit_type, plan_items| %>
+      <% if plan_items.any? %>
+        <%= render 'business_unit_type_plan_items', {
+          business_unit_type: business_unit_type,
+          plan_items: plan_items,
+          show_resource_utilization: true
+        } %>
+      <% end %>
+    <% end %>
 
-<hr>
-
-<div>
-  <%= link_to_edit [:edit, @plan] %> |
-  <%= link_to_calendar [:calendar, @plan] %> |
-  <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
-  <%= link_to_index plans_path %> |
-  <%= render 'shared/downloads', links: plan_download_options, right: true %>
+    <div>
+      <%= link_to_edit [:edit, @plan] %> |
+      <%= link_to_calendar [:calendar, @plan] %> |
+      <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
+      <%= link_to_index plans_path %> |
+      <%= render 'shared/downloads', links: plan_download_options, right: true %>
+    </div>
+  </div>
 </div>
