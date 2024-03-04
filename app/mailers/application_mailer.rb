@@ -1,5 +1,6 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
+  default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>",
+          return_path: ''
 
   def mail args
     headers(
