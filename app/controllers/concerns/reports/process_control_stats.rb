@@ -256,9 +256,7 @@ module Reports::ProcessControlStats
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
     @periods.each do |period|
-
       if @process_control_data[period].present?
-
         add_period_title(pdf, period)
 
         column_data                   = []

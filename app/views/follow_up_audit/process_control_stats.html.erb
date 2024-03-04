@@ -12,9 +12,7 @@
     %>
 
     <% @periods.each do |period| %>
-
       <% if @process_control_data[period].present? %>
-
         <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
 
         <hr>
