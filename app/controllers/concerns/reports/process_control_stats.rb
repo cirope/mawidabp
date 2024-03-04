@@ -261,8 +261,8 @@ module Reports::ProcessControlStats
 
         add_period_title(pdf, period)
 
-        column_data = []
-        columns = {}
+        column_data                   = []
+        columns                       = {}
         column_widths, column_headers = [], []
 
         @columns.each do |col_name, col_title, col_width|
