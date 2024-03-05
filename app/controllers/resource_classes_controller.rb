@@ -3,7 +3,7 @@ class ResourceClassesController < ApplicationController
 
   before_action :auth, :check_privileges
   before_action :set_resource_class, only: [:show, :edit, :update, :destroy]
-  before_action :set_title
+  before_action :set_title, except: :destroy
 
   # * GET /resource_classes
   def index

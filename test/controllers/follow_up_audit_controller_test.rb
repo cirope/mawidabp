@@ -160,7 +160,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'review stats report as CSV' do
     login
 
-    get :review_stats_report, as: :csv
+    get :review_stats_report, :params => { :controller_name => 'follow_up' }, as: :csv
 
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
@@ -222,7 +222,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by state report' do
     login
 
-    get :weaknesses_by_state
+    get :weaknesses_by_state, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_state'
 
@@ -263,7 +263,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by risk' do
     login
 
-    get :weaknesses_by_risk
+    get :weaknesses_by_risk, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_risk'
 
@@ -307,7 +307,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by risk and business unit report' do
     login
 
-    get :weaknesses_by_risk_and_business_unit
+    get :weaknesses_by_risk_and_business_unit, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_risk_and_business_unit'
 
@@ -393,7 +393,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by audit type report' do
     login
 
-    get :weaknesses_by_audit_type
+    get :weaknesses_by_audit_type, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_audit_type'
 
@@ -473,7 +473,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by risk report' do
     login
 
-    get :weaknesses_by_risk_report
+    get :weaknesses_by_risk_report, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_risk_report'
 
@@ -536,7 +536,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by month' do
     login
 
-    get :weaknesses_by_month
+    get :weaknesses_by_month, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_month'
 
@@ -835,7 +835,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by control objective' do
     login
 
-    get :weaknesses_by_control_objective
+    get :weaknesses_by_control_objective, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_control_objective'
 
@@ -857,7 +857,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by control objective as CSV' do
     login
 
-    get :weaknesses_by_control_objective, as: :csv
+    get :weaknesses_by_control_objective, :params => { :controller_name => 'follow_up' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -947,7 +947,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by business unit' do
     login
 
-    get :weaknesses_by_business_unit
+    get :weaknesses_by_business_unit, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_business_unit'
 
@@ -969,7 +969,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by business unit as CSV' do
     login
 
-    get :weaknesses_by_business_unit, as: :csv
+    get :weaknesses_by_business_unit, :params => { :controller_name => 'follow_up' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -991,7 +991,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by business unit as RTF' do
     login
 
-    get :weaknesses_by_business_unit, as: :rtf
+    get :weaknesses_by_business_unit, :params => { :controller_name => 'follow_up' }, as: :rtf
     assert_response :success
     assert_match Mime[:rtf].to_s, @response.content_type
 
@@ -1054,7 +1054,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by user' do
     login
 
-    get :weaknesses_by_user
+    get :weaknesses_by_user, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_user'
 
@@ -1076,7 +1076,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by user as CSV' do
     login
 
-    get :weaknesses_by_user, as: :csv
+    get :weaknesses_by_user, :params => { :controller_name => 'follow_up' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -1140,7 +1140,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses heatmap' do
     login
 
-    get :weaknesses_heatmap
+    get :weaknesses_heatmap, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_heatmap'
 
@@ -1162,7 +1162,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses heatmap as CSV' do
     login
 
-    get :weaknesses_heatmap, as: :csv
+    get :weaknesses_heatmap, :params => { :controller_name => 'follow_up' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -1291,7 +1291,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by control objective process' do
     login
 
-    get :weaknesses_by_control_objective_process
+    get :weaknesses_by_control_objective_process, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_control_objective_process'
 
@@ -1313,7 +1313,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses by control objective process as CSV' do
     login
 
-    get :weaknesses_by_control_objective_process, as: :csv
+    get :weaknesses_by_control_objective_process, :params => { :controller_name => 'follow_up' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -1380,7 +1380,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses evolution' do
     login
 
-    get :weaknesses_evolution
+    get :weaknesses_evolution, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_evolution'
 
@@ -1402,7 +1402,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses evolution as CSV' do
     login
 
-    get :weaknesses_evolution, as: :csv
+    get :weaknesses_evolution, :params => { :controller_name => 'follow_up' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -1497,7 +1497,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses list' do
     login
 
-    get :weaknesses_list
+    get :weaknesses_list, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_list'
 
@@ -1519,7 +1519,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses list as CSV' do
     login
 
-    get :weaknesses_list, as: :csv
+    get :weaknesses_list, :params => { :controller_name => 'follow_up' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -1591,7 +1591,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses brief' do
     login
 
-    get :weaknesses_brief
+    get :weaknesses_brief, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_brief'
 
@@ -1613,7 +1613,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'filtered weaknesses brief' do
     login
 
-    get :weaknesses_brief
+    get :weaknesses_brief, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_brief'
 
@@ -1638,7 +1638,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses brief as CSV' do
     login
 
-    get :weaknesses_brief, as: :csv
+    get :weaknesses_brief, :params => { :controller_name => 'follow_up' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -1681,7 +1681,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses reschedules' do
     login
 
-    get :weaknesses_reschedules
+    get :weaknesses_reschedules, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_reschedules'
 
@@ -1703,7 +1703,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'filtered weaknesses reschedules' do
     login
 
-    get :weaknesses_reschedules
+    get :weaknesses_reschedules, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_reschedules'
 
@@ -1729,7 +1729,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses reschedules as CSV' do
     login
 
-    get :weaknesses_reschedules, as: :csv
+    get :weaknesses_reschedules, :params => { :controller_name => 'follow_up' }, as: :csv
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
 
@@ -1751,7 +1751,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'fixed weaknesses report' do
     login
 
-    get :fixed_weaknesses_report
+    get :fixed_weaknesses_report, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/fixed_weaknesses_report'
 
@@ -1814,7 +1814,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'control objective stats report' do
     login
 
-    get :control_objective_stats
+    get :control_objective_stats, :params => { :controller_name => 'conclusion' }
     assert_response :success
     assert_template 'follow_up_audit/control_objective_stats'
 
@@ -1878,7 +1878,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'control objective stats by review report' do
     login
 
-    get :control_objective_stats_by_review
+    get :control_objective_stats_by_review, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/control_objective_stats_by_review'
 
@@ -1940,7 +1940,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'process control stats report' do
     login
 
-    get :process_control_stats
+    get :process_control_stats, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/process_control_stats'
 
@@ -2156,7 +2156,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'benefits report' do
     login
 
-    get :benefits
+    get :benefits, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/benefits'
 

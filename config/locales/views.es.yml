@@ -49,6 +49,8 @@ es:
     strongly_agree: 'Muy de acuerdo'
     'yes': 'Sí'
     'no': 'No'
+    t: 'Sí' # remove after fixing tests that use this key
+    f: 'No' # remove after fixing tests that use this key
 
   benefits:
     index:
@@ -709,6 +711,8 @@ es:
         other: 'Total de horas acumuladas por %{count} personas: %{amount}'
     new:
       title: 'Nueva actividad'
+    edit:
+      title: Editar actividad
     form:
       add_business_unit_type: 'Agregar unidad organizativa'
       activity: 'Actividad'

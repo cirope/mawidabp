@@ -5,6 +5,8 @@ es:
   label:
     'yes': "Sí"
     'no': "No"
+    t: "Sí" # remove after fixing tests that use this key
+    f: "No" # remove after fixing tests that use this key
     total: "Total"
     by: "por"
     add: "Agregar"
@@ -1174,8 +1176,8 @@ es:
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar"
-    pdf:
-      pdf_name: "listado_de_usuarios.pdf"
+    pdf_csv:
+      pdf_csv_name: "listado_de_usuarios"
       users_count: "Cantidad de usuarios: %{count}"
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
@@ -1508,7 +1510,7 @@ es:
         work_papers: "Papeles de trabajo"
         review_user_assignments: "Integrantes"
         taggings: "Etiquetas"
-        review_objective: "Objectivo del informe"
+        review_objective: "Objetivo del informe"
         type_review: "Tipo de informe"
         subsidiary_id: "Sucursal"
         subsidiary: "Sucursal"
