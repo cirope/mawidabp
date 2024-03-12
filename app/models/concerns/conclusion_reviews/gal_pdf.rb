@@ -1070,7 +1070,7 @@ module ConclusionReviews::GalPdf
     end
 
     def observations_or_applied_data_analytics_column_widths pdf
-      [35, 65].map { |percent| pdf.percent_width percent }
+      [30, 70].map { |percent| pdf.percent_width percent }
     end
 
     def legend_column_widths pdf
