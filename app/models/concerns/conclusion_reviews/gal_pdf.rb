@@ -7,6 +7,7 @@ module ConclusionReviews::GalPdf
 
     if options[:only_executive_summary]
       put_gal_tmp_reviews_code     organization
+      put_default_watermark_on     pdf
       put_gal_executive_summary_on pdf, organization
     else
       put_gal_tmp_reviews_code     organization
