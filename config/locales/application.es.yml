@@ -1361,7 +1361,7 @@ es:
         main_recommendations: "Principales Recomendaciones de Auditoría"
         additional_comments: "Comentarios adicionales"
         exclude_regularized_findings: "Excluir hallazgos regularizados"
-        review_conclusion: Conclusion del informe
+        review_conclusion: Conclusión del informe
         applied_data_analytics: Data Analytics aplicada
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
