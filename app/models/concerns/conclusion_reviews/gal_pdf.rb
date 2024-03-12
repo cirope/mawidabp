@@ -327,7 +327,7 @@ module ConclusionReviews::GalPdf
 
         rows << [
           pdf.make_cell(content: weakness.title),
-          pdf.make_cell(weakness_origin),
+          pdf.make_cell(content: weakness_origin),
           pdf.make_cell(weakness_normalization)
         ]
       end
@@ -335,7 +335,7 @@ module ConclusionReviews::GalPdf
       rows
     end
 
-    def needs_old_data_footnote?(weakness)
+    def needs_old_data_footnote? weakness
       origination_year = weakness.origination_date&.year
       origination_year && origination_year < Date.today.year - 1
     end
@@ -352,9 +352,8 @@ module ConclusionReviews::GalPdf
       needs_old_data_footnote = needs_old_data_footnote?(weakness)
       origination_text        = weakness.origination_date ? I18n.l(weakness.origination_date, format: "%b %Y") : ''
       origination_text        = needs_old_data_footnote ? origination_text + '<sup>2</sup>' : origination_text
-      origination_text_color  = needs_old_data_footnote ? "FF0000" : "000000"
 
-      { content: origination_text, text_color: origination_text_color }
+      origination_text
     end
 
     def weakness_normalization weakness
