@@ -503,7 +503,7 @@ es:
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
       project_alt: <b>Auditoría:</b> %{project}
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
-      risk_exposure_alt: "<b>Exposición al Riesgo del proceso <i>(Reviewed risk assessment)</i>:</b> %{risk}"
+      risk_exposure_alt: "<b>Exposición de Riesgo del Proceso Evaluado:</b> %{risk}"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
       main_weaknesses: "Principales debilidades"
@@ -511,14 +511,14 @@ es:
       no_weaknesses: "No hay observaciones"
       assumed_risk_weaknesses: "Riesgo asumido"
       issue_date: Fecha
-      objective: <b>Objetivo <i>(Audit objective)</i>:</b> %{objective}
-      survey: <b>Alcance <i>(Audit scope)</i>:</b> %{survey}
-      conclusion: <b>Conclusión <i>(Assurance opinion)</i></b>
-      key_weaknesses: <b>Hallazgos significativos <i>(Key findings)</i></b>
+      objective: <b>Objetivo:</b> %{objective}
+      survey: <b>Alcance:</b> %{survey}
+      conclusion: <b>Conclusión</b>
+      key_weaknesses: <b>Hallazgos significativos</b>
       origin: Origen
       origin_footnote: ²Antigua data
       normalization: Normalización
-      observations: "<b>Próximos pasos <i>(New Steps)</i>\nInformación Adicional\n<i>(Additional information)</i></b>"
+      observations: "<b>Próximos pasos\nInformación adicional</b>"
       applied_data_analytics: Data Analytics aplicada
       download: Descargar resumen ejecutivo
     detailed_review:
