@@ -455,6 +455,7 @@ en:
       brief: "Summary audit report"
       without_score: "Audit report without rating"
       expanded: "Extended audit report"
+      only_executive_summary: "Executive summary"
     pdf:
       pdf_name: "list_of_final_audit_reports.pdf"
       filtered_by:

@@ -198,11 +198,14 @@ class ConclusionDraftReviewsController < ApplicationController
           params[:conclusion_review][:include_global_score_sheet] == '1'
         note = params[:conclusion_review][:email_note]
         review_type = params[:conclusion_review][:review_type]
+        include_executive_summary = review_type == 'only_executive_summary'
 
         if review_type == 'brief'
           export_options[:brief] = '1'
         elsif review_type == 'without_score'
           export_options[:hide_score] = '1'
+        elsif review_type == 'only_executive_summary'
+          export_options[:only_executive_summary] = '1'
         end
       end
 
@@ -216,12 +219,29 @@ class ConclusionDraftReviewsController < ApplicationController
         @conclusion_draft_review.review.global_score_sheet(current_organization, draft: true)
       end
 
+      if include_executive_summary
+        pdf_path   = @conclusion_draft_review.absolute_pdf_path
+        image_path = "#{pdf_path}.png"
+
+        pdf = MiniMagick::Image.open(pdf_path)
+
+        MiniMagick::Tool::Convert.new do |convert|
+          convert.background "white"
+          convert.flatten
+          convert.density 300
+          convert.quality 100
+          convert << pdf.path
+          convert << "png32:#{image_path}"
+        end
+      end
+
       (params[:user].try(:values).try(:reject, &:blank?) || []).each do |user_data|
         user = User.find_by(id: user_data[:id]) if user_data[:id]
         send_options = {
           note: note,
           include_score_sheet: include_score_sheet,
-          include_global_score_sheet: include_global_score_sheet
+          include_global_score_sheet: include_global_score_sheet,
+          include_executive_summary: include_executive_summary
         }
 
         if user && !users.include?(user)

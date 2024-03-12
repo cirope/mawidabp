@@ -455,6 +455,7 @@ es:
       brief: "Informe resumido"
       without_score: "Informe sin calificación"
       expanded: "Informe ampliado"
+      only_executive_summary: "Resumen ejecutivo"
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:

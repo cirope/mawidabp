@@ -229,6 +229,14 @@ class NotifierMailer < ApplicationMailer
         File.read(conclusion_review.review.absolute_global_score_sheet_path)
     end
 
+    if options[:include_executive_summary]
+      image_path = "#{conclusion_review.absolute_pdf_path}.png"
+
+      if File.exist?(image_path)
+        attachments.inline['review_image.png'] = File.read(image_path)
+      end
+    end
+
     mail to: users_to_notify_for(user).map(&:email),
          subject: truncate(prefix.upcase + title, length: 990)
   end

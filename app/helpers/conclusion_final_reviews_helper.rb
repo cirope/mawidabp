@@ -195,7 +195,7 @@ module ConclusionFinalReviewsHelper
     options = if Current.conclusion_pdf_format == 'default'
                 ['normal', 'brief', 'expanded', 'without_score']
               elsif Current.conclusion_pdf_format == 'gal'
-                ['normal', 'brief']
+                ['normal', 'brief', 'only_executive_summary']
               else
                 ['normal']
               end
