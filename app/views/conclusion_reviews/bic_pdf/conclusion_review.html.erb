@@ -158,7 +158,7 @@
           <% if weakness.repeated_of.present? %>
             <div class="row">
               <div class="col-10 offset-1">
-                <p class="fw-bold text-aqua pb-4 fs-bice-2"><%= I18n.t('conclusion_review.bic.weaknesses.repeated') %></p>
+                <p class="fw-bold text-aqua pb-4 text-justify fs-bice-2"><%= I18n.t('conclusion_review.bic.weaknesses.repeated') %></p>
               </div>
             </div>
           <% end %>
@@ -166,10 +166,10 @@
             <div class="col-10 offset-1">
               <p class="fw-bold fs-bice-3"><%= Weakness.model_name.human count: 1 %></p>
               <%= simple_format weakness.description, class: 'pt-4 text-justify fs-bice-3' %>
-              <p class="pt-4 fs-bice-3"><span class="fw-bold"><%= Weakness.human_attribute_name :effect %>:</span> <%= weakness.effect %></p>
-              <p class="pt-4 fs-bice-3"><span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.audit_recommendations' %></span> <%= weakness.audit_recommendations %></p>
+              <p class="pt-4 text-justify fs-bice-3"><span class="fw-bold"><%= Weakness.human_attribute_name :effect %>:</span> <%= weakness.effect %></p>
+              <p class="pt-4 text-justify fs-bice-3"><span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.audit_recommendations' %></span> <%= weakness.audit_recommendations %></p>
               <p class="pt-4 fs-bice-3"><span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.follow_up_date' %></span> <%= follow_up_date_weakness weakness %></p>
-              <p class="pt-4 fs-bice-3"><span class="fw-bold"><%= Answer.model_name.human count: 1 %>:</span> <%= weakness.answer %></p>
+              <p class="pt-4 text-justify fs-bice-3"><span class="fw-bold"><%= Answer.model_name.human count: 1 %>:</span> <%= weakness.answer %></p>
               <% if weakness.repeated_of.present? %>
                 <p class="pt-4 fs-bice-3"><span class="fw-bold"><%= Finding.human_attribute_name :repeated_of_id %>:</span><span class="text-aqua"> <%= weakness.repeated_of %></span></p>
               <% end %>
