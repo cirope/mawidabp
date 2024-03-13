@@ -77,7 +77,10 @@
                   data: weakness_risk_data_options
                 } %>
               <% end %>
-              <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
+
+              <% unless %w(gal).include? Current.conclusion_pdf_format %>
+                <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
+              <% end %>
             <% end %>
             <%= f.label :state, Finding.human_attribute_name(:state) %>
 

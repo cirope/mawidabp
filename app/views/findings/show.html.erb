@@ -67,12 +67,14 @@
         <strong><%= Weakness.human_attribute_name :risk %></strong>:
         <%= @finding.risk_text %>
       </p>
-
-      <p class="mb-1">
-        <strong><%= Weakness.human_attribute_name :priority %></strong>:
-        <%= @finding.priority_text %>
-      </p>
+      <% unless %w(gal).include? Current.conclusion_pdf_format %>
+        <p class="mb-1">
+          <strong><%= Weakness.human_attribute_name :priority %></strong>:
+          <%= @finding.priority_text %>
+        </p>
+      <% end %>
     <% end %>
+
     <p class="mb-1">
       <strong><%= Finding.human_attribute_name(:state) %></strong>:
       <%= @finding.state_text %>
