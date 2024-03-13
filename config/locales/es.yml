@@ -547,7 +547,7 @@
       issue_date_after_review_issue_date: "su fecha de emisión (%{date}) es mayor a la fecha de emisión del informe"
 
   wicked_pdf:
-    number_pages_html: 'Pagina <span class="page"></span> de <span class="topage"></span>'
+    number_pages_html: 'Página <span class="page"></span> de <span class="topage"></span>'
 
   workflow:
     maximum_exceeded_by_human_resource: "%{user} ha excedido el máximo de hora para la tarea: %{item}"
