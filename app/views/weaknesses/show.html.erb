@@ -71,10 +71,12 @@
       <%= @weakness.risk_text %>
     </p>
 
-    <p class="mb-1">
-      <strong><%= Weakness.human_attribute_name :priority %>:</strong>
-      <%= @weakness.priority_text %>
-    </p>
+    <% unless %w(gal).include? Current.conclusion_pdf_format %>
+      <p class="mb-1">
+        <strong><%= Weakness.human_attribute_name :priority %>:</strong>
+        <%= @weakness.priority_text %>
+      </p>
+    <% end %>
 
     <div>
       <strong><%= Weakness.human_attribute_name :audit_comments %>:</strong>
