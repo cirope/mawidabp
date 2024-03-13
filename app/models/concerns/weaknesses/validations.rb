@@ -4,7 +4,8 @@ module Weaknesses::Validations
   included do
     before_validation :clean_array_attributes
 
-    validates :risk, :priority, presence: true
+    validates :risk, presence: true
+    validates :priority, presence: true, unless: :is_gal?
     validates :audit_recommendations, presence: true, if: :notify?
     validate :review_code_has_valid_prefix
     validates :impact_risk, :probability, presence: true, if: :require_impact_risk_and_probability?
@@ -44,6 +45,10 @@ module Weaknesses::Validations
   end
 
   private
+
+    def is_gal?
+      Current.conclusion_pdf_format == 'gal'
+    end
 
     def require_impact_risk_and_probability?
       USE_SCOPE_CYCLE && !manual_risk
