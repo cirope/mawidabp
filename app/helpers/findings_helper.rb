@@ -97,7 +97,7 @@ module FindingsHelper
   def finding_show_status_change_history element_id
     link_to icon('fas', 'history'), "##{element_id}", {
       title: t('findings.form.show_status_change_history'),
-      data:  { toggle: 'collapse' }
+      data:  { bs_toggle: 'collapse' }
     }
   end
 
@@ -152,11 +152,11 @@ module FindingsHelper
 
     select nil, :user_id, sort_options_array(users),
       { prompt: true },
-      { name: :user_id, id: :user_id_select, class: 'form-control' }
+      { name: :user_id, id: :user_id_select, class: 'form-select' }
   end
 
   def finding_status_options
-    Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).map do |k, v|
+    Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS - [:assumed_risk]).map do |k, v|
       [t("findings.state.#{k}"), v.to_s]
     end
   end
@@ -249,7 +249,7 @@ module FindingsHelper
 
   def link_to_recode_tasks
     options = {
-      class: 'float-right',
+      class: 'float-end',
       title: t('finding.recode_tasks'),
       data: {
         recode_tasks: true,

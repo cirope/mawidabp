@@ -76,7 +76,7 @@
       subtitle: "OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     weaknesses_by_business_unit:
       pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -228,7 +228,7 @@
       subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     process_control_stats:
       average_effectiveness: 'Calificación promedio ponderada'
       average_effectiveness_resume:
@@ -242,7 +242,7 @@
       subtitle: "SEGUIMIENTO OBSERVACIONES POR PROCEDIMIENTO DE NEGOCIO / INFORMES DEFINITIVOS"
       without_reviews_in_the_period: "Sin informes en el periodo seleccionado"
       without_weaknesses: "Sin observaciones"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
 
   follow_up_audited_committee_report:
@@ -349,7 +349,7 @@
       pdf_name: "Reporte_de_proceso_por_objectivo_de_control_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO OBSERVACIONES PROCESO POR OBJETIVO DE CONTROL / INFORMES DEFINITIVO"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_weaknesses: "Sin observaciones"
       origination_year: "Año de origen"
       control_objective_tags: "Etiquetas objetivos de control"
@@ -361,7 +361,7 @@
       subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     weaknesses_by_business_unit:
       pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -376,7 +376,7 @@
       subtitle: "SEGUIMIENTO MAPA DE CALOR OBSERVACIONES / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       process_owner_parents: "Superiores directos responsables"
       process_owner_intermediates: "Responsables intermedios"
       process_owner_roots: "Responsables máximos"

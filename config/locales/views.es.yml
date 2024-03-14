@@ -23,13 +23,16 @@ es:
     _yes: 'Sí'
     _no: 'No'
 
+  footer:
+    support: 'Soporte'
+
   activity_groups:
     edit:
       title: 'Editar grupo de actividades'
     index:
       new: 'Nuevo grupo de actividades'
       title: 'Listado de grupos de actividades'
-      empty_html: 'No hay grupos de actividades, puede crear uno con el botón <span class="badge badge-primary">Nuevo grupo de actividades</span>'
+      empty_html: 'No hay grupos de actividades, puede crear uno con el botón <span class="badge bg-primary">Nuevo grupo de actividades</span>'
     new:
       title: 'Crear grupo de actividades'
     show:
@@ -78,14 +81,14 @@ es:
 
   business_unit_kinds:
     index:
-      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>'
+      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge bg-primary">Nuevo</span>'
   closing_interviews:
     edit:
       title: 'Editar entrevista de cierre'
     index:
       new: 'Nueva entrevista de cierre'
       title: 'Listado de entrevistas de cierre'
-      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="badge badge-primary">Nueva entrevista de cierre</span>'
+      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de cierre</span>'
       empty_search_html: 'No hay entrevistas de cierre que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear entrevista de cierre'
@@ -119,7 +122,7 @@ es:
     index:
       new: 'Nuevo documento'
       title: 'Listado de documentos'
-      empty_html: 'No hay documentos, puede crear uno con el botón <span class="badge badge-primary">Nuevo documento</span>'
+      empty_html: 'No hay documentos, puede crear uno con el botón <span class="badge bg-primary">Nuevo documento</span>'
       empty_search_html: 'No hay documentos que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear documento'
@@ -192,8 +195,8 @@ es:
       incomplete: 'Incompleta'
       repeated: 'Reiterada'
       revoked: 'Anulada'
-      criteria_mismatch: 'Difiere criterio'
-      expired: 'Desestimada / No aplica'
+      criteria_mismatch: 'Difiere Criterio'
+      expired: 'Planes no implementados'
     work_papers:
       create:
         from_comment: 'De comentario por %{user} el %{date}'
@@ -208,6 +211,9 @@ es:
     finding_answers: 'Comentarios de'
     pdf:
       issue: 'Ver en la tabla adjunta los casos bajo el código %{review_code}'
+    graphs:
+      incomplete: 'Hallazgos pendientes'
+      completed: 'Hallazgos solucionados'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -257,12 +263,12 @@ es:
     index:
       new: 'Nuevo informe externo'
       title: 'Listado de informes externos'
-      empty_html: 'No hay informes externos, puede crear una con el botón <span class="badge badge-primary">Nuevo memo</span>'
+      empty_html: 'No hay informes externos, puede crear una con el botón <span class="badge bg-primary">Nuevo memo</span>'
       empty_search_html: 'No hay informes externos que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear informe externo'
     form:
-      markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+      markdown_help_html: '<span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}'
       add_file_model: 'Agregar archivo'
       download_cover: 'Descargar caratula'
     show:
@@ -274,14 +280,14 @@ es:
     index:
       new: 'Nueva noticia'
       title: 'Listado de noticias'
-      empty_html: 'No hay noticias, puede crear una con el botón <span class="badge badge-primary">Nueva noticia</span>'
+      empty_html: 'No hay noticias, puede crear una con el botón <span class="badge bg-primary">Nueva noticia</span>'
       empty_search_html: 'No hay noticias que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear noticia'
       tagging: 'Agregar etiqueta'
       image_model: 'Agregar imagen'
     form:
-      markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+      markdown_help_html: '<span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}'
     show:
       title: 'Ver noticia'
 
@@ -291,7 +297,7 @@ es:
     index:
       new: 'Nueva entrevista de inicio'
       title: 'Listado de entrevistas de inicio'
-      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="badge badge-primary">Nueva entrevista de inicio</span>'
+      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de inicio</span>'
       empty_search_html: 'No hay entrevistas de inicio que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear entrevista de inicio'
@@ -651,6 +657,8 @@ es:
     conclusion_review_receiver: 'Receptor/es del informe'
     temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.'
     finding_warning_expire_days: 'Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad'
+    finding_by_current_user: 'Filtrar observaciones por usuario actual'
+    enable_close_date_edition: 'Habilitar edición de fecha de cierre'
 
   tags:
     edit:
@@ -661,7 +669,7 @@ es:
     index:
       new: 'Nueva etiqueta'
       title: 'Listado de etiquetas'
-      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="badge badge-primary">Nueva etiqueta</span>'
+      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="badge bg-primary">Nueva etiqueta</span>'
     list:
       childless: 'Sin subetiquetas'
     new:
@@ -899,9 +907,44 @@ es:
     form:
       add_risk_assessment_weight: 'Agregar ponderador'
 
+  risk_registries:
+    edit:
+      title: 'Editar registro de riesgo'
+    form:
+      new_risk_categories: 'Luego de crear el registro de riesgo podrá completar la carga de los riesgos'
+    index:
+      new: 'Nuevo registro de riesgo'
+      title: 'Listado de registros de riesgo'
+      empty_html: 'No hay registros de riesgo, puede crear uno con el botón <span class="badge bg-primary">Nuevo registro de riesgo</span>'
+      empty_search_html: 'No hay registros de riesgo que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear registro de riesgo'
+    show:
+      title: 'Ver registro de riesgo'
+    risk_categories:
+      new: 'Agregar categoría de riesgo'
+    risks:
+      new: 'Agregar riesgo'
+
   risk_score_items:
     form:
       add_risk_score_item: 'Agregar valor'
+
+  risks:
+    likelihoods:
+      insignificant: 'Insignificante'
+      minor: 'Menor'
+      moderate: 'Moderada'
+      high: 'Alta'
+      catastrophic: 'Catastrófica'
+    impacts:
+      rare: 'Raro'
+      unlikely: 'Improbable'
+      moderate: 'Moderado'
+      likely: 'Probable'
+      almost_certain: 'Muy probable'
+    new:
+      control_objective: 'Agregar objetivo de control'
 
   versions:
     index:
@@ -927,7 +970,7 @@ es:
     index:
       new: 'Nueva plantilla de observación'
       title: 'Listado de plantillas de observación'
-      empty_html: 'No hay plantillas de observación, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de observación</span>'
+      empty_html: 'No hay plantillas de observación, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de observación</span>'
       empty_search_html: 'No hay plantillas de observación que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear plantilla de observación'
@@ -935,6 +978,16 @@ es:
       title: 'Ver plantilla de observación'
     form:
       add_control_objective: 'Agregar objetivo de control'
+
+  welcome:
+    completed_findings: 'Hallazgos solucionados'
+    commented_on: 'comentó en'
+    current_user_answers: 'Comentarios propios'
+    latest_answers: 'Últimos comentarios'
+    latest_findings: 'Hallazgos de los últimos meses'
+    pending_findings: 'Hallazgos pendientes'
+    version: 'Versión'
+    welcome: 'Bienvenido'
 
   work_papers:
     show:

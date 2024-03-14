@@ -1,14 +1,18 @@
-<div class="row">
-  <div class="col-md-4">
-    <%= link_to t('login_records.show.list'), { action: :index },
-      class: 'btn btn-outline-secondary btn-lg btn-block' %>
-  </div>
-  <div class="col-md-4">
-    <%= link_to t('error_records.show.list'), { controller: :error_records, action: :index },
-      class: 'btn btn-outline-secondary btn-lg btn-block' %>
-  </div>
-  <div class="col-md-4">
-    <%= link_to t('versions.index.title'), versions_path,
-      class: 'btn btn-outline-secondary btn-lg btn-block' %>
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4 d-grid">
+        <%= link_to t('login_records.show.list'), { action: :index },
+          class: 'btn btn-outline-secondary btn-lg' %>
+      </div>
+      <div class="col-md-4 d-grid">
+        <%= link_to t('error_records.show.list'), { controller: :error_records, action: :index },
+          class: 'btn btn-outline-secondary btn-lg' %>
+      </div>
+      <div class="col-md-4 d-grid">
+        <%= link_to t('versions.index.title'), versions_path,
+          class: 'btn btn-outline-secondary btn-lg' %>
+      </div>
+    </div>
   </div>
 </div>

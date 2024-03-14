@@ -1,222 +1,226 @@
-<%= simple_form_for @conclusion_draft_review do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @conclusion_draft_review do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <% if @conclusion_draft_review.review&.persisted? %>
-          <%= f.input :review, label: ConclusionDraftReview.human_attribute_name(:review_id),
-            input_html: { value: @conclusion_draft_review.review.identification, readonly: true } %>
-          <%= f.input :review_id, as: :hidden %>
-        <% else %>
-          <%= f.input :review_id, collection: Review.list_without_draft_review.map { |r| [truncate(r.long_identification, length: 50), r.id] },
-            prompt: true, input_html: { autofocus: true } %>
-        <% end %>
-        <%= f.input :business_unit, input_html: {
-          value: (@conclusion_draft_review.review.business_unit.name if @conclusion_draft_review.review&.persisted?),
-          readonly: true } %>
-        <%= f.input :project, input_html: {
-          value: (@conclusion_draft_review.review.plan_item.project if @conclusion_draft_review.review&.persisted?),
-          readonly: true } %>
-        <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
-          value: (score_text_for(@conclusion_draft_review) if @conclusion_draft_review.review&.persisted?),
-          readonly: true } %>
-        <% if USE_SCOPE_CYCLE %>
-          <%= f.input :score_alt, label: Review.human_attribute_name(:score_alt), input_html: {
-            value: (score_alt_text_for(@conclusion_draft_review) if @conclusion_draft_review.review&.persisted?),
-            readonly: true } %>
-        <% end %>
-        <% if %(default pat nbc).include? Current.conclusion_pdf_format %>
-          <%= f.input :issue_date, as: :date_picker %>
-        <% end %>
-      </div>
-      <div class="col-md-6">
-        <% if Current.conclusion_pdf_format == 'gal' %>
-          <% if SHOW_CONCLUSION_AS_OPTIONS %>
-            <%= f.input :conclusion, collection: conclusion_options, prompt: true, input_html: {
-              data: {
-                corrective_actions_update_url: corrective_actions_update_conclusion_draft_reviews_path
-              }
-            } %>
-          <% else %>
-            <%= f.input :conclusion, input_html: { rows: 3 } %>
-          <% end %>
-          <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true %>
-          <%= f.input :evolution_justification, input_html: { rows: 1 } %>
-        <% else %>
-          <% if SHOW_CONCLUSION_AS_OPTIONS %>
-            <%= f.input :conclusion, collection: conclusion_options, prompt: true %>
-          <% else %>
-            <%= f.input :conclusion, input_html: { rows: 3 } %>
-          <% end %>
-          <%= f.input :applied_procedures, input_html: { rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
-        <% end %>
-
-        <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
-          <%= f.input :recipients, input_html: { rows: USE_SCOPE_CYCLE ? 2 : 3 } %>
-
-          <% if USE_SCOPE_CYCLE %>
-            <%= f.input :additional_comments, input_html: { rows: 2 } %>
-          <% end %>
-        <% else %>
-          <%= f.input :issue_date, as: :date_picker %>
-        <% end %>
-      </div>
-    </div>
-
-    <% if Current.conclusion_pdf_format == 'gal' %>
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :recipients, input_html: { rows: 4 } %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :sectors, input_html: { rows: 4 } %>
-        </div>
-      </div>
-
-      <% if show_review_best_practice_comments? %>
+      <div class="form-inputs">
         <div class="row">
           <div class="col-md-6">
-            <%= f.input :main_weaknesses_text, input_html: { rows: 4 } %>
+            <% if @conclusion_draft_review.review&.persisted? %>
+              <%= f.input :review, label: ConclusionDraftReview.human_attribute_name(:review_id),
+                input_html: { value: @conclusion_draft_review.review.identification, readonly: true } %>
+              <%= f.input :review_id, as: :hidden %>
+            <% else %>
+              <%= f.input :review_id, collection: Review.list_without_draft_review.map { |r| [truncate(r.long_identification, length: 50), r.id] },
+                prompt: true, input_html: { autofocus: true } %>
+            <% end %>
+            <%= f.input :business_unit, input_html: {
+              value: (@conclusion_draft_review.review.business_unit.name if @conclusion_draft_review.review&.persisted?),
+              readonly: true } %>
+            <%= f.input :project, input_html: {
+              value: (@conclusion_draft_review.review.plan_item.project if @conclusion_draft_review.review&.persisted?),
+              readonly: true } %>
+            <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
+              value: (score_text_for(@conclusion_draft_review) if @conclusion_draft_review.review&.persisted?),
+              readonly: true } %>
+            <% if USE_SCOPE_CYCLE %>
+              <%= f.input :score_alt, label: Review.human_attribute_name(:score_alt), input_html: {
+                value: (score_alt_text_for(@conclusion_draft_review) if @conclusion_draft_review.review&.persisted?),
+                readonly: true } %>
+            <% end %>
+            <% if %(default pat nbc).include? Current.conclusion_pdf_format %>
+              <%= f.input :issue_date, as: :date_picker %>
+            <% end %>
           </div>
           <div class="col-md-6">
-            <%= f.input :corrective_actions, input_html: { rows: 4 } %>
+            <% if Current.conclusion_pdf_format == 'gal' %>
+              <% if SHOW_CONCLUSION_AS_OPTIONS %>
+                <%= f.input :conclusion, collection: conclusion_options, prompt: true, input_html: {
+                  data: {
+                    corrective_actions_update_url: corrective_actions_update_conclusion_draft_reviews_path
+                  }
+                } %>
+              <% else %>
+                <%= f.input :conclusion, input_html: { rows: 3 } %>
+              <% end %>
+              <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true %>
+              <%= f.input :evolution_justification, input_html: { rows: 1 } %>
+            <% else %>
+              <% if SHOW_CONCLUSION_AS_OPTIONS %>
+                <%= f.input :conclusion, collection: conclusion_options, prompt: true %>
+              <% else %>
+                <%= f.input :conclusion, input_html: { rows: 3 } %>
+              <% end %>
+              <%= f.input :applied_procedures, input_html: { rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
+            <% end %>
+
+            <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
+              <%= f.input :recipients, input_html: { rows: USE_SCOPE_CYCLE ? 2 : 3 } %>
+
+              <% if USE_SCOPE_CYCLE %>
+                <%= f.input :additional_comments, input_html: { rows: 2 } %>
+              <% end %>
+            <% else %>
+              <%= f.input :issue_date, as: :date_picker %>
+            <% end %>
           </div>
         </div>
-      <% end %>
 
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :observations, input_html: { rows: 4 } %>
-        </div>
-        <div class="col-md-6 mt-4">
+        <% if Current.conclusion_pdf_format == 'gal' %>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :recipients, input_html: { rows: 4 } %>
+            </div>
+            <div class="col-md-6">
+              <%= f.input :sectors, input_html: { rows: 4 } %>
+            </div>
+          </div>
+
           <% if show_review_best_practice_comments? %>
-            <%= f.input :affects_compliance, input_html: {
-              data: {
-                corrective_actions_update_url: corrective_actions_update_conclusion_draft_reviews_path
-              }
-            } %>
-          <% else %>
-            <%= f.input :collapse_control_objectives %>
+            <div class="row">
+              <div class="col-md-6">
+                <%= f.input :main_weaknesses_text, input_html: { rows: 4 } %>
+              </div>
+              <div class="col-md-6">
+                <%= f.input :corrective_actions, input_html: { rows: 4 } %>
+              </div>
+            </div>
           <% end %>
-        </div>
-      </div>
-    <% elsif Current.conclusion_pdf_format == 'bic' %>
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :previous_identification %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :previous_date, as: :date_picker %>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <% @conclusion_draft_review.build_review unless @conclusion_draft_review.review %>
-          <%= f.simple_fields_for :review do |r_f| %>
-            <%= r_f.input :description, input_html: { rows: 4 } %>
-            <%= r_f.input :id, as: :hidden %>
-          <% end %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :scope, input_html: { rows: 4 } %>
-        </div>
-      </div>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :observations, input_html: { rows: 4 } %>
+            </div>
+            <div class="col-md-6 mt-4">
+              <% if show_review_best_practice_comments? %>
+                <%= f.input :affects_compliance, input_html: {
+                  data: {
+                    corrective_actions_update_url: corrective_actions_update_conclusion_draft_reviews_path
+                  }
+                } %>
+              <% else %>
+                <%= f.input :collapse_control_objectives %>
+              <% end %>
+            </div>
+          </div>
+        <% elsif Current.conclusion_pdf_format == 'bic' %>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :previous_identification %>
+            </div>
+            <div class="col-md-6">
+              <%= f.input :previous_date, as: :date_picker %>
+            </div>
+          </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :reference, input_html: { rows: 4 } %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :observations, input_html: { rows: 4 } %>
-        </div>
-      </div>
+          <div class="row">
+            <div class="col-md-6">
+              <% @conclusion_draft_review.build_review unless @conclusion_draft_review.review %>
+              <%= f.simple_fields_for :review do |r_f| %>
+                <%= r_f.input :description, input_html: { rows: 4 } %>
+                <%= r_f.input :id, as: :hidden %>
+              <% end %>
+            </div>
+            <div class="col-md-6">
+              <%= f.input :scope, input_html: { rows: 4 } %>
+            </div>
+          </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :recipients, input_html: { rows: 4 } %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :main_recommendations, input_html: { rows: 4 } %>
-        </div>
-      </div>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :reference, input_html: { rows: 4 } %>
+            </div>
+            <div class="col-md-6">
+              <%= f.input :observations, input_html: { rows: 4 } %>
+            </div>
+          </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :exclude_regularized_findings %>
-        </div>
-      </div>
-    <% end %>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :recipients, input_html: { rows: 4 } %>
+            </div>
+            <div class="col-md-6">
+              <%= f.input :main_recommendations, input_html: { rows: 4 } %>
+            </div>
+          </div>
 
-    <% if show_review_best_practice_comments? %>
-      <div id="best_practice_comments_container">
-        <% if @conclusion_draft_review.review&.persisted? %>
-          <%= render 'best_practice_comments', f: f %>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :exclude_regularized_findings %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if show_review_best_practice_comments? %>
+          <div id="best_practice_comments_container">
+            <% if @conclusion_draft_review.review&.persisted? %>
+              <%= render 'best_practice_comments', f: f %>
+            <% end %>
+          </div>
         <% end %>
       </div>
-    <% end %>
-  </div>
 
-  <div id="approval_text">
-    <%= content_tag(:span, t('conclusion_draft_review.approved'),
-      :class => 'badge badge-success mr-1', :id => :approved,
-      :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
-    <span id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
-      <span class="badge badge-danger mr-1">
-        <%= t('conclusion_draft_review.not_approved') %>
-      </span>
-      <% @conclusion_draft_review.review.try(:must_be_approved?) %>
-      <%= link_to t('error.show_details'), '#', :onclick => 'showOrHideErrors(); return false;',
-          :id => :show_or_hide_link %>
-    </span> |
-    <span>
-      <%= link_to t('conclusion_draft_review.check_for_approval'),
-        {:action => :check_for_approval, :format => :json}, {:id => 'check_for_approval'} %>
-    </span>
-    <% if @conclusion_draft_review.updated_at %>
-      <span>
-        | <%= t('conclusion_draft_review.last_verified_date',
-          :date => l(@conclusion_draft_review.updated_at, :format => :long)) %>
-      </span>
-    <% end %>
-  </div>
-
-  <div id="approval_errors_detail" class="pt-3" style="display: none;">
-    <div id="error_list_container">
-      <%= array_to_ul(@conclusion_draft_review.review.try(:approval_errors), :id => :error_list) %>
-    </div>
-
-    <div id="force_approval_prompt" <%== @conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"' %>>
-      <%= f.input :force_approval, as: :boolean %>
-    </div>
-  </div>
-
-  <% if USE_SCOPE_CYCLE %>
-    <h4 class="mt-3">
-      <%= Annex.model_name.human count: 0 %>
-    </h4>
-
-    <div id="annexes">
-      <% @conclusion_draft_review.annexes.each do |annex| %>
-        <% annex_child_index = @conclusion_draft_review.annexes.index annex %>
-        <%= f.simple_fields_for :annexes, annex, child_index: annex_child_index do |ann_f| %>
-          <%= render 'annex', f: ann_f %>
+      <div id="approval_text">
+        <%= content_tag(:span, t('conclusion_draft_review.approved'),
+          :class => 'badge bg-success me-1', :id => :approved,
+          :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
+        <span id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
+          <span class="badge bg-danger me-1">
+            <%= t('conclusion_draft_review.not_approved') %>
+          </span>
+          <% @conclusion_draft_review.review.try(:must_be_approved?) %>
+          <%= link_to t('error.show_details'), '#', :onclick => 'showOrHideErrors(); return false;',
+              :id => :show_or_hide_link %>
+        </span> |
+        <span>
+          <%= link_to t('conclusion_draft_review.check_for_approval'),
+            {:action => :check_for_approval, :format => :json}, {:id => 'check_for_approval'} %>
+        </span>
+        <% if @conclusion_draft_review.updated_at %>
+          <span>
+            | <%= t('conclusion_draft_review.last_verified_date',
+              :date => l(@conclusion_draft_review.updated_at, :format => :long)) %>
+          </span>
         <% end %>
+      </div>
+
+      <div id="approval_errors_detail" class="pt-3" style="display: none;">
+        <div id="error_list_container">
+          <%= array_to_ul(@conclusion_draft_review.review.try(:approval_errors), :id => :error_list) %>
+        </div>
+
+        <div id="force_approval_prompt" <%== @conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"' %>>
+          <%= f.input :force_approval, as: :boolean %>
+        </div>
+      </div>
+
+      <% if USE_SCOPE_CYCLE %>
+        <h4 class="mt-3">
+          <%= Annex.model_name.human count: 0 %>
+        </h4>
+
+        <div id="annexes">
+          <% @conclusion_draft_review.annexes.each do |annex| %>
+            <% annex_child_index = @conclusion_draft_review.annexes.index annex %>
+            <%= f.simple_fields_for :annexes, annex, child_index: annex_child_index do |ann_f| %>
+              <%= render 'annex', f: ann_f %>
+            <% end %>
+          <% end %>
+        </div>
+
+        <%= link_to_add_fields t('conclusion_draft_review.add_annex'), f, :annexes, 'annex', { insert_into: "#annexes", association: 'annexes' } %>
       <% end %>
-    </div>
 
-    <%= link_to_add_fields t('conclusion_draft_review.add_annex'), f, :annexes, 'annex', { insert_into: "#annexes", association: 'annexes' } %>
-  <% end %>
+      <hr />
 
-  <hr />
-
-  <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
-    <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary' %>
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.input :lock_version, as: :hidden %>
+        <%= f.submit class: 'btn btn-primary' %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>
 
 <%= render 'bundle' %>
 
@@ -265,13 +269,13 @@
           }
 
           $('#not_approved').
-            find('.badge-danger').
-            toggleClass('badge-danger badge-warning')
+            find('.bg-danger').
+            toggleClass('bg-danger bg-warning')
 
           setTimeout(function () {
             $('#not_approved').
-              find('.badge-warning').
-              toggleClass('badge-warning badge-danger')
+              find('.bg-warning').
+              toggleClass('bg-warning bg-danger')
           }, 2000)
         }
       });

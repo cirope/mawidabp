@@ -1,6 +1,6 @@
 <% if plan_item.try(:resource_utilizations).present? %>
   <p>
-    <%= link_to '#estimated_cost_details', data: { toggle: 'collapse' } do %>
+    <%= link_to '#estimated_cost_details', data: { bs_toggle: 'collapse' } do %>
       <abbr title="<%= t 'workflow.human_resources' %>"><%= t 'workflow.human_resources_abbr' %></abbr>:
       <%= '%.2f' % plan_item.human_units %>
       <abbr title="<%= t 'workflow.material_resources' %>"><%= t 'workflow.material_resources_abbr' %></abbr>:
@@ -8,7 +8,7 @@
     <% end %>
   </p>
 
-  <div id="estimated_cost_details" class="collapse float-left">
+  <div id="estimated_cost_details" class="collapse float-start">
     <div>
       <ul>
         <% plan_item.resource_utilizations.each do |ru| %>

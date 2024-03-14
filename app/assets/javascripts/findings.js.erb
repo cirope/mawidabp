@@ -119,7 +119,7 @@ jQuery(function ($) {
 
   $(document).on('change', '[data-override-follow-up-date]', changeFollowUpDate)
 
-  $(document).on('change', '[data-toggle-priority]', function () {
+  $(document).on('change', '[data-bs-toggle-priority]', function () {
     var enabledFor = $(this).data('togglePriority')
 
     $('[name$="[priority]"]').
@@ -133,7 +133,7 @@ jQuery(function ($) {
     $('[name$="[priority]"]').val(risk_value)
   })
 
-  $(document).on('change', '[data-toggle-compliance]', function () {
+  $(document).on('change', '[data-bs-toggle-compliance]', function () {
     var disabledFor = $(this).data('toggleCompliance')
     var $compliance = $('select[name$="[compliance]"]')
 
@@ -359,7 +359,7 @@ jQuery(function ($) {
     }
   })
 
-  $(document).on('change', '[data-toggle-risk-disabled-attr]', function () {
+  $(document).on('change', '[data-bs-toggle-risk-disabled-attr]', function () {
     var manual_risk = $(this).is(':checked')
     
     if($(this).data('replaceWithOriginalValueWhenDisabled')) {

@@ -1,48 +1,50 @@
-<% if params[:control_objective].blank? %>
-  <%= render partial: 'shared/search', locals: {
-    options: { columns_for_sort: Oportunity.columns_for_sort },
-    columns: search_columns_for_model(Oportunity, ['organization'])
-  } %>
-<% end %>
-<table class="table table-sm table-striped table-hover">
-  <thead id="column_headers">
-    <tr>
-      <th></th>
-      <%= make_filterable_column Review.model_name.human, nil, 'review' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'd-none d-sm-table-cell' }, 'project' %>
-      <%= make_filterable_column Oportunity.human_attribute_name(:review_code), nil, 'review_code' %>
-      <%= make_filterable_column Oportunity.human_attribute_name(:title), { :class => 'd-none d-sm-table-cell' }, 'title' %>
-      <%= make_not_available_column Oportunity.human_attribute_name(:state), :class => 'd-none d-sm-table-cell' %>
-      <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'd-none d-sm-table-cell' }, 'tags' %>
-      <%= make_not_available_column WorkPaper.model_name.human(count: 0), :class => 'd-none d-sm-table-cell' %>
-      <th colspan="2" class="text-right"><%= link_to_search if params[:control_objective].blank? %></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @oportunities.each do |oportunity| %>
-      <tr <%== 'class="text-muted"' if oportunity.is_in_a_final_review? %>>
-        <td><%= finding_updated_at_text oportunity %></td>
-        <td><%= show_review_with_close_date_as_abbr oportunity.review %></td>
-        <td class="d-none d-sm-table-cell"><%= super_truncate oportunity.review.try(:plan_item).try(:project), 20 %></td>
-        <td><%= show_finding_review_code_with_decription_as_abbr(oportunity) %></td>
-        <td class="d-none d-sm-table-cell"><%= super_truncate oportunity.title, 20 %></td>
-        <td class="d-none d-sm-table-cell"><%= oportunity.state_text %></td>
-        <td class="d-none d-sm-table-cell"><%= tags oportunity.tags.reload %></td>
-        <td class="d-none d-sm-table-cell"><%= t oportunity.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
-        <td class="text-right"><%= link_to_show oportunity %></td>
-        <td class="text-right"><%= link_to_edit edit_oportunity_path(oportunity) %></td>
-      </tr>
+<div class="card">
+  <div class="card-body">
+    <% if params[:control_objective].blank? %>
+      <%= render partial: 'shared/search', locals: {
+        options: { columns_for_sort: Oportunity.columns_for_sort },
+        columns: search_columns_for_model(Oportunity, ['organization'])
+      } %>
     <% end %>
-  </tbody>
-</table>
+    <table class="table table-sm table-striped table-hover">
+      <thead id="column_headers">
+        <tr>
+          <th></th>
+          <%= make_filterable_column Review.model_name.human, nil, 'review' %>
+          <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'd-none d-sm-table-cell' }, 'project' %>
+          <%= make_filterable_column Oportunity.human_attribute_name(:review_code), nil, 'review_code' %>
+          <%= make_filterable_column Oportunity.human_attribute_name(:title), { :class => 'd-none d-sm-table-cell' }, 'title' %>
+          <%= make_not_available_column Oportunity.human_attribute_name(:state), :class => 'd-none d-sm-table-cell' %>
+          <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'd-none d-sm-table-cell' }, 'tags' %>
+          <%= make_not_available_column WorkPaper.model_name.human(count: 0), :class => 'd-none d-sm-table-cell' %>
+          <th colspan="2" class="text-end"><%= link_to_search if params[:control_objective].blank? %></th>
+        </tr>
+      </thead>
 
-<hr />
+      <tbody>
+        <% @oportunities.each do |oportunity| %>
+          <tr <%== 'class="text-muted"' if oportunity.is_in_a_final_review? %>>
+            <td><%= finding_updated_at_text oportunity %></td>
+            <td><%= show_review_with_close_date_as_abbr oportunity.review %></td>
+            <td class="d-none d-sm-table-cell"><%= super_truncate oportunity.review.try(:plan_item).try(:project), 20 %></td>
+            <td><%= show_finding_review_code_with_decription_as_abbr(oportunity) %></td>
+            <td class="d-none d-sm-table-cell"><%= super_truncate oportunity.title, 20 %></td>
+            <td class="d-none d-sm-table-cell"><%= oportunity.state_text %></td>
+            <td class="d-none d-sm-table-cell"><%= tags oportunity.tags.reload %></td>
+            <td class="d-none d-sm-table-cell"><%= t oportunity.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
+            <td class="text-end"><%= link_to_show oportunity %></td>
+            <td class="text-end"><%= link_to_edit edit_oportunity_path(oportunity) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<div class="clearfix">
-  <%= paginate @oportunities %>
-  <% if params[:control_objective].to_i > 0 %>
-    <%= link_to t('label.new'), new_oportunity_path(
-      :control_objective_item => params[:control_objective]), class: 'btn btn-primary' %>
-  <% end %>
+    <div class="clearfix">
+      <%= paginate @oportunities %>
+      <% if params[:control_objective].to_i > 0 %>
+        <%= link_to t('label.new'), new_oportunity_path(
+          :control_objective_item => params[:control_objective]), class: 'btn btn-primary' %>
+      <% end %>
+    </div>
+  </div>
 </div>
