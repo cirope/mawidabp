@@ -1,8 +1,6 @@
 class Users::ReleasesController < ApplicationController
   include Users::Finders
 
-  respond_to :html
-
   before_action :auth, :check_privileges, :set_user, :set_title
 
   # * GET /users/releases/1/edit
@@ -16,6 +14,6 @@ class Users::ReleasesController < ApplicationController
       with_reviews:  params[:with_reviews]  == '1'
     )
 
-    respond_with @user, location: users_path
+    redirect_with_notice @user, url: users_url
   end
 end

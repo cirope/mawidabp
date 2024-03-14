@@ -1,17 +1,14 @@
 require 'test_helper'
 
 class ApplicationControllerTest < ActionController::TestCase
-  fixtures :users, :organizations
-
   setup do
     @request.host = "#{organizations(:cirope).prefix}.test.host.co"
 
     @controller.send(:reset_session)
     @controller.send(:session)[:user_id] = users(:administrator).id
     @controller.send(:session)[:last_access] = 30.seconds.ago
-    @controller.send('response=', @response)
-    @controller.send('request=', @request)
-
+    @controller.send(:set_response!, response)
+    @controller.request = @request
     @controller.class.instance_variable_set(:@controller_name, nil)
     @controller.class.instance_variable_set(:@controller_path, nil)
 
@@ -333,10 +330,10 @@ class ApplicationControllerTest < ActionController::TestCase
 
     generated_range = @controller.send(:make_date_range, {
         :from_date => '2011-10-09', :to_date => '2000-10-09'
-      }).map { |d| d.to_s(:db) }
+      }).map { |d| d.to_fs(:db) }
 
     # Fechas válidas con el orden invertido
-    assert_equal [to_date.to_s(:db), from_date.to_s(:db)], generated_range
+    assert_equal [to_date.to_fs(:db), from_date.to_fs(:db)], generated_range
   end
 
   test 'extract operator' do

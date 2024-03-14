@@ -1,6 +1,13 @@
 /* global State */
 
 jQuery(function ($) {
+  var timeLeft                  = $('[data-time-left]').attr('data-time-left')
+  var sessionExpiresMessage     = $('[data-time-left]').attr('data-session-expires-message')
+  var sessionTimeMessage        = $('[data-time-left]').attr('data-session-time-message')
+  var rejectedDataFormatMessage = $('[data-time-left]').attr('data-rejected-data-format-message')
+  var unsavedDataWarningMessage = $('[data-time-left]').attr('data-unsaved-data-warning-message')
+  var validationFailedMessage   = $('[data-time-left]').attr('data-validation-failed-message')
+
   var setExpiration = function (expired) {
     State.sessionExpire = State.sessionExpire || expired
 
@@ -51,6 +58,24 @@ jQuery(function ($) {
       })
     }
   }, 15000)
+
+  setTimeout(function () {
+    State.showMessages = [{
+      time: (timeLeft - 2) * 60 - 10,
+      message: sessionExpiresMessage,
+      expired: false
+    }, {
+      time: timeLeft * 60 - 10,
+      message: sessionTimeMessage,
+      expired: true
+    }]
+  }, 10000)
+
+  setTimeout(function () {
+    State.rejectedDataFormat      = rejectedDataFormatMessage
+    State.unsavedDataWarning      = unsavedDataWarningMessage
+    State.validationFailedMessage = validationFailedMessage
+  })
 
   $(document).bind({
     ajaxSuccess: resetTimers

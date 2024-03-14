@@ -31,7 +31,7 @@ module Findings::Search
           column:            column,
           operator:          SEARCH_ALLOWED_OPERATORS.values,
           mask:              "%s",
-          conversion_method: ->(value) { Timeliness.parse(value, :date).to_s(:db) },
+          conversion_method: ->(value) { Timeliness.parse(value, :date).to_fs(:db) },
           regexp:            SEARCH_DATE_REGEXP
         }
       end

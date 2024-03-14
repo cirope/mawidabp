@@ -48,6 +48,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
       }, as: :pdf
     end
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('login_records.pdf_list_name', from_date: from_date.to_formatted_s(:db),
         to_date: to_date.to_formatted_s(:db)), LoginRecord.table_name)

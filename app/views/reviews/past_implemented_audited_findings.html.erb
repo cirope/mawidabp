@@ -21,6 +21,16 @@
 <% end %>
 
 <script type="text/javascript">
-  $('#past_implemented_audited_findings').effect('highlight', {}, 2000);
+  var codeExecuted = false;
+
+  document.addEventListener('DOMContentLoaded', function(e) {
+    if ("importmapScriptsLoaded" in window) {
+      if (!codeExecuted) {
+        $('#past_implemented_audited_findings').effect('highlight', {}, 2000);
+
+        codeExecuted = true;
+      }
+    }
+  });
 </script>
 

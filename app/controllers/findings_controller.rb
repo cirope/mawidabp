@@ -5,8 +5,6 @@ class FindingsController < ApplicationController
   include Findings::SetFinding
   include Reports::FileResponder
 
-  respond_to :html
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_finding, only: [:show,
                                      :edit,
@@ -40,15 +38,18 @@ class FindingsController < ApplicationController
 
   # * PATCH /incomplete/findings/1
   def update
-    update_resource @finding, finding_params
+    if @finding.update finding_params
 
-    location = if @finding.invalid? || @finding.reload.pending?
-                 edit_finding_url params[:completion_state], @finding
-               else
-                 finding_url 'complete', @finding
-               end
+      location = if @finding.reload.pending?
+                  edit_finding_url params[:completion_state], @finding
+                else
+                  finding_url 'complete', @finding
+                end
 
-    respond_with @finding, location: location unless performed?
+      redirect_with_notice @finding, url: location unless performed?
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # * GET /incomplete/findings/1/edit_bic_sigen_fields
@@ -171,7 +172,7 @@ class FindingsController < ApplicationController
       @title = title_pdf
 
       render pdf: @title.downcase.gsub(/\s+/, '_').sanitized_for_filename,
-             template: 'findings/pdf/index.html.erb',
+            template: 'findings/pdf/index',
              margin: {
                top:    15,
                bottom: 10,
@@ -180,16 +181,16 @@ class FindingsController < ApplicationController
              },
              header: {
                html: {
-                 template: 'shared/pdf/generic_report_header.html.erb'
+                 template: 'shared/pdf/generic_report_header'
                }
              },
              footer: {
                html: {
-                 template: 'shared/pdf/generic_report_footer.html.erb'
+                 template: 'shared/pdf/generic_report_footer'
                }
              },
              orientation: 'Landscape',
-             layout: 'pdf.html',
+             layout: 'pdf',
              disposition: 'attachment',
              show_as_html: false
     end

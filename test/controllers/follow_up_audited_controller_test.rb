@@ -95,6 +95,7 @@ class FollowUpAuditedControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_audited.weaknesses_by_user.pdf_name'), 'weaknesses_by_user', 0
 		)
@@ -127,6 +128,7 @@ class FollowUpAuditedControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_audited_committee_report.process_control_stats.pdf_name',
         :from_date => 1.years.ago.to_date.to_formatted_s(:db),

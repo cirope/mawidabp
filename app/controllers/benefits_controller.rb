@@ -1,6 +1,4 @@
 class BenefitsController < ApplicationController
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :set_benefit, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
@@ -27,20 +25,26 @@ class BenefitsController < ApplicationController
   def create
     @benefit = current_organization.benefits.new benefit_params
 
-    @benefit.save
-    respond_with @benefit
+    if @benefit.save
+      redirect_with_notice @benefit
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /benefits/1
   def update
-    update_resource @benefit, benefit_params
-    respond_with @benefit
+    if @benefit.update benefit_params
+      redirect_with_notice @benefit
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # DELETE /benefits/1
   def destroy
     @benefit.destroy
-    respond_with @benefit
+    redirect_with_notice @benefit
   end
 
   private

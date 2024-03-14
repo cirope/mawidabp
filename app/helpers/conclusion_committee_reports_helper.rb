@@ -1,5 +1,7 @@
 module ConclusionCommitteeReportsHelper
   def synthesis_report_score_average(title, scores)
+    scores.compact!
+
     unless scores.blank?
       raw("<strong>#{title}</strong>: <em>#{(scores.sum.to_f / scores.size).round}%</em>")
     else
@@ -15,7 +17,7 @@ module ConclusionCommitteeReportsHelper
     unless internal_audits_by_business_unit.blank?
       count = 0
       total = internal_audits_by_business_unit.inject(0) do |sum, data|
-        scores = data[:review_scores]
+        scores = data[:review_scores].compact!
 
         if scores.blank?
           sum

@@ -60,66 +60,76 @@ var Privileges = {
   }
 };
 
-jQuery(function() {
-  $('#role_role_type').data('resetValue', $('#role_role_type').val());
+var codeExecuted = false;
 
-  $(':checkbox').click(function() {
-    var element = $(this);
-    var checked = element.is(':checked');
-    var type = element.data('type');
+document.addEventListener('DOMContentLoaded', function(e) {
+  if ("importmapScriptsLoaded" in window) {
+    if (!codeExecuted) {
+      $(function() {
+        $('#role_role_type').data('resetValue', $('#role_role_type').val());
 
-    switch(type) {
-      case 'approval':
-        if(checked) {
-          Privileges.markSiblings(element, 'read', checked);
-        }
+        $(':checkbox').click(function() {
+          var element = $(this);
+          var checked = element.is(':checked');
+          var type = element.data('type');
 
-        Privileges.markChildren(element, checked);
-        break;
-      case 'erase':
-        if(!checked) {
-          Privileges.markSiblings(element, 'approval', checked);
-        } else {
-          Privileges.markSiblings(element, 'modify', checked);
-          Privileges.markSiblings(element, 'read', checked);
-        }
+          switch(type) {
+            case 'approval':
+              if(checked) {
+                Privileges.markSiblings(element, 'read', checked);
+              }
 
-        Privileges.markChildren(element, checked);
-        break;
-      case 'modify':
-        if(checked) {
-          Privileges.markSiblings(element, 'read', checked);
-        } else {
-          Privileges.markSiblings(element, 'erase', checked);
-          Privileges.markSiblings(element, 'approval', checked);
-        }
+              Privileges.markChildren(element, checked);
+              break;
+            case 'erase':
+              if(!checked) {
+                Privileges.markSiblings(element, 'approval', checked);
+              } else {
+                Privileges.markSiblings(element, 'modify', checked);
+                Privileges.markSiblings(element, 'read', checked);
+              }
 
-        Privileges.markChildren(element, checked);
-        break;
-      case 'read':
-        if(!checked) {
-          Privileges.markSiblings(element, 'modify', checked);
-          Privileges.markSiblings(element, 'erase', checked);
-          Privileges.markSiblings(element, 'approval', checked);
-        }
+              Privileges.markChildren(element, checked);
+              break;
+            case 'modify':
+              if(checked) {
+                Privileges.markSiblings(element, 'read', checked);
+              } else {
+                Privileges.markSiblings(element, 'erase', checked);
+                Privileges.markSiblings(element, 'approval', checked);
+              }
 
-        Privileges.markChildren(element, checked);
-        break;
+              Privileges.markChildren(element, checked);
+              break;
+            case 'read':
+              if(!checked) {
+                Privileges.markSiblings(element, 'modify', checked);
+                Privileges.markSiblings(element, 'erase', checked);
+                Privileges.markSiblings(element, 'approval', checked);
+              }
+
+              Privileges.markChildren(element, checked);
+              break;
+          }
+        });
+
+        $('#role_role_type').change(function() {
+          var $select = $(this);
+          var selectedType = $select.val();
+          var url = '<%= @role.new_record? ? new_role_path(role: {role_type: "REPLACE"}) : edit_role_path(@role, role: {role_type: "REPLACE"}) %>';
+
+          if(selectedType) {
+            $select.prop('disabled', true)
+
+            $.getScript(url.replace('REPLACE', selectedType)).always(function () {
+              $select.prop('disabled', false)
+            })
+          }
+        });
+      });
+
+      codeExecuted = true;
     }
-  });
-
-  $('#role_role_type').change(function() {
-    var $select = $(this);
-    var selectedType = $select.val();
-    var url = '<%= @role.new_record? ? new_role_path(role: {role_type: "REPLACE"}) : edit_role_path(@role, role: {role_type: "REPLACE"}) %>';
-
-    if(selectedType) {
-      $select.prop('disabled', true)
-
-      $.getScript(url.replace('REPLACE', selectedType)).always(function () {
-        $select.prop('disabled', false)
-      })
-    }
-  });
+  }
 });
 </script>

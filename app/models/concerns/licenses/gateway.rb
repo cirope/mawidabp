@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'redis_client'
+
 module Licenses::Gateway
   extend ActiveSupport::Concern
 
@@ -61,11 +63,11 @@ module Licenses::Gateway
   end
 
   def plan_change_url
-    @plan_change_url ||= RedisClient.license_plan_change_url subscription_id
+    @plan_change_url ||= RedisMwClient.license_plan_change_url subscription_id
   end
 
   def plan_change_url= url
-    RedisClient.assign_license_plan_change_url subscription_id, url
+    RedisMwClient.assign_license_plan_change_url subscription_id, url
   end
 
   def check_subscription
@@ -94,6 +96,6 @@ module Licenses::Gateway
   end
 
   def clean_vendor_auth_url
-    RedisClient.clean_license_plan_change_url subscription_id
+    RedisMwClient.clean_license_plan_change_url subscription_id
   end
 end

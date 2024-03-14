@@ -1,6 +1,4 @@
 class ReadingsController < ApplicationController
-  respond_to :js
-
   before_action :auth
 
   # * POST /readings

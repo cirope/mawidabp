@@ -1,12 +1,12 @@
 special_activity_time:
-  date: <%= Time.zone.today.to_s :db %>
+  date: <%= Time.zone.today.to_fs :db %>
   amount: 12.2
   user: administrator
   resource: special_activity
   resource_type: 'Activity'
   detail: ''
 review_time:
-  date: <%= Time.zone.today.to_s :db %>
+  date: <%= Time.zone.today.to_fs :db %>
   amount: 8.0
   user: administrator
   resource: review_with_conclusion

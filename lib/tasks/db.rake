@@ -844,7 +844,7 @@ private
         raw.update_column :heatmap, true if idx <= 1
         raw.update_column :identifier, identifier
 
-        risk_weights.each do |risk, value|
+        risk_weights_types.each do |risk, value|
           raw.risk_score_items.create!(
             name: I18n.t("risk_assessments.risk_weight_risks.#{risk}"),
             value: value
@@ -869,7 +869,7 @@ private
     RiskAssessmentTemplate.where(formula: nil).exists?
   end
 
-  def risk_weights
+  def risk_weights_types
     risk_types = {
       none:        0,
       low:         1,

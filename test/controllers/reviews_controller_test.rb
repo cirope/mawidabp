@@ -178,6 +178,8 @@ class ReviewsControllerTest < ActionController::TestCase
     login
 
     get :show, params: { id: review }, as: :pdf
+
+    Current.organization = review.organization
     assert_redirected_to review.relative_pdf_path
   end
 
@@ -392,6 +394,7 @@ class ReviewsControllerTest < ActionController::TestCase
       get :survey_pdf, params: { id: review.id }
     end
 
+    Current.organization = review.organization
     assert_redirected_to review.relative_survey_pdf_path
   end
 
@@ -460,6 +463,7 @@ class ReviewsControllerTest < ActionController::TestCase
       get :download_work_papers, params: { id: review.id }
     end
 
+    Current.organization = review.organization
     assert_redirected_to review.relative_work_papers_zip_path
   end
 
@@ -740,7 +744,7 @@ class ReviewsControllerTest < ActionController::TestCase
     login
 
     finding.update_columns state:         Finding::STATUS[:implemented_audited],
-                           solution_date: 1.year.ago.to_date.to_s(:db)
+                           solution_date: 1.year.ago.to_date.to_fs(:db)
 
     get :auto_complete_for_past_implemented_audited_findings, xhr: true, params: { q: 'O001' }, as: :json
     assert_response :success

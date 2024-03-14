@@ -59,7 +59,7 @@ class MemosControllerTest < ActionController::TestCase
           required_by: '',
           manual_required_by: '1',
           required_by_text: 'test required by',
-          close_date: 15.days.from_now.to_date.to_s(:db),
+          close_date: 15.days.from_now.to_date.to_fs(:db),
           file_model_memos_attributes: [
             file_model_attributes: {
               file: File.open(TEST_FILE_FULL_PATH)
@@ -92,7 +92,7 @@ class MemosControllerTest < ActionController::TestCase
         required_by: '',
         manual_required_by: '1',
         required_by_text: 'test required by',
-        close_date: 17.days.from_now.to_date.to_s(:db),
+        close_date: 17.days.from_now.to_date.to_fs(:db),
         file_model_memos_attributes: [
           file_model_attributes: {
             file: File.open(TEST_FILE_FULL_PATH)
@@ -119,6 +119,7 @@ class MemosControllerTest < ActionController::TestCase
       get :export_to_pdf, params: { id: @memo.id }
     end
 
+    Current.organization = @memo.organization
     assert_redirected_to @memo.relative_pdf_path
   end
 end

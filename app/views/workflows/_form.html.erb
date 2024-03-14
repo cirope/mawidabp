@@ -121,44 +121,52 @@
 </div>
 
 <script type="text/javascript">
-jQuery(function() {
-  $('#workflow_period_id').change(function() {
-    var element = $(this);
+  var codeExecuted = false;
 
-    if(parseInt($(this).val()) > 0) {
-      var url = '<%= reviews_for_period_workflows_path %>';
+  document.addEventListener('DOMContentLoaded', function(e) {
+    if ("importmapScriptsLoaded" in window) {
+      if (!codeExecuted) {
+        $('#workflow_period_id').change(function() {
+          var element = $(this);
 
-      Helper.showLoading(element);
+          if(parseInt($(this).val()) > 0) {
+            var url = '<%= reviews_for_period_workflows_path %>';
 
-      $.get(url, { period: $(this).val(), format: 'json' }, function(data) {
-        HTMLUtil.updateOptions(
-          $('#workflow_review_id'), HTMLUtil.optionsFromArray(data)
-        );
-      }).done(function() {
-        Helper.hideLoading(element);
-        Helper.hideLoading('#workflow_review_id');
-      });
-    } else {
-      element.val('').attr('disabled', true);
+            Helper.showLoading(element);
+
+            $.get(url, { period: $(this).val(), format: 'json' }, function(data) {
+              HTMLUtil.updateOptions(
+                $('#workflow_review_id'), HTMLUtil.optionsFromArray(data)
+              );
+            }).done(function() {
+              Helper.hideLoading(element);
+              Helper.hideLoading('#workflow_review_id');
+            });
+          } else {
+            element.val('').attr('disabled', true);
+          }
+        });
+
+        $('#workflow_review_id').change(function() {
+          var url = '<%= estimated_amount_workflows_path %>';
+          var element = $(this);
+
+          Helper.showLoading(element);
+
+          $.get(url, { id: $(this).val() }, function(data) {
+            $('#estimated_amount').html(data).stop(true, true).effect(
+              'highlight', {}, 2000
+            );
+          }).done(function() {
+            Helper.hideLoading(element);
+          });
+        });
+
+        Helper.makeSortable('#workflow_items', 'fieldset.workflow_item', 'a.move');
+        FormUtil.completeSortNumbers();
+
+        codeExecuted = true;
+      }
     }
   });
-
-  $('#workflow_review_id').change(function() {
-    var url = '<%= estimated_amount_workflows_path %>';
-    var element = $(this);
-
-    Helper.showLoading(element);
-
-    $.get(url, { id: $(this).val() }, function(data) {
-      $('#estimated_amount').html(data).stop(true, true).effect(
-        'highlight', {}, 2000
-      );
-    }).done(function() {
-      Helper.hideLoading(element);
-    });
-  });
-
-  Helper.makeSortable('#workflow_items', 'fieldset.workflow_item', 'a.move');
-  FormUtil.completeSortNumbers();
-});
 </script>

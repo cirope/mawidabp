@@ -76,7 +76,7 @@ es:
     search_link_title: "Filtrar listado (Ctrl + Espacio)"
     session_closed_correctly: "Ha cerrado sesión correctamente"
     session_expires_in_less_than_two_minutes: "Su sesión expira en menos de dos minutos"
-    session_time_expired: "Su sesión ha expirado. Por favor, inicie sesión nuevamente para continuar"
+    session_time_expired: "Su sesión ha expirado. Por favor, inicie sesión nuevamente"
     sort_by: "Ordenar por..."
     unsaved_data_warning: "Ha modificado el contenido. Si abandona la página, perderá todos los cambios realizados"
     rejected_data_format: Se ha detectado la presencia de la cadena <code>../</code> en uno o más campos. Antes de continuar, elimine esta cadena de texto en los campos resaltados

@@ -1,6 +1,4 @@
 class PeriodsController < ApplicationController
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :set_period, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: :destroy
@@ -8,8 +6,6 @@ class PeriodsController < ApplicationController
   # * GET /periods
   def index
     @periods = Period.list.reorder(start: :desc).page(params[:page])
-
-    respond_with @periods
   end
 
   # * GET /periods/1
@@ -30,20 +26,22 @@ class PeriodsController < ApplicationController
   def create
     @period = Period.list.new period_params
 
-    respond_to do |format|
-      if @period.save
-        back_to, session[:back_to] = session[:back_to], nil
-        format.html { redirect_to(back_to || periods_url) }
-      else
-        format.html { render 'new' }
-      end
+    if @period.save
+      back_to, session[:back_to] = session[:back_to], nil
+
+      redirect_with_notice @period, url: (back_to || periods_url)
+    else
+      render 'new', status: :unprocessable_entity
     end
   end
 
   # * PATCH /periods/1
   def update
-    update_resource @period, period_params
-    respond_with @period, location: periods_url unless response_body
+    if @period.update period_params
+      redirect_with_notice @period, url: periods_url
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # * DELETE /periods/1
@@ -53,7 +51,7 @@ class PeriodsController < ApplicationController
         [t('periods.errors.can_not_be_destroyed')] + @period.errors.full_messages
       ).join(APP_ENUM_SEPARATOR)
     end
-    respond_with @period, location: periods_url
+    redirect_with_notice @period, url: periods_url
   end
 
   private

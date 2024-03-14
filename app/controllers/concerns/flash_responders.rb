@@ -1,11 +1,16 @@
-require 'application_responder'
-
 module FlashResponders
   extend ActiveSupport::Concern
 
-  included do
-    respond_to :html
+  def redirect_with_notice object, options = {}
+		url = options.delete(:url) || object
 
-    self.responder = ApplicationResponder
+    notice = {
+      notice: flash.notice ||
+        t(
+          '.notice', resource_name: object.model_name.human, scope: [:flash]
+        )
+    }
+
+    redirect_to url, notice.merge(options)
   end
 end

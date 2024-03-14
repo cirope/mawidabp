@@ -1,6 +1,4 @@
 class RiskCategoriesController < ApplicationController
-  respond_to :js
-
   before_action :auth
   before_action :set_risk_registry
   before_action :set_risk_category, only: [:edit]

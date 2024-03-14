@@ -23,7 +23,7 @@ class TimeSummaryControllerTest < ActionController::TestCase
     assert_difference %w(TimeConsumption.count) do
       post :create, params: {
         time_consumption: {
-          date: date.to_s(:db),
+          date: date.to_fs(:db),
           amount: '1',
           resource_id: reviews(:current_review).id,
           resource_type: 'Review'

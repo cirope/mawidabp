@@ -1,6 +1,6 @@
 auditor_answer:
   answer: Auditor text
-  commitment_date: <%= Date.today.to_s(:db) %>
+  commitment_date: <%= Date.today.to_fs(:db) %>
   finding: confirmed_oportunity
   user: supervisor
   file_model:

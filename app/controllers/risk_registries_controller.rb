@@ -1,8 +1,6 @@
 class RiskRegistriesController < ApplicationController
   include AutoCompleteFor::ControlObjective
 
-  respond_to :html, :json
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_risk_registry, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
@@ -34,24 +32,26 @@ class RiskRegistriesController < ApplicationController
     @risk_registry = RiskRegistry.list.new risk_registry_params
 
     if @risk_registry.save
-      respond_with @risk_registry, location: edit_risk_registry_url(@risk_registry)
+      redirect_with_notice @risk_registry,
+        url: edit_risk_registry_url(@risk_registry)
     else
-      render action: :new
+      render 'new', status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /risk_registries/1
   def update
-    update_resource @risk_registry, risk_registry_params
-
-    respond_with @risk_registry
+    if @risk_registry.update risk_registry_params
+      redirect_with_notice @risk_registry
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # DELETE /risk_registries/1
   def destroy
     @risk_registry.destroy
-
-    respond_with @risk_registry, location: risk_registries_url
+    redirect_with_notice @risk_registry
   end
 
   private

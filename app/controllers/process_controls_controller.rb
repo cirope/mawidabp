@@ -1,5 +1,4 @@
 class ProcessControlsController < ApplicationController
-  respond_to :js
 
   before_action :auth
   before_action :set_best_practice

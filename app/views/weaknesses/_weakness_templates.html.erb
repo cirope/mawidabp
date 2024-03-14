@@ -1,38 +1,33 @@
-<div class="card mb-3">
-  <div class="card-header">
-    <h5 class="mb-0" id="weakness-template-heading">
-      <a class="text-reset d-block" data-bs-toggle="collapse" href="#weakness-templates">
-        <%= WeaknessTemplate.model_name.human count: 0 %>
-      </a>
-    </h5>
-  </div>
-  <div id="weakness-templates" class="collapse show">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :weakness_template_from_control_objective, collection: weakness_templates_for(f.object), prompt: true, input_html: {
-            value: f.object.weakness_template_id
-          } %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :weakness_template, input_html: {
-            title: t('label.search'),
-            autocomplete: :off,
-            data: {
-              autocomplete_url: auto_complete_for_weakness_template_weaknesses_path,
-              autocomplete_id_target: '#weakness_template_id'
-            }
-          } %>
-        </div>
-      </div>
-      <div class="col-12" data-notes></div>
-      <%= f.input :weakness_template_id, as: :hidden, input_html: {
-        id: 'weakness_template_id',
+<h5 class="mb-4" id="weakness-template-heading">
+  <a class="text-reset d-block" data-bs-toggle="collapse" href="#weakness-templates">
+    <%= WeaknessTemplate.model_name.human count: 0 %>
+  </a>
+</h5>
+
+<div id="weakness-templates" class="collapse show">
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :weakness_template_from_control_objective, collection: weakness_templates_for(f.object), prompt: true, input_html: {
+        value: f.object.weakness_template_id
+      } %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :weakness_template, input_html: {
+        title: t('label.search'),
+        autocomplete: :off,
         data: {
-          weakness_template_changed_url: weakness_template_changed_weaknesses_path,
-          control_objective_item_id: f.object.control_objective_item_id
+          autocomplete_url: auto_complete_for_weakness_template_weaknesses_path,
+          autocomplete_id_target: '#weakness_template_id'
         }
       } %>
     </div>
   </div>
+  <div class="col-12" data-notes></div>
+  <%= f.input :weakness_template_id, as: :hidden, input_html: {
+    id: 'weakness_template_id',
+    data: {
+      weakness_template_changed_url: weakness_template_changed_weaknesses_path,
+      control_objective_item_id: f.object.control_objective_item_id
+    }
+  } %>
 </div>

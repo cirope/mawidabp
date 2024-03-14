@@ -3,8 +3,6 @@ class PlansController < ApplicationController
   include AutoCompleteFor::BusinessUnitType
   include AutoCompleteFor::Tagging
 
-  respond_to :html, :js
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_business_unit_type, only: [:show, :new, :edit, :update]
   before_action :set_plan, only: [:show, :edit, :update, :destroy, :export_to_pdf]
@@ -46,27 +44,28 @@ class PlansController < ApplicationController
 
     @plan.clone_from @plan_clone if @plan_clone
 
-    @plan.save
-
-    respond_with @plan, location: -> {
-      if @plan.persisted?
-        edit_plan_url @plan, business_unit_type: params[:business_unit_type]
-      end
-    }
+    if @plan.save
+      redirect_with_notice @plan,
+        url: edit_plan_url(@plan, business_unit_type: params[:business_unit_type])
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # * PATCH /plans/1
   def update
-    update_resource @plan, plan_params
-
-    respond_with @plan, location: edit_plan_url(@plan, business_unit_type: params[:business_unit_type])
+    if @plan.update plan_params
+      redirect_with_notice @plan,
+        url: edit_plan_url(@plan, business_unit_type: params[:business_unit_type])
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # * DELETE /plans/1
   def destroy
     @plan.destroy
-
-    respond_with @plan, location: plans_url
+    redirect_with_notice @plan, url: plans_url
   end
 
   private

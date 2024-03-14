@@ -3,8 +3,6 @@ class RegistrationsController < ApplicationController
 
   layout 'public'
 
-  respond_to :html
-
   def show
   end
 
@@ -15,9 +13,11 @@ class RegistrationsController < ApplicationController
   def create
     @registration = Registration.new registration_params
 
-    @registration.save
-
-    respond_with @registration, location: registration_path
+    if @registration.save
+      redirect_with_notice @registration, url: registration_path
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   private

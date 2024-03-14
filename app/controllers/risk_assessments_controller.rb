@@ -3,8 +3,6 @@ class RiskAssessmentsController < ApplicationController
   include AutoCompleteFor::BusinessUnit
   include AutoCompleteFor::BusinessUnitType
 
-  respond_to :html
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_title, except: [
     :destroy,
@@ -72,32 +70,33 @@ class RiskAssessmentsController < ApplicationController
 
     @risk_assessment.clone_from @clone_from if @clone_from
 
-    @risk_assessment.save
-
-    if @risk_assessment.persisted?
-      respond_with @risk_assessment, location: edit_risk_assessment_url(@risk_assessment)
+    if @risk_assessment.save
+      redirect_with_notice @risk_assessment,
+        url: edit_risk_assessment_url(@risk_assessment)
     else
-      respond_with @risk_assessment
+      render 'new', status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /risk_assessments/1
   def update
-    update_resource @risk_assessment, risk_assessment_params
+    if @risk_assessment.update risk_assessment_params
+      location = if @risk_assessment.draft?
+                   edit_risk_assessment_url @risk_assessment
+                 else
+                   risk_assessment_url @risk_assessment
+                 end
 
-    location = if @risk_assessment.draft? || @risk_assessment.invalid?
-                 edit_risk_assessment_url @risk_assessment
-               else
-                 risk_assessment_url @risk_assessment
-               end
-
-    respond_with @risk_assessment, location: location
+      redirect_with_notice @risk_assessment, url: location
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # DELETE /risk_assessments/1
   def destroy
     @risk_assessment.destroy
-    respond_with @risk_assessment
+    redirect_with_notice @risk_assessment
   end
 
   # GET /risk_assessments/1/new_item
@@ -126,14 +125,14 @@ class RiskAssessmentsController < ApplicationController
   def sort_by_risk
     @risk_assessment.sort_by_risk
 
-    respond_with @risk_assessment, location: edit_risk_assessment_url(@risk_assessment)
+    redirect_with_notice @risk_assessment, url: edit_risk_assessment_url(@risk_assessment)
   end
 
   # POST /risk_assessments/1/merge_to_plan
   def merge_to_plan
     plan = @risk_assessment.merge_to_plan
 
-    respond_with plan, location: edit_plan_url(plan)
+    redirect_with_notice @risk_assessment, url: edit_plan_url(plan)
   end
 
   private

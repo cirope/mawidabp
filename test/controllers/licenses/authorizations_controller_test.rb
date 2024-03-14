@@ -23,8 +23,7 @@ class Licenses::AuthorizationsControllerTest < ActionController::TestCase
       }
     }
 
-    assert_response :success
-    assert_template 'licenses/authorizations/_form'
+    assert_redirected_to license_url
   end
 
   test 'change auditors limit' do

@@ -1,6 +1,4 @@
 class PermalinksController < ApplicationController
-  respond_to :html
-
   before_action :auth
   before_action :set_permalink, only: [:show]
 

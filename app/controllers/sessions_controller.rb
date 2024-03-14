@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
 
         @current_user&.update_saml_request_id saml_request.request_id
 
-        redirect_to action
+        redirect_to action, allow_other_host: true
       else
         store_user params[:user]
 

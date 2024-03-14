@@ -2,11 +2,11 @@
 <% id = f.object.object_id %>
 <fieldset class="work_paper" id="<%= id %>">
   <div class="row">
-    <div class="col-md-3">
-      <div class="input-group mb-3">
-        <%= render 'work_papers/status', work_paper: f.object %>
-        <%= f.text_field :name, class: 'form-control', autofocus: f.object.name.blank? %>
-      </div>
+    <div class="col-md-1">
+      <%= render 'work_papers/status', work_paper: f.object %>
+    </div>
+    <div class="col-md-2">
+      <%= f.text_field :name, class: 'form-control', autofocus: f.object.name.blank? %>
     </div>
     <div class="col-md-1">
       <%= f.input :code, label: false, input_html: {
@@ -43,6 +43,7 @@
     </div>
   </div>
 </fieldset>
+
 <% if f.object.new_record? %>
   <script type="text/javascript">
     (function() {

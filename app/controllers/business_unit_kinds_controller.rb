@@ -1,6 +1,4 @@
 class BusinessUnitKindsController < ApplicationController
-  respond_to :html, :json
-
   before_action :auth, :check_privileges
   before_action :set_business_unit_kind, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
@@ -27,22 +25,26 @@ class BusinessUnitKindsController < ApplicationController
   def create
     @business_unit_kind = BusinessUnitKind.list.new business_unit_kind_params
 
-    @business_unit_kind.save
-    respond_with @business_unit_kind
+    if @business_unit_kind.save
+      redirect_with_notice @business_unit_kind
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /business_unit_kinds/1
   def update
-    update_resource @business_unit_kind, business_unit_kind_params
-
-    respond_with @business_unit_kind
+    if @business_unit_kind.update business_unit_kind_params
+      redirect_with_notice @business_unit_kind
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # DELETE /business_unit_kinds/1
   def destroy
     @business_unit_kind.destroy
-
-    respond_with @business_unit_kind
+    redirect_with_notice @business_unit_kind
   end
 
   private

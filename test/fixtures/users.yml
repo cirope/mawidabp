@@ -12,10 +12,10 @@ administrator:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: true
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   notes: User notes
   hidden: false
   organizational_unit:
@@ -34,10 +34,10 @@ poll:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: true
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   notes: User notes
   hidden: false
   organizational_unit:
@@ -56,10 +56,10 @@ administrator_second:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
@@ -79,10 +79,10 @@ bare:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
@@ -104,7 +104,7 @@ first_time:
   failed_attempts: 0
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
@@ -124,7 +124,7 @@ expired:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.months.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.months.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
   password_changed: <%= 2.days.ago %>
@@ -148,10 +148,10 @@ disabled:
   salt: <%= salt %>
   enable: false
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
@@ -171,12 +171,12 @@ blank_password:
   salt: <%= salt %>
   enable: false
   failed_attempts: 5
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   change_password_hash: <%= SecureRandom.urlsafe_base64 %>
-  hash_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  hash_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
@@ -196,10 +196,10 @@ expired_blank_password:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 20.days.ago.to_date.to_s(:db) %>
+  last_access: <%= 20.days.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= BLANK_PASSWORD_STALE_DAYS.next.days.ago.to_s(:db) %>
+  password_changed: <%= BLANK_PASSWORD_STALE_DAYS.next.days.ago.to_fs(:db) %>
   change_password_hash: <%= SecureRandom.urlsafe_base64 %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
@@ -220,10 +220,10 @@ president:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   notes: User notes
   hidden: false
   organizational_unit:
@@ -242,10 +242,10 @@ general_manager:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:president) %>
   notes: User notes
   hidden: false
@@ -265,10 +265,10 @@ coordinator_manager:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:general_manager) %>
   notes: User notes
   hidden: false
@@ -288,10 +288,10 @@ plain_manager:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager) %>
   notes: User notes
   hidden: false
@@ -311,10 +311,10 @@ manager:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager) %>
   notes: User notes
   hidden: false
@@ -334,10 +334,10 @@ manager_second:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager) %>
   notes: User notes
   hidden: false
@@ -357,10 +357,10 @@ plain_manager_second:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager) %>
   notes: User notes
   hidden: false
@@ -380,10 +380,10 @@ supervisor:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
@@ -403,10 +403,10 @@ supervisor_second:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
@@ -426,10 +426,10 @@ audited:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:plain_manager) %>
   notes: User notes
   hidden: false
@@ -449,10 +449,10 @@ audited_second:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:plain_manager_second) %>
   notes: User notes
   hidden: false
@@ -472,10 +472,10 @@ committee:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 2.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 2.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
@@ -495,10 +495,10 @@ auditor:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:supervisor) %>
   notes: User notes
   hidden: false
@@ -518,10 +518,10 @@ corporate:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   notes: User notes
   hidden: false
   organizational_unit:
@@ -538,10 +538,10 @@ jane:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  last_access: <%= 30.minutes.ago.to_date.to_fs(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_fs(:db) %>
   notes: User notes
   hidden: false
   organizational_unit:

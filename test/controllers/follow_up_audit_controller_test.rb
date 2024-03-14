@@ -91,6 +91,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :controller_name => 'follow_up'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.synthesis_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -150,6 +151,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :controller_name => 'follow_up'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.review_stats_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -212,6 +214,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.qa_indicators.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -253,6 +256,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_state.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -297,6 +301,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_risk.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -361,6 +366,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_risk_and_business_unit.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -383,6 +389,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_risk_and_business_unit.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -425,6 +432,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_audit_type.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -463,6 +471,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :report_title => 'New title'
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.follow_up_cost_analysis.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -526,6 +535,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_risk_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -590,6 +600,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_month.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -724,6 +735,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_current_situation.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -825,6 +837,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_repeated.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -937,6 +950,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_control_objective.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1044,6 +1058,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_business_unit.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1130,6 +1145,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_user.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1217,6 +1233,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_heatmap.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1306,6 +1323,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_control_objective_process.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1423,6 +1441,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_evolution.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1607,6 +1626,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_brief.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1740,6 +1760,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.fixed_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1804,6 +1825,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.control_objective_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1866,6 +1888,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => true
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.control_objective_stats_by_review.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -1931,6 +1954,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.process_control_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
@@ -2003,14 +2027,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
           :priority                  => Finding.priorities_values.first,
           :compliance                => 'yes',
           :repeated                  => 'false',
-          :issue_date                => Date.today.to_s(:db),
+          :issue_date                => Date.today.to_fs(:db),
           :issue_date_operator       => '=',
-          :origination_date          => Date.today.to_s(:db),
+          :origination_date          => Date.today.to_fs(:db),
           :origination_date_operator => '>',
-          :follow_up_date            => Date.today.to_s(:db),
-          :follow_up_date_until      => Date.today.to_s(:db),
+          :follow_up_date            => Date.today.to_fs(:db),
+          :follow_up_date_until      => Date.today.to_fs(:db),
           :follow_up_date_operator   => 'between',
-          :solution_date             => Date.today.to_s(:db),
+          :solution_date             => Date.today.to_fs(:db),
           :solution_date_operator    => '='
         }
       }
@@ -2048,7 +2072,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_response :redirect
 
     assert_match I18n.t('follow_up_audit.weaknesses_report.pdf_name'),
-      @response.body
+      response.location
   end
 
   test 'queue async weaknesses report' do
@@ -2073,7 +2097,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = old_count }
 
     assert_response :redirect
-    assert_match back_url, @response.body
+    assert_match back_url, response.location
   end
 
   test 'weaknesses report as CSV' do
@@ -2146,6 +2170,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
     }
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.benefits.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),

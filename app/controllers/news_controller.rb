@@ -1,8 +1,6 @@
 class NewsController < ApplicationController
   include AutoCompleteFor::Tagging
 
-  respond_to :html
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_news, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy, :auto_complete_for_tagging]
@@ -26,18 +24,24 @@ class NewsController < ApplicationController
   def create
     @news = news.new news_params
 
-    @news.save
-    respond_with @news
+    if @news.save
+      redirect_with_notice @news
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   def update
-    update_resource @news, news_params
-    respond_with @news
+    if @news.update news_params
+      redirect_with_notice @news
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   def destroy
     @news.destroy
-    respond_with @news
+    redirect_with_notice @news
   end
 
   private

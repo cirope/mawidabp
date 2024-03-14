@@ -439,3 +439,12 @@ jQuery(function($) {
     }
   });
 });
+
+window.State               = State;
+window.BrowserManipulation = BrowserManipulation;
+window.EventHandler        = EventHandler;
+window.Helper              = Helper;
+window.FormUtil            = FormUtil;
+window.HTMLUtil            = HTMLUtil;
+window.Search              = Search;
+window.Util                = Util;

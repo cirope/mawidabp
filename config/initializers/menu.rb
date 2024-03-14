@@ -1,3 +1,5 @@
+require 'menu_item'
+
 # Menú del auditado
 APP_AUDITED_MENU_ITEMS = [
   MenuItem.new(

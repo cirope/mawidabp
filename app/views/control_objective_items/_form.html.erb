@@ -187,7 +187,8 @@
         <%= WorkPaper.model_name.human count: @control_objective_item.work_papers.size %>
       </h5>
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
           <h5 class="h6"><%= WorkPaper.human_attribute_name 'name' %></h5>
         </div>
         <div class="col-md-1">
@@ -226,6 +227,8 @@
 </div>
 
 <script type="text/javascript">
+  var codeExecuted = false;
+
   var ControlObjectiveCalcs = {
     effectiveness: function() {
       var selectedValues = [];
@@ -262,15 +265,23 @@
     }
   }
 
-  $('#control_objective_item_design_score').change(function() {
-    ControlObjectiveCalcs.effectiveness();
-  });
+  document.addEventListener('DOMContentLoaded', function(e) {
+    if ("importmapScriptsLoaded" in window) {
+      if (!codeExecuted) {
+        $('#control_objective_item_design_score').change(function() {
+          ControlObjectiveCalcs.effectiveness();
+        });
 
-  $('#control_objective_item_compliance_score').change(function() {
-    ControlObjectiveCalcs.effectiveness();
-  });
+        $('#control_objective_item_compliance_score').change(function() {
+          ControlObjectiveCalcs.effectiveness();
+        });
 
-  $('#control_objective_item_sustantive_score').change(function() {
-    ControlObjectiveCalcs.effectiveness();
+        $('#control_objective_item_sustantive_score').change(function() {
+          ControlObjectiveCalcs.effectiveness();
+        });
+
+        codeExecuted = true;
+      }
+    }
   });
 </script>

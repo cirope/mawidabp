@@ -1,6 +1,4 @@
 class ResourceClassesController < ApplicationController
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :set_resource_class, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: :destroy
@@ -27,20 +25,26 @@ class ResourceClassesController < ApplicationController
   def create
     @resource_class = ResourceClass.list.new resource_class_params
 
-    @resource_class.save
-    respond_with @resource_class
+    if @resource_class.save
+      redirect_with_notice @resource_class
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   # * PATCH /resource_classes/1
   def update
-    update_resource @resource_class, resource_class_params
-    respond_with @resource_class, location: resource_classes_url unless response_body
+    if @resource_class.update resource_class_params
+      redirect_with_notice @resource_class, url: resource_classes_url
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   # * DELETE /resource_classes/1
   def destroy
     @resource_class.destroy
-    respond_with @resource_class
+    redirect_with_notice @resource_class
   end
 
   private

@@ -21,7 +21,7 @@ module Polls::PdfHeaders
 
   def pdf_name
     I18n.t 'polls.pdf.name',
-      from_date: @report.from_date.to_s(:db), to_date: @report.to_date.to_s(:db)
+      from_date: @report.from_date.to_fs(:db), to_date: @report.to_date.to_fs(:db)
   end
 
   def pdf

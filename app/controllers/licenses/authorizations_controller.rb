@@ -12,7 +12,7 @@ class Licenses::AuthorizationsController < ApplicationController
 
     @license.change_auditors_limit auditors_limit
 
-    respond_with @license, location: license_url
+    redirect_with_notice @license, url: license_url
   end
 
   private

@@ -15,8 +15,6 @@ module AutoCompleteFor::ControlObjectiveAuditor
 
     @users = User.list.include_tags.where.not(id: excluded_ids).auditors_and_act_as_audited.not_hidden.where(conditions).limit(10)
 
-    respond_to do |format|
-      format.js { render template: 'control_objectives/auto_complete_for_control_objective_auditor.json' }
-    end
+    render template: 'control_objectives/auto_complete_for_control_objective_auditor', formats: [:json]
   end
 end

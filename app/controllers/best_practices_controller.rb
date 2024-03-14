@@ -3,8 +3,6 @@
 class BestPracticesController < ApplicationController
   include AutoCompleteFor::Tagging
 
-  respond_to :html
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_best_practice, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy, :auto_complete_for_tagging]
@@ -42,32 +40,32 @@ class BestPracticesController < ApplicationController
     @best_practice = BestPractice.new best_practice_params
 
     if @best_practice.save
-      respond_with @best_practice, location: edit_best_practice_url(@best_practice)
+      redirect_with_notice @best_practice, url: [:edit, @best_practice]
     else
-      render action: :new
+      render 'new', status: :unprocessable_entity
     end
   end
 
   # * PATCH /best_practices/1
   def update
-    update_resource @best_practice, best_practice_params
+    if @best_practice.update best_practice_params
 
-    redirect_to_index = @best_practice.obsolete &&
-                        @best_practice.errors.empty? &&
-                        hide_obsolete_best_practices != '0'
+      redirect_to_index = @best_practice.obsolete &&
+                          @best_practice.errors.empty? &&
+                          hide_obsolete_best_practices != '0'
 
-    location = redirect_to_index ? best_practices_url : edit_best_practice_url(@best_practice)
+      location = redirect_to_index ? best_practices_url : [:edit, @best_practice]
 
-    unless response_body
-      respond_with @best_practice, location: location
+      redirect_with_notice @best_practice, url: location
+    else
+      render 'edit', status: :unprocessable_entity
     end
   end
 
   # * DELETE /best_practices/1
   def destroy
     @best_practice.destroy
-
-    respond_with @best_practice, location: best_practices_url
+    redirect_with_notice @best_practice
   end
 
   private

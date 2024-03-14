@@ -1,6 +1,4 @@
 class Plans::CalendarController < ApplicationController
-  respond_to :html
-
   before_action :auth,
                 :check_privileges,
                 :set_title,

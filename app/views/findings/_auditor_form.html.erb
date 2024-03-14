@@ -537,7 +537,8 @@
       <h5 class="mt-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
 
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
           <h5 class="h6"><%= WorkPaper.human_attribute_name 'name' %></h5>
         </div>
         <div class="col-md-1">
@@ -633,18 +634,28 @@
 </div>
 
 <script type="text/javascript">
-  $(document).on('click', '[data-user-selector]', function() {
-    var id = $(this).closest('fieldset').find('[name$="[user_id]"]').val();
-    var userField = $(this).closest('fieldset').find('[name$="[users_for_notification][]"]');
+  var codeExecuted = false;
 
-    if($(this).is(':checked')) {
-      userField.val(id).attr('data-auto-complete', true);
-    } else {
-      userField.val('').attr('data-auto-complete', false);
+  document.addEventListener('DOMContentLoaded', function(e) {
+    if ("importmapScriptsLoaded" in window) {
+      if (!codeExecuted) {
+        $(document).on('click', '[data-user-selector]', function() {
+          var id = $(this).closest('fieldset').find('[name$="[user_id]"]').val();
+          var userField = $(this).closest('fieldset').find('[name$="[users_for_notification][]"]');
+
+          if($(this).is(':checked')) {
+            userField.val(id).attr('data-auto-complete', true);
+          } else {
+            userField.val('').attr('data-auto-complete', false);
+          }
+        });
+
+        $(document).on('change', '#finding_risk', function() {
+          alert('<%= I18n.t 'message.change_weakness_risk' %>');
+        });
+
+        codeExecuted = true;
+      }
     }
-  });
-
-  $(document).on('change', '#finding_risk', function() {
-    alert('<%= I18n.t 'message.change_weakness_risk' %>');
   });
 </script>

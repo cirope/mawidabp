@@ -225,6 +225,8 @@
 <%= render 'bundle' %>
 
 <script type="text/javascript">
+  var codeExecuted = false;
+
   function showOrHideErrors() {
     $('#approval_errors_detail').slideToggle(300, function() {
       $('#show_or_hide_link').mw(
@@ -235,67 +237,75 @@
     });
   }
 
-  $('#check_for_approval').click(function(event) {
-    if(parseInt($('#conclusion_draft_review_review_id').val()) > 0) {
-      var url = '<%= url_for({:action => :check_for_approval, :format => :json}) %>';
+  document.addEventListener('DOMContentLoaded', function(e) {
+    if ("importmapScriptsLoaded" in window) {
+      if (!codeExecuted) {
+        $('#check_for_approval').click(function(event) {
+          if(parseInt($('#conclusion_draft_review_review_id').val()) > 0) {
+            var url = '<%= url_for({:action => :check_for_approval, :format => :json}) %>';
 
-      $.get(url, { id: $('#conclusion_draft_review_review_id').val() }, function(data) {
-        if(data.approved) {
-          $('#not_approved').hide();
-          $('#approved').show().stop(true, true).effect('highlight', {}, 2000);
+            $.get(url, { id: $('#conclusion_draft_review_review_id').val() }, function(data) {
+              if(data.approved) {
+                $('#not_approved').hide();
+                $('#approved').show().stop(true, true).effect('highlight', {}, 2000);
 
-          $('#error_list_container').html('');
-          $('#force_approval_prompt').hide();
-        } else {
-          var errorsUl = HTMLUtil.arrayToUL(
-            data.errors, {'id': 'error_list' }
-          );
+                $('#error_list_container').html('');
+                $('#force_approval_prompt').hide();
+              } else {
+                var errorsUl = HTMLUtil.arrayToUL(
+                  data.errors, {'id': 'error_list' }
+                );
 
-          if($('#approval_errors_detail:visible').length > 0) {
-            $('#approval_errors_detail').slideToggle(300);
+                if($('#approval_errors_detail:visible').length > 0) {
+                  $('#approval_errors_detail').slideToggle(300);
+                }
+
+                $('#error_list_container').html(errorsUl);
+
+                $('#show_or_hide_link').mw('resetToOriginalText');
+
+                $('#approved').hide();
+                $('#not_approved').show();
+
+                if(data.can_be_approved_by_force) {
+                  $('#force_approval_prompt').show();
+                } else {
+                  $('#force_approval_prompt').hide();
+                }
+
+                $('#not_approved').
+                  find('.bg-danger').
+                  toggleClass('bg-danger bg-warning')
+
+                setTimeout(function () {
+                  $('#not_approved').
+                    find('.bg-warning').
+                    toggleClass('bg-warning bg-danger')
+                }, 2000)
+              }
+            });
           }
 
-          $('#error_list_container').html(errorsUl);
+          event.preventDefault();
+        });
 
-          $('#show_or_hide_link').mw('resetToOriginalText');
+        $('#conclusion_draft_review_review_id').change(function() {
+          var element = $(this);
+          var url = '<%= new_conclusion_draft_review_path %>';
 
-          $('#approved').hide();
-          $('#not_approved').show();
+          Helper.showLoading(element);
 
-          if(data.can_be_approved_by_force) {
-            $('#force_approval_prompt').show();
-          } else {
-            $('#force_approval_prompt').hide();
-          }
+          $.ajax({
+            url:      url,
+            dataType: 'script',
+            data:     { review: element.val() }
+          }).done(function() {
+            Helper.hideLoading(element);
+          });
+        });
 
-          $('#not_approved').
-            find('.bg-danger').
-            toggleClass('bg-danger bg-warning')
-
-          setTimeout(function () {
-            $('#not_approved').
-              find('.bg-warning').
-              toggleClass('bg-warning bg-danger')
-          }, 2000)
-        }
-      });
+        codeExecuted = true;
+      }
     }
-
-    event.preventDefault();
-  });
-
-  $('#conclusion_draft_review_review_id').change(function() {
-    var element = $(this);
-    var url = '<%= new_conclusion_draft_review_path %>';
-
-    Helper.showLoading(element);
-
-    $.ajax({
-      url:      url,
-      dataType: 'script',
-      data:     { review: element.val() }
-    }).done(function() {
-      Helper.hideLoading(element);
-    });
   });
 </script>

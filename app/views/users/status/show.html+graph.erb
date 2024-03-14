@@ -10,14 +10,14 @@
         <h5>
           <%= markdown_without_paragraph t('.high_risk_weaknesses', count: @weaknesses.with_highest_risk.count) %>
         </h5>
-        <%= pie_chart Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk) %>
+        <%= pie_chart Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk), defer: true %>
       </div>
 
       <div class="col-lg-6 text-center">
         <h5>
           <%== user_weaknesses_links %>
         </h5>
-        <%= pie_chart Weakness.pending_weaknesses_for_graph(@weaknesses) %>
+        <%= pie_chart Weakness.pending_weaknesses_for_graph(@weaknesses), defer: true %>
       </div>
     </div>
 
@@ -26,7 +26,7 @@
         <h5>
           <%= markdown_without_paragraph t('.pending_weaknesses', count: @weaknesses.with_pending_status.count) %>
         </h5>
-        <%= pie_chart Weakness.weaknesses_for_graph(@weaknesses) %>
+        <%= pie_chart Weakness.weaknesses_for_graph(@weaknesses), defer: true %>
       </div>
     </div>
 

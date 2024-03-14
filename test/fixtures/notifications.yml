@@ -1,7 +1,7 @@
 supervisor_being_implemented_weakness_confirmed:
   status: <%= Notification::STATUS[:confirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
-  confirmation_date: <%= Time.now.to_s(:db) %>
+  confirmation_date: <%= Time.now.to_fs(:db) %>
   user: supervisor
   user_who_confirm: supervisor
   notes: Notification notes
@@ -9,7 +9,7 @@ supervisor_being_implemented_weakness_confirmed:
 supervisor_unconfirmed_for_notification_weakness:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
-  confirmation_date: <%= Time.now.to_s(:db) %>
+  confirmation_date: <%= Time.now.to_fs(:db) %>
   user: supervisor
   user_who_confirm: supervisor
   notes: Notification notes
@@ -17,7 +17,7 @@ supervisor_unconfirmed_for_notification_weakness:
 supervisor_unconfirmed_oportunity:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
-  confirmation_date: <%= Time.now.to_s(:db) %>
+  confirmation_date: <%= Time.now.to_fs(:db) %>
   user: supervisor
   user_who_confirm: supervisor
   notes: Notification notes

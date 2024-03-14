@@ -1,18 +1,18 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 7.1'
 
 gem 'pg'
 gem 'activerecord-nulldb-adapter'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'responders'
+gem 'importmap-rails'
 gem 'mini_magick'
 gem 'simple_form'
-gem 'validates_timeliness', '~> 6.0.0'
+gem 'validates_timeliness', '~> 7.0.0.beta2'
 gem 'redcarpet'
 gem 'whenever'
-gem 'paper_trail', '< 15'
+gem 'paper_trail'
 gem 'carrierwave'
 gem 'acts_as_tree'
 gem 'net-ldap'
@@ -28,17 +28,18 @@ gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap-style'
 gem 'jbuilder'
-gem 'sidekiq', '< 7'
+gem 'sidekiq'
 gem 'ruby-ntlm'
 gem 'groupdate'
 gem 'apexcharts'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
-gem 'execjs', '< 2.8'
+gem 'execjs'
 gem 'net-smtp', require: false
 gem 'net-imap', require: false
 gem 'net-pop', require: false
 gem 'rexml'
+gem 'csv'
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
@@ -50,9 +51,7 @@ gem 'sassc'
 gem 'sassc-rails'
 gem 'terser'
 
-gem 'unicorn'
-gem 'unicorn-rails'
-gem 'unicorn-worker-killer'
+gem 'puma'
 
 gem 'wicked_pdf'
 
@@ -67,8 +66,6 @@ group :development do
   # Support for ed25519 ssh keys
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
-
-  gem 'bullet'
 end
 
 group :test do

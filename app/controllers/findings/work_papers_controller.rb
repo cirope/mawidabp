@@ -1,8 +1,6 @@
 class Findings::WorkPapersController < ApplicationController
   include Findings::SetFinding
 
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :set_finding, :set_finding_answer, only: [:create]
 

@@ -408,7 +408,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     def finding.can_be_destroyed?; true; end
-    assert finding.destroy
+    assert finding.reload.destroy
 
     finding = Weakness.new(
       finding.attributes.merge(
@@ -425,7 +425,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     def finding.can_be_destroyed?; true; end
-    assert finding.destroy
+    assert finding.reload.destroy
 
     finding = Weakness.new finding.attributes.merge(
         'state' => Finding::STATUS[:being_implemented]
@@ -438,7 +438,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     def finding.can_be_destroyed?; true; end
-    assert finding.destroy
+    assert finding.reload.destroy
 
     Current.user = users :supervisor
 
@@ -461,7 +461,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
     def finding.can_be_destroyed?; true; end
-    assert finding.destroy
+    assert finding.reload.destroy
 
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:unconfirmed],
@@ -483,7 +483,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal 2, @review.approval_errors.size
     assert !@review.can_be_approved_by_force
     def finding.can_be_destroyed?; true; end
-    assert finding.destroy
+    assert finding.reload.destroy
 
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:being_implemented],
@@ -499,7 +499,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
 
-    assert finding.update_attribute(:solution_date, nil)
+    assert finding.reload.update_attribute(:solution_date, nil)
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
 

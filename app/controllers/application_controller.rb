@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   include ActionTitle
-  include UpdateResource
   include ParameterSelector
   include CacheControl
   include FlashResponders

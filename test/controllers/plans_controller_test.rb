@@ -19,6 +19,8 @@ class PlansControllerTest < ActionController::TestCase
 
   test 'show plan as pdf' do
     get :show, params: { id: @plan }, as: :pdf
+
+    Current.organization = @plan.organization
     assert_redirected_to @plan.relative_pdf_path
   end
 
@@ -423,7 +425,8 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_response :success
 
-    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+    Current.organization = organizations :cirope
+    business_unit_types  = ActiveSupport::JSON.decode(@response.body)
 
     expected_business_unit_types = BusinessUnitType.where(organization_id: Current.organization.id)
                                                    .where.not(id: business_unit_types(:cycle).id).map { |but| but.name}

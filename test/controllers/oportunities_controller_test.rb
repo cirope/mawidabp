@@ -122,7 +122,7 @@ class OportunitiesControllerTest < ActionController::TestCase
           :brief => 'New brief',
           :answer => 'New answer',
           :audit_comments => 'New audit comments',
-          :origination_date => 1.day.ago.to_date.to_s(:db),
+          :origination_date => 1.day.ago.to_date.to_fs(:db),
           :state => Finding::STATUS[:being_implemented],
           :business_unit_ids => [business_units(:business_unit_three).id],
           :finding_user_assignments_attributes => [
@@ -197,7 +197,7 @@ class OportunitiesControllerTest < ActionController::TestCase
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
             :state => Finding::STATUS[:confirmed],
-            :origination_date => 1.day.ago.to_date.to_s(:db),
+            :origination_date => 1.day.ago.to_date.to_fs(:db),
             :solution_date => '',
             :finding_user_assignments_attributes => [
               {

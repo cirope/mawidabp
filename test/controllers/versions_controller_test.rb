@@ -32,9 +32,10 @@ class VersionsControllerTest < ActionController::TestCase
       }, as: :pdf
     end
 
+    Current.organization = Organization.find_by(id: @version.organization_id)
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('versions.pdf_list_name',
-        from_date: from.to_s(:db), to_date: to.to_s(:db)
+        from_date: from.to_fs(:db), to_date: to.to_fs(:db)
       ), PaperTrail::Version.table_name)
   end
 end

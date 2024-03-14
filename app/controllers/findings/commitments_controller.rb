@@ -2,8 +2,6 @@ class Findings::CommitmentsController < ApplicationController
   include Findings::CurrentUserScopes
   include Findings::SetFinding
 
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :set_finding, only: [:show]
 

@@ -1,8 +1,6 @@
-# FIXME Algunos salen como "agregadas correctamente" y otro como "ha sido agregada correctamente", se debería unificar.
-# FIXME Se deberían unificar los tiempos verbales a presente.
 es:
   flash:
-    actions:
+    male: &male
       create:
         notice: '%{resource_name} creado'
         alert:  ''
@@ -14,26 +12,46 @@ es:
         notice: '%{resource_name} eliminado'
         alert:  '%{resource_name} no pudo ser eliminado'
 
-    benefits:
+    female: &female
+      create:
+        notice: '%{resource_name} creada'
+        alert:  ''
+      update:
+        notice: '%{resource_name} actualizada'
+        alert:  ''
+        stale: '%{resource_name} no pudo ser actualizada, intente nuevamente'
       destroy:
-        alert: 'El beneficio no pudo ser eliminado, ya fue utilizado en observaciones'
+        notice: '%{resource_name} eliminada'
+        alert:  '%{resource_name} no pudo ser eliminada'
+
+    activity_groups:
+      <<: *male
+
+    benefits:
+      <<: *male
 
     best_practices:
-      create:
-        notice: 'Buenas prácticas agregadas correctamente'
-      update:
-        notice: 'Buenas prácticas actualizadas correctamente'
-        stale: 'Las buenas prácticas no fueron actualizadas, intente nuevamente'
+      <<: *female
       destroy:
-        notice: 'Buena práctica eliminada'
         alert: 'La buena práctica no puede ser eliminada, ya ha sido utilizada en informes'
 
+    business_unit_kinds:
+      <<: *male
+
+    business_unit_types:
+      <<: *female
+
     closing_interviews:
-      create:
-        notice: 'Entrevista de cierre agregada correctamente'
-      update:
-        notice: 'Entrevista de cierre actualizada correctamente'
-        stale: 'La entrevista de cierre no fue actualizada, intente nuevamente'
+      <<: *female
+
+    conclusion_draft_reviews:
+      <<: *male
+
+    conclusion_final_reviews:
+      <<: *male
+
+    documents:
+      <<: *male
 
     findings:
       update:
@@ -46,63 +64,29 @@ es:
         alert: 'La respuesta no pudo agregarse, intente nuevamente.'
 
     news:
-      create:
-        notice: 'Noticia creada'
-      update:
-        notice: 'Noticia actualizada'
-        alert: ''
-        stale: 'Noticia no pudo ser actualizada, intente nuevamente'
-      destroy:
-        notice: 'Noticia eliminada'
-        alert: 'La noticia no pudo ser eliminada'
+      <<: *female
 
     licenses:
       authorizations:
-        create:
-          notice: 'Licencia actualizada'
+        <<: *female
 
     opening_interviews:
-      create:
-        notice: 'Entrevista de inicio agregada correctamente'
-      update:
-        notice: 'Entrevista de inicio actualizada correctamente'
-        stale: 'La entrevista de inicio no fue actualizada, intente nuevamente'
+      <<: *female
 
     organizations:
-      create:
-        notice: 'Organización agregada correctamente'
-      update:
-        notice: 'Organización actualizada correctamente'
-        stale: 'La organización no fue actualizada, intente nuevamente'
+      <<: *female
 
     periods:
-      create:
-        notice: 'Período agregado correctamente'
-      update:
-        notice: 'Período actualizado correctamente'
-        stale: 'El período no fue actualizado, intente nuevamente'
+      <<: *male
 
     plans:
-      destroy:
-        notice: 'Plan de trabajo eliminado'
-        alert: 'El plan no puede ser eliminado, se encuentra relacionado con al menos un informe'
+      <<: *male
 
     polls:
-      create:
-        notice: 'La encuesta ha sido agregada correctamente'
-      update:
-        notice: 'La encuesta ha sido guardada correctamente ¡Muchas gracias!'
-        stale: 'La encuesta no fue guardada, intente nuevamente'
-      destroy:
-        notice: 'Encuesta eliminada'
-        alert: 'La encuesta no pudo ser eliminada'
+      <<: *female
 
     questionnaires:
-      create:
-        notice: 'El cuestionario ha sido agregado correctamente'
-      update:
-        notice: 'El cuestionario ha sido actualizado correctamente'
-        stale: 'El cuestionario no fue actualizado, intente nuevamente'
+      <<: *male
 
     registrations:
       create:
@@ -110,54 +94,29 @@ es:
         notice: ''
 
     resource_classes:
-      create:
-        notice: 'Clase de recurso agregada correctamente'
-      update:
-        notice: 'Clase de recurso actualizada correctamente'
-        stale: 'La clase de recurso no fue actualizada, intente nuevamente'
-      destroy:
-        notice: 'Clase de recurso eliminada'
-        alert: 'La clase de recurso no pudo ser eliminada'
+      <<: *female
 
     risk_assessments:
-      create:
-        notice: 'Evaluación de riesgo agregada correctamente'
+      <<: *male
       merge_to_plan:
         notice: 'Plan actualizado correctamente'
-      update:
-        notice: 'Evaluación de riesgo actualizada correctamente'
-        stale: 'La evaluación de riesgo no fue actualizada, intente nuevamente'
-      destroy:
-        notice: 'Evaluación de riesgo eliminada'
       sort_by_risk:
         notice: 'Evaluación de riesgo ordenada correctamente'
 
+    risk_registries:
+      <<: *male
+
     risk_assessment_templates:
-      create:
-        notice: 'Plantilla de evaluación de riesgo agregada correctamente'
-      update:
-        notice: 'Plantilla de evaluación de riesgo actualizada correctamente'
-        stale: 'La plantilla de evaluación de riesgo no fue actualizada, intente nuevamente'
-      destroy:
-        notice: 'Plantilla de evaluación de riesgo eliminada'
+      <<: *female
 
     settings:
-      update:
-        notice: 'Configuración actualizada correctamente'
-        stale: 'La configuración no fue actualizada, intente nuevamente'
+      <<: *female
 
     tags:
-      create:
-        notice: 'Etiqueta creada'
-      update:
-        notice: 'Etiqueta actualizada'
-        alert: ''
-        stale: 'Etiqueta no pudo ser actualizada, intente nuevamente'
-      destroy:
-        notice: 'Etiqueta eliminada'
-        alert: 'La etiqueta no pudo ser eliminada'
+      <<: *female
 
     users:
+      <<: *male
       profiles:
         update:
           notice: 'Actualización de perfil correcta'
@@ -172,12 +131,4 @@ es:
           alert: 'La liberación de responsabilidades no puede realizarse, deberá en algunos casos reasignarlas'
 
     weakness_templates:
-      create:
-        notice: 'Plantilla de observación creada'
-      update:
-        notice: 'Plantilla de observación actualizada'
-        alert: ''
-        stale: 'La plantilla de observación no pudo ser actualizada, intente nuevamente'
-      destroy:
-        notice: 'Plantilla de observación eliminada'
-        alert: 'La plantilla de observación no pudo ser eliminada'
+      <<: *female

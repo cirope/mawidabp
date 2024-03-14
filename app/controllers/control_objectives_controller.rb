@@ -3,8 +3,6 @@
 class ControlObjectivesController < ApplicationController
   include AutoCompleteFor::ControlObjectiveAuditor
 
-  respond_to :html
-
   before_action :auth, :check_privileges
   before_action :set_control_objective, only: [:show]
   before_action :set_title, except: :auto_complete_for_control_objective_auditor
@@ -18,7 +16,6 @@ class ControlObjectivesController < ApplicationController
 
   # * GET /control_objectives/1
   def show
-    respond_with @control_objective
   end
 
   private

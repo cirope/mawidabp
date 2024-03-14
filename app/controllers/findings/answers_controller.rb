@@ -1,8 +1,6 @@
 class Findings::AnswersController < ApplicationController
   include Findings::SetFinding
 
-  respond_to :html
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_finding, only: [:create, :update]
   before_action :set_finding_answer, :set_endorsement, only: [:update]
@@ -11,13 +9,11 @@ class Findings::AnswersController < ApplicationController
     @finding_answer = @finding.finding_answers.build finding_answer_params
 
     if @finding.save
-      flash.notice = t 'flash.finding_answers.create.notice'
-
-      respond_with @finding_answer, location: finding_url(params[:completion_state], @finding)
+      redirect_with_notice @finding_answer, url: finding_url(params[:completion_state], @finding)
     else
       flash.now[:alert] = t('flash.finding_answers.create.alert')
 
-      render 'findings/show'
+      render 'findings/show', status: :unprocessable_entity
     end
   end
 

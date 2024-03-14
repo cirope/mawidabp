@@ -243,6 +243,8 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'index as pdf' do
     get :index, as: :pdf
+
+    Current.organization = organizations(:cirope)
     assert_redirected_to UserPdf.new.relative_path
   end
 
@@ -260,6 +262,7 @@ class UsersControllerTest < ActionController::TestCase
       }
     }, as: :pdf
 
+    Current.organization = organizations(:cirope)
     assert_redirected_to UserPdf.new.relative_path
   end
 

@@ -11,7 +11,7 @@ class Findings::CommitmentsControllerTest < ActionController::TestCase
     get :show, params: {
       completion_state: 'incomplete',
       finding_id: @finding,
-      id: 10.months.from_now.to_date.to_s(:db),
+      id: 10.months.from_now.to_date.to_fs(:db),
       index: '2'
     }, xhr: true, as: :js
 

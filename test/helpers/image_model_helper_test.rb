@@ -78,6 +78,7 @@ class ImageModelHelperTest < ActionView::TestCase
 
     template.extend ActionView::Helpers::FormHelper
     template.extend ActionView::Helpers::FormOptionsHelper
+    template.extend ActionView::Helpers::FormTagHelper
 
     form_builder = SimpleForm::FormBuilder.new :control_objective, @image_model, template, {}
     link_to      = link_to_remove_image form_builder
