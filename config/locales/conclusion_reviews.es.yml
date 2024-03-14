@@ -2,7 +2,7 @@ es:
   conclusion_review:
     bic:
       cover:
-        review_identification: "Informe de Auditoria N°: %{identification}"
+        review_identification: "Informe de Auditoría N°: %{identification}"
         auditors: 'Auditores:'
         owners: 'Responsables:'
         review_period: 'Periodo de Revisión:'
@@ -16,7 +16,7 @@ es:
         final_with_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia conteniendo las respuestas de cada una de las áreas.'
         final_without_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia, el que no contiene observaciones de relevancia que formular.'
         recipients: 'Destinatarios'
-        review_period_title: "Revision de Auditoría Interna:"
+        review_period_title: "Revisión de Auditoría Interna:"
         review_period_description: "Iniciada: %{plan_item_start} - Finalizada: %{plan_item_end}"
       scope: 'ALCANCE'
       audit_comments: 'COMENTARIOS DE AUDITORIA'
