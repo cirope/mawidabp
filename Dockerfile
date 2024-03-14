@@ -1,26 +1,32 @@
 ARG APP_HOME=/opt/app
-ARG BUNDLE_BIN=$GEM_HOME/bin
-ARG BUNDLE_GEMFILE=$APP_HOME/Gemfile
-ARG PATH=$BUNDLE_BIN:$PATH
+#ARG BUNDLE_BIN=$GEM_HOME/bin
+#ARG BUNDLE_GEMFILE=$APP_HOME/Gemfile
+#ARG PATH=$BUNDLE_BIN:$PATH
 ARG RAILS_ENV=production
+#FROM multiarch/qemu-user-static:x86_64-aarch64 as qemu
 
 # ----------------------
 # --- Assets builder ---
 # ----------------------
-FROM ruby:alpine AS builder
+FROM ruby:alpine as builder
+#COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin/
+#RUN apk update
+# 👇 add this line to resolve
+#RUN apk add libc6-compat
+#FROM ruby:lastest AS builder
 
 ARG APP_HOME
-ARG BUNDLE_BIN
-ARG BUNDLE_GEMFILE
-ARG PATH
+#ARG BUNDLE_BIN
+#ARG BUNDLE_GEMFILE
+#ARG PATH
 ARG RAILS_ENV
 
-RUN apk add --update --no-cache \
-  build-base                    \
-  linux-headers                 \
-  nodejs                        \
-  postgresql-dev                \
-  tzdata
+RUN apk add --update --no-cache\
+ build-base                    \
+ linux-headers                 \
+ nodejs                        \
+ postgresql-dev                \
+ tzdata
 
 RUN mkdir $APP_HOME
 
@@ -43,9 +49,9 @@ RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 FROM ruby:alpine
 
 ARG APP_HOME
-ARG BUNDLE_BIN
-ARG BUNDLE_GEMFILE
-ARG PATH
+#ARG BUNDLE_BIN
+#ARG BUNDLE_GEMFILE
+#ARG PATH
 ARG RAILS_ENV
 
 ENV RAILS_LOG_TO_STDOUT true
