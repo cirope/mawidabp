@@ -258,6 +258,6 @@ module ConclusionFinalReviewsHelper
   def enable_close_date_edition? conclusion_final_review
     setting = Current.organization.settings.find_by name: 'enable_close_date_edition'
 
-    conclusion_final_review.new_record? || setting.value == '1'
+    conclusion_final_review.new_record? || setting&.value == '1'
   end
 end
