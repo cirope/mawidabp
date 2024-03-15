@@ -169,10 +169,10 @@ module Reports::WeaknessesHeatmap
           PlanItem.human_attribute_name('risk_exposure'),
           weakness.review.plan_item.risk_exposure
         ],
-        [
+        ([
           Weakness.human_attribute_name('priority'),
           weakness.priority_text
-        ],
+        ] unless %w(gal).include? Current.conclusion_pdf_format),
         [
           t('finding.auditors', count: 0),
           weakness.users.select(&:auditor?).map(&:full_name).to_sentence
