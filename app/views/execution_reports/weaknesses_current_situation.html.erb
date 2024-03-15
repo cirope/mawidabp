@@ -79,10 +79,12 @@
           <%= current_weakness.risk_text %>
         </p>
 
-        <p class="mb-1">
-          <span class="text-muted"><%= Weakness.human_attribute_name 'priority' %></span>:
-          <%= current_weakness.priority_text %>
-        </p>
+        <% unless %w(gal).include? Current.conclusion_pdf_format %>
+          <p class="mb-1">
+            <span class="text-muted"><%= Weakness.human_attribute_name 'priority' %></span>:
+            <%= current_weakness.priority_text %>
+          </p>
+        <% end %>
 
         <p class="h5 mb-1">
           <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
