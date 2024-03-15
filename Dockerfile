@@ -1,81 +1,52 @@
-ARG APP_HOME=/opt/app
-#ARG BUNDLE_BIN=$GEM_HOME/bin
-#ARG BUNDLE_GEMFILE=$APP_HOME/Gemfile
-#ARG PATH=$BUNDLE_BIN:$PATH
-ARG RAILS_ENV=production
-#FROM multiarch/qemu-user-static:x86_64-aarch64 as qemu
-
-# ----------------------
-# --- Assets builder ---
-# ----------------------
+FROM multiarch/qemu-user-static:x86_64-aarch64 as qemu
 FROM ruby:alpine as builder
-#COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin/
-#RUN apk update
-# 👇 add this line to resolve
-#RUN apk add libc6-compat
-#FROM ruby:lastest AS builder
 
-ARG APP_HOME
-#ARG BUNDLE_BIN
-#ARG BUNDLE_GEMFILE
-#ARG PATH
-ARG RAILS_ENV
-
-RUN apk add --update --no-cache\
- build-base                    \
- linux-headers                 \
- nodejs                        \
- postgresql-dev                \
- tzdata
-
-RUN mkdir $APP_HOME
-
-WORKDIR $APP_HOME
-
-COPY Gemfile $APP_HOME/Gemfile
-COPY Gemfile.lock $APP_HOME/Gemfile.lock
-
-RUN gem update --system && gem update --force --no-document
-RUN bundle config set deployment 'true' && bundle install
-
-COPY . $APP_HOME
-COPY config/application.yml.example $APP_HOME/config/application.yml
-
-RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
-
-# ----------------------
-# --- Release image ----
-# ----------------------
-FROM ruby:alpine
-
-ARG APP_HOME
-#ARG BUNDLE_BIN
-#ARG BUNDLE_GEMFILE
-#ARG PATH
-ARG RAILS_ENV
+ENV APP_ROOT /opt/app
 
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
+ENV RAILS_ENV production
 
-ENV HOME $APP_HOME
-ENV USER nobody
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+
+ENV USER_ID 1001
 ENV PORT 3000
 
-RUN apk add --update --no-cache \
-  imagemagick                   \
-  nodejs                        \
-  postgresql-dev                \
-  tzdata
+USER root
 
-COPY --from=builder $APP_HOME $APP_HOME
-COPY --from=builder $GEM_HOME $GEM_HOME
+RUN apk add --update --no-cache\
+ build-base                    \
+ curl                         \
+ nodejs                        \
+ postgresql-dev                \
+ tzdata \
+ libc6-compat
 
-RUN chown -R $USER: $APP_HOME
+RUN mkdir -p $APP_ROOT
+WORKDIR $APP_ROOT
 
-WORKDIR $APP_HOME
+COPY Gemfile Gemfile.lock ./
 
-USER $USER
+RUN gem update --system
+RUN bundle install
 
-EXPOSE $PORT
+COPY . $APP_ROOT
+COPY config/application.yml.example $APP_ROOT/config/application.yml
 
+RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
+#RUN bundle exec rake help:install
+#RUN rm -rf config/jekyll/_site
+#RUN bundle exec rake help:generate
+#RUN bundle exec rake help:generate
+
+RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
+
+USER $USER_ID
+
+EXPOSE 3000
+
+ENTRYPOINT [ "/usr/bin/env" ] ]
+#ENTRYPOINT [ "/rails/bin/docker-entrypoint" ]
 CMD [ "bundle", "exec", "rails", "server" ]
