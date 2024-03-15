@@ -11,6 +11,7 @@
           <% filters = %w(review review_code finding risk_levels priority current_situation compliance process_control control_objective tags) %>
           <% filters = filters - ['current_situation'] unless SHOW_FINDING_CURRENT_SITUATION %>
           <% filters = filters - ['compliance'] unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+          <% filters = filters - ['priority'] if %w(gal).include? Current.conclusion_pdf_format %>
           <% filters.each do |filter_name| %>
             <%= render "shared/filters/#{filter_name}", f: f, display: true, action: action_name %>
           <% end %>
