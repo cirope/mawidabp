@@ -2,7 +2,7 @@ module FindingAnswers::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :latest, -> { order(created_at: :desc).limit 5 }
+    scope :latest, -> { reorder(created_at: :desc).limit 5 }
   end
 
   module ClassMethods
