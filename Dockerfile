@@ -17,12 +17,14 @@ ENV PORT 3000
 USER root
 
 RUN apk add --update --no-cache\
- build-base                    \
- curl                         \
- nodejs                        \
- postgresql-dev                \
- tzdata \
- libc6-compat
+ build-base     \
+ curl           \
+ nodejs         \
+ postgresql-dev \
+ tzdata         \
+ libc6-compat   \
+ vim
+
 
 RUN mkdir -p $APP_ROOT
 WORKDIR $APP_ROOT
@@ -35,6 +37,7 @@ RUN bundle install
 COPY . $APP_ROOT
 COPY config/application.yml.example $APP_ROOT/config/application.yml
 
+#RUN bundle exec rake help:generate
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 #RUN bundle exec rake help:install
 #RUN rm -rf config/jekyll/_site
