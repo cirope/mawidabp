@@ -7,7 +7,7 @@ class ControlObjectivesController < ApplicationController
 
   before_action :auth, :check_privileges
   before_action :set_control_objective, only: [:show]
-  before_action :set_title
+  before_action :set_title, except: :auto_complete_for_control_objective_auditor
 
   # * GET /control_objectives
   def index
@@ -27,4 +27,3 @@ class ControlObjectivesController < ApplicationController
       @control_objective = ControlObjective.list.find params[:id]
     end
 end
-
