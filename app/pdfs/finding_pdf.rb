@@ -23,6 +23,10 @@ class FindingPdf < Prawn::Document
 
   private
 
+    def is_pat?
+      Current.conclusion_pdf_format == 'pat'
+    end
+
     def random_id
       @random_id ||= rand 99_999_999
     end
@@ -45,7 +49,7 @@ class FindingPdf < Prawn::Document
 
       put_table findings_data, column_headers, column_widths
 
-      if Current.conclusion_pdf_format == 'pat'
+      if is_pat?
         issues_data = generate_table_data preloaded_findings, format: :issues
 
         put_table issues_data, issue_column_headers, issue_column_widths
@@ -53,7 +57,7 @@ class FindingPdf < Prawn::Document
     end
 
     def preload_findings_data
-      if Current.conclusion_pdf_format == 'pat'
+      if is_pat?
         @findings.preload :review
       else
         @findings.preload :review, control_objective: { process_control: :best_practice }
@@ -80,12 +84,12 @@ class FindingPdf < Prawn::Document
       rows = [
         finding.review.identification,
         finding.review_code,
-        ((finding.control_objective&.process_control&.best_practice&.name || '') unless Current.conclusion_pdf_format == 'pat'),
-        (finding.control_objective&.process_control&.name unless Current.conclusion_pdf_format == 'pat'),
+        ((finding.control_objective&.process_control&.best_practice&.name || '') unless is_pat?),
+        (finding.control_objective&.process_control&.name unless is_pat?),
         finding.title
       ].compact
 
-      rows += pat_extra_rows(finding) if Current.conclusion_pdf_format == 'pat'
+      rows += pat_extra_rows(finding) if is_pat?
       rows
     end
 
@@ -156,12 +160,12 @@ class FindingPdf < Prawn::Document
       headers = [
         ['review', Review.model_name.human, 10],
         ['review_code', Finding.human_attribute_name('review_code'), 5],
-        (['best_practice', BestPractice.model_name.human, 16] unless Current.conclusion_pdf_format == 'pat'),
-        (['process_control', ProcessControl.model_name.human, 20] unless Current.conclusion_pdf_format == 'pat'),
+        (['best_practice', BestPractice.model_name.human, 16] unless is_pat?),
+        (['process_control', ProcessControl.model_name.human, 20] unless is_pat?),
         ['title', Finding.human_attribute_name('title'), 49]
       ].compact
 
-      headers += pat_extra_headers if Current.conclusion_pdf_format == 'pat'
+      headers += pat_extra_headers if is_pat?
       headers
     end
 
