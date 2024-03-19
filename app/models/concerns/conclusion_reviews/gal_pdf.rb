@@ -135,7 +135,7 @@ module ConclusionReviews::GalPdf
 
       pdf.table([
         [put_project_on(pdf)],
-        [put_review_indentifier_and_issue_date_on(pdf)],
+        [put_review_identification_and_issue_date_on(pdf)],
         [put_risk_exposure_v2_on(pdf)],
         [put_objective_on(pdf)],
         [put_survey_on(pdf)],
@@ -159,10 +159,10 @@ module ConclusionReviews::GalPdf
       )
     end
 
-    def put_review_indentifier_and_issue_date_on pdf
+    def put_review_identification_and_issue_date_on pdf
       style = {
         cell_style: { background_color: "e7e6e6", inline_format: true },
-        column_widths: review_indentifier_and_issue_date_column_widths(pdf)
+        column_widths: review_identification_and_issue_date_column_widths(pdf)
       }
 
       pdf.make_table([
@@ -1052,7 +1052,7 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def review_indentifier_and_issue_date_column_widths pdf
+    def review_identification_and_issue_date_column_widths pdf
       [78, 22].map { |percent| pdf.percent_width percent }
     end
 
