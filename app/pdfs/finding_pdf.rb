@@ -41,12 +41,13 @@ class FindingPdf < Prawn::Document
 
     def add_body
       preloaded_findings = preload_findings_data
+      findings_data      = generate_table_data preloaded_findings
 
-      findings_data = generate_table_data preloaded_findings
       put_table findings_data, column_headers, column_widths
 
       if Current.conclusion_pdf_format == 'pat'
         issues_data = generate_table_data preloaded_findings, format: :issues
+
         put_table issues_data, issue_column_headers, issue_column_widths
       end
     end
