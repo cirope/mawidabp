@@ -6,7 +6,7 @@
   <%= markdown h(@note) unless @note.blank? %>
 
   <% if attachments['review_image.png'].present? %>
-    <%= image_tag attachments['review_image.png'].url, style: 'max-width: 100%; height: auto;' -%>
+    <%= image_tag attachments['review_image.png'].url, style: 'max-width: 100%; height: auto;' %>
   <% end %>
 
   <% if @show_alt_footer %>
