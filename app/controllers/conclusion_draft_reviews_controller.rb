@@ -188,17 +188,15 @@ class ConclusionDraftReviewsController < ApplicationController
     @title = t 'conclusion_draft_review.send_by_email'
 
     if @conclusion_draft_review.try(:review).try(:can_be_sended?)
-      users = []
+      users          = []
       export_options = params[:export_options] || {}
 
       if params[:conclusion_review]
-        include_score_sheet =
-          params[:conclusion_review][:include_score_sheet] == '1'
-        include_global_score_sheet =
-          params[:conclusion_review][:include_global_score_sheet] == '1'
-        note = params[:conclusion_review][:email_note]
-        review_type = params[:conclusion_review][:review_type]
-        include_executive_summary = review_type == 'only_executive_summary'
+        include_score_sheet        = params[:conclusion_review][:include_score_sheet] == '1'
+        include_global_score_sheet = params[:conclusion_review][:include_global_score_sheet] == '1'
+        note                       = params[:conclusion_review][:email_note]
+        review_type                = params[:conclusion_review][:review_type]
+        include_executive_summary  = review_type == 'only_executive_summary'
 
         if review_type == 'brief'
           export_options[:brief] = '1'

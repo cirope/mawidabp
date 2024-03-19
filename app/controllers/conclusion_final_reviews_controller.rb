@@ -203,16 +203,16 @@ class ConclusionFinalReviewsController < ApplicationController
 
     @questionnaires = Questionnaire.list.by_pollable_type 'ConclusionReview'
 
-    users = []
+    users           = []
     users_with_poll = []
-    export_options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
+    export_options  = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
 
     if params[:conclusion_review]
-      include_score_sheet = params[:conclusion_review][:include_score_sheet] == '1'
+      include_score_sheet        = params[:conclusion_review][:include_score_sheet] == '1'
       include_global_score_sheet = params[:conclusion_review][:include_global_score_sheet] == '1'
-      note = params[:conclusion_review][:email_note]
-      review_type = params[:conclusion_review][:review_type]
-      include_executive_summary = review_type == 'only_executive_summary'
+      note                       = params[:conclusion_review][:email_note]
+      review_type                = params[:conclusion_review][:review_type]
+      include_executive_summary  = review_type == 'only_executive_summary'
 
       if review_type == 'brief'
         export_options[:brief] = '1'
