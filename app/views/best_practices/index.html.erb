@@ -1,38 +1,40 @@
-<%= render partial: 'shared/search', locals: {
-  options: {},
-  columns: search_columns_for_model(BestPractice)
-} %>
-<table class="table table-sm table-striped table-hover">
-  <thead id="column_headers">
-    <tr>
-      <%= make_filterable_column BestPractice.human_attribute_name('name'), nil, 'name' %>
-      <%= make_not_available_column BestPractice.human_attribute_name('description'), { :class => 'd-none d-md-table-cell' } %>
-      <th colspan="4" class="text-end"><%= link_to_search %></th>
-    </tr>
-  </thead>
+<div class="card">
+  <div class="card-body">
+    <%= render partial: 'shared/search', locals: {
+      options: {},
+      columns: search_columns_for_model(BestPractice)
+    } %>
+    <table class="table table-sm table-striped table-hover">
+      <thead id="column_headers">
+        <tr>
+          <%= make_filterable_column BestPractice.human_attribute_name('name'), nil, 'name' %>
+          <%= make_not_available_column BestPractice.human_attribute_name('description'), { :class => 'd-none d-md-table-cell' } %>
+          <th colspan="4" class="text-end"><%= link_to_search %></th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @best_practices.each do |best_practice| %>
-      <tr <%== 'class="text-muted strike"' if best_practice.obsolete %>>
-        <td>
-          <%= best_practice_shared_icon best_practice %>
-          <%= super_truncate best_practice.name, 40 %>
-        </td>
-        <td class="d-none d-md-table-cell"><%= super_truncate(best_practice.description, 40) %></td>
-        <td class="text-end">
-          <%= link_to [best_practice, format: :csv], title: t('label.download_csv') do %>
-            <%= icon 'fas', 'file-download' %>
-          <% end %>
-        </td>
-        <td class="text-end"><%= link_to_show best_practice %></td>
-        <td class="text-end"><%= link_to_edit edit_best_practice_path(best_practice) %></td>
-        <td class="text-end"><%= link_to_destroy best_practice %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @best_practices.each do |best_practice| %>
+          <tr <%== 'class="text-muted strike"' if best_practice.obsolete %>>
+            <td>
+              <%= best_practice_shared_icon best_practice %>
+              <%= super_truncate best_practice.name, 40 %>
+            </td>
+            <td class="d-none d-md-table-cell"><%= super_truncate(best_practice.description, 40) %></td>
+            <td class="text-end">
+              <%= link_to [best_practice, format: :csv], title: t('label.download_csv') do %>
+                <%= icon 'fas', 'file-download' %>
+              <% end %>
+            </td>
+            <td class="text-end"><%= link_to_show best_practice %></td>
+            <td class="text-end"><%= link_to_edit edit_best_practice_path(best_practice) %></td>
+            <td class="text-end"><%= link_to_destroy best_practice %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<hr />
-
-<%= paginate @best_practices %>
-<%= link_to_new new_best_practice_path, class: 'btn btn-primary' %>
+    <%= paginate @best_practices %>
+    <%= link_to_new new_best_practice_path, class: 'btn btn-primary' %>
+  </div>
+</div>

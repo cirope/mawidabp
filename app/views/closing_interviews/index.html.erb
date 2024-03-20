@@ -1,42 +1,44 @@
-<% if @closing_interviews.empty? && @query.blank? %>
-  <%= render 'shared/empty_index', message: t('.empty_html') %>
-<% else %>
-  <%= render partial: 'shared/search', locals: {
-    options: {},
-    columns: @query.blank? ? ClosingInterview::COLUMNS_FOR_SEARCH.keys : @columns
-  } %>
+<div class="card">
+  <div class="card-body">
+    <% if @closing_interviews.empty? && @query.blank? %>
+      <%= render 'shared/empty_index', message: t('.empty_html') %>
+    <% else %>
+      <%= render partial: 'shared/search', locals: {
+        options: {},
+        columns: @query.blank? ? ClosingInterview::COLUMNS_FOR_SEARCH.keys : @columns
+      } %>
 
-  <% if @closing_interviews.empty? %>
-    <%= render 'shared/empty_index', message: t('.empty_search_html') %>
-  <% else %>
-    <table class="table table-sm table-striped table-hover">
-      <thead id="column_headers">
-        <tr>
-          <%= make_filterable_column ClosingInterview.human_attribute_name('review_id'), nil, 'review' %>
-          <%= make_filterable_column PlanItem.human_attribute_name('project'), { class: 'd-none d-md-table-cell' }, 'project' %>
-          <%= make_filterable_column ClosingInterview.human_attribute_name('interview_date'), nil, 'interview_date' %>
-          <th colspan="3" class="text-end"><%= link_to_search %></th>
-        </tr>
-      </thead>
+      <% if @closing_interviews.empty? %>
+        <%= render 'shared/empty_index', message: t('.empty_search_html') %>
+      <% else %>
+        <table class="table table-sm table-striped table-hover">
+          <thead id="column_headers">
+            <tr>
+              <%= make_filterable_column ClosingInterview.human_attribute_name('review_id'), nil, 'review' %>
+              <%= make_filterable_column PlanItem.human_attribute_name('project'), { class: 'd-none d-md-table-cell' }, 'project' %>
+              <%= make_filterable_column ClosingInterview.human_attribute_name('interview_date'), nil, 'interview_date' %>
+              <th colspan="3" class="text-end"><%= link_to_search %></th>
+            </tr>
+          </thead>
 
-      <tbody>
-        <% @closing_interviews.each do |closing_interview| %>
-          <tr>
-            <td><%= closing_interview.review.identification %></td>
-            <td class="d-none d-md-table-cell"><%= closing_interview.review.plan_item.project %></td>
-            <td><%= l closing_interview.interview_date %></td>
-            <td class="text-end"><%= link_to_show closing_interview %></td>
-            <td class="text-end"><%= link_to_edit [:edit, closing_interview] %></td>
-            <td class="text-end"><%= link_to_destroy closing_interview if closing_interview.can_be_destroyed? %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
+          <tbody>
+            <% @closing_interviews.each do |closing_interview| %>
+              <tr>
+                <td><%= closing_interview.review.identification %></td>
+                <td class="d-none d-md-table-cell"><%= closing_interview.review.plan_item.project %></td>
+                <td><%= l closing_interview.interview_date %></td>
+                <td class="text-end"><%= link_to_show closing_interview %></td>
+                <td class="text-end"><%= link_to_edit [:edit, closing_interview] %></td>
+                <td class="text-end"><%= link_to_destroy closing_interview if closing_interview.can_be_destroyed? %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
 
-  <%= paginate @closing_interviews %>
-<% end %>
+      <%= paginate @closing_interviews %>
+    <% end %>
 
-<hr>
-
-<%= link_to_new new_closing_interview_path, class: 'btn btn-primary' %>
+    <%= link_to_new new_closing_interview_path, class: 'btn btn-primary' %>
+  </div>
+</div>

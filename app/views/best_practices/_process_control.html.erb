@@ -31,7 +31,9 @@
     <div data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= process_control_path f.object %>" hidden>
       <% if fetch %>
         <div class="alert alert-warning">
-          <%= t 'navigation.loading' %>
+          <div class="alert-message">
+            <%= t 'navigation.loading' %>
+          </div>
         </div>
       <% else %>
         <%= render 'process_controls/form', process_control: f.object, index: f.index %>

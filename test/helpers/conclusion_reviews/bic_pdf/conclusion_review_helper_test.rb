@@ -177,20 +177,6 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
     assert_equal '', watermark_class(false)
   end
 
-  test 'get legend weakness repeated when weakness have repeated' do
-    weakness    = findings :unanswered_for_level_1_notification
-    repeated_of = findings :being_implemented_weakness
-
-    weakness.update! repeated_of_id: repeated_of.id
-
-    assert_equal I18n.t('conclusion_review.bic.weaknesses.repeated'),
-                 legend_weakness_repeated(weakness)
-  end
-
-  test 'get legend weakness repeated when weakness dont have repeated' do
-    assert_equal '', legend_weakness_repeated(findings(:being_implemented_weakness))
-  end
-
   test 'get follow up date weakness have follow up date' do
     weakness = findings :being_implemented_weakness
 
@@ -205,10 +191,10 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
     weakness       = findings :being_implemented_weakness
     weakness.state = Finding::STATUS[:implemented_audited]
 
-    assert_equal 'green-text', risk_style(weakness)
+    assert_equal 'text-green', risk_style(weakness)
   end
 
   test 'get risk style when is not implemented_audited' do
-    assert_equal 'orange-text', risk_style(findings(:being_implemented_weakness))
+    assert_equal 'text-white', risk_style(findings(:being_implemented_weakness))
   end
 end

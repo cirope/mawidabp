@@ -1,77 +1,81 @@
-<%= simple_form_for @conclusion_final_review,
-  url: send_by_email_conclusion_final_review_path(@conclusion_final_review) do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @conclusion_final_review,
+      url: send_by_email_conclusion_final_review_path(@conclusion_final_review) do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="mb-3 form-group">
-          <%= select_tag 'conclusion_review[review_type]', send_review_options(@conclusion_final_review), class: 'form-select' %>
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3 form-group">
+              <%= select_tag 'conclusion_review[review_type]', send_review_options(@conclusion_final_review), class: 'form-select' %>
+            </div>
+            <% if Current.conclusion_pdf_format == 'default' %>
+              <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
+                <div class="form-check mb-1">
+                  <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false,
+                    id: 'conclusion_review_include_global_score_sheet', class: 'form-check-input' %>
+                  <label class="form-check-label" for="conclusion_review_include_global_score_sheet">
+                    <%= t 'conclusion_review.include_global_score_sheet' %>
+                  </label>
+                </div>
+                <div class="form-check mb-1">
+                  <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
+                    id: 'conclusion_review_include_score_sheet', class: 'form-check-input' %>
+                  <label class="form-check-label" for="conclusion_review_include_score_sheet">
+                    <%= t 'conclusion_review.include_score_sheet' %>
+                  </label>
+                </div>
+              <% end %>
+              <div class="form-check mb-3">
+                <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false,
+                  id: 'export_options_hide_control_objectives_excluded_from_score', class: 'form-check-input' %>
+                <label class="form-check-label" for="export_options_hide_control_objectives_excluded_from_score">
+                  <%= t 'conclusion_final_review.hide_control_objectives_excluded_from_score' %>
+                </label>
+              </div>
+            <% end %>
+            <div class="mb-3 form-group">
+              <%= f.label t('conclusion_review.email_note'), for: :conclusion_review_email_note %>
+              <%= text_area_tag 'conclusion_review[email_note]', nil, rows: 5, class: 'form-control' %>
+            </div>
+          </div>
         </div>
-        <% if Current.conclusion_pdf_format == 'default' %>
-          <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
-            <div class="form-check mb-1">
-              <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false,
-                id: 'conclusion_review_include_global_score_sheet', class: 'form-check-input' %>
-              <label class="form-check-label" for="conclusion_review_include_global_score_sheet">
-                <%= t 'conclusion_review.include_global_score_sheet' %>
-              </label>
-            </div>
-            <div class="form-check mb-1">
-              <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
-                id: 'conclusion_review_include_score_sheet', class: 'form-check-input' %>
-              <label class="form-check-label" for="conclusion_review_include_score_sheet">
-                <%= t 'conclusion_review.include_score_sheet' %>
-              </label>
-            </div>
-          <% end %>
-          <div class="form-check mb-3">
-            <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false,
-              id: 'export_options_hide_control_objectives_excluded_from_score', class: 'form-check-input' %>
-            <label class="form-check-label" for="export_options_hide_control_objectives_excluded_from_score">
-              <%= t 'conclusion_final_review.hide_control_objectives_excluded_from_score' %>
-            </label>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <h5 class="h6"><%= User.model_name.human %></h5>
+        </div>
+        <div class="col-md-3">
+          <h5 class="h6"><%= t 'polls.answer_poll' %></h5>
+        </div>
+        <% unless SHOW_ALTERNATIVE_QUESTIONNAIRES %>
+          <div class="col-md-2">
+            <h5 class="h6"><%= t 'polls.about' %></h5>
           </div>
         <% end %>
-        <div class="mb-3 form-group">
-          <%= f.label t('conclusion_review.email_note'), for: :conclusion_review_email_note %>
-          <%= text_area_tag 'conclusion_review[email_note]', nil, rows: 5, class: 'form-control' %>
+      </div>
+
+      <div id="users">
+        <% @conclusion_final_review.review.users.each do |user| %>
+          <%= render 'user', item: user %>
+        <% end %>
+
+        <%= link_to_add_item(
+          t('conclusion_review.add_recipient'), @conclusion_final_review.review.users.build, 'user'
+        ) %>
+      </div>
+
+      <hr />
+
+      <div class="form-actions">
+        <div class="float-end">
+          <%= link_to_edit edit_conclusion_final_review_path(@conclusion_final_review) %> |
+          <%= link_to_index conclusion_final_reviews_path %>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <h5 class="h6"><%= User.model_name.human %></h5>
-    </div>
-    <div class="col-md-3">
-      <h5 class="h6"><%= t 'polls.answer_poll' %></h5>
-    </div>
-    <% unless SHOW_ALTERNATIVE_QUESTIONNAIRES %>
-      <div class="col-md-2">
-        <h5 class="h6"><%= t 'polls.about' %></h5>
+        <%= f.submit t('label.send'), class: 'btn btn-primary' %>
       </div>
     <% end %>
   </div>
-
-  <div id="users">
-    <% @conclusion_final_review.review.users.each do |user| %>
-      <%= render 'user', item: user %>
-    <% end %>
-
-    <%= link_to_add_item(
-      t('conclusion_review.add_recipient'), @conclusion_final_review.review.users.build, 'user'
-    ) %>
-  </div>
-
-  <hr />
-
-  <div class="form-actions">
-    <div class="float-end">
-      <%= link_to_edit edit_conclusion_final_review_path(@conclusion_final_review) %> |
-      <%= link_to_index conclusion_final_reviews_path %>
-    </div>
-    <%= f.submit t('label.send'), class: 'btn btn-primary' %>
-  </div>
-<% end %>
+</div>

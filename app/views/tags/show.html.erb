@@ -1,44 +1,48 @@
-<h2>
-  <div class="badge bg-<%= @tag.style %>">
-    <%= icon 'fas', @tag.icon %>
-    <%= @tag %>
-  </div>
-</h2>
+<div class="card">
+  <div class="card-body">
+    <h2>
+      <div class="badge bg-<%= @tag.style %>">
+        <%= icon 'fas', @tag.icon %>
+        <%= @tag %>
+      </div>
+    </h2>
 
-<p class="mb-1">
-  <strong><%= Tag.human_attribute_name 'shared' %></strong>:
-  <%= t "label.#{@tag.shared ? 'yes' : 'no'}" %>
-</p>
-
-<p class="mb-1">
-  <strong><%= Tag.human_attribute_name 'obsolete' %></strong>:
-  <%= t "label.#{@tag.obsolete ? 'yes' : 'no'}" %>
-</p>
-
-<% if SHOW_REVIEW_EXTRA_ATTRIBUTES || tags_options_collection(kind: @tag.kind).any? %>
-  <% Array(TAG_OPTIONS[@tag.kind]).each do |title, option| %>
     <p class="mb-1">
-      <strong><%= title %></strong>:
-      <%= @tag.option_value option, human: true %>
+      <strong><%= Tag.human_attribute_name 'shared' %></strong>:
+      <%= t "label.#{@tag.shared ? 'yes' : 'no'}" %>
     </p>
-  <% end %>
-<% end %>
 
-<% if @tag.children.any? %>
-  <h5><%= t 'tags.form.children' %></h5>
+    <p class="mb-1">
+      <strong><%= Tag.human_attribute_name 'obsolete' %></strong>:
+      <%= t "label.#{@tag.obsolete ? 'yes' : 'no'}" %>
+    </p>
 
-  <ul class="lead">
-    <% @tag.children.each do |tag| %>
-      <li>
-        <span class="badge bg-<%= tag.style %>">
-          <%= tag %>
-        </span>
-      </li>
+    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES || tags_options_collection(kind: @tag.kind).any? %>
+      <% Array(TAG_OPTIONS[@tag.kind]).each do |title, option| %>
+        <p class="mb-1">
+          <strong><%= title %></strong>:
+          <%= @tag.option_value option, human: true %>
+        </p>
+      <% end %>
     <% end %>
-  </ul>
-<% end %>
 
-<hr>
+    <% if @tag.children.any? %>
+      <h5><%= t 'tags.form.children' %></h5>
 
-<%= link_to_edit [:edit, @tag, kind: @tag.kind] %> |
-<%= link_to_index tags_path %>
+      <ul class="lead">
+        <% @tag.children.each do |tag| %>
+          <li>
+            <span class="badge bg-<%= tag.style %>">
+              <%= tag %>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <hr>
+
+    <%= link_to_edit [:edit, @tag, kind: @tag.kind] %> |
+    <%= link_to_index tags_path %>
+  </div>
+</div>

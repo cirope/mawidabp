@@ -1,83 +1,87 @@
-<%= render partial: 'shared/filter_form',
-  locals: {
-    action: :control_objective_counts, extra_params: {
-      controller_name: 'conclusion', final: false
-    },
-    forms: [
-      [:date_range, true],
-      [:business_unit_type_multiple, true],
-    ]
-  }
-%>
+<div class="card">
+  <div class="card-body">
+    <%= render partial: 'shared/filter_form',
+      locals: {
+        action: :control_objective_counts, extra_params: {
+          controller_name: 'conclusion', final: false
+        },
+        forms: [
+          [:date_range, true],
+          [:business_unit_type_multiple, true],
+        ]
+      }
+    %>
 
-<% if @control_objective_items.any? %>
-  <% @control_objective_items.each_with_index do |control_objective_item, index| %>
-    <p class="mb-1 mt-3">
-      <span class="badge rounded-pill bg-secondary">
-        <%= index + 1 %>
-      </span>
-      <span class="text-muted"><%= BusinessUnit.model_name.human %></span>:
-      <%= control_objective_item.business_unit %>
-    </p>
+    <% if @control_objective_items.any? %>
+      <% @control_objective_items.each_with_index do |control_objective_item, index| %>
+        <p class="mb-1 mt-3">
+          <span class="badge rounded-pill bg-secondary">
+            <%= index + 1 %>
+          </span>
+          <span class="text-muted"><%= BusinessUnit.model_name.human %></span>:
+          <%= control_objective_item.business_unit %>
+        </p>
 
-    <p class="mb-1">
-      <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
-      <%= control_objective_item.review.plan_item.project %>
-    </p>
+        <p class="mb-1">
+          <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
+          <%= control_objective_item.review.plan_item.project %>
+        </p>
 
-    <p class="mb-1">
-      <span class="text-muted"><%= Review.model_name.human %></span>:
-      <%= control_objective_item.review.identification %>
-    </p>
+        <p class="mb-1">
+          <span class="text-muted"><%= Review.model_name.human %></span>:
+          <%= control_objective_item.review.identification %>
+        </p>
 
-    <p class="mb-1">
-      <span class="text-muted"><%= BusinessUnitType.model_name.human %></span>:
-      <%= control_objective_item.business_unit_type %>
-    </p>
+        <p class="mb-1">
+          <span class="text-muted"><%= BusinessUnitType.model_name.human %></span>:
+          <%= control_objective_item.business_unit_type %>
+        </p>
 
-    <p class="mb-1">
-      <span class="text-muted"><%= ProcessControl.model_name.human %></span>:
-      <%= control_objective_item.process_control %>
-    </p>
+        <p class="mb-1">
+          <span class="text-muted"><%= ProcessControl.model_name.human %></span>:
+          <%= control_objective_item.process_control %>
+        </p>
 
-    <p class="mb-1">
-      <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
-      <%= l control_objective_item.review.issue_date %>
-    </p>
+        <p class="mb-1">
+          <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
+          <%= l control_objective_item.review.issue_date %>
+        </p>
 
-    <p class="mb-1">
-      <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'control_objective_text' %></span>:
-      <%= control_objective_item.control_objective_text %>
-    </p>
+        <p class="mb-1">
+          <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'control_objective_text' %></span>:
+          <%= control_objective_item.control_objective_text %>
+        </p>
 
-    <p class="mb-1">
-      <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'auditor_comment' %></span>:
-      <%= control_objective_item.auditor_comment %>
-    </p>
+        <p class="mb-1">
+          <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'auditor_comment' %></span>:
+          <%= control_objective_item.auditor_comment %>
+        </p>
 
-    <% if control_objective_item.show_counts? current_organization.prefix %>
-      <p class="mb-1">
-        <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'issues_count' %></span>:
-        <%= control_objective_item.issues_count %>
-      </p>
-      <p class="mb-1">
-        <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'alerts_count' %></span>:
-        <%= control_objective_item.alerts_count %>
-      </p>
+        <% if control_objective_item.show_counts? current_organization.prefix %>
+          <p class="mb-1">
+            <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'issues_count' %></span>:
+            <%= control_objective_item.issues_count %>
+          </p>
+          <p class="mb-1">
+            <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'alerts_count' %></span>:
+            <%= control_objective_item.alerts_count %>
+          </p>
+        <% end %>
+      <% end %>
+    <% else %>
+      <div class="ms-3">
+        <p class="mb-1"><em><%= t 'conclusion_committee_report.control_objective_counts.without_control_objective_items' %></em></p>
+      </div>
     <% end %>
-  <% end %>
-<% else %>
-  <div class="ms-3">
-    <p class="mb-1"><em><%= t 'conclusion_committee_report.control_objective_counts.without_control_objective_items' %></em></p>
+
+    <hr />
+
+    <div>
+      <%= link_to t('label.back'), action: :index %> |
+      <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', bs_target: '#customize_report' } %> |
+      <%= link_to t('label.download_csv'), control_objective_counts_conclusion_reports_path(request.query_parameters.merge(format: :csv)) %>
+    </div>
   </div>
-<% end %>
-
-<hr />
-
-<div>
-  <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { bs_toggle: 'modal', target: '#customize_report' } %> |
-  <%= link_to t('label.download_csv'), control_objective_counts_conclusion_reports_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {

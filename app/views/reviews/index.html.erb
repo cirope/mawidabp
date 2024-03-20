@@ -1,60 +1,62 @@
-<%= render partial: 'shared/search', locals: {
-  options: { columns_for_sort: Review.columns_for_sort },
-  columns: search_columns_for_model(Review)
-} %>
-<table class="table table-sm table-striped table-hover">
-  <thead id="column_headers">
-    <tr>
-      <th></th>
-      <%= make_filterable_column Period.model_name.human, nil, 'period' %>
-      <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { :class => 'd-none d-sm-table-cell' }, 'business_unit' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'd-none d-sm-table-cell' }, 'project' %>
-      <%= make_filterable_column t('review.user_assignment.audit_team'), { :class => 'd-none d-sm-table-cell' }, 'audit_team' %>
-      <% if POSTGRESQL_ADAPTER  %>
-        <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'd-none d-sm-table-cell' }, 'tags' %>
-      <% else %>
-        <%= make_not_available_column Tag.model_name.human(count: 0), { :class => 'd-none d-sm-table-cell' } %>
-      <% end %>
-      <%= make_not_available_column t('.control_objective_items_open.label'),
-        { :class => 'd-none d-xl-table-cell',
-          :title => t('.control_objective_items_open.title')
-        }
-      %>
-      <%= make_not_available_column t('.control_objective_items_finished.label'),
-        { :class => 'd-none d-xl-table-cell',
-          :title => t('.control_objective_items_finished.title')
-        }
-      %>
-      <th colspan="4" class="text-end"><%= link_to_search %></th>
-    </tr>
-  </thead>
+<div class="card">
+  <div class="card-body">
+    <%= render partial: 'shared/search', locals: {
+      options: { columns_for_sort: Review.columns_for_sort },
+      columns: search_columns_for_model(Review)
+    } %>
+    <table class="table table-sm table-striped table-hover">
+      <thead id="column_headers">
+        <tr>
+          <th></th>
+          <%= make_filterable_column Period.model_name.human, nil, 'period' %>
+          <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
+          <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { :class => 'd-none d-sm-table-cell' }, 'business_unit' %>
+          <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'd-none d-sm-table-cell' }, 'project' %>
+          <%= make_filterable_column t('review.user_assignment.audit_team'), { :class => 'd-none d-sm-table-cell' }, 'audit_team' %>
+          <% if POSTGRESQL_ADAPTER  %>
+            <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'd-none d-sm-table-cell' }, 'tags' %>
+          <% else %>
+            <%= make_not_available_column Tag.model_name.human(count: 0), { :class => 'd-none d-sm-table-cell' } %>
+          <% end %>
+          <%= make_not_available_column t('.control_objective_items_open.label'),
+            { :class => 'd-none d-xl-table-cell',
+              :title => t('.control_objective_items_open.title')
+            }
+          %>
+          <%= make_not_available_column t('.control_objective_items_finished.label'),
+            { :class => 'd-none d-xl-table-cell',
+              :title => t('.control_objective_items_finished.title')
+            }
+          %>
+          <th colspan="4" class="text-end"><%= link_to_search %></th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @reviews.each do |review| %>
-      <% has_final = review.has_final_review? %>
-      <tr <%== 'class="text-muted strike"' if has_final %>>
-        <td><%= show_review_finished_work_papers_icon review %></td>
-        <td><%= show_period_with_dates_as_abbr review.period %></td>
-        <td><%= review.identification %></td>
-        <td class="d-none d-sm-table-cell"><%= super_truncate review.plan_item.business_unit.name, 25 %></td>
-        <td class="d-none d-sm-table-cell"><%= super_truncate review.plan_item.project, 25 %></td>
-        <td class="d-none d-sm-table-cell"><%= audit_team_for review %></td>
-        <td class="d-none d-sm-table-cell"><%= tags review.tags %></td>
-        <td class="d-none d-xl-table-cell"><%= count_control_objective_items_by_finished_status(review, finished: false) %></td>
-        <td class="d-none d-xl-table-cell"><%= count_control_objective_items_by_finished_status(review, finished: true) %></td>
-        <td class="text-end"><%= link_to_clone new_review_path(:clone_from => review.id) %></td>
-        <td class="text-end"><%= link_to_show review %></td>
-        <td class="text-end"><%= link_to_edit edit_review_path(review) %></td>
-        <td class="text-end"><%= link_to_destroy review if review.can_be_destroyed? %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @reviews.each do |review| %>
+          <% has_final = review.has_final_review? %>
+          <tr <%== 'class="text-muted strike"' if has_final %>>
+            <td><%= show_review_finished_work_papers_icon review %></td>
+            <td><%= show_period_with_dates_as_abbr review.period %></td>
+            <td><%= review.identification %></td>
+            <td class="d-none d-sm-table-cell"><%= super_truncate review.plan_item.business_unit.name, 25 %></td>
+            <td class="d-none d-sm-table-cell"><%= super_truncate review.plan_item.project, 25 %></td>
+            <td class="d-none d-sm-table-cell"><%= audit_team_for review %></td>
+            <td class="d-none d-sm-table-cell"><%= tags review.tags %></td>
+            <td class="d-none d-xl-table-cell"><%= count_control_objective_items_by_finished_status(review, finished: false) %></td>
+            <td class="d-none d-xl-table-cell"><%= count_control_objective_items_by_finished_status(review, finished: true) %></td>
+            <td class="text-end"><%= link_to_clone new_review_path(:clone_from => review.id) %></td>
+            <td class="text-end"><%= link_to_show review %></td>
+            <td class="text-end"><%= link_to_edit edit_review_path(review) %></td>
+            <td class="text-end"><%= link_to_destroy review if review.can_be_destroyed? %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<hr />
-
-<div>
-  <%= paginate @reviews %>
-  <%= link_to t('label.new'), new_review_path, class: 'btn btn-primary' %>
+    <div>
+      <%= paginate @reviews %>
+      <%= link_to t('label.new'), new_review_path, class: 'btn btn-primary' %>
+    </div>
+  </div>
 </div>

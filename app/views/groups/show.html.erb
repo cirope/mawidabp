@@ -1,37 +1,39 @@
-<p>
-  <strong><%= Group.human_attribute_name :name %>:</strong>
-  <%= @group.name %>
-</p>
+<div class="card">
+  <div class="card-body">
+    <p>
+      <strong><%= Group.human_attribute_name :name %>:</strong>
+      <%= @group.name %>
+    </p>
 
-<p>
-  <strong><%= Group.human_attribute_name :description %>:</strong>
-  <%= @group.description %>
-</p>
+    <p>
+      <strong><%= Group.human_attribute_name :description %>:</strong>
+      <%= @group.description %>
+    </p>
 
-<% unless @group.organizations.empty? %>
-  <table class="table table-sm table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= Organization.human_attribute_name :name %></th>
-        <th><%= Organization.human_attribute_name :prefix %></th>
-        <th><%= Organization.human_attribute_name :description %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @group.organizations.each do |organization| %>
-        <tr>
-          <td><%= organization.name %></td>
-          <td><%= organization.prefix %></td>
-          <td><%= organization.description %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+    <% unless @group.organizations.empty? %>
+      <table class="table table-sm table-striped table-hover">
+        <thead>
+          <tr>
+            <th><%= Organization.human_attribute_name :name %></th>
+            <th><%= Organization.human_attribute_name :prefix %></th>
+            <th><%= Organization.human_attribute_name :description %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @group.organizations.each do |organization| %>
+            <tr>
+              <td><%= organization.name %></td>
+              <td><%= organization.prefix %></td>
+              <td><%= organization.description %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
 
-<hr />
-
-<div>
-  <%= link_to_edit edit_group_path(@group) %> |
-  <%= link_to_index groups_path %>
+    <div>
+      <%= link_to_edit edit_group_path(@group) %> |
+      <%= link_to_index groups_path %>
+    </div>
+  </div>
 </div>
