@@ -8,8 +8,10 @@ servers:
       - 34.231.104.28
     labels:
       traefik.http.routers.mawidabp.entrypoints: websecure
-      traefik.http.routers.mawidabp.rule: Host(`kamal.mawidabp.com`) ||  Host(`admin-kamal.mawidabp.com`)
+      traefik.http.routers.mawidabp.rule: Host(`kamal.mawidabp.com`)
       traefik.http.routers.mawidabp.tls.certresolver: letsencrypt
+      #traefik.http.routers.mawidabp.tls.domains.main: "kamal.mawidabp.com"
+      #traefik.http.routers.mawidabp.tls.domains.sans: "admin-kamal.mawidabp.com"
 
 registry:
   # Specify the registry server, if you're not using Docker Hub
@@ -28,6 +30,8 @@ env:
 #  user: root
 
 builder:
+  args:
+    - APP_HOST
 #  args:
 #    RUBY_VERSION: 3.3.0
         #   secrets:
@@ -68,8 +72,9 @@ traefik:
     volume:
       - "/letsencrypt/acme.json:/letsencrypt/acme.json"
   args:
-    #accesslog: true
-    #accesslog.format: json
+    accesslog: true
+    accesslog.format: json
+    entryPoints.web.address: ":80"
     entryPoints.websecure.address: ":443"
     entryPoints.web.http.redirections.entryPoint.to: websecure # We want to force https
     entryPoints.web.http.redirections.entryPoint.scheme: https
