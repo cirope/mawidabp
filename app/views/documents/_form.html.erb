@@ -1,48 +1,53 @@
-<%= simple_form_for @document do |f| %>
-  <%= f.error_notification %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @document do |f| %>
+      <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.input :name, input_html: { autofocus: true } %>
-    <%= f.input :description %>
-    <%= f.input :shared, input_html: { disabled: @document.persisted? && @document.shared } %>
-    <%= f.input :lock_version, as: :hidden %>
+      <div class="form-inputs">
+        <%= f.input :name, input_html: { autofocus: true } %>
+        <%= f.input :description %>
+        <%= f.input :shared, input_html: { disabled: @document.persisted? && @document.shared } %>
+        <%= f.input :lock_version, as: :hidden %>
 
-    <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
-      <div class="file-container text-end <%= 'form-group-invalid' if file_model_error f.object %>">
-        <%= link_to_upload fm_f.object %>
+        <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
+          <div class="file-container text-end <%= 'form-group-invalid' if file_model_error f.object %>">
+            <%= link_to_upload fm_f.object %>
 
-        <% if fm_f.object.file_cache %>
-          <%= fm_f.input :file_cache, as: :hidden %>
-          <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
-        <% else %>
-          <%= fm_f.input :file, label: false %>
+            <% if fm_f.object.file_cache %>
+              <%= fm_f.input :file_cache, as: :hidden %>
+              <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
+            <% else %>
+              <%= fm_f.input :file, label: false %>
+            <% end %>
+
+            <small class="form-text text-muted"><%= file_model_error f.object %></small>
+          </div>
         <% end %>
 
-        <small class="form-text text-muted"><%= file_model_error f.object %></small>
+        <div class="card border-1 mb-3 <%= @document.errors[:tags].present? ? 'border-danger' : 'border-light' %>">
+          <div class="card-header <%= @document.errors[:tags].present? ? 'bg-danger' : 'bg-light' %>">
+            <h5 class="mb-0 <%= 'text-light' if @document.errors[:tags].present? %>">
+              <%= Tag.model_name.human count: 0 %>
+            </h5>
+          </div>
+          <div class="card-body">
+            <% @document.errors.full_messages_for(:tags).each do |error| %>
+              <p class="text-danger"><%= error %></p>
+            <% end %>
+
+            <%= f.simple_fields_for :taggings do |tf| %>
+              <%= render 'tagging', f: tf, kind: 'document' %>
+            <% end %>
+
+            <%= link_to_add_fields t('documents.new.tagging'), f, :taggings, 'documents/tagging' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.button :submit, class: 'btn-primary' %>
       </div>
     <% end %>
-
-    <div class="card mb-3 <%= 'border-danger' if @document.errors[:tags].present? %>">
-      <div class="card-header <%= 'bg-danger text-light' if @document.errors[:tags].present? %>">
-        <h5 class="mb-0">
-          <%= Tag.model_name.human count: 0 %>
-        </h5>
-      </div>
-      <div class="card-body">
-        <% @document.errors.full_messages_for(:tags).each do |error| %>
-          <p class="text-danger"><%= error %></p>
-        <% end %>
-
-        <%= f.simple_fields_for :taggings do |tf| %>
-          <%= render 'tagging', f: tf, kind: 'document' %>
-        <% end %>
-
-        <%= link_to_add_fields t('documents.new.tagging'), f, :taggings, 'documents/tagging' %>
-      </div>
-    </div>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, class: 'btn-primary' %>
   </div>
-<% end %>

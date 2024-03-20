@@ -1,44 +1,48 @@
-<%= simple_form_for @risk_assessment_template do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @risk_assessment_template do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <%= f.input :name, input_html: { autofocus: true } %>
-    <%= f.input :description, input_html: { rows: 3 } %>
-    <%= f.input :lock_version, as: :hidden %>
+      <div class="form-inputs">
+        <%= f.input :name, input_html: { autofocus: true } %>
+        <%= f.input :description, input_html: { rows: 3 } %>
+        <%= f.input :lock_version, as: :hidden %>
 
-    <h5>
-      <%= RiskAssessmentWeight.model_name.human count: 0 %>
-    </h5>
+        <h5>
+          <%= RiskAssessmentWeight.model_name.human count: 0 %>
+        </h5>
 
-    <div class="row mt-4">
-      <div class="col-md-2">
-        <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'identifier' %></h5>
+        <div class="row mt-4">
+          <div class="col-md-2">
+            <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'identifier' %></h5>
+          </div>
+          <div class="col-md-4">
+            <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'name' %></h5>
+          </div>
+          <div class="col-md-4">
+            <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'description' %></h5>
+          </div>
+        </div>
+
+        <div id="risk_assessment_weights">
+          <%= f.simple_fields_for :risk_assessment_weights, risk_template_weights(f.object) do |raw_f| %>
+            <%= render 'risk_assessment_weight', f: raw_f %>
+          <% end %>
+
+          <p>
+            <%= link_to_add_fields t('.add_risk_assessment_weight'), f, :risk_assessment_weights %>
+          </p>
+        </div>
+
+        <%= f.input :formula %>
       </div>
-      <div class="col-md-4">
-        <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'name' %></h5>
+
+      <hr>
+
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.button :submit, class: 'btn-primary' %>
       </div>
-      <div class="col-md-4">
-        <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'description' %></h5>
-      </div>
-    </div>
-
-    <div id="risk_assessment_weights">
-      <%= f.simple_fields_for :risk_assessment_weights, risk_template_weights(f.object) do |raw_f| %>
-        <%= render 'risk_assessment_weight', f: raw_f %>
-      <% end %>
-
-      <p>
-        <%= link_to_add_fields t('.add_risk_assessment_weight'), f, :risk_assessment_weights %>
-      </p>
-    </div>
-
-    <%= f.input :formula %>
+    <% end %>
   </div>
-
-  <hr>
-
-  <div class="form-actions">
-    <div class="float-end"><%= yield :form_actions %></div>
-    <%= f.button :submit, class: 'btn-primary' %>
-  </div>
-<% end %>
+</div>

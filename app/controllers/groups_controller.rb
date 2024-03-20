@@ -2,7 +2,7 @@
 #
 # Lista, muestra, crea, modifica y elimina grupos (#Group)
 class GroupsController < ApplicationController
-  layout 'clean'
+  layout 'public'
   before_action :auth, :check_group_admin
 
   # Lista los grupos

@@ -1,62 +1,66 @@
-<%= render :partial => 'shared/filter_form',
-  :locals => {:action => :qa_indicators, :extra_params => {},
-  :forms => {:date_range => true}} %>
-<% if @periods.present? %>
-  <% @periods.each do |period| %>
-    <h2 class="mb-3"><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+<div class="card">
+  <div class="card-body">
+    <%= render :partial => 'shared/filter_form',
+      :locals => {:action => :qa_indicators, :extra_params => {},
+      :forms => {:date_range => true}} %>
+    <% if @periods.present? %>
+      <% @periods.each do |period| %>
+        <h2 class="mb-3"><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
 
-    <% @indicators[period].each do |data| %>
-      <% unless data[:column_data].blank? %>
-        <table class="table table-sm table-striped table-hover">
-          <thead>
-            <tr>
-              <% @columns.each do |col_name| %>
-                <th><%= col_name.last %></th>
-              <% end %>
-            </tr>
-          </thead>
-          <tbody>
-            <% data[:column_data].each do |row| %>
-              <tr>
-                <% @columns.each do |col_name| %>
-                  <td>
-                    <% if col_name.first == 'value' && row[col_name.first].blank? %>
-                      <%= t'follow_up_committee_report.qa_indicators.without_data' %>
-                    <% else %>
-                      <%= row[col_name.first] %>
+        <% @indicators[period].each do |data| %>
+          <% unless data[:column_data].blank? %>
+            <table class="table table-sm table-striped table-hover">
+              <thead>
+                <tr>
+                  <% @columns.each do |col_name| %>
+                    <th><%= col_name.last %></th>
+                  <% end %>
+                </tr>
+              </thead>
+              <tbody>
+                <% data[:column_data].each do |row| %>
+                  <tr>
+                    <% @columns.each do |col_name| %>
+                      <td>
+                        <% if col_name.first == 'value' && row[col_name.first].blank? %>
+                          <%= t'follow_up_committee_report.qa_indicators.without_data' %>
+                        <% else %>
+                          <%= row[col_name.first] %>
+                        <% end %>
+                      </td>
                     <% end %>
-                  </td>
+                  </tr>
                 <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% else %>
-        <p class="m-2">
-          <em><%= t 'follow_up_committee_report.qa_indicators.without_audits_in_the_period' %></em>
-        </p>
+              </tbody>
+            </table>
+          <% else %>
+            <p class="m-2">
+              <em><%= t 'follow_up_committee_report.qa_indicators.without_audits_in_the_period' %></em>
+            </p>
+          <% end %>
+        <% end %>
       <% end %>
+
+      <% if @ancient_medium_risk_label %>
+        <h5 class="simple_title with_border_bottom"><%= @ancient_medium_risk_label %></h5>
+      <% end %>
+        <% if @ancient_highest_risk_label %>
+        <h5 class="simple_title with_border_bottom mb-3"><%= @ancient_highest_risk_label %></h5>
+      <% end %>
+    <% else %>
+      <p class="m-2">
+        <em><%= t 'follow_up_committee_report.qa_indicators.without_data' %></em>
+      </p>
     <% end %>
-  <% end %>
 
-  <% if @ancient_medium_risk_label %>
-    <h5 class="simple_title with_border_bottom"><%= @ancient_medium_risk_label %></h5>
-  <% end %>
-    <% if @ancient_highest_risk_label %>
-    <h5 class="simple_title with_border_bottom mb-3"><%= @ancient_highest_risk_label %></h5>
-  <% end %>
-<% else %>
-  <p class="m-2">
-    <em><%= t 'follow_up_committee_report.qa_indicators.without_data' %></em>
-  </p>
-<% end %>
+    <hr />
 
-<hr />
-
-<div>
-  <%= link_to t('label.back'), :action => :index %> |
-  <%= link_to t('label.download'), '#',
-    data: { bs_toggle: 'modal', target: '#customize_report' } %>
+    <div>
+      <%= link_to t('label.back'), :action => :index %> |
+      <%= link_to t('label.download'), '#',
+        data: { bs_toggle: 'modal', bs_target: '#customize_report' } %>
+    </div>
+  </div>
 </div>
 
 <%= render :partial => 'shared/customize_report_form', :locals => {

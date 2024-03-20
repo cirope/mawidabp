@@ -13,7 +13,7 @@
               <%= label_tag :user, t('.user'), class: 'col-form-label' %>
               <div class="controls">
                 <%= text_field_tag :user, params[:user], class: 'form-control form-control-lg',
-                  autofocus: true, autocomplete: 'off', maxlength: 30 %>
+                  autofocus: true, autocomplete: 'off', maxlength: 255 %>
               </div>
             </div>
           </div>
@@ -21,7 +21,7 @@
 
         <div class="card-footer text-center bg-white border-white pb-4">
           <div class="form-actions">
-            <%= submit_tag t('.log_in'), class: 'btn btn-lg btn-outline-secondary' %>
+            <%= submit_tag t('.log_in'), class: 'btn btn-lg btn-primary' %>
           </div>
 
           <% if current_organization.blank? || (current_organization.ldap_config.blank? && current_organization.saml_provider.blank?) %>

@@ -1,347 +1,351 @@
-<%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completion_state], @finding),
-  html: { method: :patch, id: "edit_finding_#{@finding.id}"} do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completion_state], @finding),
+      html: { method: :patch, id: "edit_finding_#{@finding.id}"} do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
+      <div class="form-inputs">
         <div class="row">
           <div class="col-md-6">
-            <%= f.input :review, label: Review.model_name.human,
-              input_html: { value: @finding.review.try(:identification), readonly: true } %>
+            <div class="row">
+              <div class="col-md-6">
+                <%= f.input :review, label: Review.model_name.human,
+                  input_html: { value: @finding.review.try(:identification), readonly: true } %>
+              </div>
+              <div class="col-md-6">
+                <%= f.input :review_code, input_html: { readonly: true } %>
+              </div>
+            </div>
+            <%= f.input :title, input_html: { readonly: true } %>
+            <%= f.input :project, label: PlanItem.human_attribute_name(:project),
+              input_html: { value: @finding.review.try(:plan_item).try(:project), readonly: true } %>
+            <%= f.input :issue_date, label:
+              ConclusionFinalReview.human_attribute_name(:issue_date),
+              input_html: { readonly: true,
+                value: (@finding.issue_date ? l(@finding.issue_date, format: :long) :
+                  t('finding.without_conclusion_final_review')) } %>
+            <% if @finding.control_objective_item %>
+              <%= f.input :control_objective_name, label: ControlObjective.model_name.human, input_html: {
+                value: "#{@finding.control_objective_item.control_objective_text}
+                (#{@finding.control_objective_item.process_control.name})",
+              }, readonly: true %>
+              <%= f.input :control_objective_item_id, as: :hidden %>
+            <% end %>
+            <%= f.input :description, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 9 : 5 } %>
+            <% if @finding.kind_of?(Weakness) %>
+              <% unless HIDE_WEAKNESS_EFFECT %>
+                <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
+              <% end %>
+              <%= f.input :audit_recommendations, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 5 : 2 } %>
+            <% end %>
+            <% if %w(bic).include? Current.conclusion_pdf_format %>
+              <div class="row">
+                <div class="col-md-4">
+                  <%= f.input :year, input_html: { readonly: true } %>
+                </div>
+                <div class="col-md-4">
+                  <%= f.input :nsisio, input_html: { readonly: true } %>
+                </div>
+                <div class="col-md-4">
+                  <%= f.input :nobs, input_html: { readonly: true } %>
+                </div>
+              </div>
+            <% end %>
           </div>
           <div class="col-md-6">
-            <%= f.input :review_code, input_html: { readonly: true } %>
+            <% if @finding.kind_of?(Weakness) %>
+              <% if USE_SCOPE_CYCLE %>
+                <div class="row">
+                  <div class="col">
+                    <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
+                      disabled: true %>
+                  </div>
+                  <div class="col">
+                    <%= f.input :probability, collection: weakness_probabilities, prompt: true, disabled: true %>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
+                      data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date('finding'))
+                    } %>
+                  </div>
+                </div>
+              <% else %>
+                <%= f.input :risk, collection: risks, prompt: true, disabled: true, input_html: {
+                  autofocus: true,
+                  data: weakness_risk_data_options
+                } %>
+              <% end %>
+              <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
+            <% end %>
+            <%= f.label :state, Finding.human_attribute_name(:state) %>
+
+            <% options_for_select = if USE_SCOPE_CYCLE
+                                      { data: data_options_for_suggested_follow_up_date('finding') }
+                                    else
+                                      {}
+                                    end %>
+
+            <%= finding_status_field(f, disabled: true, options_html: options_for_select) %>
+            <%= f.input :origination_date, as: :date_picker,
+              label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: data_options_for_suggested_follow_up_date('finding') } %>
+            <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>
+            <%= f.input :follow_up_date, as: :date_picker, label:
+              @finding.class.human_attribute_name(:follow_up_date), readonly: true %>
+            <% if @finding.follow_up_date && show_follow_up_timestamps? %>
+              <%= show_weakness_previous_follow_up_dates(@finding) %>
+            <% end %>
+            <%= f.input :solution_date, as: :date_picker, label:
+              Finding.human_attribute_name(:solution_date), readonly: true %>
+            <%= f.input :id, as: :hidden %>
+            <%= f.input :audit_comments, input_html: { readonly: true, rows: 5 } %>
           </div>
         </div>
-        <%= f.input :title, input_html: { readonly: true } %>
-        <%= f.input :project, label: PlanItem.human_attribute_name(:project),
-          input_html: { value: @finding.review.try(:plan_item).try(:project), readonly: true } %>
-        <%= f.input :issue_date, label:
-          ConclusionFinalReview.human_attribute_name(:issue_date),
-          input_html: { readonly: true,
-            value: (@finding.issue_date ? l(@finding.issue_date, format: :long) :
-              t('finding.without_conclusion_final_review')) } %>
-        <% if @finding.control_objective_item %>
-          <%= f.input :control_objective_name, label: ControlObjective.model_name.human, input_html: {
-            value: "#{@finding.control_objective_item.control_objective_text}
-            (#{@finding.control_objective_item.process_control.name})",
-          }, readonly: true %>
-          <%= f.input :control_objective_item_id, as: :hidden %>
-        <% end %>
-        <%= f.input :description, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 9 : 5 } %>
-        <% if @finding.kind_of?(Weakness) %>
-          <% unless HIDE_WEAKNESS_EFFECT %>
-            <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
+      </div>
+
+      <% if @finding.important_dates.present? && show_follow_up_timestamps? %>
+        <h5 class="my-3">
+          <%= t('finding.important_dates.title') %>
+        </h5>
+
+        <ul class="mb-1">
+          <% @finding.important_dates.each do |important_date| %>
+            <li><%= markdown_without_paragraph important_date %></li>
           <% end %>
-          <%= f.input :audit_recommendations, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 5 : 2 } %>
-        <% end %>
-        <% if %w(bic).include? Current.conclusion_pdf_format %>
-          <div class="row">
-            <div class="col-md-4">
-              <%= f.input :year, input_html: { readonly: true } %>
-            </div>
-            <div class="col-md-4">
-              <%= f.input :nsisio, input_html: { readonly: true } %>
-            </div>
-            <div class="col-md-4">
-              <%= f.input :nobs, input_html: { readonly: true } %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-      <div class="col-md-6">
-        <% if @finding.kind_of?(Weakness) %>
-          <% if USE_SCOPE_CYCLE %>
-            <div class="row">
-              <div class="col">
-                <%= f.input :impact_risk, collection: weakness_impact_risks, prompt: true,
-                  disabled: true %>
-              </div>
-              <div class="col">
-                <%= f.input :probability, collection: weakness_probabilities, prompt: true, disabled: true %>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
-                  data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date('finding'))
-                } %>
-              </div>
-            </div>
-          <% else %>
-            <%= f.input :risk, collection: risks, prompt: true, disabled: true, input_html: {
-              autofocus: true,
-              data: weakness_risk_data_options
-            } %>
-          <% end %>
-          <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
-        <% end %>
-        <%= f.label :state, Finding.human_attribute_name(:state) %>
-
-        <% options_for_select = if USE_SCOPE_CYCLE
-                                  { data: data_options_for_suggested_follow_up_date('finding') }
-                                else
-                                  {}
-                                end %>
-
-        <%= finding_status_field(f, disabled: true, options_html: options_for_select) %>
-        <%= f.input :origination_date, as: :date_picker,
-          label: Finding.human_attribute_name(:origination_date), readonly: true, input_html: { data: data_options_for_suggested_follow_up_date('finding') } %>
-        <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>
-        <%= f.input :follow_up_date, as: :date_picker, label:
-          @finding.class.human_attribute_name(:follow_up_date), readonly: true %>
-        <% if @finding.follow_up_date && show_follow_up_timestamps? %>
-          <%= show_weakness_previous_follow_up_dates(@finding) %>
-        <% end %>
-        <%= f.input :solution_date, as: :date_picker, label:
-          Finding.human_attribute_name(:solution_date), readonly: true %>
-        <%= f.input :id, as: :hidden %>
-        <%= f.input :audit_comments, input_html: { readonly: true, rows: 5 } %>
-      </div>
-    </div>
-  </div>
-
-  <% if @finding.important_dates.present? && show_follow_up_timestamps? %>
-    <h5 class="my-3">
-      <%= t('finding.important_dates.title') %>
-    </h5>
-
-    <ul class="mb-1">
-      <% @finding.important_dates.each do |important_date| %>
-        <li><%= markdown_without_paragraph important_date %></li>
+        </ul>
       <% end %>
-    </ul>
-  <% end %>
 
-  <% unless @finding.users.blank? %>
-    <% audited, auditors = *@finding.users.partition(&:can_act_as_audited?) %>
-    <% process_owners = @finding.process_owners %>
-    <% responsible_auditors = @finding.responsible_auditors %>
-    <h5 class="my-3"><%= t('finding.responsibles', :count => @finding.users.size) %></h5>
+      <% unless @finding.users.blank? %>
+        <% audited, auditors = *@finding.users.partition(&:can_act_as_audited?) %>
+        <% process_owners = @finding.process_owners %>
+        <% responsible_auditors = @finding.responsible_auditors %>
+        <h5 class="my-3"><%= t('finding.responsibles', :count => @finding.users.size) %></h5>
 
-    <table class="table table-sm table-hover">
-      <thead>
-        <tr>
-          <th><%= t('finding.audited', :count => audited.size) %></th>
-          <th><%= t('finding.reviewers', :count => auditors.size) %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% [audited.size, auditors.size].max.times do %>
-          <tr>
-            <td><%= process_owners.include?(audited.first) ?
-                audited.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:process_owner)})" :
-                audited.shift.try(:full_name) %>
-            </td>
-            <td><%= responsible_auditors.include?(auditors.first) ?
-                  auditors.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:responsible_auditor)})" :
-                auditors.shift.try(:full_name) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-
-  <% unless @finding.taggings.blank? %>
-    <h5 class="my-3">
-      <%= Tag.model_name.human count: 0 %>
-    </h5>
-
-    <ul class="list-unstyled lead mb-1">
-      <% @finding.taggings.each do |tagging| %>
-        <%= tagging_item tagging %>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-    <h5 class="my-3"><%= t('finding.repeated_ancestors') %></h5>
-
-    <ul class="mb-1">
-      <% repeated_ancestors.each do |repeated_ancestor| %>
-        <li><%= repeated_ancestor %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% unless (repeated_children = @finding.repeated_children).blank? %>
-    <h5 class="my-3"><%= t('finding.repeated_children') %></h5>
-
-    <ul class="mb-1">
-      <% repeated_children.each do |repeated_child| %>
-        <li><%= repeated_child %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% unless @finding.control_objective_item.business_units.empty? %>
-    <h5 class="my-3">
-      <%= BusinessUnit.model_name.human count: 0 %>
-    </h5>
-
-    <%=  f.input :business_unit_ids,
-      label: '&nbsp;'.html_safe,
-      collection: @finding.control_objective_item.business_units,
-      as: :check_boxes,
-      input_html: { disabled: true }
-    %>
-  <% end %>
-
-  <% if @finding.tasks.any? %>
-    <h5 class="my-3">
-      <%= Task.model_name.human count: 0 %>
-    </h5>
-
-    <table class="table table-sm table-striped table-hover">
-      <thead>
-        <tr>
-          <th><%= Task.human_attribute_name 'code' %></th>
-          <th><%= Task.human_attribute_name 'description' %></th>
-          <th><%= Task.human_attribute_name 'status' %></th>
-          <th><%= Task.human_attribute_name 'due_on' %></th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @finding.tasks.each do |task| %>
-          <tr>
-            <td><%= task.code %></td>
-            <td><%= task.description %></td>
-            <td><%= t "tasks.status.#{task.status}" %></td>
-            <td><%= l task.due_on %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-
-  <% if USE_SCOPE_CYCLE %>
-    <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
-
-    <div class="row">
-      <div class="col-md-2">
-        <%= f.input :impact_amount, disabled: true %>
-      </div>
-      <div class="col-md-2">
-        <%= f.input :probability_amount, disabled: true %>
-      </div>
-    </div>
-
-    <div class="row">
-      <%= render 'read_only_issues' %>
-    </div>
-  <% end %>
-
-  <h5 class="my-3">
-    <%= t('finding.finding_answers') %>
-  </h5>
-
-  <div class="row">
-    <div class="col-md-2">
-      <h5 class="h6"><%= User.model_name.human %></h5>
-    </div>
-    <div class="col-md-6">
-      <h5 class="h6"><%= FindingAnswer.human_attribute_name 'answer' %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= FindingAnswer.human_attribute_name 'file_model' %></h5>
-    </div>
-  </div>
-
-  <div id="finding_answers">
-    <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
-    <%= f.simple_fields_for :finding_answers do |fa_f| %>
-      <%= render 'finding_answer', f: fa_f %>
-    <% end %>
-  </div>
-
-  <% unless @finding.work_papers.blank? %>
-    <h5 class="my-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
-
-    <table class="table table-sm table-striped table-hover">
-      <thead>
-        <tr>
-          <th><%= WorkPaper.human_attribute_name 'name' %></th>
-          <th><%= WorkPaper.human_attribute_name 'code' %></th>
-          <th><%= WorkPaper.human_attribute_name 'number_of_pages' %></th>
-          <th><%= WorkPaper.human_attribute_name 'description' %></th>
-          <th><%= WorkPaper.human_attribute_name 'file_model' %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @finding.work_papers.each do |work_paper| %>
-          <tr>
-            <td><%= work_paper.name %></td>
-            <td><%= work_paper.code %></td>
-            <td><%= work_paper.number_of_pages %></td>
-            <td><%= simple_format work_paper.description, class: 'mb-1' %></td>
-            <td><%= work_paper.file_model.try(:file?) ?
-              link_to(t('label.download'), work_paper.file_model.file.url) : '-' %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-
-  <br />
-
-  <% if show_follow_up_timestamps? %>
-    <%= markdown t('finding.costs', :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
-  <% end %>
-
-  <% if @finding.costs.present? && show_follow_up_timestamps? %>
-    <p class="my-3" >
-      <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :bs_toggle => 'collapse' } %>
-    </p>
-
-    <div id="cost_details" class="collapse">
-      <div>
-        <table class="table table-sm table-striped table-hover">
+        <table class="table table-sm table-hover">
           <thead>
             <tr>
-              <th><%= Cost.human_attribute_name 'created_at' %></th>
-              <th><%= Cost.human_attribute_name 'cost' %></th>
-              <th><%= Cost.human_attribute_name 'description' %></th>
-              <th><%= Cost.human_attribute_name 'user_id' %></th>
+              <th><%= t('finding.audited', :count => audited.size) %></th>
+              <th><%= t('finding.reviewers', :count => auditors.size) %></th>
             </tr>
           </thead>
           <tbody>
-            <% @finding.costs.reject {|f| f.new_record?}.each do |cost| %>
+            <% [audited.size, auditors.size].max.times do %>
               <tr>
-                <td><%= l(cost.created_at, :format => :long) %></td>
-                <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
-                <td><%= cost.description.blank? ? '-' : cost.description %></td>
-                <td><%= cost.user.full_name %></td>
+                <td><%= process_owners.include?(audited.first) ?
+                    audited.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:process_owner)})" :
+                    audited.shift.try(:full_name) %>
+                </td>
+                <td><%= responsible_auditors.include?(auditors.first) ?
+                      auditors.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:responsible_auditor)})" :
+                    auditors.shift.try(:full_name) %></td>
               </tr>
             <% end %>
           </tbody>
         </table>
+      <% end %>
+
+      <% unless @finding.taggings.blank? %>
+        <h5 class="my-3">
+          <%= Tag.model_name.human count: 0 %>
+        </h5>
+
+        <ul class="list-unstyled lead mb-1">
+          <% @finding.taggings.each do |tagging| %>
+            <%= tagging_item tagging %>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
+        <h5 class="my-3"><%= t('finding.repeated_ancestors') %></h5>
+
+        <ul class="mb-1">
+          <% repeated_ancestors.each do |repeated_ancestor| %>
+            <li><%= repeated_ancestor %></li>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <% unless (repeated_children = @finding.repeated_children).blank? %>
+        <h5 class="my-3"><%= t('finding.repeated_children') %></h5>
+
+        <ul class="mb-1">
+          <% repeated_children.each do |repeated_child| %>
+            <li><%= repeated_child %></li>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <% unless @finding.control_objective_item.business_units.empty? %>
+        <h5 class="my-3">
+          <%= BusinessUnit.model_name.human count: 0 %>
+        </h5>
+
+        <%=  f.input :business_unit_ids,
+          label: '&nbsp;'.html_safe,
+          collection: @finding.control_objective_item.business_units,
+          as: :check_boxes,
+          input_html: { disabled: true }
+        %>
+      <% end %>
+
+      <% if @finding.tasks.any? %>
+        <h5 class="my-3">
+          <%= Task.model_name.human count: 0 %>
+        </h5>
+
+        <table class="table table-sm table-striped table-hover">
+          <thead>
+            <tr>
+              <th><%= Task.human_attribute_name 'code' %></th>
+              <th><%= Task.human_attribute_name 'description' %></th>
+              <th><%= Task.human_attribute_name 'status' %></th>
+              <th><%= Task.human_attribute_name 'due_on' %></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @finding.tasks.each do |task| %>
+              <tr>
+                <td><%= task.code %></td>
+                <td><%= task.description %></td>
+                <td><%= t "tasks.status.#{task.status}" %></td>
+                <td><%= l task.due_on %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+
+      <% if USE_SCOPE_CYCLE %>
+        <h5 class="mt-3"><%= Issue.model_name.human count: 0 %></h5>
+
+        <div class="row">
+          <div class="col-md-2">
+            <%= f.input :impact_amount, disabled: true %>
+          </div>
+          <div class="col-md-2">
+            <%= f.input :probability_amount, disabled: true %>
+          </div>
+        </div>
+
+        <div class="row">
+          <%= render 'read_only_issues' %>
+        </div>
+      <% end %>
+
+      <h5 class="my-3">
+        <%= t('finding.finding_answers') %>
+      </h5>
+
+      <div class="row">
+        <div class="col-md-2">
+          <h5 class="h6"><%= User.model_name.human %></h5>
+        </div>
+        <div class="col-md-6">
+          <h5 class="h6"><%= FindingAnswer.human_attribute_name 'answer' %></h5>
+        </div>
+        <div class="col-md-2">
+          <h5 class="h6"><%= FindingAnswer.human_attribute_name 'file_model' %></h5>
+        </div>
       </div>
-    </div>
-  <% end %>
 
-  <div class="row">
-    <div class="col-md-2">
-      <%= Cost.human_attribute_name 'cost' %>
-    </div>
-    <div class="col-md-10">
-      <%= Cost.human_attribute_name 'description' %>
-    </div>
-  </div>
+      <div id="finding_answers">
+        <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
+        <%= f.simple_fields_for :finding_answers do |fa_f| %>
+          <%= render 'finding_answer', f: fa_f %>
+        <% end %>
+      </div>
 
-  <div id="costs">
-    <%= f.simple_fields_for :costs, @finding.costs.detect { |c| c.new_record? } ||
-        Cost.new(:user => @auth_user, :cost_type => 'audited') do |c_f| %>
-      <%= render 'cost', f: c_f %>
+      <% unless @finding.work_papers.blank? %>
+        <h5 class="my-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
+
+        <table class="table table-sm table-striped table-hover">
+          <thead>
+            <tr>
+              <th><%= WorkPaper.human_attribute_name 'name' %></th>
+              <th><%= WorkPaper.human_attribute_name 'code' %></th>
+              <th><%= WorkPaper.human_attribute_name 'number_of_pages' %></th>
+              <th><%= WorkPaper.human_attribute_name 'description' %></th>
+              <th><%= WorkPaper.human_attribute_name 'file_model' %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @finding.work_papers.each do |work_paper| %>
+              <tr>
+                <td><%= work_paper.name %></td>
+                <td><%= work_paper.code %></td>
+                <td><%= work_paper.number_of_pages %></td>
+                <td><%= simple_format work_paper.description, class: 'mb-1' %></td>
+                <td><%= work_paper.file_model.try(:file?) ?
+                  link_to(t('label.download'), work_paper.file_model.file.url) : '-' %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+
+      <br />
+
+      <% if show_follow_up_timestamps? %>
+        <%= markdown t('finding.costs', :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+      <% end %>
+
+      <% if @finding.costs.present? && show_follow_up_timestamps? %>
+        <p class="my-3" >
+          <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :bs_toggle => 'collapse' } %>
+        </p>
+
+        <div id="cost_details" class="collapse">
+          <div>
+            <table class="table table-sm table-striped table-hover">
+              <thead>
+                <tr>
+                  <th><%= Cost.human_attribute_name 'created_at' %></th>
+                  <th><%= Cost.human_attribute_name 'cost' %></th>
+                  <th><%= Cost.human_attribute_name 'description' %></th>
+                  <th><%= Cost.human_attribute_name 'user_id' %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @finding.costs.reject {|f| f.new_record?}.each do |cost| %>
+                  <tr>
+                    <td><%= l(cost.created_at, :format => :long) %></td>
+                    <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
+                    <td><%= cost.description.blank? ? '-' : cost.description %></td>
+                    <td><%= cost.user.full_name %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="row">
+        <div class="col-md-2">
+          <%= Cost.human_attribute_name 'cost' %>
+        </div>
+        <div class="col-md-10">
+          <%= Cost.human_attribute_name 'description' %>
+        </div>
+      </div>
+
+      <div id="costs">
+        <%= f.simple_fields_for :costs, @finding.costs.detect { |c| c.new_record? } ||
+            Cost.new(:user => @auth_user, :cost_type => 'audited') do |c_f| %>
+          <%= render 'cost', f: c_f %>
+        <% end %>
+      </div>
+
+      <hr />
+
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.input :lock_version, as: :hidden %>
+        <%= f.submit class: 'btn btn-primary', data: { disable_with: false }  %>
+      </div>
     <% end %>
   </div>
-
-  <hr />
-
-  <div class="form-actions">
-    <div class="float-end"><%= yield :form_actions %></div>
-    <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary', data: { disable_with: false }  %>
-  </div>
-<% end %>
+</div>

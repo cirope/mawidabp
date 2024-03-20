@@ -20,6 +20,7 @@ class BusinessUnit < ApplicationRecord
   validates :name, :uniqueness =>
     {:case_sensitive => false, :scope => :business_unit_type_id}
   validates :business_unit_kind_id, :presence => true, if: :require_business_unit_kind?
+  validates :name, pdf_encoding: true
 
   # Relaciones
   belongs_to :business_unit_type, :optional => true

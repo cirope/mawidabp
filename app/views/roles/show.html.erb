@@ -1,40 +1,44 @@
-<p class="mb-1">
-  <strong><%= Role.human_attribute_name :name %>:</strong>
-  <%= @role.name %>
-</p>
+<div class="card">
+  <div class="card-body">
+    <p class="mb-1">
+      <strong><%= Role.human_attribute_name :name %>:</strong>
+      <%= @role.name %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Role.human_attribute_name :role_type %>:</strong>
-  <%= role_type_text(@role.role_type, nil) %>
-</p>
+    <p class="mb-1">
+      <strong><%= Role.human_attribute_name :role_type %>:</strong>
+      <%= role_type_text(@role.role_type, nil) %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Role.human_attribute_name :identifier %>:</strong>
-  <%= @role.identifier %>
-</p>
+    <p class="mb-1">
+      <strong><%= Role.human_attribute_name :identifier %>:</strong>
+      <%= @role.identifier %>
+    </p>
 
-<table class="table table-sm table-striped table-hover mt-3">
-  <thead>
-    <tr>
-      <th><%= Privilege.model_name.human %></th>
-      <th><%= Privilege.human_attribute_name :read %></th>
-      <th><%= Privilege.human_attribute_name :modify %></th>
-      <th><%= Privilege.human_attribute_name :erase %></th>
-      <th><%= Privilege.human_attribute_name :approval %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
+    <table class="table table-sm table-striped table-hover mt-3">
+      <thead>
+        <tr>
+          <th><%= Privilege.model_name.human %></th>
+          <th><%= Privilege.human_attribute_name :read %></th>
+          <th><%= Privilege.human_attribute_name :modify %></th>
+          <th><%= Privilege.human_attribute_name :erase %></th>
+          <th><%= Privilege.human_attribute_name :approval %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
 
-    <% menu_items.each do |menu_item| %>
-      <%= render 'menu_item_show', menu_item: menu_item %>
-    <% end %>
-  </tbody>
-</table>
+        <% menu_items.each do |menu_item| %>
+          <%= render 'menu_item_show', menu_item: menu_item %>
+        <% end %>
+      </tbody>
+    </table>
 
-<hr />
+    <hr />
 
-<div>
-  <%= link_to_edit edit_role_path(@role) %> |
-  <%= link_to_index roles_path %>
+    <div>
+      <%= link_to_edit edit_role_path(@role) %> |
+      <%= link_to_index roles_path %>
+    </div>
+  </div>
 </div>

@@ -46,7 +46,7 @@
     control_objective_counts_title: "Análisis de objetivos de control"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_risk_and_business_unit_title: "Observaciones totales por riesgo y unidad de negocio"
-    weaknesses_by_month_title: "Observaciones por riesgo"
+    weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
     weaknesses_by_user_title: "Observaciones por usuario"
@@ -538,9 +538,9 @@
       work_papers: "Papeles de trabajo"
       pdf_name: "seguimiento_de_observacion_%{code}.pdf"
     pdf:
-      filtered_by_html:
-        one: "El listado fue filtrado con la consulta <span class=\"font-weight-bold\">'%{query}'</span> en la columna <span class=\"font-weight-bold\">'%{columns}'</span>"
-        other: "El listado fue filtrado con la consulta <span class=\"font-weight-bold\">'%{query}'</span> en las columnas <span class=\"font-weight-bold\">'%{columns}'</span>"
+      filtered_by:
+        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
+        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
     user_assignment:
       audit_team: "Auditoría"
       others: "Usuarios"
@@ -728,7 +728,7 @@
       without_weaknesses: "Sin observaciones"
       origination_year: "Año de origen"
     weaknesses_by_control_objective_process:
-      pdf_name: "Reporte_de_proceso_por_objectivo_de_control_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "Reporte_de_proceso_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO OBSERVACIONES PROCESO POR OBJETIVO DE CONTROL / INFORMES DEFINITIVO"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
@@ -1137,90 +1137,6 @@
     errors:
       issue_date_after_review_issue_date: "su fecha de emisión (%{date}) es mayor a la fecha de emisión del informe"
 
-  review_user_assignment:
-    responsibility_modification:
-      title: "Modificación de responsabilidades en el informe %{review}"
-      old_responsible: "Responsable anterior: %{responsible}"
-      new_responsible: "Responsable actual: %{responsible}"
-    responsibility_removed: "Ha sido desafectado del informe %{review}"
-    cannot_be_reassigned: "El usuario no puede ser reasignado, tiene observaciones que dependen de el"
-    cannot_be_destroyed: "El usuario no puede ser eliminado, tiene observaciones que dependen de el"
-
-  role:
-    index_title: "Listado de perfiles"
-    show_title: "Detalles del perfil"
-    new_title: "Agregar perfil"
-    edit_title: "Modificar perfil"
-    correctly_created: "Perfil agregado correctamente."
-    correctly_updated: "Perfil actualizado correctamente."
-    stale_object_error: "El perfil no fue actualizado, intente nuevamente."
-    type_admin: "Administrador"
-    type_supervisor: "Supervisor"
-    type_auditor: "Auditor"
-    type_audited: "Auditado"
-    type_committee: "Comité"
-    type_manager: "Gerente de auditoría"
-    type_executive_manager: "Gerente"
-
-  user:
-    will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha observaciones pendientes, deberá reasignarlas primero"
-    disabled: "Deshabilitado"
-    without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"
-    responsibility_modification:
-      title: "Modificación de responsabilidades"
-      old_responsible: "Responsable anterior: %{responsible}"
-      new_responsible: "Responsable actual: %{responsible}"
-      reassigned_to_reviews:
-        one: "Se ha reasignado la responsabilidad del informe en ejecución %{reviews}"
-        other: "Se han reasignado la responsabilidad de los informes en ejecución %{reviews}"
-      reassigned_to_findings_from_reviews:
-        one: "Se han reasignado las observaciones pendientes del informe %{reviews}"
-        other: "Se han reasignado las observaciones pendientes de los informes %{reviews}"
-    responsibility_release:
-      title: "Liberación de responsabilidades"
-    unconfirmed_findings: "Observaciones sin confirmar a la fecha"
-    pdf_csv:
-      pdf_csv_name: "listado_de_usuarios"
-      users_count: "Cantidad de usuarios: %{count}"
-      filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
-
-  weakness:
-    index_title: "Listado de observaciones"
-    show_title: "Detalles de la observación"
-    new_title: "Agregar observación"
-    edit_title: "Modificar observación"
-    correctly_created: "Observación agregada correctamente."
-    correctly_updated: "Observación actualizada correctamente."
-    stale_object_error: "La observación no fue actualizada, intente nuevamente."
-    see_all: "Ver todas"
-    edit_control_objective: "Editar objetivo de control"
-    previous_follow_up_dates: "Fechas de implementación anteriores"
-    show_follow_up: 'Ver en seguimiento'
-    edit_follow_up: 'Editar en seguimiento'
-    errors:
-      is_unconfirmed: "está en estado 'No confirmada'"
-      not_valid_state: "tiene un estado no permitido"
-      with_expired_tasks: "tiene tareas pendientes o en proceso vencidas"
-      with_follow_up_date: "tiene fecha de implementación (y no debería)"
-      with_solution_date: "tiene fecha de solución (y no debería)"
-      without_answer: "no tiene respuesta"
-      without_audited: "no tiene auditado"
-      without_auditor: "no tiene auditor"
-      without_effect: "no tiene posibles consecuencias"
-      without_follow_up_date: "no tiene fecha de implementación"
-      without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
-      without_audit_recommendations: "no tiene recomendaciones de auditoria"
-      cannot_update_sigen_fields_in_repeated_of: "No se pudieron actualizar los campos sigen en el finding con id: %{id} debido a los errores: %{messages}"
-
-  welcome:
-    index_title: "Bienvenido"
-
-  wicked_pdf:
-    number_pages_html: 'Pagina <span class="page"></span> de <span class="topage"></span>'
-
   workflow:
     maximum_exceeded_by_human_resource: "%{user} ha excedido el máximo de hora para la tarea: %{item}"
 
@@ -1483,3 +1399,4 @@
     findings: "Observaciones"
     groups: "Grupos"
     licenses: "Licencia"
+    blocked: "Licencia bloqueda"

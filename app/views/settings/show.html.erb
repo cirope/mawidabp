@@ -1,16 +1,20 @@
-<h2><%= t("settings.#{@setting.name}") %></h2>
+<div class="card">
+  <div class="card-body">
+    <h2><%= t("settings.#{@setting.name}") %></h2>
 
-<p class="mb-1">
-  <strong><%= Setting.human_attribute_name 'description' %></strong>:
-  <%= @setting.description %>
-</p>
+    <p class="mb-1">
+      <strong><%= Setting.human_attribute_name 'description' %></strong>:
+      <%= @setting.description %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Setting.human_attribute_name 'value' %></strong>:
-  <%= @setting.value %>
-</p>
+    <p class="mb-1">
+      <strong><%= Setting.human_attribute_name 'value' %></strong>:
+      <%= @setting.value %>
+    </p>
 
-<hr />
+    <hr />
 
-<%= link_to_edit edit_setting_path(@setting) %> |
-<%= link_to_index settings_path %>
+    <%= link_to_edit edit_setting_path(@setting) %> |
+    <%= link_to_index settings_path %>
+  </div>
+</div>

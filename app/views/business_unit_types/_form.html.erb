@@ -1,112 +1,116 @@
-<%= simple_form_for @business_unit_type do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @business_unit_type do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-<%= SHOW_REVIEW_AUTOMATIC_IDENTIFICATION ? 6 : 12 %>">
-        <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
-      </div>
-      <% if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION %>
-        <div class="col-md-6">
-          <%= f.input :review_prefix, input_html: { maxlength: 255 } %>
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-md-<%= SHOW_REVIEW_AUTOMATIC_IDENTIFICATION ? 6 : 12 %>">
+            <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
+          </div>
+          <% if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION %>
+            <div class="col-md-6">
+              <%= f.input :review_prefix, input_html: { maxlength: 255 } %>
+            </div>
+          <% end %>
         </div>
-      <% end %>
-    </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <%= f.input :business_unit_label, input_html: { maxlength: 255 } %>
-      </div>
-      <div class="col-md-6">
-        <%= f.input :project_label, input_html: { maxlength: 255 } %>
-      </div>
-    </div>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :business_unit_label, input_html: { maxlength: 255 } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :project_label, input_html: { maxlength: 255 } %>
+          </div>
+        </div>
 
-    <% if Current.conclusion_pdf_format == 'gal' %>
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :recipients, input_html: { rows: 4 } %>
+        <% if Current.conclusion_pdf_format == 'gal' %>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :recipients, input_html: { rows: 4 } %>
+            </div>
+            <div class="col-md-6">
+              <%= f.input :sectors, input_html: { rows: 4 } %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.input :external %>
+          </div>
+          <div class="col-md-3">
+            <%= f.input :require_tag %>
+          </div>
+          <% if Current.conclusion_pdf_format == 'pat' %>
+            <div class="col-md-3">
+              <%= f.input :shared_business_units %>
+            </div>
+          <% elsif Current.conclusion_pdf_format == 'nbc' %>
+            <div class="col-md-6">
+              <%= f.input :grouped_by_business_unit_annual_report %>
+            </div>
+          <% end %>
         </div>
-        <div class="col-md-6">
-          <%= f.input :sectors, input_html: { rows: 4 } %>
+
+        <% if Current.conclusion_pdf_format == 'gal' %>
+          <div class="row">
+            <div class="col-md-3">
+              <%= f.input :require_counts %>
+            </div>
+            <div class="col-md-3">
+              <%= f.input :hide_review_logo %>
+            </div>
+            <div class="col-md-3">
+              <%= f.input :independent_identification %>
+            </div>
+            <div class="col-md-3">
+              <%= f.input :without_number %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :reviews_for, input_html: { maxlength: 255 } %>
+            </div>
+            <div class="col-md-6">
+              <%= f.input :detailed_review, input_html: { maxlength: 255 } %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :exec_summary_intro, input_html: { rows: 4 },
+                hint: t('simple_form.hints.business_unit_type.exec_summary_intro',
+                  keywords: I18n.t("conclusion_review.executive_summary.keywords.review")
+                ).html_safe %>
+            </div>
+            <div class="col-md-6">
+            <%= f.input :detailed_review_legend, input_html: { rows: 4 } %>
+            </div>
+          </div>
+        <% end %>
+
+        <hr />
+
+        <h5 class="h6"><%= BusinessUnit.model_name.human %></h5>
+
+        <div id="business_units">
+          <%= f.simple_fields_for :business_units do |bu_f| %>
+            <%= render 'business_unit', f: bu_f %>
+          <% end %>
+
+          <%= link_to_add_fields t('business_unit_type.add_business_unit'), f, :business_units %>
         </div>
+      </div>
+
+      <hr />
+
+      <div class="form-inputs">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.submit class: 'btn btn-primary' %>
+        <%= f.input :lock_version, as: :hidden %>
       </div>
     <% end %>
-
-    <div class="row">
-      <div class="col-md-3">
-        <%= f.input :external %>
-      </div>
-      <div class="col-md-3">
-        <%= f.input :require_tag %>
-      </div>
-      <% if Current.conclusion_pdf_format == 'pat' %>
-        <div class="col-md-3">
-          <%= f.input :shared_business_units %>
-        </div>
-      <% elsif Current.conclusion_pdf_format == 'nbc' %>
-        <div class="col-md-6">
-          <%= f.input :grouped_by_business_unit_annual_report %>
-        </div>
-      <% end %>
-    </div>
-
-    <% if Current.conclusion_pdf_format == 'gal' %>
-      <div class="row">
-        <div class="col-md-3">
-          <%= f.input :require_counts %>
-        </div>
-        <div class="col-md-3">
-          <%= f.input :hide_review_logo %>
-        </div>
-        <div class="col-md-3">
-          <%= f.input :independent_identification %>
-        </div>
-        <div class="col-md-3">
-          <%= f.input :without_number %>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :reviews_for, input_html: { maxlength: 255 } %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :detailed_review, input_html: { maxlength: 255 } %>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :exec_summary_intro, input_html: { rows: 4 },
-            hint: t('simple_form.hints.business_unit_type.exec_summary_intro',
-              keywords: I18n.t("conclusion_review.executive_summary.keywords.review")
-            ).html_safe %>
-        </div>
-        <div class="col-md-6">
-        <%= f.input :detailed_review_legend, input_html: { rows: 4 } %>
-        </div>
-      </div>
-    <% end %>
-
-    <hr />
-
-    <h5 class="h6"><%= BusinessUnit.model_name.human %></h5>
-
-    <div id="business_units">
-      <%= f.simple_fields_for :business_units do |bu_f| %>
-        <%= render 'business_unit', f: bu_f %>
-      <% end %>
-
-      <%= link_to_add_fields t('business_unit_type.add_business_unit'), f, :business_units %>
-    </div>
   </div>
-
-  <hr />
-
-  <div class="form-inputs">
-    <div class="float-end"><%= yield :form_actions %></div>
-    <%= f.submit class: 'btn btn-primary' %>
-    <%= f.input :lock_version, as: :hidden %>
-  </div>
-<% end %>
+</div>
