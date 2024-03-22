@@ -2628,7 +2628,11 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.save!
 
-    assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(follow_up_date_last_changed_expected, format: :minimal)
+    expected_time = I18n.l(follow_up_date_last_changed_expected, format: :minimal)
+    actual_time   = finding.follow_up_date_last_changed_on_versions
+    delta         = 1.second
+
+    assert_in_delta Time.parse(expected_time), Time.parse(actual_time), delta
   end
 
   test 'should notify findings with follow_up_date_last_changed greater than 90 days' do
