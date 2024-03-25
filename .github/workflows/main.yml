@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - c-banco-china
       - c-bancotdf
       - c-bica
       - c-bice-production
@@ -10,18 +11,30 @@ on:
       - c-bna-pla
       - c-bvalores
       - c-bvalores-test
+      - c-comafi-production
+      - c-comafi-test
       - c-dino-production
       - c-galicia-production
       - c-galicia-test
-      - c-hipotecario
+      - c-hipotecario-production
+      - c-hipotecario-testing
+      - c-macro-production
+      - c-macro-test
+      - c-mariva-production
+      - c-mariva-testing
       - c-nbch
       - c-patagonia-production
       - c-patagonia-test
       - c-petersen-production
       - c-petersen-test
+      - c-smg-production
+      - c-smg-test
+      - c-supervielle-production
+      - c-supervielle-test
   pull_request:
     branches:
       - master
+      - c-banco-china
       - c-bancotdf
       - c-bica
       - c-bice-production
@@ -29,22 +42,33 @@ on:
       - c-bna-pla
       - c-bvalores
       - c-bvalores-test
+      - c-comafi-production
+      - c-comafi-test
       - c-dino-production
       - c-galicia-production
       - c-galicia-test
-      - c-hipotecario
+      - c-hipotecario-production
+      - c-hipotecario-testing
+      - c-macro-production
+      - c-macro-test
+      - c-mariva-production
+      - c-mariva-testing
       - c-nbch
       - c-patagonia-production
       - c-patagonia-test
       - c-petersen-production
       - c-petersen-test
+      - c-smg-production
+      - c-smg-test
+      - c-supervielle-production
+      - c-supervielle-test
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         ruby-version:
-          - 2.7
+          - 3.1
         config-type:
           - normal
           - gal
@@ -52,32 +76,44 @@ jobs:
           - bh
           - cycle_score
           - reviews_scored_by_weakness
-        use_v27:
+        use_v31:
           - >-
             ${{ contains(github.ref_name, 'master')
+            || contains(github.ref_name, 'china')
             || contains(github.ref_name, 'bancotdf')
             || contains(github.ref_name, 'bica')
             || contains(github.ref_name, 'bice')
             || contains(github.ref_name, 'bna')
             || contains(github.ref_name, 'bvalores')
+            || contains(github.ref_name, 'comafi')
             || contains(github.ref_name, 'dino')
             || contains(github.ref_name, 'galicia')
             || contains(github.ref_name, 'hipotecario')
+            || contains(github.ref_name, 'macro')
+            || contains(github.ref_name, 'mariva')
             || contains(github.ref_name, 'nbch')
             || contains(github.ref_name, 'patagonia')
             || contains(github.ref_name, 'petersen')
+            || contains(github.ref_name, 'smg')
+            || contains(github.ref_name, 'supervielle')
             || contains(github.event.pull_request.base.ref, 'master')
+            || contains(github.event.pull_request.base.ref, 'china')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
             || contains(github.event.pull_request.base.ref, 'bica')
             || contains(github.event.pull_request.base.ref, 'bice')
             || contains(github.event.pull_request.base.ref, 'bna')
             || contains(github.event.pull_request.base.ref, 'bvalores')
+            || contains(github.event.pull_request.base.ref, 'comafi')
             || contains(github.event.pull_request.base.ref, 'dino')
             || contains(github.event.pull_request.base.ref, 'galicia')
             || contains(github.event.pull_request.base.ref, 'hipotecario')
+            || contains(github.event.pull_request.base.ref, 'macro')
+            || contains(github.event.pull_request.base.ref, 'mariva')
             || contains(github.event.pull_request.base.ref, 'nbch')
             || contains(github.event.pull_request.base.ref, 'patagonia')
-            || contains(github.event.pull_request.base.ref, 'petersen') }}
+            || contains(github.event.pull_request.base.ref, 'petersen')
+            || contains(github.event.pull_request.base.ref, 'smg')
+            || contains(github.event.pull_request.base.ref, 'supervielle') }}
         use_bh:
           - >-
             ${{ contains(github.ref_name, 'master')
@@ -105,19 +141,31 @@ jobs:
         use_normal:
           - >-
             ${{ contains(github.ref_name, 'master')
+            || contains(github.ref_name, 'china')
             || contains(github.ref_name, 'bancotdf')
             || contains(github.ref_name, 'bica')
             || contains(github.ref_name, 'bna')
             || contains(github.ref_name, 'bvalores')
+            || contains(github.ref_name, 'comafi')
             || contains(github.ref_name, 'dino')
+            || contains(github.ref_name, 'macro')
+            || contains(github.ref_name, 'mariva')
             || contains(github.ref_name, 'petersen')
+            || contains(github.ref_name, 'smg')
+            || contains(github.ref_name, 'supervielle')
             || contains(github.event.pull_request.base.ref, 'master')
+            || contains(github.event.pull_request.base.ref, 'china')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
             || contains(github.event.pull_request.base.ref, 'bica')
             || contains(github.event.pull_request.base.ref, 'bna')
             || contains(github.event.pull_request.base.ref, 'bvalores')
+            || contains(github.event.pull_request.base.ref, 'comafi')
             || contains(github.event.pull_request.base.ref, 'dino')
-            || contains(github.event.pull_request.base.ref, 'petersen') }}
+            || contains(github.event.pull_request.base.ref, 'macro')
+            || contains(github.event.pull_request.base.ref, 'mariva')
+            || contains(github.event.pull_request.base.ref, 'petersen')
+            || contains(github.event.pull_request.base.ref, 'smg')
+            || contains(github.event.pull_request.base.ref, 'supervielle') }}
         use_reviews_scored_by_weakness:
           - >-
             ${{ contains(github.ref_name, 'master')
@@ -125,8 +173,8 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'nbch') }}
         exclude:
-          - use_v27: false
-            ruby-version: 2.7
+          - use_v31: false
+            ruby-version: 3.1
           - use_bh: false
             config-type: bh
           - use_normal: false
@@ -168,10 +216,10 @@ jobs:
       APP_HOST: 'lvh.me'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: update ubuntu packages
-        run: sudo apt-get update
-      - name: Install sldap
+        uses: actions/checkout@v4
+      - name: Update package lists
+        run: sudo apt update -y
+      - name: Install slapd and ldap-utils
         run: sudo apt -y install slapd ldap-utils
       - name: Install wkhtmltopdf
         run: sudo apt -y install wkhtmltopdf
