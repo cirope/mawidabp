@@ -74,7 +74,9 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
   end
 
   def short_bic_weakness_review_code review_code
-    review_code.sub(/^O/, '').to_i
+    prefix = I18n.t('code_prefixes.weaknesses')
+
+    review_code.sub(/^#{prefix}/, '').to_i
   end
 
   def sort_bic_weaknesses_by_risk? conclusion_review
