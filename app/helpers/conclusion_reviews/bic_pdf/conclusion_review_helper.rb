@@ -73,11 +73,11 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     end.join '; '
   end
 
-  def short_weakness_review_code review_code
+  def short_bic_weakness_review_code review_code
     review_code.sub(/^O/, '').to_i
   end
 
-  def sort_weaknesses_by_risk? conclusion_review
+  def sort_bic_weaknesses_by_risk? conclusion_review
     CONCLUSION_REVIEW_SORT_BY_RISK_START && conclusion_review.created_at >= CONCLUSION_REVIEW_SORT_BY_RISK_START
   end
 
@@ -95,7 +95,7 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     repeated.reorder risk: :desc, priority: :desc, review_code: :asc
   end
 
-  def control_objective_item_weaknesses conclusion_review, control_objective_item
+  def bic_control_objective_item_weaknesses conclusion_review, control_objective_item
     weaknesses = if kind_of? ConclusionFinalReview
                    control_objective_item.final_weaknesses
                  else

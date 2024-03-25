@@ -122,7 +122,7 @@
     <% end %>
   </div>
 
-  <% if sort_weaknesses_by_risk? conclusion_review %>
+  <% if sort_bic_weaknesses_by_risk? conclusion_review %>
     <% bic_current_weaknesses(conclusion_review).each do |weakness| %>
       <div class="alwaysbreak <%= watermark_class draft %>">
         <%= render partial: 'conclusion_reviews/bic_pdf/weakness', locals: { weakness: weakness } %>
@@ -136,7 +136,7 @@
   <% else %>
     <% conclusion_review.review.grouped_control_objective_items.each do |process_control, control_objective_items| %>
       <% control_objective_items.sort.each do |control_objective_item| %>
-        <% control_objective_item_weaknesses(conclusion_review, control_objective_item).each do |weakness| %>
+        <% bic_control_objective_item_weaknesses(conclusion_review, control_objective_item).each do |weakness| %>
           <div class="alwaysbreak <%= watermark_class draft %>">
             <%= render partial: 'conclusion_reviews/bic_pdf/weakness', locals: { weakness: weakness } %>
           </div>
