@@ -218,10 +218,10 @@ module Reports::WeaknessesCurrentSituation
           Weakness.human_attribute_name('risk'),
           current_weakness.risk_text
         ],
-        ([
+        [
           Weakness.human_attribute_name('priority'),
           current_weakness.priority_text
-        ] unless %w(gal).include? Current.conclusion_pdf_format),
+        ],
         [
           "<font size='#{PDF_FONT_SIZE + 2}'>#{Weakness.human_attribute_name('title')}</font>",
           "<font size='#{PDF_FONT_SIZE + 2}'><b>#{current_weakness.title}</b></font>"

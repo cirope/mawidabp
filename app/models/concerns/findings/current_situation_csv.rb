@@ -53,7 +53,7 @@ module Findings::CurrentSituationCsv
           I18n.t('follow_up_committee_report.weaknesses_current_situation.origination_year'),
           ConclusionFinalReview.human_attribute_name('conclusion'),
           Weakness.human_attribute_name('risk'),
-          (Weakness.human_attribute_name('priority') unless %w(gal).include? Current.conclusion_pdf_format),
+          Weakness.human_attribute_name('priority'),
           Weakness.human_attribute_name('title'),
           Weakness.human_attribute_name('description'),
           Weakness.human_attribute_name('current_situation'),
@@ -67,7 +67,7 @@ module Findings::CurrentSituationCsv
           Tag.model_name.human(count: 0),
           Weakness.human_attribute_name('compliance_observations'),
           Weakness.human_attribute_name('compliance_maybe_sanction')
-        ].compact.concat benefits.pluck('name')
+        ].concat benefits.pluck('name')
       end
 
       def weaknesses_current_situation_csv_data_rows benefits
@@ -82,7 +82,7 @@ module Findings::CurrentSituationCsv
             (I18n.l weakness.origination_date, format: '%Y' if weakness.origination_date),
             weakness.review.conclusion_final_review&.conclusion,
             current_weakness.risk_text,
-            (current_weakness.priority_text unless %w(gal).include? Current.conclusion_pdf_format),
+            current_weakness.priority_text,
             current_weakness.title,
             current_weakness.description,
             (current_weakness.show_current_situation? ? current_weakness.current_situation : ''),
@@ -96,7 +96,7 @@ module Findings::CurrentSituationCsv
             weakness.taggings.map(&:tag).join('; '),
             weakness.compliance_observations,
             compliance_maybe_sanction(weakness)
-          ].compact.concat(benefits.map do |b|
+          ].concat(benefits.map do |b|
             achievement = weakness.achievements.detect do |a|
               a.benefit_id == b.id
             end
