@@ -51,12 +51,10 @@
   <%= weakness.review.plan_item.risk_exposure %>
 </p>
 
-<% unless %w(gal).include? Current.conclusion_pdf_format %>
-  <p class="mb-1">
-    <span class="text-muted"><%= Weakness.human_attribute_name 'priority' %></span>:
-    <%= weakness.priority_text %>
-  </p>
-<% end %>
+<p class="mb-1">
+  <span class="text-muted"><%= Weakness.human_attribute_name 'priority' %></span>:
+  <%= weakness.priority_text %>
+</p>
 
 <p class="mb-1">
   <span class="text-muted"><%= t 'finding.auditors', count: 0 %></span>:
