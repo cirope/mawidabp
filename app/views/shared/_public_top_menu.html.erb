@@ -1,0 +1,27 @@
+<% time_left = 60 %>
+
+<nav class="navbar sticky-top navbar-expand navbar-light navbar-bg">
+  <div class="navbar-collapse collapse">
+    <ul class="navbar-nav navbar-align">
+      <li class="nav-item">
+        <%= link_to t('navigation.logout'), logout_path, class: 'nav-link', data: { method: :delete } %>
+      </li>
+
+      <span class="navbar-text"
+        data-time-left="<%= time_left %>"
+        data-session-expires-message="<%= t 'message.session_expires_in_less_than_two_minutes' %>"
+        data-session-time-message="<%= t 'message.session_time_expired' %>"
+        data-rejected-data-format-message="<%= t 'message.rejected_data_format' %>"
+        data-unsaved-data-warning-message="<%= t 'message.unsaved_data_warning' %>"
+        data-validation-failed-message="<%= t 'message.validation_failed_message' %>"
+        hidden>
+
+        <span data-bs-toggle="popover" data-trigger="hover" data-placement="bottom" title="<%= t 'navigation.warning' %>" data-content="">
+          <span class="text-warning pulsate" data-text-style>
+            <%= icon 'fas', 'exclamation-circle' %>
+          </span>
+        </span>
+      </span>
+    </ul>
+  </div>
+</nav>
