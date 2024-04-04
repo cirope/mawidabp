@@ -73,14 +73,40 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     end.join '; '
   end
 
-  def conclusion_review_weaknesses conclusion_review
-    weaknesses = if conclusion_review.draft?
-                   conclusion_review.review.weaknesses
+  def short_bic_weakness_review_code review_code
+    prefix = I18n.t('code_prefixes.weaknesses')
+
+    review_code.sub(/^#{prefix}/, '').to_i
+  end
+
+  def sort_bic_weaknesses_by_risk? conclusion_review
+    CONCLUSION_REVIEW_SORT_BY_RISK_START && conclusion_review.created_at >= CONCLUSION_REVIEW_SORT_BY_RISK_START
+  end
+
+  def bic_current_weaknesses conclusion_review
+    weaknesses = base_weaknesses conclusion_review
+    present    = weaknesses.not_revoked.where repeated_of_id: nil
+
+    present.reorder risk: :desc, priority: :desc, review_code: :asc
+  end
+
+  def bic_repeated_weaknesses conclusion_review
+    weaknesses = base_weaknesses conclusion_review
+    repeated   = weaknesses.not_revoked.where.not repeated_of_id: nil
+
+    repeated.reorder risk: :desc, priority: :desc, review_code: :asc
+  end
+
+  def bic_control_objective_item_weaknesses conclusion_review, control_objective_item
+    weaknesses = if kind_of? ConclusionFinalReview
+                   control_objective_item.final_weaknesses
                  else
-                   conclusion_review.review.final_weaknesses
+                   control_objective_item.weaknesses
                  end
 
-    conclusion_review.bic_exclude_regularized_findings weaknesses
+    weaknesses = conclusion_review.bic_exclude_regularized_findings weaknesses
+
+    weaknesses.not_revoked.sort_for_review
   end
 
   def watermark_class draft
@@ -100,4 +126,16 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
       'pt-15'
     end
   end
+
+  private
+
+    def base_weaknesses conclusion_review
+      weaknesses = if conclusion_review.draft?
+                     conclusion_review.review.weaknesses
+                   else
+                     conclusion_review.review.final_weaknesses
+                   end
+
+      conclusion_review.bic_exclude_regularized_findings weaknesses
+    end
 end
