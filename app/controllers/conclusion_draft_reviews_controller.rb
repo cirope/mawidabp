@@ -242,7 +242,8 @@ class ConclusionDraftReviewsController < ApplicationController
         user = User.find_by(id: user_data[:id]) if user_data[:id]
         send_options = {
           note: note,
-          include_score_sheet: include_score_sheet
+          include_score_sheet: include_score_sheet,
+          include_global_score_sheet: include_global_score_sheet
         }
 
         if include_executive_summary
