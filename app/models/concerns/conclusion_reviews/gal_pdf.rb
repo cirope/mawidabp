@@ -159,13 +159,14 @@ module ConclusionReviews::GalPdf
       pdf.make_cell(
         content: project_text,
         background_color: 'e7e6e6',
+        size: (PDF_FONT_SIZE * 0.9).round,
         inline_format: true
       )
     end
 
     def put_review_identification_and_issue_date_on pdf
       style = {
-        cell_style: { background_color: "e7e6e6", inline_format: true },
+        cell_style: { background_color: "e7e6e6", size: (PDF_FONT_SIZE * 0.9).round, inline_format: true },
         column_widths: review_identification_and_issue_date_column_widths(pdf)
       }
 
@@ -186,6 +187,7 @@ module ConclusionReviews::GalPdf
       pdf.make_cell(
         content: risk_exposure_text,
         background_color: 'e7e6e6',
+        size: (PDF_FONT_SIZE * 0.9).round,
         inline_format: true
       )
     end
@@ -199,6 +201,7 @@ module ConclusionReviews::GalPdf
       pdf.make_cell(
         content: objective_text,
         align: :justify,
+        size: (PDF_FONT_SIZE * 0.9).round,
         inline_format: true
       )
     end
@@ -212,6 +215,7 @@ module ConclusionReviews::GalPdf
       pdf.make_cell(
         content: survey_text,
         align: :justify,
+        size: (PDF_FONT_SIZE * 0.9).round,
         inline_format: true
       )
     end
@@ -239,7 +243,7 @@ module ConclusionReviews::GalPdf
       style = { column_widths: conclusion_data_column_width(pdf) }
 
       pdf.make_table(data, style) do
-        column(1).style(align: :justify)
+        column(1).style(align: :justify, size: (PDF_FONT_SIZE * 0.9).round)
       end
     end
 
@@ -286,7 +290,7 @@ module ConclusionReviews::GalPdf
 
       style = {
        column_widths: legend_column_widths(pdf),
-       cell_style: { borders: [], :padding => [0, 0, 1, 5] }
+       cell_style: { borders: [], padding: [0, 0, 1, 5], size: (PDF_FONT_SIZE * 0.9).round }
       }
 
       pdf.make_table(rows, style) do
@@ -312,7 +316,7 @@ module ConclusionReviews::GalPdf
       }
 
       pdf.make_table(rows, style) do
-        row(0).style(background_color: 'e7e6e6', font_style: :bold, align: :center)
+        row(0).style(background_color: 'e7e6e6', font_style: :bold, align: :center, size: (PDF_FONT_SIZE * 0.9).round)
         columns(1..2).style(align: :center)
       end
     end
@@ -326,13 +330,16 @@ module ConclusionReviews::GalPdf
       end
 
       weaknesses.each do |weakness|
+        row_font_size          = (PDF_FONT_SIZE * 0.8).round
+        padding                = [(PDF_FONT_SIZE * 0.3).round, (PDF_FONT_SIZE * 0.5).round]
         weakness_origin        = weakness_origin pdf, weakness
         weakness_normalization = weakness_normalization weakness
 
+
         rows << [
-          pdf.make_cell(content: weakness.title),
-          pdf.make_cell(content: weakness_origin),
-          pdf.make_cell(weakness_normalization)
+          pdf.make_cell(content: weakness.title, size: row_font_size, padding: padding),
+          pdf.make_cell(content: weakness_origin, size: row_font_size, padding: padding),
+          pdf.make_cell(weakness_normalization.merge({size: row_font_size, padding: padding}))
         ]
       end
 
@@ -386,7 +393,7 @@ module ConclusionReviews::GalPdf
 
       pdf.make_table([[title, content]], style) do
         column(0).style(font_style: :bold, valign: :center)
-        column(1).style(align: :justify)
+        column(1).style(align: :justify, size: (PDF_FONT_SIZE * 0.8).round)
       end
     end
 
@@ -1069,11 +1076,11 @@ module ConclusionReviews::GalPdf
     end
 
     def key_weaknesses_column_widths pdf
-      [69, 13, 18].map { |percent| pdf.percent_width percent }
+      [71, 12, 17].map { |percent| pdf.percent_width percent }
     end
 
     def observations_or_applied_data_analytics_column_widths pdf
-      [30, 70].map { |percent| pdf.percent_width percent }
+      [29, 71].map { |percent| pdf.percent_width percent }
     end
 
     def legend_column_widths pdf
