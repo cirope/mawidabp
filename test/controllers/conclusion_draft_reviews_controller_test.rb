@@ -422,13 +422,23 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     perform_job_with_current_attributes(enqueued_jobs.first)
 
-    assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
+    attachments_count = Current.conclusion_pdf_format == 'gal' ? 3 : 2
 
-    text_part = ActionMailer::Base.deliveries.last.parts.detect {
-      |p| p.content_type.match(/text/)
-    }.body.decoded
+    assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
 
-    assert_match /markdown/, text_part
+    unless Current.conclusion_pdf_format == 'gal'
+      text_part = ActionMailer::Base.deliveries.last.parts.detect {
+        |p| p.content_type.match(/text/)
+      }.body.decoded
+
+      assert_match /markdown/, text_part
+    else
+      image_part = ActionMailer::Base.deliveries.last.parts.detect do |p|
+                     p.content_type.match(/multipart/)
+                   end
+
+      assert_not_nil image_part
+    end
 
     clear_enqueued_jobs
     clear_performed_jobs
@@ -452,13 +462,23 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     perform_job_with_current_attributes(enqueued_jobs.first)
 
-    assert_equal 3, ActionMailer::Base.deliveries.last.attachments.size
+    attachments_count = Current.conclusion_pdf_format == 'gal' ? 4 : 3
 
-    text_part = ActionMailer::Base.deliveries.last.parts.detect {
-      |p| p.content_type.match(/text/)
-    }.body.decoded
+    assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
 
-    assert_match /markdown/, text_part
+    unless Current.conclusion_pdf_format == 'gal'
+      text_part = ActionMailer::Base.deliveries.last.parts.detect {
+        |p| p.content_type.match(/text/)
+      }.body.decoded
+
+      assert_match /markdown/, text_part
+    else
+      image_part = ActionMailer::Base.deliveries.last.parts.detect do |p|
+                     p.content_type.match(/multipart/)
+                   end
+
+      assert_not_nil image_part
+    end
   end
 
   test 'can not send by email with final review' do
