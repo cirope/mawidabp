@@ -203,10 +203,11 @@ class NotifierMailer < ApplicationMailer
     body_title = I18n.t('notifier.conclusion_review_notification.body_title',
       elements: elements.to_sentence)
 
-    @conclusion_review = conclusion_review
-    @organization = conclusion_review.review.organization
-    @body_title = body_title
-    @note = options[:note]
+    @conclusion_review       = conclusion_review
+    @organization            = conclusion_review.review.organization
+    @body_title              = body_title
+    @note                    = options[:note]
+    @executive_summary_pages = options[:executive_summary_pages]
 
     if conclusion_review.review.show_counts?(org_prefix)
       @show_alt_footer = true
@@ -229,11 +230,17 @@ class NotifierMailer < ApplicationMailer
         File.read(conclusion_review.review.absolute_global_score_sheet_path)
     end
 
-    if options[:include_executive_summary]
-      image_path = "#{conclusion_review.absolute_pdf_path}.png"
+    if @executive_summary_pages
+      pdf_path = conclusion_review.absolute_executive_summary_pdf_path
 
-      if File.exist?(image_path)
-        attachments.inline['review_image.png'] = File.read(image_path)
+      @executive_summary_pages.times do |page|
+        image_path = "#{pdf_path}_#{page}.png"
+
+        if File.exist?(image_path)
+          attached_png_name = I18n.t('conclusion_review.executive_summary.attached_png_name', page: page)
+
+          attachments.inline[attached_png_name] = File.read(image_path)
+        end
       end
     end
 

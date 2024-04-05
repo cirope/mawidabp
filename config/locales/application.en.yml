@@ -455,7 +455,6 @@ en:
       brief: "Summary audit report"
       without_score: "Audit report without rating"
       expanded: "Extended audit report"
-      only_executive_summary: "Executive summary"
     pdf:
       pdf_name: "list_of_final_audit_reports.pdf"
       filtered_by:
@@ -500,6 +499,8 @@ en:
     review_repeated_finding_label: "Audit report #"
     executive_summary:
       title: "Executive Summary"
+      pdf_name: executive-summary-%{pdf_name}
+      attached_png_name: executive-summary-image-%{page}.png
       review_author: "Internal Audit Management"
       project: "The audit carried out was circumscribed to the review of:"
       project_alt: <b>Audit:</b> %{project}

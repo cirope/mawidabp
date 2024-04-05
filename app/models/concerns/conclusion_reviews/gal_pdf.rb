@@ -9,8 +9,12 @@ module ConclusionReviews::GalPdf
     put_default_watermark_on pdf
 
     if options[:only_executive_summary]
+      gal_pdf_name = executive_summary_pdf_name
+
       put_gal_executive_summary_on pdf, organization
     else
+      gal_pdf_name = pdf_name
+
       put_gal_header_on            pdf, organization
       put_gal_cover_on             pdf
       put_gal_executive_summary_on pdf, organization
@@ -18,7 +22,7 @@ module ConclusionReviews::GalPdf
       put_annex_on                 pdf, organization, options
     end
 
-    pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
+    pdf.custom_save_as gal_pdf_name, ConclusionReview.table_name, id
   end
 
   private

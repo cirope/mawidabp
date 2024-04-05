@@ -212,7 +212,7 @@ class ConclusionFinalReviewsController < ApplicationController
       include_global_score_sheet = params[:conclusion_review][:include_global_score_sheet] == '1'
       note                       = params[:conclusion_review][:email_note]
       review_type                = params[:conclusion_review][:review_type]
-      include_executive_summary  = review_type == 'only_executive_summary'
+      include_executive_summary  = Current.conclusion_pdf_format == 'gal'
 
       if review_type == 'brief'
         export_options[:brief] = '1'
@@ -220,8 +220,6 @@ class ConclusionFinalReviewsController < ApplicationController
         export_options[:hide_score] = '1'
       elsif review_type == 'expanded'
         export_options[:expanded] = '1'
-      elsif review_type == 'only_executive_summary'
-        export_options[:only_executive_summary] = '1'
       end
     end
 
@@ -236,18 +234,25 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     if include_executive_summary
-      pdf_path   = @conclusion_final_review.absolute_pdf_path
-      image_path = "#{pdf_path}.png"
+      export_options[:only_executive_summary] = '1'
 
-      pdf = MiniMagick::Image.open(pdf_path)
+      @conclusion_final_review.to_pdf(current_organization, export_options)
 
-      MiniMagick::Tool::Convert.new do |convert|
-        convert.background "white"
-        convert.flatten
-        convert.density 300
-        convert.quality 100
-        convert << pdf.path
-        convert << "png32:#{image_path}"
+      pdf_path    = @conclusion_final_review.absolute_executive_summary_pdf_path
+      pdf         = MiniMagick::Image.open(pdf_path)
+      total_pages = pdf.pages.count
+
+      total_pages.times do |page|
+        image_path = "#{pdf_path}_#{page}.png"
+
+        MiniMagick::Tool::Convert.new do |convert|
+          convert.background "white"
+          convert.flatten
+          convert.density 300
+          convert.quality 100
+          convert << pdf.pages[page].path
+          convert << "png32:#{image_path}"
+        end
       end
     end
 
@@ -256,9 +261,12 @@ class ConclusionFinalReviewsController < ApplicationController
       send_options = {
         note: note,
         include_score_sheet: include_score_sheet,
-        include_global_score_sheet: include_global_score_sheet,
-        include_executive_summary: include_executive_summary
+        include_global_score_sheet: include_global_score_sheet
       }
+
+      if include_executive_summary
+        send_options[:executive_summary_pages] = total_pages
+      end
 
       if user && users.all? { |u| u.id != user.id }
         @conclusion_final_review.send_by_email_to(user, send_options)

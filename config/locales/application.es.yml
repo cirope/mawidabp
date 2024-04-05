@@ -455,7 +455,6 @@ es:
       brief: "Informe resumido"
       without_score: "Informe sin calificación"
       expanded: "Informe ampliado"
-      only_executive_summary: "Resumen ejecutivo"
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:
@@ -500,6 +499,8 @@ es:
     review_repeated_finding_label: "Informe nro."
     executive_summary:
       title: "Resumen ejecutivo"
+      pdf_name: resumen-ejecutivo-%{pdf_name}
+      attached_png_name: imagen-resumen-ejecutivo-%{page}.png
       review_author: "Gerencia de Auditoría Interna"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
       project_alt: <b>Auditoría:</b> %{project}
