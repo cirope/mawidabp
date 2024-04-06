@@ -37,13 +37,13 @@ RUN gem update --system
 RUN bundle install
 
 COPY . $APP_ROOT
-COPY config/application.yml.example $APP_ROOT/config/application.yml
+COPY config/application.yml.kamal $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
-#RUN bundle exec rake help:install
-#RUN rm -rf config/jekyll/_site
-#RUN bundle exec rake help:create_bootstrap_symlinks
-#RUN bundle exec rake help:generate
+RUN bundle exec rake help:install
+RUN rm -rf config/jekyll/_site
+RUN bundle exec rake help:create_bootstrap_symlinks
+RUN bundle exec rake help:generate
 
 RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
 
