@@ -137,6 +137,14 @@ private
                            description: I18n.t('settings.finding_by_current_user')
       end
     end
+
+    if add_enable_close_date_edition? #2024-01-31
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'enable_close_date_edition',
+                           value:       DEFAULT_SETTINGS[:enable_close_date_edition][:value],
+                           description: I18n.t('settings.enable_close_date_edition')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -185,6 +193,10 @@ private
 
   def add_finding_by_current_user?
     Setting.where(name: 'finding_by_current_user').empty?
+  end
+
+  def add_enable_close_date_edition?
+    Setting.where(name: 'enable_close_date_edition').empty?
   end
 
   def add_new_answer_options
