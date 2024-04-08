@@ -348,6 +348,7 @@ module ConclusionReviews::GalPdf
 
     def needs_old_data_footnote? weakness
       origination_year = weakness.origination_date&.year
+
       origination_year && origination_year < Date.today.year - 1
     end
 
