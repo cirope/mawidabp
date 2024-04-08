@@ -223,6 +223,10 @@ jobs:
         run: sudo apt -y install slapd ldap-utils
       - name: Install wkhtmltopdf
         run: sudo apt -y install wkhtmltopdf
+      - name: Install ghostscript
+        run: sudo apt install ghostscript
+      - name: Modify ImageMagick policy
+        run: sudo sed -i '/PDF/s/rights="none"/rights="read|write"/' /etc/ImageMagick-6/policy.xml
       - name: Install ruby and gems
         uses: ruby/setup-ruby@v1
         with:
@@ -237,9 +241,5 @@ jobs:
           sudo cp test/fixtures/ldap/slapd.conf /etc/ldap/
           sudo slapd -f /etc/ldap/slapd.conf -h ldap://localhost:3389
           bundle exec rails ldap:reset
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-      - name: Modify ImageMagick policy
-        run: sudo sed -i '/PDF/s/rights="none"/rights="read|write"/' /etc/ImageMagick-6/policy.xml
       - name: Run tests
         run: bin/rails test
