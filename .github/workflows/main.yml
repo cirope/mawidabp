@@ -221,8 +221,6 @@ jobs:
         run: sudo apt update -y
       - name: Install slapd and ldap-utils
         run: sudo apt -y install slapd ldap-utils
-      - name: Modify ImageMagick policy
-        run: sudo sed -i '/PDF/s/rights="none"/rights="read|write"/' /etc/ImageMagick-6/policy.xml
       - name: Install wkhtmltopdf
         run: sudo apt -y install wkhtmltopdf
       - name: Install ruby and gems
@@ -230,6 +228,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
+      - name: Modify ImageMagick policy
+        run: sudo sed -i '/PDF/s/rights="none"/rights="read|write"/' /etc/ImageMagick-6/policy.xml
       - name: Migrate database
         run: bin/rails db:migrate
       - name: Copy application.yml
