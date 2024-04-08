@@ -221,6 +221,8 @@ jobs:
         run: sudo apt update -y
       - name: Install slapd and ldap-utils
         run: sudo apt -y install slapd ldap-utils
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Modify ImageMagick policy
         run: sudo sed -i '/PDF/s/rights="none"/rights="read|write"/' /etc/ImageMagick-6/policy.xml
       - name: Install wkhtmltopdf
