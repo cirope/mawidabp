@@ -916,10 +916,10 @@ en:
       title: "You have a new finding [#%{finding_id}]"
       created_title: "New finding"
     notify_new_findings:
-      title: "Findings / oportunities notifications"
+      title: "Weaknesses / opportunities notifications"
       created_title:
-        one: "New finding / oportunity"
-        other: "New findings / oportunities"
+        one: "New weakness / opportunity"
+        other: "New weaknesses / opportunities"
     notify_new_finding_answer:
       title: "New comment on audit report %{review} [#%{finding_id}]"
       finding_data: "A comment has been added to the finding **%{finding_code}** of audit report **%{review}**"

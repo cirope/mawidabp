@@ -26,7 +26,7 @@ module Users::CloseDateWarning
           raise ActiveRecord::Rollback unless findings.all? &:mark_as_unconfirmed
         end
 
-        if ENV['EMAIL_METHOD']
+        if CHECK_FINDING_EMAIL_REPLIES
           users.each do |user|
             user.findings.recently_notified.each do |finding|
               NotifierMailer.notify_new_finding(user, finding).deliver_later
