@@ -361,7 +361,7 @@ module ConclusionReviews::GalPdf
     end
 
     def weakness_origin pdf, weakness
-      needs_old_data_footnote = needs_old_data_footnote?(weakness)
+      needs_old_data_footnote = needs_old_data_footnote? weakness
       origination_text        = weakness.origination_date ? I18n.l(weakness.origination_date, format: "%b %Y") : ''
       origination_text        = needs_old_data_footnote ? origination_text + '<sup>2</sup>' : origination_text
 
