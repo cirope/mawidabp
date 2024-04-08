@@ -221,8 +221,6 @@ jobs:
         run: sudo apt update -y
       - name: Install slapd and ldap-utils
         run: sudo apt -y install slapd ldap-utils
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
       - name: Modify ImageMagick policy
         run: sudo sed -i '/PDF/s/rights="none"/rights="read|write"/' /etc/ImageMagick-6/policy.xml
       - name: Install wkhtmltopdf
@@ -241,5 +239,7 @@ jobs:
           sudo cp test/fixtures/ldap/slapd.conf /etc/ldap/
           sudo slapd -f /etc/ldap/slapd.conf -h ldap://localhost:3389
           bundle exec rails ldap:reset
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Run tests
         run: bin/rails test
