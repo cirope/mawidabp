@@ -183,7 +183,7 @@ es:
       confirmed: 'Confirmada'
       unconfirmed: 'No confirmada'
       unanswered: 'Sin respuesta'
-      awaiting: 'A regularizar'
+      awaiting: 'En definición del Plan de Acción'
       failure: 'Falla'
       being_implemented: 'En proceso de implementación'
       being_implemented_current: 'Vigente'
