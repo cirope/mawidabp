@@ -919,6 +919,11 @@ es:
       title: "Nuevo comentario en el informe %{review} [#%{finding_id}]"
       finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver hallazgo"
+    notify_new_findings:
+      title: "Notificación de observaciones / oportunidades de mejora"
+      created_title:
+        one: "Nueva observación / oportunidad de mejora"
+        other: "Nuevas observaciones / oportunidades de mejora"
     change_password: "Cambiar contraseña"
     changes_notification:
       title: "Notificación de cambios"
