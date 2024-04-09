@@ -378,11 +378,13 @@ module ConclusionReviews::GalPdf
 
     def put_observations_v2_on(pdf)
       title = I18n.t('conclusion_review.executive_summary.observations')
+
       create_observations_or_applied_data_analytics_table(pdf, title, observations)
     end
 
     def put_applied_data_analytics_on(pdf)
       title = I18n.t('conclusion_review.executive_summary.applied_data_analytics')
+
       create_observations_or_applied_data_analytics_table(pdf, title, applied_data_analytics)
     end
 
