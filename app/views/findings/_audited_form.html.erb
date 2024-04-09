@@ -78,7 +78,7 @@
                 } %>
               <% end %>
 
-              <% unless %w(gal).include? Current.conclusion_pdf_format %>
+              <% if %w(gal).exclude? Current.conclusion_pdf_format %>
                 <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
               <% end %>
             <% end %>

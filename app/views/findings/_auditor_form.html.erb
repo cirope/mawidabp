@@ -177,7 +177,7 @@
                   data: { bic_field_to_disabled_when_is_manual: true } %>
               <% end %>
 
-              <% unless %w(gal).include? Current.conclusion_pdf_format %>
+              <% if %w(gal).exclude? Current.conclusion_pdf_format %>
                 <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
                   disabled: disabled_priority(@finding, false),
                   readonly: !!USE_SCOPE_CYCLE
