@@ -6,6 +6,11 @@
         :action => :export_to_pdf, :id => @conclusion_draft_review, :_ts => Time.now.to_i
       }, :class => 'dropdown-item'
     ),
+    link_to(
+      t('conclusion_review.executive_summary.download'), {
+        :action => :export_to_pdf, :id => @conclusion_draft_review, :export_options => {:only_executive_summary => '1'}, :_ts => Time.now.to_i
+      }, :class => 'dropdown-item'
+    ),
     (
       link_to(
         t('conclusion_draft_review.download_brief'), {

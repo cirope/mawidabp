@@ -32,11 +32,31 @@ CONCLUSION_IMAGES = {
   'No aplica'                    => 'score_not_apply.png'
 }
 
+CONCLUSION_CHARTS = {
+  'Satisfactorio'                => 'score_success_chart.png',
+  'Satisfactorio con salvedades' => 'score_success_with_exceptions_chart.png',
+  'Necesita mejorar'             => 'score_warning_chart.png',
+  'No satisfactorio'             => 'score_danger_chart.png',
+  'No aplica'                    => 'score_not_apply_chart.png'
+}
+
+CONCLUSION_CHART_LEGENDS = {
+  'Satisfactorio'                => 'score_success_legend.png',
+  'Satisfactorio con salvedades' => 'score_success_with_exceptions_legend.png',
+  'Necesita mejorar'             => 'score_warning_legend.png',
+  'No satisfactorio'             => 'score_danger_legend.png',
+  'No aplica'                    => 'score_not_apply_legend.png'
+}
+
+CONCLUSION_CHART_LEGENDS_CHECKED = {
+  'Satisfactorio'                => 'score_success_legend_checked.png',
+  'Satisfactorio con salvedades' => 'score_success_with_exceptions_legend_checked.png',
+  'Necesita mejorar'             => 'score_warning_legend_checked.png',
+  'No satisfactorio'             => 'score_danger_legend_checked.png',
+  'No aplica'                    => 'score_not_apply_legend_checked.png'
+}
+
 CONCLUSION_EVOLUTION_IMAGES = {
-  [
-    'Satisfactorio con salvedades',
-    'Mantiene calificación desfavorable'
-  ] => 'evolution_equal_success.png',
   [
     'Satisfactorio con salvedades',
     'Empeora calficación'
@@ -87,7 +107,24 @@ EVOLUTION_IMAGES = {
   'No aplica'                          => 'evolution_not_apply.png'
 }
 
-PDF_IMAGE_PATH = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
+EVOLUTION_SUPERSCRIPT = 'evolution_footnote.png'
+
+CONCLUSION_EVOLUTION_FOOTNOTES = {
+  [
+    'Satisfactorio con salvedades',
+    'Empeora calficación'
+  ] => '¹Desmejora (dentro de Satisfactorio) respecto a la auditoría anterior'
+}
+
+EVOLUTION_FOOTNOTES = {
+  'Mantiene calificación desfavorable' => '¹Mantiene calificación desfavorable respecto a la auditoría anterior',
+  'Mantiene calificación favorable'    => '¹Mantiene calificación favorable respecto a la auditoría anterior',
+  'Mejora calificación'                => '¹Mejora calificación respecto a la auditoría anterior',
+  'Empeora calficación'                => '¹Desmejora calificación respecto a la auditoría anterior',
+  'No aplica'                          => '¹No puede compararse con un trabajo anterior'
+}
+
+PDF_IMAGE_PATH          = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
 PDF_DEFAULT_SCORE_IMAGE = 'score_none.png'
 
 PLAN_ITEM_STATS_EXCLUDED_SCOPES = [
