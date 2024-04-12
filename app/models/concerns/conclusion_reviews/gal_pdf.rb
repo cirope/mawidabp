@@ -36,7 +36,7 @@ module ConclusionReviews::GalPdf
 
     def put_gal_cover_on pdf
       unless CODE_CHANGE_DATES['exec_summary_v2'] && created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
-        items_font_size = PDF_FONT_SIZE * 1.5
+        items_font_size     = PDF_FONT_SIZE * 1.5
         business_unit_label =
           review.business_unit.business_unit_type.business_unit_label
         business_unit_title =
