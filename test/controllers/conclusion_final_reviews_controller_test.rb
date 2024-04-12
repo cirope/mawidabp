@@ -375,9 +375,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_current_final_review).id
     )
-    is_gal_exec_summary_v2 = Current.conclusion_pdf_format == 'gal' &&
-      CODE_CHANGE_DATES['exec_summary_v2'] &&
-      conclusion_review.created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
+    is_gal_exec_summary_v2 = is_gal_exec_summary_v2? conclusion_review
 
     ActionMailer::Base.deliveries = []
 
@@ -513,5 +511,13 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_final_review.pdf.pdf_name'),
       ConclusionFinalReview.table_name)
+  end
+
+  private
+
+  def is_gal_exec_summary_v2? conclusion_review
+    Current.conclusion_pdf_format == 'gal' &&
+      CODE_CHANGE_DATES['exec_summary_v2'] &&
+      conclusion_review.created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
   end
 end
