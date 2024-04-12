@@ -401,6 +401,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
     )
+    is_gal_exec_summary_v2 = Current.conclusion_pdf_format == 'gal' &&
+      CODE_CHANGE_DATES['exec_summary_v2'] &&
+      conclusion_review.created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
 
     ActionMailer::Base.deliveries = []
 
@@ -422,11 +425,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     perform_job_with_current_attributes(enqueued_jobs.first)
 
-    attachments_count = Current.conclusion_pdf_format == 'gal' ? 3 : 2
+    attachments_count = is_gal_exec_summary_v2 ? 3 : 2
 
     assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
 
-    unless Current.conclusion_pdf_format == 'gal'
+    unless is_gal_exec_summary_v2
       text_part = ActionMailer::Base.deliveries.last.parts.detect {
         |p| p.content_type.match(/text/)
       }.body.decoded
@@ -462,11 +465,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     perform_job_with_current_attributes(enqueued_jobs.first)
 
-    attachments_count = Current.conclusion_pdf_format == 'gal' ? 4 : 3
+    attachments_count = is_gal_exec_summary_v2 ? 4 : 3
 
     assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
 
-    unless Current.conclusion_pdf_format == 'gal'
+    unless is_gal_exec_summary_v2
       text_part = ActionMailer::Base.deliveries.last.parts.detect {
         |p| p.content_type.match(/text/)
       }.body.decoded
