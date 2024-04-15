@@ -1,7 +1,4 @@
 ARG QUEMU_IMAGE=multiarch/qemu-user-static:x86_64-aarch64
-ARG APP_ROOT=/opt/app
-ARG BUNDLE_BIN=$GEM_HOME/bin
-ARG BUNDLE_GEMFILE=$APP_ROOT/Gemfile
 ARG RAILS_ENV=production
 
 # -----------------------
@@ -12,7 +9,7 @@ ARG RAILS_ENV=production
 FROM $QUEMU_IMAGE as qemu
 FROM ruby:alpine as builder
 
-ARG APP_ROOT
+ARG APP_ROOT=/opt/app
 
 RUN apk add --update --no-cache\
  build-base     \
@@ -24,17 +21,18 @@ RUN apk add --update --no-cache\
  ca-certificates \
  vim
 
-RUN mkdir $APP_ROOT
+RUN mkdir -p $APP_ROOT
+
+COPY . $APP_ROOT
 
 WORKDIR $APP_ROOT
 
-COPY Gemfile Gemfile.lock ./
+#COPY Gemfile Gemfile.lock ./
 
 RUN gem update --system && gem update --force --no-document
 
 RUN bundle config set deployment 'true' && bundle install
 
-COPY . $APP_ROOT
 COPY config/application.yml.kamal $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
@@ -50,8 +48,7 @@ RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
 
 FROM ruby:alpine
 
-ARG BUNDLE_BIN
-ARG BUNDLE_GEMFILE
+ARG APP_ROOT=/opt/app
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
 ENV LC_ALL en_US.UTF-8
@@ -73,11 +70,7 @@ RUN apk add --update --no-cache\
 COPY --from=builder $APP_ROOT $APP_ROOT
 COPY --from=builder $GEM_HOME $GEM_HOME
 
-#RUN chown -R $USER: $APP_ROOT
-
 WORKDIR $APP_ROOT
-
-USER $USER
 
 EXPOSE $PORT
 
