@@ -184,7 +184,8 @@ module Reports::SynthesisReport
       process_control_text = get_synthesis_report_process_controls_text
       weaknesses_text = get_synthesis_report_weaknesses_text(c_r)
 
-      @review_scores << c_r.review.score
+      calculate_score c_r.review
+
       @column_data << [
         c_r.review.business_unit.name,
         c_r.review.to_s,
@@ -196,13 +197,19 @@ module Reports::SynthesisReport
       ]
     end
 
+    def calculate_score review
+      risk_assign = review.plan_item.plan.risk_assessment.risk_assessment_items.where(name: review.identification).take!
+
+      @review_scores << ((review.score * risk_assign.risk) / 100)
+    end
+
     def sort_synthesis_report_column_data
       @column_data.sort! do |cd_1, cd_2|
-        cd_1[2].score <=> cd_2[2].score
+        calculate_score(cd_1[2]) <=> calculate_score(cd_2[2])
       end
 
       @column_data.each do |data|
-        data[2] = data[2].score_text
+        data[2] = calculate_score(data[2]).sorted
       end
     end
 
