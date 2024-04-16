@@ -401,6 +401,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
     )
+    is_gal_exec_summary_v2 = is_gal_exec_summary_v2? conclusion_review
 
     ActionMailer::Base.deliveries = []
 
@@ -422,13 +423,23 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     perform_job_with_current_attributes(enqueued_jobs.first)
 
-    assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
+    attachments_count = is_gal_exec_summary_v2 ? 3 : 2
 
-    text_part = ActionMailer::Base.deliveries.last.parts.detect {
-      |p| p.content_type.match(/text/)
-    }.body.decoded
+    assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
 
-    assert_match /markdown/, text_part
+    unless is_gal_exec_summary_v2
+      text_part = ActionMailer::Base.deliveries.last.parts.detect {
+        |p| p.content_type.match(/text/)
+      }.body.decoded
+
+      assert_match /markdown/, text_part
+    else
+      image_part = ActionMailer::Base.deliveries.last.parts.detect do |p|
+                     p.content_type.match(/multipart/)
+                   end
+
+      assert_not_nil image_part
+    end
 
     clear_enqueued_jobs
     clear_performed_jobs
@@ -452,13 +463,23 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     perform_job_with_current_attributes(enqueued_jobs.first)
 
-    assert_equal 3, ActionMailer::Base.deliveries.last.attachments.size
+    attachments_count = is_gal_exec_summary_v2 ? 4 : 3
 
-    text_part = ActionMailer::Base.deliveries.last.parts.detect {
-      |p| p.content_type.match(/text/)
-    }.body.decoded
+    assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
 
-    assert_match /markdown/, text_part
+    unless is_gal_exec_summary_v2
+      text_part = ActionMailer::Base.deliveries.last.parts.detect {
+        |p| p.content_type.match(/text/)
+      }.body.decoded
+
+      assert_match /markdown/, text_part
+    else
+      image_part = ActionMailer::Base.deliveries.last.parts.detect do |p|
+                     p.content_type.match(/multipart/)
+                   end
+
+      assert_not_nil image_part
+    end
   end
 
   test 'can not send by email with final review' do
@@ -493,4 +514,12 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_response :success
     assert_match Mime[:js].to_s, @response.content_type
   end
+
+  private
+
+    def is_gal_exec_summary_v2? conclusion_review
+      Current.conclusion_pdf_format == 'gal' &&
+        CODE_CHANGE_DATES['exec_summary_v2'] &&
+        conclusion_review.created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
+    end
 end
