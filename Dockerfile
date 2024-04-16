@@ -66,6 +66,7 @@ RUN apk add --update --no-cache\
  tzdata         \
  libc6-compat   \
  ca-certificates \
+ libpq-dev      \
  vim
 
 COPY --from=builder $APP_ROOT $APP_ROOT

@@ -24,7 +24,7 @@ registry:
 
 env:
   clear:
-    DB_HOST: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
+    DB_HOST: 34.231.104.28
     REDIS_HOST: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
   secret:
     - POSTGRES_PASSWORD
@@ -37,7 +37,7 @@ builder:
 accessories:
   postgresql:
     image: postgres:16
-    host: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
+    host: 34.231.104.28
     port: 5432
     env:
       clear:
