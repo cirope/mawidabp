@@ -5,7 +5,7 @@ image: mawidabp
 servers:
   web:
     hosts:
-      - 34.231.104.28
+      - <%= ENV['MBP_HOST'] || '127.0.0.1' %>
     labels:
       traefik.http.routers.mawidabp.entrypoints: websecure
       traefik.http.routers.mawidabp.rule: Host(`kamal.mawidabp.com`)
@@ -14,7 +14,7 @@ servers:
       #traefik.http.routers.mawidabp.tls.domains.sans: "admin-kamal.mawidabp.com"
   job:
     hosts:
-      - 34.231.104.28
+      - <%= ENV['MBP_HOST'] || '127.0.0.1' %>
     cmd: bundle exec sidekiq
 
 registry:
@@ -24,8 +24,8 @@ registry:
 
 env:
   clear:
-    DB_HOST: 34.231.104.28
-    REDIS_HOST: "34.231.104.28"
+    DB_HOST: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
+    REDIS_HOST: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
   secret:
     - POSTGRES_PASSWORD
 
@@ -37,7 +37,7 @@ builder:
 accessories:
   postgresql:
     image: postgres:16
-    host: 34.231.104.28
+    host: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
     port: 5432
     env:
       clear:
@@ -73,7 +73,7 @@ traefik:
     entryPoints.web.http.redirections.entryPoint.to: websecure # We want to force https
     entryPoints.web.http.redirections.entryPoint.scheme: https
     entryPoints.web.http.redirections.entrypoint.permanent: true
-    certificatesResolvers.letsencrypt.acme.email: "sergio@hullop.com"
+    certificatesResolvers.letsencrypt.acme.email: "soporte@mawidabp.com"
     certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
     certificatesResolvers.letsencrypt.acme.httpchallenge: true
     certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web

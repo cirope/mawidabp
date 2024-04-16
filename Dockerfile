@@ -18,6 +18,7 @@ RUN apk add --update --no-cache\
  postgresql-dev \
  tzdata         \
  libc6-compat   \
+ libpq-dev      \
  ca-certificates \
  vim
 
