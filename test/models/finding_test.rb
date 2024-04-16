@@ -1361,7 +1361,7 @@ class FindingTest < ActiveSupport::TestCase
 
     Finding.unconfirmed_for_notification.each do |finding|
       finding.update_column :first_notification_date,
-        FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.business_days.ago.to_date
+        1.next.business_days.ago.to_date
     end
 
     refute Finding.unconfirmed_for_notification.any?
