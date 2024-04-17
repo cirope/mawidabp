@@ -8,9 +8,9 @@ module Settings::Validations
     validates :value,
       numericality: { only_integer: true, greater_than_or_equal_to: 0 },
       if: :is_number?
-    validate :validate_finding_stale_confirmed_days, if: -> { name == 'finding_stale_confirmed_days' }
+    validate :validate_finding_stale_confirmed_days, if: -> { name == 'finding_stale_confirmed_days' }, on: :update
     validate :validate_finding_warning_expire_days, if: -> { name == 'finding_warning_expire_days' }
-    validate :validate_finding_days_for_next_notifications, if: -> { name == 'finding_days_for_next_notifications' }
+    validate :validate_finding_days_for_next_notifications, if: -> { name == 'finding_days_for_next_notifications' }, on: :update
   end
 
   private
