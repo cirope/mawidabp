@@ -24,7 +24,7 @@ registry:
 
 env:
   clear:
-    DB_HOST: 34.231.104.28
+    DB_HOST: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
     REDIS_HOST: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
   secret:
     - POSTGRES_PASSWORD
@@ -32,12 +32,12 @@ env:
 builder:
   remote:
     arch: arm64
-    host: ssh://root@34.231.104.28
+    host: ssh://root@<%= ENV['MBP_HOST'] %>
 
 accessories:
   postgresql:
     image: postgres:16
-    host: 34.231.104.28
+    host: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
     port: 5432
     env:
       clear:

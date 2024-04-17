@@ -1,15 +1,15 @@
 ARG QUEMU_IMAGE=multiarch/qemu-user-static:x86_64-aarch64
-ARG RAILS_ENV=production
+ARG APP_ROOT=/opt/app
 
 # -----------------------
 # --- Assets builder ----
 # -----------------------
 
-
 FROM $QUEMU_IMAGE as qemu
 FROM ruby:alpine as builder
 
-ARG APP_ROOT=/opt/app
+ARG APP_ROOT
+ENV RAILS_ENV production
 
 RUN apk add --update --no-cache\
  build-base     \
@@ -27,8 +27,6 @@ RUN mkdir -p $APP_ROOT
 COPY . $APP_ROOT
 
 WORKDIR $APP_ROOT
-
-#COPY Gemfile Gemfile.lock ./
 
 RUN gem update --system && gem update --force --no-document
 
@@ -49,14 +47,14 @@ RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
 
 FROM ruby:alpine
 
-ARG APP_ROOT=/opt/app
+ARG APP_ROOT
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
-ENV HOME $APP_HOME
 ENV PORT 3000
+ENV RAILS_ENV production
 
 RUN apk add --update --no-cache\
  build-base     \
