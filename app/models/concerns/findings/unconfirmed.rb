@@ -1,8 +1,8 @@
 module Findings::Unconfirmed
   extend ActiveSupport::Concern
 
-  included do
-    scope :unconfirmed_for_notification, -> (days) {
+  module ClassMethods
+    def unconfirmed_for_notification days
       where(
         [
           'first_notification_date = :stale_unconfirmed_date',
@@ -15,10 +15,8 @@ module Findings::Unconfirmed
           stale_unconfirmed_date: days.business_days.ago.to_date
         }
       )
-    }
-  end
+    end
 
-  module ClassMethods
     def notify_for_unconfirmed_for_notification_findings
       if Time.zone.today.workday?
         finding_days_for_next_notifications_parameters.each do |organization, value|
@@ -28,7 +26,7 @@ module Findings::Unconfirmed
 
           days_array.each do |days|
             Finding.transaction do
-              findings = Finding.list.unconfirmed_for_notification(days)
+              findings = Finding.list.unconfirmed_for_notification days
 
               notify findings, days
             end
