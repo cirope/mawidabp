@@ -95,11 +95,12 @@ class NotifierMailer < ApplicationMailer
          subject: t('notifier.notify_action_not_found.title')
   end
 
-  def stale_notification(user)
+  def stale_notification(user, days)
     @notifications = user.notifications.not_confirmed
-    organizations = @notifications.map do |n|
-      n.findings.map(&:organization)
-    end.flatten.uniq
+    @days          = days
+    organizations  = @notifications.map do |n|
+                       n.findings.map(&:organization)
+                     end.flatten.uniq
     prefixes = organizations.map {|o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
