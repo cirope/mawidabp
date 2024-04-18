@@ -22,7 +22,7 @@ module Findings::Unconfirmed
         finding_days_for_next_notifications_parameters.each do |organization, value|
           Current.organization = organization
           Current.group        = organization.group
-          days_array           = value.to_s.split(',').map { |v| v.strip.to_i }
+          days_array           = value.to_s.split(',').map &:to_i
 
           days_array.each do |days|
             Finding.transaction do
