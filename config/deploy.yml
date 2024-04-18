@@ -8,10 +8,8 @@ servers:
       - <%= ENV['HOST'] || '127.0.0.1' %>
     labels:
       traefik.http.routers.mawidabp.entrypoints: websecure
-      traefik.http.routers.mawidabp.rule: Host(`kamal.mawidabp.com`)
+      traefik.http.routers.mawidabp.rule: Host(`<%= ENV['HOST'] %>`) || Host(`admin-<%= ENV['HOST'] %>`)
       traefik.http.routers.mawidabp.tls.certresolver: letsencrypt
-      #traefik.http.routers.mawidabp.tls.domains.main: "kamal.mawidabp.com"
-      #traefik.http.routers.mawidabp.tls.domains.sans: "admin-kamal.mawidabp.com"
   job:
     hosts:
       - <%= ENV['HOST'] || '127.0.0.1' %>
@@ -73,6 +71,8 @@ traefik:
     entryPoints.web.http.redirections.entryPoint.to: websecure # We want to force https
     entryPoints.web.http.redirections.entryPoint.scheme: https
     entryPoints.web.http.redirections.entrypoint.permanent: true
+    entrypoints.websecure.http.tls.domains[0].main: <%= ENV['HOST'] %>
+    entrypoints.websecure.http.tls.domains[0].sans: "admin-<%= ENV['HOST'] %>"
     certificatesResolvers.letsencrypt.acme.email: "soporte@mawidabp.com"
     certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
     certificatesResolvers.letsencrypt.acme.httpchallenge: true
