@@ -78,7 +78,7 @@ module Settings::Validations
       array.select { |item| !item.match?(/^\d+$/) }
     end
 
-    def check_duplicates(array)
+    def check_duplicates array
       array.select { |item| array.count(item) > 1 }.uniq
     end
 end
