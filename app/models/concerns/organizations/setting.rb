@@ -14,4 +14,11 @@ module Organizations::Setting
       )
     end
   end
+
+  def finding_by_current_user?
+    setting = settings.find_by name: 'finding_by_current_user'
+    result  = (setting ? setting.value : DEFAULT_SETTINGS[:finding_by_current_user][:value]) != '0'
+
+    result
+  end
 end

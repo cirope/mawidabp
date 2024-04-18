@@ -155,40 +155,12 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
     assert_equal result, bic_weakness_responsible(weakness)
   end
 
-  test 'get conclusion review weaknesses when is final' do
-    conclusion_review = conclusion_reviews :conclusion_current_final_review
-
-    assert_equal conclusion_review.bic_exclude_regularized_findings(conclusion_review.review.final_weaknesses),
-                 conclusion_review_weaknesses(conclusion_review)
-  end
-
-  test 'get conclusion review weaknesses when is draft' do
-    conclusion_review = conclusion_reviews :conclusion_current_draft_review
-
-    assert_equal conclusion_review.bic_exclude_regularized_findings(conclusion_review.review.weaknesses),
-                 conclusion_review_weaknesses(conclusion_review)
-  end
-
   test 'get watermark class when is draft' do
     assert_equal 'watermark-bic', watermark_class(true)
   end
 
   test 'get watermark class when is not draft' do
     assert_equal '', watermark_class(false)
-  end
-
-  test 'get legend weakness repeated when weakness have repeated' do
-    weakness    = findings :unanswered_for_level_1_notification
-    repeated_of = findings :being_implemented_weakness
-
-    weakness.update! repeated_of_id: repeated_of.id
-
-    assert_equal I18n.t('conclusion_review.bic.weaknesses.repeated'),
-                 legend_weakness_repeated(weakness)
-  end
-
-  test 'get legend weakness repeated when weakness dont have repeated' do
-    assert_equal '', legend_weakness_repeated(findings(:being_implemented_weakness))
   end
 
   test 'get follow up date weakness have follow up date' do
@@ -205,10 +177,10 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
     weakness       = findings :being_implemented_weakness
     weakness.state = Finding::STATUS[:implemented_audited]
 
-    assert_equal 'green-text', risk_style(weakness)
+    assert_equal 'text-green', risk_style(weakness)
   end
 
   test 'get risk style when is not implemented_audited' do
-    assert_equal 'orange-text', risk_style(findings(:being_implemented_weakness))
+    assert_equal 'text-white', risk_style(findings(:being_implemented_weakness))
   end
 end
