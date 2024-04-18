@@ -5,7 +5,7 @@ image: mawidabp
 servers:
   web:
     hosts:
-      - <%= ENV['MBP_HOST'] || '127.0.0.1' %>
+      - <%= ENV['HOST'] || '127.0.0.1' %>
     labels:
       traefik.http.routers.mawidabp.entrypoints: websecure
       traefik.http.routers.mawidabp.rule: Host(`kamal.mawidabp.com`)
@@ -14,7 +14,7 @@ servers:
       #traefik.http.routers.mawidabp.tls.domains.sans: "admin-kamal.mawidabp.com"
   job:
     hosts:
-      - <%= ENV['MBP_HOST'] || '127.0.0.1' %>
+      - <%= ENV['HOST'] || '127.0.0.1' %>
     cmd: bundle exec sidekiq
 
 registry:
@@ -24,20 +24,20 @@ registry:
 
 env:
   clear:
-    DB_HOST: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
-    REDIS_HOST: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
+    DB_HOST: <%= ENV['HOST'] || '127.0.0.1' %>
+    REDIS_HOST: <%= ENV['HOST'] || '127.0.0.1' %>
   secret:
     - POSTGRES_PASSWORD
 
 builder:
   remote:
-    arch: arm64
-    host: ssh://root@<%= ENV['MBP_HOST'] %>
+    arch: <%= ENV['ARCH'].present? ? ENV['ARCH'] : (raise RuntimeError.new('Debe agregar el argumento ARCH con los valores(arm64 o amd64)')) %>
+    host: ssh://root@<%= ENV['HOST'] %>
 
 accessories:
   postgresql:
     image: postgres:16
-    host: <%= ENV['MBP_HOST'] || '127.0.0.1' %>
+    host: <%= ENV['HOST'] || '127.0.0.1' %>
     port: 5432
     env:
       clear:
