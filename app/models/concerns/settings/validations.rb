@@ -64,11 +64,13 @@ module Settings::Validations
 
     def add_errors_for_invalid_numbers array, attribute
       invalid_items = validate_numericality array
+
       errors.add(attribute, :invalid, invalid_days: invalid_items.join(', ')) if invalid_items.any?
     end
 
     def add_errors_for_duplicates array, attribute
       duplicate_items = check_duplicates array
+
       errors.add(attribute, :duplicate_array_values, duplicate_days: duplicate_items.join(', ')) if duplicate_items.any?
     end
 
