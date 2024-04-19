@@ -246,7 +246,7 @@ class NotifierMailer < ApplicationMailer
     end
 
     if @executive_summary_pages
-      pdf_path = conclusion_review.absolute_executive_summary_pdf_path
+      pdf_path = conclusion_review.absolute_pdf_path
 
       @executive_summary_pages.times do |page|
         image_path = "#{pdf_path}_#{page}.png"
