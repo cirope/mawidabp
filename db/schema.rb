@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_01_172300) do
+ActiveRecord::Schema.define(version: 2024_04_19_123824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1077,6 +1077,7 @@ ActiveRecord::Schema.define(version: 2023_11_01_172300) do
     t.bigint "risk_assessment_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "plan_item_id"
     t.index ["business_unit_id"], name: "index_risk_assessment_items_on_business_unit_id"
     t.index ["process_control_id"], name: "index_risk_assessment_items_on_process_control_id"
     t.index ["risk_assessment_id"], name: "index_risk_assessment_items_on_risk_assessment_id"

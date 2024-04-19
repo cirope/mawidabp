@@ -117,6 +117,8 @@ module Reports::SynthesisReport
       @columns = {'business_unit_report_name' => [but.business_unit_label, 10],
         'review' => [Review.model_name.human, 10],
         'score' => ["#{Review.human_attribute_name(:score)} (1)", 10],
+        'riesgo_in' =>  ['Riesgo inherente', 10],
+        'riesgo_re' =>  ['Riesgo residual', 10],
         'process_control' => ["#{BestPractice.human_attribute_name('process_controls.name')} (2)", 16],
         'weaknesses_count' => ["#{t('conclusion_review.objectives_and_scopes').downcase.upcase_first} (3)", 28],
         'oportunities_count' => ["#{Weakness.model_name.human(count: 0)} (4)", 26]
@@ -190,6 +192,8 @@ module Reports::SynthesisReport
         c_r.review.business_unit.name,
         c_r.review.to_s,
         c_r.review.reload,
+        'hola',
+        'hola',
         process_control_text,
         @control_objective_text,
         weaknesses_text.blank? ?
@@ -205,11 +209,13 @@ module Reports::SynthesisReport
 
     def sort_synthesis_report_column_data
       @column_data.sort! do |cd_1, cd_2|
-        calculate_score(cd_1[2]) <=> calculate_score(cd_2[2])
+        cd_1[2].score <=> cd_2[2].score
+        #calculate_score(cd_1[2]) <=> calculate_score(cd_2[2])
       end
 
       @column_data.each do |data|
-        data[2] = calculate_score(data[2]).sorted
+#        data[2] = calculate_score(data[2]).sorted
+        data[2] = data[2].score_text
       end
     end
 
