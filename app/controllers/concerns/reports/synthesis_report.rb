@@ -76,8 +76,9 @@ module Reports::SynthesisReport
       @title = t("#{@controller}_committee_report.synthesis_report_title")
       @from_date, @to_date = *make_date_range(params[:synthesis_report])
       @periods = periods_for_interval
-      @column_order = ['business_unit_report_name', 'review', 'score',
-          'process_control', 'weaknesses_count', 'oportunities_count']
+      @column_order = ['business_unit_report_name', 'review', 'score', 'inherent_risk',
+                       'residual_risk','process_control', 'weaknesses_count',
+                       'oportunities_count']
       @filters = []
       @risk_levels = []
       @audits_by_business_unit = {}
@@ -117,8 +118,8 @@ module Reports::SynthesisReport
       @columns = {'business_unit_report_name' => [but.business_unit_label, 10],
         'review' => [Review.model_name.human, 10],
         'score' => ["#{Review.human_attribute_name(:score)} (1)", 10],
-        'riesgo_in' =>  ['Riesgo inherente', 10],
-        'riesgo_re' =>  ['Riesgo residual', 10],
+        'inherent_risk' =>  ["#{t('conclusion_reports.synthesis_report.inherent_risk')}", 10],
+        'residual_risk' =>  ["#{t('conclusion_reports.synthesis_report.residual_risk')}", 10],
         'process_control' => ["#{BestPractice.human_attribute_name('process_controls.name')} (2)", 16],
         'weaknesses_count' => ["#{t('conclusion_review.objectives_and_scopes').downcase.upcase_first} (3)", 28],
         'oportunities_count' => ["#{Weakness.model_name.human(count: 0)} (4)", 26]
@@ -128,6 +129,8 @@ module Reports::SynthesisReport
     def init_synthesis_report_business_unit_type_vars
       @column_data = []
       @review_scores = []
+      @inherent_risk_total = []
+      @residual_risk_total = []
       @repeated_count = 0 if @controller == 'follow_up'
     end
 
@@ -186,14 +189,12 @@ module Reports::SynthesisReport
       process_control_text = get_synthesis_report_process_controls_text
       weaknesses_text = get_synthesis_report_weaknesses_text(c_r)
 
-      calculate_score c_r.review
-
       @column_data << [
         c_r.review.business_unit.name,
         c_r.review.to_s,
         c_r.review.reload,
-        'hola',
-        'hola',
+        calculate_inherent_risk(c_r.review),
+        calculate_residual_risk(c_r.review),
         process_control_text,
         @control_objective_text,
         weaknesses_text.blank? ?
@@ -201,10 +202,26 @@ module Reports::SynthesisReport
       ]
     end
 
-    def calculate_score review
-      risk_assign = review.plan_item.plan.risk_assessment.risk_assessment_items.where(name: review.identification).take!
+    def calculate_inherent_risk review
+      risk = review.plan_item&.risk_assessment_item&.risk.to_f
 
-      @review_scores << ((review.score * risk_assign.risk) / 100)
+      @inherent_risk_total << risk
+
+      risk
+    end
+
+    def calculate_residual_risk review
+      risk = review.plan_item&.risk_assessment_item&.risk.to_f
+
+      calculate = ((risk * review.score) / 100)
+
+      @residual_risk_total << calculate
+
+      calculate
+    end
+
+    def calculate_score
+      @review_score = @residual_risk_total / @inherent_risk_total
     end
 
     def sort_synthesis_report_column_data
@@ -227,6 +244,8 @@ module Reports::SynthesisReport
         :columns => @columns,
         :column_data => @column_data,
         :review_scores => @review_scores,
+        :inherent_risks => @inherent_risk_total,
+        :residual_risks => @residual_risk_total,
         :repeated_count => @repeated_count
       }
     end
