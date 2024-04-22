@@ -118,8 +118,8 @@ module Reports::SynthesisReport
       @columns = {'business_unit_report_name' => [but.business_unit_label, 10],
         'review' => [Review.model_name.human, 10],
         'score' => ["#{Review.human_attribute_name(:score)} (1)", 10],
-        'inherent_risk' =>  ["#{t('conclusion_reports.synthesis_report.inherent_risk')}", 10],
-        'residual_risk' =>  ["#{t('conclusion_reports.synthesis_report.residual_risk')}", 10],
+        'inherent_risk' => ["#{t('conclusion_reports.synthesis_report.inherent_risk')}", 10],
+        'residual_risk' => ["#{t('conclusion_reports.synthesis_report.residual_risk')}", 10],
         'process_control' => ["#{BestPractice.human_attribute_name('process_controls.name')} (2)", 16],
         'weaknesses_count' => ["#{t('conclusion_review.objectives_and_scopes').downcase.upcase_first} (3)", 28],
         'oportunities_count' => ["#{Weakness.model_name.human(count: 0)} (4)", 26]
@@ -329,13 +329,14 @@ module Reports::SynthesisReport
         end
 
         total = internal_audits_by_business_unit.inject(0) do |sum, data|
-          scores = data[:review_scores]
+          inherent_risks = data[:inherent_risks]
+          residual_risks = data[:residual_risks]
 
-          if scores.blank?
+          if inherent_risks.blank?
             sum
           else
             count += 1
-            sum + (scores.sum.to_f / scores.size).round
+            sum + ((residual_risks.sum.to_f / inherent_risks.sum.to_f) * 100).round
           end
         end
 
