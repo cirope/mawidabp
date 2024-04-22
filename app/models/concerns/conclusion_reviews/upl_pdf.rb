@@ -307,7 +307,7 @@ module ConclusionReviews::UplPdf
               cell_style:    {
                 align: :right,
                 size:  (font_size * 1).round,
-                padding: [30,5,5,5]
+                padding: [30, 5, 5, 5]
               }
           end
         end
@@ -318,8 +318,10 @@ module ConclusionReviews::UplPdf
 
     def upl_table_data_header
       [
-        ['',I18n.t('conclusion_final_review.downloads.departmental_management'),
-         I18n.t('conclusion_final_review.downloads.page_number')
+        [
+          '',
+          I18n.t('conclusion_final_review.downloads.departmental_management'),
+          I18n.t('conclusion_final_review.downloads.page_number')
         ]
       ]
     end
