@@ -235,7 +235,7 @@ module ConclusionReviews::GalPdf
     end
 
     def put_conclusion_data_on pdf
-      conclusion_chart_and_evolution_image = put_chart_and_image pdf
+      conclusion_chart_and_evolution_image = put_chart_image_and_caption_on pdf
 
       data  = [[conclusion_chart_and_evolution_image, review_conclusion]]
       style = { column_widths: conclusion_data_column_width(pdf) }
@@ -245,7 +245,17 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def put_chart_and_image pdf
+    def put_chart_image_and_caption_on pdf
+      data  = [[put_chart_and_image_on(pdf)], [put_image_caption_on(pdf)]]
+      style = {
+        column_widths: [pdf.percent_width(47)],
+        cell_style: { borders: [] }
+      }
+
+      pdf.make_table(data, style)
+    end
+
+    def put_chart_and_image_on pdf
       conclusion_chart      = put_chart_on pdf
       evolution_image       = pdf_score_image_row get_evolution_image
       evolution_superscript = {
@@ -254,9 +264,8 @@ module ConclusionReviews::GalPdf
         vposition: :center
       }
 
-      pdf.add_footnote get_evolution_footnote
+      data = [[conclusion_chart, evolution_image, evolution_superscript]]
 
-      data  = [[conclusion_chart, evolution_image, evolution_superscript]]
       style = {
         column_widths: chart_and_image_column_width(pdf),
         cell_style: { borders: [] }
@@ -269,11 +278,33 @@ module ConclusionReviews::GalPdf
       image      = CONCLUSION_CHARTS[conclusion]
       image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
       size       = 150
+      style      = {
+        column_widths: [pdf.percent_width(40)],
+        cell_style: { borders: [] }
+      }
 
       pdf.make_table([
         [{ image: image_path, fit: [size, size], position: :center, vposition: :center }],
         [put_legend_on(pdf, conclusion)]
-      ], column_widths: [pdf.percent_width(40)], cell_style: { borders: [] })
+      ], style)
+    end
+
+    def put_image_caption_on pdf
+      data = [[
+        {
+          content: get_evolution_footnote,
+          align: :justify,
+          size: (PDF_FONT_SIZE * 0.6).round,
+          inline_format: true
+        }
+      ]]
+
+      style = {
+        column_widths: [pdf.percent_width(47)],
+        cell_style: { borders: [] }
+      }
+
+      pdf.make_table(data, style)
     end
 
     def put_legend_on pdf, conclusion
