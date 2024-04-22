@@ -305,8 +305,8 @@ module ConclusionReviews::UplPdf
             pdf.table table_data,
               column_widths: [column_width * 0.45, column_width * 0.4, column_width * 0.15],
               cell_style:    {
-                align: :right,
-                size:  (font_size * 1).round,
+                align:   :right,
+                size:    (font_size * 1).round,
                 padding: [30, 5, 5, 5]
               }
           end
