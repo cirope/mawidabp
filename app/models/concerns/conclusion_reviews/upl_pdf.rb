@@ -305,8 +305,9 @@ module ConclusionReviews::UplPdf
             pdf.table table_data,
               column_widths: [column_width * 0.45, column_width * 0.4, column_width * 0.15],
               cell_style:    {
-                align: :right,
-                size:  (font_size * 1).round
+                align:   :right,
+                size:    (font_size * 1).round,
+                padding: [30, 5, 5, 5]
               }
           end
         end
@@ -318,10 +319,10 @@ module ConclusionReviews::UplPdf
     def upl_table_data_header
       [
         [
-          { content: "", rowspan: 2 }, I18n.t('conclusion_final_review.downloads.general_assistant_manager'),
-          { content: I18n.t('conclusion_final_review.downloads.page_number'), rowspan: 2 }
-        ],
-        [I18n.t('conclusion_final_review.downloads.departmental_management')]
+          '',
+          I18n.t('conclusion_final_review.downloads.departmental_management'),
+          I18n.t('conclusion_final_review.downloads.page_number')
+        ]
       ]
     end
 
