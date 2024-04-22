@@ -200,6 +200,9 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
       post :merge_to_plan, params: { id: @risk_assessment }
     end
 
+    rai = @risk_assessment.risk_assessment_items.select { |r| r.plan_item_id.present? }
+
+    assert_equal 1, rai.size
     assert_redirected_to edit_plan_url(Plan.find_by period_id: period.id)
   end
 
