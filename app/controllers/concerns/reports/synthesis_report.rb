@@ -235,6 +235,7 @@ module Reports::SynthesisReport
       @audits_by_business_unit[period] ||= []
       @audits_by_business_unit[period] << {
         :name => but.name,
+        :business_units => but.business_units.map(&:name).join(', '),
         :external => but.external,
         :columns => @columns,
         :column_data => @column_data,
