@@ -293,6 +293,8 @@ ActiveRecord::Schema.define(version: 2024_04_22_171222) do
     t.text "effectiveness_notes"
     t.text "additional_comments"
     t.boolean "exclude_regularized_findings", default: false, null: false
+    t.text "review_conclusion"
+    t.text "applied_data_analytics"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
