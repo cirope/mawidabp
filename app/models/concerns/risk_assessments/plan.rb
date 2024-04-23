@@ -31,7 +31,7 @@ module RiskAssessments::Plan
           end:              period.end,
           scope:            scope,
           risk_exposure:    risk_exposure,
-          business_unit_id: risk_assessment_item.business_unit_id,
+          business_unit_id: risk_assessment_item.business_unit_id
         )
       end
     end

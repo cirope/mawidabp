@@ -1,7 +1,10 @@
 module ConclusionCommitteeReportsHelper
   def synthesis_report_score_average(title, inherent_risks, residual_risks)
-    unless inherent_risks.blank?
-      raw("<strong>#{title}</strong>: <em>#{((residual_risks.sum.to_f / inherent_risks.sum.to_f) * 100).round}%</em>")
+    inherent_risks_sum = inherent_risks.sum.to_f
+    residual_risks_sum = residual_risks.sum.to_f
+
+    if inherent_risks_sum > 0 && residual_risks_sum > 0
+      raw("<strong>#{title}</strong>: <em>#{((residual_risks_sum / inherent_risks_sum) * 100).round}%</em>")
     else
       t('conclusion_committee_report.synthesis_report.without_audits_in_the_period')
     end
@@ -15,14 +18,15 @@ module ConclusionCommitteeReportsHelper
     unless internal_audits_by_business_unit.blank?
       count = 0
       total = internal_audits_by_business_unit.inject(0) do |sum, data|
-        inherent_risks = data[:inherent_risks]
-        residual_risks = data[:residual_risks]
+        inherent_risks = data[:inherent_risks].sum.to_f
+        residual_risks = data[:residual_risks].sum.to_f
 
-        if inherent_risks.blank?
-          sum
-        else
+        if inherent_risks > 0 && residual_risks > 0
           count += 1
-          sum + ((residual_risks.sum.to_f / inherent_risks.sum.to_f) * 100).round
+
+          sum + ((residual_risks / inherent_risks) * 100).round
+        else
+          sum
         end
       end
 

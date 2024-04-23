@@ -329,14 +329,14 @@ module Reports::SynthesisReport
         end
 
         total = internal_audits_by_business_unit.inject(0) do |sum, data|
-          inherent_risks = data[:inherent_risks]
-          residual_risks = data[:residual_risks]
+          inherent_risks = data[:inherent_risks].sum.to_f
+          residual_risks = data[:residual_risks].sum.to_f
 
-          if inherent_risks.blank?
-            sum
-          else
+          if inherent_risks > 0 && residual_risks > 0
             count += 1
             sum + ((residual_risks.sum.to_f / inherent_risks.sum.to_f) * 100).round
+          else
+            sum
           end
         end
 
