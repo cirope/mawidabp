@@ -70,9 +70,9 @@ class RiskAssessmentTest < ActiveSupport::TestCase
       assert_equal @risk_assessment.risk_assessment_items.count,
         plan.plan_items.count
 
-      @risk_assessment.risk_assessment_items.each do |r|
-        assert r.plan_item
-      end
+      items = @risk_assessment.risk_assessment_items
+
+      assert items.all? { |i| plan.plan_items.include? i.plan_item }
     end
 
     assert @risk_assessment.reload.merged?
