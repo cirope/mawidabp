@@ -282,11 +282,22 @@ module Prawn
         end
       end
 
-      def add_footnote(text, font_size = 8, style = :normal)
-        font_height = self.font.height_at(font_size)
+      def add_footnote(text, font_size = 8, style = :normal, footnote_number = 1)
+        font_height     = self.font.height_at(font_size)
+        vertical_offset = font_height * (footnote_number - 1)
+        text_at_y       = self.bounds.bottom - font_height - vertical_offset
+
+        self.line_width = 0.5
+
+        if footnote_number == 1
+          self.stroke_horizontal_line 0, self.bounds.width / 3,
+            :at => text_at_y + font_size + 1.5
+        end
 
         self.draw_text(text, :size => font_size, :style => style,
-          :at => [self.bounds.left, self.bounds.bottom - font_height * 0.5])
+          :at => [self.bounds.left, text_at_y])
+
+        self.line_width = 1
       end
 
       def default_table_options(column_widths)
