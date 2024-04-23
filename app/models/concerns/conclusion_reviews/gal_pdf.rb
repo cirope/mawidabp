@@ -8,7 +8,7 @@ module ConclusionReviews::GalPdf
     put_gal_tmp_reviews_code     organization
     put_default_watermark_on     pdf
     put_gal_header_on            pdf, organization
-    put_gal_cover_on             pdf
+    put_gal_cover_on             pdf unless use_gal_exec_summary_v2?
     put_gal_executive_summary_on pdf, organization
 
     executive_summary_pages = pdf.page_count
@@ -31,52 +31,50 @@ module ConclusionReviews::GalPdf
     end
 
     def put_gal_cover_on pdf
-      unless CODE_CHANGE_DATES['exec_summary_v2'] && created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
-        items_font_size     = PDF_FONT_SIZE * 1.5
-        business_unit_label =
-          review.business_unit.business_unit_type.business_unit_label
-        business_unit_title =
-          "#{business_unit_label}: #{review.business_unit.name}"
-        issue_date_title    =
-          I18n.t('conclusion_review.issue_date_title').downcase.camelize
+      items_font_size     = PDF_FONT_SIZE * 1.5
+      business_unit_label =
+        review.business_unit.business_unit_type.business_unit_label
+      business_unit_title =
+        "#{business_unit_label}: #{review.business_unit.name}"
+      issue_date_title    =
+        I18n.t('conclusion_review.issue_date_title').downcase.camelize
 
-        pdf.move_down PDF_FONT_SIZE * 8
-        pdf.text "#{business_unit_title}\n", size: (PDF_FONT_SIZE * 2.5).round,
-          align: :center
-        pdf.move_down PDF_FONT_SIZE * 4
+      pdf.move_down PDF_FONT_SIZE * 8
+      pdf.text "#{business_unit_title}\n", size: (PDF_FONT_SIZE * 2.5).round,
+        align: :center
+      pdf.move_down PDF_FONT_SIZE * 4
 
-        if review.business_unit.business_unit_type.project_label.present?
-          project_label = review.business_unit.business_unit_type.project_label
+      if review.business_unit.business_unit_type.project_label.present?
+        project_label = review.business_unit.business_unit_type.project_label
 
-          pdf.add_description_item project_label, review.plan_item.project,
-            0, false, items_font_size
-          pdf.move_down PDF_FONT_SIZE * 2
-        end
-
-        unless review.business_unit_type.without_number
-          pdf.add_description_item ::Review.model_name.human, review.identification,
-                                   0, false, items_font_size
-        end
-
-        pdf.add_description_item issue_date_title, I18n.l(issue_date),
+        pdf.add_description_item project_label, review.plan_item.project,
           0, false, items_font_size
-
         pdf.move_down PDF_FONT_SIZE * 2
-
-        if review.business_unit_type.reviews_for.present? &&
-          created_at >= CODE_CHANGE_DATES['reviews_for_and_detailed_review_custom_field'].to_date
-            pdf.text review.business_unit_type.reviews_for, size: items_font_size
-        else
-          pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
-                   size: items_font_size
-        end
-
-        pdf.start_new_page
       end
+
+      unless review.business_unit_type.without_number
+        pdf.add_description_item ::Review.model_name.human, review.identification,
+                                 0, false, items_font_size
+      end
+
+      pdf.add_description_item issue_date_title, I18n.l(issue_date),
+        0, false, items_font_size
+
+      pdf.move_down PDF_FONT_SIZE * 2
+
+      if review.business_unit_type.reviews_for.present? &&
+        created_at >= CODE_CHANGE_DATES['reviews_for_and_detailed_review_custom_field'].to_date
+          pdf.text review.business_unit_type.reviews_for, size: items_font_size
+      else
+        pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
+                 size: items_font_size
+      end
+
+      pdf.start_new_page
     end
 
     def put_gal_executive_summary_on pdf, organization
-      if CODE_CHANGE_DATES['exec_summary_v2'] && created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
+      if use_gal_exec_summary_v2?
         put_gal_executive_summary_v2_on pdf
       else
         put_gal_executive_summary_v1_on pdf, organization
@@ -1237,5 +1235,11 @@ module ConclusionReviews::GalPdf
         !collapse_control_objectives &&
         SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START &&
         review.period.start >= SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START.to_date
+    end
+
+    def use_gal_exec_summary_v2?
+      Current.conclusion_pdf_format == 'gal' &&
+        CODE_CHANGE_DATES['exec_summary_v2'] &&
+        created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
     end
 end
