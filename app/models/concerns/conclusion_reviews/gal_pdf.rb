@@ -448,9 +448,9 @@ module ConclusionReviews::GalPdf
 
       pdf.text legend, align: :justify, style: :italic
 
-      put_review_survey_on       pdf
+      put_review_survey_on       pdf unless use_gal_exec_summary_v2?
       put_detailed_weaknesses_on pdf, organization
-      put_observations_on        pdf unless show_observations_on_top? organization
+      put_observations_on        pdf unless show_observations_on_top?(organization) || use_gal_exec_summary_v2?
       put_recipients_on pdf
     end
 
