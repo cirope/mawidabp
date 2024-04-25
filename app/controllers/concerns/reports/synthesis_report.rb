@@ -129,9 +129,9 @@ module Reports::SynthesisReport
     def init_synthesis_report_business_unit_type_vars
       @column_data = []
       @review_scores = []
-      @inherent_risk_total = []
-      @residual_risk_total = []
-      @business_unit_review = []
+      @inherent_risk = []
+      @residual_risk = []
+      @business_unit_names = []
       @repeated_count = 0 if @controller == 'follow_up'
     end
 
@@ -192,11 +192,11 @@ module Reports::SynthesisReport
 
       @review_scores << c_r.review.score
       @column_data << [
-        business_unit_names(c_r.review),
+        set_synthesis_report_business_unit_names(c_r.review),
         c_r.review.to_s,
         c_r.review.reload,
-        inherent_risk(c_r.review),
-        residual_risk(c_r.review),
+        set_synthesis_report_inherent_risk(c_r.review),
+        set_synthesis_report_residual_risk(c_r.review),
         process_control_text,
         @control_objective_text,
         weaknesses_text.blank? ?
@@ -204,28 +204,28 @@ module Reports::SynthesisReport
       ]
     end
 
-    def business_unit_names review
+    def set_synthesis_report_business_unit_names review
       bu = review.business_unit.name
 
-      @business_unit_review << bu
+      @business_unit_names << bu
 
       bu
     end
 
-    def inherent_risk review
+    def set_synthesis_report_inherent_risk review
       risk = review.plan_item&.risk_assessment_item&.risk.to_f
 
-      @inherent_risk_total << risk
+      @inherent_risk << risk
 
       risk
     end
 
-    def residual_risk review
+    def set_synthesis_report_residual_risk review
       risk = review.plan_item&.risk_assessment_item&.risk.to_f
 
-      item_risk = ((risk * review.score.to_f) / 100)
+      item_risk = risk * review.score.to_f / 100
 
-      @residual_risk_total << item_risk
+      @residual_risk << item_risk
 
       item_risk
     end
@@ -244,13 +244,13 @@ module Reports::SynthesisReport
       @audits_by_business_unit[period] ||= []
       @audits_by_business_unit[period] << {
         :name => but.name,
-        :business_units => @business_unit_review.uniq.join(', '),
+        :business_units => @business_unit_names.uniq.join(', '),
         :external => but.external,
         :columns => @columns,
         :column_data => @column_data,
         :review_scores => @review_scores,
-        :inherent_risks => @inherent_risk_total,
-        :residual_risks => @residual_risk_total,
+        :inherent_risks => @inherent_risk,
+        :residual_risks => @residual_risk,
         :repeated_count => @repeated_count
       }
     end
@@ -318,7 +318,7 @@ module Reports::SynthesisReport
       if inherent_risks_sum > 0 && residual_risks_sum > 0
         title = t("#{@controller}_committee_report.synthesis_report.generic_score_average",
           :count => inherent_risks.size, :audit_type => audit_type_name)
-        text = "<b>#{title}</b>: <i>#{((residual_risks_sum / inherent_risks_sum) * 100).round}%</i>"
+        text = "<b>#{title}</b>: <i>#{(residual_risks_sum / inherent_risks_sum * 100).round}%</i>"
       else
         text = t('conclusion_committee_report.synthesis_report.without_audits_in_the_period')
       end
@@ -337,12 +337,12 @@ module Reports::SynthesisReport
         end
 
         total = internal_audits_by_business_unit.inject(0) do |sum, data|
-          inherent_risks = data[:inherent_risks].sum.to_f
-          residual_risks = data[:residual_risks].sum.to_f
+          inherent_risks = data[:inherent_risks].sum
+          residual_risks = data[:residual_risks].sum
 
           if inherent_risks > 0 && residual_risks > 0
             count += 1
-            sum + ((residual_risks / inherent_risks) * 100).round
+            sum + (residual_risks / inherent_risks * 100).round
           else
             sum
           end
