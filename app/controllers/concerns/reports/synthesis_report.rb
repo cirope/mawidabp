@@ -129,8 +129,8 @@ module Reports::SynthesisReport
     def init_synthesis_report_business_unit_type_vars
       @column_data = []
       @review_scores = []
-      @inherent_risk = []
-      @residual_risk = []
+      @inherent_risks = []
+      @residual_risks = []
       @business_unit_names = []
       @repeated_count = 0 if @controller == 'follow_up'
     end
@@ -215,7 +215,7 @@ module Reports::SynthesisReport
     def set_synthesis_report_inherent_risk review
       risk = review.plan_item&.risk_assessment_item&.risk.to_f
 
-      @inherent_risk << risk
+      @inherent_risks << risk
 
       risk
     end
@@ -225,7 +225,7 @@ module Reports::SynthesisReport
 
       item_risk = risk * review.score.to_f / 100
 
-      @residual_risk << item_risk
+      @residual_risks << item_risk
 
       item_risk
     end
@@ -249,8 +249,8 @@ module Reports::SynthesisReport
         :columns => @columns,
         :column_data => @column_data,
         :review_scores => @review_scores,
-        :inherent_risks => @inherent_risk,
-        :residual_risks => @residual_risk,
+        :inherent_risks => @inherent_risks,
+        :residual_risks => @residual_risks,
         :repeated_count => @repeated_count
       }
     end
