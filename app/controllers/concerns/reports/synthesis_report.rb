@@ -195,8 +195,8 @@ module Reports::SynthesisReport
         business_unit_names(c_r.review),
         c_r.review.to_s,
         c_r.review.reload,
-        calculate_inherent_risk(c_r.review),
-        calculate_residual_risk(c_r.review),
+        inherent_risk(c_r.review),
+        residual_risk(c_r.review),
         process_control_text,
         @control_objective_text,
         weaknesses_text.blank? ?
@@ -212,7 +212,7 @@ module Reports::SynthesisReport
       bu
     end
 
-    def calculate_inherent_risk review
+    def inherent_risk review
       risk = review.plan_item&.risk_assessment_item&.risk.to_f
 
       @inherent_risk_total << risk
@@ -220,14 +220,14 @@ module Reports::SynthesisReport
       risk
     end
 
-    def calculate_residual_risk review
+    def residual_risk review
       risk = review.plan_item&.risk_assessment_item&.risk.to_f
 
-      calculate = ((risk * review.score.to_f) / 100)
+      item_risk = ((risk * review.score.to_f) / 100)
 
-      @residual_risk_total << calculate
+      @residual_risk_total << item_risk
 
-      calculate
+      item_risk
     end
 
     def sort_synthesis_report_column_data
