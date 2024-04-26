@@ -292,7 +292,7 @@ module ConclusionReviews::GalPdf
         {
           content: get_evolution_footnote,
           align: :justify,
-          size: (PDF_FONT_SIZE * 0.6).round,
+          size: (PDF_FONT_SIZE * 0.7).round,
           inline_format: true
         }
       ]]
