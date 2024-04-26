@@ -518,7 +518,7 @@ en:
       conclusion: <b>Assurance opinion</b>
       key_weaknesses: <b>Key findings</b>
       origin: Origin
-      origin_footnote: ¹Old data
+      old_data: (Old data)
       normalization: Normalization
       observations: "<b>New Steps\nAdditional information</b>"
       applied_data_analytics: Applied Data Analytics
