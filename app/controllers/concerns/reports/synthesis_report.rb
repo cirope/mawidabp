@@ -343,6 +343,7 @@ module Reports::SynthesisReport
           if inherent_risks > 0 && residual_risks > 0
             count += 1
 
+
             sum + (residual_risks / inherent_risks * 100).round
           else
             sum
