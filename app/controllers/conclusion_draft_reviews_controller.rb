@@ -204,8 +204,7 @@ class ConclusionDraftReviewsController < ApplicationController
         end
       end
 
-      executive_summary_pages =
-        @conclusion_draft_review.to_pdf(current_organization, export_options)[:executive_summary_pages]
+      pdf_info = @conclusion_draft_review.to_pdf(current_organization, export_options)
 
       if include_score_sheet
         @conclusion_draft_review.review.score_sheet current_organization, draft: true
@@ -216,6 +215,7 @@ class ConclusionDraftReviewsController < ApplicationController
       end
 
       if include_executive_summary?
+        executive_summary_pages = pdf_info[:executive_summary_pages]
         pdf_path = @conclusion_draft_review.absolute_pdf_path
         pdf      = MiniMagick::Image.open(pdf_path)
 
