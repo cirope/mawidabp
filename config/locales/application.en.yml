@@ -187,6 +187,9 @@ en:
       users: 'By user'
       business_units: 'By business unit'
       process_controls: 'By business process'
+    synthesis_report:
+      inherent_risk: 'Inherent risk'
+      residual_risk: 'Residual risk'
 
   conclusion_committee_report:
     index_title: "Conclusion reports"
