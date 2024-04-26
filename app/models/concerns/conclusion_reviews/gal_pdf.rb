@@ -349,34 +349,22 @@ module ConclusionReviews::GalPdf
     end
 
     def key_weaknesses_rows pdf, weaknesses
-      rows              = [key_weaknesses_header]
-      footnote_required = weaknesses.any? { |w| needs_old_data_footnote?(w) }
-
-      if footnote_required
-        pdf.add_footnote I18n.t('conclusion_review.executive_summary.origin_footnote'), 8, :normal, 2
-      end
+      rows = [key_weaknesses_header]
 
       weaknesses.each do |weakness|
         row_font_size          = (PDF_FONT_SIZE * 0.8).round
-        padding                = [(PDF_FONT_SIZE * 0.3).round, (PDF_FONT_SIZE * 0.5).round]
-        weakness_origin        = weakness_origin pdf, weakness
+        cell_padding           = [(PDF_FONT_SIZE * 0.3).round, (PDF_FONT_SIZE * 0.5).round]
+        weakness_origin        = weakness_origin pdf, weakness, cell_padding, row_font_size
         weakness_normalization = weakness_normalization weakness
 
-
         rows << [
-          pdf.make_cell(content: weakness.title, size: row_font_size, padding: padding),
-          pdf.make_cell(content: weakness_origin, size: row_font_size, padding: padding),
-          pdf.make_cell(weakness_normalization.merge({size: row_font_size, padding: padding}))
+          pdf.make_cell(content: weakness.title, size: row_font_size, padding: cell_padding),
+          weakness_origin,
+          pdf.make_cell(weakness_normalization.merge({size: row_font_size, padding: cell_padding}))
         ]
       end
 
       rows
-    end
-
-    def needs_old_data_footnote? weakness
-      origination_year = weakness.origination_date&.year
-
-      origination_year && origination_year < Date.today.year - 1
     end
 
     def key_weaknesses_header
@@ -387,12 +375,30 @@ module ConclusionReviews::GalPdf
       ]
     end
 
-    def weakness_origin pdf, weakness
-      needs_old_data_footnote = needs_old_data_footnote? weakness
-      origination_text        = weakness.origination_date ? I18n.l(weakness.origination_date, format: "%b %Y") : ''
-      origination_text        = needs_old_data_footnote ? origination_text + '<sup>2</sup>' : origination_text
+    def weakness_origin pdf, weakness, cell_padding, row_font_size
+      origin_text         = weakness.origination_date ? I18n.l(weakness.origination_date, format: "%b %Y") : ''
+      origin_cell_padding = is_origination_date_old?(weakness) ? [1, 6] : cell_padding
+      origin_cell         = pdf.make_cell(content: origin_text, size: row_font_size, padding: origin_cell_padding, align: :center)
+      origin_content      = [[origin_cell]]
 
-      origination_text
+      if is_origination_date_old? weakness
+        old_data_text = I18n.t('conclusion_review.executive_summary.old_data')
+        old_data_cell = pdf.make_cell(content: old_data_text, size: (PDF_FONT_SIZE * 0.6).round, padding: [0, 1, 1, 1], align: :center)
+        origin_content << [old_data_cell]
+      end
+
+      style = {
+        column_widths: [pdf.percent_width(12)],
+        cell_style: { inline_format: true, borders: [] }
+      }
+
+      pdf.make_table(origin_content, style)
+    end
+
+    def is_origination_date_old? weakness
+      origination_year = weakness.origination_date&.year
+
+      origination_year && origination_year < Date.today.year - 1
     end
 
     def weakness_normalization weakness
