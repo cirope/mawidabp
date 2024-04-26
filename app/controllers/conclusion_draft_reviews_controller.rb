@@ -216,8 +216,8 @@ class ConclusionDraftReviewsController < ApplicationController
 
       if include_executive_summary?
         executive_summary_pages = pdf_info[:executive_summary_pages]
-        pdf_path = @conclusion_draft_review.absolute_pdf_path
-        pdf      = MiniMagick::Image.open(pdf_path)
+        pdf_path                = @conclusion_draft_review.absolute_pdf_path
+        pdf                     = MiniMagick::Image.open(pdf_path)
 
         executive_summary_pages.times do |page|
           image_path = "#{pdf_path}_#{page}.png"
