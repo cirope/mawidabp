@@ -222,8 +222,7 @@ class ConclusionFinalReviewsController < ApplicationController
       end
     end
 
-    executive_summary_pages =
-      @conclusion_final_review.to_pdf(current_organization, export_options)[:executive_summary_pages]
+    pdf_info = @conclusion_final_review.to_pdf(current_organization, export_options)
 
     if include_score_sheet
       @conclusion_final_review.review.score_sheet current_organization
@@ -234,8 +233,9 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     if include_executive_summary?
-      pdf_path = @conclusion_final_review.absolute_pdf_path
-      pdf      = MiniMagick::Image.open(pdf_path)
+      executive_summary_pages = pdf_info[:executive_summary_pages]
+      pdf_path                = @conclusion_final_review.absolute_pdf_path
+      pdf                     = MiniMagick::Image.open(pdf_path)
 
       executive_summary_pages.times do |page|
         image_path = "#{pdf_path}_#{page}.png"
