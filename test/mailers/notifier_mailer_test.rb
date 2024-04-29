@@ -160,8 +160,9 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'deliver stale notification' do
-    user = User.find(users(:bare).id)
-    response = NotifierMailer.stale_notification(user).deliver_now
+    user     = User.find(users(:bare).id)
+    days     = 1
+    response = NotifierMailer.stale_notification(user, days).deliver_now
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(I18n.t('notifier.notification.pending'))

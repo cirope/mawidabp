@@ -4,7 +4,7 @@
     <%= t 'notifier.notification.the_following_findings_are_still_unconfirmed' %>
   </h3>
   <% @notifications.each do |n| %>
-    <% n.findings.unconfirmed_for_notification.group_by(&:organization).each do |organization, findings| %>
+    <% n.findings.unconfirmed_for_notification(@days).group_by(&:organization).each do |organization, findings| %>
       <% Current.organization = organization %>
       <h4 style="margin-bottom: 1em;"><%= organization.name %></h4>
       <h5><%= l(n.created_at.to_date, :format => :long) %></h5>

@@ -204,7 +204,7 @@ class ConclusionDraftReviewsController < ApplicationController
         end
       end
 
-      @conclusion_draft_review.to_pdf(current_organization, export_options)
+      pdf_info = @conclusion_draft_review.to_pdf(current_organization, export_options)
 
       if include_score_sheet
         @conclusion_draft_review.review.score_sheet current_organization, draft: true
@@ -215,15 +215,11 @@ class ConclusionDraftReviewsController < ApplicationController
       end
 
       if include_executive_summary?
-        export_options[:only_executive_summary] = '1'
+        executive_summary_pages = pdf_info[:executive_summary_pages]
+        pdf_path                = @conclusion_draft_review.absolute_pdf_path
+        pdf                     = MiniMagick::Image.open(pdf_path)
 
-        @conclusion_draft_review.to_pdf(current_organization, export_options)
-
-        pdf_path    = @conclusion_draft_review.absolute_executive_summary_pdf_path
-        pdf         = MiniMagick::Image.open(pdf_path)
-        total_pages = pdf.pages.count
-
-        total_pages.times do |page|
+        executive_summary_pages.times do |page|
           image_path = "#{pdf_path}_#{page}.png"
 
           MiniMagick::Tool::Convert.new do |convert|
@@ -246,7 +242,7 @@ class ConclusionDraftReviewsController < ApplicationController
         }
 
         if include_executive_summary?
-          send_options[:executive_summary_pages] = total_pages
+          send_options[:executive_summary_pages] = executive_summary_pages
         end
 
         if user && !users.include?(user)
