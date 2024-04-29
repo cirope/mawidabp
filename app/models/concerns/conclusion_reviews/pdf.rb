@@ -20,14 +20,6 @@ module ConclusionReviews::Pdf
     "#{model_name}-#{identification}.pdf"
   end
 
-  def absolute_executive_summary_pdf_path
-    Prawn::Document.absolute_path executive_summary_pdf_name, ConclusionReview.table_name, id
-  end
-
-  def executive_summary_pdf_name
-    I18n.t('conclusion_review.executive_summary.pdf_name', pdf_name: pdf_name)
-  end
-
   def draft?
     is_a? ConclusionDraftReview
   end
