@@ -1196,7 +1196,7 @@
         sectors: "Sectores/departamentos involucrados"
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación de la evolución"
-        observations: "Otras consideraciones"
+        observations: "Próximos pasos - Información adicional"
         main_weaknesses_text: "Principales debilidades"
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"

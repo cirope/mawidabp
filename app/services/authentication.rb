@@ -75,8 +75,11 @@ class Authentication
     end
 
     def update_user user, attributes
-      current_roles = user.organization_roles.where organization_id: @current_organization.id
-      remove_roles  = current_roles.includes(:role).references(:roles).where.not roles: { identifier: attributes[:roles] }
+      current_organization_roles = user.organization_roles.where organization_id: @current_organization.id
+      current_roles              = current_organization_roles.includes(:role).references(:roles)
+      remove_roles               = current_roles.where.not(roles: { identifier: attributes[:roles] }).
+                                    or(current_roles.where(roles: { identifier: nil}))
+
       add_roles     = Array(attributes[:roles]).select do |identifier|
         current_roles.includes(:role).references(:roles).where(roles: { identifier: identifier }).empty?
       end
