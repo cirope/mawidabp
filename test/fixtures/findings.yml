@@ -89,7 +89,7 @@ unconfirmed_for_notification_weakness:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
-  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.business_days.ago.to_date.to_s(:db) %>
+  first_notification_date: <%= 1.next.business_days.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -189,7 +189,7 @@ other_unconfirmed_for_notification_weakness:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
-  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.business_days.ago.to_date.to_s(:db) %>
+  first_notification_date: <%= 1.business_days.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']

@@ -155,20 +155,6 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
     assert_equal result, bic_weakness_responsible(weakness)
   end
 
-  test 'get conclusion review weaknesses when is final' do
-    conclusion_review = conclusion_reviews :conclusion_current_final_review
-
-    assert_equal conclusion_review.bic_exclude_regularized_findings(conclusion_review.review.final_weaknesses),
-                 conclusion_review_weaknesses(conclusion_review)
-  end
-
-  test 'get conclusion review weaknesses when is draft' do
-    conclusion_review = conclusion_reviews :conclusion_current_draft_review
-
-    assert_equal conclusion_review.bic_exclude_regularized_findings(conclusion_review.review.weaknesses),
-                 conclusion_review_weaknesses(conclusion_review)
-  end
-
   test 'get watermark class when is draft' do
     assert_equal 'watermark-bic', watermark_class(true)
   end

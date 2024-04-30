@@ -1,9 +1,10 @@
 class Users::StatusController < ApplicationController
   include Users::Finders
 
-  before_action :auth, :set_title
+  before_action :auth
+  before_action :set_title, except: [:index, :create, :destroy]
   before_action :set_user, only: [:show, :create, :destroy]
-  before_action -> { request.variant = :graph if params[:graph]  }
+  before_action -> { request.variant = :graph if params[:graph] }
 
   # * GET /users/status
   def index
