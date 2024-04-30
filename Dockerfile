@@ -1,14 +1,10 @@
-ARG QUEMU_IMAGE=multiarch/qemu-user-static:x86_64-aarch64
-ARG APP_ROOT=/opt/app
-
 # -----------------------
 # --- Assets builder ----
 # -----------------------
 
-FROM $QUEMU_IMAGE as qemu
-FROM ruby:alpine as builder
+FROM --platform=$BUILDPLATFORM ruby:alpine as builder
 
-ARG APP_ROOT
+ARG APP_ROOT=/opt/app
 ENV RAILS_ENV production
 
 RUN apk add --update --no-cache\
@@ -19,8 +15,7 @@ RUN apk add --update --no-cache\
  tzdata         \
  libc6-compat   \
  libpq-dev      \
- ca-certificates \
- vim
+ ca-certificates
 
 RUN mkdir -p $APP_ROOT
 
@@ -35,42 +30,37 @@ RUN bundle config set deployment 'true' && bundle install
 COPY config/application.yml.kamal $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
-#RUN bundle exec rake help:install
-#RUN rm -rf config/jekyll/_site
-#RUN bundle exec rake help:create_bootstrap_symlinks
-#RUN bundle exec rake help:generate
-RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
 
 # -----------------------
 # ---- Release image ----
 # -----------------------
 
-FROM ruby:alpine
+FROM --platform=$BUILDPLATFORM ruby:alpine
 
-ARG APP_ROOT
+ARG APP_ROOT=/opt/app
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
+ENV USER nobody
 ENV PORT 3000
 ENV RAILS_ENV production
 
 RUN apk add --update --no-cache\
- build-base     \
  curl           \
  nodejs         \
  postgresql-dev \
  tzdata         \
  libc6-compat   \
  ca-certificates \
- libpq-dev      \
- vim
+ libpq-dev
 
 COPY --from=builder $APP_ROOT $APP_ROOT
 COPY --from=builder $GEM_HOME $GEM_HOME
 
+RUN chown -R $USER: $APP_ROOT
+
 WORKDIR $APP_ROOT
+
+USER $USER
 
 EXPOSE $PORT
 
