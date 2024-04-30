@@ -62,7 +62,9 @@
         <div class="row pt-5">
           <div class="col-10 offset-1">
             <p class="fw-bold pb-4 fs-bice-3"><%= Review.human_attribute_name :description %></p>
-            <%= simple_format conclusion_review.review.description, class: "text-justify fs-bice-3 text-quote" %>
+            <div class="text-justify fs-bice-3 text-quote">
+              <%= conclusion_review.review.description.html_safe %>
+            </div>
           </div>
         </div>
         <div class="row pt-5 text-center">
@@ -88,7 +90,9 @@
       <div class="col-9">
         <div class="row">
           <div class="col-10 offset-1">
-            <%= simple_format conclusion_review.applied_procedures, class: "text-justify fs-bice-3"%>
+            <div class="text-justify fs-bice-3">
+              <%= conclusion_review.applied_procedures.html_safe %>
+            </div>
           </div>
         </div>
       </div>
@@ -103,7 +107,9 @@
         </div>
         <div class="col-9 px-0">
           <div class="col-10 offset-1">
-            <%= simple_format conclusion_review.reference, class: "m-0 text-justify fs-bice-3" %>
+            <div class="m-0 text-justify fs-bice-3">
+              <%= conclusion_review.reference.html_safe %>
+            </div>
           </div>
         </div>
       </div>
@@ -115,7 +121,9 @@
         </div>
         <div class="col-9 px-0">
           <div class="col-10 offset-1">
-            <%= simple_format conclusion_review.conclusion, class: "m-0 text-justify fs-bice-3" %>
+            <div class="m-0 text-justify fs-bice-3">
+              <%= conclusion_review.conclusion.html_safe %>
+            </div>
           </div>
         </div>
       </div>
