@@ -29,12 +29,12 @@ env:
 
 builder:
   remote:
-    arch: <%= ENV['ARCH'].present? ? ENV['ARCH'] : (raise RuntimeError.new('Debe agregar el argumento ARCH con los valores(arm64 o amd64)')) %>
-    host: ssh://root@<%= ENV['HOST'] %>
+    arch: <%= ENV['BUILDPLATFORM'] || (raise RuntimeError.new('BUILDPLATFORM must be provided')) %>
+  host: ssh://<%="#{ENV['USER'] || 'root'}@#{ENV['HOST']}" %>
 
 accessories:
   postgresql:
-    image: postgres:16
+    image: postgres:<%= ENV['POSTGRES_VERSION'] || 'latest' %>
     host: <%= ENV['HOST'] || '127.0.0.1' %>
     port: 5432
     env:

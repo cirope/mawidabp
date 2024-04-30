@@ -14,8 +14,7 @@ RUN apk add --update --no-cache\
  postgresql-dev \
  tzdata         \
  libc6-compat   \
- libpq-dev      \
- ca-certificates
+ libpq-dev
 
 RUN mkdir -p $APP_ROOT
 
