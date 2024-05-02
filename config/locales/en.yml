@@ -30,7 +30,7 @@
     control_objective_counts_title: "Control objective analysis"
     weaknesses_by_risk_report_title: "Issues by risk"
     weaknesses_by_risk_and_business_unit_title: "Findings by risk and business unit"
-    weaknesses_by_month_title: "Issues by risk"
+    weaknesses_by_month_title: "Monthly report"
     weaknesses_current_situation_title: "Global report - Quarterly"
     weaknesses_by_control_objective_title: "Issues by control objective"
     weaknesses_by_user_title: "Issues by use"
@@ -210,8 +210,8 @@
       pdf_name: "track_finding_%{code}.pdf"
     pdf:
       filtered_by_html:
-        one: "The list was filtered with the query <span class=\"font-weight-bold\">'%{query}'</span> on the <span class=\"font-weight-bold\" column >'%{columns}'</span>"
-        other: "The list was filtered with the query <span class=\"font-weight-bold\">'%{query}'</span> on the <span class=\"font-weight-bold\" columns >'%{columns}'</span>"
+        one: "The list was filtered with the query '%{query}' on the column %{columns}"
+        other: "The list was filtered with the query '%{query}' on the columns %{columns}"
     user_assignment:
       audit_team: "Audit"
       others: "Users"
@@ -545,9 +545,6 @@
   external_review:
     errors:
       issue_date_after_review_issue_date: "issue date (%{date}) is greater than the audit report issue date"
-
-  wicked_pdf:
-    number_pages_html: 'Page <span class="page"></span> of <span class="topage"></span>'
 
   workflow:
     maximum_exceeded_by_human_resource: "%{user} has exceeded the maximum time for task: %{item}"

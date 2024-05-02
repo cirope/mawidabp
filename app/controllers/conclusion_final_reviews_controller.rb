@@ -203,15 +203,15 @@ class ConclusionFinalReviewsController < ApplicationController
 
     @questionnaires = Questionnaire.list.by_pollable_type 'ConclusionReview'
 
-    users = []
+    users           = []
     users_with_poll = []
-    export_options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
+    export_options  = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
 
     if params[:conclusion_review]
-      include_score_sheet = params[:conclusion_review][:include_score_sheet] == '1'
+      include_score_sheet        = params[:conclusion_review][:include_score_sheet] == '1'
       include_global_score_sheet = params[:conclusion_review][:include_global_score_sheet] == '1'
-      note = params[:conclusion_review][:email_note]
-      review_type = params[:conclusion_review][:review_type]
+      note                       = params[:conclusion_review][:email_note]
+      review_type                = params[:conclusion_review][:review_type]
 
       if review_type == 'brief'
         export_options[:brief] = '1'
@@ -222,7 +222,7 @@ class ConclusionFinalReviewsController < ApplicationController
       end
     end
 
-    @conclusion_final_review.to_pdf(current_organization, export_options)
+    pdf_info = @conclusion_final_review.to_pdf(current_organization, export_options)
 
     if include_score_sheet
       @conclusion_final_review.review.score_sheet current_organization
@@ -232,6 +232,25 @@ class ConclusionFinalReviewsController < ApplicationController
       @conclusion_final_review.review.global_score_sheet(current_organization)
     end
 
+    if include_executive_summary?
+      executive_summary_pages = pdf_info[:executive_summary_pages]
+      pdf_path                = @conclusion_final_review.absolute_pdf_path
+      pdf                     = MiniMagick::Image.open(pdf_path)
+
+      executive_summary_pages.times do |page|
+        image_path = "#{pdf_path}_#{page}.png"
+
+        MiniMagick::Tool::Convert.new do |convert|
+          convert.background "white"
+          convert.flatten
+          convert.density 300
+          convert.quality 100
+          convert << pdf.pages[page].path
+          convert << "png32:#{image_path}"
+        end
+      end
+    end
+
     (params[:user].try(:values).try(:reject, &:blank?) || []).each do |user_data|
       user = User.find_by(id: user_data[:id]) if user_data[:id]
       send_options = {
@@ -239,6 +258,10 @@ class ConclusionFinalReviewsController < ApplicationController
         include_score_sheet: include_score_sheet,
         include_global_score_sheet: include_global_score_sheet
       }
+
+      if include_executive_summary?
+        send_options[:executive_summary_pages] = executive_summary_pages
+      end
 
       if user && users.all? { |u| u.id != user.id }
         @conclusion_final_review.send_by_email_to(user, send_options)
@@ -408,6 +431,7 @@ class ConclusionFinalReviewsController < ApplicationController
         :affects_compliance, :collapse_control_objectives,
         :reference, :scope, :previous_identification, :previous_date,
         :main_recommendations, :effectiveness_notes, :additional_comments,
+        :review_conclusion, :applied_data_analytics,
         :lock_version, :exclude_regularized_findings,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
@@ -429,5 +453,11 @@ class ConclusionFinalReviewsController < ApplicationController
           compose_email: :modify,
           send_by_email: :modify
         })
+    end
+
+    def include_executive_summary?
+      Current.conclusion_pdf_format == 'gal' &&
+        CODE_CHANGE_DATES['exec_summary_v2'] &&
+        @conclusion_final_review.created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
     end
 end

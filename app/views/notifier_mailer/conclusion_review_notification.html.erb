@@ -5,6 +5,16 @@
   <%= markdown @body_title %>
   <%= markdown h(@note) unless @note.blank? %>
 
+  <% if @executive_summary_pages %>
+    <% @executive_summary_pages.times do |page| %>
+      <% attached_png_name = I18n.t('conclusion_review.executive_summary.attached_png_name', page: page) %>
+
+      <% if attachments[attached_png_name].present? %>
+        <%= image_tag attachments[attached_png_name].url, style: 'max-width: 100%; height: auto;' %>
+      <% end %>
+    <% end %>
+  <% end %>
+
   <% if @show_alt_footer %>
     <%= render partial: 'common_mailer/alt_footer' %>
   <% else %>

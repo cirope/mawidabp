@@ -218,11 +218,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Update package lists
-        run: sudo apt update -y
+        run: sudo apt update
       - name: Install slapd and ldap-utils
         run: sudo apt -y install slapd ldap-utils
       - name: Install wkhtmltopdf
         run: sudo apt -y install wkhtmltopdf
+      - name: Install ghostscript
+        run: sudo apt install ghostscript
+      - name: Modify ImageMagick policy
+        run: sudo sed -i '/PDF/s/rights="none"/rights="read|write"/' /etc/ImageMagick-6/policy.xml
       - name: Install ruby and gems
         uses: ruby/setup-ruby@v1
         with:
