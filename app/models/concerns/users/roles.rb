@@ -77,7 +77,8 @@ module Users::Roles
     (
       audited_on?(organization_id)           ||
       executive_manager_on?(organization_id) ||
-      admin_on?(organization_id)
+      admin_on?(organization_id)             ||
+      committee_on?(organization_id)
     ) && !(
       auditor_on?(organization_id)    ||
       supervisor_on?(organization_id) ||
