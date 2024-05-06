@@ -16,7 +16,7 @@ servers:
     cmd: bundle exec sidekiq
 
 registry:
-  server: 030650017690.dkr.ecr.us-east-1.amazonaws.com
+  server: <%= ENV['REGISTRY_SERVER'] %>
   username: AWS
   password: <%= %x(aws ecr get-login-password) %>
 
