@@ -38,7 +38,7 @@
         <div class="row">
           <div class="col-10 offset-1">
             <div class="text-justify fs-bice-3">
-              <%= format_and_custom_sanitize conclusion_review.recipients %>
+              <%= format_and_sanitize conclusion_review.recipients %>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@
           <div class="col-10 offset-1">
             <p class="fw-bold pb-4 fs-bice-3"><%= Review.human_attribute_name :description %></p>
             <div class="text-justify fs-bice-3 text-quote">
-              <%= format_and_custom_sanitize conclusion_review.review.description %>
+              <%= format_and_sanitize conclusion_review.review.description %>
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@
         <div class="row">
           <div class="col-10 offset-1">
             <div class="text-justify fs-bice-3">
-              <%= format_and_custom_sanitize conclusion_review.applied_procedures %>
+              <%= format_and_sanitize conclusion_review.applied_procedures %>
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@
         <div class="col-9 px-0">
           <div class="col-10 offset-1">
             <div class="m-0 text-justify fs-bice-3">
-              <%= format_and_custom_sanitize conclusion_review.reference %>
+              <%= format_and_sanitize conclusion_review.reference %>
             </div>
           </div>
         </div>
@@ -124,7 +124,7 @@
         <div class="col-9 px-0">
           <div class="col-10 offset-1">
             <div class="m-0 text-justify fs-bice-3">
-              <%= format_and_custom_sanitize conclusion_review.conclusion %>
+              <%= format_and_sanitize conclusion_review.conclusion %>
             </div>
           </div>
         </div>
