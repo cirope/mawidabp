@@ -173,4 +173,15 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
   test 'get risk style when is not implemented_audited' do
     assert_equal 'text-white', risk_style(findings(:being_implemented_weakness))
   end
+
+  test 'format_and_sanitize method should sanitize input while preserving allowed tags' do
+    input    = "<b>Bold</b> <u>Underline</u> <script>hack()</script>"
+    expected = "<b>Bold</b> <u>Underline</u> hack()"
+
+    assert_equal expected, format_and_sanitize(input)
+  end
+
+  test 'format_and_sanitize method should convert newlines to <br> tags' do
+    assert_equal 'Hello<br>World', format_and_sanitize("Hello\nWorld")
+  end
 end
