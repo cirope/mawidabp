@@ -138,7 +138,7 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
   end
 
   def format_and_custom_sanitize input_text
-    formatted_text     = simple_format input_text, {}, sanitize: false
+    formatted_text     = input_text.gsub(/\n/, '<br>')
     allowed_tags       = %w[b i em strong u br small sub sup mark p div span ul ol li]
     sanitized_text     = sanitize formatted_text, tags: allowed_tags
 
