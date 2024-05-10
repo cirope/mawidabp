@@ -9,7 +9,6 @@ ENV RAILS_ENV production
 
 RUN apk add --update --no-cache\
  build-base     \
- curl           \
  nodejs         \
  postgresql-dev \
  tzdata         \
@@ -26,7 +25,7 @@ RUN gem update --system && gem update --force --no-document
 
 RUN bundle config set deployment 'true' && bundle install
 
-COPY config/application.yml.kamal $APP_ROOT/config/application.yml
+COPY config/application.yml.example $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 
