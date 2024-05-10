@@ -25,7 +25,7 @@ es:
         responsible: 'Responsable:'
         audit_recommendations: 'Recomendación:'
         follow_up_date: 'Implementación:'
-        audit_comments: 'Comentarios:'
+        audit_comments: 'Comentarios de Auditoría:'
         repeated: 'OBSERVACIÓN REITERADA'
       number_pages_html: 'Página <span class="page"></span> de <span class="topage"></span>'
     cro:

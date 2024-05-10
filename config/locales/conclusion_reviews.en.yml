@@ -26,7 +26,7 @@ en:
         responsible: 'Responsible:'
         audit_recommendations: 'Recommendation:'
         follow_up_date: 'Implementation:'
-        audit_comments: 'Comments:'
+        audit_comments: 'Audit comments:'
         repeated: 'REPEATED ISSUE'
       number_pages_html: 'Page <span class="page"></span> of <span class="topage"></span>'
     cro:
