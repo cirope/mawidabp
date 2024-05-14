@@ -4,7 +4,7 @@ module PeriodsHelper
       :title => "#{period.dates_range_text(false)}"
   end
 
-  def period_filter
+  def period_filter_options
     Period.list.map { |period| [period.name, period.id] }
   end
 end

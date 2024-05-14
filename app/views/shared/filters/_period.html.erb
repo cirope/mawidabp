@@ -8,7 +8,7 @@
       <% selected = params[action] ? params[action][:period] : nil %>
       <%= f.label :period, Period.model_name.human, class: 'col-md-4 col-form-label' %>
       <div class="col-md-8">
-        <%= f.select :period, period_filter, { selected: selected, include_blank: t('helpers.select.prompt') }, class: 'form-select' %>
+        <%= f.select :period, period_filter_options, { selected: selected, include_blank: t('helpers.select.prompt') }, class: 'form-select' %>
       </div>
     </div>
   </div>
