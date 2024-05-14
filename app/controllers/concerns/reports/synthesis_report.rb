@@ -9,6 +9,7 @@ module Reports::SynthesisReport
       synthesis_business_unit_type_reviews if params[:synthesis_report][:business_unit_type].present?
       synthesis_business_unit_reviews if params[:synthesis_report][:business_unit].present?
       synthesis_reviews_by_scope if params[:synthesis_report][:scope].present?
+      synthesis_period_scope if params[:synthesis_report][:period].present?
     end
 
     @business_unit_types = @selected_business_unit ?
@@ -112,6 +113,14 @@ module Reports::SynthesisReport
 
       @conclusion_reviews = @conclusion_reviews.where(reviews: { scope: scope })
       @filters << "<b>#{Review.human_attribute_name 'scope'}</b> = \"#{scope}\""
+    end
+
+    def synthesis_period_scope
+      period              = params[:synthesis_report][:period]
+      period_name         = Period.list.find(period).name
+      @conclusion_reviews = @conclusion_reviews.where(reviews: { period: period })
+
+      @filters << "<b>#{Period.model_name.human}</b> = \"#{period_name}\""
     end
 
     def set_synthesis_columns(but)

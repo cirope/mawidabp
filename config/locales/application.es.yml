@@ -521,7 +521,7 @@ es:
       conclusion: <b>Conclusión</b>
       key_weaknesses: <b>Hallazgos significativos</b>
       origin: Origen
-      origin_footnote: ²Antigua data
+      old_data: (Antigua data)
       normalization: Normalización
       observations: "<b>Próximos pasos\nInformación adicional</b>"
       applied_data_analytics: Data Analytics aplicada

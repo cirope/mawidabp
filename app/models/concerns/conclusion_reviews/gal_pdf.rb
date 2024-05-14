@@ -5,24 +5,20 @@ module ConclusionReviews::GalPdf
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
-    put_gal_tmp_reviews_code organization
-    put_default_watermark_on pdf
+    put_gal_tmp_reviews_code     organization
+    put_default_watermark_on     pdf
+    put_gal_header_on            pdf, organization
+    put_gal_cover_on             pdf unless use_gal_exec_summary_v2?
+    put_gal_executive_summary_on pdf, organization
 
-    if options[:only_executive_summary]
-      gal_pdf_name = executive_summary_pdf_name
+    executive_summary_pages = pdf.page_count
 
-      put_gal_executive_summary_on pdf, organization
-    else
-      gal_pdf_name = pdf_name
+    put_detailed_review_on pdf, organization
+    put_annex_on           pdf, organization, options
 
-      put_gal_header_on            pdf, organization
-      put_gal_cover_on             pdf
-      put_gal_executive_summary_on pdf, organization
-      put_detailed_review_on       pdf, organization
-      put_annex_on                 pdf, organization, options
-    end
+    absolute_path = pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
 
-    pdf.custom_save_as gal_pdf_name, ConclusionReview.table_name, id
+    { absolute_path: absolute_path, executive_summary_pages: executive_summary_pages }
   end
 
   private
@@ -35,52 +31,50 @@ module ConclusionReviews::GalPdf
     end
 
     def put_gal_cover_on pdf
-      unless CODE_CHANGE_DATES['exec_summary_v2'] && created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
-        items_font_size     = PDF_FONT_SIZE * 1.5
-        business_unit_label =
-          review.business_unit.business_unit_type.business_unit_label
-        business_unit_title =
-          "#{business_unit_label}: #{review.business_unit.name}"
-        issue_date_title    =
-          I18n.t('conclusion_review.issue_date_title').downcase.camelize
+      items_font_size     = PDF_FONT_SIZE * 1.5
+      business_unit_label =
+        review.business_unit.business_unit_type.business_unit_label
+      business_unit_title =
+        "#{business_unit_label}: #{review.business_unit.name}"
+      issue_date_title    =
+        I18n.t('conclusion_review.issue_date_title').downcase.camelize
 
-        pdf.move_down PDF_FONT_SIZE * 8
-        pdf.text "#{business_unit_title}\n", size: (PDF_FONT_SIZE * 2.5).round,
-          align: :center
-        pdf.move_down PDF_FONT_SIZE * 4
+      pdf.move_down PDF_FONT_SIZE * 8
+      pdf.text "#{business_unit_title}\n", size: (PDF_FONT_SIZE * 2.5).round,
+        align: :center
+      pdf.move_down PDF_FONT_SIZE * 4
 
-        if review.business_unit.business_unit_type.project_label.present?
-          project_label = review.business_unit.business_unit_type.project_label
+      if review.business_unit.business_unit_type.project_label.present?
+        project_label = review.business_unit.business_unit_type.project_label
 
-          pdf.add_description_item project_label, review.plan_item.project,
-            0, false, items_font_size
-          pdf.move_down PDF_FONT_SIZE * 2
-        end
-
-        unless review.business_unit_type.without_number
-          pdf.add_description_item ::Review.model_name.human, review.identification,
-                                   0, false, items_font_size
-        end
-
-        pdf.add_description_item issue_date_title, I18n.l(issue_date),
+        pdf.add_description_item project_label, review.plan_item.project,
           0, false, items_font_size
-
         pdf.move_down PDF_FONT_SIZE * 2
-
-        if review.business_unit_type.reviews_for.present? &&
-          created_at >= CODE_CHANGE_DATES['reviews_for_and_detailed_review_custom_field'].to_date
-            pdf.text review.business_unit_type.reviews_for, size: items_font_size
-        else
-          pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
-                   size: items_font_size
-        end
-
-        pdf.start_new_page
       end
+
+      unless review.business_unit_type.without_number
+        pdf.add_description_item ::Review.model_name.human, review.identification,
+                                 0, false, items_font_size
+      end
+
+      pdf.add_description_item issue_date_title, I18n.l(issue_date),
+        0, false, items_font_size
+
+      pdf.move_down PDF_FONT_SIZE * 2
+
+      if review.business_unit_type.reviews_for.present? &&
+        created_at >= CODE_CHANGE_DATES['reviews_for_and_detailed_review_custom_field'].to_date
+          pdf.text review.business_unit_type.reviews_for, size: items_font_size
+      else
+        pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
+                 size: items_font_size
+      end
+
+      pdf.start_new_page
     end
 
     def put_gal_executive_summary_on pdf, organization
-      if CODE_CHANGE_DATES['exec_summary_v2'] && created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
+      if use_gal_exec_summary_v2?
         put_gal_executive_summary_v2_on pdf
       else
         put_gal_executive_summary_v1_on pdf, organization
@@ -239,7 +233,7 @@ module ConclusionReviews::GalPdf
     end
 
     def put_conclusion_data_on pdf
-      conclusion_chart_and_evolution_image = put_chart_and_image pdf
+      conclusion_chart_and_evolution_image = put_chart_image_and_caption_on pdf
 
       data  = [[conclusion_chart_and_evolution_image, review_conclusion]]
       style = { column_widths: conclusion_data_column_width(pdf) }
@@ -249,7 +243,17 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def put_chart_and_image pdf
+    def put_chart_image_and_caption_on pdf
+      data  = [[put_chart_and_image_on(pdf)], [put_image_caption_on(pdf)]]
+      style = {
+        column_widths: [pdf.percent_width(47)],
+        cell_style: { borders: [] }
+      }
+
+      pdf.make_table(data, style)
+    end
+
+    def put_chart_and_image_on pdf
       conclusion_chart      = put_chart_on pdf
       evolution_image       = pdf_score_image_row get_evolution_image
       evolution_superscript = {
@@ -258,9 +262,8 @@ module ConclusionReviews::GalPdf
         vposition: :center
       }
 
-      pdf.add_footnote get_evolution_footnote
+      data = [[conclusion_chart, evolution_image, evolution_superscript]]
 
-      data  = [[conclusion_chart, evolution_image, evolution_superscript]]
       style = {
         column_widths: chart_and_image_column_width(pdf),
         cell_style: { borders: [] }
@@ -273,11 +276,33 @@ module ConclusionReviews::GalPdf
       image      = CONCLUSION_CHARTS[conclusion]
       image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
       size       = 150
+      style      = {
+        column_widths: [pdf.percent_width(40)],
+        cell_style: { borders: [] }
+      }
 
       pdf.make_table([
         [{ image: image_path, fit: [size, size], position: :center, vposition: :center }],
         [put_legend_on(pdf, conclusion)]
-      ], column_widths: [pdf.percent_width(40)], cell_style: { borders: [] })
+      ], style)
+    end
+
+    def put_image_caption_on pdf
+      data = [[
+        {
+          content: get_evolution_footnote,
+          align: :justify,
+          size: (PDF_FONT_SIZE * 0.7).round,
+          inline_format: true
+        }
+      ]]
+
+      style = {
+        column_widths: [pdf.percent_width(47)],
+        cell_style: { borders: [] }
+      }
+
+      pdf.make_table(data, style)
     end
 
     def put_legend_on pdf, conclusion
@@ -324,34 +349,22 @@ module ConclusionReviews::GalPdf
     end
 
     def key_weaknesses_rows pdf, weaknesses
-      rows              = [key_weaknesses_header]
-      footnote_required = weaknesses.any? { |w| needs_old_data_footnote?(w) }
-
-      if footnote_required
-        pdf.add_footnote I18n.t('conclusion_review.executive_summary.origin_footnote'), 8, :normal, 2
-      end
+      rows = [key_weaknesses_header]
 
       weaknesses.each do |weakness|
         row_font_size          = (PDF_FONT_SIZE * 0.8).round
-        padding                = [(PDF_FONT_SIZE * 0.3).round, (PDF_FONT_SIZE * 0.5).round]
-        weakness_origin        = weakness_origin pdf, weakness
+        cell_padding           = [(PDF_FONT_SIZE * 0.3).round, (PDF_FONT_SIZE * 0.5).round]
+        weakness_origin        = weakness_origin pdf, weakness, cell_padding, row_font_size
         weakness_normalization = weakness_normalization weakness
 
-
         rows << [
-          pdf.make_cell(content: weakness.title, size: row_font_size, padding: padding),
-          pdf.make_cell(content: weakness_origin, size: row_font_size, padding: padding),
-          pdf.make_cell(weakness_normalization.merge({size: row_font_size, padding: padding}))
+          pdf.make_cell(content: weakness.title, size: row_font_size, padding: cell_padding),
+          weakness_origin,
+          pdf.make_cell(weakness_normalization.merge({size: row_font_size, padding: cell_padding}))
         ]
       end
 
       rows
-    end
-
-    def needs_old_data_footnote? weakness
-      origination_year = weakness.origination_date&.year
-
-      origination_year && origination_year < Date.today.year - 1
     end
 
     def key_weaknesses_header
@@ -362,12 +375,30 @@ module ConclusionReviews::GalPdf
       ]
     end
 
-    def weakness_origin pdf, weakness
-      needs_old_data_footnote = needs_old_data_footnote? weakness
-      origination_text        = weakness.origination_date ? I18n.l(weakness.origination_date, format: "%b %Y") : ''
-      origination_text        = needs_old_data_footnote ? origination_text + '<sup>2</sup>' : origination_text
+    def weakness_origin pdf, weakness, cell_padding, row_font_size
+      origin_text         = weakness.origination_date ? I18n.l(weakness.origination_date, format: "%b %Y") : ''
+      origin_cell_padding = is_origination_date_old?(weakness) ? [1, 6] : cell_padding
+      origin_cell         = pdf.make_cell(content: origin_text, size: row_font_size, padding: origin_cell_padding, align: :center)
+      origin_content      = [[origin_cell]]
 
-      origination_text
+      if is_origination_date_old? weakness
+        old_data_text = I18n.t('conclusion_review.executive_summary.old_data')
+        old_data_cell = pdf.make_cell(content: old_data_text, size: (PDF_FONT_SIZE * 0.6).round, padding: [0, 1, 1, 1], align: :center)
+        origin_content << [old_data_cell]
+      end
+
+      style = {
+        column_widths: [pdf.percent_width(12)],
+        cell_style: { inline_format: true, borders: [] }
+      }
+
+      pdf.make_table(origin_content, style)
+    end
+
+    def is_origination_date_old? weakness
+      origination_year = weakness.origination_date&.year
+
+      origination_year && origination_year < Date.today.year - 1
     end
 
     def weakness_normalization weakness
@@ -423,9 +454,9 @@ module ConclusionReviews::GalPdf
 
       pdf.text legend, align: :justify, style: :italic
 
-      put_review_survey_on       pdf
+      put_review_survey_on       pdf unless use_gal_exec_summary_v2?
       put_detailed_weaknesses_on pdf, organization
-      put_observations_on        pdf unless show_observations_on_top? organization
+      put_observations_on        pdf unless show_observations_on_top?(organization) || use_gal_exec_summary_v2?
       put_recipients_on pdf
     end
 
@@ -1210,5 +1241,11 @@ module ConclusionReviews::GalPdf
         !collapse_control_objectives &&
         SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START &&
         review.period.start >= SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START.to_date
+    end
+
+    def use_gal_exec_summary_v2?
+      Current.conclusion_pdf_format == 'gal' &&
+        CODE_CHANGE_DATES['exec_summary_v2'] &&
+        created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
     end
 end
