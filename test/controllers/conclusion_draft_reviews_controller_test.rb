@@ -427,18 +427,12 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
 
-    unless is_gal_exec_summary_v2
-      text_part = ActionMailer::Base.deliveries.last.parts.detect {
-        |p| p.content_type.match(/text/)
-      }.body.decoded
-
-      assert_match /markdown/, text_part
-    else
-      image_part = ActionMailer::Base.deliveries.last.parts.detect do |p|
-                     p.content_type.match(/multipart/)
-                   end
-
+    if is_gal_exec_summary_v2
+      image_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/multipart/) }
       assert_not_nil image_part
+    else
+      text_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/text/) }.body.decoded
+      assert_match /markdown/, text_part
     end
 
     clear_enqueued_jobs
@@ -467,18 +461,12 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
 
-    unless is_gal_exec_summary_v2
-      text_part = ActionMailer::Base.deliveries.last.parts.detect {
-        |p| p.content_type.match(/text/)
-      }.body.decoded
-
-      assert_match /markdown/, text_part
-    else
-      image_part = ActionMailer::Base.deliveries.last.parts.detect do |p|
-                     p.content_type.match(/multipart/)
-                   end
-
+    if is_gal_exec_summary_v2
+      image_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/multipart/) }
       assert_not_nil image_part
+    else
+      text_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/text/) }.body.decoded
+      assert_match /markdown/, text_part
     end
   end
 
