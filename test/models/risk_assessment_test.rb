@@ -69,6 +69,10 @@ class RiskAssessmentTest < ActiveSupport::TestCase
       assert_equal @risk_assessment.period_id, plan.period_id
       assert_equal @risk_assessment.risk_assessment_items.count,
         plan.plan_items.count
+
+      items = @risk_assessment.risk_assessment_items
+
+      assert items.all? { |i| plan.plan_items.include? i.plan_item }
     end
 
     assert @risk_assessment.reload.merged?

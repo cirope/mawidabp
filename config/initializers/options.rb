@@ -60,7 +60,11 @@ CONCLUSION_EVOLUTION_IMAGES = {
   [
     'Satisfactorio con salvedades',
     'Empeora calficación'
-  ] => 'evolution_down_success.png'
+  ] => 'evolution_down_success.png',
+  [
+    'Necesita mejorar',
+    'Mantiene calificación desfavorable'
+  ] => 'evolution_equal_warning.png'
 }
 
 CONCLUSION_EVOLUTION = {
@@ -113,15 +117,15 @@ CONCLUSION_EVOLUTION_FOOTNOTES = {
   [
     'Satisfactorio con salvedades',
     'Empeora calficación'
-  ] => '¹Desmejora (dentro de Satisfactorio) respecto a la auditoría anterior'
+  ] => '¹Se ha evidenciado algunos nuevos expuestos respecto de la revisión anterior, sin embargo, los mismos, aun así, permiten mantener una calificación favorable.'
 }
 
 EVOLUTION_FOOTNOTES = {
-  'Mantiene calificación desfavorable' => '¹Mantiene calificación desfavorable respecto a la auditoría anterior',
-  'Mantiene calificación favorable'    => '¹Mantiene calificación favorable respecto a la auditoría anterior',
-  'Mejora calificación'                => '¹Mejora calificación respecto a la auditoría anterior',
-  'Empeora calficación'                => '¹Desmejora calificación respecto a la auditoría anterior',
-  'No aplica'                          => '¹No puede compararse con un trabajo anterior'
+  'Mantiene calificación desfavorable' => '¹Se ha evidenciado un ambiente de control interno que presenta oportunidades de mejora al igual que en nuestra revisión anterior.',
+  'Mantiene calificación favorable'    => '¹Se ha evidenciado un adecuado ambiente de control interno del proceso auditado, similar al de nuestra revisión anterior.',
+  'Mejora calificación'                => '¹Se ha evidenciado la normalización de expuestos preexistentes, lo que ha impactado positivamente en la presente calificación respecto de nuestra revisión anterior.',
+  'Empeora calficación'                => '¹Se ha evidenciado, respecto de nuestra revisión anterior, nuevos expuestos que debilitan el ambiente de control interno del proceso auditado.',
+  'No aplica'                          => '¹El presente trabajo no puede compararse contra una revisión anterior porque se genera por primera vez o porque su actual alcance es distinto.'
 }
 
 PDF_IMAGE_PATH          = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
