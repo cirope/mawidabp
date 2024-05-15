@@ -405,7 +405,10 @@
       </div>
 
       <div id="finding_user_assignments">
-        <% others, audit_team = @weakness.finding_user_assignments.partition { |fua| fua.user.can_act_as_audited? } %>
+        <% others, audit_team = @weakness.finding_user_assignments.partition do |fua|
+          corporate_organizations_ids = fua.user.organizations.corporate.map(&:id)
+          fua.user.can_act_as_audited? || corporate_organizations_ids.any? { |id| fua.user.can_act_as_audited_on?(id) }
+        end %>
 
         <% if audit_team.present? %>
           <h5 class="text-muted"><%= t 'finding.user_assignment.audit_team' %></h5>
