@@ -1,10 +1,12 @@
 <%
-  finding = f.object.finding || parent.object
-  id = f.object.object_id
-  finding_user = f.object.user
-  original_finding = finding.errors.empty? || finding.new_record? ? finding : Finding.find(finding.id)
-  is_a_new_relation = original_finding.finding_user_assignments.detect { |fua| fua.user_id == f.object.user_id }.nil?
-  for_notification = for_notification
+  finding                     = f.object.finding || parent.object
+  id                          = f.object.object_id
+  finding_user                = f.object.user
+  original_finding            = finding.errors.empty? || finding.new_record? ? finding : Finding.find(finding.id)
+  is_a_new_relation           = original_finding.finding_user_assignments.detect { |fua| fua.user_id == f.object.user_id }.nil?
+  for_notification            = for_notification
+  corporate_organizations_ids = finding_user && finding_user.organizations.corporate.map(&:id)
+  is_audited                  = finding_user && (finding_user.can_act_as_audited? || corporate_organizations_ids.any? { |id| finding_user.can_act_as_audited_on?(id) })
 %>
 <fieldset class="finding_user_assignment">
   <div class="form-inputs">
@@ -37,12 +39,12 @@
       </div>
       <div class="col-md-2">
         <%= f.input :responsible_auditor, as: :boolean, label: '&nbsp;'.html_safe,
-          input_html: { disabled: readonly || (finding_user && finding_user.can_act_as_audited?) },
+          input_html: { disabled: readonly || is_audited },
           wrapper_html: { class: 'mt-2' } %>
       </div>
       <div class="col-md-2">
         <%= f.input :process_owner, as: :boolean, label: '&nbsp;'.html_safe,
-          input_html: { disabled: readonly || (finding_user && !finding_user.can_act_as_audited?) },
+          input_html: { disabled: readonly || !is_audited },
           wrapper_html: { class: 'mt-2' } %>
       </div>
       <div class="col-md-1">
