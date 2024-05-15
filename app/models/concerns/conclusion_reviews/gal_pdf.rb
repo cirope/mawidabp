@@ -1244,7 +1244,7 @@ module ConclusionReviews::GalPdf
     end
 
     def use_gal_exec_summary_v2?
-      draft_issue_date = instance_of?(ConclusionDraftReview) ? issue_date : review.conclusion_draft_review.issue_date
+      draft_issue_date = review.conclusion_draft_review.issue_date
       code_change_date = CODE_CHANGE_DATES['exec_summary_v2']&.to_date
 
       Current.conclusion_pdf_format == 'gal' && code_change_date && draft_issue_date >= code_change_date
