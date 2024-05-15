@@ -50,13 +50,23 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     end
   end
 
-  def bic_review_period conclusion_review
-    plan_item_start = I18n.l conclusion_review.plan_item.start, format: :minimal
-    plan_item_end   = I18n.l conclusion_review.plan_item.end, format: :minimal
+  def bic_internal_audit_review_dates conclusion_review
+    start_date = bic_internal_audit_review_start_date conclusion_review
+    end_date   = bic_internal_audit_review_end_date conclusion_review
 
-    I18n.t 'conclusion_review.bic.cover.review_period_description',
-           plan_item_start: plan_item_start,
-           plan_item_end: plan_item_end
+    I18n.t 'conclusion_review.bic.cover.internal_audit_review_dates',
+      start_date: start_date,
+      end_date: end_date
+  end
+
+  def bic_internal_audit_review_start_date conclusion_review
+    date = conclusion_review.review.opening_interview&.start_date
+
+    date ? I18n.l(date, format: :minimal) : '--/--/--'
+  end
+
+  def bic_internal_audit_review_end_date conclusion_review
+    I18n.l conclusion_review.issue_date, format: :minimal
   end
 
   def bic_weakness_responsible weakness
