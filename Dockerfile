@@ -25,9 +25,12 @@ RUN gem update --system && gem update --force --no-document
 
 RUN bundle config set deployment 'true' && bundle install
 
-COPY config/application.yml.example $APP_ROOT/config/application.yml
+COPY config/application.yml.kamal $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
+
+RUN bundle exec whenever > $APP_ROOT/config/mawidabp_crontab
+
 
 # -----------------------
 # ---- Release image ----
@@ -49,6 +52,8 @@ RUN apk add --update --no-cache\
  tzdata         \
  libc6-compat   \
  ca-certificates \
+ busybox-suid   \
+ bash           \
  libpq-dev
 
 COPY --from=builder $APP_ROOT $APP_ROOT

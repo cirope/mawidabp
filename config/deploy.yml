@@ -10,10 +10,32 @@ servers:
       traefik.http.routers.mawidabp.entrypoints: websecure
       traefik.http.routers.mawidabp.rule: Host(`<%= ENV['HOST'] %>`) || Host(`admin-<%= ENV['HOST'] %>`)
       traefik.http.routers.mawidabp.tls.certresolver: letsencrypt
+    directories:
+      - /private:/opt/app/private
+    logging:
+      driver: awslogs
+      options:
+        max-size: 10m
+        awslogs-region: "us-east-1"
+        awslogs-group: "my-app"
   job:
     hosts:
       - <%= ENV['HOST'] || '127.0.0.1' %>
     cmd: bundle exec sidekiq
+    logging:
+      driver: awslogs
+      options:
+        max-size: 10m
+        max-file: 10
+  cron:
+    hosts:
+      - <%= ENV['HOST'] || '127.0.0.1' %>
+    cmd: sh -c "cat config/mawidabp_contrab | crontab - && crond -f l 2"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: 10
 
 registry:
   server: <%= ENV['REGISTRY_SERVER'] %>
@@ -43,8 +65,6 @@ accessories:
         POSTGRES_DB: 'mawidabp_production'
       secret:
         - POSTGRES_PASSWORD
-    files:
-      - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
     volume:
       - db_data:/var/lib/postgresql/data
   redis:
@@ -80,3 +100,5 @@ traefik:
 
 healthcheck:
   path: /healthy
+
+
