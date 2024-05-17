@@ -2,17 +2,17 @@
 # --- Assets builder ----
 # -----------------------
 
-FROM --platform=$BUILDPLATFORM ruby:alpine as builder
+FROM --platform=$BUILDPLATFORM ruby:slim as builder
 
 ARG APP_ROOT=/opt/app
 ENV RAILS_ENV production
 
-RUN apk add --update --no-cache\
- build-base     \
+RUN apt-get update && \
+apt-get install -y --no-install-recommends \
+ build-essential     \
  nodejs         \
- postgresql-dev \
+ postgresql-client \
  tzdata         \
- libc6-compat   \
  libpq-dev
 
 RUN mkdir -p $APP_ROOT
@@ -36,7 +36,7 @@ RUN bundle exec whenever > $APP_ROOT/config/mawidabp_crontab
 # ---- Release image ----
 # -----------------------
 
-FROM --platform=$BUILDPLATFORM ruby:alpine
+FROM --platform=$BUILDPLATFORM ruby:slim
 
 ARG APP_ROOT=/opt/app
 ENV RAILS_LOG_TO_STDOUT true
@@ -45,15 +45,16 @@ ENV USER nobody
 ENV PORT 3000
 ENV RAILS_ENV production
 
-RUN apk add --update --no-cache\
+RUN apt-get update && \
+apt-get install -y --no-install-recommends \
+ build-essential     \
  curl           \
  nodejs         \
- postgresql-dev \
+ postgresql-client \
  tzdata         \
- libc6-compat   \
  ca-certificates \
- busybox-suid   \
- bash           \
+ bash \
+ cron \
  libpq-dev
 
 COPY --from=builder $APP_ROOT $APP_ROOT
