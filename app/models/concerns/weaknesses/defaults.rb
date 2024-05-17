@@ -13,9 +13,6 @@ module Weaknesses::Defaults
     end
 
     def set_priority
-      if risk != Finding.risks[:medium] || (Current.conclusion_pdf_format == "gal" &&
-        risk == Finding.risks[:medium] && self.priority.nil?)
-          self.priority = Finding.priorities[:low]
-      end
+      self.priority ||= Finding.priorities[:low]
     end
 end
