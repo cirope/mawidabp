@@ -15,10 +15,13 @@ class FindingUserAssignment < ApplicationRecord
   validates :user_id, :numericality => {:only_integer => true},
     :allow_blank => true, :allow_nil => true
   validates_each :process_owner do |record, attr, value|
-    organization_id = record.finding.try(:organization_id)
+    organization_id            = record.finding.try(:organization_id)
+    corporate_organization_ids = Current.corporate_ids
 
-    if value && !record.user&.can_act_as_audited? && !record.user&.can_act_as_audited_on?(organization_id)
-      record.errors.add attr, :invalid
+    if value && !record.user&.can_act_as_audited? &&
+      !record.user&.can_act_as_audited_on?(organization_id) &&
+      !corporate_organization_ids.any? { |id| record.user&.can_act_as_audited_on?(id) }
+        record.errors.add attr, :invalid
     end
   end
   validates_each :user_id do |record, attr, value|
