@@ -145,6 +145,14 @@ private
                            description: I18n.t('settings.enable_close_date_edition')
       end
     end
+
+    if add_finding_days_for_next_notifications? #2024-04-16
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'finding_days_for_next_notifications',
+                           value:       DEFAULT_SETTINGS[:finding_days_for_next_notifications][:value],
+                           description: I18n.t('settings.finding_days_for_next_notifications')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -197,6 +205,10 @@ private
 
   def add_enable_close_date_edition?
     Setting.where(name: 'enable_close_date_edition').empty?
+  end
+
+  def add_finding_days_for_next_notifications?
+    Setting.where(name: 'finding_days_for_next_notifications').empty?
   end
 
   def add_new_answer_options

@@ -32,15 +32,39 @@ CONCLUSION_IMAGES = {
   'No aplica'                    => 'score_not_apply.png'
 }
 
+CONCLUSION_CHARTS = {
+  'Satisfactorio'                => 'score_success_chart.png',
+  'Satisfactorio con salvedades' => 'score_success_with_exceptions_chart.png',
+  'Necesita mejorar'             => 'score_warning_chart.png',
+  'No satisfactorio'             => 'score_danger_chart.png',
+  'No aplica'                    => 'score_not_apply_chart.png'
+}
+
+CONCLUSION_CHART_LEGENDS = {
+  'Satisfactorio'                => 'score_success_legend.png',
+  'Satisfactorio con salvedades' => 'score_success_with_exceptions_legend.png',
+  'Necesita mejorar'             => 'score_warning_legend.png',
+  'No satisfactorio'             => 'score_danger_legend.png',
+  'No aplica'                    => 'score_not_apply_legend.png'
+}
+
+CONCLUSION_CHART_LEGENDS_CHECKED = {
+  'Satisfactorio'                => 'score_success_legend_checked.png',
+  'Satisfactorio con salvedades' => 'score_success_with_exceptions_legend_checked.png',
+  'Necesita mejorar'             => 'score_warning_legend_checked.png',
+  'No satisfactorio'             => 'score_danger_legend_checked.png',
+  'No aplica'                    => 'score_not_apply_legend_checked.png'
+}
+
 CONCLUSION_EVOLUTION_IMAGES = {
   [
     'Satisfactorio con salvedades',
-    'Mantiene calificación desfavorable'
-  ] => 'evolution_equal_success.png',
-  [
-    'Satisfactorio con salvedades',
     'Empeora calficación'
-  ] => 'evolution_down_success.png'
+  ] => 'evolution_down_success.png',
+  [
+    'Necesita mejorar',
+    'Mantiene calificación desfavorable'
+  ] => 'evolution_equal_warning.png'
 }
 
 CONCLUSION_EVOLUTION = {
@@ -87,7 +111,24 @@ EVOLUTION_IMAGES = {
   'No aplica'                          => 'evolution_not_apply.png'
 }
 
-PDF_IMAGE_PATH = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
+EVOLUTION_SUPERSCRIPT = 'evolution_footnote.png'
+
+CONCLUSION_EVOLUTION_FOOTNOTES = {
+  [
+    'Satisfactorio con salvedades',
+    'Empeora calficación'
+  ] => '¹Se ha evidenciado algunos nuevos expuestos respecto de la revisión anterior, sin embargo, los mismos, aun así, permiten mantener una calificación favorable.'
+}
+
+EVOLUTION_FOOTNOTES = {
+  'Mantiene calificación desfavorable' => '¹Se ha evidenciado un ambiente de control interno que presenta oportunidades de mejora al igual que en nuestra revisión anterior.',
+  'Mantiene calificación favorable'    => '¹Se ha evidenciado un adecuado ambiente de control interno del proceso auditado, similar al de nuestra revisión anterior.',
+  'Mejora calificación'                => '¹Se ha evidenciado la normalización de expuestos preexistentes, lo que ha impactado positivamente en la presente calificación respecto de nuestra revisión anterior.',
+  'Empeora calficación'                => '¹Se ha evidenciado, respecto de nuestra revisión anterior, nuevos expuestos que debilitan el ambiente de control interno del proceso auditado.',
+  'No aplica'                          => '¹El presente trabajo no puede compararse contra una revisión anterior porque se genera por primera vez o porque su actual alcance es distinto.'
+}
+
+PDF_IMAGE_PATH          = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
 PDF_DEFAULT_SCORE_IMAGE = 'score_none.png'
 
 PLAN_ITEM_STATS_EXCLUDED_SCOPES = [

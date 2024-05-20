@@ -16,8 +16,8 @@ es:
         final_with_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia conteniendo las respuestas de cada una de las áreas.'
         final_without_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia, el que no contiene observaciones de relevancia que formular.'
         recipients: 'Destinatarios'
-        review_period_title: "Revisión de Auditoría Interna:"
-        review_period_description: "Iniciada: %{plan_item_start} - Finalizada: %{plan_item_end}"
+        internal_audit_review: "Revisión de Auditoría Interna:"
+        internal_audit_review_dates: "Iniciada: %{start_date} - Finalizada: %{end_date}"
       scope: 'ALCANCE'
       audit_comments: 'COMENTARIOS DE AUDITORIA'
       weaknesses:
@@ -26,6 +26,7 @@ es:
         audit_recommendations: 'Recomendación:'
         follow_up_date: 'Implementación:'
         repeated: 'OBSERVACIÓN REITERADA'
+      number_pages_html: 'Página <span class="page"></span> de <span class="topage"></span>'
     cro:
       header:
         legend_html: "<b>Bértora y Asociados</b>\r\nBernardo de Irigoyen 330 Piso 3\r\n\r\nCiudad Autónoma de Buenos Aires\r\nC1072AAF\r\nTeléfono +54 (11)4342 2544\r\n\r\nwww.crowe.com.ar"
