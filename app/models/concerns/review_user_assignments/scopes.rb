@@ -3,9 +3,9 @@ module ReviewUserAssignments::Scopes
 
   included do
     scope :list, -> {
-      joins(review: :organization).where(review: {
+      joins(:review).where(review: {
         organization_id: Current.organization&.id
-      }).order identification: :asc
+      })
     }
   end
 
