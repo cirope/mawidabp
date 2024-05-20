@@ -46,7 +46,7 @@ module Users::Releases
     end
 
     def release_pending_reviews
-      review_user_assignments.each do |rua|
+      review_user_assignments.list.each do |rua|
         unless rua.review.has_final_review?
           _items_for_notification << review_description_for(rua.review)
           _organizations          << rua.review.organization
