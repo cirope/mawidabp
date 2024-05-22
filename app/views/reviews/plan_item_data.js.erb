@@ -67,7 +67,7 @@
 
     $.get(amountUrl, { id: $element.val() }, function (data) {
       $('#estimated_amount').html(data)
-    }).complete(function () {
+    }).always(function () {
       Helper.hideLoading($element)
       $('#estimated_amount').effect('highlight', {}, 2000)
     })
