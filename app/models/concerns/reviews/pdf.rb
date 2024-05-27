@@ -73,14 +73,36 @@ module Reviews::Pdf
     end
 
     def pdf_columns
+      hide_effects          = HIDE_CONTROL_EFFECTS
+      hide_compliance_tests = HIDE_CONTROL_COMPLIANCE_TESTS
+
+      design_tests_width = if hide_effects && hide_compliance_tests
+                             35
+                           elsif hide_effects
+                             25
+                           elsif hide_compliance_tests
+                             30
+                           else
+                             20
+                           end
+
+      sustantive_tests_width = if hide_effects && hide_compliance_tests
+                                 35
+                               elsif hide_effects
+                                 20
+                               elsif hide_compliance_tests
+                                 30
+                               else
+                                 20
+                               end
       [
         [ProcessControl.model_name.human, 6],
         [ControlObjective.model_name.human, 6],
         ([Control.human_attribute_name('effects'), 10] unless HIDE_CONTROL_EFFECTS),
         [Control.human_attribute_name('control'), 10],
-        [Control.human_attribute_name('design_tests'), HIDE_CONTROL_EFFECTS ? 35 : 20],
+        [Control.human_attribute_name('design_tests'), design_tests_width],
         ([Control.human_attribute_name('compliance_tests'), 20] unless HIDE_CONTROL_COMPLIANCE_TESTS),
-        [Control.human_attribute_name('sustantive_tests'), HIDE_CONTROL_COMPLIANCE_TESTS ? 35 : 20],
+        [Control.human_attribute_name('sustantive_tests'), sustantive_tests_width],
         [ControlObjectiveItem.human_attribute_name('auditor_comment'), 8]
       ].compact
     end
