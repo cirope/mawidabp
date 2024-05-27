@@ -157,17 +157,7 @@ module LdapConfigs::LdapImport
     end
 
     def skip_function_and_manager?
-      @_skip_function_and_manager_setting ||= Current.organization.settings.find_by(
-        name: 'skip_function_and_manager_from_ldap_sync'
-      )
-
-      value = if @_skip_function_and_manager_setting
-                @_skip_function_and_manager_setting.value
-              else
-                DEFAULT_SETTINGS[:skip_function_and_manager_from_ldap_sync][:value]
-              end
-
-      value != '0'
+      Organization.skip_function_and_manager?
     end
 
     def check_state_for_late_changes(users)
