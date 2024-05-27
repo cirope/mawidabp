@@ -2,7 +2,7 @@ class ConclusionDraftReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_draft_review, only: [
     :show, :edit, :update, :export_to_pdf, :export_to_rtf,
-    :score_sheet, :download_work_papers, :create_bundle, 
+    :score_sheet, :download_work_papers, :create_bundle,
     :compose_email, :send_by_email
   ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
@@ -196,7 +196,6 @@ class ConclusionDraftReviewsController < ApplicationController
         include_global_score_sheet = params[:conclusion_review][:include_global_score_sheet] == '1'
         note                       = params[:conclusion_review][:email_note]
         review_type                = params[:conclusion_review][:review_type]
-        include_executive_summary  = Current.conclusion_pdf_format == 'gal'
 
         if review_type == 'brief'
           export_options[:brief] = '1'
@@ -205,7 +204,7 @@ class ConclusionDraftReviewsController < ApplicationController
         end
       end
 
-      @conclusion_draft_review.to_pdf(current_organization, export_options)
+      pdf_info = @conclusion_draft_review.to_pdf(current_organization, export_options)
 
       if include_score_sheet
         @conclusion_draft_review.review.score_sheet current_organization, draft: true
@@ -215,16 +214,12 @@ class ConclusionDraftReviewsController < ApplicationController
         @conclusion_draft_review.review.global_score_sheet(current_organization, draft: true)
       end
 
-      if include_executive_summary
-        export_options[:only_executive_summary] = '1'
+      if include_executive_summary?
+        executive_summary_pages = pdf_info[:executive_summary_pages]
+        pdf_path                = @conclusion_draft_review.absolute_pdf_path
+        pdf                     = MiniMagick::Image.open(pdf_path)
 
-        @conclusion_draft_review.to_pdf(current_organization, export_options)
-
-        pdf_path    = @conclusion_draft_review.absolute_executive_summary_pdf_path
-        pdf         = MiniMagick::Image.open(pdf_path)
-        total_pages = pdf.pages.count
-
-        total_pages.times do |page|
+        executive_summary_pages.times do |page|
           image_path = "#{pdf_path}_#{page}.png"
 
           MiniMagick::Tool::Convert.new do |convert|
@@ -246,8 +241,8 @@ class ConclusionDraftReviewsController < ApplicationController
           include_global_score_sheet: include_global_score_sheet
         }
 
-        if include_executive_summary
-          send_options[:executive_summary_pages] = total_pages
+        if include_executive_summary?
+          send_options[:executive_summary_pages] = executive_summary_pages
         end
 
         if user && !users.include?(user)
@@ -351,5 +346,12 @@ class ConclusionDraftReviewsController < ApplicationController
         compose_email: :modify,
         send_by_email: :modify
       )
+    end
+
+    def include_executive_summary?
+      draft_issue_date = @conclusion_draft_review.issue_date
+      code_change_date = CODE_CHANGE_DATES['exec_summary_v2']&.to_date
+
+      Current.conclusion_pdf_format == 'gal' && code_change_date && draft_issue_date >= code_change_date
     end
 end
