@@ -89,7 +89,7 @@ module Reviews::Pdf
       sustantive_tests_width = if hide_effects && hide_compliance_tests
                                  35
                                elsif hide_effects
-                                 20
+                                 25
                                elsif hide_compliance_tests
                                  30
                                else
