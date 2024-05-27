@@ -173,8 +173,11 @@ class UserTest < ActiveSupport::TestCase
     assert @user.valid?
   end
 
-  test 'validates can duplicate user if ldap' do
-    Current.organization = organizations(:google)
+  test 'Disable uniqueness username validation' do
+    o                    = organizations(:google)
+    Current.organization = o
+
+    o.settings.find_by(name: 'disable_uniqueness_username_validation').update! value: '1'
 
     @user.user = users(:bare).user
 
