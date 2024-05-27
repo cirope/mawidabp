@@ -372,12 +372,15 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
   test 'send by email with multiple attachments' do
     login
+    conclusion_review = ConclusionFinalReview.find(
+      conclusion_reviews(:conclusion_current_final_review).id
+    )
 
     ActionMailer::Base.deliveries = []
 
     assert_enqueued_jobs 1 do
       patch :send_by_email, :params => {
-        :id => conclusion_reviews(:conclusion_current_final_review).id,
+        :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
           :email_note => 'note in **markdown** _format_'
@@ -393,30 +396,17 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     perform_job_with_current_attributes(enqueued_jobs.first)
 
-    attachments_count = Current.conclusion_pdf_format == 'gal' ? 3 : 2
+    assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
 
-    assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
-
-    unless Current.conclusion_pdf_format == 'gal'
-      text_part = ActionMailer::Base.deliveries.last.parts.detect {
-        |p| p.content_type.match(/text/)
-      }.body.decoded
-
-      assert_match /markdown/, text_part
-    else
-      image_part = ActionMailer::Base.deliveries.last.parts.detect do |p|
-                     p.content_type.match(/multipart/)
-                   end
-
-      assert_not_nil image_part
-    end
+    text_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/text/) }.body.decoded
+    assert_match /markdown/, text_part
 
     clear_enqueued_jobs
     clear_performed_jobs
 
     assert_enqueued_jobs 1 do
       patch :send_by_email, :params => {
-        :id => conclusion_reviews(:conclusion_current_final_review).id,
+        :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
           :include_global_score_sheet => '1',
@@ -433,21 +423,42 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     perform_job_with_current_attributes(enqueued_jobs.first)
 
-    attachments_count = Current.conclusion_pdf_format == 'gal' ? 4 : 3
+    assert_equal 3, ActionMailer::Base.deliveries.last.attachments.size
 
-    assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
+    text_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/text/) }.body.decoded
+    assert_match /markdown/, text_part
 
-    unless Current.conclusion_pdf_format == 'gal'
-      text_part = ActionMailer::Base.deliveries.last.parts.detect {
-        |p| p.content_type.match(/text/)
-      }.body.decoded
+    if Current.conclusion_pdf_format == 'gal'
+      clear_enqueued_jobs
+      clear_performed_jobs
 
-      assert_match /markdown/, text_part
-    else
-      image_part = ActionMailer::Base.deliveries.last.parts.detect do |p|
-                     p.content_type.match(/multipart/)
-                   end
+      assert_not_nil CODE_CHANGE_DATES['exec_summary_v2']
 
+      conclusion_draft_review = conclusion_review.review.conclusion_draft_review
+      conclusion_draft_review.update issue_date: CODE_CHANGE_DATES['exec_summary_v2'].to_date + 1
+
+      assert_enqueued_jobs 1 do
+        patch :send_by_email, :params => {
+          :id => conclusion_review.id,
+          :conclusion_review => {
+            :include_score_sheet => '1',
+            :include_global_score_sheet => '1',
+            :email_note => 'note in **markdown** _format_'
+          },
+          :user => {
+            users(:administrator).id => {
+              :id => users(:administrator).id,
+              :data => users(:administrator).name
+            }
+          }
+        }
+      end
+
+      perform_job_with_current_attributes(enqueued_jobs.first)
+
+      assert_equal 4, ActionMailer::Base.deliveries.last.attachments.size
+
+      image_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/multipart/) }
       assert_not_nil image_part
     end
   end

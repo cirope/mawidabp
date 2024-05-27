@@ -961,6 +961,14 @@ en:
           attributes:
             base:
               auditors_limit_reached: 'Auditor limit reached, please update your license.'
+        setting:
+          attributes:
+            value:
+              empty: must have at least one
+              invalid: "must contain only numbers separated by commas. Invalid: %{invalid_days}"
+              array_values_above: "%{days_above} must be less than %{stale_day} (value configured in '%{setting_description}')"
+              array_values_below: "must be greater than %{last_notification_day} (highest value configured in '%{setting_description}')"
+              duplicate_array_values: "%{duplicate_days} are duplicated"
         memo:
           attributes:
             base:

@@ -24,7 +24,7 @@ module RiskAssessments::Plan
         risk_exposure = REVIEW_RISK_EXPOSURE.last if SHOW_REVIEW_EXTRA_ATTRIBUTES
         scope         = REVIEW_SCOPES.keys.first  if SHOW_REVIEW_EXTRA_ATTRIBUTES || USE_SCOPE_CYCLE
 
-        plan.plan_items.build(
+        risk_assessment_item.plan_item = plan.plan_items.build(
           order_number:     i.next,
           project:          project,
           start:            period.start,
