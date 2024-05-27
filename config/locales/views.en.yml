@@ -663,6 +663,7 @@ en:
     finding_by_current_user: 'Filter findings by current user'
     enable_close_date_edition: 'Enable close date edition'
     finding_days_for_next_notifications: 'Number of days in which a confirmation request must be sent'
+    disable_uniqueness_username_validation: 'Disable uniqueness username validation'
 
   tags:
     edit:
