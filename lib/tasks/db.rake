@@ -154,11 +154,11 @@ private
       end
     end
 
-    if add_disable_uniqueness_username_validation? #2024-05-24
+    if add_uniqueness_username_validation? #2024-05-24
       Organization.all.find_each do |o|
-        o.settings.create! name:        'disable_uniqueness_username_validation',
-                           value:       DEFAULT_SETTINGS[:disable_uniqueness_username_validation][:value],
-                           description: I18n.t('settings.disable_uniqueness_username_validation')
+        o.settings.create! name:        'uniqueness_username_validation',
+                           value:       DEFAULT_SETTINGS[:uniqueness_username_validation][:value],
+                           description: I18n.t('settings.uniqueness_username_validation')
       end
     end
   end
@@ -219,8 +219,8 @@ private
     Setting.where(name: 'finding_days_for_next_notifications').empty?
   end
 
-  def add_disable_uniqueness_username_validation?
-    Setting.where(name: 'disable_uniqueness_username_validation').empty?
+  def add_uniqueness_username_validation?
+    Setting.where(name: 'uniqueness_username_validation').empty?
   end
 
   def add_new_answer_options

@@ -2,7 +2,7 @@ module Users::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :user, uniqueness: { case_sensitive: false }, if: :is_allow_uniqueness_username_validation?
+    validates :user, uniqueness: { case_sensitive: false }, if: :username_uniqueness?
     validates :password, length: { maximum: 128 }, allow_nil: true, allow_blank: true
     validates :function, :office, :organizational_unit, :salt,
       :change_password_hash,
@@ -17,10 +17,10 @@ module Users::Validations
 
   private
 
-    def is_allow_uniqueness_username_validation?
-      setting = Current.organization&.settings&.find_by name: 'disable_uniqueness_username_validation'
+    def username_uniqueness?
+      setting = Current.organization&.settings&.find_by name: 'uniqueness_username_validation'
 
-      setting&.value != '1'
+      setting&.value == '1'
     end
 
     def validate_manager
