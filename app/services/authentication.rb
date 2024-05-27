@@ -67,8 +67,6 @@ class Authentication
       user = User.where(conditions).by_email(email) ||
              User.where(conditions).by_user(@params[:user])
 
-
-
       if user
         update_user user, pruned_attributes.merge(email: email)
       else
@@ -85,8 +83,6 @@ class Authentication
       add_roles     = Array(attributes[:roles]).select do |identifier|
         current_roles.includes(:role).references(:roles).where(roles: { identifier: identifier }).empty?
       end
-
-
 
       User.transaction do
         user.organization_roles.where(id: remove_roles.ids).destroy_all
