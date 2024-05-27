@@ -86,7 +86,7 @@ class Authentication
         current_roles.includes(:role).references(:roles).where(roles: { identifier: identifier }).empty?
       end
 
-      manager = set_manager pruned_attributes[:manager]
+
 
       User.transaction do
         user.organization_roles.where(id: remove_roles.ids).destroy_all
@@ -108,12 +108,14 @@ class Authentication
                                           role_id:         default_role.id
         end
 
+        manager = set_manager attributes[:manager]
+
         user.update! user:       attributes[:user],
                      email:      attributes[:email],
                      name:       attributes[:name],
                      last_name:  attributes[:last_name],
                      function:   attributes[:function],
-                     manager_id: manager.id,
+                     manager_id: manager&.id,
                      enable:    true
       end
 
@@ -125,6 +127,8 @@ class Authentication
 
       roles << @current_organization.saml_provider.default_role_for_users if roles.empty?
 
+      manager = set_manager attributes[:manager]
+
       if roles.compact.any?
         User.create!(
           name:                          attributes[:name],
@@ -132,7 +136,7 @@ class Authentication
           email:                         attributes[:email],
           user:                          attributes[:user],
           function:                      attributes[:function],
-          manager_id:                    manager.id,
+          manager_id:                    manager&.id,
           enable:                        true,
           organization_roles_attributes: roles.map do |r|
             { organization_id: r.organization_id, role_id: r.id }
@@ -351,7 +355,8 @@ class Authentication
     end
 
     def set_manager data
-      User.group_list.by_email(data) || User.list.by_user(data) &&
-        Current.organization.settings.where[]
+      unless Organization.skip_function_and_manager?
+        User.group_list.by_email(data) || User.list.by_user(data)
+      end
     end
 end
