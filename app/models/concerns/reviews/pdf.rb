@@ -73,24 +73,21 @@ module Reviews::Pdf
     end
 
     def pdf_columns
-      hide_effects          = HIDE_CONTROL_EFFECTS
-      hide_compliance_tests = HIDE_CONTROL_COMPLIANCE_TESTS
-
-      design_tests_width = if hide_effects && hide_compliance_tests
+      design_tests_width = if HIDE_CONTROL_EFFECTS && HIDE_CONTROL_COMPLIANCE_TESTS
                              35
-                           elsif hide_effects
+                           elsif HIDE_CONTROL_EFFECTS
                              25
-                           elsif hide_compliance_tests
+                           elsif HIDE_CONTROL_COMPLIANCE_TESTS
                              30
                            else
                              20
                            end
 
-      sustantive_tests_width = if hide_effects && hide_compliance_tests
+      sustantive_tests_width = if HIDE_CONTROL_EFFECTS && HIDE_CONTROL_COMPLIANCE_TESTS
                                  35
-                               elsif hide_effects
+                               elsif HIDE_CONTROL_EFFECTS
                                  25
-                               elsif hide_compliance_tests
+                               elsif HIDE_CONTROL_COMPLIANCE_TESTS
                                  30
                                else
                                  20
