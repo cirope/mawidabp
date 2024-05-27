@@ -108,15 +108,18 @@ class Authentication
                                           role_id:         default_role.id
         end
 
-        manager = set_manager attributes[:manager]
+        user_data = {
+          user:       attributes[:user],
+          email:      attributes[:email],
+          name:       attributes[:name],
+          last_name:  attributes[:last_name],
+          function:   attributes[:function],
+          enable:     true
+        }
 
-        user.update! user:       attributes[:user],
-                     email:      attributes[:email],
-                     name:       attributes[:name],
-                     last_name:  attributes[:last_name],
-                     function:   attributes[:function],
-                     manager_id: manager&.id,
-                     enable:    true
+        user_data[:manager_id] = set_manager(attributes[:manager])&.id unless Organization.skip_function_and_manager?
+
+        user.update! user_data
       end
 
       user if user.organization_roles.where(organization_id: @current_organization.id).any?
@@ -130,18 +133,22 @@ class Authentication
       manager = set_manager attributes[:manager]
 
       if roles.compact.any?
-        User.create!(
+
+        user_data = {
+          user:                          attributes[:user],
+          email:                         attributes[:email],
           name:                          attributes[:name],
           last_name:                     attributes[:last_name],
-          email:                         attributes[:email],
-          user:                          attributes[:user],
           function:                      attributes[:function],
-          manager_id:                    manager&.id,
           enable:                        true,
           organization_roles_attributes: roles.map do |r|
             { organization_id: r.organization_id, role_id: r.id }
           end
-        )
+        }
+
+        user_data[:manager_id] = set_manager(attributes[:manager])&.id unless Organization.skip_function_and_manager?
+
+        User.create! user_data
       end
     end
 
@@ -355,8 +362,6 @@ class Authentication
     end
 
     def set_manager data
-      unless Organization.skip_function_and_manager?
-        User.group_list.by_email(data) || User.list.by_user(data)
-      end
+      User.group_list.by_email(data) || User.list.by_user(data) if data
     end
 end
