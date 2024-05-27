@@ -67,6 +67,8 @@ class Authentication
       user = User.where(conditions).by_email(email) ||
              User.where(conditions).by_user(@params[:user])
 
+
+
       if user
         update_user user, pruned_attributes.merge(email: email)
       else
@@ -83,6 +85,8 @@ class Authentication
       add_roles     = Array(attributes[:roles]).select do |identifier|
         current_roles.includes(:role).references(:roles).where(roles: { identifier: identifier }).empty?
       end
+
+      manager = set_manager pruned_attributes[:manager]
 
       User.transaction do
         user.organization_roles.where(id: remove_roles.ids).destroy_all
@@ -104,10 +108,12 @@ class Authentication
                                           role_id:         default_role.id
         end
 
-        user.update! user:      attributes[:user],
-                     email:     attributes[:email],
-                     name:      attributes[:name],
-                     last_name: attributes[:last_name],
+        user.update! user:       attributes[:user],
+                     email:      attributes[:email],
+                     name:       attributes[:name],
+                     last_name:  attributes[:last_name],
+                     function:   attributes[:function],
+                     manager_id: manager.id,
                      enable:    true
       end
 
@@ -125,6 +131,8 @@ class Authentication
           last_name:                     attributes[:last_name],
           email:                         attributes[:email],
           user:                          attributes[:user],
+          function:                      attributes[:function],
+          manager_id:                    manager.id,
           enable:                        true,
           organization_roles_attributes: roles.map do |r|
             { organization_id: r.organization_id, role_id: r.id }
@@ -141,7 +149,9 @@ class Authentication
         name:      Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.name_claim}"]).first,
         email:     Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.email_claim}"]).first,
         last_name: Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.lastname_claim}"]).first,
-        roles:     attributes["http://schemas.microsoft.com/ws/2008/06/identity/claims/#{provider.roles_claim}"]
+        roles:     attributes["http://schemas.microsoft.com/ws/2008/06/identity/claims/#{provider.roles_claim}"],
+        function:  Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.function_claim}"]).first,
+        manager:   Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.manager_claim}"]).first
       }
     end
 
@@ -338,5 +348,10 @@ class Authentication
 
     def ldap_config_present?
       !is_user_recovery? && @current_organization.try(:ldap_config)
+    end
+
+    def set_manager data
+      User.group_list.by_email(data) || User.list.by_user(data) &&
+        Current.organization.settings.where[]
     end
 end
