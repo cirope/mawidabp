@@ -205,7 +205,7 @@ module Users::Import
           manager_id = if users_by_file[manager] == user.user
                          nil
                        else
-                         User.find_by(user: manager)&.id
+                         User.where("LOWER(#{quoted_table_name}.#{qcn 'user'}) = ?", manager.downcase).take&.id
                        end
 
           user.reload.update manager_id: manager_id if manager_id
