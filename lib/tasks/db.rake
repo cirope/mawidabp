@@ -104,6 +104,14 @@ private
                            description: I18n.t('settings.conclusion_review_receiver')
       end
     end
+
+    if add_uniqueness_username_validation? #2024-05-24
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'uniqueness_username_validation',
+                           value:       DEFAULT_SETTINGS[:uniqueness_username_validation][:value],
+                           description: I18n.t('settings.uniqueness_username_validation')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -140,6 +148,10 @@ private
 
   def add_brief_period_in_weeks?
     Setting.where(name: 'brief_period_in_weeks').empty?
+  end
+
+  def add_uniqueness_username_validation?
+    Setting.where(name: 'uniqueness_username_validation').empty?
   end
 
   def add_new_answer_options
