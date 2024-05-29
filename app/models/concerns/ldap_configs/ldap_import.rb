@@ -157,7 +157,7 @@ module LdapConfigs::LdapImport
     end
 
     def skip_function_and_manager?
-      Organization.skip_function_and_manager?
+      @_skip_function_and_manager_setting ||= organization.skip_function_and_manager?
     end
 
     def check_state_for_late_changes(users)

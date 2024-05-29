@@ -105,14 +105,17 @@ class Authentication
         end
 
         user_data = {
-          user:       attributes[:user],
-          email:      attributes[:email],
-          name:       attributes[:name],
-          last_name:  attributes[:last_name],
-          enable:     true
+          user:      attributes[:user],
+          email:     attributes[:email],
+          name:      attributes[:name],
+          last_name: attributes[:last_name],
+          enable:    true
         }
 
-        function_and_manager user_data, attributes
+        unless skip_function_and_manager?
+          user_data[:manager_id] = find_manager(attributes[:manager])
+          user_data[:function]   = attributes[:function]
+        end
 
         user.update! user_data
       end
@@ -133,12 +136,15 @@ class Authentication
           name:                          attributes[:name],
           last_name:                     attributes[:last_name],
           enable:                        true,
-        #  organization_roles_attributes: roles.map do |r|
-        #    { organization_id: r.organization_id, role_id: r.id }
-        #  end
+          organization_roles_attributes: roles.map do |r|
+            { organization_id: r.organization_id, role_id: r.id }
+          end
         }
 
-        function_and_manager user_data, attributes
+        unless skip_function_and_manager?
+          user_data[:manager_id] = find_manager(attributes[:manager])
+          user_data[:function]   = attributes[:function]
+        end
 
         User.create! user_data
       end
@@ -357,14 +363,7 @@ class Authentication
       User.group_list.by_email(manager) || User.list.by_user(manager) if manager
     end
 
-    def function_and_manager data_user, attributes
-      unless skip_function_and_manager?
-        data_user['manager_id'] = find_manager(attributes[:manager])
-        data_user[:function]    = attributes[:function]
-      end
-    end
-
     def skip_function_and_manager?
-      @current_organization.settings.valid_setting? 'skip_function_and_manager_from_ldap_sync'
+      @current_organization.skip_function_and_manager?
     end
 end

@@ -21,4 +21,18 @@ module Organizations::Setting
 
     result
   end
+
+  def skip_function_and_manager?
+    setting = settings.find_by(
+      name: 'skip_function_and_manager_from_ldap_sync'
+    )
+
+    value = if setting
+              setting.value
+            else
+              DEFAULT_SETTINGS[:skip_function_and_manager_from_ldap_sync][:value]
+            end
+
+    value != '0'
+  end
 end
