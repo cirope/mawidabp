@@ -30,20 +30,6 @@ module Organizations::Scopes
       where group_id: group.id
     end
 
-    def skip_function_and_manager?
-      @_skip_function_and_manager_setting ||= Current.organization.settings.find_by(
-        name: 'skip_function_and_manager_from_ldap_sync'
-      )
-
-      value = if @_skip_function_and_manager_setting
-                @_skip_function_and_manager_setting.value
-              else
-                DEFAULT_SETTINGS[:skip_function_and_manager_from_ldap_sync][:value]
-              end
-
-      value != '0'
-    end
-
     def with_ldap_config
       includes(:ldap_config).where.not ldap_configs: { organization_id: nil }
     end

@@ -109,11 +109,10 @@ class Authentication
           email:      attributes[:email],
           name:       attributes[:name],
           last_name:  attributes[:last_name],
-          function:   attributes[:function],
           enable:     true
         }
 
-        user_data[:manager_id] = set_manager(attributes[:manager])&.id unless Organization.skip_function_and_manager?
+        function_and_manager user_data, attributes
 
         user.update! user_data
       end
@@ -126,8 +125,6 @@ class Authentication
 
       roles << @current_organization.saml_provider.default_role_for_users if roles.empty?
 
-      manager = set_manager attributes[:manager]
-
       if roles.compact.any?
 
         user_data = {
@@ -135,14 +132,13 @@ class Authentication
           email:                         attributes[:email],
           name:                          attributes[:name],
           last_name:                     attributes[:last_name],
-          function:                      attributes[:function],
           enable:                        true,
-          organization_roles_attributes: roles.map do |r|
-            { organization_id: r.organization_id, role_id: r.id }
-          end
+        #  organization_roles_attributes: roles.map do |r|
+        #    { organization_id: r.organization_id, role_id: r.id }
+        #  end
         }
 
-        user_data[:manager_id] = set_manager(attributes[:manager])&.id unless Organization.skip_function_and_manager?
+        function_and_manager user_data, attributes
 
         User.create! user_data
       end
@@ -357,7 +353,18 @@ class Authentication
       !is_user_recovery? && @current_organization.try(:ldap_config)
     end
 
-    def set_manager data
-      User.group_list.by_email(data) || User.list.by_user(data) if data
+    def find_manager manager
+      User.group_list.by_email(manager) || User.list.by_user(manager) if manager
+    end
+
+    def function_and_manager data_user, attributes
+      unless skip_function_and_manager?
+        data_user['manager_id'] = find_manager(attributes[:manager])
+        data_user[:function]    = attributes[:function]
+      end
+    end
+
+    def skip_function_and_manager?
+      @current_organization.settings.valid_setting? 'skip_function_and_manager_from_ldap_sync'
     end
 end

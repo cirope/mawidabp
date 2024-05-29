@@ -1,7 +1,9 @@
 class Setting < ApplicationRecord
   include Auditable
+  include Settings::Helpers
   include Settings::Validations
   include Settings::Scopes
+
 
   attr_readonly :name
 
