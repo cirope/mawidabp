@@ -29,10 +29,6 @@
         <div class="row">
           <div class="col-md-6">
             <%= s_p_f.input :provider, collection: providers %>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
             <%= s_p_f.input :idp_homepage %>
             <%= s_p_f.input :idp_sso_target_url %>
             <%= s_p_f.input :assertion_consumer_service_url %>
@@ -49,6 +45,8 @@
             <%= s_p_f.input :lastname_claim %>
             <%= s_p_f.input :email_claim %>
             <%= s_p_f.input :roles_claim %>
+            <%= s_p_f.input :function_claim %>
+            <%= s_p_f.input :manager_claim %>
           </div>
         </div>
       </fieldset>

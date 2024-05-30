@@ -153,6 +153,14 @@ private
                            description: I18n.t('settings.finding_days_for_next_notifications')
       end
     end
+
+    if add_uniqueness_username_validation? #2024-05-24
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'uniqueness_username_validation',
+                           value:       DEFAULT_SETTINGS[:uniqueness_username_validation][:value],
+                           description: I18n.t('settings.uniqueness_username_validation')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -209,6 +217,10 @@ private
 
   def add_finding_days_for_next_notifications?
     Setting.where(name: 'finding_days_for_next_notifications').empty?
+  end
+
+  def add_uniqueness_username_validation?
+    Setting.where(name: 'uniqueness_username_validation').empty?
   end
 
   def add_new_answer_options

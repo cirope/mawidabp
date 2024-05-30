@@ -1583,6 +1583,8 @@ es:
         lastname_claim: 'Atributo con el apellido'
         email_claim: 'Atributo con el correo electrónico'
         roles_claim: 'Atribudo con los roles'
+        function_claim: 'Atribudo con el cargo'
+        manager_claim: 'Atribudo con el superior'
       work_paper:
         name: "Nombre"
         code: "Código"
