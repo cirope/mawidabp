@@ -350,7 +350,9 @@ class Authentication
     end
 
     def manager_and_function attributes
-      unless @current_organization.skip_function_and_manager?
+      if @current_organization.skip_function_and_manager?
+        {}
+      else
         manager_attr = attributes[:manager]
         user_manager = User.group_list.by_email(manager_attr) ||
           User.list.by_user(manager_attr) if manager_attr
