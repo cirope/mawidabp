@@ -110,7 +110,7 @@ class Authentication
           name:      attributes[:name],
           last_name: attributes[:last_name],
           enable:    true
-        }.merge(manager_and_function(attributes))
+        }.merge conditional_user_data(attributes)
 
         user.update! user_data
       end
@@ -124,7 +124,6 @@ class Authentication
       roles << @current_organization.saml_provider.default_role_for_users if roles.empty?
 
       if roles.compact.any?
-
         user_data = {
           user:                          attributes[:user],
           email:                         attributes[:email],
@@ -134,7 +133,7 @@ class Authentication
           organization_roles_attributes: roles.map do |r|
             { organization_id: r.organization_id, role_id: r.id }
           end
-        }.merge(manager_and_function(attributes))
+        }.merge conditional_user_data(attributes)
 
         User.create! user_data
       end
@@ -349,18 +348,20 @@ class Authentication
       !is_user_recovery? && @current_organization.try(:ldap_config)
     end
 
-    def manager_and_function attributes
-      if @current_organization.skip_function_and_manager?
-        {}
-      else
-        manager_attr = attributes[:manager]
-        user_manager = User.group_list.by_email(manager_attr) ||
-          User.list.by_user(manager_attr) if manager_attr
+    def conditional_user_data attributes
+      data = {}
 
-        {
+      unless @current_organization.skip_function_and_manager?
+        user_manager = if attributes[:manager]
+                          User.group_list.by_email(attributes[:manager]) ||
+                            User.list.by_user(attributes[:manager])
+                       end
+        data = {
           manager_id: user_manager&.id,
           function:   attributes[:function]
         }
       end
+
+      data
     end
 end
