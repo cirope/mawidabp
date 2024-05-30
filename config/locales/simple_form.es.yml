@@ -69,3 +69,5 @@ es:
         lastname_claim: 'Por ejemplo: surname'
         email_claim: 'Por ejemplo: emailaddress'
         roles_claim: 'Por ejemplo: groups'
+        function_claim: 'Por ejemplo: department'
+        manager_claim: 'Por ejemplo: manager'
