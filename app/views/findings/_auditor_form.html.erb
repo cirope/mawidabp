@@ -353,9 +353,25 @@
       </div>
 
       <div id="finding_user_assignments">
-        <%= f.simple_fields_for :finding_user_assignments do |fua_f| %>
-          <%= render 'finding_user_assignment', f: fua_f,
-            readonly: users_readonly, for_notification: true %>
+        <% others, audit_team = @finding.finding_user_assignments.partition do |fua|
+          corporate_organizations_ids = fua.user&.organizations&.corporate&.map(&:id)
+          fua.user&.can_act_as_audited? || corporate_organizations_ids&.any? { |id| fua.user.can_act_as_audited_on?(id) }
+        end %>
+
+        <% if audit_team.present? %>
+          <h5 class="text-muted"><%= t 'finding.user_assignment.audit_team' %></h5>
+          <%= f.simple_fields_for :finding_user_assignments, audit_team do |fua_f| %>
+            <%= render 'finding_user_assignment', f: fua_f,
+              readonly: users_readonly, for_notification: true %>
+          <% end %>
+        <% end %>
+
+        <% if others.present? %>
+          <h5 class="text-muted"><%= t 'finding.user_assignment.others' %></h5>
+          <%= f.simple_fields_for :finding_user_assignments, others do |fua_f| %>
+            <%= render 'finding_user_assignment', f: fua_f,
+              readonly: users_readonly, for_notification: true %>
+          <% end %>
         <% end %>
 
         <%= link_to_add_fields(
