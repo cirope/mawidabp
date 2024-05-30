@@ -110,12 +110,7 @@ class Authentication
           name:      attributes[:name],
           last_name: attributes[:last_name],
           enable:    true
-        }
-
-        unless skip_function_and_manager?
-          user_data[:manager_id] = find_manager(attributes[:manager])
-          user_data[:function]   = attributes[:function]
-        end
+        }.merge(manager_and_function(attributes))
 
         user.update! user_data
       end
@@ -139,12 +134,7 @@ class Authentication
           organization_roles_attributes: roles.map do |r|
             { organization_id: r.organization_id, role_id: r.id }
           end
-        }
-
-        unless skip_function_and_manager?
-          user_data[:manager_id] = find_manager(attributes[:manager])
-          user_data[:function]   = attributes[:function]
-        end
+        }.merge(manager_and_function(attributes))
 
         User.create! user_data
       end
@@ -359,11 +349,15 @@ class Authentication
       !is_user_recovery? && @current_organization.try(:ldap_config)
     end
 
-    def find_manager manager
-      User.group_list.by_email(manager) || User.list.by_user(manager) if manager
-    end
+    def manager_and_function attributes
+      unless @current_organization.skip_function_and_manager?
+        manager_attr = attributes[:manager]
+        user_manager = User.group_list.by_email(manager_attr) || User.list.by_user(manager_attr) if manager_attr
 
-    def skip_function_and_manager?
-      @current_organization.skip_function_and_manager?
+        {
+          manager_id: user_manager&.id,
+          function: attributes[:function]
+        }
+      end
     end
 end

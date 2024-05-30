@@ -3,7 +3,6 @@ module Organizations::Setting
 
   included do
     after_create :create_settings
-
     has_many :settings, dependent: :destroy
   end
 
