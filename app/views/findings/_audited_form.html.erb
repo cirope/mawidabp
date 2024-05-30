@@ -120,7 +120,12 @@
       <% end %>
 
       <% unless @finding.users.blank? %>
-        <% audited, auditors = *@finding.users.partition(&:can_act_as_audited?) %>
+        <% audited, auditors = *@finding.users.partition do |u|
+          corporate_organizations_ids = u.organizations.corporate.map(&:id)
+
+          u.can_act_as_audited? || corporate_organizations_ids.any? { |id| u.can_act_as_audited_on?(id) }
+        end %>
+
         <% process_owners = @finding.process_owners %>
         <% responsible_auditors = @finding.responsible_auditors %>
         <h5 class="my-3"><%= t('finding.responsibles', :count => @finding.users.size) %></h5>
