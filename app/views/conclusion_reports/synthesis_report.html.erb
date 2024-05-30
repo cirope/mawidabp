@@ -1,4 +1,4 @@
-<% forms = {:date_range => true, :business_unit => true} %>
+<% forms = {:date_range => true, :business_unit => true, :period => true} %>
 <% forms[:scope] = true if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
 
 <div class="card">
@@ -61,8 +61,8 @@
             <%= synthesis_report_score_average(
             t(
               'conclusion_committee_report.synthesis_report.generic_score_average',
-              :audit_type => data[:name], :count => data[:review_scores].try(:size) || 0),
-              data[:review_scores]) %>
+              :audit_type => data[:business_units], :count => data[:review_scores].try(:size) || 0),
+              data[:inherent_risks], data[:residual_risks]) %>
           </p>
         <% else %>
           <p style="margin: 1em;">
