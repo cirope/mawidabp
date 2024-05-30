@@ -29,7 +29,9 @@ module LdapConfigs::LdapImport
 
       raise Net::LDAP::Error.new unless connection.get_operation_result.code == 0
 
-      assign_managers managers, users_by_dn unless organization.skip_function_and_manager?
+      unless organization.skip_function_and_manager?
+        assign_managers managers, users_by_dn
+      end
 
       users = check_state_for_late_changes(users)
     end
@@ -65,7 +67,9 @@ module LdapConfigs::LdapImport
     def process_entry entry, user:, roles:, data:
       manager_dn = casted_attribute entry, manager_attribute
 
-      data[:manager_id] = nil if manager_dn.blank? && !organization.skip_function_and_manager?
+      if manager_dn.blank? && !organization.skip_function_and_manager?
+        data[:manager_id] = nil
+      end
 
       state = if user
                 if should_sync_ldap?(user)
