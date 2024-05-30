@@ -44,7 +44,7 @@
       </div>
       <div class="col-md-2">
         <%= f.input :process_owner, as: :boolean, label: '&nbsp;'.html_safe,
-          input_html: { disabled: readonly || !is_audited },
+          input_html: { disabled: readonly || (finding_user && !is_audited) },
           wrapper_html: { class: 'mt-2' } %>
       </div>
       <div class="col-md-1">
