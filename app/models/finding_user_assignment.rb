@@ -14,16 +14,8 @@ class FindingUserAssignment < ApplicationRecord
   validates :user_id, :presence => true
   validates :user_id, :numericality => {:only_integer => true},
     :allow_blank => true, :allow_nil => true
-  validates_each :process_owner do |record, attr, value|
-    organization_id            = record.finding.try(:organization_id)
-    corporate_organization_ids = Current.corporate_ids
-
-    if value && !record.user&.can_act_as_audited? &&
-      !record.user&.can_act_as_audited_on?(organization_id) &&
-      !corporate_organization_ids.any? { |id| record.user&.can_act_as_audited_on?(id) }
-        record.errors.add attr, :invalid
-    end
-  end
+  validate :validate_process_owner
+  validate :validate_responsible_auditor
   validates_each :user_id do |record, attr, value|
     users = (record.finding || record.raw_finding).finding_user_assignments.
       reject(&:marked_for_destruction?).map(&:user_id)
@@ -69,6 +61,31 @@ class FindingUserAssignment < ApplicationRecord
   end
 
   private
+
+    def validate_process_owner
+      audited_on_finding_org, audited_on_corporate_orgs = validate_audit_conditions(self)
+
+      if process_owner && user && !(audited_on_finding_org || (audited_on_finding_org && audited_on_corporate_orgs))
+        errors.add :process_owner, :invalid
+      end
+    end
+
+    def validate_responsible_auditor
+      audited_on_finding_org, audited_on_corporate_orgs = validate_audit_conditions(self)
+
+      if responsible_auditor && user && (audited_on_finding_org || (audited_on_finding_org && audited_on_corporate_orgs))
+        errors.add :responsible_auditor, :invalid
+      end
+    end
+
+    def validate_audit_conditions record
+      finding_organization_id    = record.finding.try(:organization_id)
+      corporate_organization_ids = Current.corporate_ids
+      audited_on_finding_org     = record.user&.can_act_as_audited_on?(finding_organization_id)
+      audited_on_corporate_orgs  = corporate_organization_ids.any? { |id| record.user&.can_act_as_audited_on?(id) }
+
+      [audited_on_finding_org, audited_on_corporate_orgs]
+    end
 
     def validate_process_owner_uniqueness?
       finding && SHOW_WEAKNESS_EXTRA_ATTRIBUTES
