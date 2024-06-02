@@ -80,8 +80,10 @@ module Findings::FollowUpPdf
     def put_follow_up_user_data_on pdf
       audited, auditors = *users.partition do |u|
         corporate_organization_ids = u.organizations.corporate.map(&:id)
+        audited_on_current_org     = u.can_act_as_audited?
+        audited_on_corporate_orgs  = corporate_organization_ids.any? { |id| u.can_act_as_audited_on?(id) }
 
-        u.can_act_as_audited? || corporate_organization_ids.any? { |id| u.can_act_as_audited_on?(id) }
+        audited_on_current_org || (audited_on_current_org && audited_on_corporate_orgs)
       end
 
       pdf.add_title I18n.t('finding.auditors', count: auditors.size), PDF_FONT_SIZE, :left
