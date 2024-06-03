@@ -1583,6 +1583,8 @@ en:
         lastname_claim: 'Last name claim'
         email_claim: 'Email claim'
         roles_claim: 'Roles claim'
+        function_claim: 'Function claim'
+        manager_claim: 'Manager claim'
       work_paper:
         name: "Name"
         code: "Code"
