@@ -420,6 +420,8 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'undo reiteration' do
     login
+    set_organization
+
     weakness = Finding.find(findings(:unanswered_for_level_1_notification).id)
     repeated_of = Finding.find(findings(:being_implemented_weakness).id)
     repeated_of_original_state = repeated_of.state

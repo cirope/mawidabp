@@ -35,6 +35,8 @@ class FindingReviewAssignmentTest < ActiveSupport::TestCase
   end
 
   test 'destroy gets cancelled if repeated' do
+    set_organization
+    
     finding_review_assignment =
       finding_review_assignments :review_without_conclusion_being_implemented_weakness
 

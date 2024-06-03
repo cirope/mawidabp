@@ -80,7 +80,6 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
   end
 
   test 'validates process owner' do
-    Current.corporate_ids                  = Current.organization&.group&.organizations&.corporate&.ids
     @finding_user_assignment.process_owner = true
 
     assert @finding_user_assignment.invalid?

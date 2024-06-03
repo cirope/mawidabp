@@ -25,6 +25,8 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list completed findings' do
+    set_organization
+
     finding = findings(:being_implemented_weakness)
     completed_status_list = Finding::STATUS.values       -
                             Finding::PENDING_STATUS      -
@@ -45,6 +47,8 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list repeated findings' do
+    set_organization
+
     finding = findings :unanswered_for_level_1_notification
     repeated_of = findings :being_implemented_weakness
     repeated_status_list = [Finding::STATUS[:repeated]]
