@@ -520,6 +520,8 @@ es:
       origin: Origen
       old_data: (Antigua data)
       normalization: Normalización
+      no_weaknesses_v2: "<b>No surgieron expuestos para destacar.</b>"
+      no_origin_or_normalization: '-'
       observations: "<b>Próximos pasos\nInformación adicional</b>"
       applied_data_analytics: Data Analytics aplicada
     detailed_review:

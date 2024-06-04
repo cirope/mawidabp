@@ -520,6 +520,8 @@ en:
       origin: Origin
       old_data: (Old data)
       normalization: Normalization
+      no_weaknesses_v2: "<b>No exposures to highlight emerged.</b>"
+      no_origin_or_normalization: '-'
       observations: "<b>New Steps\nAdditional information</b>"
       applied_data_analytics: Applied Data Analytics
     detailed_review:

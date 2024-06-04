@@ -349,19 +349,25 @@ module ConclusionReviews::GalPdf
     end
 
     def key_weaknesses_rows pdf, weaknesses
-      rows = [key_weaknesses_header]
+      rows                         = [key_weaknesses_header]
+      row_font_size                = (PDF_FONT_SIZE * 0.8).round
+      cell_padding                 = [(PDF_FONT_SIZE * 0.3).round, (PDF_FONT_SIZE * 0.5).round]
+      no_weakness_text             = I18n.t('conclusion_review.executive_summary.no_weaknesses_v2')
+      no_origin_normalization_text = I18n.t('conclusion_review.executive_summary.no_origin_or_normalization')
 
-      weaknesses.each do |weakness|
-        row_font_size          = (PDF_FONT_SIZE * 0.8).round
-        cell_padding           = [(PDF_FONT_SIZE * 0.3).round, (PDF_FONT_SIZE * 0.5).round]
-        weakness_origin        = weakness_origin pdf, weakness, cell_padding, row_font_size
-        weakness_normalization = weakness_normalization weakness
+      if weaknesses.present?
+        weaknesses.each do |weakness|
+          weakness_origin        = weakness_origin pdf, weakness, cell_padding, row_font_size
+          weakness_normalization = weakness_normalization weakness
 
-        rows << [
-          pdf.make_cell(content: weakness.title, size: row_font_size, padding: cell_padding),
-          weakness_origin,
-          pdf.make_cell(weakness_normalization.merge({size: row_font_size, padding: cell_padding}))
-        ]
+          rows << [
+            pdf.make_cell(content: weakness.title, size: row_font_size, padding: cell_padding),
+            weakness_origin,
+            pdf.make_cell(weakness_normalization.merge({size: row_font_size, padding: cell_padding}))
+          ]
+        end
+      else
+        rows << [no_weakness_text, no_origin_normalization_text, no_origin_normalization_text]
       end
 
       rows
