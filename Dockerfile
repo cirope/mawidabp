@@ -2,6 +2,7 @@
 # --- Assets builder ----
 # -----------------------
 
+
 FROM --platform=$BUILDPLATFORM ruby:slim as builder
 
 ARG APP_ROOT=/opt/app
@@ -41,7 +42,7 @@ FROM --platform=$BUILDPLATFORM ruby:slim
 ARG APP_ROOT=/opt/app
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
-ENV USER nobody
+ENV USER root
 ENV PORT 3000
 ENV RAILS_ENV production
 
@@ -59,6 +60,14 @@ apt-get install -y --no-install-recommends \
 
 COPY --from=builder $APP_ROOT $APP_ROOT
 COPY --from=builder $GEM_HOME $GEM_HOME
+
+RUN rm -rf /var/lib/apt/lists/* && \
+   which cron && \
+   rm -rf /etc/cron.*/*
+
+COPY config/mawidabp_crontab /etc/cron.d/cronfile
+RUN chmod 0644 /etc/cron.d/cronfile
+RUN crontab /etc/cron.d/cronfile
 
 RUN chown -R $USER: $APP_ROOT
 

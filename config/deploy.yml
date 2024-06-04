@@ -27,10 +27,15 @@ servers:
       options:
         max-size: 10m
         max-file: 10
+  worker:
+    hosts:
+      - <%= ENV['HOST'] %>
+    cmd: bin/run-worker.sh
+
   cron:
     hosts:
       - <%= ENV['HOST'] || '127.0.0.1' %>
-    cmd: sh -c "cat config/mawidabp_contrab | crontab - && crond -f l 2"
+    cmd: sh -c "cron -f l 2"
     logging:
       driver: json-file
       options:
@@ -100,5 +105,3 @@ traefik:
 
 healthcheck:
   path: /healthy
-
-
