@@ -16,10 +16,6 @@ servers:
     hosts:
       - <%= ENV['HOST'] || '127.0.0.1' %>
     cmd: bundle exec sidekiq
-  worker:
-    hosts:
-      - <%= ENV['HOST'] %>
-    cmd: bin/run-worker.sh
 
   cron:
     hosts:
