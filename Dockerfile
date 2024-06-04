@@ -32,7 +32,6 @@ RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 
 RUN bundle exec whenever > $APP_ROOT/config/mawidabp_crontab
 
-
 # -----------------------
 # ---- Release image ----
 # -----------------------
@@ -65,7 +64,7 @@ RUN rm -rf /var/lib/apt/lists/* && \
    which cron && \
    rm -rf /etc/cron.*/*
 
-COPY config/mawidabp_crontab /etc/cron.d/cronfile
+COPY $APP_ROOT/config/mawidabp_crontab /etc/cron.d/cronfile
 RUN chmod 0644 /etc/cron.d/cronfile
 RUN crontab /etc/cron.d/cronfile
 
