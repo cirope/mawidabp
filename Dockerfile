@@ -64,7 +64,7 @@ RUN rm -rf /var/lib/apt/lists/* && \
    which cron && \
    rm -rf /etc/cron.*/*
 
-COPY $APP_ROOT/config/mawidabp_crontab /etc/cron.d/cronfile
+COPY --from=builder $APP_ROOT/config/mawidabp_crontab /etc/cron.d/cronfile
 RUN chmod 0644 /etc/cron.d/cronfile
 RUN crontab /etc/cron.d/cronfile
 
