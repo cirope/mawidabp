@@ -30,7 +30,10 @@ REGEX_REPLY_EMAIL: 'El .*escribió:'
 #REDIS_HOST: 'localhost'
 REDIS_PORT: '6379'
 
+SECRET_KEY_BASE: 'REPLACE with rake secret output'
 NEW_RELIC_LICENSE_KEY: 'REPLACE with the one provided by NewRelic'
+
+
 
 # Extra application options
 ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION: 'false'
