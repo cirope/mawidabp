@@ -34,6 +34,7 @@ env:
     REDIS_HOST: <%= ENV['HOST'] || '127.0.0.1' %>
   secret:
     - POSTGRES_PASSWORD
+    - RAILS_MASTER_KEY
 
 builder:
   remote:
