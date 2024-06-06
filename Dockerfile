@@ -40,7 +40,7 @@ FROM --platform=$BUILDPLATFORM ruby:slim
 ARG APP_ROOT=/opt/app
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
-ENV USER nobody
+ENV USER root
 ENV PORT 3000
 ENV RAILS_ENV production
 
@@ -70,8 +70,6 @@ RUN crontab /etc/cron.d/cronfile
 RUN chown -R $USER: $APP_ROOT
 
 WORKDIR $APP_ROOT
-
-USER $USER
 
 EXPOSE $PORT
 
