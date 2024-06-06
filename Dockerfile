@@ -2,7 +2,6 @@
 # --- Assets builder ----
 # -----------------------
 
-
 FROM --platform=$BUILDPLATFORM ruby:slim as builder
 
 ARG APP_ROOT=/opt/app
@@ -41,7 +40,7 @@ FROM --platform=$BUILDPLATFORM ruby:slim
 ARG APP_ROOT=/opt/app
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
-ENV USER root
+ENV USER nobody
 ENV PORT 3000
 ENV RAILS_ENV production
 
