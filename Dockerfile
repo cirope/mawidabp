@@ -27,7 +27,7 @@ RUN bundle config set deployment 'true' && bundle install
 
 COPY config/application.yml.example $APP_ROOT/config/application.yml
 
-RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
+RUN SECRET_KEY_BASE=$SECRET_KEY_BASE bundle exec rails assets:precompile DB_ADAPTER=nulldb
 
 RUN bundle exec whenever > $APP_ROOT/config/mawidabp_crontab
 
