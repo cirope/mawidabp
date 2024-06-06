@@ -28,8 +28,8 @@ registry:
   password: <%= %x(aws ecr get-login-password) %>
 
 env:
-  SECRET_KEY_BASE: <%= ENV['SECRET_KEY_BASE'] %>
   clear:
+    SECRET_KEY_BASE: <%= ENV['SECRET_KEY_BASE'] %>
     DB_HOST: <%= ENV['HOST'] || '127.0.0.1' %>
     REDIS_HOST: <%= ENV['HOST'] || '127.0.0.1' %>
   secret:
