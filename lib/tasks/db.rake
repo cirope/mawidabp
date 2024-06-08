@@ -161,6 +161,14 @@ private
                            description: I18n.t('settings.uniqueness_username_validation')
       end
     end
+
+    if add_skip_reiteration_copy? #2024-06-08
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'skip_reiteration_copy',
+                           value:       DEFAULT_SETTINGS[:skip_reiteration_copy][:value],
+                           description: I18n.t('settings.skip_reiteration_copy')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -221,6 +229,11 @@ private
 
   def add_uniqueness_username_validation?
     Setting.where(name: 'uniqueness_username_validation').empty?
+  end
+
+
+  def add_skip_reiteration_copy?
+    Setting.where(name: 'skip_reiteration_copy').empty?
   end
 
   def add_new_answer_options

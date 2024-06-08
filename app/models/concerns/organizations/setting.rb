@@ -26,6 +26,10 @@ module Organizations::Setting
     setting(:skip_function_and_manager_from_ldap_sync) != '0'
   end
 
+  def skip_reiteration_copy?
+    setting(:skip_reiteration_copy) != '0'
+  end
+
   private
 
     def setting name
