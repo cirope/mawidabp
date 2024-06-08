@@ -59,9 +59,7 @@ apt-get install -y --no-install-recommends \
 COPY --from=builder $APP_ROOT $APP_ROOT
 COPY --from=builder $GEM_HOME $GEM_HOME
 
-RUN rm -rf /var/lib/apt/lists/* && \
-   which cron && \
-   rm -rf /etc/cron.*/*
+RUN rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder $APP_ROOT/config/mawidabp_crontab /etc/cron.d/cronfile
 RUN chmod 0644 /etc/cron.d/cronfile

@@ -20,7 +20,7 @@ servers:
   cron:
     hosts:
       - <%= ENV['HOST'] || '127.0.0.1' %>
-    cmd: touch /var/log/cron.log && cron && tail -f /var/log/cron.log
+    cmd: tail -f
 
 registry:
   server: <%= ENV['REGISTRY_SERVER'] %>
