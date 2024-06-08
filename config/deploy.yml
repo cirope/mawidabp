@@ -30,6 +30,7 @@ registry:
 env:
   clear:
     SECRET_KEY_BASE: <%= ENV['SECRET_KEY_BASE'] %>
+    APP_HOST: <%= (ENV['HOST'] || 'localhost.lvh.me').sub(/\w+\./, '') %>
     DB_HOST: <%= ENV['HOST'] || '127.0.0.1' %>
     REDIS_HOST: <%= ENV['HOST'] || '127.0.0.1' %>
   secret:

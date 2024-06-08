@@ -19,7 +19,7 @@ EMAIL_PASSWORD: '<password>'
 EMAIL_SSL: 'true'
 
 # Automatic response with mgraph
-EMAIL_METHOD: 'mgraph'
+#EMAIL_METHOD: '<method>' # 'mgraph', 'pop3' or 'imap'
 EMAIL_USER_ID: '<user_id>'
 EMAIL_TENANT_ID: '<tenant_id>'
 EMAIL_CLIENT_ID: '<client_id>'
