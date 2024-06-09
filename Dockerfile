@@ -54,6 +54,7 @@ apt-get install -y --no-install-recommends \
  ca-certificates \
  bash \
  cron \
+ busybox \
  libpq-dev
 
 COPY --from=builder $APP_ROOT $APP_ROOT
@@ -61,9 +62,9 @@ COPY --from=builder $GEM_HOME $GEM_HOME
 
 RUN rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder $APP_ROOT/config/mawidabp_crontab /etc/cron.d/cronfile
-RUN chmod 0644 /etc/cron.d/cronfile
-RUN crontab /etc/cron.d/cronfile
+#COPY --from=builder $APP_ROOT/config/mawidabp_crontab /etc/cron.d/mawidabp
+#RUN chmod 0644 /etc/cron.d/mawidabp
+# RUN crontab /etc/crontab
 
 RUN chown -R $USER: $APP_ROOT
 

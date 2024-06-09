@@ -20,7 +20,7 @@ servers:
   cron:
     hosts:
       - <%= ENV['HOST'] || '127.0.0.1' %>
-    cmd: tail -f
+    cmd: sh -c 'bundle exec whenever --update-crontab && cron && busybox syslogd -n -O-'
 
 registry:
   server: <%= ENV['REGISTRY_SERVER'] %>
