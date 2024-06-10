@@ -172,8 +172,4 @@ module WeaknessesHelper
       [t("suggested_type_probabilities.#{key}"), value]
     end
   end
-
-  def skip_reiteration_copy
-    Current.organization.skip_reiteration_copy?
-  end
 end

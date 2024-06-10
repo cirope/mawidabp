@@ -663,7 +663,7 @@ es:
     enable_close_date_edition: 'Habilitar edición de fecha de cierre'
     finding_days_for_next_notifications: 'Cantidad de días en los que se debe enviar una solicitud de confirmación'
     uniqueness_username_validation: 'Validar que el nombre de usuario sea único para todas las organizaciones'
-    skip_reiteration_copy: 'Omitir copiar datos de observación anterior al reiterar'
+    skip_reiteration_copy: 'Omitir copiar los datos de la observación anterior al reiterar'
 
   tags:
     edit:

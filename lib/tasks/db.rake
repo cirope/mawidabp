@@ -231,7 +231,6 @@ private
     Setting.where(name: 'uniqueness_username_validation').empty?
   end
 
-
   def add_skip_reiteration_copy?
     Setting.where(name: 'skip_reiteration_copy').empty?
   end
