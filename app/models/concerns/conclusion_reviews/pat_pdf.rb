@@ -392,6 +392,10 @@ module ConclusionReviews::PatPdf
       pdf.text "#{i}. #{weakness.title}\n\n", align: :justify, style: :bold
       pdf.text weakness.description, align: :justify
 
+      if review.subsidiary
+        pdf.text "#{I18n.t('finding.weakness_template_previous')}: #{weakness.has_previous_review_label}"
+      end
+
       if weakness.image_model
         pdf.move_down PDF_FONT_SIZE
         pdf.image weakness.image_model.image.path, position: :center,

@@ -73,6 +73,16 @@ module Findings::Csv
     row.map { |item| item.to_s.gsub(LINE_BREAK, LINE_BREAK_REPLACEMENT) }
   end
 
+  def has_previous_review_label
+    if weakness_template_id
+      previous_weakness = Finding.list.weakness_by_template? review.previous, weakness_template
+
+      I18n.t "label.#{previous_weakness ? 'yes' : 'no'}"
+    else
+      I18n.t "label.no"
+    end
+  end
+
   private
 
     def commitment_date_required_level_text_csv
@@ -87,16 +97,6 @@ module Findings::Csv
       supervisors.map do |supervisor|
         supervisor.user.full_name
       end.join ' - '
-    end
-
-    def has_previous_review_label
-      if weakness_template_id
-        previous_weakness = Finding.list.weakness_by_template? review.previous, weakness_template
-
-        I18n.t "label.#{previous_weakness ? 'yes' : 'no'}"
-      else
-        I18n.t "label.no"
-      end
     end
 
     def issue_date_text
