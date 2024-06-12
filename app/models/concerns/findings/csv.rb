@@ -55,7 +55,7 @@ module Findings::Csv
       ((try(:weakness_template)&.reference).to_s if USE_SCOPE_CYCLE),
       ((try(:weakness_template)&.subreference).to_s if USE_SCOPE_CYCLE),
       (review.period if USE_SCOPE_CYCLE),
-      (check_if_weakness_is_repeated if USE_SCOPE_CYCLE),
+      (has_repeated_weakness_text if USE_SCOPE_CYCLE),
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
@@ -73,7 +73,7 @@ module Findings::Csv
     row.map { |item| item.to_s.gsub(LINE_BREAK, LINE_BREAK_REPLACEMENT) }
   end
 
-  def check_if_weakness_is_repeated
+  def has_repeated_weakness_text
     if weakness_template_id
       previous_weakness = Finding.list.weakness_by_template? review.previous, weakness_template
 

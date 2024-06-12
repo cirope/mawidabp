@@ -392,9 +392,9 @@ module ConclusionReviews::PatPdf
       pdf.text "#{i}. #{weakness.title}\n\n", align: :justify, style: :bold
       pdf.text weakness.description, align: :justify
 
-      if pat_show_repeated_weakness_item
+      if pat_show_repeated_weakness?
         pdf.move_down PDF_FONT_SIZE
-        pdf.text "#{I18n.t('finding.weakness_template_previous')}: #{weakness.check_if_weakness_is_repeated}"
+        pdf.text "#{I18n.t('finding.weakness_template_previous')}: #{weakness.has_repeated_weakness_text}"
       end
 
       if weakness.image_model
@@ -586,7 +586,7 @@ module ConclusionReviews::PatPdf
       use_finals ? :draft_review_code : :review_code
     end
 
-    def pat_show_repeated_weakness_item
+    def pat_show_repeated_weakness?
       review.subsidiary &&
         CODE_CHANGE_DATES['conclusion_review_check_repated_weakness'] &&
         created_at >= CODE_CHANGE_DATES['conclusion_review_check_repated_weakness'].to_date
