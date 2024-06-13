@@ -63,7 +63,7 @@ module ConclusionReviews::GalPdf
       pdf.move_down PDF_FONT_SIZE * 2
 
       if review.business_unit_type.reviews_for.present? &&
-        created_at >= CODE_CHANGE_DATES['reviews_for_and_detailed_review_custom_field'].to_date
+        created_at >= CONCLUSION_REVIEW_FEATURE_DATES['reviews_for_and_detailed_review_custom_field'].to_date
           pdf.text review.business_unit_type.reviews_for, size: items_font_size
       else
         pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
@@ -90,7 +90,7 @@ module ConclusionReviews::GalPdf
       project                    = review.plan_item.project
 
       full_exec_summary_intro = if exec_summary_intro.present? &&
-                                  created_at >= CODE_CHANGE_DATES['exec_summary_intro_custom_field'].to_date
+                                  created_at >= CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_intro_custom_field'].to_date
                                     exec_summary_intro % params
                                 elsif independent_identification
                                   I18n.t "conclusion_review.executive_summary.intro_alt"
@@ -435,14 +435,14 @@ module ConclusionReviews::GalPdf
 
     def put_detailed_review_on pdf, organization
       title  = if review.business_unit_type.detailed_review.present? &&
-                created_at >= CODE_CHANGE_DATES['reviews_for_and_detailed_review_custom_field'].to_date
+                created_at >= CONCLUSION_REVIEW_FEATURE_DATES['reviews_for_and_detailed_review_custom_field'].to_date
                    review.business_unit_type.detailed_review
                else
                  I18n.t 'conclusion_review.detailed_review.title'
                end
 
       legend = if review.business_unit_type.detailed_review_legend.present? &&
-                 created_at >= CODE_CHANGE_DATES['detailed_review_legend_custom_field'].to_date
+                 created_at >= CONCLUSION_REVIEW_FEATURE_DATES['detailed_review_legend_custom_field'].to_date
                    review.business_unit_type.detailed_review_legend
                else
                  I18n.t 'conclusion_review.detailed_review.legend'
@@ -1245,7 +1245,7 @@ module ConclusionReviews::GalPdf
 
     def use_gal_exec_summary_v2?
       draft_issue_date = review.conclusion_draft_review.issue_date
-      code_change_date = CODE_CHANGE_DATES['exec_summary_v2']&.to_date
+      code_change_date = CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_v2']&.to_date
 
       Current.conclusion_pdf_format == 'gal' && code_change_date && draft_issue_date >= code_change_date
     end
