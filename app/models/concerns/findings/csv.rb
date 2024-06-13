@@ -79,7 +79,7 @@ module Findings::Csv
 
       I18n.t "label.#{previous_weakness ? 'yes' : 'no'}"
     else
-      I18n.t "label.no"
+      I18n.t 'label.no'
     end
   end
 
