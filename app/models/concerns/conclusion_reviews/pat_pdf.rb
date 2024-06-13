@@ -588,7 +588,7 @@ module ConclusionReviews::PatPdf
 
     def pat_show_repeated_weakness?
       review.subsidiary &&
-        CODE_CHANGE_DATES['conclusion_review_check_repated_weakness'] &&
-        created_at >= CODE_CHANGE_DATES['conclusion_review_check_repated_weakness'].to_date
+        CONCLUSION_REVIEW_FEATURE_DATES['conclusion_review_check_repated_weakness'] &&
+        created_at >= CONCLUSION_REVIEW_FEATURE_DATES['conclusion_review_check_repated_weakness'].to_date
     end
 end
