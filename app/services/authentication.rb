@@ -104,11 +104,15 @@ class Authentication
                                           role_id:         default_role.id
         end
 
-        user.update! user:      attributes[:user],
-                     email:     attributes[:email],
-                     name:      attributes[:name],
-                     last_name: attributes[:last_name],
-                     enable:    true
+        user_data = {
+          user:      attributes[:user],
+          email:     attributes[:email],
+          name:      attributes[:name],
+          last_name: attributes[:last_name],
+          enable:    true
+        }.merge conditional_user_data(attributes)
+
+        user.update! user_data
       end
 
       user if user.organization_roles.where(organization_id: @current_organization.id).any?
@@ -120,16 +124,18 @@ class Authentication
       roles << @current_organization.saml_provider.default_role_for_users if roles.empty?
 
       if roles.compact.any?
-        User.create!(
+        user_data = {
+          user:                          attributes[:user],
+          email:                         attributes[:email],
           name:                          attributes[:name],
           last_name:                     attributes[:last_name],
-          email:                         attributes[:email],
-          user:                          attributes[:user],
           enable:                        true,
           organization_roles_attributes: roles.map do |r|
             { organization_id: r.organization_id, role_id: r.id }
           end
-        )
+        }.merge conditional_user_data(attributes)
+
+        User.create! user_data
       end
     end
 
@@ -141,7 +147,9 @@ class Authentication
         name:      Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.name_claim}"]).first,
         email:     Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.email_claim}"]).first,
         last_name: Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.lastname_claim}"]).first,
-        roles:     attributes["http://schemas.microsoft.com/ws/2008/06/identity/claims/#{provider.roles_claim}"]
+        roles:     attributes["http://schemas.microsoft.com/ws/2008/06/identity/claims/#{provider.roles_claim}"],
+        function:  Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.function_claim}"]).first,
+        manager:   Array(attributes["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/#{provider.manager_claim}"]).first
       }
     end
 
@@ -338,5 +346,22 @@ class Authentication
 
     def ldap_config_present?
       !is_user_recovery? && @current_organization.try(:ldap_config)
+    end
+
+    def conditional_user_data attributes
+      data = {}
+
+      unless @current_organization.skip_function_and_manager?
+        user_manager = if attributes[:manager]
+                          User.group_list.by_email(attributes[:manager]) ||
+                            User.list.by_user(attributes[:manager])
+                       end
+        data = {
+          manager_id: user_manager&.id,
+          function:   attributes[:function]
+        }
+      end
+
+      data
     end
 end
