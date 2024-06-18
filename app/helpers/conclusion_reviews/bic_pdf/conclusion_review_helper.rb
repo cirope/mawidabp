@@ -137,6 +137,14 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     end
   end
 
+  def format_and_sanitize input_text
+    formatted_text = input_text.gsub(/\n/, '<br>')
+    allowed_tags   = %w[b i em strong u br small sub sup mark p div span ul ol li]
+    sanitized_text = sanitize formatted_text, tags: allowed_tags
+
+    raw sanitized_text
+  end
+
   private
 
     def base_weaknesses conclusion_review

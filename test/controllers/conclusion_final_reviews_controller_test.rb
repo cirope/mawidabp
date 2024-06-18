@@ -432,10 +432,10 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       clear_enqueued_jobs
       clear_performed_jobs
 
-      assert_not_nil CODE_CHANGE_DATES['exec_summary_v2']
+      assert_not_nil CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_v2']
 
       conclusion_draft_review = conclusion_review.review.conclusion_draft_review
-      conclusion_draft_review.update issue_date: CODE_CHANGE_DATES['exec_summary_v2'].to_date + 1
+      conclusion_draft_review.update issue_date: CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_v2'].to_date + 1
 
       assert_enqueued_jobs 1 do
         patch :send_by_email, :params => {
