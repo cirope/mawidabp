@@ -163,6 +163,16 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
     assert_equal '', watermark_class(false)
   end
 
+  test 'get follow up date weakness have follow up date' do
+    weakness = findings :being_implemented_weakness
+
+    assert_equal I18n.l(weakness.follow_up_date), follow_up_date_weakness(weakness)
+  end
+
+  test 'get follow up date weakness dont have follow up date' do
+    assert_equal '-', follow_up_date_weakness(findings(:unconfirmed_for_notification_weakness))
+  end
+
   test 'get risk style when is implemented_audited' do
     weakness       = findings :being_implemented_weakness
     weakness.state = Finding::STATUS[:implemented_audited]

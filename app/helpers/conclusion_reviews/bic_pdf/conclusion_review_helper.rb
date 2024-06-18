@@ -123,6 +123,10 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     draft ? 'watermark-bic' : ''
   end
 
+  def follow_up_date_weakness weakness
+    weakness.follow_up_date ? I18n.l(weakness.follow_up_date) : '-'
+  end
+
   def risk_style weakness
     weakness.implemented_audited? ? 'text-green' : 'text-white'
   end
