@@ -163,9 +163,9 @@ NEW_EVOLUTION_OPTIONS = [
 
 EVOLUTION_IMAGES = {
   'Mantiene calificación desfavorable' => 'evolution_equal_danger.png',
-  'Mantiene calificación favorable'    => 'evolution_equal_success.png',
-  'Mejora calificación'                => 'evolution_up.png',
-  'Empeora calficación'                => 'evolution_down.png',
+  'Mantiene calificación favorable'    => 'evolution_equal_success_light.png',
+  'Mejora calificación'                => 'evolution_up_success_light.png',
+  'Empeora calficación'                => 'evolution_down_danger.png',
   'No aplica'                          => 'evolution_not_apply.png'
 }
 
