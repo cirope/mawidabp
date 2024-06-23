@@ -71,26 +71,36 @@ CONCLUSION_EVOLUTION = {
   'Satisfactorio' => [
     'Mantiene calificación favorable',
     'Mejora calificación',
+    'No aplica - Primera revisión',
+    'No aplica - Nuevo alcance',
     'No aplica'
   ],
   'Satisfactorio con salvedades' => [
     'Mantiene calificación favorable',
     'Mejora calificación',
     'Empeora calficación',
+    'No aplica - Primera revisión',
+    'No aplica - Nuevo alcance',
     'No aplica'
   ],
   'Necesita mejorar' => [
     'Mantiene calificación desfavorable',
     'Mejora calificación',
     'Empeora calficación',
+    'No aplica - Primera revisión',
+    'No aplica - Nuevo alcance',
     'No aplica'
   ],
   'No satisfactorio' => [
     'Mantiene calificación desfavorable',
     'Empeora calficación',
+    'No aplica - Primera revisión',
+    'No aplica - Nuevo alcance',
     'No aplica'
   ],
   'No aplica' => [
+    'No aplica - Primera revisión',
+    'No aplica - Nuevo alcance',
     'No aplica'
   ]
 }
