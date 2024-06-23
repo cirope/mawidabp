@@ -545,6 +545,26 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     end
   end
 
+  test 'cannot be destroyed after allowed business days' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
+
+    @conclusion_review.update(created_at: (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS + 1).business_days.ago)
+
+    assert_no_difference 'ConclusionFinalReview.count' do
+      @conclusion_review.destroy
+    end
+  end
+
+  test 'can be destroyed within allowed business days' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
+
+    @conclusion_review.update(created_at: (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS - 1).business_days.ago)
+
+    assert_difference 'ConclusionFinalReview.count', -1 do
+      @conclusion_review.destroy
+    end
+  end
+
   # Prueba la inclusión de observaciones anuladas en ejecución
   test 'revoked weaknesses' do
     review   = reviews :review_approved_with_conclusion
