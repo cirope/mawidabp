@@ -191,7 +191,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy conclusion final review' do
-    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
     login
 
