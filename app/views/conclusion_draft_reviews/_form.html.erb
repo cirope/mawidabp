@@ -109,7 +109,10 @@
               <%= f.input :observations, input_html: { rows: 4 } %>
             </div>
             <div class="col-md-6">
-              <%= f.input :applied_data_analytics, input_html: { rows: 4 } %>
+              <%= f.input :applied_data_analytics, input_html: {
+                rows: 4,
+                value: (f.object.new_record? ? I18n.t('conclusion_review.executive_summary.applied_data_analytics_default_value') : f.object.applied_data_analytics)
+              } %>
             </div>
           </div>
         <% elsif Current.conclusion_pdf_format == 'bic' %>
