@@ -43,7 +43,7 @@
               <% else %>
                 <%= f.input :conclusion, input_html: { rows: 3 } %>
               <% end %>
-              <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true %>
+              <%= f.input :evolution, collection: evolution_options(@conclusion_draft_review), prompt: true %>
               <%= f.input :evolution_justification, input_html: { rows: 1 } %>
             <% else %>
               <% if SHOW_CONCLUSION_AS_OPTIONS %>

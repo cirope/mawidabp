@@ -1218,13 +1218,23 @@ module ConclusionReviews::GalPdf
     end
 
     def get_evolution_image
-      CONCLUSION_EVOLUTION_IMAGES[[conclusion, evolution]] ||
-        EVOLUTION_IMAGES[evolution]
+      if use_new_conclusion_evolution_combination?
+        NEW_CONCLUSION_EVOLUTION_IMAGES[[conclusion, evolution]] ||
+          NEW_EVOLUTION_IMAGES[evolution]
+      else
+        CONCLUSION_EVOLUTION_IMAGES[[conclusion, evolution]] ||
+          EVOLUTION_IMAGES[evolution]
+      end
     end
 
     def get_evolution_footnote
-      CONCLUSION_EVOLUTION_FOOTNOTES[[conclusion, evolution]] ||
-        EVOLUTION_FOOTNOTES[evolution]
+      if use_new_conclusion_evolution_combination?
+        NEW_CONCLUSION_EVOLUTION_FOOTNOTES[[conclusion, evolution]] ||
+          NEW_EVOLUTION_FOOTNOTES[evolution]
+      else
+        CONCLUSION_EVOLUTION_FOOTNOTES[[conclusion, evolution]] ||
+          EVOLUTION_FOOTNOTES[evolution]
+      end
     end
 
     def show_review_best_practice_comments? organization
@@ -1254,5 +1264,12 @@ module ConclusionReviews::GalPdf
       code_change_date = CODE_CHANGE_DATES['exec_summary_v2']&.to_date
 
       Current.conclusion_pdf_format == 'gal' && code_change_date && draft_issue_date >= code_change_date
+    end
+
+    def use_new_conclusion_evolution_combination?
+      draft_issue_date = review.conclusion_draft_review.issue_date
+      code_change_date = CONCLUSION_REVIEW_FEATURE_DATES['new_conclusion_evolution_combination']&.to_date
+
+      code_change_date && draft_issue_date >= code_change_date
     end
 end
