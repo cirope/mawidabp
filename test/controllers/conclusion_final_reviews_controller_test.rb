@@ -196,10 +196,10 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     login
 
     conclusion_review_id = conclusion_reviews(:conclusion_past_final_review).id
-    conclusion_review    = ConclusionFinalReview.find(conclusion_review_id)
+    conclusion_review    = ConclusionFinalReview.find conclusion_review_id
     created_at           = (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS - 1).business_days.ago
 
-    conclusion_review.update_column(:created_at, created_at)
+    conclusion_review.update_column :created_at, created_at
 
     assert_difference 'ConclusionFinalReview.count', -1 do
       delete :destroy, params: { id: conclusion_review.id }
