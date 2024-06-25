@@ -13,6 +13,7 @@ apt-get install -y --no-install-recommends \
  nodejs         \
  postgresql-client \
  tzdata         \
+ libsass1 \
  libpq-dev
 
 RUN mkdir -p $APP_ROOT
@@ -30,6 +31,14 @@ COPY config/application.yml.example $APP_ROOT/config/application.yml
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 
 RUN bundle exec whenever > $APP_ROOT/config/mawidabp_crontab
+
+RUN bundle exec rake help:install
+RUN rm -rf config/jekyll/_site
+RUN rm -rf config/jekyll/assets/fonts
+RUN rm -rf config/jekyll/assets/stylesheets
+RUN bundle exec rake help:create_bootstrap_symlinks
+RUN bundle exec rake help:generate
+
 
 # -----------------------
 # ---- Release image ----
@@ -61,10 +70,6 @@ COPY --from=builder $APP_ROOT $APP_ROOT
 COPY --from=builder $GEM_HOME $GEM_HOME
 
 RUN rm -rf /var/lib/apt/lists/*
-
-#COPY --from=builder $APP_ROOT/config/mawidabp_crontab /etc/cron.d/mawidabp
-#RUN chmod 0644 /etc/cron.d/mawidabp
-# RUN crontab /etc/crontab
 
 RUN chown -R $USER: $APP_ROOT
 
