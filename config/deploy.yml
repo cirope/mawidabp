@@ -29,13 +29,22 @@ registry:
 
 env:
   clear:
-    SECRET_KEY_BASE: <%= ENV['SECRET_KEY_BASE'] %>
-    APP_HOST: <%= (ENV['HOST'] || 'localhost.lvh.me').sub(/\w+\./, '') %>
-    DB_HOST: <%= ENV['HOST'] || '127.0.0.1' %>
-    REDIS_HOST: <%= ENV['HOST'] || '127.0.0.1' %>
+    SECRET_KEY_BASE:           <%= ENV['SECRET_KEY_BASE'] %>
+    APP_HOST:                  <%= (ENV['HOST'] || 'localhost.lvh.me').sub(/\w+\./, '') %>
+    DB_HOST:                   <%= ENV['HOST'] || '127.0.0.1' %>
+    REDIS_HOST:                <%= ENV['HOST'] || '127.0.0.1' %>
+    SMTP_AUTHENTICATION:       'plain'
+    SMTP_ENABLE_STARTTLS_AUTO: 'true'
+    EMAIL_ADDRESS:             'soporte@mawidabp.com'
+
   secret:
     - POSTGRES_PASSWORD
     - RAILS_MASTER_KEY
+    - SMTP_ADDRESS
+    - SMTP_USER_NAME
+    - SMTP_PASSWORD
+    - SMTP_DOMAIN
+    - SMTP_PORT
 
 builder:
   remote:
