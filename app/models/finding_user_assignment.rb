@@ -82,7 +82,7 @@ class FindingUserAssignment < ApplicationRecord
       finding_organization_id    = record.finding.try(:organization_id)
       corporate_organization_ids = Current.corporate_ids
       audited_on_finding_org     = record.user&.can_act_as_audited_on?(finding_organization_id)
-      audited_on_corporate_orgs  = corporate_organization_ids.any? { |id| record.user&.can_act_as_audited_on?(id) }
+      audited_on_corporate_orgs  = corporate_organization_ids&.any? { |id| record.user&.can_act_as_audited_on?(id) }
 
       [audited_on_finding_org, audited_on_corporate_orgs]
     end
