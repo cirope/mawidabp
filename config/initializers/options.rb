@@ -60,7 +60,7 @@ CONCLUSION_EVOLUTION_IMAGES = {
   [
     'Satisfactorio con salvedades',
     'Empeora calficación'
-  ] => 'evolution_down_success.png',
+  ] => 'evolution_down_success_light.png',
   [
     'Necesita mejorar',
     'Mantiene calificación desfavorable'
