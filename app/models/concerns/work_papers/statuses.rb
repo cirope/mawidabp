@@ -18,15 +18,17 @@ module WorkPapers::Statuses
   end
 
   def next_status
-    if Current.user.auditor?
-      case status
-      when 'pending'  then 'finished'
-      when 'finished' then 'pending'
-      end
-    elsif Current.user.supervisor? || Current.user.manager?
-      case status
-      when 'finished' then 'revised'
-      when 'revised'  then 'pending'
+    if persisted?
+      if Current.user.auditor?
+        case status
+        when 'pending'  then 'finished'
+        when 'finished' then 'pending'
+        end
+      elsif Current.user.supervisor? || Current.user.manager?
+        case status
+        when 'finished' then 'revised'
+        when 'revised'  then 'pending'
+        end
       end
     end
   end

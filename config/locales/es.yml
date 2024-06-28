@@ -30,7 +30,7 @@
     control_objective_counts_title: "Análisis de objetivos de control"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
-    weaknesses_by_month_title: "Observaciones por riesgo"
+    weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     weaknesses_by_control_objective_title: "Resultado objetivos de control"
     weaknesses_by_user_title: "Observaciones por usuario"
@@ -76,7 +76,7 @@
       subtitle: "OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     weaknesses_by_business_unit:
       pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -209,9 +209,9 @@
       work_papers: "Papeles de trabajo"
       pdf_name: "seguimiento_de_hallazgo_%{code}.pdf"
     pdf:
-      filtered_by_html:
-        one: "El listado fue filtrado con la consulta <span class=\"font-weight-bold\">'%{query}'</span> en la columna <span class=\"font-weight-bold\">'%{columns}'</span>"
-        other: "El listado fue filtrado con la consulta <span class=\"font-weight-bold\">'%{query}'</span> en las columnas <span class=\"font-weight-bold\">'%{columns}'</span>"
+      filtered_by:
+        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
+        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
     user_assignment:
       audit_team: "Auditoría"
       others: "Usuarios"
@@ -228,7 +228,7 @@
       subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     process_control_stats:
       average_effectiveness: 'Calificación promedio ponderada'
       average_effectiveness_resume:
@@ -242,7 +242,7 @@
       subtitle: "SEGUIMIENTO OBSERVACIONES POR PROCESO DE NEGOCIO / INFORMES DEFINITIVOS"
       without_reviews_in_the_period: "Sin informes en el periodo seleccionado"
       without_weaknesses: "Sin observaciones"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
 
   follow_up_audited_committee_report:
@@ -348,10 +348,10 @@
       without_weaknesses: "Sin observaciones"
       origination_year: "Año de origen"
     weaknesses_by_control_objective_process:
-      pdf_name: "Reporte_de_proceso_por_objectivo_de_control_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "Reporte_de_proceso_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO OBSERVACIONES PROCESO POR OBJETIVO DE CONTROL / INFORMES DEFINITIVO"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_weaknesses: "Sin observaciones"
       origination_year: "Año de origen"
       control_objective_tags: "Etiquetas objetivos de control"
@@ -363,7 +363,7 @@
       subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     weaknesses_by_business_unit:
       pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -378,7 +378,7 @@
       subtitle: "SEGUIMIENTO MAPA DE CALOR OBSERVACIONES / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       process_owner_parents: "Superiores directos responsables"
       process_owner_intermediates: "Responsables intermedios"
       process_owner_roots: "Responsables máximos"
@@ -552,9 +552,6 @@
     errors:
       issue_date_after_review_issue_date: "su fecha de emisión (%{date}) es mayor a la fecha de emisión del informe"
 
-  wicked_pdf:
-    number_pages_html: 'Pagina <span class="page"></span> de <span class="topage"></span>'
-
   workflow:
     maximum_exceeded_by_human_resource: "%{user} ha excedido el máximo de hora para la tarea: %{item}"
 
@@ -624,3 +621,4 @@
   actioncontroller:
     findings: "Hallazgos"
     licenses: "Licencia"
+    blocked: "Licencia bloqueda"

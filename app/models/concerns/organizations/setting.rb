@@ -14,4 +14,27 @@ module Organizations::Setting
       )
     end
   end
+
+  def finding_by_current_user?
+    setting = settings.find_by name: 'finding_by_current_user'
+    result  = (setting ? setting.value : DEFAULT_SETTINGS[:finding_by_current_user][:value]) != '0'
+
+    result
+  end
+
+  def skip_function_and_manager?
+    setting(:skip_function_and_manager_from_ldap_sync) != '0'
+  end
+
+  def skip_reiteration_copy?
+    setting(:skip_reiteration_copy) != '0'
+  end
+
+  private
+
+    def setting name
+      setting = settings.find_by name: name
+
+      setting ? setting.value : DEFAULT_SETTINGS[name][:value]
+    end
 end

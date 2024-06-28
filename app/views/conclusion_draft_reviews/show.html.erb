@@ -1,134 +1,138 @@
-<h3>
-  <%= Review.model_name.human %>
-  <%= @conclusion_draft_review.review.identification %>
-</h3>
+<div class="card">
+  <div class="card-body">
+    <h3>
+      <%= Review.model_name.human %>
+      <%= @conclusion_draft_review.review.identification %>
+    </h3>
 
-<h4><%= @conclusion_draft_review.review.plan_item.project %></h4>
+    <h4><%= @conclusion_draft_review.review.plan_item.project %></h4>
 
-<h5 class="mt-3">
-  <%= @conclusion_draft_review.review.plan_item.business_unit.name %>
-</h5>
+    <h5 class="mt-3">
+      <%= @conclusion_draft_review.review.plan_item.business_unit.name %>
+    </h5>
 
-<p class="mb-1">
-  <strong><%= t('conclusion_review.issue_date_title') %></strong>:
-  <%= l(@conclusion_draft_review.issue_date, :format => :long) %>
-</p>
-<p class="mb-1">
-  <strong><%= @conclusion_draft_review.review.business_unit.business_unit_type.business_unit_label %></strong>:
-  <%= @conclusion_draft_review.review.business_unit.name %>
-</p>
+    <p class="mb-1">
+      <strong><%= t('conclusion_review.issue_date_title') %></strong>:
+      <%= l(@conclusion_draft_review.issue_date, :format => :long) %>
+    </p>
+    <p class="mb-1">
+      <strong><%= @conclusion_draft_review.review.business_unit.business_unit_type.business_unit_label %></strong>:
+      <%= @conclusion_draft_review.review.business_unit.name %>
+    </p>
 
-<% unless @conclusion_draft_review.review.business_unit.business_unit_type.project_label.blank? %>
-  <p class="mb-1">
-    <strong><%= @conclusion_draft_review.review.business_unit.business_unit_type.project_label %></strong>:
-    <%= @conclusion_draft_review.review.plan_item.project %>
-  </p>
-<% end %>
-<p class="mb-1">
-  <strong><%= t('conclusion_review.audit_period_title') %></strong>:
-  <%= t('conclusion_review.audit_period',
-      :start => I18n.l(@conclusion_draft_review.review.plan_item.start, :format => :long),
-      :end => I18n.l(@conclusion_draft_review.review.plan_item.end, :format => :long)) %>
-</p>
-
-<h5 class="mt-3"><%= t('conclusion_review.objectives_and_scopes') %></h5>
-<% grouped_control_objectives = @conclusion_draft_review.review.grouped_control_objective_items %>
-<% grouped_control_objectives.each do |process_control, cois| %>
-  <p class="mb-1">
-    <strong><%= ProcessControl.model_name.human %></strong>:
-    <%= process_control.name %>
-  </p>
-  <ul class="mb-1">
-    <% cois.sort.each do |coi| %>
-      <li><%= coi.to_s %></li>
+    <% unless @conclusion_draft_review.review.business_unit.business_unit_type.project_label.blank? %>
+      <p class="mb-1">
+        <strong><%= @conclusion_draft_review.review.business_unit.business_unit_type.project_label %></strong>:
+        <%= @conclusion_draft_review.review.plan_item.project %>
+      </p>
     <% end %>
-  </ul>
-<% end %>
+    <p class="mb-1">
+      <strong><%= t('conclusion_review.audit_period_title') %></strong>:
+      <%= t('conclusion_review.audit_period',
+          :start => I18n.l(@conclusion_draft_review.review.plan_item.start, :format => :long),
+          :end => I18n.l(@conclusion_draft_review.review.plan_item.end, :format => :long)) %>
+    </p>
 
-<% unless @conclusion_draft_review.applied_procedures.blank? %>
-  <h5 class="mt-3"><%= t('conclusion_review.applied_procedures') %></h5>
-  <%= simple_format @conclusion_draft_review.applied_procedures, class: 'mb-1' %>
-<% end %>
-
-<h5 class="mt-3"><%= t('conclusion_review.conclusion') %></h5>
-<% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) && Current.conclusion_pdf_format != 'pat' %>
-  <%= conclusion_review_score_text @conclusion_draft_review.review %>
-<% elsif %w(gal pat nbc).exclude? Current.conclusion_pdf_format %>
-  <%= conclusion_review_score_details_table @conclusion_draft_review.review %>
-  <p class="mb-1 small"><%= t('review.review_qualification_explanation') %></p>
-<% end %>
-
-<% unless @conclusion_draft_review.conclusion.blank? %>
-  <%= simple_format @conclusion_draft_review.conclusion, class: 'mb-1' %>
-<% end %>
-
-<% review_has_observations = grouped_control_objectives.any? do |_, cois|
-  cois.any? { |coi| coi.weaknesses.not_revoked.present? }
-end %>
-
-<% if review_has_observations %>
-  <h5 class="mt-3"><%= t('conclusion_review.weaknesses') %></h5>
-
-  <table class="table table-sm table-hover table-bordered">
+    <h5 class="mt-3"><%= t('conclusion_review.objectives_and_scopes') %></h5>
+    <% grouped_control_objectives = @conclusion_draft_review.review.grouped_control_objective_items %>
     <% grouped_control_objectives.each do |process_control, cois| %>
-      <%= conclusion_review_process_control_weakness_details_table(process_control, cois, false) %>
+      <p class="mb-1">
+        <strong><%= ProcessControl.model_name.human %></strong>:
+        <%= process_control.name %>
+      </p>
+      <ul class="mb-1">
+        <% cois.sort.each do |coi| %>
+          <li><%= coi.to_s %></li>
+        <% end %>
+      </ul>
     <% end %>
-  </table>
-<% end %>
 
-<% review_has_oportunities = grouped_control_objectives.any? do |_, cois|
-  cois.any? { |coi| !coi.oportunities.not_revoked.blank? }
-end %>
-
-<% if review_has_oportunities %>
-  <h5 class="mt-3"><%= t('conclusion_review.oportunities') %></h5>
-
-  <table class="table table-sm table-hover table-bordered">
-    <% grouped_control_objectives.each do |process_control, cois| %>
-      <%= conclusion_review_process_control_oportunity_details_table(process_control, cois, false) %>
+    <% unless @conclusion_draft_review.applied_procedures.blank? %>
+      <h5 class="mt-3"><%= t('conclusion_review.applied_procedures') %></h5>
+      <%= simple_format @conclusion_draft_review.applied_procedures, class: 'mb-1' %>
     <% end %>
-  </table>
-<% end %>
 
-<hr />
+    <h5 class="mt-3"><%= t('conclusion_review.conclusion') %></h5>
+    <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) && Current.conclusion_pdf_format != 'pat' %>
+      <%= conclusion_review_score_text @conclusion_draft_review.review %>
+    <% elsif %w(gal pat nbc).exclude? Current.conclusion_pdf_format %>
+      <%= conclusion_review_score_details_table @conclusion_draft_review.review %>
+      <p class="mb-1 small"><%= t('review.review_qualification_explanation') %></p>
+    <% end %>
 
-<div>
-  <% if @conclusion_draft_review.approved? && !@conclusion_draft_review.has_final_review? %>
-    <%= link_to t('conclusion_draft_review.new_conclusion_final_review'),
-      new_conclusion_final_review_path(:review => @conclusion_draft_review.review_id) %> |
-  <% end %>
-  <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
-  <%= link_to_index conclusion_draft_reviews_path %> |
-  <% if Current.conclusion_pdf_format == 'gal' %>
-    <%= render 'gal_downloads' %>
-  <% elsif Current.conclusion_pdf_format == 'bic' %>
-    <%= render 'bic_downloads' %>
-  <% elsif Current.conclusion_pdf_format == 'pat' %>
-    <%= render 'pat_downloads' %>
-  <% elsif Current.conclusion_pdf_format != 'default' %>
-    <%= render('shared/downloads',
-      right: true,
-      links: [
-        link_to(
-          t('label.download'), {
-            :action => :export_to_pdf, :id => @conclusion_draft_review, :_ts => Time.now.to_i
-          }, :class => 'dropdown-item'
-        ),
-        link_to(
-          t('conclusion_draft_review.download_work_papers'), {
-            :action => :download_work_papers, :id => @conclusion_draft_review, :_ts => Time.now.to_i
-          }, :class => 'dropdown-item'
-        )
-      ]
-    ) %>
-  <% elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
-    <%= render 'limited_downloads' %>
-  <% else %>
-    <%= render 'downloads' %>
-  <% end %>
-  <span>|</span>
-  <%= link_to t('conclusion_draft_review.create_bundle'), '#',
-    data: { toggle: 'modal', target: '#customize_report' } %>
+    <% unless @conclusion_draft_review.conclusion.blank? %>
+      <%= simple_format @conclusion_draft_review.conclusion, class: 'mb-1' %>
+    <% end %>
+
+    <% review_has_observations = grouped_control_objectives.any? do |_, cois|
+      cois.any? { |coi| coi.weaknesses.not_revoked.present? }
+    end %>
+
+    <% if review_has_observations %>
+      <h5 class="mt-3"><%= t('conclusion_review.weaknesses') %></h5>
+
+      <table class="table table-sm table-hover table-bordered">
+        <% grouped_control_objectives.each do |process_control, cois| %>
+          <%= conclusion_review_process_control_weakness_details_table(process_control, cois, false) %>
+        <% end %>
+      </table>
+    <% end %>
+
+    <% review_has_oportunities = grouped_control_objectives.any? do |_, cois|
+      cois.any? { |coi| !coi.oportunities.not_revoked.blank? }
+    end %>
+
+    <% if review_has_oportunities %>
+      <h5 class="mt-3"><%= t('conclusion_review.oportunities') %></h5>
+
+      <table class="table table-sm table-hover table-bordered">
+        <% grouped_control_objectives.each do |process_control, cois| %>
+          <%= conclusion_review_process_control_oportunity_details_table(process_control, cois, false) %>
+        <% end %>
+      </table>
+    <% end %>
+
+    <hr />
+
+    <div>
+      <% if @conclusion_draft_review.approved? && !@conclusion_draft_review.has_final_review? %>
+        <%= link_to t('conclusion_draft_review.new_conclusion_final_review'),
+          new_conclusion_final_review_path(:review => @conclusion_draft_review.review_id) %> |
+      <% end %>
+      <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
+      <%= link_to_index conclusion_draft_reviews_path %> |
+      <% if Current.conclusion_pdf_format == 'gal' %>
+        <%= render 'gal_downloads' %>
+      <% elsif Current.conclusion_pdf_format == 'bic' %>
+        <%= render 'bic_downloads' %>
+      <% elsif Current.conclusion_pdf_format == 'pat' %>
+        <%= render 'pat_downloads' %>
+      <% elsif Current.conclusion_pdf_format != 'default' %>
+        <%= render('shared/downloads',
+          right: true,
+          links: [
+            link_to(
+              t('label.download'), {
+                :action => :export_to_pdf, :id => @conclusion_draft_review, :_ts => Time.now.to_i
+              }, :class => 'dropdown-item'
+            ),
+            link_to(
+              t('conclusion_draft_review.download_work_papers'), {
+                :action => :download_work_papers, :id => @conclusion_draft_review, :_ts => Time.now.to_i
+              }, :class => 'dropdown-item'
+            )
+          ]
+        ) %>
+      <% elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
+        <%= render 'limited_downloads' %>
+      <% else %>
+        <%= render 'downloads' %>
+      <% end %>
+      <span>|</span>
+      <%= link_to t('conclusion_draft_review.create_bundle'), '#',
+        data: { bs_toggle: 'modal', bs_target: '#customize_report' } %>
+    </div>
+  </div>
 </div>
 
 <%= render 'bundle' %>

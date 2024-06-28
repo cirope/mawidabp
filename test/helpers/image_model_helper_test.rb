@@ -93,7 +93,7 @@ class ImageModelHelperTest < ActionView::TestCase
     expected << link_to(
       icon('fas', 'times-circle'), '#',
       title: t('label.delete'),
-      class: 'ml-2',
+      class: 'ms-2',
       data: {
         'dynamic-target' => "##{@image_model.class.name.underscore}_#{@image_model.object_id}",
         'dynamic-form-event' => 'hideItembutton',

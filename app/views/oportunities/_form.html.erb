@@ -3,306 +3,308 @@
 <% frozen = review.try(:is_frozen?) || @oportunity.repeated? %>
 <% show_history_changes = @oportunity.status_change_history.size > 1 %>
 
-<%= simple_form_for @oportunity do |f| %>
-  <% content_for :js_extra do %>
-    <%= raw("var lastWorkPaperCode = '#{next_oportunity_work_paper_code(@oportunity)}';") unless frozen %>
-  <% end %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @oportunity do |f| %>
+      <% content_for :js_extra do %>
+        <%= raw("var lastWorkPaperCode = '#{next_oportunity_work_paper_code(@oportunity)}';") unless frozen %>
+      <% end %>
 
-  <%= render 'shared/error_explanation', f: f %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
+      <div class="form-inputs">
         <div class="row">
           <div class="col-md-6">
-            <%= f.input :review, label: Review.model_name.human(count: 1),
-              input_html: { value: review.try(:identification), readonly: true } %>
+            <div class="row">
+              <div class="col-md-6">
+                <%= f.input :review, label: Review.model_name.human(count: 1),
+                  input_html: { value: review.try(:identification), readonly: true } %>
+              </div>
+              <div class="col-md-6">
+                <%= f.input :review_code, input_html: { maxlength: 255, readonly: true } %>
+              </div>
+            </div>
+            <%= f.input :title, input_html: { autofocus: true, maxlength: 255, readonly: readonly } %>
+            <div>
+              <label for="oportunity_control_objective_item">
+                <%= ControlObjective.model_name.human %>
+              </label>
+              <% if !readonly && !@oportunity.new_record? %>
+                <%= f.input :control_objective_item, label: false, input_html: {
+                  value: @oportunity.control_objective_item.try(:control_objective_text),
+                  title: t('label.search'),
+                  autocomplete: :off,
+                  data: {
+                    autocomplete_params: ({ review_id: @oportunity.review.id } if @oportunity.review),
+                    autocomplete_url: auto_complete_for_control_objective_item_oportunities_path,
+                    autocomplete_id_target: '#control_objective_item_id'
+                  }
+                } %>
+              <% else %>
+                <%= f.input :control_objective_name, label: false, input_html: {
+                  id: :oportunity_control_objective_item,
+                  value: "#{@oportunity.control_objective_item.control_objective_text}
+                  (#{@oportunity.control_objective_item.process_control.name})",
+                  readonly: true } %>
+              <% end %>
+              <%= f.input :control_objective_item_id, as: :hidden,
+                input_html: { id: 'control_objective_item_id' } %>
+            </div>
+            <%= finding_repeated_of_label f, readonly: readonly %>
+            <%= finding_repeated_of_if_field f, readonly: readonly %>
+            <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: 5 } %>
+            <% if USE_SCOPE_CYCLE %>
+              <%= f.input :brief, input_html: { readonly: readonly, rows: 1 } %>
+            <% end %>
+            <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
           </div>
           <div class="col-md-6">
-            <%= f.input :review_code, input_html: { maxlength: 255, readonly: true } %>
+            <%= f.label :state, raw(Oportunity.human_attribute_name(:state) + ' ' +
+                (show_history_changes ? finding_show_status_change_history(
+                  :finding_status_change_history) : ''))  %>
+            <%= finding_status_field f, disabled: readonly %>
+
+            <% if show_skip_work_paper_for @oportunity %>
+              <%= f.input :skip_work_paper, as: :boolean %>
+            <% end %>
+
+            <% if show_history_changes %>
+              <%= render 'findings/history_changes', finding: @oportunity %>
+            <% end %>
+
+            <%= f.input :origination_date, as: :date_picker, input_html: {
+              readonly: (readonly || @oportunity.repeated_of)
+            } %>
+            <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
+
+            <% if @oportunity.must_have_a_comment? %>
+              <%= f.simple_fields_for :comments,
+                @oportunity.comments.build(user: @auth_user) do |c_f| %>
+                <%= c_f.input :comment %>
+                <%= c_f.input :user_id, as: :hidden %>
+              <% end %>
+            <% end %>
+            <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
+            <%= f.input :follow_up_date, as: :date_picker, input_html: { disabled: @oportunity.tasks.any? || readonly } %>
           </div>
         </div>
-        <%= f.input :title, input_html: { autofocus: true, maxlength: 255, readonly: readonly } %>
-        <div>
-          <label for="oportunity_control_objective_item">
-            <%= ControlObjective.model_name.human %>
-          </label>
-          <% if !readonly && !@oportunity.new_record? %>
-            <%= f.input :control_objective_item, label: false, input_html: {
-              value: @oportunity.control_objective_item.try(:control_objective_text),
-              title: t('label.search'),
-              autocomplete: :off,
-              data: {
-                autocomplete_params: ({ review_id: @oportunity.review.id } if @oportunity.review),
-                autocomplete_url: auto_complete_for_control_objective_item_oportunities_path,
-                autocomplete_id_target: '#control_objective_item_id'
-              }
-            } %>
-          <% else %>
-            <%= f.input :control_objective_name, label: false, input_html: {
-              id: :oportunity_control_objective_item,
-              value: "#{@oportunity.control_objective_item.control_objective_text}
-              (#{@oportunity.control_objective_item.process_control.name})",
-              readonly: true } %>
-          <% end %>
-          <%= f.input :control_objective_item_id, as: :hidden,
-            input_html: { id: 'control_objective_item_id' } %>
+      </div>
+
+      <h5 class="mt-3">
+        <%= t 'finding.responsibles', count: @oportunity.users.size %>
+      </h5>
+
+      <div class="row">
+        <div class="col-md-6">
+          <h5 class="h6"><%= User.model_name.human %></h5>
         </div>
-        <%= finding_repeated_of_label f, readonly: readonly %>
-        <%= finding_repeated_of_if_field f, readonly: readonly %>
-        <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: 5 } %>
-        <% if USE_SCOPE_CYCLE %>
-          <%= f.input :brief, input_html: { readonly: readonly, rows: 1 } %>
-        <% end %>
-        <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
+        <div class="col-md-2">
+          <h5 class="h6"><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></h5>
+        </div>
+        <div class="col-md-2">
+          <h5 class="h6"><%= FindingUserAssignment.human_attribute_name 'process_owner' %></h5>
+        </div>
       </div>
-      <div class="col-md-6">
-        <%= f.label :state, raw(Oportunity.human_attribute_name(:state) + ' ' +
-            (show_history_changes ? finding_show_status_change_history(
-              :finding_status_change_history) : ''))  %>
-        <%= finding_status_field f, disabled: readonly %>
 
-        <% if show_skip_work_paper_for @oportunity %>
-          <%= f.input :skip_work_paper, as: :boolean %>
-        <% end %>
+      <div id="finding_user_assignments">
+        <% others, audit_team = @oportunity.finding_user_assignments.partition { |fua| fua.user.can_act_as_audited? } %>
 
-        <% if show_history_changes %>
-          <%= render 'findings/history_changes', finding: @oportunity %>
-        <% end %>
-
-        <%= f.input :origination_date, as: :date_picker, input_html: {
-          readonly: (readonly || @oportunity.repeated_of)
-        } %>
-        <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
-
-        <% if @oportunity.must_have_a_comment? %>
-          <%= f.simple_fields_for :comments,
-            @oportunity.comments.build(user: @auth_user) do |c_f| %>
-            <%= c_f.input :comment %>
-            <%= c_f.input :user_id, as: :hidden %>
+        <% if audit_team.present? %>
+          <h5 class="text-muted"><%= t 'finding.user_assignment.audit_team' %></h5>
+          <%= f.simple_fields_for :finding_user_assignments, audit_team do |fua_f| %>
+            <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
           <% end %>
         <% end %>
-        <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
-        <%= f.input :follow_up_date, as: :date_picker, input_html: { disabled: @oportunity.tasks.any? || readonly } %>
+
+        <% if others.present? %>
+          <h5 class="text-muted"><%= t 'finding.user_assignment.others' %></h5>
+          <%= f.simple_fields_for :finding_user_assignments, others do |fua_f| %>
+            <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
+          <% end %>
+        <% end %>
+
+        <%= link_to_add_fields(t('finding.add_user'), f,
+          :finding_user_assignments, 'findings/finding_user_assignment', {}, { readonly: readonly }
+        ) unless readonly %>
       </div>
-    </div>
-  </div>
 
-  <h5 class="mt-3">
-    <%= t 'finding.responsibles', count: @oportunity.users.size %>
-  </h5>
+      <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
+        <h5 class="mt-3">
+          <%= t 'finding.repeated_ancestors' %>
+        </h5>
 
-  <div class="row">
-    <div class="col-md-6">
-      <h5 class="h6"><%= User.model_name.human %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= FindingUserAssignment.human_attribute_name 'process_owner' %></h5>
-    </div>
-  </div>
-
-  <div id="finding_user_assignments">
-    <% others, audit_team = @oportunity.finding_user_assignments.partition { |fua| fua.user.can_act_as_audited? } %>
-
-    <% if audit_team.present? %>
-      <h5 class="text-muted"><%= t 'finding.user_assignment.audit_team' %></h5>
-      <%= f.simple_fields_for :finding_user_assignments, audit_team do |fua_f| %>
-        <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
+        <ul class="mb-1">
+          <% repeated_ancestors.each do |repeated_ancestor| %>
+            <li><%= repeated_ancestor %></li>
+          <% end %>
+        </ul>
       <% end %>
-    <% end %>
 
-    <% if others.present? %>
-      <h5 class="text-muted"><%= t 'finding.user_assignment.others' %></h5>
-      <%= f.simple_fields_for :finding_user_assignments, others do |fua_f| %>
-        <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
+      <% unless (repeated_children = @oportunity.repeated_children).blank? %>
+        <h5 class="mt-3">
+          <%= t('finding.repeated_children') %>
+        </h5>
+
+        <ul class="mb-1">
+          <% repeated_children.each do |repeated_child| %>
+            <li><%= repeated_child %></li>
+          <% end %>
+        </ul>
       <% end %>
-    <% end %>
 
-    <%= link_to_add_fields(t('finding.add_user'), f,
-      :finding_user_assignments, 'findings/finding_user_assignment', {}, { readonly: readonly }
-    ) unless readonly %>
-  </div>
+      <h5 class="mt-3">
+        <%= Tag.model_name.human count: 0 %>
+      </h5>
 
-  <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
-    <h5 class="mt-3">
-      <%= t 'finding.repeated_ancestors' %>
-    </h5>
+      <div class="row">
+        <div class="col-md-6">
+          <h5 class="h6"><%= Tag.human_attribute_name :name %></h5>
+        </div>
+      </div>
 
-    <ul class="mb-1">
-      <% repeated_ancestors.each do |repeated_ancestor| %>
-        <li><%= repeated_ancestor %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% unless (repeated_children = @oportunity.repeated_children).blank? %>
-    <h5 class="mt-3">
-      <%= t('finding.repeated_children') %>
-    </h5>
-
-    <ul class="mb-1">
-      <% repeated_children.each do |repeated_child| %>
-        <li><%= repeated_child %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <h5 class="mt-3">
-    <%= Tag.model_name.human count: 0 %>
-  </h5>
-
-  <div class="row">
-    <div class="col-md-6">
-      <h5 class="h6"><%= Tag.human_attribute_name :name %></h5>
-    </div>
-  </div>
-
-  <div id="taggings">
-    <%= f.simple_fields_for :taggings do |t_f| %>
-      <%= render 'findings/tagging', f: t_f, parent: f %>
-    <% end %>
-
-    <%= link_to_add_fields(t('finding.add_tagging'), f, :taggings, 'findings/tagging') unless frozen %>
-  </div>
-
-  <h5 class="mt-3">
-    <%= t('finding.finding_relations') %>
-  </h5>
-
-  <div class="row">
-    <div class="col-md-6">
-      <h5 class="h6"><%= FindingRelation.human_attribute_name 'related_finding_id' %></h5>
-    </div>
-    <div class="col-md-5">
-      <h5 class="h6"><%= FindingRelation.human_attribute_name 'description' %></h5>
-    </div>
-  </div>
-
-  <div id="finding_relations">
-    <%= f.simple_fields_for :finding_relations do |fr_f| %>
-      <%= render 'findings/finding_relation', f: fr_f %>
-    <% end %>
-
-    <%= link_to_add_fields(t('finding.add_finding_relation'), f,
-      :finding_relations, 'findings/finding_relation') unless frozen %>
-  </div>
-
-  <% unless @oportunity.inverse_finding_relations.blank? %>
-    <h5 class="mt-3">
-      <%= t('finding.inverse_finding_relations') %>
-    </h5>
-
-    <table class="table table-sm table-striped table-hover mt-3">
-      <thead>
-        <tr>
-          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
-          <th><%= FindingRelation.human_attribute_name :description %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @oportunity.inverse_finding_relations.each do |ifr| %>
-          <tr>
-            <td><%= ifr.finding %></td>
-            <td><%= ifr.description %></td>
-          </tr>
+      <div id="taggings">
+        <%= f.simple_fields_for :taggings do |t_f| %>
+          <%= render 'findings/tagging', f: t_f, parent: f %>
         <% end %>
-      </tbody>
-    </table>
-  <% end %>
 
-  <% unless oportunity_business_units.empty? %>
-    <h5 class="mt-3">
-      <%= BusinessUnit.model_name.human count: 0 %>
-    </h5>
+        <%= link_to_add_fields(t('finding.add_tagging'), f, :taggings, 'findings/tagging') unless frozen %>
+      </div>
 
-    <%= f.input :business_unit_ids,
-      label: '&nbsp;'.html_safe,
-      item_wrapper_class: 'custom-control custom-checkbox',
-      collection: oportunity_business_units,
-      as: :check_boxes,
-      input_html: { disabled: readonly },
-      wrapper_html: { class: 'mt-n4' }
-    %>
-  <% end %>
+      <h5 class="mt-3">
+        <%= t('finding.finding_relations') %>
+      </h5>
 
-  <% unless @oportunity.finding_answers.blank? %>
-    <h5 class="mt-3">
-      <%= t('finding.finding_answers') %>
-    </h5>
+      <div class="row">
+        <div class="col-md-6">
+          <h5 class="h6"><%= FindingRelation.human_attribute_name 'related_finding_id' %></h5>
+        </div>
+        <div class="col-md-5">
+          <h5 class="h6"><%= FindingRelation.human_attribute_name 'description' %></h5>
+        </div>
+      </div>
 
-    <table class="table table-sm table-striped table-hover mt-3">
-      <thead>
-        <tr>
-          <th><%= User.model_name.human %></th>
-          <th><%= FindingAnswer.human_attribute_name 'answer' %></th>
-          <th><%= FindingAnswer.human_attribute_name 'file_model' %></th>
-          <th><%= FindingAnswer.human_attribute_name 'created_at' %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @oportunity.finding_answers.each do |finding_answer| %>
-          <tr>
-            <td><%= finding_answer.user.full_name %></td>
-            <td><%= simple_format finding_answer.answer, class: 'mb-1' %></td>
-            <td>
-              <%= finding_answer.file_model.try(:file?) ?
-                link_to(t('label.download'), finding_answer.file_model.file.url) : '-' %>
-            </td>
-            <td>
-              <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
-              <% if finding_answer.commitment_date %>
-                <div class="my-1">
-                  <strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
-                  <span class="d-block">
-                    <%= l(finding_answer.commitment_date, format: :long) %>
-                  </span>
-                </div>
-              <% end %>
-            </td>
-          </tr>
+      <div id="finding_relations">
+        <%= f.simple_fields_for :finding_relations do |fr_f| %>
+          <%= render 'findings/finding_relation', f: fr_f %>
         <% end %>
-      </tbody>
-    </table>
-  <% end %>
 
-  <h5 class="mt-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
+        <%= link_to_add_fields(t('finding.add_finding_relation'), f,
+          :finding_relations, 'findings/finding_relation') unless frozen %>
+      </div>
 
-  <div class="row">
-    <div class="col-md-3">
-      <h5 class="h6"><%= WorkPaper.human_attribute_name 'name' %></h5>
-    </div>
-    <div class="col-md-1">
-      <h5 class="h6"><%= WorkPaper.human_attribute_name 'code' %></h5>
-    </div>
-    <div class="col-md-1">
-      <h5 class="h6"><%= WorkPaper.human_attribute_name 'number_of_pages' %></h5>
-    </div>
-    <div class="col-md-4">
-      <h5 class="h6"><%= WorkPaper.human_attribute_name 'description' %></h5>
-    </div>
-    <div class="col-md-2">
-      <h5 class="h6"><%= WorkPaper.human_attribute_name 'file_model' %></h5>
-    </div>
-  </div>
+      <% unless @oportunity.inverse_finding_relations.blank? %>
+        <h5 class="mt-3">
+          <%= t('finding.inverse_finding_relations') %>
+        </h5>
 
-  <div id="work_papers">
-    <%= f.simple_fields_for :work_papers do |wp_f| %>
-      <%= render 'work_papers/work_paper', f: wp_f, frozen: frozen %>
+        <table class="table table-sm table-striped table-hover mt-3">
+          <thead>
+            <tr>
+              <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+              <th><%= FindingRelation.human_attribute_name :description %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @oportunity.inverse_finding_relations.each do |ifr| %>
+              <tr>
+                <td><%= ifr.finding %></td>
+                <td><%= ifr.description %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+
+      <% unless oportunity_business_units.empty? %>
+        <h5 class="mt-3">
+          <%= BusinessUnit.model_name.human count: 0 %>
+        </h5>
+
+        <%= f.input :business_unit_ids,
+          label: '&nbsp;'.html_safe,
+          collection: oportunity_business_units,
+          as: :check_boxes,
+          input_html: { disabled: readonly }
+        %>
+      <% end %>
+
+      <% unless @oportunity.finding_answers.blank? %>
+        <h5 class="mt-3">
+          <%= t('finding.finding_answers') %>
+        </h5>
+
+        <table class="table table-sm table-striped table-hover mt-3">
+          <thead>
+            <tr>
+              <th><%= User.model_name.human %></th>
+              <th><%= FindingAnswer.human_attribute_name 'answer' %></th>
+              <th><%= FindingAnswer.human_attribute_name 'file_model' %></th>
+              <th><%= FindingAnswer.human_attribute_name 'created_at' %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @oportunity.finding_answers.each do |finding_answer| %>
+              <tr>
+                <td><%= finding_answer.user.full_name %></td>
+                <td><%= simple_format finding_answer.answer, class: 'mb-1' %></td>
+                <td>
+                  <%= finding_answer.file_model.try(:file?) ?
+                    link_to(t('label.download'), finding_answer.file_model.file.url) : '-' %>
+                </td>
+                <td>
+                  <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+                  <% if finding_answer.commitment_date %>
+                    <div class="my-1">
+                      <strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+                      <span class="d-block">
+                        <%= l(finding_answer.commitment_date, format: :long) %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+
+      <h5 class="mt-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
+
+      <div class="row">
+        <div class="col-md-3">
+          <h5 class="h6"><%= WorkPaper.human_attribute_name 'name' %></h5>
+        </div>
+        <div class="col-md-1">
+          <h5 class="h6"><%= WorkPaper.human_attribute_name 'code' %></h5>
+        </div>
+        <div class="col-md-1">
+          <h5 class="h6"><%= WorkPaper.human_attribute_name 'number_of_pages' %></h5>
+        </div>
+        <div class="col-md-4">
+          <h5 class="h6"><%= WorkPaper.human_attribute_name 'description' %></h5>
+        </div>
+        <div class="col-md-2">
+          <h5 class="h6"><%= WorkPaper.human_attribute_name 'file_model' %></h5>
+        </div>
+      </div>
+
+      <div id="work_papers">
+        <%= f.simple_fields_for :work_papers do |wp_f| %>
+          <%= render 'work_papers/work_paper', f: wp_f, frozen: frozen %>
+        <% end %>
+
+        <%= link_to_add_fields(
+          t('finding.add_work_paper'), f, :work_papers, 'work_papers/work_paper'
+        ) unless frozen %>
+      </div>
+
+      <hr />
+
+      <div class="form-actions">
+        <div class="float-end"><%= yield :form_actions %></div>
+        <%= f.input :lock_version, as: :hidden %>
+        <%= f.submit class: 'btn btn-primary', disabled: frozen %>
+      </div>
     <% end %>
-
-    <%= link_to_add_fields(
-      t('finding.add_work_paper'), f, :work_papers, 'work_papers/work_paper'
-    ) unless frozen %>
   </div>
-
-  <hr />
-
-  <div class="form-actions">
-    <div class="float-right"><%= yield :form_actions %></div>
-    <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary', disabled: frozen %>
-  </div>
-<% end %>
+</div>

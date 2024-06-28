@@ -19,6 +19,8 @@ class RiskAssessment < ApplicationRecord
   include RiskAssessments::Validations
   include Shareable
 
+  attr_accessor :cloned_from
+
   belongs_to :period, optional: true
   belongs_to :plan, optional: true
   belongs_to :risk_assessment_template, optional: true

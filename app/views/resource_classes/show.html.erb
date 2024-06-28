@@ -1,23 +1,25 @@
-<h2><%= @resource_class.name %></h2>
+<div class="card">
+  <div class="card-body">
+    <h2><%= @resource_class.name %></h2>
 
-<table class="table table-sm table-striped table-hover">
-  <thead>
-    <tr>
-      <th><%= Resource.human_attribute_name 'name' %></th>
-      <th><%= Resource.human_attribute_name 'description' %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @resource_class.resources.each do |resource| %>
-      <tr>
-        <td><%= resource.name %></td>
-        <td><%= resource.description %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <table class="table table-sm table-striped table-hover">
+      <thead>
+        <tr>
+          <th><%= Resource.human_attribute_name 'name' %></th>
+          <th><%= Resource.human_attribute_name 'description' %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @resource_class.resources.each do |resource| %>
+          <tr>
+            <td><%= resource.name %></td>
+            <td><%= resource.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<hr />
-
-<%= link_to_edit edit_resource_class_path(@resource_class) %> |
-<%= link_to_index resource_classes_path %>
+    <%= link_to_edit edit_resource_class_path(@resource_class) %> |
+    <%= link_to_index resource_classes_path %>
+  </div>
+</div>
