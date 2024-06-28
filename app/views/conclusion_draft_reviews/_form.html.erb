@@ -43,7 +43,7 @@
               <% else %>
                 <%= f.input :conclusion, input_html: { rows: 3 } %>
               <% end %>
-              <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true %>
+              <%= f.input :evolution, collection: evolution_options(@conclusion_draft_review), prompt: true %>
               <%= f.input :evolution_justification, input_html: { rows: 1 } %>
             <% else %>
               <% if SHOW_CONCLUSION_AS_OPTIONS %>
@@ -109,7 +109,10 @@
               <%= f.input :observations, input_html: { rows: 4 } %>
             </div>
             <div class="col-md-6">
-              <%= f.input :applied_data_analytics, input_html: { rows: 4 } %>
+              <%= f.input :applied_data_analytics, input_html: {
+                rows: 4,
+                value: applied_data_analytics_value(f.object)
+              } %>
             </div>
           </div>
         <% elsif Current.conclusion_pdf_format == 'bic' %>
