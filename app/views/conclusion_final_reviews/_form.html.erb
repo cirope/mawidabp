@@ -47,7 +47,7 @@
               <% else %>
                 <%= f.input :conclusion, input_html: { readonly: readonly, rows: 2 } %>
               <% end %>
-              <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true, input_html: { disabled: readonly } %>
+              <%= f.input :evolution, collection: evolution_options(@conclusion_final_review), prompt: true, input_html: { disabled: readonly } %>
               <%= f.input :evolution_justification, input_html: { rows: 1, readonly: readonly } %>
             <% else %>
               <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 2 } %>
