@@ -16,8 +16,10 @@ namespace :help do
         fonts_path       = './assets/fonts'
         stylesheets_path = './_sass/stylesheets'
 
+        FileUtils.rm_rf(fonts_path)
+
         File.symlink("#{bootstrap_path}/assets/fonts/bootstrap", fonts_path) unless File.exist?(fonts_path)
-        File.symlink("#{bootstrap_path}/assets/stylesheets", stylesheets_path) unless File.exist?(stylesheets_path)
+#        File.symlink("#{bootstrap_path}/assets/stylesheets", stylesheets_path) unless File.exist?(stylesheets_path)
       end
     end
   end
