@@ -199,7 +199,7 @@ module Reports::WeaknessesByMonth
     end
 
     def put_weaknesses_by_month_evolution_image_on pdf, conclusion_review
-      image_path      = get_image_path conclusion_review
+      image_path      = get_evolution_image_path conclusion_review
       text            = "#{ConclusionFinalReview.human_attribute_name('evolution')}: "
       image_x         = pdf.width_of(text, size: PDF_FONT_SIZE, style: :bold)
       required_height = pdf.height_of(text, style: :bold)
@@ -209,7 +209,7 @@ module Reports::WeaknessesByMonth
       pdf.image image_path, fit: [10, 10], at: [image_x, pdf.cursor + 1]
     end
 
-    def get_image_path conclusion_review
+    def get_evolution_image_path conclusion_review
       image_key        = [conclusion_review.conclusion, conclusion_review.evolution]
       draft_issue_date = conclusion_review.review.conclusion_draft_review.issue_date
       code_change_date = CONCLUSION_REVIEW_FEATURE_DATES['new_conclusion_evolution_combination']&.to_date
