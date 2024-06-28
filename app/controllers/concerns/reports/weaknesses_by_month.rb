@@ -202,8 +202,7 @@ module Reports::WeaknessesByMonth
       image_path      = get_image_path conclusion_review
       text            = "#{ConclusionFinalReview.human_attribute_name('evolution')}: "
       image_x         = pdf.width_of(text, size: PDF_FONT_SIZE, style: :bold)
-      text_style      = { size: PDF_FONT_SIZE, style: :bold }
-      required_height = pdf.height_of("Example Text", text_style)
+      required_height = pdf.height_of(text, style: :bold)
 
       pdf.start_new_page if pdf.cursor < required_height
 
