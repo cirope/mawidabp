@@ -44,9 +44,7 @@ module Users::Password
   end
 
   def reset_password organization, notify: true
-    if hash_changed && Time.zone.now < hash_changed + 10.minutes
-      false
-    else
+    if hash_changed.nil? || Time.zone.now > hash_changed + 10.minutes
       self.change_password_hash = SecureRandom.urlsafe_base64
       self.hash_changed         = Time.zone.now
 

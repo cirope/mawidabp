@@ -332,6 +332,26 @@ class UserTest < ActiveSupport::TestCase
     assert_not_nil @user.reload.change_password_hash
   end
 
+  test 'restrict reset password for 10 minutes' do
+    assert_nil @user.change_password_hash
+
+    assert_enqueued_emails 1 do
+      @user.reset_password organizations(:cirope)
+    end
+
+    assert_not_nil @user.reload.change_password_hash
+
+    @user.hash_changed = Time.zone.now
+
+    assert_nil @user.reset_password organizations(:cirope)
+
+    @user.hash_changed = Time.zone.now - 11.minutes
+
+     assert_enqueued_emails 1 do
+       @user.reset_password organizations(:cirope)
+     end
+  end
+
   test 'privileges' do
     user = users :administrator
     privileges = user.privileges organizations(:cirope)
