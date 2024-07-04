@@ -44,12 +44,16 @@ module Users::Password
   end
 
   def reset_password organization, notify: true
-    self.change_password_hash = SecureRandom.urlsafe_base64
-    self.hash_changed = Time.zone.now
+    if Time.zone.now > hash_changed + 10.minutes
+      self.change_password_hash = SecureRandom.urlsafe_base64
+      self.hash_changed         = Time.zone.now
 
-    save!
+      save!
 
-    NotifierMailer.restore_password(self, organization).deliver_later if notify
+      NotifierMailer.restore_password(self, organization).deliver_later if notify
+    else
+      false
+    end
   end
 
   def password_was_encrypted
