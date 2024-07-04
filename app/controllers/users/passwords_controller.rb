@@ -15,8 +15,11 @@ class Users::PasswordsController < ApplicationController
     @user = find_with_organization user_params[:email], :email
 
     if @user
-      @user.reset_password current_organization
-      redirect_to login_url, notice: t('.success')
+      if @user.reset_password current_organization
+        redirect_to login_url, notice: t('.success')
+      else
+        render status: :unprocessable_entity
+      end
     else
       redirect_to new_users_password_url, notice: t('.not_found')
     end
