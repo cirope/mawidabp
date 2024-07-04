@@ -341,8 +341,6 @@ class UserTest < ActiveSupport::TestCase
 
     assert_not_nil @user.reload.change_password_hash
 
-    @user.hash_changed = Time.zone.now
-
     assert_nil @user.reset_password organizations(:cirope)
 
     @user.hash_changed = Time.zone.now - 11.minutes
