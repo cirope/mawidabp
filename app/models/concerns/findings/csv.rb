@@ -27,7 +27,7 @@ module Findings::Csv
       full_state_text,
       try(:risk_text) || '',
       (respond_to?(:risk_text) ? priority_text : '' unless USE_SCOPE_CYCLE),
-      effect,
+      effect || '',
       auditeds_as_process_owner.join('; '),
       audited_users.join('; '),
       auditor_users.join('; '),
