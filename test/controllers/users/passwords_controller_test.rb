@@ -29,7 +29,7 @@ class Users::PasswordsControllerTest < ActionController::TestCase
   test 'restrict password reset' do
     user = users :blank_password
 
-    user.update hash_changed: Time.zone.now
+    user.update! hash_changed: Time.zone.now
 
     post :create, params: {
       user: { email: user.email }
