@@ -53,7 +53,7 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to login_url
-    assert_equal I18n.t('flash.actions.create.notice', resource_name: User.model_name.human),
+    assert_equal I18n.t('flash.users.create.notice', resource_name: User.model_name.human),
       flash.notice
   end
 
