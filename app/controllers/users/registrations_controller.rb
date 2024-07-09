@@ -17,7 +17,7 @@ class Users::RegistrationsController < ApplicationController
       @group.update! admin_hash: nil
       @user.send_welcome_email
 
-      redirect_to login_url, notice: t('flash.actions.create.notice', resource_name: User.model_name.human)
+      redirect_to login_url, notice: t('flash.users.create.notice', resource_name: User.model_name.human)
     else
       render 'new'
     end

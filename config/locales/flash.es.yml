@@ -2,27 +2,27 @@ es:
   flash:
     male: &male
       create:
-        notice: '%{resource_name} creado'
+        notice: '%{resource_name} creado correctamente.'
         alert:  ''
       update:
-        notice: '%{resource_name} actualizado'
+        notice: '%{resource_name} actualizado correctamente.'
         alert:  ''
-        stale: '%{resource_name} no pudo ser actualizado, intente nuevamente'
+        stale: '%{resource_name} no pudo ser actualizado. Por favor, intente nuevamente.'
       destroy:
-        notice: '%{resource_name} eliminado'
-        alert:  '%{resource_name} no pudo ser eliminado'
+        notice: '%{resource_name} eliminado correctamente.'
+        alert:  '%{resource_name} no pudo ser eliminado.'
 
     female: &female
       create:
-        notice: '%{resource_name} creada'
+        notice: '%{resource_name} creada correctamente.'
         alert:  ''
       update:
-        notice: '%{resource_name} actualizada'
+        notice: '%{resource_name} actualizada correctamente.'
         alert:  ''
-        stale: '%{resource_name} no pudo ser actualizada, intente nuevamente'
+        stale: '%{resource_name} no pudo ser actualizada. Por favor, intente nuevamente.'
       destroy:
-        notice: '%{resource_name} eliminada'
-        alert:  '%{resource_name} no pudo ser eliminada'
+        notice: '%{resource_name} eliminada correctamente.'
+        alert:  '%{resource_name} no pudo ser eliminada.'
 
     activity_groups:
       <<: *male
@@ -33,7 +33,7 @@ es:
     best_practices:
       <<: *female
       destroy:
-        alert: 'La buena práctica no puede ser eliminada, ya ha sido utilizada en informes'
+        alert: 'La buena práctica no pudo ser eliminada, ya ha sido utilizada en otros informes.'
 
     business_unit_kinds:
       <<: *male
@@ -55,13 +55,13 @@ es:
 
     findings:
       update:
-        notice: 'Respuesta a hallazgo actualizada correctamente.'
-        stale: 'La respuesta al hallazgo no fue actualizada, intente nuevamente.'
+        notice: 'Respuesta al hallazgo actualizada correctamente.'
+        stale: 'La respuesta al hallazgo no pudo ser actualizada. Por favor, intente nuevamente.'
 
     finding_answers:
       create:
         notice: 'Respuesta a hallazgo creada correctamente.'
-        alert: 'La respuesta no pudo agregarse, intente nuevamente.'
+        alert: 'La respuesta no pudo ser agregada. Por favor, intente nuevamente.'
 
     news:
       <<: *female
@@ -99,9 +99,9 @@ es:
     risk_assessments:
       <<: *male
       merge_to_plan:
-        notice: 'Plan actualizado correctamente'
+        notice: 'Plan actualizado correctamente.'
       sort_by_risk:
-        notice: 'Evaluación de riesgo ordenada correctamente'
+        notice: 'Evaluación de riesgo ordenada correctamente.'
 
     risk_registries:
       <<: *male
@@ -119,16 +119,16 @@ es:
       <<: *male
       profiles:
         update:
-          notice: 'Actualización de perfil correcta'
-          alert: 'No se pudo actualizar el perfil'
+          notice: 'Perfil actualizado correctamente.'
+          alert: 'El perfil no pudo ser actualizado.'
       reassignments:
         update:
-          notice: 'Reasignación de responsabilidades finalizada correctamente'
-          alert: 'La reasignación de responsabilidades no puede realizarse'
+          notice: 'Responsabilidades reasignadas correctamente.'
+          alert: 'Las responsabilidades no pudieron ser reasignadas.'
       releases:
         update:
-          notice: 'Liberación de responsabilidades finalizada correctamente'
-          alert: 'La liberación de responsabilidades no puede realizarse, deberá en algunos casos reasignarlas'
+          notice: 'Responsabilidades liberadas correctamente.'
+          alert: 'Las responsabilidades no pudieron ser liberadas. En algunos casos, es necesario reasignarlas.'
 
     weakness_templates:
       <<: *female
