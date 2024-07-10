@@ -145,6 +145,14 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     raw sanitized_text
   end
 
+  def bic_organization_image
+    organization_image_path = Current.organization&.image_model&.image&.path
+
+    if organization_image_path && File.exist?(organization_image_path)
+      image_to_base_64 organization_image_path
+    end
+  end
+
   private
 
     def base_weaknesses conclusion_review
