@@ -129,6 +129,46 @@ private
                            description: I18n.t('settings.finding_warning_expire_days')
       end
     end
+
+    if add_finding_by_current_user? #2024-01-26
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'finding_by_current_user',
+                           value:       DEFAULT_SETTINGS[:finding_by_current_user][:value],
+                           description: I18n.t('settings.finding_by_current_user')
+      end
+    end
+
+    if add_enable_close_date_edition? #2024-01-31
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'enable_close_date_edition',
+                           value:       DEFAULT_SETTINGS[:enable_close_date_edition][:value],
+                           description: I18n.t('settings.enable_close_date_edition')
+      end
+    end
+
+    if add_finding_days_for_next_notifications? #2024-04-16
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'finding_days_for_next_notifications',
+                           value:       DEFAULT_SETTINGS[:finding_days_for_next_notifications][:value],
+                           description: I18n.t('settings.finding_days_for_next_notifications')
+      end
+    end
+
+    if add_uniqueness_username_validation? #2024-05-24
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'uniqueness_username_validation',
+                           value:       DEFAULT_SETTINGS[:uniqueness_username_validation][:value],
+                           description: I18n.t('settings.uniqueness_username_validation')
+      end
+    end
+
+    if add_skip_reiteration_copy? #2024-06-08
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'skip_reiteration_copy',
+                           value:       DEFAULT_SETTINGS[:skip_reiteration_copy][:value],
+                           description: I18n.t('settings.skip_reiteration_copy')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -173,6 +213,26 @@ private
 
   def add_finding_warning_expire_days?
     Setting.where(name: 'finding_warning_expire_days').empty?
+  end
+
+  def add_finding_by_current_user?
+    Setting.where(name: 'finding_by_current_user').empty?
+  end
+
+  def add_enable_close_date_edition?
+    Setting.where(name: 'enable_close_date_edition').empty?
+  end
+
+  def add_finding_days_for_next_notifications?
+    Setting.where(name: 'finding_days_for_next_notifications').empty?
+  end
+
+  def add_uniqueness_username_validation?
+    Setting.where(name: 'uniqueness_username_validation').empty?
+  end
+
+  def add_skip_reiteration_copy?
+    Setting.where(name: 'skip_reiteration_copy').empty?
   end
 
   def add_new_answer_options

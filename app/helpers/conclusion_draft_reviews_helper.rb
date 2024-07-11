@@ -54,4 +54,10 @@ module ConclusionDraftReviewsHelper
 
     result.join "\r\n\r\n"
   end
+
+  def applied_data_analytics_value conclusion_draft_review
+    default_value = I18n.t 'conclusion_review.executive_summary.applied_data_analytics_default_value'
+
+    conclusion_draft_review.new_record? ? default_value : conclusion_draft_review.applied_data_analytics
+  end
 end

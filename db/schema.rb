@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_01_172300) do
+ActiveRecord::Schema.define(version: 2024_05_27_024428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -293,6 +293,8 @@ ActiveRecord::Schema.define(version: 2023_11_01_172300) do
     t.text "effectiveness_notes"
     t.text "additional_comments"
     t.boolean "exclude_regularized_findings", default: false, null: false
+    t.text "review_conclusion"
+    t.text "applied_data_analytics"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
@@ -1077,6 +1079,7 @@ ActiveRecord::Schema.define(version: 2023_11_01_172300) do
     t.bigint "risk_assessment_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "plan_item_id"
     t.index ["business_unit_id"], name: "index_risk_assessment_items_on_business_unit_id"
     t.index ["process_control_id"], name: "index_risk_assessment_items_on_process_control_id"
     t.index ["risk_assessment_id"], name: "index_risk_assessment_items_on_risk_assessment_id"
@@ -1229,6 +1232,8 @@ ActiveRecord::Schema.define(version: 2023_11_01_172300) do
     t.string "lastname_claim"
     t.string "email_claim"
     t.string "roles_claim"
+    t.string "function_claim"
+    t.string "manager_claim"
     t.index ["default_role_for_users_id"], name: "index_saml_providers_on_default_role_for_users_id"
     t.index ["organization_id"], name: "index_saml_providers_on_organization_id"
   end

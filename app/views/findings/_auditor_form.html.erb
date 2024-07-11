@@ -177,10 +177,12 @@
                   data: { bic_field_to_disabled_when_is_manual: true } %>
               <% end %>
 
-              <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
-                disabled: disabled_priority(@finding, false),
-                readonly: !!USE_SCOPE_CYCLE
-              %>
+              <% if %w(gal).exclude? Current.conclusion_pdf_format %>
+                <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
+                  disabled: disabled_priority(@finding, false),
+                  readonly: !!USE_SCOPE_CYCLE
+                %>
+              <% end %>
             <% end %>
             <%= f.label :state, raw(Finding.human_attribute_name(:state) + ' ' +
               (show_history_changes ? finding_show_status_change_history(:finding_status_change_history) : '')) %>
@@ -540,13 +542,13 @@
         <div class="col-md-3">
           <h5 class="h6"><%= WorkPaper.human_attribute_name 'name' %></h5>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2 col-xxl-1">
           <h5 class="h6"><%= WorkPaper.human_attribute_name 'code' %></h5>
         </div>
         <div class="col-md-1">
           <h5 class="h6"><%= WorkPaper.human_attribute_name 'number_of_pages' %></h5>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3 col-xxl-4">
           <h5 class="h6"><%= WorkPaper.human_attribute_name 'description' %></h5>
         </div>
         <div class="col-md-2">

@@ -49,6 +49,8 @@ es:
     strongly_agree: 'Muy de acuerdo'
     'yes': 'Sí'
     'no': 'No'
+    t: 'Sí' # remove after fixing tests that use this key
+    f: 'No' # remove after fixing tests that use this key
 
   benefits:
     index:
@@ -657,6 +659,11 @@ es:
     conclusion_review_receiver: 'Receptor/es del informe'
     temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.'
     finding_warning_expire_days: 'Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad'
+    finding_by_current_user: 'Filtrar observaciones por usuario actual'
+    enable_close_date_edition: 'Habilitar edición de fecha de cierre'
+    finding_days_for_next_notifications: 'Cantidad de días en los que se debe enviar una solicitud de confirmación'
+    uniqueness_username_validation: 'Validar que el nombre de usuario sea único para todas las organizaciones'
+    skip_reiteration_copy: 'Omitir copiar los datos de la observación anterior al reiterar'
 
   tags:
     edit:
@@ -707,6 +714,8 @@ es:
         other: 'Total de horas acumuladas por %{count} personas: %{amount}'
     new:
       title: 'Nueva actividad'
+    edit:
+      title: Editar actividad
     form:
       add_business_unit_type: 'Agregar unidad organizativa'
       activity: 'Actividad'

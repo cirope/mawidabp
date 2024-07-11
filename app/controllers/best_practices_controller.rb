@@ -7,7 +7,7 @@ class BestPracticesController < ApplicationController
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_best_practice, only: [:show, :edit, :update, :destroy]
-  before_action :set_title, except: :destroy
+  before_action :set_title, except: [:destroy, :auto_complete_for_tagging]
 
   # * GET /best_practices
   def index

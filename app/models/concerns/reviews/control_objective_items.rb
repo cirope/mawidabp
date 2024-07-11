@@ -18,8 +18,10 @@ module Reviews::ControlObjectiveItems
       if BestPractice.exists? best_practice_id
         best_practice = BestPractice.find best_practice_id
 
-        best_practice.control_objectives.each do |control_objective|
-          add_control_objective_item_from control_objective
+        best_practice.process_controls.each do |process_control|
+          process_control.control_objectives.each do |control_objective|
+            add_control_objective_item_from control_objective
+          end
         end
       end
     end
