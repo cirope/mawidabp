@@ -457,7 +457,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     def include_executive_summary?
       draft_issue_date = @conclusion_final_review.review.conclusion_draft_review.issue_date
-      code_change_date = CODE_CHANGE_DATES['exec_summary_v2']&.to_date
+      code_change_date = CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_v2']&.to_date
 
       Current.conclusion_pdf_format == 'gal' && code_change_date && draft_issue_date >= code_change_date
     end
