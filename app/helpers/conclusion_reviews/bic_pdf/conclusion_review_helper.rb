@@ -50,13 +50,23 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     end
   end
 
-  def bic_review_period conclusion_review
-    plan_item_start = I18n.l conclusion_review.plan_item.start, format: :minimal
-    plan_item_end   = I18n.l conclusion_review.plan_item.end, format: :minimal
+  def bic_internal_audit_review_dates conclusion_review
+    start_date = bic_internal_audit_review_start_date conclusion_review
+    end_date   = bic_internal_audit_review_end_date conclusion_review
 
-    I18n.t 'conclusion_review.bic.cover.review_period_description',
-           plan_item_start: plan_item_start,
-           plan_item_end: plan_item_end
+    I18n.t 'conclusion_review.bic.cover.internal_audit_review_dates',
+      start_date: start_date,
+      end_date: end_date
+  end
+
+  def bic_internal_audit_review_start_date conclusion_review
+    date = conclusion_review.review.opening_interview&.start_date
+
+    date ? I18n.l(date, format: :minimal) : '--/--/--'
+  end
+
+  def bic_internal_audit_review_end_date conclusion_review
+    I18n.l conclusion_review.issue_date, format: :minimal
   end
 
   def bic_weakness_responsible weakness
@@ -124,6 +134,22 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
   def conclusion_padding conclusion_review
     if !conclusion_review.reference.present?
       'pt-15'
+    end
+  end
+
+  def format_and_sanitize input_text
+    formatted_text = input_text.gsub(/\n/, '<br>')
+    allowed_tags   = %w[b i em strong u br small sub sup mark p div span ul ol li]
+    sanitized_text = sanitize formatted_text, tags: allowed_tags
+
+    raw sanitized_text
+  end
+
+  def bic_organization_image
+    organization_image_path = Current.organization&.image_model&.image&.path
+
+    if organization_image_path && File.exist?(organization_image_path)
+      image_to_base_64 organization_image_path
     end
   end
 

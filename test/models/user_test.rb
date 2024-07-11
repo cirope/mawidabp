@@ -173,8 +173,11 @@ class UserTest < ActiveSupport::TestCase
     assert @user.valid?
   end
 
-  test 'validates can duplicate user if ldap' do
-    Current.organization = organizations(:google)
+  test 'disable uniqueness username validation' do
+    o                    = organizations(:google)
+    Current.organization = o
+
+    o.settings.find_by(name: 'uniqueness_username_validation').update! value: '0'
 
     @user.user = users(:bare).user
 
@@ -327,6 +330,26 @@ class UserTest < ActiveSupport::TestCase
     end
 
     assert_not_nil @user.reload.change_password_hash
+  end
+
+  test 'restrict reset password for 10 minutes' do
+    assert_nil @user.change_password_hash
+
+    assert_enqueued_emails 1 do
+      @user.reset_password organizations(:cirope)
+    end
+
+    assert @user.reload.change_password_hash
+
+    assert_no_enqueued_emails do
+      refute @user.reset_password organizations(:cirope)
+    end
+
+    @user.hash_changed = Time.zone.now - 11.minutes
+
+     assert_enqueued_emails 1 do
+       @user.reset_password organizations(:cirope)
+     end
   end
 
   test 'privileges' do

@@ -17,8 +17,8 @@ en:
         final_with_weaknesses: 'Attached to this document, we distribute the final version of the referenced audit report, which includes responses from each area.'
         final_without_weaknesses: 'Attached to this document, we distribute the Final version of the referenced audit report, which does not contain relevant issues.'
         recipients: 'Recipients'
-        review_period_title: "Internal Audit Review:"
-        review_period_description: "Started: %{plan_item_start} - Completed: %{plan_item_end}"
+        internal_audit_review: "Internal Audit Review:"
+        internal_audit_review_dates: "Started: %{start_date} - Completed: %{end_date}"
       scope: 'SCOPE'
       audit_comments: 'AUDIT COMMENTS'
       weaknesses:
@@ -26,6 +26,7 @@ en:
         responsible: 'Responsible:'
         audit_recommendations: 'Recommendation:'
         follow_up_date: 'Implementation:'
+        audit_comments: 'Audit comments:'
         repeated: 'REPEATED ISSUE'
       number_pages_html: 'Page <span class="page"></span> of <span class="topage"></span>'
     cro:

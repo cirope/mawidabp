@@ -183,7 +183,7 @@ module Reports::FixedWeaknessesReport
       end
     end
 
-    add_pdf_filters(pdf, @controllers, @filters) if @filters.present?
+    add_pdf_filters(pdf, @controller, @filters) if @filters.present?
 
     save_pdf(pdf, @controller, @from_date, @to_date, 'fixed_weaknesses_report')
 
