@@ -218,7 +218,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   end
 
   test 'create 2 times and keep draft review code' do
-    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
     Current.user           = users :supervisor
     review                 = reviews :review_approved_with_conclusion
@@ -283,7 +283,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   end
 
   test 'create 2 times and keep draft review code with revoked findings' do
-    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
     Current.user = users :supervisor
     review       = reviews :review_approved_with_conclusion
@@ -481,7 +481,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de informes finales
   test 'destroy' do
-    skip if ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+    skip if ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
     assert_no_difference 'ConclusionFinalReview.count' do
       @conclusion_review.destroy
@@ -489,7 +489,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   end
 
   test 'can not be destroyed' do
-    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
     another_weakness = findings :unconfirmed_for_notification_weakness
     weakness         = @conclusion_review.review.weaknesses.first
@@ -504,13 +504,13 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   end
 
   test 'can be destroyed' do
-    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
     assert @conclusion_review.can_be_destroyed?
   end
 
   test 'not destroy when has repeated in weakness' do
-    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
     another_weakness = findings :unconfirmed_for_notification_weakness
     weakness         = @conclusion_review.review.weaknesses.first
@@ -531,7 +531,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   end
 
   test 'allow destruction' do
-    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
     final_findings_count =
       @conclusion_review.review.final_weaknesses.count + @conclusion_review.review.final_oportunities.count
@@ -542,6 +542,26 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert_difference 'Finding.finals(true).count', -final_findings_count do
         @conclusion_review.destroy
       end
+    end
+  end
+
+  test 'cannot be destroyed after allowed business days' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
+
+    @conclusion_review.update created_at: (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS + 1).business_days.ago
+
+    assert_no_difference 'ConclusionFinalReview.count' do
+      @conclusion_review.destroy
+    end
+  end
+
+  test 'can be destroyed within allowed business days' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
+
+    @conclusion_review.update created_at: (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS - 1).business_days.ago
+
+    assert_difference 'ConclusionFinalReview.count', -1 do
+      @conclusion_review.destroy
     end
   end
 

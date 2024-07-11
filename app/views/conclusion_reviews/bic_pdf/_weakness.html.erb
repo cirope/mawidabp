@@ -1,10 +1,15 @@
 <div class="row">
   <div class="col-3 text-bg-primary ps-4 pt-15">
     <div style="min-height: 400px;">
-      <p class="text-start fw-bold fs-bice-2"><%= I18n.t 'conclusion_review.bic.weaknesses.plan', index: short_bic_weakness_review_code(weakness.review_code) %></p>
+      <p class="text-start fw-bold fs-bice-2">
+        <%= I18n.t 'conclusion_review.bic.weaknesses.plan', index: short_bic_weakness_review_code(weakness.review_code) %>
+      </p>
       <p class="text-start fw-bold fs-bice-2 pt-4"><%= weakness.title %></p>
     </div>
-    <p class="text-start fs-bice-3"><span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span> <%= bic_weakness_responsible weakness %></p>
+    <p class="text-start fs-bice-3">
+      <span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.responsible' %></span>
+      <%= bic_weakness_responsible weakness %>
+    </p>
     <div class="row fw-bold">
       <div class="col-5 text-center vertical-align-center pe-0">
         <p class="bg-black-border-white w-100 mb-0 p-1 fs-bice-3"><%= (Weakness.human_attribute_name :risk).upcase %></p>
@@ -39,13 +44,36 @@
     <div class="row">
       <div class="col-10 offset-1">
         <p class="fw-bold fs-bice-3"><%= Weakness.model_name.human count: 1 %></p>
-        <%= simple_format weakness.description, class: 'pt-4 text-justify fs-bice-3' %>
-        <p class="pt-4 text-justify fs-bice-3"><span class="fw-bold"><%= Weakness.human_attribute_name :effect %>:</span> <%= weakness.effect %></p>
-        <p class="pt-4 text-justify fs-bice-3"><span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.audit_recommendations' %></span> <%= weakness.audit_recommendations %></p>
-        <p class="pt-4 fs-bice-3"><span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.follow_up_date' %></span> <%= follow_up_date_weakness weakness %></p>
-        <p class="pt-4 text-justify fs-bice-3"><span class="fw-bold"><%= Answer.model_name.human count: 1 %>:</span> <%= weakness.answer %></p>
+        <p class="pt-4 text-justify fs-bice-3">
+          <%= format_and_sanitize weakness.description %>
+        </p>
+        <p class="pt-4 text-justify fs-bice-3">
+          <span class="fw-bold"><%= Weakness.human_attribute_name :effect %>:</span>
+          <%= format_and_sanitize weakness.effect %>
+        </p>
+        <p class="pt-4 text-justify fs-bice-3">
+          <span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.audit_recommendations' %></span>
+          <%= format_and_sanitize weakness.audit_recommendations %>
+        </p>
+        <p class="pt-4 fs-bice-3">
+          <span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.follow_up_date' %></span>
+          <%= follow_up_date_weakness weakness %>
+        </p>
+        <p class="pt-4 text-justify fs-bice-3">
+          <span class="fw-bold"><%= Answer.model_name.human count: 1 %>:</span>
+          <%= format_and_sanitize weakness.answer %>
+        </p>
+        <% if weakness.audit_comments.present? %>
+          <p class="pt-4 text-justify fs-bice-3">
+            <span class="fw-bold"><%= I18n.t 'conclusion_review.bic.weaknesses.audit_comments' %></span>
+            <%= format_and_sanitize weakness.audit_comments %>
+          </p>
+        <% end %>
         <% if weakness.repeated_of.present? %>
-          <p class="pt-4 fs-bice-3"><span class="fw-bold"><%= Finding.human_attribute_name :repeated_of_id %>:</span><span class="text-aqua"> <%= weakness.repeated_of %></span></p>
+          <p class="pt-4 fs-bice-3">
+            <span class="fw-bold"><%= Finding.human_attribute_name :repeated_of_id %>:</span>
+            <span class="text-aqua"> <%= weakness.repeated_of %></span>
+          </p>
         <% end %>
       </div>
     </div>

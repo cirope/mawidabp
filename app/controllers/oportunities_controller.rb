@@ -166,7 +166,10 @@
         ],
         taggings_attributes: [
           :id, :tag_id, :_destroy
-        ]
+        ],
+        comments_attributes: [
+          :user_id, :comment
+        ],
       )
     end
 
