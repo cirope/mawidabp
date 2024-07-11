@@ -1,9 +1,9 @@
 <div class="header-background-image">
   <div class="row ps-5 pb-4">
     <div class="col-6 offset-3 ps-5">
-      <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'logo_1.png')),
-                    height: 90,
-                    class: 'mt-1 ms-4' %>
+      <% if bic_organization_image %>
+        <%= image_tag bic_organization_image, height: 90, class: 'mt-1 ms-4' %>
+      <% end %>
     </div>
     <div class="col-3 text-end">
       <%= image_tag image_to_base_64(File.join(Rails.root, 'app', 'assets', 'images', 'bic_pdf', 'iram_icono.jpg')),

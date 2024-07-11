@@ -14,4 +14,19 @@ module ConclusionReviewsHelper
       conclusion_review.review.score_alt_text
     end
   end
+
+  def conclusion_options
+    CONCLUSION_OPTIONS.map { |option| [option, option] }
+  end
+
+  def evolution_options conclusion_review
+    draft_issue_date = conclusion_review&.review&.conclusion_draft_review&.issue_date
+    code_change_date = CONCLUSION_REVIEW_FEATURE_DATES['new_conclusion_evolution_combination']&.to_date
+
+    if draft_issue_date && code_change_date && draft_issue_date < code_change_date
+      EVOLUTION_OPTIONS.map { |option| [option, option] }
+    else
+      NEW_EVOLUTION_OPTIONS.map { |option| [option, option] }
+    end
+  end
 end

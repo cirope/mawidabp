@@ -663,6 +663,8 @@ en:
     finding_by_current_user: 'Filter findings by current user'
     enable_close_date_edition: 'Enable close date edition'
     finding_days_for_next_notifications: 'Number of days in which a confirmation request must be sent'
+    uniqueness_username_validation: 'Validates username uniqueness across all organizations'
+    skip_reiteration_copy: 'Do not copy previous weakness data on reiteration'
 
   tags:
     edit:

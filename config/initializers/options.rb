@@ -60,33 +60,86 @@ CONCLUSION_EVOLUTION_IMAGES = {
   [
     'Satisfactorio con salvedades',
     'Empeora calficación'
-  ] => 'evolution_down_success.png'
+  ] => 'evolution_down_success_light.png',
+  [
+    'Necesita mejorar',
+    'Mantiene calificación desfavorable'
+  ] => 'evolution_equal_warning.png'
+}
+
+NEW_CONCLUSION_EVOLUTION_IMAGES = {
+  [
+    'Satisfactorio',
+    'Mejora calificación'
+  ] => 'evolution_up_success_light.png',
+  [
+    'Satisfactorio con salvedades',
+    'Mantiene calificación desfavorable'
+  ] => 'evolution_equal_success_dark.png',
+  [
+    'Satisfactorio con salvedades',
+    'Mejora calificación'
+  ] => 'evolution_up_success_dark.png',
+  [
+    'Satisfactorio con salvedades',
+    'Empeora calficación'
+  ] => 'evolution_down_success_dark.png',
+  [
+    'Necesita mejorar',
+    'Mantiene calificación desfavorable'
+  ] => 'evolution_equal_warning.png',
+  [
+    'Necesita mejorar',
+    'Mejora calificación'
+  ] => 'evolution_up_warning.png',
+  [
+    'Necesita mejorar',
+    'Empeora calficación'
+  ] => 'evolution_down_warning.png',
+  [
+    'No satisfactorio',
+    'Mantiene calificación desfavorable'
+  ] => 'evolution_equal_danger.png',
+  [
+    'No satisfactorio',
+    'Empeora calficación'
+  ] => 'evolution_down_danger.png'
 }
 
 CONCLUSION_EVOLUTION = {
   'Satisfactorio' => [
     'Mantiene calificación favorable',
     'Mejora calificación',
+    'No aplica - Primera revisión',
+    'No aplica - Nuevo alcance',
     'No aplica'
   ],
   'Satisfactorio con salvedades' => [
     'Mantiene calificación favorable',
     'Mejora calificación',
     'Empeora calficación',
+    'No aplica - Primera revisión',
+    'No aplica - Nuevo alcance',
     'No aplica'
   ],
   'Necesita mejorar' => [
     'Mantiene calificación desfavorable',
     'Mejora calificación',
     'Empeora calficación',
+    'No aplica - Primera revisión',
+    'No aplica - Nuevo alcance',
     'No aplica'
   ],
   'No satisfactorio' => [
     'Mantiene calificación desfavorable',
     'Empeora calficación',
+    'No aplica - Primera revisión',
+    'No aplica - Nuevo alcance',
     'No aplica'
   ],
   'No aplica' => [
+    'No aplica - Primera revisión',
+    'No aplica - Nuevo alcance',
     'No aplica'
   ]
 }
@@ -99,12 +152,27 @@ EVOLUTION_OPTIONS = [
   'No aplica'
 ]
 
+NEW_EVOLUTION_OPTIONS = [
+  'Mantiene calificación desfavorable',
+  'Mantiene calificación favorable',
+  'Mejora calificación',
+  'Empeora calficación',
+  'No aplica - Primera revisión',
+  'No aplica - Nuevo alcance'
+]
+
 EVOLUTION_IMAGES = {
   'Mantiene calificación desfavorable' => 'evolution_equal_danger.png',
-  'Mantiene calificación favorable'    => 'evolution_equal_success.png',
-  'Mejora calificación'                => 'evolution_up.png',
-  'Empeora calficación'                => 'evolution_down.png',
+  'Mantiene calificación favorable'    => 'evolution_equal_success_light.png',
+  'Mejora calificación'                => 'evolution_up_success_light.png',
+  'Empeora calficación'                => 'evolution_down_danger.png',
   'No aplica'                          => 'evolution_not_apply.png'
+}
+
+NEW_EVOLUTION_IMAGES = {
+  'Mantiene calificación favorable' => 'evolution_equal_success_light.png',
+  'No aplica - Primera revisión'    => 'evolution_not_apply.png',
+  'No aplica - Nuevo alcance'       => 'evolution_not_apply.png'
 }
 
 EVOLUTION_SUPERSCRIPT = 'evolution_footnote.png'
@@ -113,15 +181,61 @@ CONCLUSION_EVOLUTION_FOOTNOTES = {
   [
     'Satisfactorio con salvedades',
     'Empeora calficación'
-  ] => '¹Desmejora (dentro de Satisfactorio) respecto a la auditoría anterior'
+  ] => '¹Se ha evidenciado algunos nuevos expuestos respecto de la revisión anterior, sin embargo, los mismos, aun así, permiten mantener una calificación favorable.'
 }
 
+NEW_CONCLUSION_EVOLUTION_FOOTNOTES = {
+  [
+    'Satisfactorio',
+    'Mejora calificación'
+  ] => '¹Se ha evidenciado la normalización de expuestos preexistentes, lo que ha impactado positivamente en la presente calificación respecto de nuestra revisión anterior.',
+  [
+    'Satisfactorio con salvedades',
+    'Mantiene calificación desfavorable'
+  ] => '¹Se ha evidenciado un ambiente de control interno que presenta oportunidades de mejora al igual que en nuestra revisión anterior.',
+  [
+    'Satisfactorio con salvedades',
+    'Mejora calificación'
+  ] => '¹Se ha evidenciado la normalización de expuestos preexistentes, lo que ha impactado positivamente en la presente calificación respecto de nuestra revisión anterior.',
+  [
+    'Satisfactorio con salvedades',
+    'Empeora calficación'
+  ] => '¹Se ha evidenciado, respecto de nuestra revisión anterior,  nuevos expuestos que debilitan el ambiente de control interno del proceso auditado.',
+  [
+    'Necesita mejorar',
+    'Mantiene calificación desfavorable'
+  ] => '¹Se ha evidenciado un ambiente de control interno que presenta oportunidades de mejora al igual que en nuestra revisión anterior.',
+  [
+    'Necesita mejorar',
+    'Mejora calificación'
+  ] => '¹Se ha evidenciado la normalización de expuestos preexistentes, lo que ha impactado positivamente en la presente calificación respecto de nuestra revisión anterior.',
+  [
+    'Necesita mejorar',
+    'Empeora calficación'
+  ] => '¹Se ha evidenciado, respecto de nuestra revisión anterior,  nuevos expuestos que debilitan el ambiente de control interno del proceso auditado.',
+  [
+    'No satisfactorio',
+    'Mantiene calificación desfavorable'
+  ] => '¹Se ha evidenciado un ambiente de control interno que presenta oportunidades de mejora al igual que en nuestra revisión anterior.',
+  [
+    'No satisfactorio',
+    'Empeora calficación'
+  ] => '¹Se ha evidenciado, respecto de nuestra revisión anterior,  nuevos expuestos que debilitan el ambiente de control interno del proceso auditado.',
+}
+
+
 EVOLUTION_FOOTNOTES = {
-  'Mantiene calificación desfavorable' => '¹Mantiene calificación desfavorable respecto a la auditoría anterior',
-  'Mantiene calificación favorable'    => '¹Mantiene calificación favorable respecto a la auditoría anterior',
-  'Mejora calificación'                => '¹Mejora calificación respecto a la auditoría anterior',
-  'Empeora calficación'                => '¹Desmejora calificación respecto a la auditoría anterior',
-  'No aplica'                          => '¹No puede compararse con un trabajo anterior'
+  'Mantiene calificación desfavorable' => '¹Se ha evidenciado un ambiente de control interno que presenta oportunidades de mejora al igual que en nuestra revisión anterior.',
+  'Mantiene calificación favorable'    => '¹Se ha evidenciado un adecuado ambiente de control interno del proceso auditado, similar al de nuestra revisión anterior.',
+  'Mejora calificación'                => '¹Se ha evidenciado la normalización de expuestos preexistentes, lo que ha impactado positivamente en la presente calificación respecto de nuestra revisión anterior.',
+  'Empeora calficación'                => '¹Se ha evidenciado, respecto de nuestra revisión anterior, nuevos expuestos que debilitan el ambiente de control interno del proceso auditado.',
+  'No aplica'                          => '¹El presente trabajo no puede compararse contra una revisión anterior porque se genera por primera vez o porque su actual alcance es distinto.'
+}
+
+NEW_EVOLUTION_FOOTNOTES = {
+  'Mantiene calificación favorable' => '¹Se ha evidenciado un adecuado ambiente de control interno del proceso auditado, similar al de nuestra revisión anterior.',
+  'No aplica - Primera revisión'    => '¹El presente trabajo no puede compararse contra una revisión anterior porque se genera por primera vez.',
+  'No aplica - Nuevo alcance'       => '¹El presente trabajo no puede compararse contra una revisión anterior porque su actual alcance es distinto.'
 }
 
 PDF_IMAGE_PATH          = Rails.root.join('app', 'assets', 'images', 'pdf').freeze

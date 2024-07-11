@@ -61,7 +61,7 @@ module Users::Reassigns
     end
 
     def reassign_pending_reviews_to other
-      review_user_assignments.each do |rua|
+      review_user_assignments.list.each do |rua|
         is_editable = !rua.review.has_final_review?
         other_is_not_included = rua.review.users.exclude? other
 

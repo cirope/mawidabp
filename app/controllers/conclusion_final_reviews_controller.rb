@@ -222,7 +222,7 @@ class ConclusionFinalReviewsController < ApplicationController
       end
     end
 
-    @conclusion_final_review.to_pdf(current_organization, export_options)
+    pdf_info = @conclusion_final_review.to_pdf(current_organization, export_options)
 
     if include_score_sheet
       @conclusion_final_review.review.score_sheet current_organization
@@ -233,15 +233,11 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     if include_executive_summary?
-      export_options[:only_executive_summary] = '1'
+      executive_summary_pages = pdf_info[:executive_summary_pages]
+      pdf_path                = @conclusion_final_review.absolute_pdf_path
+      pdf                     = MiniMagick::Image.open(pdf_path)
 
-      @conclusion_final_review.to_pdf(current_organization, export_options)
-
-      pdf_path    = @conclusion_final_review.absolute_executive_summary_pdf_path
-      pdf         = MiniMagick::Image.open(pdf_path)
-      total_pages = pdf.pages.count
-
-      total_pages.times do |page|
+      executive_summary_pages.times do |page|
         image_path = "#{pdf_path}_#{page}.png"
 
         MiniMagick::Tool::Convert.new do |convert|
@@ -264,7 +260,7 @@ class ConclusionFinalReviewsController < ApplicationController
       }
 
       if include_executive_summary?
-        send_options[:executive_summary_pages] = total_pages
+        send_options[:executive_summary_pages] = executive_summary_pages
       end
 
       if user && users.all? { |u| u.id != user.id }
@@ -460,8 +456,9 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     def include_executive_summary?
-      Current.conclusion_pdf_format == 'gal' &&
-        CODE_CHANGE_DATES['exec_summary_v2'] &&
-        @conclusion_final_review.created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
+      draft_issue_date = @conclusion_final_review.review.conclusion_draft_review.issue_date
+      code_change_date = CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_v2']&.to_date
+
+      Current.conclusion_pdf_format == 'gal' && code_change_date && draft_issue_date >= code_change_date
     end
 end

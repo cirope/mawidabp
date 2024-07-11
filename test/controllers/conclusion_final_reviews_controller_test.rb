@@ -191,14 +191,18 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy conclusion final review' do
-    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
     login
 
+    conclusion_review_id = conclusion_reviews(:conclusion_past_final_review).id
+    conclusion_review    = ConclusionFinalReview.find conclusion_review_id
+    created_at           = (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS - 1).business_days.ago
+
+    conclusion_review.update_column :created_at, created_at
+
     assert_difference 'ConclusionFinalReview.count', -1 do
-      delete :destroy, params: {
-        id: conclusion_reviews(:conclusion_past_final_review).id
-      }
+      delete :destroy, params: { id: conclusion_review.id }
     end
 
     assert_redirected_to conclusion_final_reviews_url
@@ -375,7 +379,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_current_final_review).id
     )
-    is_gal_exec_summary_v2 = is_gal_exec_summary_v2? conclusion_review
 
     ActionMailer::Base.deliveries = []
 
@@ -397,23 +400,10 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     perform_job_with_current_attributes(enqueued_jobs.first)
 
-    attachments_count = is_gal_exec_summary_v2 ? 3 : 2
+    assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
 
-    assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
-
-    unless is_gal_exec_summary_v2
-      text_part = ActionMailer::Base.deliveries.last.parts.detect {
-        |p| p.content_type.match(/text/)
-      }.body.decoded
-
-      assert_match /markdown/, text_part
-    else
-      image_part = ActionMailer::Base.deliveries.last.parts.detect do |p|
-                     p.content_type.match(/multipart/)
-                   end
-
-      assert_not_nil image_part
-    end
+    text_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/text/) }.body.decoded
+    assert_match /markdown/, text_part
 
     clear_enqueued_jobs
     clear_performed_jobs
@@ -437,21 +427,42 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     perform_job_with_current_attributes(enqueued_jobs.first)
 
-    attachments_count = is_gal_exec_summary_v2 ? 4 : 3
+    assert_equal 3, ActionMailer::Base.deliveries.last.attachments.size
 
-    assert_equal attachments_count, ActionMailer::Base.deliveries.last.attachments.size
+    text_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/text/) }.body.decoded
+    assert_match /markdown/, text_part
 
-    unless is_gal_exec_summary_v2
-      text_part = ActionMailer::Base.deliveries.last.parts.detect {
-        |p| p.content_type.match(/text/)
-      }.body.decoded
+    if Current.conclusion_pdf_format == 'gal'
+      clear_enqueued_jobs
+      clear_performed_jobs
 
-      assert_match /markdown/, text_part
-    else
-      image_part = ActionMailer::Base.deliveries.last.parts.detect do |p|
-                     p.content_type.match(/multipart/)
-                   end
+      assert_not_nil CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_v2']
 
+      conclusion_draft_review = conclusion_review.review.conclusion_draft_review
+      conclusion_draft_review.update issue_date: CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_v2'].to_date + 1
+
+      assert_enqueued_jobs 1 do
+        patch :send_by_email, :params => {
+          :id => conclusion_review.id,
+          :conclusion_review => {
+            :include_score_sheet => '1',
+            :include_global_score_sheet => '1',
+            :email_note => 'note in **markdown** _format_'
+          },
+          :user => {
+            users(:administrator).id => {
+              :id => users(:administrator).id,
+              :data => users(:administrator).name
+            }
+          }
+        }
+      end
+
+      perform_job_with_current_attributes(enqueued_jobs.first)
+
+      assert_equal 4, ActionMailer::Base.deliveries.last.attachments.size
+
+      image_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/multipart/) }
       assert_not_nil image_part
     end
   end
@@ -511,13 +522,5 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_final_review.pdf.pdf_name'),
       ConclusionFinalReview.table_name)
-  end
-
-  private
-
-  def is_gal_exec_summary_v2? conclusion_review
-    Current.conclusion_pdf_format == 'gal' &&
-      CODE_CHANGE_DATES['exec_summary_v2'] &&
-      conclusion_review.created_at >= CODE_CHANGE_DATES['exec_summary_v2'].to_date
   end
 end

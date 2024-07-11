@@ -26,6 +26,7 @@ class PlanItem < ApplicationRecord
 
   belongs_to :plan, optional: true
   belongs_to :business_unit, optional: true
+  has_one :risk_assessment_item
   has_one :review
   has_one :memo
   has_one :conclusion_final_review, through: :review
