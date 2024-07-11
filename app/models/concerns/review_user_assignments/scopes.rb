@@ -1,6 +1,14 @@
 module ReviewUserAssignments::Scopes
   extend ActiveSupport::Concern
 
+  included do
+    scope :list, -> {
+      joins(:review).where(review: {
+        organization_id: Current.organization&.id
+      })
+    }
+  end
+
   module ClassMethods
     def audit_team
       where assignment_type: [

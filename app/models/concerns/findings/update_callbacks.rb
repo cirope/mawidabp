@@ -27,7 +27,7 @@ module Findings::UpdateCallbacks
     end
 
     def users_notification
-      send_users_notifications unless incomplete?
+      send_users_notifications if should_notify?
     end
 
     def send_users_notifications
@@ -44,9 +44,7 @@ module Findings::UpdateCallbacks
     end
 
     def notify_changes_to_users
-      unless incomplete?
-        notify_changes unless avoid_changes_notification
-      end
+      notify_changes if should_notify? && !avoid_changes_notification
     end
 
     def notify_changes
