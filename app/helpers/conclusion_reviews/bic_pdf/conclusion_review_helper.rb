@@ -137,6 +137,22 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     end
   end
 
+  def format_and_sanitize input_text
+    formatted_text = input_text.gsub(/\n/, '<br>')
+    allowed_tags   = %w[b i em strong u br small sub sup mark p div span ul ol li]
+    sanitized_text = sanitize formatted_text, tags: allowed_tags
+
+    raw sanitized_text
+  end
+
+  def bic_organization_image
+    organization_image_path = Current.organization&.image_model&.image&.path
+
+    if organization_image_path && File.exist?(organization_image_path)
+      image_to_base_64 organization_image_path
+    end
+  end
+
   private
 
     def base_weaknesses conclusion_review
