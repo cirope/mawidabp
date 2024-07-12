@@ -26,6 +26,18 @@ class Users::PasswordsControllerTest < ActionController::TestCase
     assert user.hash_changed > 1.minute.ago
   end
 
+  test 'restrict password reset' do
+    user = users :blank_password
+
+    user.update! hash_changed: Time.zone.now
+
+    post :create, params: {
+      user: { email: user.email }
+    }
+
+    assert_response :unprocessable_entity
+  end
+
   test 'edit password' do
     login
     get :edit, params: { id: users(:blank_password) }
