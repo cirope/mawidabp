@@ -5,6 +5,8 @@ es:
   label:
     'yes': "Sí"
     'no': "No"
+    t: "Sí" # remove after fixing tests that use this key
+    f: "No" # remove after fixing tests that use this key
     total: "Total"
     by: "por"
     add: "Agregar"
@@ -28,6 +30,7 @@ es:
     download: "Descargar"
     download_csv: "Descargar CSV"
     download_rtf: "Descargar RTF"
+    download_pdf: "Descargar PDF"
     create_permalink: "Crear enlace permanente"
     edit: "Editar"
     import: "Importar"
@@ -94,6 +97,10 @@ es:
     send_it_to_the_administrator: "Y envíelo al administrador del sistema a través de la página:"
     show_details: "Ver detalles"
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
+
+  best_practice:
+    auditors: Auditores a cargo
+    audited: Referentes a cargo
 
   business_unit_type:
     index_title: "Listado de unidades organizativas"
@@ -353,7 +360,7 @@ es:
       comparision_to_previous_period:
         classification_title: '<i><b>Cuadro II: Comparación con la calificación del año anterior (%{period})</b></i>'
         header_cycle: '<b>Ciclo</b>'
-        header_weight: '<b>Ponderador a fecha de los Informes %{period}</b>'
+        header_weight: '<b>Ponderador por fecha de los informes %{period}</b>'
         header_qualification: '<b>Calificación</b>'
         conclusions_body: 'Si bien la Calificación del Control Interno del NBCH S. A. es <b>“%{annual_qualification_period}”</b> y la misma no tiene tuvo modificaciones respecto del año anterior, es importante señalar que el ponderador actual <b>“%{annual_weight_period}”</b> es un 7% menor al <b>“%{annual_weight_previous_period}”</b> al del período anterior.'
       comparision_to_actual_situation:
@@ -492,16 +499,32 @@ es:
     review_repeated_finding_label: "Informe nro."
     executive_summary:
       title: "Resumen ejecutivo"
+      pdf_name: resumen-ejecutivo-%{pdf_name}
+      attached_png_name: imagen-resumen-ejecutivo-%{page}.png
       review_author: "Gerencia de Auditoría Interna"
       project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
-      project_alt: "Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:"
+      project_alt: <b>Auditoría:</b> %{project}
       risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
+      risk_exposure_alt: "<b>Exposición de Riesgo del Proceso Evaluado:</b> %{risk}"
       score: "Calificación"
       evolution: "EVOLUCIÓN (*)"
       main_weaknesses: "Principales debilidades"
       other_weaknesses: "Otras observaciones"
       no_weaknesses: "No hay observaciones"
       assumed_risk_weaknesses: "Riesgo asumido"
+      issue_date: Fecha
+      objective: <b>Objetivo:</b> %{objective}
+      survey: <b>Alcance:</b> %{survey}
+      conclusion: <b>Conclusión</b>
+      key_weaknesses: <b>Hallazgos significativos</b>
+      origin: Origen
+      old_data: (Antigua data)
+      normalization: Normalización
+      no_weaknesses_v2: "<b>No surgieron expuestos para destacar.</b>"
+      no_origin_or_normalization: '-'
+      observations: "<b>Próximos pasos\nInformación adicional</b>"
+      applied_data_analytics: Data Analytics aplicada
+      applied_data_analytics_default_value: No existen procesos robotizados que coadyuven a cumplir con parte del alcance del trabajo realizado.
     detailed_review:
       title: "Informe detallado"
       legend: "Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados por el BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
@@ -638,7 +661,7 @@ es:
     tagged_findings_report:
       empty: 'No hay hallazgos para el filtro aplicado'
       findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
-      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'seguimiento_de_hallazgos_en_ejecucion_etiquetados.pdf'
       tags_count_label: 'Cantidad máxima de etiquetas'
       title: 'Hallazgos por cantidad máxima de etiquetas'
@@ -646,7 +669,7 @@ es:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion.pdf'
 
   finding_relation:
@@ -675,7 +698,7 @@ es:
     tagged_findings_report:
       empty: 'No hay hallazgos para el filtro aplicado'
       findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
-      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge bg-secondary">%{count}</span>'
       pdf_name: 'seguimiento_de_hallazgos_etiquetados.pdf'
       tags_count_label: "Cantidad máxima de etiquetas"
       title: 'Hallazgos por cantidad máxima de etiquetas'
@@ -683,7 +706,7 @@ es:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones.pdf'
     others:
       title: 'Otros'
@@ -912,6 +935,11 @@ es:
       title: "Nuevo comentario en el informe %{review} [#%{finding_id}]"
       finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver hallazgo"
+    notify_new_findings:
+      title: "Notificación de observaciones / oportunidades de mejora"
+      created_title:
+        one: "Nueva observación / oportunidad de mejora"
+        other: "Nuevas observaciones / oportunidades de mejora"
     change_password: "Cambiar contraseña"
     changes_notification:
       title: "Notificación de cambios"
@@ -1169,8 +1197,8 @@ es:
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar"
-    pdf:
-      pdf_name: "listado_de_usuarios.pdf"
+    pdf_csv:
+      pdf_csv_name: "listado_de_usuarios"
       users_count: "Cantidad de usuarios: %{count}"
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
@@ -1342,6 +1370,8 @@ es:
         main_recommendations: "Principales Recomendaciones de Auditoría"
         additional_comments: "Comentarios adicionales"
         exclude_regularized_findings: "Excluir hallazgos regularizados"
+        review_conclusion: Conclusión del informe
+        applied_data_analytics: Data Analytics aplicada
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:
@@ -1503,7 +1533,7 @@ es:
         work_papers: "Papeles de trabajo"
         review_user_assignments: "Integrantes"
         taggings: "Etiquetas"
-        review_objective: "Objectivo del informe"
+        review_objective: "Objetivo del informe"
         type_review: "Tipo de informe"
         subsidiary_id: "Sucursal"
         subsidiary: "Sucursal"
@@ -1551,6 +1581,13 @@ es:
         assertion_consumer_service_binding: 'Enlace de Servicio de consumidor de aserciones'
         idp_cert: 'Certificado (Base64)'
         default_role_for_users: 'Rol por defecto para usuarios'
+        username_claim: 'Atributo con el nombre de usuario'
+        name_claim: 'Atributo con el nombre'
+        lastname_claim: 'Atributo con el apellido'
+        email_claim: 'Atributo con el correo electrónico'
+        roles_claim: 'Atribudo con los roles'
+        function_claim: 'Atribudo con el cargo'
+        manager_claim: 'Atribudo con el superior'
       work_paper:
         name: "Nombre"
         code: "Código"

@@ -11,13 +11,12 @@
           <%= markdown_without_paragraph t('.high_risk_weaknesses', count: @weaknesses.with_highest_risk.count) %>
         </h5>
         <table class="table table-sm table-striped table-hover">
-          <% labels, values = *Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk).values %>
-          <% labels.zip(values).each do |label, value| %>
+          <% Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk).each do |values| %>
             <tr>
-              <td><%= label %></td>
+              <td><%= values[:name] %></td>
               <td>
                 <% if @weaknesses.with_highest_risk.count > 0 %>
-                  <%= "#{value} (#{(value.to_f / @weaknesses.with_highest_risk.count * 100).round(2)}%)" %>
+                  <%= "#{values[:data]} (#{(values[:data].to_f / @weaknesses.with_highest_risk.count * 100).round(2)}%)" %>
                 <% else %>
                   0
                 <% end %>
@@ -32,13 +31,12 @@
           <%== user_weaknesses_links %>
         </h5>
         <table class="table table-sm table-striped table-hover">
-          <% labels, values = *Weakness.weaknesses_for_graph(@weaknesses).values %>
-          <% labels.zip(values).each do |label, value| %>
+          <% Weakness.weaknesses_for_graph(@weaknesses).each do |values| %>
             <tr>
-              <td><%= label %></td>
+              <td><%= values[:name] %></td>
               <td>
                 <% if @weaknesses.count > 0 %>
-                  <%= "#{value} (#{(value.to_f / @weaknesses.count * 100).round(2)}%)" %>
+                  <%= "#{values[:data]} (#{(values[:data].to_f / @weaknesses.count * 100).round(2)}%)" %>
                 <% else %>
                   0
                 <% end %>
@@ -53,13 +51,12 @@
           <%= markdown_without_paragraph t('.pending_weaknesses', count: @weaknesses.with_pending_status.count) %>
         </h5>
         <table class="table table-sm table-striped table-hover">
-          <% labels, values = *Weakness.pending_weaknesses_for_graph(@weaknesses).values %>
-          <% labels.zip(values).each do |label, value| %>
+          <% Weakness.pending_weaknesses_for_graph(@weaknesses).each do |values| %>
             <tr>
-              <td><%= label %></td>
+              <td><%= values[:name] %></td>
               <td>
                 <% if @weaknesses.with_pending_status.count > 0 %>
-                  <%= "#{value} (#{(value.to_f / @weaknesses.with_pending_status.count * 100).round(2)}%)" %>
+                  <%= "#{values[:data]} (#{(values[:data].to_f / @weaknesses.with_pending_status.count * 100).round(2)}%)" %>
                 <% else %>
                   0
                 <% end %>
@@ -69,11 +66,13 @@
         </table>
       </div>
     </div>
-  </div>
 
-  <div class="card-footer">
-    <%= link_to_show user_path(@user) %> |
-    <%= link_to_index users_path %> |
-    <%= link_to t('.graph'), users_status_path(graph: true) %>
+    <hr>
+
+    <div>
+      <%= link_to_show user_path(@user) %> |
+      <%= link_to_index users_path %> |
+      <%= link_to t('.graph'), users_status_path(graph: true) %>
+    </div>
   </div>
 </div>

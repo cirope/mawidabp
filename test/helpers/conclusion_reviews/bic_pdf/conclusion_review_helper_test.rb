@@ -108,16 +108,16 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
     assert_equal '-', bic_previous_review_text(conclusion_review)
   end
 
-  test 'get bic review period' do
-    conclusion_review = conclusion_reviews :conclusion_current_final_review
-    plan_item_start   = I18n.l conclusion_review.plan_item.start, format: :minimal
-    plan_item_end     = I18n.l conclusion_review.plan_item.end, format: :minimal
+  test 'get bic internal audit review dates' do
+    conclusion_review      = conclusion_reviews :conclusion_current_final_review
+    opening_interview_date = conclusion_review.review.opening_interview&.start_date
+    start_date             = opening_interview_date ? I18n.l(opening_interview_date, format: :minimal) : '--/--/--'
+    end_date               = I18n.l conclusion_review.issue_date, format: :minimal
+    result                 = I18n.t 'conclusion_review.bic.cover.internal_audit_review_dates',
+                               start_date: start_date,
+                               end_date: end_date
 
-    result = I18n.t 'conclusion_review.bic.cover.review_period_description',
-                    plan_item_start: plan_item_start,
-                    plan_item_end: plan_item_end
-
-    assert_equal result, bic_review_period(conclusion_review)
+    assert_equal result, bic_internal_audit_review_dates(conclusion_review)
   end
 
   test 'get bic weakness responsible when dont have process owner' do
@@ -155,40 +155,12 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
     assert_equal result, bic_weakness_responsible(weakness)
   end
 
-  test 'get conclusion review weaknesses when is final' do
-    conclusion_review = conclusion_reviews :conclusion_current_final_review
-
-    assert_equal conclusion_review.bic_exclude_regularized_findings(conclusion_review.review.final_weaknesses),
-                 conclusion_review_weaknesses(conclusion_review)
-  end
-
-  test 'get conclusion review weaknesses when is draft' do
-    conclusion_review = conclusion_reviews :conclusion_current_draft_review
-
-    assert_equal conclusion_review.bic_exclude_regularized_findings(conclusion_review.review.weaknesses),
-                 conclusion_review_weaknesses(conclusion_review)
-  end
-
   test 'get watermark class when is draft' do
     assert_equal 'watermark-bic', watermark_class(true)
   end
 
   test 'get watermark class when is not draft' do
     assert_equal '', watermark_class(false)
-  end
-
-  test 'get legend weakness repeated when weakness have repeated' do
-    weakness    = findings :unanswered_for_level_1_notification
-    repeated_of = findings :being_implemented_weakness
-
-    weakness.update! repeated_of_id: repeated_of.id
-
-    assert_equal I18n.t('conclusion_review.bic.weaknesses.repeated'),
-                 legend_weakness_repeated(weakness)
-  end
-
-  test 'get legend weakness repeated when weakness dont have repeated' do
-    assert_equal '', legend_weakness_repeated(findings(:being_implemented_weakness))
   end
 
   test 'get follow up date weakness have follow up date' do
@@ -205,10 +177,21 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
     weakness       = findings :being_implemented_weakness
     weakness.state = Finding::STATUS[:implemented_audited]
 
-    assert_equal 'green-text', risk_style(weakness)
+    assert_equal 'text-green', risk_style(weakness)
   end
 
   test 'get risk style when is not implemented_audited' do
-    assert_equal 'orange-text', risk_style(findings(:being_implemented_weakness))
+    assert_equal 'text-white', risk_style(findings(:being_implemented_weakness))
+  end
+
+  test 'format_and_sanitize method should sanitize input while preserving allowed tags' do
+    input    = "<b>Bold</b> <u>Underline</u> <script>hack()</script>"
+    expected = "<b>Bold</b> <u>Underline</u> hack()"
+
+    assert_equal expected, format_and_sanitize(input)
+  end
+
+  test 'format_and_sanitize method should convert newlines to <br> tags' do
+    assert_equal 'Hello<br>World', format_and_sanitize("Hello\nWorld")
   end
 end

@@ -35,6 +35,13 @@ module Users::Scopes
         }
       )
     }
+    scope :auditors_and_act_as_audited, -> {
+      includes(organization_roles: :role).where(
+        roles: {
+          role_type: [::Role::TYPES[:auditor], ::Role::ACT_AS[:audited]].flatten
+        }
+      )
+    }
     scope :include_tags, -> {
       includes('tags').references('tags')
     }
@@ -42,6 +49,10 @@ module Users::Scopes
 
   def recovery?
     tags.with_option('recovery', '1').exists?
+  end
+
+  def update_saml_request_id new_request_id
+    update_column :saml_request_id, new_request_id
   end
 
   module ClassMethods

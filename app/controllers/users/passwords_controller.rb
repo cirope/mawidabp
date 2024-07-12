@@ -1,6 +1,8 @@
 class Users::PasswordsController < ApplicationController
   include Users::Finders
 
+  layout 'public'
+
   before_action :set_title
   before_action :set_user, only: [:edit, :update]
 
@@ -16,7 +18,7 @@ class Users::PasswordsController < ApplicationController
       if @user.reset_password current_organization
         redirect_to login_url, notice: t('.success')
       else
-        render status: :unprocessable_entity
+        render :new, status: :unprocessable_entity
       end
     else
       redirect_to new_users_password_url, notice: t('.not_found')

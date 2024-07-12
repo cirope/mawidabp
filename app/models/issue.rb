@@ -1,5 +1,6 @@
 class Issue < ApplicationRecord
   include Auditable
+  include Issues::Scopes
   include Issues::Validation
 
   belongs_to :finding, touch: true, inverse_of: :issues

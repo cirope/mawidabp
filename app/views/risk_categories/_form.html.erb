@@ -1,0 +1,21 @@
+<% risk_category ||= @risk_category %>
+<% index         ||= params[:index] %>
+
+<div data-container-id="<%= params[:container] %>">
+  <%= simple_fields_for @risk_registry do |f| %>
+    <%= f.simple_fields_for :risk_categories, risk_category, child_index: index do |rc_f| %>
+      <% risk_category.risks.each do |risk| %>
+        <% risk_index = risk_category.risks.index risk %>
+        <%= rc_f.simple_fields_for :risks, risk, child_index: risk_index do |r_f| %>
+          <%= render 'risk_categories/risk', f: r_f, risk_category_id: risk_category.id %>
+        <% end %>
+      <% end %>
+
+      <% if risk_category.persisted? %>
+        <div hidden>
+          <%= rc_f.input :id, as: :hidden, input_html: { id: "nested_risk_registry_risk_category_#{risk_category.id}" } %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

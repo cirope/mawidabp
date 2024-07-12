@@ -50,13 +50,23 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     end
   end
 
-  def bic_review_period conclusion_review
-    plan_item_start = I18n.l conclusion_review.plan_item.start, format: :minimal
-    plan_item_end   = I18n.l conclusion_review.plan_item.end, format: :minimal
+  def bic_internal_audit_review_dates conclusion_review
+    start_date = bic_internal_audit_review_start_date conclusion_review
+    end_date   = bic_internal_audit_review_end_date conclusion_review
 
-    I18n.t 'conclusion_review.bic.cover.review_period_description',
-           plan_item_start: plan_item_start,
-           plan_item_end: plan_item_end
+    I18n.t 'conclusion_review.bic.cover.internal_audit_review_dates',
+      start_date: start_date,
+      end_date: end_date
+  end
+
+  def bic_internal_audit_review_start_date conclusion_review
+    date = conclusion_review.review.opening_interview&.start_date
+
+    date ? I18n.l(date, format: :minimal) : '--/--/--'
+  end
+
+  def bic_internal_audit_review_end_date conclusion_review
+    I18n.l conclusion_review.issue_date, format: :minimal
   end
 
   def bic_weakness_responsible weakness
@@ -73,22 +83,44 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
     end.join '; '
   end
 
-  def conclusion_review_weaknesses conclusion_review
-    weaknesses = if conclusion_review.draft?
-                   conclusion_review.review.weaknesses
+  def short_bic_weakness_review_code review_code
+    prefix = I18n.t('code_prefixes.weaknesses')
+
+    review_code.sub(/^#{prefix}/, '').to_i
+  end
+
+  def sort_bic_weaknesses_by_risk? conclusion_review
+    CONCLUSION_REVIEW_SORT_BY_RISK_START && conclusion_review.created_at >= CONCLUSION_REVIEW_SORT_BY_RISK_START
+  end
+
+  def bic_current_weaknesses conclusion_review
+    weaknesses = base_weaknesses conclusion_review
+    present    = weaknesses.not_revoked.where repeated_of_id: nil
+
+    present.reorder risk: :desc, priority: :desc, review_code: :asc
+  end
+
+  def bic_repeated_weaknesses conclusion_review
+    weaknesses = base_weaknesses conclusion_review
+    repeated   = weaknesses.not_revoked.where.not repeated_of_id: nil
+
+    repeated.reorder risk: :desc, priority: :desc, review_code: :asc
+  end
+
+  def bic_control_objective_item_weaknesses conclusion_review, control_objective_item
+    weaknesses = if kind_of? ConclusionFinalReview
+                   control_objective_item.final_weaknesses
                  else
-                   conclusion_review.review.final_weaknesses
+                   control_objective_item.weaknesses
                  end
 
-    conclusion_review.bic_exclude_regularized_findings weaknesses
+    weaknesses = conclusion_review.bic_exclude_regularized_findings weaknesses
+
+    weaknesses.not_revoked.sort_for_review
   end
 
   def watermark_class draft
     draft ? 'watermark-bic' : ''
-  end
-
-  def legend_weakness_repeated weakness
-    weakness.repeated_of.present? ? I18n.t('conclusion_review.bic.weaknesses.repeated') : ''
   end
 
   def follow_up_date_weakness weakness
@@ -96,6 +128,40 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
   end
 
   def risk_style weakness
-    weakness.implemented_audited? ? 'green-text' : 'orange-text'
+    weakness.implemented_audited? ? 'text-green' : 'text-white'
   end
+
+  def conclusion_padding conclusion_review
+    if !conclusion_review.reference.present?
+      'pt-15'
+    end
+  end
+
+  def format_and_sanitize input_text
+    formatted_text = input_text.gsub(/\n/, '<br>')
+    allowed_tags   = %w[b i em strong u br small sub sup mark p div span ul ol li]
+    sanitized_text = sanitize formatted_text, tags: allowed_tags
+
+    raw sanitized_text
+  end
+
+  def bic_organization_image
+    organization_image_path = Current.organization&.image_model&.image&.path
+
+    if organization_image_path && File.exist?(organization_image_path)
+      image_to_base_64 organization_image_path
+    end
+  end
+
+  private
+
+    def base_weaknesses conclusion_review
+      weaknesses = if conclusion_review.draft?
+                     conclusion_review.review.weaknesses
+                   else
+                     conclusion_review.review.final_weaknesses
+                   end
+
+      conclusion_review.bic_exclude_regularized_findings weaknesses
+    end
 end

@@ -26,13 +26,13 @@ class WelcomeControllerTest < ActionController::TestCase
     login
     get :index
     assert_response :success
-    assert_template 'welcome/auditor_index'
+    assert_template 'welcome/index'
   end
 
   test 'show audited welcome' do
     login user: users(:audited)
     get :index
     assert_response :success
-    assert_template 'welcome/audited_index'
+    assert_template 'welcome/index'
   end
 end

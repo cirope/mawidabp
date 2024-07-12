@@ -16,6 +16,7 @@ en:
       best_practices:
         best_practices: 'Management'
         control_objectives: 'Control objectives'
+      risk_registries: 'Risk Registries'
       settings: 'Settings'
       weakness_templates: 'Issue templates'
       risk_assessment_templates: 'Risk assessment templates'

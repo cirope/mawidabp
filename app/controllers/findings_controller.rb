@@ -16,7 +16,8 @@ class FindingsController < ApplicationController
   before_action :check_if_editable, only: [:edit, :update]
   before_action :check_if_editable_bic_sigen_fields, only: [:edit_bic_sigen_fields,
                                                             :update_bic_sigen_fields]
-  before_action :set_title, except: [:destroy]
+  before_action :set_title, except: [:destroy, :auto_complete_for_finding_relation,
+                                     :auto_complete_for_tagging, :update_bic_sigen_fields]
 
   # * GET /incomplete/findings
   def index
@@ -25,7 +26,7 @@ class FindingsController < ApplicationController
     respond_to do |format|
       format.html { paginate_findings }
       format.csv  { render_index_csv }
-      format.pdf  { render_index_pdf }
+      format.pdf  { redirect_to pdf.relative_path }
     end
   end
 
@@ -72,10 +73,10 @@ class FindingsController < ApplicationController
   private
 
     def finding_params
-      casted_params = if @auth_user.can_act_as_audited? || @auth_user.committee?
-                        audited_finding_params
-                      else
+      casted_params = if @auth_user.can_act_as_auditor?
                         auditor_finding_params
+                      else
+                        audited_finding_params
                       end
 
       casted_params.merge(
@@ -90,7 +91,7 @@ class FindingsController < ApplicationController
         :audit_comments, :state, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
         :compliance, :impact_risk, :probability, :compliance_observations,
-        :compliance_susceptible_to_sanction, :manual_risk, :nested_user,
+        :compliance_maybe_sanction, :manual_risk, :nested_user,
         :skip_work_paper, :use_suggested_impact,
         :use_suggested_probability, :impact_amount, :probability_amount,
         :extension, :state_regulations, :degree_compliance,
@@ -126,7 +127,7 @@ class FindingsController < ApplicationController
           :id, :code, :description, :status, :due_on, :_destroy
         ],
         taggings_attributes: [
-          :id, :tag_id, :_destroy
+          :id, :description, :tag_id, :_destroy
         ],
         costs_attributes: [
           :id, :raw_cost, :cost, :cost_type, :description, :user_id, :_destroy
@@ -141,7 +142,7 @@ class FindingsController < ApplicationController
       params.require(:finding).permit(
         :year, :nsisio, :nobs, :skip_work_paper,
         taggings_attributes: [
-          :id, :tag_id, :_destroy
+          :id, :description, :tag_id, :_destroy
         ])
     end
 
@@ -166,34 +167,7 @@ class FindingsController < ApplicationController
       )
     end
 
-    def render_index_pdf
-      @title = title_pdf
-
-      render pdf: @title.downcase.gsub(/\s+/, '_').sanitized_for_filename,
-             template: 'findings/pdf/index.html.erb',
-             margin: {
-               top:    15,
-               bottom: 10,
-               left:   20,
-               right:  20
-             },
-             header: {
-               html: {
-                 template: 'shared/pdf/generic_report_header.html.erb'
-               }
-             },
-             footer: {
-               html: {
-                 template: 'shared/pdf/generic_report_footer.html.erb'
-               }
-             },
-             orientation: 'Landscape',
-             layout: 'pdf.html',
-             disposition: 'attachment',
-             show_as_html: false
-    end
-
-    def title_pdf
+    def pdf
       title_partial = case params[:completion_state]
                       when 'incomplete'
                         'pending'
@@ -203,7 +177,13 @@ class FindingsController < ApplicationController
                         'complete'
                       end
 
-      t("menu.follow_up.#{title_partial}_findings")
+      FindingPdf.create(
+        title: t("menu.follow_up.#{title_partial}_findings"),
+        columns: @columns,
+        query: @query,
+        findings: @findings.except(:limit),
+        current_organization: current_organization
+      )
     end
 
     def csv_options

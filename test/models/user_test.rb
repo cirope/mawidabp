@@ -173,8 +173,11 @@ class UserTest < ActiveSupport::TestCase
     assert @user.valid?
   end
 
-  test 'validates can duplicate user if ldap' do
-    Current.organization = organizations(:google)
+  test 'disable uniqueness username validation' do
+    o                    = organizations(:google)
+    Current.organization = o
+
+    o.settings.find_by(name: 'uniqueness_username_validation').update! value: '0'
 
     @user.user = users(:bare).user
 
@@ -568,7 +571,9 @@ class UserTest < ActiveSupport::TestCase
       review_codes_by_user[user] = user.findings.for_notification.pluck 'review_code'
     end
 
-    assert_enqueued_emails 12 do
+    enqueued_emails = CHECK_FINDING_EMAIL_REPLIES ? 12 : 6
+
+    assert_enqueued_emails enqueued_emails do
       User.notify_new_findings
     end
 

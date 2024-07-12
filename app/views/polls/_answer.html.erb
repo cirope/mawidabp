@@ -17,7 +17,7 @@
         <%= f.input :type, as: :hidden, input_html: { value: AnswerWritten.name } %>
       <% end %>
     </div>
-    
+
     <% hidde_comments = SHOW_ALTERNATIVE_QUESTIONNAIRES && question.answer_written? %>
 
     <div class="col-md-6">

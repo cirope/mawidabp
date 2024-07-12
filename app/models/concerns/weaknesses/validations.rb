@@ -4,7 +4,8 @@ module Weaknesses::Validations
   included do
     before_validation :clean_array_attributes
 
-    validates :risk, :priority, presence: true
+    validates :risk, presence: true
+    validates :priority, presence: true, unless: :is_gal?
     validates :audit_recommendations, presence: true, if: :notify?
     validate :review_code_has_valid_prefix
     validates :impact_risk, :probability, presence: true, if: :require_impact_risk_and_probability?
@@ -20,8 +21,8 @@ module Weaknesses::Validations
               :internal_control_components,
               presence: true, if: :validate_extra_attributes?
     validates :compliance_observations, presence: true, if: :compliance_require_observations?
-    validates :compliance_susceptible_to_sanction,
-              inclusion: { in: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values },
+    validates :compliance_maybe_sanction,
+              inclusion: { in: COMPLIANCE_MAYBE_SANCTION_OPTIONS.values },
               if: :compliance_require_observations?
     validates :year, :nsisio, :nobs, length: { maximum: 4 },
                                      numericality: { only_integer: true },
@@ -44,6 +45,10 @@ module Weaknesses::Validations
   end
 
   private
+
+    def is_gal?
+      Current.conclusion_pdf_format == 'gal'
+    end
 
     def require_impact_risk_and_probability?
       USE_SCOPE_CYCLE && !manual_risk

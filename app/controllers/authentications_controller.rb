@@ -1,6 +1,8 @@
 class AuthenticationsController < ApplicationController
   include Sessions
 
+  layout 'public'
+
   before_action :set_title, except: [:destroy]
 
   def new
@@ -15,7 +17,6 @@ class AuthenticationsController < ApplicationController
 
     if auth.authenticated?
       flash.notice = auth.message
-
 
       set_session_values auth.user
     else

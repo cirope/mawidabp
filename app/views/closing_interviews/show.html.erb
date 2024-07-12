@@ -1,98 +1,102 @@
-<h3><%= @closing_interview.review %></h3>
+<div class="card">
+  <div class="card-body">
+    <h3><%= @closing_interview.review %></h3>
 
-<p class="mb-1">
-  <strong><%= ClosingInterview.human_attribute_name 'interview_date' %></strong>:
-  <%= l @closing_interview.interview_date %>
-</p>
+    <p class="mb-1">
+      <strong><%= ClosingInterview.human_attribute_name 'interview_date' %></strong>:
+      <%= l @closing_interview.interview_date %>
+    </p>
 
-<div>
-  <p class="mb-1">
-    <strong><%= ClosingInterview.human_attribute_name 'findings_summary' %></strong>:
-  </p>
+    <div>
+      <p class="mb-1">
+        <strong><%= ClosingInterview.human_attribute_name 'findings_summary' %></strong>:
+      </p>
 
-  <%= simple_format @closing_interview.findings_summary, class: 'mb-1' %>
-</div>
+      <%= simple_format @closing_interview.findings_summary, class: 'mb-1' %>
+    </div>
 
-<div>
-  <p class="mb-1">
-    <strong><%= ClosingInterview.human_attribute_name 'recommendations_summary' %></strong>:
-  </p>
+    <div>
+      <p class="mb-1">
+        <strong><%= ClosingInterview.human_attribute_name 'recommendations_summary' %></strong>:
+      </p>
 
-  <%= simple_format @closing_interview.recommendations_summary, class: 'mb-1' %>
-</div>
+      <%= simple_format @closing_interview.recommendations_summary, class: 'mb-1' %>
+    </div>
 
-<div>
-  <p class="mb-1">
-    <strong><%= ClosingInterview.human_attribute_name 'suggestions' %></strong>:
-  </p>
+    <div>
+      <p class="mb-1">
+        <strong><%= ClosingInterview.human_attribute_name 'suggestions' %></strong>:
+      </p>
 
-  <%= simple_format @closing_interview.suggestions, class: 'mb-1' %>
-</div>
+      <%= simple_format @closing_interview.suggestions, class: 'mb-1' %>
+    </div>
 
-<div>
-  <p class="mb-1">
-    <strong><%= ClosingInterview.human_attribute_name 'comments' %></strong>:
-  </p>
+    <div>
+      <p class="mb-1">
+        <strong><%= ClosingInterview.human_attribute_name 'comments' %></strong>:
+      </p>
 
-  <%= simple_format @closing_interview.comments, class: 'mb-1' %>
-</div>
+      <%= simple_format @closing_interview.comments, class: 'mb-1' %>
+    </div>
 
-<div>
-  <p class="mb-1">
-    <strong><%= ClosingInterview.human_attribute_name 'audit_comments' %></strong>:
-  </p>
+    <div>
+      <p class="mb-1">
+        <strong><%= ClosingInterview.human_attribute_name 'audit_comments' %></strong>:
+      </p>
 
-  <%= simple_format @closing_interview.audit_comments, class: 'mb-1' %>
-</div>
+      <%= simple_format @closing_interview.audit_comments, class: 'mb-1' %>
+    </div>
 
-<div>
-  <p class="mb-1">
-    <strong><%= ClosingInterview.human_attribute_name 'responsible_comments' %></strong>:
-  </p>
+    <div>
+      <p class="mb-1">
+        <strong><%= ClosingInterview.human_attribute_name 'responsible_comments' %></strong>:
+      </p>
 
-  <%= simple_format @closing_interview.responsible_comments, class: 'mb-1' %>
-</div>
+      <%= simple_format @closing_interview.responsible_comments, class: 'mb-1' %>
+    </div>
 
-<% if @closing_interview.responsible_users.any? %>
-  <h5 class="mt-3">
-    <%= t '.auditeds' %>
-  </h5>
+    <% if @closing_interview.responsible_users.any? %>
+      <h5 class="mt-3">
+        <%= t '.auditeds' %>
+      </h5>
 
-  <ul class="mb-1">
-    <% @closing_interview.responsible_users.each do |user| %>
-      <li><%= user.full_name %></li>
+      <ul class="mb-1">
+        <% @closing_interview.responsible_users.each do |user| %>
+          <li><%= user.full_name %></li>
+        <% end %>
+      </ul>
     <% end %>
-  </ul>
-<% end %>
 
-<% if @closing_interview.auditor_users.any? %>
-  <h5 class="mt-3">
-    <%= t '.auditors' %>
-  </h5>
+    <% if @closing_interview.auditor_users.any? %>
+      <h5 class="mt-3">
+        <%= t '.auditors' %>
+      </h5>
 
-  <ul class="mb-1">
-    <% @closing_interview.auditor_users.each do |user| %>
-      <li><%= user.full_name %></li>
+      <ul class="mb-1">
+        <% @closing_interview.auditor_users.each do |user| %>
+          <li><%= user.full_name %></li>
+        <% end %>
+      </ul>
     <% end %>
-  </ul>
-<% end %>
 
-<% if @closing_interview.assistant_users.any? %>
-  <h5 class="mt-3">
-    <%= ClosingInterviewUser.model_name.human count: 0 %>
-  </h5>
+    <% if @closing_interview.assistant_users.any? %>
+      <h5 class="mt-3">
+        <%= ClosingInterviewUser.model_name.human count: 0 %>
+      </h5>
 
-  <ul class="mb-1">
-    <% @closing_interview.assistant_users.each do |user| %>
-      <li><%= user.full_name %></li>
+      <ul class="mb-1">
+        <% @closing_interview.assistant_users.each do |user| %>
+          <li><%= user.full_name %></li>
+        <% end %>
+      </ul>
     <% end %>
-  </ul>
-<% end %>
 
-<hr>
+    <hr>
 
-<div>
-  <%= link_to_edit [:edit, @closing_interview] %> |
-  <%= link_to t('.download_pdf'), [@closing_interview, _ts: Time.now.to_i, format: :pdf] %> |
-  <%= link_to_index closing_interviews_path %>
+    <div>
+      <%= link_to_edit [:edit, @closing_interview] %> |
+      <%= link_to t('.download_pdf'), [@closing_interview, _ts: Time.now.to_i, format: :pdf] %> |
+      <%= link_to_index closing_interviews_path %>
+    </div>
+  </div>
 </div>
