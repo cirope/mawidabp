@@ -7,6 +7,12 @@ class SessionsController < ApplicationController
   before_action :set_title, except: [:destroy]
 
   def new
+    locale = params[:locale]
+
+    if locale.present?
+      session[:locale] = locale
+      I18n.locale      = locale
+    end
   end
 
   def create
@@ -24,9 +30,7 @@ class SessionsController < ApplicationController
         redirect_to signin_url
       end
     else
-      flash.now.alert = t 'message.invalid_user_or_email'
-
-      render 'new', status: :unprocessable_entity
+      redirect_to_login t('message.invalid_user_or_email'), :alert
     end
   end
 
