@@ -74,7 +74,7 @@ NEW_CONCLUSION_EVOLUTION_IMAGES = {
   ] => 'evolution_up_success_light.png',
   [
     'Satisfactorio con salvedades',
-    'Mantiene calificación desfavorable'
+    'Mantiene calificación favorable'
   ] => 'evolution_equal_success_dark.png',
   [
     'Satisfactorio con salvedades',
@@ -191,7 +191,7 @@ NEW_CONCLUSION_EVOLUTION_FOOTNOTES = {
   ] => '¹Se ha evidenciado la normalización de expuestos preexistentes, lo que ha impactado positivamente en la presente calificación respecto de nuestra revisión anterior.',
   [
     'Satisfactorio con salvedades',
-    'Mantiene calificación desfavorable'
+    'Mantiene calificación favorable'
   ] => '¹Se ha evidenciado un ambiente de control interno que presenta oportunidades de mejora al igual que en nuestra revisión anterior.',
   [
     'Satisfactorio con salvedades',
