@@ -1,4 +1,3 @@
----
 es:
   actioncontroller:
     best_practices: Buenas prácticas
@@ -28,485 +27,22 @@ es:
     weaknesses: Observaciones
     welcome: Bienvenida
     workflows: Programas de trabajo
-  activerecord:
-    attributes:
-      answer:
-        attached: Adjunto
-      business_unit:
-        business_unit_kind_id: Tipo de unidad de negocio
-        business_unit_type_id: Unidad organizativa
-        name: Nombre
-      business_unit_type:
-        business_unit_label: Etiqueta de la unidad de negocio en el informe
-        detailed_review: Título de Informe Detallado
-        detailed_review_legend: Texto de Informe Detallado
-        exec_summary_intro: Introducción de Resumen Ejecutivo
-        external: Externo
-        grouped_by_business_unit_annual_report: Agrupado por unidad de negocio en reporte anual
-        hide_review_logo: Ocultar logo en informes
-        independent_identification: Numeración independiente
-        name: Nombre
-        project_label: Etiqueta del proyecto en el informe
-        recipients: Destinatarios del informe
-        require_counts: Requerir cantidades en objetivos de control
-        require_tag: Requerir etiqueta en informe
-        review_prefix: Prefijo en el informe
-        reviews_for: Informes para
-        sectors: Sectores/departamentos involucrados
-        shared_business_units: Unidades de negocio compartidas
-        without_number: Sin número
-      business_unit_type/business_units:
-        business_unit_kind_id: Tipo de unidad de negocio
-        name: Unidad de negocio
-        one: Unidad de negocio
-        other: Unidades de negocio
-      business_unit_type_review:
-        business_unit_type_id: Unidad organizativa
-        review_id: Informe
-      business_unit_type_user:
-        business_unit_type_id: Unidad organizativa
-        user_id: Usuario
-      comment:
-        comment: Comentario
-        created_at: Fecha del comentario
-        user_id: Usuario
-      conclusion_draft_review:
-        force_approval: Forzar aprobación
-      conclusion_review:
-        additional_comments: Comentarios adicionales
-        affects_compliance: Afecta cumplimiento
-        applied_data_analytics: Data Analytics aplicada
-        applied_procedures: Procedimientos aplicados
-        approved: Aprobado
-        business_unit: Unidad de negocio
-        close_date: Fecha de cierre
-        collapse_control_objectives: Agrupar objetivos de control
-        conclusion: Conclusión
-        corrective_actions: Acciones correctivas
-        effectiveness_notes: Nota efectividad
-        evolution: Evolución de la calificación
-        evolution_justification: Justificación de la evolución
-        exclude_regularized_findings: Excluir hallazgos regularizados
-        issue_date: Fecha de emisión
-        main_recommendations: Principales Recomendaciones de Auditoría
-        main_weaknesses_text: Principales debilidades
-        observations: Otras consideraciones
-        previous_date: Fecha de emisión previa
-        previous_identification: Informe previo
-        project: Proyecto
-        recipients: Destinatarios del informe
-        reference: Marco de referencia
-        review_conclusion: Conclusión del informe
-        review_id: Informe
-        scope: Limitación al alcance
-        sectors: Sectores/departamentos involucrados
-        summary: Acta
-        type: Tipo
-      conclusion_review/review/best_practice_comments:
-        auditor_comment: Conclusiones del auditor (proceso)
-      control:
-        compliance_tests: Pruebas de cumplimiento
-        control: Controles
-        design_tests: Pruebas de diseño
-        effects: Efectos
-        order: Orden
-        sustantive_tests: Pruebas sustantivas
-      control_objective_item:
-        alerts_count: Cantidad de alertas
-        audit_date: Fecha de auditoría
-        auditor_comment: Conclusiones del auditor
-        compliance_score: Calificación pruebas de cumplimiento
-        control_objective_id: Objetivo de control
-        control_objective_text: Objetivo de control
-        design_score: Calificación pruebas de diseño
-        effectiveness: Efectividad de control
-        exclude_from_score: No calificar
-        finished: Terminado
-        issues_count: Casos observados
-        oportunities: Oportunidades de mejora
-        process_control_id: Proceso de negocio
-        relevance: Importancia
-        scored_business_unit_type_id: Unidad organizativa evaluada
-        support: Soporte
-        sustantive_score: Calificación pruebas sustantivas
-        weaknesses: Observaciones
-        work_papers: Papeles de trabajo
-      control_objective_item/business_unit_scores:
-        business_unit_id: Calificación de unidad de negocio (unidad de negocio)
-        compliance_score: Calificación de unidad de negocio (pruebas de cumplimiento)
-        design_score: Calificación de unidad de negocio (pruebas de diseño)
-        sustantive_score: Calificación de unidad de negocio (pruebas sustantivas)
-      control_objective_item/control:
-        compliance_tests: Objetivo de control (pruebas de cumplimiento)
-        control: Objetivo de control (controles)
-        design_tests: Objetivo de control (pruebas de diseño)
-        effects: Objetivo de control (efectos)
-        order: Objetivo de control (orden)
-        sustantive_tests: Objetivo de control (pruebas sustantivas)
-        work_papers: Papeles de trabajo
-      control_objective_item/work_papers:
-        code: Papel de trabajo (código)
-        description: Papel de trabajo (descripción)
-        name: Papel de trabajo (nombre)
-        number_of_pages: Papel de trabajo (páginas)
-        one: Papel de trabajo
-        other: Papeles de trabajo
-      control_objective_item/work_papers/file_model:
-        file_content_type: Papel de trabajo (tipo de archivo)
-        file_file_name: Papel de trabajo (nombre de archivo)
-        file_file_size: Papel de trabajo (tamaño de archivo)
-        one: Papel de trabajo (archivo)
-      cost:
-        cost: Tiempo dedicado
-        description: Descripción de las actividades realizadas
-        item_id: Item
-        item_type: Item (tipo)
-        user_id: Usuario
-      file_model:
-        content_type: Archivo (tipo)
-        file: Archivo
-        size: Archivo (tamaño)
-        uploaded_data: Archivo
-      finding_answer:
-        answer: Comentario
-        commitment_date: Fecha de compromiso
-        created_at: Fecha del comentario
-        file_model: Anexo
-        finding_id: Hallazgo
-        notify_users: Enviar notificación
-        skip_commitment_support: Tildar si la observación está solucionada
-        user_id: Usuario
-      finding_relation:
-        description: Descripción
-        finding_id: Hallazgo
-        related_finding_id: Hallazgo relacionado
-      finding_review_assignment:
-        finding: Hallazgo
-        finding_id: Hallazgo
-        review: Informe
-        review_id: Informe
-      finding_user_assignment:
-        finding_id: Hallazgo
-        process_owner: Responsable
-        responsible_auditor: Auditor referente
-        user: Usuario
-        user_id: Usuario
-      group:
-        admin_email: Correo del administrador
-        description: Descripción
-        name: Nombre
-        organizations:
-          description: Organización (descripción)
-          name: Organización (nombre)
-          one: Organización
-          prefix: Organización (prefijo)
-        send_notification_email: Enviar notificación
-      group/organizations:
-        description: Organización (descripción)
-        name: Organización (nombre)
-        one: Organización
-        prefix: Organización (prefijo)
-      notification:
-        conclusion_reviews: Informes
-        confirmation_date: Fecha de confirmación
-        confirmation_hash: Cadena de confirmación
-        created_at: Fecha de envío
-        findings: Observaciones
-        notes: Notas
-        status: Estado
-        updated_at: Fecha de actualización
-        user_who_confirm: Confirmada por
-      notification_relation:
-        model: Modelo
-        notification: Notificación
-      old_password:
-        password: Contraseña
-      organization_role:
-        organization_id: Organización
-        role_id: Perfil
-        sync_ldap: "¿Sincronizar con LDAP?"
-        user_id: Usuario
-      privilege:
-        approval: Aprobación
-        erase: Baja
-        modify: Modificación
-        module: Módulo
-        read: Lectura
-      process_controls/control_objectives/control:
-        compliance_tests: Pruebas de cumplimientos
-        effects: Efectos
-      related_user_relation:
-        notify: Incluir en notificaciones
-        related_user_id: Usuario relacionado
-        user_id: Usuario
-      resource_utilization:
-        resource_id: Recurso
-      review:
-        audit_type: Unidad organizativa
-        business_unit: Unidad de negocio
-        description: Descripción
-        file_model_id: Anexos
-        identification: Identificación
-        include_sox: Incluye prueba SOX
-        manual_score: Puntaje de auditoría
-        manual_score_alt: Puntaje de auditoría cumplimiento
-        period_id: Periodo
-        plan_item: Proyecto
-        plan_item_id: Proyecto
-        review_objective: Objetivo del informe
-        review_user_assignments: Integrantes
-        risk_exposure: Exposición al riesgo
-        scope: Alcance auditoría
-        score: Calificación
-        score_alt: Calificación cumplimiento
-        subsidiary: Sucursal
-        subsidiary_id: Sucursal
-        survey: Relevamiento
-        taggings: Etiquetas
-        type_review: Tipo de informe
-        work_papers: Papeles de trabajo
-      review/external_reviews:
-        alternative_review: Informe externo
-        alternative_review_id: Informe externo
-      review/file_model:
-        file_content_type: Anexo (tipo de archivo)
-        file_file_name: Anexo (nombre de archivo)
-        file_file_size: Anexo (tamaño de archivo)
-        one: Anexo (archivo)
-      review/finding_review_assignments:
-        finding: Observación / Oportunidad de mejora pendiente
-        finding_id: Observación / Oportunidad de mejora pendiente
-        one: Observación / Oportunidad de mejora pendiente
-        other: Observaciones / Oportunidades de mejora pendientes
-      review/review_user_assignments:
-        assignment_type: Integrante (rol)
-        include_signature: Incluir firma
-        one: Integrante
-        other: Integrantes
-        owner: Responsable
-        user: Integrante
-        user_id: Integrante
-      review_user_assignment:
-        assignment_type: Rol
-        include_signature: Incluir firma
-        owner: Responsable
-        review: Informe
-        user: Integrante
-        user_id: Integrante
-      role:
-        identifier: Identificador
-        name: Perfil
-        privileges: Privilegios
-        role_type: Tipo perfil
-      saml_provider:
-        assertion_consumer_service_binding: Enlace de Servicio de consumidor de aserciones
-        assertion_consumer_service_url: Dirección URL de respuesta (URL del Servicio de consumidor de aserciones)
-        default_role_for_users: Rol por defecto para usuarios
-        email_claim: Atributo con el correo electrónico
-        function_claim: Atribudo con el cargo
-        idp_cert: Certificado (Base64)
-        idp_entity_id: Identificador de Azure AD
-        idp_homepage: Dirección URL de metadatos de federación de aplicación
-        idp_sso_target_url: Dirección URL de inicio de sesión
-        lastname_claim: Atributo con el apellido
-        manager_claim: Atribudo con el superior
-        name_claim: Atributo con el nombre
-        name_identifier_format: Formato del identificador de nombre
-        provider: Proveedor
-        roles_claim: Atribudo con los roles
-        sp_entity_id: Identificador (id. de entidad)
-        username_claim: Atributo con el nombre de usuario
-      work_paper:
-        code: Código
-        description: Descripción
-        file_model: Archivo
-        name: Nombre
-        number_of_pages: Páginas
-      workflow:
-        cost: Costo
-        file_model_id: Anexo
-        organization_id: Organización
-        period_id: Periodo
-        review: Informe
-        review_id: Informe
-        units: Unidades
-        workflow_items:
-          base: ''
-          end: Tarea (fin)
-          one: Tarea
-          order_number: Tarea (orden)
-          other: Tareas
-          resource_utilizations:
-            cost: Recurso (costo)
-            cost_per_unit: Recurso (costo por unidad)
-            one: Recurso
-            other: Recursos
-            resource_id: Recurso
-            units: Recurso (cantidad de unidades)
-          resources: Tarea (recursos)
-          start: Tarea (inicio)
-          task: Tarea
-        workflow_items_resources: Recursos
-      workflow/workflow_items:
-        base: ''
-        end: Tarea (fin)
-        one: Tarea
-        order_number: Tarea (orden)
-        other: Tareas
-        resources: Tarea (recursos)
-        start: Tarea (inicio)
-        task: Tarea
-      workflow/workflow_items/resource_utilizations:
-        cost: Recurso (costo)
-        cost_per_unit: Recurso (costo por unidad)
-        one: Recurso
-        other: Recursos
-        resource: Recurso
-        resource_id: Recurso
-        units: Recurso (cantidad de unidades)
-      workflow_item:
-        end: Fin
-        human_resource_units: Costo recursos humanos
-        material_resource_units: Costo recursos materiales
-        order_number: Orden
-        resource_ids: Recursos
-        resources: Recursos
-        start: Inicio
-        task: Tarea
-        total_resource_units: Costo total
-    errors:
-      models:
-        best_practice:
-          attributes:
-            process_controls:
-              locked: no pueden ser eliminados, ya se utilizaron en al menos un informe
-        business_unit_type:
-          attributes:
-            business_units:
-              locked: no pueden ser eliminadas, ya se utilizaron en al menos un plan de trabajo
-            exec_summary_intro:
-              missing_keys:
-                one: 'contiene una clave no válida: %{invalid_keys}'
-                other: 'contiene %{count} claves no válidas: %{invalid_keys}'
-        conclusion_final_review:
-          attributes:
-            issue_date:
-              less_than_alt_issue_date: debe ser mayor o igual a la fecha de emisión %{date} del informe anexado %{name}
-            review_id:
-              invalid: no está aprobado
-              taken: ya tiene creado un informe definitivo
-              without_draft: no tiene borrador
-        control_objective_auditor:
-          attributes:
-            user_id:
-              invalid: debe ser auditor o referente
-        file_model:
-          attributes:
-            file:
-              without_extension: debe tener extensión
-            file_file_name:
-              without_extension: debe tener extensión
-        finding:
-          attributes:
-            tag_ids:
-              too_short:
-                one: debe ser una como mínimo
-                other: deben ser %{count} como mínimo
-        image_model:
-          attributes:
-            image_content_type:
-              invalid: no es válido
-            image_file_size:
-              invalid: no es válido
-        organization_role:
-          attributes:
-            role_id:
-              invalid: deben ser sólo del tipo auditado o de otro tipo pero no ambos
-        process_control:
-          attributes:
-            control_objectives:
-              locked: no pueden ser eliminados, ya se utilizaron en al menos un informe
-        question:
-          attributes:
-            answer_type:
-              used: ya ha sido enviada en al menos un cuestionario
-            question:
-              answered: ya tiene respuestas
-        review:
-          attributes:
-            plan_item:
-              invalid: debe tener una unidad de negocio asignada en la planificación
-              required: debe seleccionar uno
-            review_user_assignments:
-              invalid: debe tener al menos %{required_roles}
-        review_user_assignment:
-          attributes:
-            user_id:
-              invalid: debe tener un perfil acorde a su rol dentro del informe
-        user:
-          attributes:
-            organization_roles:
-              blank: debe tener al menos uno
-              invalid: no se puede modificar, el usuario tiene observaciones pendientes (debe reasignarlas o desasociarlas)
-            password:
-              already_used: ya fue utilizada con anterioridad
-              invalid: debe cumplir las restricciones impuestas por el administrador
-              too_short: es demasiado corta (%{count} caracteres mínimo)
-              too_soon:
-                one: no se puede modificar, debe esperar al menos un día entre cambios
-                other: no se puede modificar, debe esperar al menos %{count} días entre cambios
-        weakness:
-          attributes:
-            nobs:
-              different_from_repeated_of: N OBS no puede ser diferente a la de la observacion repetida
-              frozen: No se puede modificar ya que el estado de la observacion es repetida
-            nsisio:
-              different_from_repeated_of: NSISIO no puede ser diferente a la de la observacion repetida
-              frozen: No se puede modificar ya que el estado de la observacion es repetida
-            year:
-              different_from_repeated_of: Año no puede ser diferente a la de la observacion repetida
-              frozen: No se puede modificar ya que el estado de la observacion es repetida
-        workflow_item:
-          attributes:
-            end:
-              resource_overload: se superpone con otro ítem que ocupa el mismo recurso
-            start:
-              resource_overload: se superpone con otro ítem que ocupa el mismo recurso
-    models:
-      business_unit_type: Unidad organizativa
-      business_unit_type_review: Unidad organizativa
-      business_unit_type_user: Unidad organizativa
-      comment: Comentario
-      conclusion_draft_review: Informe borrador
-      conclusion_final_review: Informe definitivo
-      conclusion_review: Informe
-      control: Control
-      control_objective_item: Objetivo de control
-      cost: Costo
-      finding_answer: Respuesta a hallazgo
-      finding_review_assignment: Asignación de observación a informe
-      group: Grupo
-      notification: Notificación
-      old_password: Contraseña anterior
-      privilege: Privilegio
-      review:
-        one: Informe
-        other: Informes
-      review_user_assignment: Asignación de usuario a informe
-      role: Perfil
-      workflow: Programa de trabajo
-      workflow_item: Registro de programa de trabajo
+
   app_copyright: Copyright © 2008-%{year} Hullop Solutions S.A. Todos los derechos reservados.
   app_name: Mawidabp
+
   best_practice:
     audited: Referentes a cargo
     auditors: Auditores a cargo
+
   business_unit:
     correctly_updated: Unidad de negocio actualizada correctamente.
     edit_title: Modificar unidad de negocio
+
   business_unit_kind:
     errors:
       business_unit_kind_related: El tipo de unidad de negocio no puede ser eliminado, se encuentra relacionada con al menos una unidad de negocio
+
   business_unit_type:
     add_business_unit: Agregar unidad de negocio
     correctly_created: Unidad organizativa agregada correctamente.
@@ -521,6 +57,7 @@ es:
     new_title: Agregar unidad organizativa
     show_title: Detalle unidad organizativa
     stale_object_error: La unidad organizativa no fue actualizada, intente nuevamente.
+
   conclusion_committee_report:
     applied_filters:
       one: 'En este reporte se ha aplicado el siguiente filtro: %{filters}'
@@ -879,6 +416,7 @@ es:
     weaknesses_graphs: Gráfico de observaciones
     weaknesses_type_external: Observaciones Auditorías Externas
     weaknesses_type_internal: Observaciones Auditoría Interna
+
   conclusion_draft_review:
     add_annex: Agregar anexo
     add_image: Agregar imagen
@@ -907,6 +445,7 @@ es:
     send_by_email: Enviar por correo electrónico
     show_title: Detalle del informe borrador
     stale_object_error: El informe borrador no pudo ser actualizado, intente nuevamente.
+
   conclusion_final_review:
     bundle_title: Generar legajo
     correctly_created: Informe definitivo agregado correctamente.
@@ -949,11 +488,13 @@ es:
       without_score: Informe sin calificación
     show_title: Detalle del informe definitivo
     stale_object_error: El informe definitivo no pudo ser actualizado, intente nuevamente.
+
   conclusion_management_report:
     index_title: Reportes de la gerencia
     weaknesses_by_audit_type_title: Hallazgos totales por tipo de auditoría
     weaknesses_by_risk_title: Hallazgos totales por riesgo
     weaknesses_by_state_title: Hallazgos totales por estado
+
   conclusion_report:
     cost_analysis:
       detailed_column_deviation: Desviación
@@ -1005,6 +546,7 @@ es:
     weaknesses_by_state_title: Hallazgos totales por estado
     weaknesses_by_user_title: Observaciones por usuario
     weaknesses_current_situation_title: Reporte global - Cuatrimestral
+
   conclusion_reports:
     weaknesses_graphs:
       business_units: Por unidad de negocio
@@ -1012,6 +554,7 @@ es:
       hint: Debe realizar una búsqueda
       process_controls: Por proceso de negocio
       users: Por usuario
+
   conclusion_review:
     add_recipient: Agregar nuevo destinatario
     annex:
@@ -1117,9 +660,11 @@ es:
       finding_work_papers: Papeles de trabajo del hallazgo
       pdf_name: documentacion_del_trabajo_realizado.pdf
       title: Documentación del trabajo realizado
+
   control_objective:
     errors:
       related: El objetivo de control no puede ser eliminado, se encuentra relacionado en al menos un procedimiento y prueba de control
+
   control_objective_item:
     add_business_unit_score: Agregar calificación de unidad de negocio
     add_business_unit_type: Agregar unidades de negocio por tipo
@@ -1158,10 +703,12 @@ es:
     view_all_oportunities: Ver listado de oportunidades de mejora
     view_all_weaknesses: Ver listado de observaciones
     without_work_papers: Sin papeles de trabajo
+
   customize_report_form:
     create: Generar
     subtitle: Subtítulo
     title: Título
+
   error:
     download_the_following_file: 'Por favor descargue el siguiente archivo:'
     error_file: archivo_de_error
@@ -1172,6 +719,7 @@ es:
     show_details: Ver detalles
     thank_you_and_apologies_for_the_inconvenience: Muchas gracias y disculpe las molestias
     title: Error
+
   execution_committee_report:
     weaknesses_current_situation:
       control_objective_tags: Etiquetas objetivos de control
@@ -1189,6 +737,7 @@ es:
       without_audits_in_the_interval: Sin auditorías en el intervalo seleccionado
       without_weaknesses: Sin observaciones
     weaknesses_current_situation_title: Reporte global - Cuatrimestral borradores
+
   execution_reports:
     cost_analysis_title: Análisis de costos
     detailed_management_report:
@@ -1262,9 +811,11 @@ es:
     without_findings: Sin hallazgos
     without_weaknesses: Sin hallazgos en el periodo
     without_weaknesses_in_the_interval: Sin hallazgos en el intervalo
+
   external_review:
     errors:
       issue_date_after_review_issue_date: su fecha de emisión (%{date}) es mayor a la fecha de emisión del informe
+
   finding:
     add_endorsement: Agregar revisor
     add_finding_answer: Agregar comentario
@@ -1362,10 +913,12 @@ es:
     weakness_template_previous: Repite Observación
     without_conclusion_final_review: Sin informe definitivo
     without_work_papers: Sin papeles de trabajo
+
   finding_relation:
     types:
       duplicated: Duplicada
       related: Relacionada
+
   follow_up_audit:
     cost_analysis:
       column_audit_cost: Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)
@@ -1426,6 +979,7 @@ es:
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     weaknesses_reschedules_title: Resumen de observaciones y reprogramaciones
+
   follow_up_audited:
     business_unit_title: Unidad de negocio
     business_unit_type_title: Unidad organizativa
@@ -1461,12 +1015,14 @@ es:
       without_audits_in_the_interval: Sin auditorías en el intervalo seleccionado
       without_weaknesses: Sin observaciones
     weaknesses_by_user_title: Observaciones por usuario
+
   follow_up_audited_committee_report:
     period:
       range: desde el %{from_date} al %{to_date}
       title: Intervalo
     process_control_stats:
       pdf_name: observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf
+
   follow_up_committee_report:
     applied_filters:
       one: 'En este reporte se ha aplicado el siguiente filtro: %{filters}'
@@ -1846,11 +1402,13 @@ es:
     weaknesses_reschedules_title: Resumen de observaciones y reprogramaciones
     without_oportunities: Sin oportunidades en el periodo
     without_weaknesses: Sin observaciones en el periodo
+
   follow_up_management:
     index_title: Reportes de la gerencia
     weaknesses_by_audit_type_title: Hallazgos totales por tipo de auditoría
     weaknesses_by_risk_title: Hallazgos totales por riesgo
     weaknesses_by_state_title: Hallazgos totales por estado
+
   group:
     add_organization: Agregar organización
     correctly_created: Grupo agregado correctamente.
@@ -1860,6 +1418,7 @@ es:
     new_title: Agregar grupo
     show_title: Detalles del grupo
     stale_object_error: El grupo no fue actualizado, intente nuevamente.
+
   label:
     add: Agregar
     add_item: Agregar ítem
@@ -1909,14 +1468,17 @@ es:
     update: Actualizar
     without_data: Sin datos
     'yes': Sí
+
   lang:
     en: Inglés
     es: Español
+
   memo:
     correctly_created: Informe externo agregado correctamente.
     correctly_updated: Informe externo actualizado correctamente.
     description_pdf: COMENTARIOS
     stale_object_error: El Informe externo no fue actualizado, intente nuevamente.
+
   message:
     automatic_by_the_system: Realizado de forma automática por el sistema
     change_weakness_risk: El riesgo de la observación ha cambiado
@@ -1948,6 +1510,7 @@ es:
     validation_failed_message: Los datos ingresados no son válidos. Por favor, verifique los campos resaltados e intente nuevamente
     welcome: Bienvenido
     you_are_already_logged: Este usuario ya ha iniciado sesión
+
   notification:
     confirm: Confirmar
     confirmed: Notificación confirmada correctamente.
@@ -1962,6 +1525,7 @@ es:
     status_rejected: Rechazada
     status_unconfirmed: Sin confirmar
     type: Tipo
+
   notifier:
     being_implemented_and_stale_finding_to_manager:
       the_following_finding_is_being_implemented_and_stale: La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación
@@ -2096,6 +1660,7 @@ es:
         one: 'Luego puede acceder a la siguiente dirección URL:'
         other: 'Luego puede acceder a cualquiera de las siguientes direcciones URL (dependiendo de la organización que seleccione):'
       title: "%{name}, su cuenta ha sido creada"
+
   oportunity:
     correctly_created: Oportunidad agregada correctamente.
     correctly_updated: Oportunidad actualizada correctamente.
@@ -2120,6 +1685,7 @@ es:
     show_follow_up: Ver en seguimiento
     show_title: Detalles de la oportunidad
     stale_object_error: La oportunidad no fue actualizada, intente nuevamente.
+
   organization:
     correctly_created: Organización agregada correctamente.
     correctly_updated: Organización actualizada correctamente.
@@ -2129,15 +1695,18 @@ es:
     new_title: Agregar organización
     show_title: Detalles de la organización
     stale_object_error: La organización no fue actualizada, intente nuevamente.
+
   pdf:
     draft: Borrador
     export: Exportar
     page_pattern: Página %{page} de %{total}
     period_description: Periodo %{period}
     review_identification: Número de informe %{review}
+
   plan_item:
     errors:
       cannot_edit_business_unit_for_memos_too: o un memo
+
   questionnaire:
     add_question: Agregar pregunta
     correctly_created: El cuestionario ha sido agregado correctamente.
@@ -2150,6 +1719,7 @@ es:
     not_found: No se encontró el cuestionario
     show_title: Detalles del cuestionario
     stale_object_error: El cuestionario no fue actualizado, intente nuevamente.
+
   review:
     add_best_practice: Agregar una nueva buena práctica
     add_control_objective: Agregar un nuevo objetivo de control
@@ -2272,6 +1842,7 @@ es:
     work_papers_marked_as_revised: Papeles de trabajo marcados como revisados supervisor
     work_papers_recode_failed: Los papeles de trabajo no se pudieron recodificar
     work_papers_recoded: Se recodificaron los papeles de trabajo
+
   review_user_assignment:
     cannot_be_destroyed: El usuario no puede ser eliminado, tiene observaciones que dependen de el
     cannot_be_reassigned: El usuario no puede ser reasignado, tiene observaciones que dependen de el
@@ -2280,6 +1851,7 @@ es:
       old_responsible: 'Responsable anterior: %{responsible}'
       title: Modificación de responsabilidades en el informe %{review}
     responsibility_removed: Ha sido desafectado del informe %{review}
+
   role:
     correctly_created: Perfil agregado correctamente.
     correctly_updated: Perfil actualizado correctamente.
@@ -2295,6 +1867,7 @@ es:
     type_executive_manager: Gerente
     type_manager: Gerente de auditoría
     type_supervisor: Supervisor
+
   user:
     disabled: Deshabilitado
     pdf_csv:
@@ -2318,6 +1891,7 @@ es:
     unconfirmed_findings: Observaciones sin confirmar
     will_be_orphan_findings: No se eliminó el usuario, tiene a la fecha hallazgos pendientes, deberá reasignarlas primero
     without_organization: El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema
+
   weakness:
     correctly_created: Observación agregada correctamente.
     correctly_updated: Observación actualizada correctamente.
@@ -2346,13 +1920,16 @@ es:
     show_follow_up: Ver en seguimiento
     show_title: Detalles de la observación
     stale_object_error: La observación no fue actualizada, intente nuevamente.
+
   welcome:
     index_title: Bienvenido
+
   work_paper:
     cover_name: "%{prefix}%{filename}-portada.pdf"
     number_of_pages:
       one: una hoja
       other: "%{count} hojas"
+
   workflow:
     add_human_resource_utilization: Agregar recurso humano
     add_material_resource_utilization: Agregar recurso material

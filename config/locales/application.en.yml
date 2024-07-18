@@ -1,4 +1,3 @@
----
 en:
   actioncontroller:
     best_practices: Best practices
@@ -28,485 +27,22 @@ en:
     weaknesses: Issues
     welcome: Welcome
     workflows: Workflows
-  activerecord:
-    attributes:
-      answer:
-        attached: Attached
-      business_unit:
-        business_unit_kind_id: Type of business unit
-        business_unit_type_id: Organizational unit
-        name: Name
-      business_unit_type:
-        business_unit_label: Business unit label in the audit report
-        detailed_review: Detailed audit report title
-        detailed_review_legend: Detailed audit report text
-        exec_summary_intro: Executive Summary Introduction
-        external: External
-        grouped_by_business_unit_annual_report: Grouped by business unit in annual report
-        hide_review_logo: Hide logo in audit reports
-        independent_identification: Independent numbering
-        name: Name
-        project_label: Project label in the audit report
-        recipients: Audit report recipients
-        require_counts: Require counts on control targets
-        require_tag: Require tag in audit report
-        review_prefix: Audit report prefix
-        reviews_for: Audit reports for
-        sectors: Sectors/departments involved
-        shared_business_units: Shared business units
-        without_number: No number
-      business_unit_type/business_units:
-        business_unit_kind_id: Type of business unit
-        name: Business unit
-        one: Business unit
-        other: Business units
-      business_unit_type_review:
-        business_unit_type_id: Organizational unit
-        review_id: Audit report
-      business_unit_type_user:
-        business_unit_type_id: Organizational unit
-        user_id: User
-      comment:
-        comment: Comment
-        created_at: Comment date
-        user_id: User
-      conclusion_draft_review:
-        force_approval: Force approval
-      conclusion_review:
-        additional_comments: Additional comments
-        affects_compliance: Affects compliance
-        applied_data_analytics: Applied Data Analytics
-        applied_procedures: Applied procedures
-        approved: Approved
-        business_unit: Business unit
-        close_date: Closing date
-        collapse_control_objectives: Group control objectives
-        conclusion: Conclusion
-        corrective_actions: Corrective actions
-        effectiveness_notes: Effectiveness note
-        evolution: Rating evolution
-        evolution_justification: Evolution justification
-        exclude_regularized_findings: Exclude regularized findings
-        issue_date: Issue date
-        main_recommendations: Main Audit Recommendations
-        main_weaknesses_text: Main weaknesses
-        observations: Other considerations
-        previous_date: Previous issue date
-        previous_identification: Previous audit report
-        project: Project
-        recipients: Audit report recipients
-        reference: Frame of reference
-        review_conclusion: Review conclusion
-        review_id: Audit report
-        scope: Scope limitation
-        sectors: Sectors/departments involved
-        summary: Summary
-        type: Type
-      conclusion_review/review/best_practice_comments:
-        auditor_comment: Auditor conclusions (process)
-      control:
-        compliance_tests: Compliance tests
-        control: Controls
-        design_tests: Design tests
-        effects: Effects
-        order: Order
-        sustantive_tests: Substantive tests
-      control_objective_item:
-        alerts_count: Number of alerts
-        audit_date: Audit date
-        auditor_comment: Auditor comments
-        compliance_score: Compliance test rating
-        control_objective_id: Control objective
-        control_objective_text: Control objective
-        design_score: Design test rating
-        effectiveness: Control effectiveness
-        exclude_from_score: Do not rate
-        finished: Finished
-        issues_count: Observed records
-        oportunities: Improvement opportunities
-        process_control_id: Business process
-        relevance: Importance
-        scored_business_unit_type_id: Evaluated organizational unit
-        support: Support
-        sustantive_score: Substantive evidence rating
-        weaknesses: Issues
-        work_papers: Working papers
-      control_objective_item/business_unit_scores:
-        business_unit_id: Business unit rating (business unit)
-        compliance_score: Business unit rating (compliance tests)
-        design_score: Business unit rating (design tests)
-        sustantive_score: Business unit rating (substantive tests)
-      control_objective_item/control:
-        compliance_tests: Control objective (compliance tests)
-        control: Control objective (controls)
-        design_tests: Control objective (design tests)
-        effects: Control objective (effects)
-        order: Control objective (order)
-        sustantive_tests: Control objective (substantive tests)
-        work_papers: Working papers
-      control_objective_item/work_papers:
-        code: Working paper (code)
-        description: Working paper (description)
-        name: Working paper (name)
-        number_of_pages: Working paper (pages)
-        one: Working papers
-        other: Working papers
-      control_objective_item/work_papers/file_model:
-        file_content_type: Working paper (file type)
-        file_file_name: Working paper (file name)
-        file_file_size: Working paper (file size)
-        one: Working paper (file)
-      cost:
-        cost: Time spent
-        description: Description of the activities carried out
-        item_id: Item
-        item_type: Item (type)
-        user_id: User
-      file_model:
-        content_type: File (type)
-        file: File
-        size: File (size)
-        uploaded_data: File
-      finding_answer:
-        answer: Comment
-        commitment_date: Commitment date
-        created_at: Comment date
-        file_model: Attachment
-        finding_id: Finding
-        notify_users: Send notification
-        skip_commitment_support: Check if the issue is resolved
-        user_id: User
-      finding_relation:
-        description: Description
-        finding_id: Finding
-        related_finding_id: Related finding
-      finding_review_assignment:
-        finding: Finding
-        finding_id: Finding
-        review: Audit report
-        review_id: Audit report
-      finding_user_assignment:
-        finding_id: Finding
-        process_owner: Owner
-        responsible_auditor: Referring auditor
-        user: User
-        user_id: User
-      group:
-        admin_email: Admin email
-        description: Description
-        name: Name
-        organizations:
-          description: Organization (description)
-          name: Organization (name)
-          one: Organization
-          prefix: Organization (prefix)
-        send_notification_email: Send notification
-      group/organizations:
-        description: Organization (description)
-        name: Organization (name)
-        one: Organization
-        prefix: Organization (prefix)
-      notification:
-        conclusion_reviews: Audit reports
-        confirmation_date: Confirmation date
-        confirmation_hash: Confirmation chain
-        created_at: Sent date
-        findings: Issues
-        notes: Notes
-        status: Status
-        updated_at: Update date
-        user_who_confirm: Confirmed by
-      notification_relation:
-        model: Model
-        notification: Notification
-      old_password:
-        password: Password
-      organization_role:
-        organization_id: Organization
-        role_id: Profile
-        sync_ldap: Synchronize with LDAP?
-        user_id: User
-      privilege:
-        approval: Approval
-        erase: Remove
-        modify: Modify
-        module: Module
-        read: Read
-      process_controls/control_objectives/control:
-        compliance_tests: Compliance tests
-        effects: Effects
-      related_user_relation:
-        notify: Include in notifications
-        related_user_id: Related user
-        user_id: User
-      resource_utilization:
-        resource_id: Resource
-      review:
-        audit_type: Organizational unit
-        business_unit: Business unit
-        description: Description
-        file_model_id: Attachments
-        identification: Identification
-        include_sox: Include SOX test
-        manual_score: Audit rating
-        manual_score_alt: Compliance audit rating
-        period_id: Period
-        plan_item: Project
-        plan_item_id: Project
-        review_objective: Audit report objective
-        review_user_assignments: Members
-        risk_exposure: Risk exposure
-        scope: Audit scope
-        score: Rating
-        score_alt: Compliance rating
-        subsidiary: Branch
-        subsidiary_id: Branch
-        survey: Survey
-        taggings: Taggings
-        type_review: Audit report type
-        work_papers: Working papers
-      review/external_reviews:
-        alternative_review: External audit report
-        alternative_review_id: External audit report
-      review/file_model:
-        file_content_type: Attachment (file type)
-        file_file_name: Attachment (filename)
-        file_file_size: Attachment (file size)
-        one: Attachment (file)
-      review/finding_review_assignments:
-        finding: Pending issue / improvement opportunity
-        finding_id: Pending issue / improvement opportunity
-        one: Pending issue / improvement opportunity
-        other: Pending issues / improvement opportunities
-      review/review_user_assignments:
-        assignment_type: Member (role)
-        include_signature: Include signature
-        one: Member
-        other: Members
-        owner: Responsible
-        user: Member
-        user_id: Member
-      review_user_assignment:
-        assignment_type: Role
-        include_signature: Include signature
-        owner: Responsible
-        review: Audit report
-        user: Member
-        user_id: Member
-      role:
-        identifier: Identifier
-        name: Profile
-        privileges: Privileges
-        role_type: Profile type
-      saml_provider:
-        assertion_consumer_service_binding: Assertion consumer service binding
-        assertion_consumer_service_url: Response URL (Assertion consumer service URL)
-        default_role_for_users: Default role for users
-        email_claim: Email claim
-        function_claim: Function claim
-        idp_cert: Certificate (Base64)
-        idp_entity_id: Azure AD identifier
-        idp_homepage: Application federation metadata URL
-        idp_sso_target_url: Login URL
-        lastname_claim: Last name claim
-        manager_claim: Manager claim
-        name_claim: Name claim
-        name_identifier_format: Name identifier format
-        provider: Provider
-        roles_claim: Roles claim
-        sp_entity_id: Identifier (entity ID)
-        username_claim: Username claim
-      work_paper:
-        code: Code
-        description: Description
-        file_model: File
-        name: Name
-        number_of_pages: Pages
-      workflow:
-        cost: Cost
-        file_model_id: Attachment
-        organization_id: Organization
-        period_id: Period
-        review: Audit report
-        review_id: Audit report
-        units: Units
-        workflow_items:
-          base: ''
-          end: Task (end)
-          one: Task
-          order_number: Task (order)
-          other: Tasks
-          resource_utilizations:
-            cost: Resource (cost)
-            cost_per_unit: Resource (cost per unit)
-            one: Resource
-            other: Resources
-            resource_id: Resource
-            units: Resource (number of units)
-          resources: Task (resources)
-          start: Task (start)
-          task: Task
-        workflow_items_resources: Resources
-      workflow/workflow_items:
-        base: ''
-        end: Task (end)
-        one: Task
-        order_number: Task (order)
-        other: Tasks
-        resources: Task (resources)
-        start: Task (start)
-        task: Task
-      workflow/workflow_items/resource_utilizations:
-        cost: Resource (cost)
-        cost_per_unit: Resource (cost per unit)
-        one: Resource
-        other: Resources
-        resource: Resource
-        resource_id: Resource
-        units: Resource (number of units)
-      workflow_item:
-        end: End
-        human_resource_units: Human resource cost
-        material_resource_units: Material resource cost
-        order_number: Order
-        resource_ids: Resources
-        resources: Resources
-        start: Start
-        task: Task
-        total_resource_units: Total cost
-    errors:
-      models:
-        best_practice:
-          attributes:
-            process_controls:
-              locked: cannot be removed, they have already been used in at least one audit report
-        business_unit_type:
-          attributes:
-            business_units:
-              locked: cannot be removed, already used in at least one workplan
-            exec_summary_intro:
-              missing_keys:
-                one: 'contains an invalid key: %{invalid_keys}'
-                other: 'contains %{count} invalid keys: %{invalid_keys}'
-        conclusion_final_review:
-          attributes:
-            issue_date:
-              less_than_alt_issue_date: must be greater than or equal to the issuance date %{date} of the attached audit report %{name}
-            review_id:
-              invalid: is not approved
-              taken: has already created a final audit report
-              without_draft: has no draft audit report
-        control_objective_auditor:
-          attributes:
-            user_id:
-              invalid: must be auditor or auditee
-        file_model:
-          attributes:
-            file:
-              without_extension: must have extension
-            file_file_name:
-              without_extension: must have extension
-        finding:
-          attributes:
-            tag_ids:
-              too_short:
-                one: must be at least one
-                other: must be at least %{count}
-        image_model:
-          attributes:
-            image_content_type:
-              invalid: is not valid
-            image_file_size:
-              invalid: is not valid
-        organization_role:
-          attributes:
-            role_id:
-              invalid: must be only the auditee type or another type but not both
-        process_control:
-          attributes:
-            control_objectives:
-              locked: cannot be removed, they have already been used in at least one audit report
-        question:
-          attributes:
-            answer_type:
-              used: has already been submitted in at least one questionnaire
-            question:
-              answered: already has answers
-        review:
-          attributes:
-            plan_item:
-              invalid: must have a business unit assigned in planning
-              required: must select one
-            review_user_assignments:
-              invalid: must have at least %{required_roles}
-        review_user_assignment:
-          attributes:
-            user_id:
-              invalid: must have a profile according to your role within the audit report
-        user:
-          attributes:
-            organization_roles:
-              blank: must have at least one
-              invalid: cannot be modified, user has pending issues (must reassign or detach them)
-            password:
-              already_used: already used before
-              invalid: must meet the restrictions set by the administrator
-              too_short: is too short (%{count} characters minimum)
-              too_soon:
-                one: cannot be modified, must wait at least one day between changes
-                other: cannot be modified, must wait at least %{count} days between changes
-        weakness:
-          attributes:
-            nobs:
-              different_from_repeated_of: N OBS cannot be different from the repeated issue
-              frozen: Cannot be modified since the status of the issue is repeated
-            nsisio:
-              different_from_repeated_of: NSISIO cannot be different from the repeated issue
-              frozen: Cannot be modified since the status of the issue is repeated
-            year:
-              different_from_repeated_of: Year cannot be different from that of the repeated issue
-              frozen: Cannot be modified since the status of the issue is repeated
-        workflow_item:
-          attributes:
-            end:
-              resource_overload: overloads with another item that occupies the same resource
-            start:
-              resource_overload: overloads with another item that occupies the same resource
-    models:
-      business_unit_type: Organizational unit
-      business_unit_type_review: Organizational unit
-      business_unit_type_user: Organizational unit
-      comment: Comment
-      conclusion_draft_review: Draft audit report
-      conclusion_final_review: Final audit report
-      conclusion_review: Audit report
-      control: Control
-      control_objective_item: Control objective
-      cost: Cost
-      finding_answer: Response to finding
-      finding_review_assignment: Assignment of issue to audit report
-      group: Group
-      notification: Notification
-      old_password: Old password
-      privilege: Privilege
-      review:
-        one: Audit report
-        other: Audit reports
-      review_user_assignment: Audit report user assignment
-      role: Profile
-      workflow: Workflow
-      workflow_item: Workflow record
+
   app_copyright: Copyright © 2008-%{year} Hullop Solutions S.A. All rights reserved.
   app_name: Mawidabp
+
   best_practice:
     audited: Auditees in charge
     auditors: Auditors in charge
+
   business_unit:
     correctly_updated: Business unit correctly updated.
     edit_title: Modify business unit
+
   business_unit_kind:
     errors:
       business_unit_kind_related: The type of business unit cannot be deleted, it is related to at least one business unit
+
   business_unit_type:
     add_business_unit: Add business unit
     correctly_created: Organizational unit was successfully created.
@@ -521,6 +57,7 @@ en:
     new_title: Add organizational unit
     show_title: Organizational unit detail
     stale_object_error: The organizational unit was not updated, please try again.
+
   conclusion_committee_report:
     applied_filters:
       one: 'The following filter has been applied to this report: %{filters}'
@@ -879,6 +416,7 @@ en:
     weaknesses_graphs: Issues graph
     weaknesses_type_external: External Audit Issues
     weaknesses_type_internal: Internal Audit Issues
+
   conclusion_draft_review:
     add_annex: Add annex
     add_image: Add image
@@ -907,6 +445,7 @@ en:
     send_by_email: Send by email
     show_title: Draft audit report details
     stale_object_error: The draft audit report could not be updated, please try again.
+
   conclusion_final_review:
     bundle_title: Generate file
     correctly_created: Final audit report was successfully created.
@@ -949,11 +488,13 @@ en:
       without_score: Audit report without rating
     show_title: Final audit report details
     stale_object_error: The final audit report could not be updated, please try again.
+
   conclusion_management_report:
     index_title: Management reports
     weaknesses_by_audit_type_title: Total findings by audit type
     weaknesses_by_risk_title: Total findings by risk
     weaknesses_by_state_title: Total findings by status
+
   conclusion_report:
     cost_analysis:
       detailed_column_deviation: Deviation
@@ -1004,6 +545,7 @@ en:
     weaknesses_by_state_title: Total findings by status
     weaknesses_by_user_title: Issues by user
     weaknesses_current_situation_title: Global report - Quarterly
+
   conclusion_reports:
     weaknesses_graphs:
       business_units: By business unit
@@ -1011,6 +553,7 @@ en:
       hint: You must perform a search
       process_controls: By business process
       users: By user
+
   conclusion_review:
     add_recipient: Add new recipient
     annex:
@@ -1116,9 +659,11 @@ en:
       finding_work_papers: Finding Working Papers
       pdf_name: workflow_documentation.pdf
       title: Workflow documentation
+
   control_objective:
     errors:
       related: Control objective cannot be removed, it is related in at least one control procedure and test
+
   control_objective_item:
     add_business_unit_score: Add business unit rating
     add_business_unit_type: Add business units by type
@@ -1157,10 +702,12 @@ en:
     view_all_oportunities: Show improvement opportunities list
     view_all_weaknesses: Show issues list
     without_work_papers: No working papers
+
   customize_report_form:
     create: Create
     subtitle: Subtitle
     title: Title
+
   error:
     download_the_following_file: 'Please download the following file:'
     error_file: error_file
@@ -1171,6 +718,7 @@ en:
     show_details: Show details
     thank_you_and_apologies_for_the_inconvenience: Thank you very much and sorry for the inconvenience
     title: Error
+
   execution_committee_report:
     weaknesses_current_situation:
       control_objective_tags: Control objective tags
@@ -1188,6 +736,7 @@ en:
       without_audits_in_the_interval: Without audits in the selected interval
       without_weaknesses: Without issues
     weaknesses_current_situation_title: Global report - Quarterly drafts
+
   execution_reports:
     cost_analysis_title: Cost Analysis
     detailed_management_report:
@@ -1262,9 +811,11 @@ en:
     without_findings: No findings
     without_weaknesses: No findings in the period
     without_weaknesses_in_the_interval: No findings in the interval
+
   external_review:
     errors:
       issue_date_after_review_issue_date: issue date (%{date}) is greater than the audit report issue date
+
   finding:
     add_endorsement: Add reviewer
     add_finding_answer: Add finding
@@ -1362,10 +913,12 @@ en:
     weakness_template_previous: Repeat issue
     without_conclusion_final_review: Without final audit report
     without_work_papers: Without working papers
+
   finding_relation:
     types:
       duplicated: Duplicate
       related: Related
+
   follow_up_audit:
     cost_analysis:
       column_audit_cost: Number of hours used (sum of follow-up hours by auditors)
@@ -1426,6 +979,7 @@ en:
       weaknesses_count: 'Number of issues that meet the criteria: %{count}'
       weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     weaknesses_reschedules_title: Summary of issues and reschedules
+
   follow_up_audited:
     business_unit_title: Business unit
     business_unit_type_title: Organizational unit
@@ -1461,12 +1015,14 @@ en:
       without_audits_in_the_interval: Without audits in the selected interval
       without_weaknesses: Without issues
     weaknesses_by_user_title: Issues by user
+
   follow_up_audited_committee_report:
     period:
       range: from %{from_date} to %{to_date}
       title: Interval
     process_control_stats:
       pdf_name: issues_by_business_process_%{from_date}_to_%{to_date}.pdf
+
   follow_up_committee_report:
     applied_filters:
       one: 'The following filter has been applied to this report: %{filters}'
@@ -1846,11 +1402,13 @@ en:
     weaknesses_reschedules_title: Summary of issues and reschedules
     without_oportunities: No opportunities in the period
     without_weaknesses: No issues in the period
+
   follow_up_management:
     index_title: Management reports
     weaknesses_by_audit_type_title: Total findings by audit type
     weaknesses_by_risk_title: Total findings by risk
     weaknesses_by_state_title: Total findings by status
+
   group:
     add_organization: Add organization
     correctly_created: Group was successfully created.
@@ -1860,6 +1418,7 @@ en:
     new_title: Add group
     show_title: Group details
     stale_object_error: Group was not updated, please try again.
+
   label:
     add: Add
     add_item: Add item
@@ -1909,14 +1468,17 @@ en:
     update: Update
     without_data: Without data
     'yes': 'Yes'
+
   lang:
     en: English
     es: Spanish
+
   memo:
     correctly_created: External audit report was successfully created.
     correctly_updated: External audit report was successfully updated.
     description_pdf: COMMENTS
     stale_object_error: External audit report was not updated, please try again.
+
   message:
     automatic_by_the_system: Done automatically by the system
     change_weakness_risk: The risk of the issue has changed
@@ -1948,6 +1510,7 @@ en:
     validation_failed_message: The entered data is not valid. Please check the highlighted fields and try again
     welcome: Welcome
     you_are_already_logged: This user is already logged in
+
   notification:
     confirm: Confirm
     confirmed: Notification was successfully confirmed.
@@ -1962,6 +1525,7 @@ en:
     status_rejected: Rejected
     status_unconfirmed: Unconfirmed
     type: Type
+
   notifier:
     being_implemented_and_stale_finding_to_manager:
       the_following_finding_is_being_implemented_and_stale: The following issue implementation date has passed and is still in the process of being implemented
@@ -2096,6 +1660,7 @@ en:
         one: 'Then you can access the following URL address:'
         other: 'Then you can access any of the following URLs (depending on the organization you select):'
       title: "%{name}, your account has been created"
+
   oportunity:
     correctly_created: Opportunity was successfully created.
     correctly_updated: Opportunity was successfully updated.
@@ -2120,6 +1685,7 @@ en:
     show_follow_up: Show follow-up
     show_title: Opportunity details
     stale_object_error: Opportunity was not updated, please try again.
+
   organization:
     correctly_created: Organization successfully added.
     correctly_updated: Organization updated correctly.
@@ -2129,15 +1695,18 @@ en:
     new_title: Add organization
     show_title: Organization details
     stale_object_error: Organization was not updated, please try again.
+
   pdf:
     draft: Draft
     export: Export
     page_pattern: Page %{page} of %{total}
     period_description: Period %{period}
     review_identification: Audit report number %{review}
+
   plan_item:
     errors:
       cannot_edit_business_unit_for_memos_too: or a memo
+
   questionnaire:
     add_question: Add question
     correctly_created: The questionnaire has been successfully added.
@@ -2150,6 +1719,7 @@ en:
     not_found: Questionnaire not found
     show_title: Questionnaire Details
     stale_object_error: The questionnaire was not updated, please try again.
+
   review:
     add_best_practice: Add a new best practice
     add_control_objective: Add a new control objective
@@ -2272,6 +1842,7 @@ en:
     work_papers_marked_as_revised: Working papers marked as supervisor-reviewed
     work_papers_recode_failed: Working papers could not be recoded
     work_papers_recoded: Working papers were successfully recoded
+
   review_user_assignment:
     cannot_be_destroyed: User cannot be deleted, it has issues that depend on them
     cannot_be_reassigned: User cannot be reassigned, has issues that depend on them
@@ -2280,6 +1851,7 @@ en:
       old_responsible: 'Old responsible: %{responsible}'
       title: Modification of responsibilities in %{review} audit report
     responsibility_removed: You have been removed from the %{review} audit report
+
   role:
     correctly_created: Profile was successfully created.
     correctly_updated: Profile was successfully updated.
@@ -2295,6 +1867,7 @@ en:
     type_executive_manager: Manager
     type_manager: Audit manager
     type_supervisor: Supervisor
+
   user:
     disabled: Disabled
     pdf_csv:
@@ -2318,6 +1891,7 @@ en:
     unconfirmed_findings: Unconfirmed issues to this date
     will_be_orphan_findings: The user was not deleted, they have pending findings to date. Must reassign them first.
     without_organization: The user has no profile assigned, therefore it does not belong to any organization and cannot enter the system
+
   weakness:
     correctly_created: Issue was successfully created.
     correctly_updated: Issue was successfully updated.
@@ -2346,13 +1920,16 @@ en:
     show_follow_up: Show follow-up
     show_title: Issue details
     stale_object_error: Issue was not updated, please try again.
+
   welcome:
     index_title: Welcome
+
   work_paper:
     cover_name: "%{prefix}%{filename}-cover.pdf"
     number_of_pages:
       one: one sheet
       other: "%{count} sheets"
+
   workflow:
     add_human_resource_utilization: Add human resource
     add_material_resource_utilization: Add material resource
