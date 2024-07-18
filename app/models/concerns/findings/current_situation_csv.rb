@@ -65,7 +65,8 @@ module Findings::CurrentSituationCsv
           I18n.t('finding.audited', count: 0),
           I18n.t('finding.auditors', count: 0),
           Tag.model_name.human(count: 0),
-          Weakness.human_attribute_name('compliance_observations')
+          Weakness.human_attribute_name('compliance_observations'),
+          Weakness.human_attribute_name('compliance_maybe_sanction')
         ].concat benefits.pluck('name')
       end
 
@@ -93,7 +94,8 @@ module Findings::CurrentSituationCsv
             weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
             weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; '),
             weakness.taggings.map(&:tag).join('; '),
-            weakness.compliance_observations
+            weakness.compliance_observations,
+            compliance_maybe_sanction(weakness)
           ].concat(benefits.map do |b|
             achievement = weakness.achievements.detect do |a|
               a.benefit_id == b.id
@@ -107,5 +109,13 @@ module Findings::CurrentSituationCsv
           end)
         end
       end
+
+      private
+
+        def compliance_maybe_sanction weakness
+          unless weakness.compliance_maybe_sanction.nil?
+            I18n.t "label.#{weakness.compliance_maybe_sanction ? 'yes' : 'no'}"
+          end
+        end
   end
 end

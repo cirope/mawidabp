@@ -1,0 +1,15 @@
+// En caso de uso, revisar las traducciones
++function () {
+  var $correctiveActions = $('#conclusion_draft_review_corrective_actions')
+  var actionsWhenUnsatisfied = 'The Canal Development Management informs that it will intervene to the Zonal Supervisor, with the purpose that, within a period of 30 days, he seeks the regularization of the aspects that gave rise to the unfavorable rating of this Audit.\r\nRegarding particular on the weaknesses that are related to aspects of Compliance, in addition to the punctual regularization of the observed cases, it will instruct the Hierarchies of the Branch Network on the importance and implication of possible breaches of these provisions.'
+  var actionsWhenAffectsCompliance = 'The Channel Development Management informs that regarding the weaknesses that are related to Compliance aspects, in addition to the punctual regularization of the observed cases, it will instruct the Branch Network Hierarchies on the importance and implication of eventual breaches of these provisions.\r\nRegarding the rest of the cases exposed and the risks involved, it will give instructions to the branch hierarchies for their regularization immediately, taking extreme precautions in internal control to avoid the appearance of new cases.\r\n\r\n<b>Established normalization period</b>: The Channel Development Management estimates that the regularization of the branch will be completed within 30 days.'
+  var actionsWhenNoAffectsCompliance = 'The Channel Development Management, analyzed the report, the exposed cases and the risks involved, giving instructions to the branch hierarchies for their immediate regularization, taking extreme precautions in internal control to avoid the appearance of new cases.'
+
+  <% if params[:conclusion] == CONCLUSION_OPTIONS[2] || params[:conclusion] == CONCLUSION_OPTIONS[3] %>
+    $correctiveActions.val(actionsWhenUnsatisfied).effect('highlight')
+  <% elsif params[:conclusion] == CONCLUSION_OPTIONS[1] && params[:affects_compliance] == 'true' %>
+    $correctiveActions.val(actionsWhenAffectsCompliance).effect('highlight')
+  <% elsif params[:conclusion] == CONCLUSION_OPTIONS[1] %>
+    $correctiveActions.val(actionsWhenNoAffectsCompliance).effect('highlight')
+  <% end %>
+}()

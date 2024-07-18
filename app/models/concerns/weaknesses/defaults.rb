@@ -13,8 +13,6 @@ module Weaknesses::Defaults
     end
 
     def set_priority
-      unless risk == Finding.risks[:medium]
-        self.priority = Finding.priorities[:low]
-      end
+      self.priority ||= Finding.priorities[:low]
     end
 end

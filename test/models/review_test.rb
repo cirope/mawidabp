@@ -213,7 +213,7 @@ class ReviewTest < ActiveSupport::TestCase
     tag           = tags :manual
     tag_option    = opts[:require_tags].first
 
-    tag.update! options: [tag_option]
+    tag.update! options: { tag_option => '1' }
 
     assert @review.invalid?
     assert_error @review, :taggings, :missing_tags_for_scope,
@@ -929,6 +929,7 @@ class ReviewTest < ActiveSupport::TestCase
     order = [
       repeated_order,
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
     ].map { |o| Arel.sql o }
 

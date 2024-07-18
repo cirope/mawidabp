@@ -13,4 +13,16 @@ class WorkPapersControllerTest < ActionController::TestCase
     assert_template 'work_papers/show'
     assert @response.body.match /iframe/
   end
+
+  test 'upadte work papers' do
+    login user: users(:auditor)
+
+    @work_paper = work_papers :image_work_paper
+
+    assert @work_paper.pending?
+
+    patch :update, params: { id: @work_paper }, xhr: true, as: :js
+
+    assert @work_paper.reload.finished?
+  end
 end

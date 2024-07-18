@@ -1,0 +1,30 @@
+---
+en:
+  ldap_mailer:
+    import_notifier:
+      subject: "Changes in user accounts"
+      body_title: "User accounts have been synchronized, these are the changes made:"
+      greetings: "Hello Supervisors,"
+      states:
+        created: 'Created:'
+        deleted: 'Deleted:'
+        errored: 'With errors:'
+        updated: 'Updated:'
+
+  common_mailer:
+    header_repĺy:
+      reply_delimiter: '-- TO ADD A COMMENT, REPLY TO THIS EMAIL WITHOUT MODIFYING THE SUBJECT. AFTER THE COMMENT, WRITE THE PHRASE %{regex_reply_email} --'
+    alt_footer:
+      warning: "Please, **do not reply** to this email. To perform any interaction, please login into the system."
+      title_html: "If you want to access your issues, click on the following link and enter your Windows ID and password: %{url}"
+    footer:
+      email_label: "Email"
+      warning: "Please, **do not reply** to this email. To perform any interaction, you must log in to the system."
+      title: "Email sent by the 'Mawidabp' system, for any questions contact the support area."
+      recommendations: "We recommend using *Mozilla Firefox*, *Google Chrome* and *Internet Explorer 10 or higher*"
+
+  report_mailer:
+    attached_report:
+      subject: '[%{organization}] Your report is ready'
+      body: 'The requested report is attached.'
+      greetings: 'Hello %{name}'

@@ -7,7 +7,7 @@ class DatePickerInput < SimpleForm::Inputs::Base
 
     def value
       if object.present? && object.send(attribute_name)
-        I18n.l object.send(attribute_name) 
+        I18n.l object.send(attribute_name) rescue nil
       else
         input_html_options[:value]
       end

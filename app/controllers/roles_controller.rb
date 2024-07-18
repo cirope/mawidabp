@@ -103,7 +103,7 @@ class RolesController < ApplicationController
 
     def role_params
       params.require(:role).permit(
-        :name, :role_type, :lock_version, privileges_attributes: [
+        :name, :role_type, :identifier, :lock_version, privileges_attributes: [
           :id, :module, :approval, :erase, :modify, :read
         ]
       )

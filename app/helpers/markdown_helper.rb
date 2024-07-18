@@ -1,6 +1,6 @@
 module MarkdownHelper
   def markdown(text)
-    text.present? ? MARKDOWN_RENDERER.render(text).strip.html_safe : ''
+    text.present? ? sanitize(MARKDOWN_RENDERER.render(text).strip.html_safe) : ''
   end
 
   def markdown_without_paragraph(text)
@@ -13,7 +13,7 @@ module MarkdownHelper
   end
 
   def markdown_help_link
-    link = link_to 'markdown', '#markdown-help', data: { toggle: 'modal' }
+    link = link_to 'markdown', '#markdown-help', data: { bs_toggle: 'modal' }
 
     t '.markdown_help_html', link: link
   end

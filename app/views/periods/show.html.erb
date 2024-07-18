@@ -1,20 +1,24 @@
-<h2><%= @period.name %></h2>
+<div class="card">
+  <div class="card-body">
+    <h2><%= @period.name %></h2>
 
-<p class="lead">
-  <%= @period.description %>
-</p>
+    <p class="lead">
+      <%= @period.description %>
+    </p>
 
-<p>
-  <strong><%= Period.human_attribute_name 'start' %></strong>:
-  <%= l @period.start, format: :long %>
-</p>
+    <p>
+      <strong><%= Period.human_attribute_name 'start' %></strong>:
+      <%= l @period.start, format: :long %>
+    </p>
 
-<p>
-  <strong><%= Period.human_attribute_name 'end' %></strong>:
-  <%= l @period.end, format: :long %>
-</p>
+    <p>
+      <strong><%= Period.human_attribute_name 'end' %></strong>:
+      <%= l @period.end, format: :long %>
+    </p>
 
-<hr />
+    <hr />
 
-<%= link_to_edit edit_period_path(@period) %> |
-<%= link_to_index periods_path %>
+    <%= link_to_edit edit_period_path(@period) %> |
+    <%= link_to_index periods_path %>
+  </div>
+</div>

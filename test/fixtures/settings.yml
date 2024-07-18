@@ -3,11 +3,11 @@ parameter_<%= name %>_default:
   name: <%= name %>
   description: Setting <%= name %>
   organization: cirope
-  value: <%= value[:value] %>
+  value: '<%= value[:value] %>'
 
 parameter_<%= name %>_second:
   name: <%= name %>
   description: Setting <%= name %>
   organization: google
-  value: <%= value[:value] %>
+  value: '<%= value[:value] %>'
 <% end %>

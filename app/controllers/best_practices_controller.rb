@@ -7,7 +7,7 @@ class BestPracticesController < ApplicationController
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_best_practice, only: [:show, :edit, :update, :destroy]
-  before_action :set_title, except: :destroy
+  before_action :set_title, except: [:destroy, :auto_complete_for_tagging]
 
   # * GET /best_practices
   def index
@@ -42,7 +42,7 @@ class BestPracticesController < ApplicationController
     @best_practice = BestPractice.new best_practice_params
 
     if @best_practice.save
-      respond_with @best_practice, location: edit_best_practice_url(@best_practice)  
+      respond_with @best_practice, location: edit_best_practice_url(@best_practice)
     else
       render action: :new
     end
@@ -90,7 +90,6 @@ class BestPracticesController < ApplicationController
           control_objectives_attributes: [
             :id, :name, :relevance, :risk, :obsolete, :support, :support_cache,
             :audit_sector, :date_charge, :order, :_destroy, :remove_support,
-            :affected_sector_id,
             taggings_attributes: [:id, :tag_id, :_destroy],
             control_attributes:  [
               :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy,

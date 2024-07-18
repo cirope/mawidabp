@@ -1,30 +1,32 @@
-<%= render partial: 'shared/search', locals: {
-  options: {},
-  columns: search_columns_for_model(EMail)
-} %>
+<div class="card">
+  <div class="card-body">
+    <%= render partial: 'shared/search', locals: {
+      options: {},
+      columns: search_columns_for_model(EMail)
+    } %>
 
-<table class="table table-sm table-striped table-hover">
-  <thead id="column_headers">
-    <tr>
-      <%= make_not_available_column EMail.human_attribute_name('created_at') %>
-      <%= make_filterable_column EMail.human_attribute_name('to'), nil, 'to' %>
-      <%= make_filterable_column EMail.human_attribute_name('subject'), nil, 'subject' %>
-      <th class="text-right"><%= link_to_search %></th>
-    </tr>
-  </thead>
+    <table class="table table-sm table-striped table-hover">
+      <thead id="column_headers">
+        <tr>
+          <%= make_not_available_column EMail.human_attribute_name('created_at') %>
+          <%= make_filterable_column EMail.human_attribute_name('to'), nil, 'to' %>
+          <%= make_filterable_column EMail.human_attribute_name('subject'), nil, 'subject' %>
+          <th class="text-end"><%= link_to_search %></th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @emails.each do |email| %>
-      <tr>
-        <td><%= l email.created_at, format: :short %></td>
-        <td><%= super_truncate email.to %></td>
-        <td><%= super_truncate email.subject %></td>
-        <td class="text-right"><%= link_to_show email %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @emails.each do |email| %>
+          <tr>
+            <td><%= l email.created_at, format: :short %></td>
+            <td><%= super_truncate email.to %></td>
+            <td><%= super_truncate email.subject %></td>
+            <td class="text-end"><%= link_to_show email %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<hr />
-
-<%= paginate @emails %>
+    <%= paginate @emails %>
+  </div>
+</div>

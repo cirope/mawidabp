@@ -38,10 +38,10 @@ class RiskAssessmentItemTest < ActiveSupport::TestCase
     assert @risk_assessment_item.invalid?
     assert_error @risk_assessment_item, :risk, :greater_than_or_equal_to, count: 0
 
-    @risk_assessment_item.risk = 101
+    @risk_assessment_item.risk = 2147483648
 
     assert @risk_assessment_item.invalid?
-    assert_error @risk_assessment_item, :risk, :less_than_or_equal_to, count: 100
+    assert_error @risk_assessment_item, :risk, :less_than_or_equal_to, count: 2147483647
   end
 
   test 'validates attributes encoding' do
@@ -52,10 +52,10 @@ class RiskAssessmentItemTest < ActiveSupport::TestCase
   end
 
   test 'risk calculation' do
-    assert_not_equal 100, @risk_assessment_item.risk
+    assert_equal 30, @risk_assessment_item.risk
 
     @risk_assessment_item.save!
 
-    assert_equal 100, @risk_assessment_item.reload.risk
+    assert_equal 8, @risk_assessment_item.reload.risk
   end
 end

@@ -17,6 +17,6 @@ es:
       order_by:
         issue_date: 'Fecha de emisión'
         risk: 'Riesgo'
-        first_follow_up_date: 'Primer fecha de implementación'
+        first_follow_up_date: 'Primer fecha estimada de regularización'
       repeated:
         allow_latest: 'Mostrar últimas reiteradas'

@@ -1,21 +1,21 @@
 <div id="answer_option_filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group row">
+      <div class="mb-1 form-group row">
         <% selected = params[action] ? params[action][:answer_option] : nil %>
         <%= f.label :answer_option, Answer.model_name.human, class: 'col-md-4 col-form-label' %>
         <div class="col-md-8">
           <%= f.select :answer_option, filter_answer_options,
-            { selected: selected, prompt: true }, class: 'form-control' %>
+            { selected: selected, prompt: true }, class: 'form-select' %>
         </div>
       </div>
     </div>
 
     <div class="col-md-6">
-      <div class="custom-control custom-checkbox mt-2">
+      <div class="form-check mt-2">
         <% filter_answers = params[action] && params[action][:filter_answers] %>
-        <%= f.check_box :filter_answers, checked: filter_answers == '1', id: 'filter_answers', class: 'custom-control-input' %>
-        <label class="custom-control-label" for="filter_answers"><%= t '.filter_answers' %></label>
+        <%= f.check_box :filter_answers, checked: filter_answers == '1', id: 'filter_answers', class: 'form-check-input' %>
+        <label class="form-check-label" for="filter_answers"><%= t '.filter_answers' %></label>
       </div>
     </div>
   </div>

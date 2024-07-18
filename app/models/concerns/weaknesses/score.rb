@@ -40,7 +40,8 @@ module Weaknesses::Score
   end
 
   def age_weight date: Time.zone.today
-    age_in_days = (date - origination_date).days
+    w_origination_date = origination_date ? origination_date : date
+    age_in_days        = (date - w_origination_date).days
 
     case
     when age_in_days <= 2.years

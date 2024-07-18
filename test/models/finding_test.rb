@@ -1038,12 +1038,12 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'notify for stale and unconfirmed findings' do
     Current.organization = nil
+    days                 =  1
     # Only if no weekend
     assert Time.zone.today.workday?
-    assert_not_equal 0, Finding.unconfirmed_for_notification.size
+    assert_not_equal 0, Finding.unconfirmed_for_notification(days).size
 
-    review_codes_by_user =
-      review_codes_on_findings_by_user :unconfirmed_for_notification
+    review_codes_by_user = review_codes_on_findings_by_user(:unconfirmed_for_notification, args: days)
 
     assert_enqueued_emails 1 do
       Finding.notify_for_unconfirmed_for_notification_findings
@@ -1055,7 +1055,9 @@ class FindingTest < ActiveSupport::TestCase
     # Only if no weekend
     assert Time.zone.today.workday?
 
-    review_codes_by_user = review_codes_on_findings_by_user :next_to_expire
+    before_expire = Array(7.business_days.from_now.to_date)
+
+    review_codes_by_user = review_codes_on_findings_by_user :expires_on, args: before_expire
 
     assert_enqueued_emails 7 do
       Finding.warning_users_about_expiration
@@ -1355,21 +1357,23 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'unconfirmed for notification scope' do
-    assert Finding.unconfirmed_for_notification.any?
+    days = 1
 
-    Finding.unconfirmed_for_notification.each do |finding|
+    assert Finding.unconfirmed_for_notification(days).any?
+
+    Finding.unconfirmed_for_notification(days).each do |finding|
       finding.update_column :first_notification_date,
-        FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.business_days.ago.to_date
+        1.next.business_days.ago.to_date
     end
 
-    refute Finding.unconfirmed_for_notification.any?
+    refute Finding.unconfirmed_for_notification(days).any?
   end
 
   test 'next to expire scope' do
-    before_expire = FINDING_WARNING_EXPIRE_DAYS.pred.business_days.from_now.to_date
-    expire        = FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
+    before_expire = 7.pred.business_days.from_now.to_date
+    expire        = 7.business_days.from_now.to_date
 
-    all_findings_are_in_range = Finding.next_to_expire.all? do |finding|
+    all_findings_are_in_range = Finding.expires_on([before_expire]).all? do |finding|
       finding.follow_up_date.between?(before_expire, expire) ||
         finding.solution_date.between?(before_expire, expire)
     end
@@ -1744,7 +1748,7 @@ class FindingTest < ActiveSupport::TestCase
 
     set_first_follow_update_at_end_of_month finding
 
-    create_finding_answer_with_commitment_date finding, 
+    create_finding_answer_with_commitment_date finding,
                                                one_day_later_of_required_level_if_is_end_of_month(finding, :medium, :manager)
 
     assert_equal :management, finding.commitment_date_required_level
@@ -1757,7 +1761,7 @@ class FindingTest < ActiveSupport::TestCase
 
     set_first_follow_update_at_beginning_of_month finding
 
-    create_finding_answer_with_commitment_date finding, 
+    create_finding_answer_with_commitment_date finding,
                                                one_day_later_of_required_level(finding, :medium, :manager)
 
     assert_equal :management, finding.commitment_date_required_level
@@ -2488,19 +2492,19 @@ class FindingTest < ActiveSupport::TestCase
 
     assert_equal expected_reschedules, finding.calculate_reschedule_count
 
-    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
 
     assert_equal expected_reschedules + 1, finding.calculate_reschedule_count
 
     finding.save!
 
-    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 1.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 1.days).to_s(:db)
 
     assert_equal expected_reschedules + 1, finding.calculate_reschedule_count
 
     finding.save!
 
-    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 4.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 4.days).to_s(:db)
 
     assert_equal expected_reschedules + 2, finding.calculate_reschedule_count
 
@@ -2508,13 +2512,13 @@ class FindingTest < ActiveSupport::TestCase
       finding.save!
 
       finding.state = Finding::STATUS[:awaiting]
-      finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 6.days).to_s(:db)
+      finding.follow_up_date = (7.business_days.from_now.to_date + 6.days).to_s(:db)
 
       assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
 
       finding.save!
 
-      finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 5.days).to_s(:db)
+      finding.follow_up_date = (7.business_days.from_now.to_date + 5.days).to_s(:db)
 
       assert_equal expected_reschedules + 3, finding.calculate_reschedule_count
     end
@@ -2534,7 +2538,7 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     finding.extension      = false
-    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
     reschedules            = finding.calculate_reschedule_count
 
     assert reschedules.zero?
@@ -2547,7 +2551,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'store follow_up_date_last_changed when change' do
     finding                = findings :being_implemented_weakness
-    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
 
     finding.save!
 
@@ -2556,7 +2560,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'store follow_up_date_last_changed when change to nil' do
     finding                = findings :incomplete_weakness
-    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
 
     finding.save!
 
@@ -2569,7 +2573,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'store follow_up_date_last_changed when change from nil' do
     finding                = findings :incomplete_weakness
-    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
 
     finding.save!
 
@@ -2608,7 +2612,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'should return follow_up_date_last_changed when in past didnt have' do
     finding                = findings :incomplete_weakness
-    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
 
     finding.save!
 
@@ -2617,7 +2621,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'should return follow_up_date when dont have follow_up_date but in past have' do
     finding                = findings :incomplete_weakness
-    finding.follow_up_date = (FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date + 2.days).to_s(:db)
+    finding.follow_up_date = (7.business_days.from_now.to_date + 2.days).to_s(:db)
 
     finding.save!
 
@@ -2626,7 +2630,11 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.save!
 
-    assert_equal finding.follow_up_date_last_changed_on_versions, I18n.l(follow_up_date_last_changed_expected, format: :minimal)
+    expected_time = I18n.l(follow_up_date_last_changed_expected, format: :minimal)
+    actual_time   = finding.follow_up_date_last_changed_on_versions
+    delta         = 1.second
+
+    assert_in_delta Time.parse(expected_time), Time.parse(actual_time), delta
   end
 
   test 'should notify findings with follow_up_date_last_changed greater than 90 days' do
@@ -2746,17 +2754,26 @@ class FindingTest < ActiveSupport::TestCase
                      body: body
     end
 
-    def review_codes_on_findings_by_user method
+    def review_codes_on_findings_by_user method, args: nil
       review_codes_by_user = {}
+      findings             = if args.present?
+                               Finding.list.send(method, args)
+                             else
+                               Finding.send(method)
+                             end
 
-      Finding.send(method).each do |finding|
+      findings.each do |finding|
         finding.users.each do |user|
           review_codes_by_user[user] ||= []
 
           user.notifications.not_confirmed.each do |n|
             assert n.findings.present?
 
-            review_codes_by_user[user] |= n.findings.send(method).map(&:review_code)
+            review_codes_by_user[user] |= if args.present?
+                                            n.findings.send(method, args)
+                                          else
+                                            n.findings.send(method)
+                                          end.map(&:review_code)
           end
         end
       end

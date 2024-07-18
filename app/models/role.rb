@@ -22,7 +22,7 @@ class Role < ApplicationRecord
   }.freeze
 
   # Callbacks
-  before_validation :check_auth_privileges
+  before_validation :check_auth_privileges, :set_identifier
   before_save :check_change_in_privileges
 
   # Restricciones
@@ -35,6 +35,9 @@ class Role < ApplicationRecord
     :allow_nil => true, :allow_blank => true
   validates :name, :uniqueness =>
     {:case_sensitive => false, :scope => :organization_id}
+  validates :identifier, :uniqueness =>
+    {:case_sensitive => false, :scope => :organization_id},
+    :allow_nil => true
 
   # Relaciones
   belongs_to :organization
@@ -89,6 +92,10 @@ class Role < ApplicationRecord
     unless self.has_auth_privileges?
       raise 'Must inject the auth privileges before save a Role'
     end
+  end
+
+  def set_identifier
+    self.identifier = nil if identifier.blank?
   end
 
   def has_auth_privileges?
