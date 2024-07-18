@@ -176,6 +176,8 @@ GEM
       net-protocol
     net-ssh (7.2.1)
     nio4r (2.7.0)
+    nokogiri (1.15.5-aarch64-linux)
+      racc (~> 1.4)
     nokogiri (1.15.5-x86_64-linux)
       racc (~> 1.4)
     paper_trail (14.0.0)
@@ -327,6 +329,7 @@ GEM
     zeitwerk (2.6.12)
 
 PLATFORMS
+  aarch64-linux
   x86_64-linux
 
 DEPENDENCIES
