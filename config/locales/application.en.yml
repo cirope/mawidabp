@@ -1445,7 +1445,7 @@ en:
     download_rtf: Download RTF
     downloads: Downloads
     edit: Edit
-    f: 'No'
+    f: 'No' # remove after fixing tests that use this key
     greater_or_equal_than: Greater or equal than
     import: Import
     insert_item: Insert item
@@ -1463,7 +1463,7 @@ en:
     search: Search
     send: Send
     show: Show
-    t: 'Yes'
+    t: 'Yes' # remove after fixing tests that use this key
     total: Total
     update: Update
     without_data: Without data
