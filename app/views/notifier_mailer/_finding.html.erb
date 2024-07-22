@@ -38,7 +38,13 @@
   </p>
 <% end %>
 
-<% audited, auditors = *finding.users.partition(&:can_act_as_audited?) %>
+<% audited, auditors = *finding.users.partition do |u|
+  corporate_organization_ids = u.organizations.corporate.map(&:id)
+  audited_on_current_org     = u.can_act_as_audited?
+  audited_on_corporate_orgs  = corporate_organization_ids.any? { |id| u.can_act_as_audited_on?(id) }
+
+  audited_on_current_org || (audited_on_current_org && audited_on_corporate_orgs)
+end %>
 
 <p style="margin: .1em 0em;">
   <b><%= t 'finding.audited', count: audited.size %></b>:

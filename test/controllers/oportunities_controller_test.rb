@@ -261,6 +261,8 @@ class OportunitiesControllerTest < ActionController::TestCase
 
   test 'undo reiteration' do
     login
+    set_organization
+
     review = Review.find(reviews(:review_with_conclusion).id)
 
     assert_difference 'review.finding_review_assignments.count' do

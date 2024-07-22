@@ -126,6 +126,8 @@ class FindingsHelperTest < ActionView::TestCase
   end
 
   test 'should return nil link to edit finding when user is included in finding and finding is repeated' do
+    set_organization
+
     auth_user     = users :audited
     finding       = findings :being_implemented_weakness
     finding.state = Finding::STATUS[:repeated]
@@ -136,6 +138,8 @@ class FindingsHelperTest < ActionView::TestCase
   end
 
   test 'should return nil link to edit finding when user is not can act as audited and finding is repeated' do
+    set_organization
+
     auth_user     = users :supervisor
     finding       = findings :being_implemented_weakness
     finding.state = Finding::STATUS[:repeated]

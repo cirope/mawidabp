@@ -440,6 +440,7 @@ es:
         user: 'Usuario relacionado (usuario)'
         user_id: 'Usuario relacionado (usuario)'
         process_owner: 'Responsable (usuario)'
+        responsible_auditor: 'Auditor referente (usuario)'
       finding/finding_answers:
         one: 'Comentarios'
         answer: 'Comentario'
@@ -910,6 +911,8 @@ es:
             process_owner:
               invalid: 'solo puede ser asignado a usuarios de tipo auditado'
               taken: 'solo puede haber uno'
+            responsible_auditor:
+              invalid: 'solo puede ser asignado a usuarios de tipo auditor'
         ldap_config:
           attributes:
             user:

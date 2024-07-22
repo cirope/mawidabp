@@ -107,7 +107,13 @@
       </div>
 
       <div id="finding_user_assignments">
-        <% others, audit_team = @oportunity.finding_user_assignments.partition { |fua| fua.user.can_act_as_audited? } %>
+        <% others, audit_team = @oportunity.finding_user_assignments.partition do |fua|
+          corporate_organization_ids = fua.user&.organizations&.corporate&.map(&:id)
+          audited_on_current_org     = fua.user&.can_act_as_audited?
+          audited_on_corporate_orgs  = corporate_organization_ids&.any? { |id| fua.user.can_act_as_audited_on?(id) }
+
+          audited_on_current_org || (audited_on_current_org && audited_on_corporate_orgs)
+        end %>
 
         <% if audit_team.present? %>
           <h5 class="text-muted"><%= t 'finding.user_assignment.audit_team' %></h5>

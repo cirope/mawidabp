@@ -121,6 +121,8 @@ class ConclusionReviews::BicPdf::ConclusionReviewHelperTest < ActionView::TestCa
   end
 
   test 'get bic weakness responsible when dont have process owner' do
+    set_organization
+
     finding_user_assignment               = finding_user_assignments :being_implemented_weakness_audited
     finding_user_assignment.process_owner = false
 
