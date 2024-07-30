@@ -71,9 +71,9 @@ module Users::Roles
   end
 
   def can_act_as_auditor? organization_id = Current.organization&.id
-    auditor?(organization_id)      ||
-      supervisor?(organization_id) ||
-      manager?(organization_id)
+    auditor?(organization_id)    ||
+    supervisor?(organization_id) ||
+    manager?(organization_id)
   end
 
   def roles_has_changed?
