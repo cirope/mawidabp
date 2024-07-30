@@ -170,9 +170,9 @@ module Findings::Validations
 
     def all_roles_fullfilled_by? users
       has_audited    = users.any? { |u| u.can_act_as_audited? || u.can_act_as_audited?(organization_id) }
-      has_auditor    = users.any? { |u| u.auditor?            || u.auditor_on?(organization_id) }
-      has_supervisor = users.any? { |u| u.supervisor?         || u.supervisor_on?(organization_id) }
-      has_manager    = users.any? { |u| u.manager?            || u.manager_on?(organization_id) }
+      has_auditor    = users.any? { |u| u.auditor?            || u.auditor?(organization_id) }
+      has_supervisor = users.any? { |u| u.supervisor?         || u.supervisor?(organization_id) }
+      has_manager    = users.any? { |u| u.manager?            || u.manager?(organization_id) }
 
       has_audited && has_auditor && (has_supervisor || has_manager)
     end
@@ -183,7 +183,7 @@ module Findings::Validations
 
     def validate_manager_presence
       users = finding_user_assignments.reject(&:marked_for_destruction?).map &:user
-      has_manager = users.any? { |u| u.manager? || u.manager_on?(organization_id) }
+      has_manager = users.any? { |u| u.manager? || u.manager?(organization_id) }
 
       unless has_manager
         errors.add :finding_user_assignments, :must_have_a_manager
