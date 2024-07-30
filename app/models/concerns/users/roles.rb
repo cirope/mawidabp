@@ -66,23 +66,24 @@ module Users::Roles
   end
 
   def can_act_as_audited?
-    USE_SCOPE_CYCLE ? roles_audited? : (roles_audited? && !roles_auditors?)
-  end
+    organization_id = Current&.organization&.id || organization.id
 
-  def can_act_as_auditor?
-    roles_auditors?
+    if USE_SCOPE_CYCLE
+      roles_audited_on? organization_id
+    else
+      can_act_as_audited_on? organization_id
+    end
   end
 
   def can_act_as_audited_on? organization_id
-    (
-      audited_on?(organization_id)           ||
-      executive_manager_on?(organization_id) ||
-      admin_on?(organization_id)
-    ) && !(
-      auditor_on?(organization_id)    ||
-      supervisor_on?(organization_id) ||
-      manager_on?(organization_id)
-    )
+    roles_audited_on?(organization_id) &&
+      !can_act_as_auditor?
+  end
+
+  def can_act_as_auditor?
+    organization_id = Current&.organization&.id || organization.id
+
+    roles_auditors_on? organization_id
   end
 
   def roles_has_changed?
@@ -124,12 +125,16 @@ module Users::Roles
 
   private
 
-    def roles_audited?
-      audited? || executive_manager? || admin?
+    def roles_audited_on? organization_id
+      audited_on?(organization_id)           ||
+      executive_manager_on?(organization_id) ||
+      admin_on?(organization_id)
     end
 
-    def roles_auditors?
-      auditor? || supervisor? || manager?
+    def roles_auditors_on? organization_id
+      auditor_on?(organization_id)    ||
+      supervisor_on?(organization_id) ||
+      manager_on?(organization_id)
     end
 
     def inject_auth_privileges_in_roles

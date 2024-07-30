@@ -18,7 +18,7 @@ module Findings::Unanswered
     def confirmed_and_stale_with_auditeds
       confirmed_and_stale.reject do |c_f|
         # Si o si hacer un reload, sino trae la asociación de la consulta
-        c_f.finding_answers.reload.any? { |fa| fa.user.can_act_as_audited? }
+        c_f.finding_answers.reload.any? { |fa| fa.user.can_act_as_audited_on? c_f.organization_id }
       end
     end
 
@@ -35,7 +35,7 @@ module Findings::Unanswered
     def unconfirmed_and_stale_with_auditeds
       unconfirmed_and_stale.reject do |u_f|
         # Si o si hacer un reload, sino trae la asociación de la consulta
-        u_f.finding_answers.reload.any? { |fa| fa.user.can_act_as_audited? }
+        u_f.finding_answers.reload.any? { |fa| fa.user.can_act_as_audited_on? u_f.organization_id }
       end
     end
 
