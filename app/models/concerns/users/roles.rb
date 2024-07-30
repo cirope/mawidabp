@@ -66,7 +66,7 @@ module Users::Roles
   end
 
   def can_act_as_audited?
-    organization_id = Current&.organization&.id || organization.id
+    organization_id = Current.organization&.id
 
     if USE_SCOPE_CYCLE
       roles_audited_on? organization_id
@@ -77,12 +77,10 @@ module Users::Roles
 
   def can_act_as_audited_on? organization_id
     roles_audited_on?(organization_id) &&
-      !can_act_as_auditor?
+      !can_act_as_auditor?(organization_id)
   end
 
-  def can_act_as_auditor?
-    organization_id = Current&.organization&.id || organization.id
-
+  def can_act_as_auditor? organization_id = Current.organization&.id
     roles_auditors_on? organization_id
   end
 
