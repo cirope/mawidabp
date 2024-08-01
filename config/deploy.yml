@@ -12,6 +12,7 @@ servers:
       traefik.http.routers.mawidabp.tls.certresolver: letsencrypt
     directories:
       - /private:/opt/app/private
+    cmd: bundle exec rails db:migrate
   job:
     hosts:
       - <%= ENV['HOST'] || '127.0.0.1' %>
@@ -97,3 +98,4 @@ traefik:
 
 healthcheck:
   path: /healthy
+  interval: 10s
