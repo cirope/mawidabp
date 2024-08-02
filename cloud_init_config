@@ -45,6 +45,44 @@ write_files:
     permissions: '0600'
     owner: root:root
 
+  - path: /etc/cron.daily/mawidabp-backups
+    content: |
+      #!/bin/sh
+      set -eu
+
+      rundate=`date '+%Y%m%d'`
+
+      backup_dir=/var/backups/mawidabp.com/
+      #storage_dir=/var/www/mawidabp.com/shared/private/
+
+      backup_db=mawidabp_production
+      backup_file=${backup_db}_${rundate}.sql.bz2
+
+      s3_folder=kamal-audit
+      s3_db_dir=db
+      s3_storage_dir=private
+
+      s3_bucket_name=customer-backups.hullop.com
+
+      s3_db_bucket_url=s3://$s3_bucket_name/$s3_folder/$s3_db_dir/
+      s3_storage_bucket_url=s3://$s3_bucket_name/$s3_folder/$s3_storage_dir/
+
+      mkdir -p $backup_dir
+
+      find $backup_dir -mindepth 1 -mtime +29 -delete
+
+      # BACKUP
+      docker exec -i mawidabp-postgresql /usr/bin/pg_dump -U mawidabp mawidabp_production | bzip2 > /var/tmp/$backup_file
+      mv /var/tmp/$backup_file $backup_dir
+
+      # S3 SYNC
+      for cfg_path in $(ls ~/.s3cfg/*.s3cfg)
+      do
+        s3cmd sync $backup_dir  $s3_db_bucket_url      -c $cfg_path
+        #s3cmd sync $storage_dir $s3_storage_bucket_url -c $cfg_path
+      done
+    permissions: '0755'
+
 packages:
   - fail2ban
   - zsh
