@@ -1,0 +1,68 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+disable_root: false
+disable_root_opts: "permitrootlogin yes"
+ssh_authorized_keys:
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM28nVX0GneGcVkD/GiwwOro1RNNHIhO76+6eGOHkM0H sergio@xps
+
+write_files:
+  - path: /etc/fail2ban/fail2ban.conf
+    content: |
+      [Definition]
+      loglevel = 4
+      logtarget = /var/log/fail2ban.log
+      maxretry = 3
+      bantime = 600
+      findtime = 600
+      mode = normal
+      maxretry = 5
+
+      [sshd]
+      enabled = true
+      port = 22
+      logpath = /var/log/auth.log
+      maxretry = 3
+
+  - path: /etc/zsh/zshrc
+    content: |
+      export LANG=en_US.UTF-8
+      export LC_ALL=en_US.UTF-8
+      export EDITOR=vim
+      export VISUAL=vim
+      export HISTFILE=~/.zsh_history
+      export HISTSIZE=1000
+      export SAVEHIST=1000
+
+  - path: /root/.oh-my-zsh
+    content: |
+      # Add Oh My Zsh configuration
+      export ZSH_THEME="agnoster"
+      export plugins=(zsh-syntax-highlighting)
+
+  - path: /letsencrypt/acme.json
+    permissions: '0600'
+    owner: root:root
+
+packages:
+  - fail2ban
+  - zsh
+  - docker.io
+
+runcmd:
+  - echo "alias ll='ls -l'" >> /root/.zshrc
+  - echo "alias ll='ls -l'" >> /root/.zshrc
+  - service fail2ban start
+  - service ssh restart
+  - iptables -t filter -N FWR
+  - iptables -t filter -A INPUT -j FWR
+  - iptables -t filter -A FWR -i lo -j ACCEPT
+  - iptables -t filter -A FWR -m state --state RELATED,ESTABLISHED -j ACCEPT
+  - iptables -t filter -A FWR -p icmp -j ACCEPT
+  - iptables -t filter -A FWR -p tcp --dport 22 -j ACCEPT
+  - iptables -t filter -A FWR -p tcp --dport 80 -j ACCEPT
+  - iptables -t filter -A FWR -p tcp --dport 443 -j ACCEPT
+  - iptables -t filter -A FWR -p tcp --dport 8443 -j ACCEPT
+  - iptables -t filter -A FWR -p tcp -m tcp --tcp-flags SYN,RST,ACK SYN -j REJECT --reject-with icmp-port-unreachable
+  - iptables -t filter -A FWR -p udp -j REJECT --reject-with icmp-port-unreachable
