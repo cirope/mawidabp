@@ -36,6 +36,7 @@ RUN bundle exec rake help:install
 RUN rm -rf config/jekyll/_site
 RUN bundle exec rake help:create_bootstrap_symlinks
 RUN bundle exec rake help:generate
+RUN bundle exec rake help:environment
 
 
 # -----------------------
