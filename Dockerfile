@@ -35,6 +35,7 @@ RUN bundle exec whenever > $APP_ROOT/config/mawidabp_crontab
 RUN bundle exec rake help:install
 RUN rm -rf config/jekyll/_site
 RUN rm -rf public/help
+RUn rm -rf config/jekyll/_sass/stylesheets
 RUN bundle exec rake help:create_bootstrap_symlinks
 RUN bundle exec rake help:generate
 RUN bundle exec rake help:environment
