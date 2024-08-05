@@ -87,6 +87,7 @@ packages:
   - fail2ban
   - zsh
   - docker.io
+  - s3cmd
 
 runcmd:
   - echo "alias ll='ls -l'" >> /root/.zshrc
