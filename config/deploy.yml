@@ -2,6 +2,9 @@ service: mawidabp
 
 image: mawidabp
 
+volumes:
+  - /private:/opt/app/private
+
 servers:
   web:
     hosts:
@@ -10,8 +13,7 @@ servers:
       traefik.http.routers.mawidabp.entrypoints: websecure
       traefik.http.routers.mawidabp.rule: Host(`<%= ENV['HOST'] %>`) || Host(`admin-<%= ENV['HOST'] %>`)
       traefik.http.routers.mawidabp.tls.certresolver: letsencrypt
-    directories:
-      - /private:/opt/app/private
+
   job:
     hosts:
       - <%= ENV['HOST'] || '127.0.0.1' %>
@@ -30,7 +32,7 @@ registry:
 env:
   clear:
     SECRET_KEY_BASE:           <%= ENV['SECRET_KEY_BASE'] %>
-    APP_HOST:                  <%= (ENV['HOST'] || 'localhost.lvh.me')[/\w+\.\w+$/] %>
+    APP_HOST:                  <%= (ENV['HOST'] || 'localhost.lvh.me').sub(/^[^.]+\./, '') %>
     DB_HOST:                   <%= ENV['HOST'] || '127.0.0.1' %>
     REDIS_HOST:                <%= ENV['HOST'] || '127.0.0.1' %>
     SMTP_AUTHENTICATION:       'plain'
@@ -62,8 +64,8 @@ accessories:
         POSTGRES_DB: 'mawidabp_production'
       secret:
         - POSTGRES_PASSWORD
-    volume:
-      - db_data:/var/lib/postgresql/data
+    volumes:
+      - /db_data:/var/lib/postgresql/data
   redis:
     image: redis:latest
     port: 6379
