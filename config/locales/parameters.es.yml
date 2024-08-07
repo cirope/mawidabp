@@ -1,102 +1,100 @@
+---
 es:
   approach_types:
-    control: 'Control'
-    sustantive: 'Sustantivo'
-    control_sustantive: 'Control/Sustantivo'
-  frequency_types:
-    monthly: 'Mensual'
-    biyearly: 'Semestral'
-    yearly: 'Anual'
-  impact_risk_types:
-    small: 'Insignificante'
-    low: 'Bajo'
-    moderate: 'Moderado'
-    high: 'Alto'
-    critical: 'Crítico'
+    control: Control
+    control_sustantive: Control/Sustantivo
+    sustantive: Sustantivo
   bic_impact_risk_types:
-    low: 'Bajo'
-    moderate: 'Medio'
-    high: 'Alto'
-  relevance_types:
-    not_rated: 'Nulo'
-    low: 'Bajo'
-    moderate_low: 'Moderado/bajo'
-    moderate: 'Moderado'
-    high: 'Alto'
-    critical: 'Crítico'
-    # Short relevance
-    'yes': 'Sí'
-    'no': 'No'
-  qualification_types:
-    not_rated: 'Nulo'
-    very_low: 'Muy bajo'
-    low: 'Bajo'
-    moderately_low: 'Medianamente bajo'
-    medium_low: 'Medio bajo'
-    medium: 'Medio'
-    moderately_high: 'Medianamente alto'
-    medium_high: 'Medio alto'
-    high: 'Alto'
-    very_high: 'Muy alto'
-    excellent: 'Óptimo'
-    # Short qualifications
-    ok: 'OK'
-    observed: 'Observado'
-    not_apply: 'No aplica'
-  risk_types:
-    low: 'Bajo'
-    medium: 'Medio'
-    high: 'Alto'
-    none: 'Organismo controlador'
-  priority_types:
-    low: 'Baja'
-    medium: 'Media'
-    high: 'Alta'
-    none: 'Organismo controlador'
-  probability_types:
-    rare: 'Raro'
-    unlikely: 'Improbable'
-    possible: 'Posible'
-    probable: 'Probable'
-    almost_certain: 'Casi Certeza'
-  frequencies_types:
-    low: 'Remota'
-    moderate: 'Probable'
-    high: 'Alto'
-  state_regulations_types:
-    not_exist: 'No existe'
-    inadequate: 'Desactualizada/inadecuada/requiere ajuste'
-    exist: 'Existe actualizada'
+    high: Alto
+    low: Bajo
+    moderate: Medio
   degree_compliance_types:
-    fails: 'No cumple'
-    partially: 'Se cumple parcialmente'
-    comply: 'Se cumple'
-  observation_originated_tests_types:
-    design: 'Diseño'
-    compliance: 'Cumplimiento'
-    sustantive: 'Sustantiva'
-  sample_deviation_types:
-    less_expected: 'Menos esperado'
-    most_expected: 'Mas esperado'
+    comply: Se cumple
+    fails: No cumple
+    partially: Se cumple parcialmente
   external_repeated_types:
-    repeated_without_action_plan: 'Si, sin plan de acción'
-    repeated_with_action_plan: 'Si, con plan de acción'
     no_repeated: 'No'
-  suggested_type_risks:
-    representativeness: 'Representatividad'
-    absolute_value: 'Valor absoluto'
-  suggested_type_probabilities:
-    representativeness: 'Representatividad'
-    repeatability: 'Repetitividad'
+    repeated_with_action_plan: Si, con plan de acción
+    repeated_without_action_plan: Si, sin plan de acción
+  frequencies_types:
+    high: Alto
+    low: Remota
+    moderate: Probable
+  frequency_types:
+    biyearly: Semestral
+    monthly: Mensual
+    yearly: Anual
+  impact_risk_types:
+    critical: Crítico
+    high: Alto
+    low: Bajo
+    moderate: Moderado
+    small: Insignificante
+  observation_originated_tests_types:
+    compliance: Cumplimiento
+    design: Diseño
+    sustantive: Sustantiva
+  priority_types:
+    high: Alta
+    low: Baja
+    medium: Media
+    none: Organismo controlador
+  probability_types:
+    almost_certain: Casi Certeza
+    possible: Posible
+    probable: Probable
+    rare: Raro
+    unlikely: Improbable
+  qualification_types:
+    excellent: Óptimo
+    high: Alto
+    low: Bajo
+    medium: Medio
+    medium_high: Medio alto
+    medium_low: Medio bajo
+    moderately_high: Medianamente alto
+    moderately_low: Medianamente bajo
+    not_apply: No aplica
+    not_rated: Nulo
+    observed: Observado
+    ok: OK
+    very_high: Muy alto
+    very_low: Muy bajo
+  relevance_types:
+    critical: Crítico
+    high: Alto
+    low: Bajo
+    moderate: Moderado
+    moderate_low: Moderado/bajo
+    'no': 'No'
+    not_rated: Nulo
+    'yes': Sí
+  risk_types:
+    high: Alto
+    low: Bajo
+    medium: Medio
+    none: Organismo controlador
+  sample_deviation_types:
+    less_expected: Menos esperado
+    most_expected: Mas esperado
   score_types:
-    satisfactory: 'Satisfactorio'
-    improve: 'Necesita mejorar'
-    regular: 'Regular'
-    unsatisfactory: 'No satisfactorio'
-    # When score by weaknesses is used
-    adequate: 'Satisfactorio'
-    require_some_improvements: 'Aceptable'
-    require_improvements: 'Ajustado'
-    require_lots_of_improvements: 'Sujeto a mejora'
-    inadequate: 'Insatisfactorio'
-    none: 'No aplica'
+    adequate: Satisfactorio
+    improve: Necesita mejorar
+    inadequate: Insatisfactorio
+    none: No aplica
+    regular: Regular
+    require_improvements: Ajustado
+    require_lots_of_improvements: Sujeto a mejora
+    require_some_improvements: Aceptable
+    satisfactory: Satisfactorio
+    unsatisfactory: No satisfactorio
+  state_regulations_types:
+    exist: Existe actualizada
+    inadequate: Desactualizada/inadecuada/requiere ajuste
+    not_exist: No existe
+  suggested_type_probabilities:
+    repeatability: Repetitividad
+    representativeness: Representatividad
+  suggested_type_risks:
+    absolute_value: Valor absoluto
+    representativeness: Representatividad
