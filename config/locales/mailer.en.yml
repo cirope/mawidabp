@@ -1,30 +1,160 @@
 ---
 en:
+  common_mailer:
+    alt_footer:
+      title_html: 'If you want to access your issues, click on the following link and enter your Windows ID and password: %{url}'
+      warning: Please, **do not reply** to this email. To perform any interaction, please login into the system.
+    footer:
+      email_label: Email
+      recommendations: We recommend using *Mozilla Firefox*, *Google Chrome* and *Internet Explorer 10 or higher*
+      title: Email sent by the 'Mawidabp' system, for any questions contact the support area.
+      warning: Please, **do not reply** to this email. To perform any interaction, you must log in to the system.
+    header_repĺy:
+      reply_delimiter: "-- TO ADD A COMMENT, REPLY TO THIS EMAIL WITHOUT MODIFYING THE SUBJECT. AFTER THE COMMENT, WRITE THE PHRASE %{regex_reply_email} --"
+
   ldap_mailer:
     import_notifier:
-      subject: "Changes in user accounts"
-      body_title: "User accounts have been synchronized, these are the changes made:"
-      greetings: "Hello Supervisors,"
+      body_title: 'User accounts have been synchronized, these are the changes made:'
+      greetings: Hello Supervisors,
       states:
         created: 'Created:'
         deleted: 'Deleted:'
         errored: 'With errors:'
         updated: 'Updated:'
+      subject: Changes in user accounts
 
-  common_mailer:
-    header_repĺy:
-      reply_delimiter: '-- TO ADD A COMMENT, REPLY TO THIS EMAIL WITHOUT MODIFYING THE SUBJECT. AFTER THE COMMENT, WRITE THE PHRASE %{regex_reply_email} --'
-    alt_footer:
-      warning: "Please, **do not reply** to this email. To perform any interaction, please login into the system."
-      title_html: "If you want to access your issues, click on the following link and enter your Windows ID and password: %{url}"
-    footer:
-      email_label: "Email"
-      warning: "Please, **do not reply** to this email. To perform any interaction, you must log in to the system."
-      title: "Email sent by the 'Mawidabp' system, for any questions contact the support area."
-      recommendations: "We recommend using *Mozilla Firefox*, *Google Chrome* and *Internet Explorer 10 or higher*"
+  notifier:
+    being_implemented_and_stale_finding_to_manager:
+      the_following_finding_is_being_implemented_and_stale: The following issue implementation date has passed and is still in the process of being implemented
+      title: Notification of issues in the process of implementation due
+    change_password: Change password
+    changes_notification:
+      title: Notification of changes
+    conclusion_final_review_close_date_warning:
+      body_title: The following audit reports are close to closing
+      title: Notification of audit reports close to closure
+    conclusion_review_notification:
+      body_title: 'The following documents are attached: %{elements}'
+      draft: Draft
+      final: Final
+      title: "%{type} audit report %{review}"
+    endorsement_update:
+      body_title: Approval request status updated
+      title: Approval Update
+    expired_finding_to_manager:
+      managers_clarification: People can change if the users of the issue / improvement opportunity are modified or if the organizational structure is altered
+      subject: Expired finding [#%{finding_id}]
+      the_following_finding_is_expired: No new implementation date has been proposed for the following finding
+      title: Expired finding
+    findings_brief:
+      title: Pending findings summary
+    findings_expiration_warning:
+      body_title:
+        one: The following finding is about to expire
+        other: The following findings are about to expire
+      title: Notification of findings near expiration
+    findings_expired_warning:
+      body_title:
+        one: The following finding is expired
+        other: The following findings are expired
+      title: Notification of expired findings
+    findings_unanswered_warning:
+      body_title:
+        one: The following finding is unanswered
+        other: The following findings are unanswered
+      title: Unattended without response finding notification
+    group_welcome_email:
+      clarification: You have received this email because you have been assigned a group in the 'Mawidabp' system
+      create_user: Create user
+      initial_user: To start using the system you must first create a user
+      title: The group %{name} has been created
+    new_admin_user:
+      body: "%{name} (%{user}) is now an administrator"
+      body_title: A new administrator was assigned to the organization
+      title: New admin
+    new_endorsement:
+      body_title: A new commitment date has been proposed that requires your approval
+      title: Approval required
+    notification:
+      confirm: Confirm notification
+      pending: Pending notifications
+      the_following_findings_are_still_unconfirmed: The following findings have been reported but have not received a confirmation
+      unconfirmed: Unconfirmed notifications
+    notify_action_not_found:
+      reply_receive: Response received
+      title: Your mail was not processed
+      warning: No action was taken with the mail received.
+    notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
+      finding_follow_up_date_last_changed_is_grerater_90_days: 90 days have passed since the last change in the issue implementation date
+      follow_up_date_last_changed: 'Last changed implementation date: %{follow_up_date_last_changed}'
+      title: Deployed issue expiration
+    notify_new_finding:
+      created_title: New finding
+      title: You have a new finding [#%{finding_id}]
+    notify_new_finding_answer:
+      finding_data: A comment has been added to the finding **%{finding_code}** of audit report **%{review}**
+      finding_link: Show finding
+      title: New comment on audit report %{review} [#%{finding_id}]
+    notify_new_oportunity:
+      oportunity_link: See improvement opportunity
+      title: You have a new opportunity to improve
+    pending_poll_email:
+      about_html: Survey about <strong>%{entity}</strong>
+    reassigned_findings:
+      new_responsibles:
+        one: 'Current user: %{responsible}'
+        other: 'Current users: %{responsible}'
+      old_responsibles:
+        one: 'Previous user: %{responsible}'
+        other: 'Previous users: %{responsible}'
+      the_following_findings_are_now_reassigned:
+        one: The following finding has been reassigned
+        other: The following findings have been reassigned
+      title:
+        one: Finding / Improvement opportunity reassigned
+        other: Findings / Improvement opportunities reassigned
+    restore_password:
+      body_title: "%{user_name}, to reset the password of your user (%{user}) use the following link:"
+      clarification: If you **did not request** the reset **do nothing**, your username and password are still valid
+      title: Reset password
+      valid_until: "%{link} (You will be able to use this link until the day **%{date}** inclusive"
+    tasks_expiration_warning:
+      body_title:
+        one: The next task is close to due
+        other: The following tasks are close to due
+      title: Notification of tasks close to due
+    tasks_expired_warning:
+      body_title:
+        one: The following task is overdue
+        other: The following tasks are overdue
+      title: Notification of overdue tasks
+    unanswered_finding:
+      if_no_answer_is_given_the_following_users_will_be_notified: If it continues in the same status (Unanswered) the following notifications will be generated
+      subject: Notification of changes to findings [#%{finding_id}]"
+      the_following_finding_are_now_unanswered: The following finding / improvement opportunity has its status changed to **Unanswered**, due to not receiving a response
+      title: Notification of changes
+    unanswered_finding_to_manager:
+      managers_clarification: People can change if the finding's users are modified or if the organizational structure is altered
+      subject: Inactivity notification [#%{finding_id}]
+      the_following_finding_is_stale_and_unanswered: No response has been received from the users regarding the following finding
+      title: Inactivity notification
+    unanswered_findings:
+      if_no_answer_is_given_the_following_users_will_be_notified: If it continues in the same status (Unanswered), the following notifications will be generated
+      the_following_findings_are_now_unanswered:
+        one: The following issue / improvement opportunity has its status changed to **Unanswered**, due to not receiving a response
+        other: The following issues / improvement opportunities have their status changed to **Unanswered**, due to not receiving a response
+      title: Notification of changes
+    welcome_email:
+      change_password: Set password
+      clarification: You have received this email because you have been registered in the 'Mawidabp' system.
+      initial_password: To start using the system, you must first set your password
+      organizations_sites:
+        one: 'Then you can access the following URL address:'
+        other: 'Then you can access any of the following URLs (depending on the organization you select):'
+      title: "%{name}, your account has been created"
 
   report_mailer:
     attached_report:
-      subject: '[%{organization}] Your report is ready'
-      body: 'The requested report is attached.'
-      greetings: 'Hello %{name}'
+      body: The requested report is attached.
+      greetings: Hello %{name}
+      subject: "[%{organization}] Your report is ready"
