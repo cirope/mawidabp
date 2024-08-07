@@ -1,181 +1,181 @@
+---
 en:
   flash:
     actions:
       create:
-        notice: '%{resource_name} created'
         alert: ''
-      update:
-        notice: '%{resource_name} updated'
-        alert: ''
-        stale: '%{resource_name} could not be updated, please try again'
+        notice: "%{resource_name} created"
       destroy:
-        notice: '%{resource_name} deleted'
-        alert: '%{resource_name} could not be deleted'
+        alert: "%{resource_name} could not be deleted"
+        notice: "%{resource_name} deleted"
+      update:
+        alert: ''
+        notice: "%{resource_name} updated"
+        stale: "%{resource_name} could not be updated, please try again"
 
     benefits:
       destroy:
-        alert: 'Benefit could not be deleted, it was already used in observations'
+        alert: Benefit could not be deleted, it was already used in observations
 
     best_practices:
       create:
-        notice: 'Best practices successfully created'
-      update:
-        notice: 'Best practices successfully updated'
-        stale: 'Best practices were not updated, please try again'
+        notice: Best practices successfully created
       destroy:
-        notice: 'Best practice deleted'
-        alert: 'Best practice cannot be deleted, it has already been used in audit reports'
+        alert: Best practice cannot be deleted, it has already been used in audit reports
+        notice: Best practice deleted
+      update:
+        notice: Best practices successfully updated
+        stale: Best practices were not updated, please try again
 
     closing_interviews:
       create:
-        notice: 'Closing interview successfully created'
+        notice: Closing interview successfully created
       update:
-        notice: 'Closing interview successfully updated'
-        stale: 'Closing interview was not updated, please try again'
-
-    findings:
-      update:
-        notice: 'Finding response successfully updated.'
-        stale: 'Finding responses was not updated, please try again.'
+        notice: Closing interview successfully updated
+        stale: Closing interview was not updated, please try again
 
     finding_answers:
       create:
-        notice: 'Finding answer created successfully.'
-        alert: 'Answer could not be created, please try again.'
+        alert: Answer could not be created, please try again.
+        notice: Finding answer created successfully.
 
-    news:
-      create:
-        notice: 'News created'
+    findings:
       update:
-        notice: 'News updated'
-        alert: ''
-        stale: 'News could not be updated, please try again'
-      destroy:
-        notice: 'News deleted'
-        alert: 'News could not be deleted'
+        notice: Finding response successfully updated.
+        stale: Finding responses was not updated, please try again.
 
     licenses:
       authorizations:
         create:
-          notice: 'License updated'
+          notice: License updated
+
+    news:
+      create:
+        notice: News created
+      destroy:
+        alert: News could not be deleted
+        notice: News deleted
+      update:
+        alert: ''
+        notice: News updated
+        stale: News could not be updated, please try again
 
     opening_interviews:
       create:
-        notice: 'Opening interview successfully created'
+        notice: Opening interview successfully created
       update:
-        notice: 'Opening interview successfully updated'
-        stale: 'Opening interview was not updated, please try again'
+        notice: Opening interview successfully updated
+        stale: Opening interview was not updated, please try again
 
     organizations:
       create:
-        notice: 'Organization created successfully'
+        notice: Organization created successfully
       update:
-        notice: 'Organization updated successfully'
-        stale: 'Organization was not updated, please try again'
+        notice: Organization updated successfully
+        stale: Organization was not updated, please try again
 
     periods:
       create:
-        notice: 'Period created successfully'
+        notice: Period created successfully
       update:
-        notice: 'Period updated successfully'
-        stale: 'Period was not updated, please try again'
+        notice: Period updated successfully
+        stale: Period was not updated, please try again
 
     plans:
       destroy:
-        notice: 'Work plan deleted'
-        alert: 'Plan cannot be deleted, it is related to at least one audit report'
+        alert: Plan cannot be deleted, it is related to at least one audit report
+        notice: Work plan deleted
 
     polls:
       create:
-        notice: 'Poll has been successfully created'
-      update:
-        notice: 'Poll has been successfully saved. Thank you very much!'
-        stale: 'Poll was not saved, please try again'
+        notice: Poll has been successfully created
       destroy:
-        notice: 'Poll deleted'
-        alert: 'Poll could not be deleted'
+        alert: Poll could not be deleted
+        notice: Poll deleted
+      update:
+        notice: Poll has been successfully saved. Thank you very much!
+        stale: Poll was not saved, please try again
 
     questionnaires:
       create:
-        notice: 'Questionnaire has been successfully created'
+        notice: Questionnaire has been successfully created
       update:
-        notice: 'Questionnaire has been successfully updated'
-        stale: 'Questionnaire was not updated, please try again'
+        notice: Questionnaire has been successfully updated
+        stale: Questionnaire was not updated, please try again
 
     registrations:
       create:
-        # With this we skip showing a flash message, the show view is enough
         notice: ''
 
     resource_classes:
       create:
-        notice: 'Resource class created successfully'
-      update:
-        notice: 'Resource class updated successfully'
-        stale: 'Resource class was not updated, please try again'
+        notice: Resource class created successfully
       destroy:
-        notice: 'Resource class deleted'
-        alert: 'Resource class could not be deleted'
-
-    risk_assessments:
-      create:
-        notice: 'Risk assessment successfully created'
-      merge_to_plan:
-        notice: 'Plan updated successfully'
+        alert: Resource class could not be deleted
+        notice: Resource class deleted
       update:
-        notice: 'Risk assessment updated successfully'
-        stale: 'Risk assessment was not updated, please try again'
-      destroy:
-        notice: 'Risk assessment deleted'
-      sort_by_risk:
-        notice: 'Risk assessment ordered successfully'
+        notice: Resource class updated successfully
+        stale: Resource class was not updated, please try again
 
     risk_assessment_templates:
       create:
-        notice: 'Risk assessment template successfully created'
-      update:
-        notice: 'Risk assessment template successfully updated'
-        stale: 'Risk assessment template was not updated, please try again'
+        notice: Risk assessment template successfully created
       destroy:
-        notice: 'Risk assessment template deleted'
+        notice: Risk assessment template deleted
+      update:
+        notice: Risk assessment template successfully updated
+        stale: Risk assessment template was not updated, please try again
+
+    risk_assessments:
+      create:
+        notice: Risk assessment successfully created
+      destroy:
+        notice: Risk assessment deleted
+      merge_to_plan:
+        notice: Plan updated successfully
+      sort_by_risk:
+        notice: Risk assessment ordered successfully
+      update:
+        notice: Risk assessment updated successfully
+        stale: Risk assessment was not updated, please try again
 
     settings:
       update:
-        notice: 'Setting updated successfully'
-        stale: 'Settings was not updated, please try again'
+        notice: Setting updated successfully
+        stale: Settings was not updated, please try again
 
     tags:
       create:
-        notice: 'Tag created'
-      update:
-        notice: 'Tag updated'
-        alert: ''
-        stale: 'Tag could not be updated, please try again'
+        notice: Tag created
       destroy:
-        notice: 'Tag deleted'
-        alert: 'Tag could not be deleted'
+        alert: Tag could not be deleted
+        notice: Tag deleted
+      update:
+        alert: ''
+        notice: Tag updated
+        stale: Tag could not be updated, please try again
 
     users:
       profiles:
         update:
-          notice: 'Profile update successful'
-          alert: 'Failed to update profile'
+          alert: Failed to update profile
+          notice: Profile update successful
       reassignments:
         update:
-          notice: 'Responsibility reassignment completed successfully'
-          alert: 'Responsibility reassignment cannot be performed'
+          alert: Responsibility reassignment cannot be performed
+          notice: Responsibility reassignment completed successfully
       releases:
         update:
-          notice: 'Release of responsibilities completed successfully'
-          alert: 'Release of responsibilities cannot be performed, you must in some cases reassign them'
+          alert: Release of responsibilities cannot be performed, you must in some cases reassign them
+          notice: Release of responsibilities completed successfully
 
     weakness_templates:
       create:
-        notice: 'Weakness template created'
-      update:
-        notice: 'Weakness template updated'
-        alert: ''
-        stale: 'Weakness template could not be updated, please try again'
+        notice: Weakness template created
       destroy:
-        notice: 'Weakness template deleted'
-        alert: 'Weakness template could not be deleted'
+        alert: Weakness template could not be deleted
+        notice: Weakness template deleted
+      update:
+        alert: ''
+        notice: Weakness template updated
+        stale: Weakness template could not be updated, please try again
