@@ -7,13 +7,13 @@ FROM --platform=$BUILDPLATFORM ruby:slim as builder
 ARG APP_ROOT=/opt/app
 ENV RAILS_ENV production
 
-RUN apt-get update && \
+RUN apt-get update &&                      \
 apt-get install -y --no-install-recommends \
- build-essential     \
- nodejs         \
- postgresql-client \
- tzdata         \
- libsass1 \
+ build-essential                           \
+ nodejs                                    \
+ postgresql-client                         \
+ tzdata                                    \
+ libsass1                                  \
  libpq-dev
 
 RUN mkdir -p $APP_ROOT
@@ -33,9 +33,9 @@ RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 RUN bundle exec whenever > $APP_ROOT/config/mawidabp_crontab
 
 RUN bundle exec rake help:install
-RUN rm -rf config/jekyll/_site
-RUN rm -rf public/help
-RUn rm -rf config/jekyll/_sass/stylesheets
+#RUN rm -rf config/jekyll/_site
+#RUN rm -rf public/help
+#RUN rm -rf config/jekyll/_sass/stylesheets
 RUN bundle exec rake help:create_bootstrap_symlinks
 RUN bundle exec rake help:generate
 RUN bundle exec rake help:environment
@@ -50,29 +50,26 @@ FROM --platform=$BUILDPLATFORM ruby:slim
 ARG APP_ROOT=/opt/app
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
-ENV USER root
 ENV PORT 3000
 ENV RAILS_ENV production
 
-RUN apt-get update && \
+RUN apt-get update &&                      \
 apt-get install -y --no-install-recommends \
- build-essential     \
- curl           \
- nodejs         \
- postgresql-client \
- tzdata         \
- ca-certificates \
- bash \
- cron \
- busybox \
+ build-essential                           \
+ curl                                      \
+ nodejs                                    \
+ postgresql-client                         \
+ tzdata                                    \
+ ca-certificates                           \
+ bash                                      \
+ cron                                      \
+ busybox                                   \
  libpq-dev
 
 COPY --from=builder $APP_ROOT $APP_ROOT
 COPY --from=builder $GEM_HOME $GEM_HOME
 
-RUN rm -rf /var/lib/apt/lists/*
-
-RUN chown -R $USER: $APP_ROOT
+#RUN chown -R $USER: $APP_ROOT
 
 WORKDIR $APP_ROOT
 
