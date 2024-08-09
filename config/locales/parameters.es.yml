@@ -54,20 +54,22 @@ es:
     medium_low: Medio bajo
     moderately_high: Medianamente alto
     moderately_low: Medianamente bajo
-    not_apply: Bajo
     not_rated: Nulo
-    observed: Medio
-    ok: Alto
     very_high: Muy alto
     very_low: Muy bajo
+    # Short qualifications
+    not_apply: Bajo
+    observed: Medio
+    ok: Alto
   relevance_types:
     critical: Crítico
     high: Alto
     low: Bajo
     moderate: Moderado
     moderate_low: Moderado/bajo
-    'no': 'No'
     not_rated: Nulo
+    # Short relevance
+    'no': 'No'
     'yes': Sí
   risk_types:
     high: Alto
@@ -78,16 +80,17 @@ es:
     less_expected: Menos esperado
     most_expected: Mas esperado
   score_types:
-    adequate: Adecuado
     improve: Necesita mejorar
+    regular: Regular
+    satisfactory: Satisfactorio
+    unsatisfactory: No satisfactorio
+    # When score by weaknesses is used
+    adequate: Adecuado
     inadequate: Inadecuado
     none: No aplica
-    regular: Regular
     require_improvements: Requiere mejoras
     require_lots_of_improvements: Requiere mejoras significativas
     require_some_improvements: Requiere ciertas mejoras
-    satisfactory: Satisfactorio
-    unsatisfactory: No satisfactorio
   state_regulations_types:
     exist: Existe actualizada
     inadequate: Desactualizada/inadecuada/requiere ajuste
