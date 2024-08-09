@@ -4,6 +4,8 @@ package_upgrade: true
 
 disable_root: false
 disable_root_opts: "permitrootlogin yes"
+ssh_pwauth: false
+
 ssh_authorized_keys:
   - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM28nVX0GneGcVkD/GiwwOro1RNNHIhO76+6eGOHkM0H sergio@xps
 
@@ -88,9 +90,9 @@ packages:
   - zsh
   - docker.io
   - s3cmd
+  - git
 
 runcmd:
-  - echo "alias ll='ls -l'" >> /root/.zshrc
   - echo "alias ll='ls -l'" >> /root/.zshrc
   - service fail2ban start
   - service ssh restart
