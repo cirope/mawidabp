@@ -2,7 +2,7 @@ module ConclusionReviews::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :review_id, :organization_id, :issue_date, presence: true
+    validates :organization_id, :issue_date, presence: true
     validates :applied_procedures, presence: true, unless: :validate_extra_gal_attributes?
     validates :conclusion, :applied_procedures, :summary, :recipients, :sectors,
       :observations, :reference, :scope, :main_weaknesses_text,
