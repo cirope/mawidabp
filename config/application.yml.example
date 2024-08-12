@@ -19,7 +19,6 @@ EMAIL_PASSWORD: '<password>'
 EMAIL_SSL: 'true'
 
 # Automatic response with mgraph
-#EMAIL_METHOD: '<method>' # 'mgraph', 'pop3' or 'imap'
 EMAIL_USER_ID: '<user_id>'
 EMAIL_TENANT_ID: '<tenant_id>'
 EMAIL_CLIENT_ID: '<client_id>'
@@ -27,13 +26,11 @@ EMAIL_CLIENT_SECRET: '<client_secret>'
 
 REGEX_REPLY_EMAIL: 'El .*escribió:'
 
-#REDIS_HOST: 'localhost'
+REDIS_HOST: 'localhost'
 REDIS_PORT: '6379'
 
 SECRET_KEY_BASE: 'REPLACE with rake secret output'
 NEW_RELIC_LICENSE_KEY: 'REPLACE with the one provided by NewRelic'
-
-
 
 # Extra application options
 ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION: 'false'
