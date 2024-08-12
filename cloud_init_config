@@ -47,6 +47,10 @@ write_files:
     permissions: '0600'
     owner: root:root
 
+  - path: /etc/iptables/rules.v4
+    permissions: '0644'
+    owner: root:root
+
   - path: /etc/cron.daily/mawidabp-backups
     content: |
       #!/bin/sh
@@ -91,6 +95,7 @@ packages:
   - docker.io
   - s3cmd
   - git
+  - iptables-persistent
 
 runcmd:
   - echo "alias ll='ls -l'" >> /root/.zshrc
@@ -107,3 +112,4 @@ runcmd:
   - iptables -t filter -A FWR -p tcp --dport 8443 -j ACCEPT
   - iptables -t filter -A FWR -p tcp -m tcp --tcp-flags SYN,RST,ACK SYN -j REJECT --reject-with icmp-port-unreachable
   - iptables -t filter -A FWR -p udp -j REJECT --reject-with icmp-port-unreachable
+  - iptables-save > /etc/iptables/rules.v4
