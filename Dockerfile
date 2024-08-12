@@ -33,9 +33,6 @@ RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 RUN bundle exec whenever > $APP_ROOT/config/mawidabp_crontab
 
 RUN bundle exec rake help:install
-#RUN rm -rf config/jekyll/_site
-#RUN rm -rf public/help
-#RUN rm -rf config/jekyll/_sass/stylesheets
 RUN bundle exec rake help:create_bootstrap_symlinks
 RUN bundle exec rake help:generate
 RUN bundle exec rake help:environment
@@ -68,8 +65,6 @@ apt-get install -y --no-install-recommends \
 
 COPY --from=builder $APP_ROOT $APP_ROOT
 COPY --from=builder $GEM_HOME $GEM_HOME
-
-#RUN chown -R $USER: $APP_ROOT
 
 WORKDIR $APP_ROOT
 
