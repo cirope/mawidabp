@@ -1,108 +1,107 @@
-# FIXME Algunos salen como "agregadas correctamente" y otro como "ha sido agregada correctamente", se debería unificar.
-# FIXME Se deberían unificar los tiempos verbales a presente.
+---
 es:
   flash:
     actions:
       create:
-        notice: '%{resource_name} creado'
-        alert:  ''
-      update:
-        notice: '%{resource_name} actualizado'
-        alert:  ''
-        stale: '%{resource_name} no pudo ser actualizado, intente nuevamente'
+        alert: ''
+        notice: "%{resource_name} creado"
       destroy:
-        notice: '%{resource_name} eliminado'
-        alert:  '%{resource_name} no pudo ser eliminado'
+        alert: "%{resource_name} no pudo ser eliminado"
+        notice: "%{resource_name} eliminado"
+      update:
+        alert: ''
+        notice: "%{resource_name} actualizado"
+        stale: "%{resource_name} no pudo ser actualizado, intente nuevamente"
 
     benefits:
       destroy:
-        alert: 'El beneficio no pudo ser eliminado, ya fue utilizado en observaciones'
+        alert: El beneficio no pudo ser eliminado, ya fue utilizado en observaciones
 
     best_practices:
       create:
-        notice: 'Buenas prácticas agregadas correctamente'
-      update:
-        notice: 'Buenas prácticas actualizadas correctamente'
-        stale: 'Las buenas prácticas no fueron actualizadas, intente nuevamente'
+        notice: Buenas prácticas agregadas correctamente
       destroy:
-        notice: 'Buena práctica eliminada'
-        alert: 'La buena práctica no puede ser eliminada, ya ha sido utilizada en informes'
+        alert: La buena práctica no puede ser eliminada, ya ha sido utilizada en informes
+        notice: Buena práctica eliminada
+      update:
+        notice: Buenas prácticas actualizadas correctamente
+        stale: Las buenas prácticas no fueron actualizadas, intente nuevamente
 
     closing_interviews:
       create:
-        notice: 'Entrevista de cierre agregada correctamente'
+        notice: Entrevista de cierre agregada correctamente
       update:
-        notice: 'Entrevista de cierre actualizada correctamente'
-        stale: 'La entrevista de cierre no fue actualizada, intente nuevamente'
-
-    findings:
-      update:
-        notice: 'Respuesta a hallazgo actualizada correctamente.'
-        stale: 'La respuesta al hallazgo no fue actualizada, intente nuevamente.'
+        notice: Entrevista de cierre actualizada correctamente
+        stale: La entrevista de cierre no fue actualizada, intente nuevamente
 
     finding_answers:
       create:
-        notice: 'Respuesta a hallazgo creada correctamente.'
-        alert: 'La respuesta no pudo agregarse, intente nuevamente.'
+        alert: La respuesta no pudo agregarse, intente nuevamente.
+        notice: Respuesta a hallazgo creada correctamente.
 
-    news:
-      create:
-        notice: 'Noticia creada'
+    findings:
       update:
-        notice: 'Noticia actualizada'
-        alert: ''
-        stale: 'Noticia no pudo ser actualizada, intente nuevamente'
-      destroy:
-        notice: 'Noticia eliminada'
-        alert: 'La noticia no pudo ser eliminada'
+        notice: Respuesta a hallazgo actualizada correctamente.
+        stale: La respuesta al hallazgo no fue actualizada, intente nuevamente.
 
     licenses:
       authorizations:
         create:
-          notice: 'Licencia actualizada'
+          notice: Licencia actualizada
+
+    news:
+      create:
+        notice: Noticia creada
+      destroy:
+        alert: La noticia no pudo ser eliminada
+        notice: Noticia eliminada
+      update:
+        alert: ''
+        notice: Noticia actualizada
+        stale: Noticia no pudo ser actualizada, intente nuevamente
 
     opening_interviews:
       create:
-        notice: 'Entrevista de inicio agregada correctamente'
+        notice: Entrevista de inicio agregada correctamente
       update:
-        notice: 'Entrevista de inicio actualizada correctamente'
-        stale: 'La entrevista de inicio no fue actualizada, intente nuevamente'
+        notice: Entrevista de inicio actualizada correctamente
+        stale: La entrevista de inicio no fue actualizada, intente nuevamente
 
     organizations:
       create:
-        notice: 'Organización agregada correctamente'
+        notice: Organización agregada correctamente
       update:
-        notice: 'Organización actualizada correctamente'
-        stale: 'La organización no fue actualizada, intente nuevamente'
+        notice: Organización actualizada correctamente
+        stale: La organización no fue actualizada, intente nuevamente
 
     periods:
       create:
-        notice: 'Período agregado correctamente'
+        notice: Período agregado correctamente
       update:
-        notice: 'Período actualizado correctamente'
-        stale: 'El período no fue actualizado, intente nuevamente'
+        notice: Período actualizado correctamente
+        stale: El período no fue actualizado, intente nuevamente
 
     plans:
       destroy:
-        notice: 'Plan de trabajo eliminado'
-        alert: 'El plan no puede ser eliminado, se encuentra relacionado con al menos un informe'
+        alert: El plan no puede ser eliminado, se encuentra relacionado con al menos un informe
+        notice: Plan de trabajo eliminado
 
     polls:
       create:
-        notice: 'La encuesta ha sido agregada correctamente'
-      update:
-        notice: 'La encuesta ha sido guardada correctamente ¡Muchas gracias!'
-        stale: 'La encuesta no fue guardada, intente nuevamente'
+        notice: La encuesta ha sido agregada correctamente
       destroy:
-        notice: 'Encuesta eliminada'
-        alert: 'La encuesta no pudo ser eliminada'
+        alert: La encuesta no pudo ser eliminada
+        notice: Encuesta eliminada
+      update:
+        notice: La encuesta ha sido guardada correctamente ¡Muchas gracias!
+        stale: La encuesta no fue guardada, intente nuevamente
 
     questionnaires:
       create:
-        notice: 'El cuestionario ha sido agregado correctamente'
+        notice: El cuestionario ha sido agregado correctamente
       update:
-        notice: 'El cuestionario ha sido actualizado correctamente'
-        stale: 'El cuestionario no fue actualizado, intente nuevamente'
+        notice: El cuestionario ha sido actualizado correctamente
+        stale: El cuestionario no fue actualizado, intente nuevamente
 
     registrations:
       create:
@@ -111,73 +110,73 @@ es:
 
     resource_classes:
       create:
-        notice: 'Clase de recurso agregada correctamente'
-      update:
-        notice: 'Clase de recurso actualizada correctamente'
-        stale: 'La clase de recurso no fue actualizada, intente nuevamente'
+        notice: Clase de recurso agregada correctamente
       destroy:
-        notice: 'Clase de recurso eliminada'
-        alert: 'La clase de recurso no pudo ser eliminada'
-
-    risk_assessments:
-      create:
-        notice: 'Evaluación de impacto agregada correctamente'
-      merge_to_plan:
-        notice: 'Plan actualizado correctamente'
+        alert: La clase de recurso no pudo ser eliminada
+        notice: Clase de recurso eliminada
       update:
-        notice: 'Evaluación de impacto actualizada correctamente'
-        stale: 'La evaluación de impacto no fue actualizada, intente nuevamente'
-      destroy:
-        notice: 'Evaluación de impacto eliminada'
-      sort_by_risk:
-        notice: 'Evaluación de impacto ordenada correctamente'
+        notice: Clase de recurso actualizada correctamente
+        stale: La clase de recurso no fue actualizada, intente nuevamente
 
     risk_assessment_templates:
       create:
-        notice: 'Plantilla de evaluación de impacto agregada correctamente'
-      update:
-        notice: 'Plantilla de evaluación de impacto actualizada correctamente'
-        stale: 'La plantilla de evaluación de impacto no fue actualizada, intente nuevamente'
+        notice: Plantilla de evaluación de impacto agregada correctamente
       destroy:
-        notice: 'Plantilla de evaluación de impacto eliminada'
+        notice: Plantilla de evaluación de impacto eliminada
+      update:
+        notice: Plantilla de evaluación de impacto actualizada correctamente
+        stale: La plantilla de evaluación de impacto no fue actualizada, intente nuevamente
+
+    risk_assessments:
+      create:
+        notice: Evaluación de impacto agregada correctamente
+      destroy:
+        notice: Evaluación de impacto eliminada
+      merge_to_plan:
+        notice: Plan actualizado correctamente
+      sort_by_risk:
+        notice: Evaluación de impacto ordenada correctamente
+      update:
+        notice: Evaluación de impacto actualizada correctamente
+        stale: La evaluación de impacto no fue actualizada, intente nuevamente
 
     settings:
       update:
-        notice: 'Configuración actualizada correctamente'
-        stale: 'La configuración no fue actualizada, intente nuevamente'
+        notice: Configuración actualizada correctamente
+        stale: La configuración no fue actualizada, intente nuevamente
 
     tags:
       create:
-        notice: 'Etiqueta creada'
-      update:
-        notice: 'Etiqueta actualizada'
-        alert: ''
-        stale: 'Etiqueta no pudo ser actualizada, intente nuevamente'
+        notice: Etiqueta creada
       destroy:
-        notice: 'Etiqueta eliminada'
-        alert: 'La etiqueta no pudo ser eliminada'
+        alert: La etiqueta no pudo ser eliminada
+        notice: Etiqueta eliminada
+      update:
+        alert: ''
+        notice: Etiqueta actualizada
+        stale: Etiqueta no pudo ser actualizada, intente nuevamente
 
     users:
       profiles:
         update:
-          notice: 'Actualización de perfil correcta'
-          alert: 'No se pudo actualizar el perfil'
+          alert: No se pudo actualizar el perfil
+          notice: Actualización de perfil correcta
       reassignments:
         update:
-          notice: 'Reasignación de responsabilidades finalizada correctamente'
-          alert: 'La reasignación de responsabilidades no puede realizarse'
+          alert: La reasignación de responsabilidades no puede realizarse
+          notice: Reasignación de responsabilidades finalizada correctamente
       releases:
         update:
-          notice: 'Liberación de responsabilidades finalizada correctamente'
-          alert: 'La liberación de responsabilidades no puede realizarse, deberá en algunos casos reasignarlas'
+          alert: La liberación de responsabilidades no puede realizarse, deberá en algunos casos reasignarlas
+          notice: Liberación de responsabilidades finalizada correctamente
 
     weakness_templates:
       create:
-        notice: 'Plantilla de observación creada'
-      update:
-        notice: 'Plantilla de observación actualizada'
-        alert: ''
-        stale: 'La plantilla de observación no pudo ser actualizada, intente nuevamente'
+        notice: Plantilla de observación creada
       destroy:
-        notice: 'Plantilla de observación eliminada'
-        alert: 'La plantilla de observación no pudo ser eliminada'
+        alert: La plantilla de observación no pudo ser eliminada
+        notice: Plantilla de observación eliminada
+      update:
+        alert: ''
+        notice: Plantilla de observación actualizada
+        stale: La plantilla de observación no pudo ser actualizada, intente nuevamente
