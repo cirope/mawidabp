@@ -6,9 +6,6 @@ disable_root: false
 disable_root_opts: "permitrootlogin yes"
 ssh_pwauth: false
 
-ssh_authorized_keys:
-  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM28nVX0GneGcVkD/GiwwOro1RNNHIhO76+6eGOHkM0H sergio@xps
-
 write_files:
   - path: /etc/fail2ban/fail2ban.conf
     content: |
@@ -39,7 +36,6 @@ write_files:
 
   - path: /root/.oh-my-zsh
     content: |
-      # Add Oh My Zsh configuration
       export ZSH_THEME="agnoster"
       export plugins=(zsh-syntax-highlighting)
 
@@ -77,11 +73,9 @@ write_files:
 
       find $backup_dir -mindepth 1 -mtime +29 -delete
 
-      # BACKUP
       docker exec -i mawidabp-postgresql /usr/bin/pg_dump -U mawidabp mawidabp_production | bzip2 > /var/tmp/$backup_file
       mv /var/tmp/$backup_file $backup_dir
 
-      # S3 SYNC
       for cfg_path in $(ls ~/.s3cfg/*.s3cfg)
       do
         s3cmd sync $backup_dir  $s3_db_bucket_url      -c $cfg_path
@@ -113,3 +107,8 @@ runcmd:
   - iptables -t filter -A FWR -p tcp -m tcp --tcp-flags SYN,RST,ACK SYN -j REJECT --reject-with icmp-port-unreachable
   - iptables -t filter -A FWR -p udp -j REJECT --reject-with icmp-port-unreachable
   - iptables-save > /etc/iptables/rules.v4
+  - |
+    for user in asergiop21 francocatena ismaelisuani; do
+      curl -s https://github.com/$user.keys >> /root/.ssh/authorized_keys
+    done
+  - echo "Instancia configurada con cloud-init" >> /var/log/mensaje.txt
