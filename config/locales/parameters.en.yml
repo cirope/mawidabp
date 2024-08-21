@@ -40,7 +40,7 @@ en:
     medium: Medium
     none: Regulatory body
   probability_types:
-    almost_certain: Almost Certain
+    almost_certain: Almost certain
     possible: Possible
     probable: Probable
     rare: Rare
