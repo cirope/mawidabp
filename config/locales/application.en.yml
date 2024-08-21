@@ -883,7 +883,7 @@ en:
     latest_answer: Latest follow-up finding
     next_pending_task_date: Next pending task date
     pdf:
-      filtered_by_html:
+      filtered_by:
         one: The list was filtered with the query '%{query}' on the column %{columns}
         other: The list was filtered with the query '%{query}' on the columns %{columns}
     readonly: The finding cannot be created or modified, the final audit report has already been issued
@@ -1446,7 +1446,7 @@ en:
     download_rtf: Download RTF
     downloads: Downloads
     edit: Edit
-    f: 'No'
+    f: 'No' # remove after fixing tests that use this key
     greater_or_equal_than: Greater or equal than
     import: Import
     insert_item: Insert item
@@ -1464,7 +1464,7 @@ en:
     search: Search
     send: Send
     show: Show
-    t: 'Yes'
+    t: 'Yes' # remove after fixing tests that use this key
     total: Total
     update: Update
     without_data: Without data

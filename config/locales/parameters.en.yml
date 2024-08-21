@@ -58,9 +58,9 @@ en:
     very_high: Very high
     very_low: Very low
     # Short qualifications
-    not_apply: Low
-    observed: Medium
-    ok: High
+    not_apply: Not apply
+    observed: Observed
+    ok: OK
   relevance_types:
     critical: Critical
     high: High
