@@ -105,6 +105,7 @@ en:
 
     registrations:
       create:
+        # With this we skip showing a flash message, the show view is enough
         notice: ''
 
     resource_classes:
