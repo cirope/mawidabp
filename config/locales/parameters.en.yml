@@ -23,7 +23,7 @@ en:
   frequency_types:
     biyearly: Biannual
     monthly: Monthly
-    yearly: Annaul
+    yearly: Annual
   impact_risk_types:
     critical: Critical
     high: High
