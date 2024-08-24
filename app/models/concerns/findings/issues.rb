@@ -59,7 +59,7 @@ module Findings::Issues
         file                 = FINDING_REPEATABILITY_FILE[review.organization.prefix]
         subsidiary_identity = review&.subsidiary&.identity
 
-        CSV.foreach(file, csv_options) do |row|
+        CSV.foreach(file, **csv_options) do |row|
           reference_file     = row['id_ofinal']
           subsidiary_file_id = row['id_suc']
 
@@ -123,10 +123,10 @@ module Findings::Issues
   def amount_by_impact
     {
       1 => 0,
-      2 => 3113515,
-      3 => 31135152,
-      4 => 311351520,
-      5 => 3113515200
+      2 => 24318969,
+      3 => 243189684,
+      4 => 2431896826,
+      5 => 24318968251
     }
   end
 

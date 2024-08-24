@@ -14,9 +14,9 @@ Tiene los requisitos mínimos de cumplimiento que requiere una organización (av
 
 Seleccionamos **Administración -> Configuración**.
 
-![]({% asset administration/configuration/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/1.png){: class="img-responsive"}
 
-![]({% asset administration/configuration/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/2.png){: class="img-responsive"}
 
 Podemos **Ver** **(Lupa)** y **Editar (Lápiz)** una configuración.
 
@@ -39,7 +39,7 @@ Tabla con los siguientes campos: Informe, Código observación, Título, Fecha d
 
 El correo se envía a todos los usuarios vinculados a la observación.
 
-![]({% asset administration/configuration/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/3.png){: class="img-responsive"}
 
 **Administración -> Configuraciones**.
 
@@ -47,19 +47,19 @@ Seleccionamos ¨Administración¨ -> ¨Configuraciones¨
 
 El nombre del parámetro que deben modificar es Período de notificación ¨Resumen de hallazgos¨ en semanas (por defecto en 0, lo cual significa desactivado).
 
-![]({% asset administration/configuration/4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/4.png){: class="img-responsive"}
 
 Seleccionamos ¨Editar¨.
 
-![]({% asset administration/configuration/5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/5.png){: class="img-responsive"}
 
 La configuración por tiempo está en semanas, por ejemplo 4 semanas, el correo va llegar cada 4 lunes.
 
-![]({% asset administration/configuration/6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/6.png){: class="img-responsive"}
 
 Seleccionamos ¨Actualizar Configuración¨.
 
-![]({% asset administration/configuration/7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/7.png){: class="img-responsive"}
 
 **Mostrar marcas de tiempo en seguimiento**
 
@@ -71,31 +71,31 @@ Al colocar el parámetro en 0 (cero) el sistema muestra menos campos en las obse
 
 Seleccionamos ¨Configuración¨, muestra las configuraciones del sistema.
 
-![]({% asset administration/configuration/8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/8.png){: class="img-responsive"}
 
 Seleccionamos ¨Editar¨ en ¨Mostrar marcas de tiempo en seguimiento¨
 
-![]({% asset administration/configuration/9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/9.png){: class="img-responsive"}
 
 Si cambiamos el valor a ¨0¨ nos muestra las siguientes pantalla:
 
-![]({% asset administration/configuration/10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/10.png){: class="img-responsive"}
 
 Si cambiamos el valor a ¨1¨ nos muestra las siguientes pantalla:
 
-![]({% asset administration/configuration/11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/11.png){: class="img-responsive"}
 
 **Requerir gerente de auditoría en hallazgos**
 
 Primero deben habilitar el parámetro ¨Requerir gerente de auditoría en hallazgos¨ dentro de ¨Administración¨ ->  ¨Configuraciones¨, por defecto está en 0.
 
-![]({% asset administration/configuration/12.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/12.png){: class="img-responsive"}
 
 Si cambiamos el valor a ¨1¨ nos muestra las siguientes pantalla:
 
 De esta forma el Gerente de auditoría va estar siempre asociado a una observación u oportunidad de mejora.
 
-![]({% asset administration/configuration/13.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/13.png){: class="img-responsive"}
 
 **Cantidad de días que deben pasar para que una observación sin responder se considere desatendida (pase a estado "Sin respuesta")**
 
@@ -107,7 +107,7 @@ La cantidad de días se carga en "Administración" -> "Configuraciones" "Cantida
 
 Ahora se tiene en cuenta solamente la fecha de primera notificación, independiente de si el auditado confirma o no (esto para pasar a "Sin respuesta").
 
- ![]({% asset administration/configuration/14.png @path %}){: class="img-responsive"}
+ ![image]({{ site.baseurl }}/assets/images/administration/configuration/14.png){: class="img-responsive"}
 
 Trazabilidad del proceso de cambios de estado desde "Notificar"
 
@@ -156,19 +156,19 @@ Si pasan el mouse sobre el icono (cuando está en amarillo) muestra el mensaje:
 > Advertencia<br>
 > Su sesión expira en menos de 2 minutos
 
-![]({% asset administration/configuration/15.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/15.png){: class="img-responsive"}
 
 Si presionan cualquier tecla o hacen clic se vuelve al blanco original y se reinicia el tiempo.
 
-![]({% asset administration/configuration/16.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/16.png){: class="img-responsive"}
 
 Si pasan el mouse sobre el icono (cuando está en rojo) muestra el mensaje:
 
 > Advertencia<br>
 > Su sesión ha expirado, debe autenticarse nuevamente
 
-![]({% asset administration/configuration/17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/17.png){: class="img-responsive"}
 
 Si presionan cualquier tecla o hacen clic vuelve a la pantalla de login.
 
-![]({% asset administration/configuration/18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/configuration/18.png){: class="img-responsive"}

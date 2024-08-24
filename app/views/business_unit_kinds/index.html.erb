@@ -14,9 +14,9 @@
       <% @business_unit_kinds.each do |business_unit_kind| %>
         <tr>
           <td class="d-none d-sm-table-cell"><%= business_unit_kind.name %></td>
-          <td class="text-right"><%= link_to_show business_unit_kind %></td>
-          <td class="text-right"><%= link_to_edit [:edit, business_unit_kind] %></td>
-          <td class="text-right"><%= link_to_destroy business_unit_kind if business_unit_kind.can_be_destroyed? %></td>
+          <td class="text-end"><%= link_to_show business_unit_kind %></td>
+          <td class="text-end"><%= link_to_edit [:edit, business_unit_kind] %></td>
+          <td class="text-end"><%= link_to_destroy business_unit_kind if business_unit_kind.can_be_destroyed? %></td>
         </tr>
       <% end %>
     </tbody>

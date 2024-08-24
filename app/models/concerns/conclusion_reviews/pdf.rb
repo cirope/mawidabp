@@ -19,4 +19,8 @@ module ConclusionReviews::Pdf
 
     "#{model_name}-#{identification}.pdf"
   end
+
+  def draft?
+    is_a? ConclusionDraftReview
+  end
 end

@@ -93,7 +93,7 @@ module Findings::Approval
     end
 
     def audit_comments_error
-      if audit_comments.blank? && !revoked? && Current.conclusion_pdf_format != 'gal'
+      if audit_comments.blank? && !revoked? && (%w(bic gal).exclude? Current.conclusion_pdf_format)
         I18n.t "#{class_name}.errors.without_audit_comments"
       end
     end

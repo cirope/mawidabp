@@ -1,8 +1,8 @@
 class TimeSummaryController < ApplicationController
   respond_to :html, :csv, :js
 
-  before_action :auth, :check_privileges, :set_title, :set_descendants,
-                :set_user
+  before_action :auth, :check_privileges, :set_descendants, :set_user
+  before_action :set_title, except: [:show, :destroy]
   before_action :set_time_consumption, only: [:edit, :update, :destroy]
 
   def index
@@ -161,7 +161,13 @@ class TimeSummaryController < ApplicationController
         t('time_summary.downloads.csv.quantity_hours_per_day'),
         t('time_summary.downloads.csv.business_unit_types'),
         t('time_summary.downloads.csv.detail'),
-        t('time_summary.downloads.csv.organization')
+        t('time_summary.downloads.csv.organization'),
+        t('time_summary.downloads.csv.period'),
+        t('time_summary.downloads.csv.period_start'),
+        t('time_summary.downloads.csv.period_end'),
+        t('time_summary.downloads.csv.plan_item'),
+        t('time_summary.downloads.csv.plan_item_start'),
+        t('time_summary.downloads.csv.plan_item_end')
       ]
     end
 
@@ -182,7 +188,13 @@ class TimeSummaryController < ApplicationController
               helpers.number_with_precision(tc.amount, precision: 1),
               (tc.resource.plan_item.business_unit.business_unit_type.name if tc.review?).to_s,
               tc.detail,
-              organization_name_by_resource(tc)
+              organization_name_by_resource(tc),
+              (tc.resource.period.name if tc.review?).to_s,
+              (tc.resource.period.start if tc.review?).to_s,
+              (tc.resource.period.end if tc.review?).to_s,
+              (tc.resource.plan_item.project if tc.review?).to_s,
+              (tc.resource.plan_item.start if tc.review?).to_s,
+              (tc.resource.plan_item.end  if tc.review?).to_s
             ]
 
             time_consumptions[tc.date] ||= []

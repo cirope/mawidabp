@@ -11,11 +11,11 @@ parent: Buenas prácticas
 
 Seleccionamos **Administración -> Buenas prácticas**.
 
-![]({% asset administration/best_practices/bp-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/best_practices/bp-1.png){: class="img-responsive"}
 
 Seleccionamos Siguiente.
 
-![]({% asset administration/best_practices/bp-2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/best_practices/bp-2.png){: class="img-responsive"}
 
 Podemos **Descargar (Archivo)** a formato CSV,  **Ver** (Lupa), **Editar** (Lápiz) y **Eliminar** (Tarrito) una buena práctica cargada en el sistema.
 
@@ -23,11 +23,11 @@ Podemos **Descargar (Archivo)** a formato CSV,  **Ver** (Lupa), **Editar** (Láp
 
 Seleccionamos **Nuevo**
 
-![]({% asset administration/best_practices/bp-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/best_practices/bp-3.png){: class="img-responsive"}
 
 Cargamos los datos requeridos,  seleccionamos Crear Buena práctica
 
-![]({% asset administration/best_practices/bp-4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/best_practices/bp-4.png){: class="img-responsive"}
 
 Para que se guarden los datos seleccionamos Actualizar Buena práctica.
 
@@ -43,11 +43,11 @@ A continuación mostramos un ejemplo de Procesos cargados en la Buena práctica 
 
 En este caso los Procesos **Controles generales de Activas** y **Acuerdos en Cuenta Corriente**.
 
-![]({% asset administration/best_practices/bp-5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/best_practices/bp-5.png){: class="img-responsive"}
 
 Luego mostramos, un ejemplo de un objetivo de control para el proceso **Controles generales de Activas**:
 
-![]({% asset administration/best_practices/bp-6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/best_practices/bp-6.png){: class="img-responsive"}
 
 **Objetivo de control:** el resultado que se desea alcanzar mediante la implementación de procedimientos de control en los procesos de trabajo de una organización.
 
@@ -105,4 +105,4 @@ Las etiquetas de "Objetivos de control" se pueden compartir, solo en el caso de 
 
 Se agregó la búsqueda en el listado de buenas prácticas.
 
-![]({% asset administration/best_practices/bp-7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/best_practices/bp-7.png){: class="img-responsive"}

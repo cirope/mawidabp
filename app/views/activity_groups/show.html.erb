@@ -1,20 +1,24 @@
-<h2><%= @activity_group %></h2>
+<div class="card">
+  <div class="card-body">
+    <h2><%= @activity_group %></h2>
 
-<% if @activity_group.activities.any? %>
-  <h5 class="h5 my-3">
-    <%= Activity.model_name.human count: @activity_group.activities.size %>
-  </h5>
+    <% if @activity_group.activities.any? %>
+      <h5 class="h5 my-3">
+        <%= Activity.model_name.human count: @activity_group.activities.size %>
+      </h5>
 
-  <ul>
-    <% @activity_group.activities.each do |activity| %>
-      <li>
-        <%= activity.name %>
-      </li>
+      <ul>
+        <% @activity_group.activities.each do |activity| %>
+          <li>
+            <%= activity.name %>
+          </li>
+        <% end %>
+      </ul>
     <% end %>
-  </ul>
-<% end %>
 
-<hr />
+    <hr />
 
-<%= link_to_edit [:edit, @activity_group] %> |
-<%= link_to_index activity_groups_path %>
+    <%= link_to_edit [:edit, @activity_group] %> |
+    <%= link_to_index activity_groups_path %>
+  </div>
+</div>

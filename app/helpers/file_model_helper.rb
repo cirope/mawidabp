@@ -41,7 +41,10 @@ module FileModelHelper
       class: 'btn btn-outline-secondary',
       target: '_blank',
       hidden: file_url.blank?,
-      data: { file_url: true }
+      data: {
+        file_url: true,
+        work_paper_url: work_papers_path(file_url: 'file-url')
+      }
     }
 
     link_to url, options do

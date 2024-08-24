@@ -15,15 +15,15 @@ Seleccionando ¨Editar¨ nos permite realizar las tareas previstas en este módu
 
 **Seleccionamos Ejecución -> Observaciones**
 
-![]({% asset execution/weaknesses/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/1.png){: class="img-responsive"}
 
 Nos muestra las observaciones generadas ordenados por Informe.
 
-![]({% asset execution/weaknesses/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/2.png){: class="img-responsive"}
 
 Si necesitamos encontrar en forma rápida tenemos la opción de **Buscar** por Informe, Proyecto, Código, Título y Etiqueta, y además ¨Ordenar por¨.
 
-![]({% asset execution/weaknesses/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/3.png){: class="img-responsive"}
 
 En el caso de las búsquedas se pueden "desactivar" las columnas por las que no se quiere buscar.
 
@@ -41,7 +41,7 @@ Agregamos el campo **"Título"** en observaciones/oportunidades de mejora.
 
 Permite agregar un título para luego poder buscar de manera simple y rápida.
 
-![]({% asset execution/weaknesses/4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/4.png){: class="img-responsive"}
 
 <hr>
 
@@ -53,7 +53,7 @@ Permite agregar un título para luego poder buscar de manera simple y rápida.
 
 Reconocimiento de **¨enlaces en papeles de trabajo¨** (http y ftp), permite agregar enlaces http y ftp en la descripción.
 
-![]({% asset execution/weaknesses/5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/5.png){: class="img-responsive"}
 
 <hr>
 
@@ -69,11 +69,11 @@ Incorporamos la funcionalidad **"Relacionar observaciones"**.
 
 Seleccionamos "Editar" en una observación.
 
-![]({% asset execution/weaknesses/6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/6.png){: class="img-responsive"}
 
 Luego "Agregar relación" y para guardar seleccionamos  “Actualizar observación”
 
-![]({% asset execution/weaknesses/7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/7.png){: class="img-responsive"}
 
 Podemos relacionar observaciones cuando estamos generando la nueva observación, existe la opción "Relacionada con".
 
@@ -117,17 +117,17 @@ Resumen de los pasos:
 
 1) Dentro de "Ejecución"  -> Informes, seleccionar "editar", agregar dentro de “Agregar hallazgo pendiente” las observaciones que van a reiterar, luego seleccionar actualizar informe.
 
-![]({% asset execution/weaknesses/8.png @path %}){: class="img-responsive"}
-![]({% asset execution/weaknesses/9.png @path %}){: class="img-responsive"}
-![]({% asset execution/weaknesses/10.png @path %}){: class="img-responsive"}
-![]({% asset execution/weaknesses/11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/8.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/9.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/10.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/11.png){: class="img-responsive"}
 
 2) Luego crear una observación nueva en el informe y dentro de las opciones seleccionar "Reiterada de", en el desplegable se muestran las incluidas en el punto anterior.
 
 Editamos un objetivo de control, seleccionamos agregar una observación, seleccionar "Reiterada de", en el desplegable muestra la observación, la seleccionamos, luego seleccionamos “Crear observación”.
 
-![]({% asset execution/weaknesses/12.png @path %}){: class="img-responsive"}
-![]({% asset execution/weaknesses/13.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/12.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/13.png){: class="img-responsive"}
 
 3) Luego de esto la observación anterior queda enlazada a la nueva y por lo tanto la marca como "reiterada".
 
@@ -173,7 +173,7 @@ Incorporamos la funcionalidad **¨Descargar CSV¨** para observaciones.
 
 Seleccionamos "Observaciones", luego “Descargar CSV”
 
-![]({% asset execution/weaknesses/14.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/14.png){: class="img-responsive"}
 
 <hr>
 
@@ -213,33 +213,33 @@ Cuando cambian el estado de una observación a uno de los "finales" (sería "Imp
 
 **Ejecución -> Observaciones**
 
-![]({% asset execution/weaknesses/15.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/15.png){: class="img-responsive"}
 
 Luego seleccionamos ¨Editar¨ en la observación donde vamos agregar tareas. Nos muestra la siguiente pantalla (para que podamos agregar tareas).
 
-![]({% asset execution/weaknesses/16.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/16.png){: class="img-responsive"}
 
 Seleccionamos ¨Agregar tarea¨
 
-![]({% asset execution/weaknesses/17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/17.png){: class="img-responsive"}
 
 Seleccionamos ¨Actualizar Observación¨ para guardar los cambios.
 
-![]({% asset execution/weaknesses/18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/18.png){: class="img-responsive"}
 
 Al agregar la tarea con esta fecha se bloquea la edición del campo ¨Fecha de implementación¨ de la observación. Esto es porque se entiende que ahora está definido por las tareas, donde se toma la mayor como la nueva fecha de implementación.
 
-![]({% asset execution/weaknesses/19.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/19.png){: class="img-responsive"}
 
 Se envían recordatorios similares a los de las observaciones, siempre que estén en estado ¨Pendiente¨ o ¨En Proceso¨ (Por ejemplo: Notificación de tareas cercanas al vencimiento, Notificación de tareas vencidas).
 
 **Notificación de tareas cercanas al vencimiento**
 
-![]({% asset execution/weaknesses/20.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/20.png){: class="img-responsive"}
 
 **Notificación de tareas vencidas**
 
-![]({% asset execution/weaknesses/21.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/21.png){: class="img-responsive"}
 
 **Reprogramaciones**
 
@@ -247,22 +247,22 @@ Se mantiene registro de las reprogramaciones.
 
 A tiempo sin reprogramación: muestra un icono **¨tilde verde¨**.
 
-![]({% asset execution/weaknesses/22.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/22.png){: class="img-responsive"}
 
 A tiempo reprogramada: muestra un icono **¨círculo con una flecha de color amarillo¨.**
 
-![]({% asset execution/weaknesses/23.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/23.png){: class="img-responsive"}
 
 Vencida: fuera de tiempo, muestra un icono **¨reloj en rojo¨**.
 
-![]({% asset execution/weaknesses/24.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/24.png){: class="img-responsive"}
 
 Cuando cambian el estado de una observación a uno de los "finales" (sería "Implementada / Auditada", "Riesgo asumido", "Difiere criterio", "Anulada" y "Desestimada / No aplica"), todas las tareas se pasan a "Finalizada".
 
 Si pasamos la observación al estado "Implementada / Auditada".
 
-![]({% asset execution/weaknesses/25.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/25.png){: class="img-responsive"}
 
 La tarea pasa a estado ¨Finalizada¨ en forma automática.
 
-![]({% asset execution/weaknesses/26.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/weaknesses/26.png){: class="img-responsive"}

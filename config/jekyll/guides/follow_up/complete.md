@@ -11,7 +11,7 @@ article_order: 3
 
 Seleccionamos **Seguimiento -> Hallazgos solucionados**, muestra la siguiente pantalla.
 
-![]({% asset follow_up/complete-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-1.png){: class="img-responsive"}
 
 Podemos ¨**Descargar CSV**¨ y ¨**Resumen en PDF**¨ todos los hallazgos solucionados.
 
@@ -35,7 +35,7 @@ Seleccionamos **Seguimiento -> Hallazgos solucionados**
 
 Se agregó en "Ordenar por".
 
-![]({% asset follow_up/complete-2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-2.png){: class="img-responsive"}
 
 <hr>
 
@@ -51,7 +51,7 @@ Seleccionamos **Seguimiento -> Hallazgos solucionados**
 
 Para la vista de **"Hallazgos Solucionados"** (por default): se ordenan los hallazgos desde la fecha de solución más reciente a la más antigua
 
-![]({% asset follow_up/complete-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-3.png){: class="img-responsive"}
 
 <hr>
 
@@ -91,7 +91,7 @@ Si hacen clic sobre el nombre de la columna que no necesitan buscar (por ejemplo
 
 Las columnas que se encuentran tachadas, tampoco se tienen en cuenta para la búsqueda.
 
-![]({% asset follow_up/complete-4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-4.png){: class="img-responsive"}
 
 <hr>
 
@@ -137,7 +137,7 @@ Agregamos nuevas columnas al CSV: unidad organizativa, unidad de negocio, recome
 
 Seleccionamos ¨**Descargar CSV**¨.
 
-![]({% asset follow_up/complete-5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-5.png){: class="img-responsive"}
 
 <hr>
 
@@ -151,19 +151,19 @@ Incorporamos una nueva funcionalidad que permite ordenar en forma descendente lo
 
 Seleccionamos **Seguimiento -> Hallazgos solucionados**
 
-![]({% asset follow_up/complete-6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-6.png){: class="img-responsive"}
 
 Luego seleccionamos "Buscar"
 
-![]({% asset follow_up/complete-7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-7.png){: class="img-responsive"}
 
 Luego seleccionamos en "Ordenar por" la opción “Comentarios sin leer (Descendente)
 
-![]({% asset follow_up/complete-8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-8.png){: class="img-responsive"}
 
 Luego nuevamente "Buscar", nos muestra los comentarios sin leer ordenados en forma descendente (posicionando el mouse en el triángulo nos muestra la cantidad de comentarios sin leer):
 
-![]({% asset follow_up/complete-9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-9.png){: class="img-responsive"}
 
 
 
@@ -193,11 +193,11 @@ Luego **¨Buscar¨**, ingresamos ¨desde 1/5/2018 y hasta 4/5/2018¨, dejamos ac
 
 Seleccionamos **¨Buscar¨**, nos muestra las observaciones que se modificaron en ese periodo.
 
-![]({% asset follow_up/complete-10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-10.png){: class="img-responsive"}
 
 Si seleccionamos **¨Resumen en PDF¨** nos muestra las mismas observaciones, informando al final del listado como fue elaborado el filtrado (filtrado con la consulta 'desde 1/5/2018 y hasta 4/5/2018' en la columna Última actualización).
 
-![]({% asset follow_up/complete-11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/complete-11.png){: class="img-responsive"}
 
 <hr>
 

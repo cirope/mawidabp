@@ -6,4 +6,8 @@ class Answer < ApplicationRecord
   belongs_to :question, optional: true
   belongs_to :poll, optional: true
   belongs_to :answer_option, optional: true
+
+  mount_uploader :attached, FileUploader
+
+  delegate :organization_id, to: :poll, allow_nil: true
 end

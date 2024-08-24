@@ -5,17 +5,6 @@ class SamlSessionsController < ApplicationController
 
   before_action :set_saml_config
 
-  def new
-    if @saml_config
-      saml_request = OneLogin::RubySaml::Authrequest.new
-      action = saml_request.create @saml_config
-
-      redirect_to action
-    else
-      redirect_to login_url
-    end
-  end
-
   def metadata
     meta = OneLogin::RubySaml::Metadata.new
 

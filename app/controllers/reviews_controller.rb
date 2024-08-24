@@ -331,7 +331,7 @@ class ReviewsController < ApplicationController
           ]
         }
       ).merge(
-        PlanItem.allowed_by_business_units
+        PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
       ).order(
         [
           "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",

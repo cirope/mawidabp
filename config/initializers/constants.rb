@@ -1,23 +1,24 @@
+# Variable para setear cookies de session
 COOKIES_DOMAIN = ".#{ENV['APP_HOST'].sub /:.*/, ''}"
+SHARED_SESSION = ENV['SHARED_SESSION'] == 'true'
 # Dirección del correo electrónico de soporte
 SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
-# Ruta hasta el directorio de configuración
-CONFIG_PATH = File.join(Rails.root, 'config', File::SEPARATOR).freeze
-# Ruta hasta el directorio público
-PUBLIC_PATH = File.join(Rails.root, 'public', File::SEPARATOR).freeze
-# Ruta hasta el directorio privado
-PRIVATE_PATH = File.join(Rails.root, 'private', File::SEPARATOR).freeze
+# Ruta relativa directorio privado de almacenamiento de archivos
+RELATIVE_PRIVATE_PATH =
+  if Rails.env.test?
+    File.join('test', 'private').freeze
+  else
+    File.join('private').freeze
+  end
+# Ruta absoluta directorio privado de almacenamiento de archivos
+PRIVATE_PATH = File.join(Rails.root, RELATIVE_PRIVATE_PATH).freeze
 # Ruta al directorio temporal
-TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
+TEMP_PATH = File.join(Rails.root, 'tmp').freeze
 # Prefijo de la organización para administrar grupos
 APP_ADMIN_PREFIXES = ['admin', 'www'].freeze
-# Ruta a los archivos subidos a la aplicación
-APP_FILES_PATH = File.join(PRIVATE_PATH, 'file_models', File::SEPARATOR).freeze
-# Ruta a las imágenes subidas a la aplicación
-APP_IMAGES_PATH = File.join(PRIVATE_PATH, 'image_models', File::SEPARATOR).freeze
 # Variable con los idiomas disponibles (Debería reemplazarse con
 # I18.available_locales cuando se haya completado la traducción a Inglés)
-AVAILABLE_LOCALES = [:es].freeze
+AVAILABLE_LOCALES = [:es, :en].freeze
 # Cantidad de días en los que es posible cambiar la contraseña luego de un
 # blanqueo
 BLANK_PASSWORD_STALE_DAYS = 3
@@ -26,13 +27,12 @@ BLANK_PASSWORD_STALE_DAYS = 3
 CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS = 7
 # Expresión regular para validar direcciones de correo
 EMAIL_REGEXP = /\A[a-z0-9'._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\Z/i
+# Restricciones para subir archivos.
+FILE_UPLOADS_CONSTRAINTS = YAML.load(ENV['FILE_UPLOADS_CONSTRAINTS']) rescue nil
 # Cantidad máxima de observaciones por PDF
 FINDING_MAX_PDF_ROWS = 100
-# Cantidad de días anteriores al vencimiento de una observación en los que el
-# sistema notificará su proximidad
-FINDING_WARNING_EXPIRE_DAYS = 7
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
-FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1
+FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1 # TODO Remove after migrating all clients to PR #779
 # Fecha inicial para el envío de correo con resumen de observaciones
 FINDING_INITIAL_BRIEF_DATE = Date.new 2018, 1, 1
 # Opciones para crear claves foráneas
@@ -50,7 +50,7 @@ PDF_PAPER = 'A4'.freeze
 # Logo para el pié de página de los PDFs
 PDF_LOGO = File.join(Rails.root, 'app', 'assets', 'images', 'logo_pdf.png').freeze
 # Dimensiones del logo en pixels, primero el ancho y luego el alto
-PDF_LOGO_SIZE = [350, 51].map { |size| (size / 6.0).round }
+PDF_LOGO_SIZE = [350, 45].map { |size| (size / 6.0).round }
 # Escala del logo
 PDF_LOGO_FACTOR = 1.0
 # Tamaño de fuente en los PDF

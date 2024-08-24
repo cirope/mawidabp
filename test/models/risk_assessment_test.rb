@@ -69,6 +69,10 @@ class RiskAssessmentTest < ActiveSupport::TestCase
       assert_equal @risk_assessment.period_id, plan.period_id
       assert_equal @risk_assessment.risk_assessment_items.count,
         plan.plan_items.count
+
+      items = @risk_assessment.risk_assessment_items
+
+      assert items.all? { |i| plan.plan_items.include? i.plan_item }
     end
 
     assert @risk_assessment.reload.merged?
@@ -95,11 +99,17 @@ class RiskAssessmentTest < ActiveSupport::TestCase
   end
 
   test 'sort by risk' do
+    @risk_assessment.risk_score_items.first.update value: 1000
+
     rai = @risk_assessment.risk_assessment_items.create!(
       name:  'First by risk',
-      risk:  99,
+      risk: 1000,
       order: 2,
-      business_unit_id: business_units(:business_unit_two).id
+      business_unit_id: business_units(:business_unit_two).id,
+      risk_weights_attributes: [
+        value: 1000,
+        risk_assessment_weight: @risk_assessment.risk_assessment_weights.first
+      ]
     )
 
     assert_equal @risk_assessment.risk_assessment_items.last.id, rai.id
@@ -225,5 +235,17 @@ class RiskAssessmentTest < ActiveSupport::TestCase
 
     assert new_risk_assessment.risk_assessment_items.size > 0
     assert all_items_are_equal
+  end
+
+  test 'evaluate expression' do
+    rai = @risk_assessment.risk_assessment_items.first
+
+    assert_equal 30, rai.risk
+
+    @risk_assessment.update_column :formula, 'A * 100'
+
+    rai.update name: 'New formula'
+
+    assert_equal 3000, rai.risk
   end
 end

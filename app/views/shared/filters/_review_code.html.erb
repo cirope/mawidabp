@@ -1,0 +1,13 @@
+<div id="review_code_filter" <%== 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group row">
+        <% review_code_filter = params[action] ? params[action][:review_code] : nil %>
+        <%= f.label :review_code, Weakness.human_attribute_name(:review_code), class: 'col-md-4 col-form-label' %>
+        <div class="col-md-8">
+          <%= f.text_field :review_code, value: review_code_filter, class: 'form-control', label: false %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

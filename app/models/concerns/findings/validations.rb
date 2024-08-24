@@ -9,7 +9,7 @@ module Findings::Validations
     validates :review_code, :title, length: { maximum: 255 }, allow_blank: true
     validates :audit_comments, presence: true, if: :audit_comments_should_be_present?
     validates :review_code, :description, :answer, :audit_recommendations,
-      :effect, :audit_comments, :title, :current_situation, :compliance,
+      :effect, :audit_comments, :title, :current_situation, :compliance, :brief,
       pdf_encoding: true
     validates :follow_up_date, :solution_date, :origination_date,
       :first_notification_date, timeliness: { type: :date }, allow_blank: true
@@ -23,6 +23,7 @@ module Findings::Validations
     validate :validate_solution_date,     if: :check_dates?
     validate :extension_enabled,          if: :extension
     validate :validate_draft_review_code, if: -> { !revoked? }
+    validate :validate_required_tags
   end
 
   def is_in_a_final_review?
@@ -168,10 +169,10 @@ module Findings::Validations
     end
 
     def all_roles_fullfilled_by? users
-      has_audited    = users.any? { |u| u.can_act_as_audited? || u.can_act_as_audited_on?(organization_id) }
-      has_auditor    = users.any? { |u| u.auditor?            || u.auditor_on?(organization_id) }
-      has_supervisor = users.any? { |u| u.supervisor?         || u.supervisor_on?(organization_id) }
-      has_manager    = users.any? { |u| u.manager?            || u.manager_on?(organization_id) }
+      has_audited    = users.any? { |u| u.can_act_as_audited? || u.can_act_as_audited?(organization_id) }
+      has_auditor    = users.any? { |u| u.auditor?            || u.auditor?(organization_id) }
+      has_supervisor = users.any? { |u| u.supervisor?         || u.supervisor?(organization_id) }
+      has_manager    = users.any? { |u| u.manager?            || u.manager?(organization_id) }
 
       has_audited && has_auditor && (has_supervisor || has_manager)
     end
@@ -182,7 +183,7 @@ module Findings::Validations
 
     def validate_manager_presence
       users = finding_user_assignments.reject(&:marked_for_destruction?).map &:user
-      has_manager = users.any? { |u| u.manager? || u.manager_on?(organization_id) }
+      has_manager = users.any? { |u| u.manager? || u.manager?(organization_id) }
 
       unless has_manager
         errors.add :finding_user_assignments, :must_have_a_manager
@@ -234,6 +235,40 @@ module Findings::Validations
     def check_invalid_draft_review_code_when_is_not_final
       if children.present? && children.take.draft_review_code != draft_review_code
         errors.add :draft_review_code, :not_same_draft_review_code_children
+      end
+    end
+
+    def validate_required_tags
+      required_tags = organization.tags.for_findings.non_roots.group_by &:parent
+
+      required_tags.each do |tag, subtags|
+        if tag.required_min&.positive? || tag.required_max&.positive?
+          required_from = Date.parse(tag.required_from) if tag.required_from.present?
+          validate_from = created_at || Time.zone.now
+          required_min  = tag.required_min
+          required_max  = tag.required_max
+
+          if !required_from || validate_from >= required_from
+            assigned_tags = taggings.reject(&:marked_for_destruction?).map &:tag
+            subtags_count = (subtags & assigned_tags).count
+
+            result = if required_min&.positive? && required_max&.positive?
+              subtags_count.between? required_min, required_max
+            elsif required_min&.positive?
+              subtags_count >= required_min
+            elsif required_max&.positive?
+              subtags_count <= required_max
+            end
+
+            unless result
+              required_errors = []
+              required_errors << "#{tag.required_min_label}: #{required_min}" if required_min&.positive?
+              required_errors << "#{tag.required_max_label}: #{required_max}" if required_max&.positive?
+
+              errors.add :base, "#{Tag.model_name.human} #{tag.name}: #{required_errors.join ', '}"
+            end
+          end
+        end
       end
     end
 end

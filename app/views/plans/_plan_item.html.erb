@@ -4,23 +4,24 @@
 <fieldset class="plan_item">
   <div class="row">
     <div class="col-md-1">
-      <div class="media">
-        <div class="float-left mt-2 mr-1">
+      <div class="d-flex">
+        <div class="flex-shrink-0 mt-2 me-2">
           <%= show_plan_item_info(f.object) %>
         </div>
-        <div class="float-left mt-2 mr-2">
+        <div class="flex-shrink-0 mt-2 me-2">
           <%= link_to_fetch_hide id, fetch ? :fetch : :show %>
         </div>
-        <div class="media-body">
+        <div class="flex-grow-1">
           <%= f.input :order_number, as: :string, label: false,
             input_html: { class: 'sort_number', readonly: true } %>
         </div>
       </div>
     </div>
     <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES ? 2 : 3 %>">
-      <% unless f.object.business_unit %>
+      <% if f.object.can_edit_business_unit? %>
         <%= f.input :business_unit_id, as: :string, label: false, input_html: {
           name: 'plan_item[business_unit_data]', id: "plan_item_business_unit_#{id}",
+          value: f.object.business_unit,
           title: t('label.search'),
           autofocus: true, data: {
             autocomplete_params: ({ business_unit_type_id: @business_unit_type.id } if @business_unit_type),
@@ -61,7 +62,7 @@
       </div>
     </div>
     <div class="col-md-1">
-      <div class="mt-2 text-right text-nowrap">
+      <div class="mt-2 text-end text-nowrap">
         <%= link_to_insert_field f %>
         <span class="text-muted">|</span>
         <% unless f.object.try(:review) %>
@@ -74,7 +75,7 @@
     </div>
   </div>
 
-  <div class="pl-4 ml-3" data-nested hidden>
+  <div class="ps-4 ms-3" data-nested hidden>
     <div class="row" data-nested>
       <div class="col-md-8">
         <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'resource' %></h5>
@@ -86,7 +87,11 @@
 
     <div data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= plan_item_path f.object %>" hidden>
       <% if fetch %>
-        <div class="alert alert-warning"><%= t 'navigation.loading' %></div>
+        <div class="alert alert-warning">
+          <div class="alert-message">
+            <%= t 'navigation.loading' %>
+          </div>
+        </div>
       <% else %>
         <%= render 'plan_items/form', plan_item: f.object, index: f.index %>
       <% end %>

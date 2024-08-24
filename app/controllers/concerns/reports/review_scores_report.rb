@@ -44,7 +44,7 @@ module Reports::ReviewScoresReport
         references(
           :reviews, :business_units
         ).merge(
-          PlanItem.allowed_by_business_units
+          PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
         ).list_all_by_date @from_date, @to_date
     end
 

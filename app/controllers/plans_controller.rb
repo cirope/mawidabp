@@ -9,7 +9,8 @@ class PlansController < ApplicationController
   before_action :set_business_unit_type, only: [:show, :new, :edit, :update]
   before_action :set_plan, only: [:show, :edit, :update, :destroy, :export_to_pdf]
   before_action :set_plan_clone, only: [:new, :create]
-  before_action :set_title, except: [:destroy]
+  before_action :set_title, except: [:destroy, :auto_complete_for_business_unit_type,
+                                     :auto_complete_for_business_unit]
 
   # * GET /plans
   def index
@@ -119,8 +120,13 @@ class PlansController < ApplicationController
     def plan_csv_path
       if params[:prs]
         render csv: @plan.to_csv_prs(business_unit_type: @business_unit_type), filename: @plan.csv_filename_prs
+      elsif params[:prh]
+        render csv: @plan.to_csv_prh(business_unit_type: @business_unit_type), filename: @plan.csv_filename_prh
       else
-        render csv: @plan.to_csv(business_unit_type: @business_unit_type), filename: @plan.csv_filename
+        render csv: @plan.to_csv(
+          dprh: params[:dprh].present?,
+          business_unit_type: @business_unit_type
+        ), filename: @plan.csv_filename
       end
     end
 

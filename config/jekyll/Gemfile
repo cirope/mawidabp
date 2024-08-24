@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'jekyll', '~> 3.8.0'
+gem 'jekyll', '~> 4.3.1'
 
 gem 'sass'
 gem 'coffee-script'
@@ -12,6 +12,5 @@ gem 'execjs', '< 2.8'
 gem 'sprockets', '~> 3.7'
 
 group :jekyll_plugins do
-  gem 'jekyll-assets'
   gem 'jekyll-multiple-languages-plugin'
 end

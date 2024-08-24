@@ -11,7 +11,7 @@ module Reports::Period
     ).references(
       :reviews
     ).merge(
-      PlanItem.allowed_by_business_units
+      PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
     )
   end
 
@@ -31,7 +31,7 @@ module Reports::Period
     ).references(
       :reviews
     ).merge(
-      PlanItem.allowed_by_business_units
+      PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
     )
   end
 end

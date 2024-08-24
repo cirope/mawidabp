@@ -10,7 +10,7 @@ article_order: 2
 
 Seleccionamos **Administración**, nos muestra la siguiente pantalla.
 
-![]({% asset administration/menu.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/menu.png){: class="img-responsive"}
 
 
 ### Organización
@@ -21,14 +21,14 @@ Seleccionamos **Administración -> Organización -> Gestión**
 
 Se cargan los siguientes datos de la organización: nombre, prefijo, y la descripción.
 
-![]({% asset basic_process_flow/new_organization.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/new_organization.png){: class="img-responsive"}
 
 *Seleccionamos **Crear organización** para que se genere.*
 *Luego de creada la organización se puede cargar el isologotipo.*
 
 A continuación mostramos la vista global de la organización creada *(por ejemplo en este caso: Demo).*
 
-![]({% asset basic_process_flow/list_organizations.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/list_organizations.png){: class="img-responsive"}
 
 Luego mostramos los datos en detalle de la organización creada:
 
@@ -37,7 +37,7 @@ Luego mostramos los datos en detalle de la organización creada:
 Esta opción es utilizada cuando el sistema es instalado en la infraestructura de la organización.
 Se cargan los datos de acuerdo a la configuración de Active Directory informados por las áreas de sistemas y seguridad informática de la organización.
 
-![]({% asset basic_process_flow/ldap.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/ldap.png){: class="img-responsive"}
 
 ##### Unidades organizativas
 Seleccionamos **Administración -> Organización -> Unidades organizativas**
@@ -49,11 +49,11 @@ Las unidades organizativas están compuestas por unidades de negocio (por ejempl
 
 A continuación mostramos un ejemplo de las unidades organizativas necesarias para el área de auditoría interna de un Banco:
 
-![]({% asset basic_process_flow/business_unit_types.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/business_unit_types.png){: class="img-responsive"}
 
 Para agregar una unidad organizativa, seleccionamos Nuevo, muestra la siguiente pantalla (los datos indicados con * son obligatorios)
 
-![]({% asset basic_process_flow/new_business_unit_types.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/new_business_unit_types.png){: class="img-responsive"}
 
 >Para guardar los cambios seleccionamos **Crear Tipo de unidad de negocio**
 
@@ -62,7 +62,7 @@ Para agregar una unidad organizativa, seleccionamos Nuevo, muestra la siguiente 
 - **Etiqueta de la unidad de negocio en el informe:** es una leyenda que aparece en el formato del informe (es opcional).
 
 
-	* **Ejemplo 1:** si estamos trabajando con la unidad organizativa Procesos Centrales,  y la unidad de negocio Préstamos, podemos agregar como etiqueta CICLO, de esta manera cuando generemos el informe, va mostrarse de la siguiente manera: 
+	* **Ejemplo 1:** si estamos trabajando con la unidad organizativa Procesos Centrales,  y la unidad de negocio Préstamos, podemos agregar como etiqueta CICLO, de esta manera cuando generemos el informe, va mostrarse de la siguiente manera:
 		+ **CICLO**: Préstamos  (corresponde a la descripción de la unidad de negocio).  
    &nbsp;
 	* **Ejemplo 2:** si estamos trabajando con la unidad organizativa Sucursales, y la unidad de negocio Sucursal Buenos Aires, podemos agregar como etiqueta UNIDAD DE NEGOCIO, de esta manera cuando generemos el informe, va mostrarse de la siguiente manera:
@@ -86,31 +86,31 @@ A continuación mostramos como se agrega una unidad de negocio:
 - Unidad organizativa: Sucursales
 - Unidad de negocio: 1 - SUCURSAL BUENOS AIRES.
 
-![]({% asset basic_process_flow/new_business_unit_types_with_data.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/new_business_unit_types_with_data.png){: class="img-responsive"}
 
 A continuación agregamos otra unidad de negocio a la unidad organizativa Sucursales:
 Unidad de negocio: 2 - SUCURSAL SAN JUAN
 
-![]({% asset basic_process_flow/new_business_unit_types_with_data_2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/new_business_unit_types_with_data_2.png){: class="img-responsive"}
 
 
 Para que se guarden los cambios hay que seleccionar Actualizar Tipo de unidad de negocio
 Si seleccionamos Listado: muestra las unidades organizativas creadas en el sistema.
 Si seleccionamos Volver: vuelve a la pantalla anterior.
 
-![]({% asset basic_process_flow/business_unit_types.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/business_unit_types.png){: class="img-responsive"}
 
 Las unidades organizativas se pueden Editar (lápiz).
 
 
 A continuación editamos la unidad organizativa Procesos Centrales, la misma está compuesta por varias unidades de negocio.
 
-![]({% asset basic_process_flow/edit_business_unit_types.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/edit_business_unit_types.png){: class="img-responsive"}
 
 También podemos Ver (lupa) las unidades organizativas.
 A continuación mostramos la unidad de organizativa Tecnología Informática, con sus correspondientes unidades de negocio.
 
-![]({% asset basic_process_flow/show_business_unit_types.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/show_business_unit_types.png){: class="img-responsive"}
 
 
 ### Buenas prácticas
@@ -118,15 +118,15 @@ A continuación mostramos la unidad de organizativa Tecnología Informática, co
 Seleccionamos Administración -> Buenas prácticas.
 
 
-Las buenas prácticas son la base del control interno de una organización. 
+Las buenas prácticas son la base del control interno de una organización.
 Una buena práctica se encuentra formada por procesos y estos por objetivos de control.
-En las buenas prácticas se definen los controles a cumplir por la organización en los diferentes procesos. 
+En las buenas prácticas se definen los controles a cumplir por la organización en los diferentes procesos.
 Los controles se revisan (chequean) por medio de pruebas (evaluación de diseño, pruebas de cumplimiento y pruebas sustantivas), las cuales permiten definir un grado de cumplimiento con los controles definidos (10% a 100% de cumplimiento).
 
 
 A continuación mostramos como se carga una Nueva buena práctica:
 
-![]({% asset basic_process_flow/new_best_practices.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/new_best_practices.png){: class="img-responsive"}
 
 **Nombre:** de la buena práctica.  
 **Descripción:** es opcional.  
@@ -141,7 +141,7 @@ Si seleccionamos la Flecha que se encuentra debajo de Procesos, aparece la opci�
 
 Si seleccionamos Agregar objetivo muestra los datos a cargar.
 
-![]({% asset basic_process_flow/processes.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/processes.png){: class="img-responsive"}
 
 
 Para que se guarde tenemos que seleccionar **Actualizar Buena práctica.**
@@ -151,12 +151,12 @@ A continuación mostramos un ejemplo de Procesos cargados en la Buena práctica 
 
 En este caso los Procesos Controles generales de Activas y Acuerdos en Cuenta Corriente.
 
-![]({% asset basic_process_flow/edit_process.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/edit_process.png){: class="img-responsive"}
 
 
 Luego mostramos, un ejemplo de un objetivo de control para el proceso Controles generales de Activas:
 
-![]({% asset basic_process_flow/process_control_objective.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/process_control_objective.png){: class="img-responsive"}
 
 **Objetivo de control:** el resultado que se desea alcanzar mediante la implementación de procedimientos de control en los procesos de trabajo de una organización.
 
@@ -191,17 +191,17 @@ Luego mostramos, un ejemplo de un objetivo de control para el proceso Controles 
 **Efecto:** se definen los temas que se pueden producir al no cumplirse con los controles definidos para cada uno de los objetivos de control (impacto en la organización). Es uno de los componentes del riesgo. Cualquier impacto (económico, patrimonial, en productividad, en servicio al cliente, en normatividad, en desarrollo institucional, posicionamiento competitivo, etc.) que afecte a una organización se refleja en los objetivos y metas de la organización. Es importante analizar el comportamiento del impacto en cada uno de los objetivos de control.
 
 
-**Etiqueta:** podemos agregar etiquetas que han sido definidas en la etapa de Administración - Etiquetas, para luego poder identificar el objetivo de control en un filtro o reporte. 
+**Etiqueta:** podemos agregar etiquetas que han sido definidas en la etapa de Administración - Etiquetas, para luego poder identificar el objetivo de control en un filtro o reporte.
 
 
 A continuación mostramos un ejemplo de las buenas prácticas cargadas en esta organización:
 
-![]({% asset basic_process_flow/best_practices.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/best_practices.png){: class="img-responsive"}
 
 Podemos Editar (Lápiz) una buena práctica cargada en el sistema, si lo seleccionamos muestra la siguiente pantalla.
 
-![]({% asset basic_process_flow/edit_best_practice.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/edit_best_practice.png){: class="img-responsive"}
 
 Podemos Ver (Lupa) una buena práctica cargada en el sistema, si la seleccionamos muestra la siguiente pantalla.
 
-![]({% asset basic_process_flow/show_best_practice.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/show_best_practice.png){: class="img-responsive"}

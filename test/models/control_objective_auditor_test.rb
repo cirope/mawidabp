@@ -3,9 +3,9 @@
 require 'test_helper'
 
 class ControlObjectiveAuditorTest < ActiveSupport::TestCase
-  test 'invalid because user isnt auditor' do
+  test 'invalid because user is not auditor and cannot act as audited' do
     new_control_objective_auditor =
-      ControlObjectiveAuditor.new user: users(:corporate),
+      ControlObjectiveAuditor.new user: users(:manager),
                                   control_objective: control_objectives(:management_dependency)
 
     refute new_control_objective_auditor.valid?

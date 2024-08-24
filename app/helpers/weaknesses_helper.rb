@@ -65,8 +65,8 @@ module WeaknessesHelper
     end
   end
 
-  def weakness_compliance_susceptible_to_sanction_options
-    COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.map do |k, v|
+  def weakness_compliance_maybe_sanction_options
+    COMPLIANCE_MAYBE_SANCTION_OPTIONS.map do |k, v|
       [t("label.#{k}"), v]
     end
   end

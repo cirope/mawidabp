@@ -1,23 +1,27 @@
-<p class="mb-1">
-  <strong><%= ErrorRecord.human_attribute_name 'user_id' %></strong>:
-  <%= @login_record %>
-</p>
+<div class="card">
+  <div class="card-body">
+    <p class="mb-1">
+      <strong><%= ErrorRecord.human_attribute_name 'user_id' %></strong>:
+      <%= @login_record %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= LoginRecord.human_attribute_name 'start' %></strong>:
-  <%= l(@login_record.start, format: :short) if @login_record.start %>
-</p>
+    <p class="mb-1">
+      <strong><%= LoginRecord.human_attribute_name 'start' %></strong>:
+      <%= l(@login_record.start, format: :short) if @login_record.start %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= LoginRecord.human_attribute_name 'end' %></strong>:
-  <%= l(@login_record.end, format: :short) if @login_record.end %>
-</p>
+    <p class="mb-1">
+      <strong><%= LoginRecord.human_attribute_name 'end' %></strong>:
+      <%= l(@login_record.end, format: :short) if @login_record.end %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= LoginRecord.human_attribute_name 'data' %></strong>:
-  <%= @login_record.data %>
-</p>
+    <p class="mb-1">
+      <strong><%= LoginRecord.human_attribute_name 'data' %></strong>:
+      <%= @login_record.data %>
+    </p>
 
-<hr />
+    <hr />
 
-<%= link_to_index login_records_path %>
+    <%= link_to_index login_records_path %>
+  </div>
+</div>

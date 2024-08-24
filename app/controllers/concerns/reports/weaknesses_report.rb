@@ -76,7 +76,7 @@ module Reports::WeaknessesReport
     def filter_weaknesses_for_report report_params
       weaknesses = scoped_weaknesses.finals false
 
-      %i(review project process_control control_objective).each do |param|
+      %i(review review_code project process_control control_objective).each do |param|
         if report_params[param].present?
           weaknesses = weaknesses.send "by_#{param}", report_params[param]
         end

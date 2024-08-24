@@ -12,6 +12,7 @@ class Organization < ApplicationRecord
   include Organizations::Parameters
   include Organizations::Roles
   include Organizations::Scopes
+  include Organizations::SamlProvider
   include Organizations::Setting
   include Organizations::Validations
 
