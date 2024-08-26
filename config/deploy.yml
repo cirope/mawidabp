@@ -51,7 +51,7 @@ env:
 builder:
   remote:
     arch: <%= ENV['BUILDPLATFORM'] || (raise 'BUILDPLATFORM must be provided') %>
-  host: ssh://<%="#{ENV['USER'] || 'root'}@#{ENV['HOST']}" %>
+    host: ssh://<%="#{ENV['USER'] || 'root'}@#{ENV['HOST']}" %>
 
 accessories:
   postgresql:
