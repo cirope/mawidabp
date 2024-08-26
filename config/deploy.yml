@@ -1,0 +1,101 @@
+service: mawidabp
+
+image: mawidabp
+
+volumes:
+  - /private:/opt/app/private
+
+servers:
+  web:
+    hosts:
+      - <%= ENV['HOST'] || '127.0.0.1' %>
+    labels:
+      traefik.http.routers.mawidabp.entrypoints: websecure
+      traefik.http.routers.mawidabp.rule: Host(`<%= ENV['HOST'] %>`) || Host(`admin-<%= ENV['HOST'] %>`)
+      traefik.http.routers.mawidabp.tls.certresolver: letsencrypt
+
+  job:
+    hosts:
+      - <%= ENV['HOST'] || '127.0.0.1' %>
+    cmd: bundle exec sidekiq
+
+  cron:
+    hosts:
+      - <%= ENV['HOST'] || '127.0.0.1' %>
+    cmd: sh -c 'bundle exec whenever --update-crontab && cron && busybox syslogd -n -O-'
+
+registry:
+  server: <%= ENV['REGISTRY_SERVER'] %>
+  username: AWS
+  password: <%= %x(aws ecr get-login-password) %>
+
+env:
+  clear:
+    SECRET_KEY_BASE:           <%= ENV['SECRET_KEY_BASE'] %>
+    APP_HOST:                  <%= (ENV['HOST'] || 'localhost.lvh.me').sub(/^[^.]+\./, '') %>
+    DB_HOST:                   <%= ENV['HOST'] || '127.0.0.1' %>
+    REDIS_HOST:                <%= ENV['HOST'] || '127.0.0.1' %>
+    SMTP_AUTHENTICATION:       'plain'
+    SMTP_ENABLE_STARTTLS_AUTO: 'true'
+    EMAIL_ADDRESS:             'soporte@mawidabp.com'
+
+  secret:
+    - POSTGRES_PASSWORD
+    - RAILS_MASTER_KEY
+    - SMTP_ADDRESS
+    - SMTP_USER_NAME
+    - SMTP_PASSWORD
+    - SMTP_DOMAIN
+    - SMTP_PORT
+
+builder:
+  remote:
+    arch: <%= ENV['BUILDPLATFORM'] || (raise 'BUILDPLATFORM must be provided') %>
+    host: ssh://<%="#{ENV['USER'] || 'root'}@#{ENV['HOST']}" %>
+
+accessories:
+  postgresql:
+    image: postgres:<%= ENV['POSTGRES_VERSION'] || 'latest' %>
+    host: <%= ENV['HOST'] || '127.0.0.1' %>
+    port: 5432
+    env:
+      clear:
+        POSTGRES_USER: 'mawidabp'
+        POSTGRES_DB: 'mawidabp_production'
+      secret:
+        - POSTGRES_PASSWORD
+    volumes:
+      - /db_data:/var/lib/postgresql/data
+  redis:
+    image: redis:latest
+    port: 6379
+    roles:
+      - web
+      - job
+    cmd: 'redis-server'
+    volumes:
+      - /var/lib/redis:/data
+
+traefik:
+  options:
+    publish:
+      - '443:443'
+    volume:
+      - '/letsencrypt/acme.json:/letsencrypt/acme.json'
+  args:
+    accesslog: true
+    accesslog.format: json
+    entryPoints.web.address: ':80'
+    entryPoints.websecure.address: ':443'
+    entryPoints.web.http.redirections.entryPoint.to: websecure # We want to force https
+    entryPoints.web.http.redirections.entryPoint.scheme: https
+    entryPoints.web.http.redirections.entrypoint.permanent: true
+    entrypoints.websecure.http.tls.domains[0].main: <%= ENV['HOST'] %>
+    entrypoints.websecure.http.tls.domains[0].sans: admin-<%= ENV['HOST'] %>
+    certificatesResolvers.letsencrypt.acme.email: soporte@mawidabp.com
+    certificatesResolvers.letsencrypt.acme.storage: /letsencrypt/acme.json
+    certificatesResolvers.letsencrypt.acme.httpchallenge: true
+    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
+
+healthcheck:
+  path: /healthy

@@ -26,3 +26,6 @@ uploads/
 Dockerfile*
 Vagrantfile
 docker-compose.yml
+config/jekyll/_vendor/bundle/
+config/jekyll/_sass/stylesheets
+config/jekyll/assets/fonts

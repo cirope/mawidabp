@@ -19,7 +19,6 @@ EMAIL_PASSWORD: '<password>'
 EMAIL_SSL: 'true'
 
 # Automatic response with mgraph
-EMAIL_METHOD: 'mgraph'
 EMAIL_USER_ID: '<user_id>'
 EMAIL_TENANT_ID: '<tenant_id>'
 EMAIL_CLIENT_ID: '<client_id>'
@@ -32,7 +31,6 @@ REDIS_PORT: '6379'
 
 SECRET_KEY_BASE: 'REPLACE with rake secret output'
 NEW_RELIC_LICENSE_KEY: 'REPLACE with the one provided by NewRelic'
-RAILS_MASTER_KEY: 'REPLACE with THE master key'
 
 # Extra application options
 ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION: 'false'
