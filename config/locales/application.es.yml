@@ -2,6 +2,7 @@
 es:
   actioncontroller:
     best_practices: Buenas prácticas
+    blocked: Licencia bloqueda
     business_unit_types: Unidades de negocio
     conclusion_draft_reviews: Informe borrador
     conclusion_final_reviews: Informe definitivo
@@ -30,6 +31,10 @@ es:
 
   app_copyright: Copyright © 2008-%{year} Hullop Solutions S.A. Todos los derechos reservados.
   app_name: Mawidabp
+
+  best_practice:
+    audited: Referentes a cargo
+    auditors: Auditores a cargo
 
   business_unit:
     correctly_updated: Unidad de negocio actualizada correctamente.
@@ -182,7 +187,7 @@ es:
         conclusions_body: Si bien la Calificación del Control Interno del NBCH S. A. es <b>“%{annual_qualification_period}”</b> y la misma no tiene tuvo modificaciones respecto del año anterior, es importante señalar que el ponderador actual <b>“%{annual_weight_period}”</b> es un 7% menor al <b>“%{annual_weight_previous_period}”</b> al del período anterior.
         header_cycle: "<b>Ciclo</b>"
         header_qualification: "<b>Calificación</b>"
-        header_weight: "<b>Ponderador a fecha de los Informes %{period}</b>"
+        header_weight: "<b>Ponderador por fecha de los informes %{period}</b>"
       front_page:
         first_title: Subsidiarias
         second_title: Calificación del Ciclo
@@ -353,7 +358,7 @@ es:
       without_audits_in_the_month: Sin auditorías en el mes
       without_weaknesses: Sin observaciones
       year: Año de origen
-    weaknesses_by_month_title: Observaciones por riesgo
+    weaknesses_by_month_title: Informe mensual
     weaknesses_by_risk:
       pdf_name: observaciones_informes_definitivos_por_riesgo_%{from_date}_al_%{to_date}.pdf
       period_summary: Resumen del periodo %{period}
@@ -404,7 +409,7 @@ es:
         INFORME DE SINTESIS AL DIRECTORIO
         EVALUACIÓN DEL SISTEMA DE
         CONTROL INTERNO COM. "A" 5042
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_audits_in_the_interval: Sin auditorías en el intervalo seleccionado
       without_weaknesses: Sin observaciones
     weaknesses_by_user_title: Observaciones por usuario
@@ -589,16 +594,34 @@ es:
     email_note: Nota a incluir en el correo
     estimated_follow_up_date: Mes estimado de normalización
     executive_summary:
+      applied_data_analytics: Data Analytics aplicada
+      applied_data_analytics_default_value: No existen procesos robotizados que coadyuven a cumplir con parte del alcance del trabajo realizado.
       assumed_risk_weaknesses: Riesgo asumido
+      attached_png_name: imagen-resumen-ejecutivo-%{page}.png
+      conclusion: "<b>Conclusión</b>"
       evolution: EVOLUCIÓN (*)
+      issue_date: Fecha
+      key_weaknesses: "<b>Hallazgos significativos</b>"
       main_weaknesses: Principales debilidades
+      no_origin_or_normalization: "-"
       no_weaknesses: No hay observaciones
+      no_weaknesses_v2: "<b>No surgieron expuestos para destacar.</b>"
+      normalization: Normalización
+      objective: "<b>Objetivo:</b> %{objective}"
+      observations: |-
+        <b>Próximos pasos
+        Información adicional</b>
+      old_data: "(Antigua data)"
+      origin: Origen
       other_weaknesses: Otras observaciones
+      pdf_name: resumen-ejecutivo-%{pdf_name}
       project: 'La Auditoría practicada estuvo circunscripta a la revisión de:'
-      project_alt: 'Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:'
+      project_alt: "<b>Auditoría:</b> %{project}"
       review_author: Gerencia de Auditoría Interna
       risk_exposure: 'Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)'
+      risk_exposure_alt: "<b>Exposición de Riesgo del Proceso Evaluado:</b> %{risk}"
       score: Calificación
+      survey: "<b>Alcance:</b> %{survey}"
       title: Resumen ejecutivo
     finding_review_assignments: HALLAZGOS REVISADOS
     findings_follow_up:
@@ -764,7 +787,7 @@ es:
     tagged_findings_report:
       empty: No hay hallazgos para el filtro aplicado
       findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
-      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: seguimiento_de_hallazgos_en_ejecucion_etiquetados.pdf
       tags_count_label: Cantidad máxima de etiquetas
       title: Hallazgos por cantidad máxima de etiquetas
@@ -785,7 +808,7 @@ es:
       pdf_name: informe_de_seguimiento_de_observaciones_en_ejecucion.pdf
       title: Informe de seguimiento de observaciones
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     without_findings: Sin hallazgos
     without_weaknesses: Sin hallazgos en el periodo
     without_weaknesses_in_the_interval: Sin hallazgos en el intervalo
@@ -860,9 +883,9 @@ es:
     latest_answer: Último comentario de seguimiento
     next_pending_task_date: Fecha próxima tarea pendiente
     pdf:
-      filtered_by_html:
-        one: El listado fue filtrado con la consulta <span class="font-weight-bold">'%{query}'</span> en la columna <span class="font-weight-bold">'%{columns}'</span>
-        other: El listado fue filtrado con la consulta <span class="font-weight-bold">'%{query}'</span> en las columnas <span class="font-weight-bold">'%{columns}'</span>
+      filtered_by:
+        one: El listado fue filtrado con la consulta '%{query}' en la columna %{columns}
+        other: El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}
     readonly: La observación no puede ser creada ni modificada, ya se emitió el informe definitivo
     recode_tasks: Recodificar tareas
     repeated_ancestors: Reiterada de
@@ -914,6 +937,7 @@ es:
       without_oportunities: Sin oportunidades de mejora en el periodo
       without_weaknesses: Sin observaciones en el periodo
     cost_analysis_title: Análisis de costos
+    export_issues: Exportar casos
     fixed_weaknesses_report_title: Observaciones por riesgo solucionadas
     high_risk_weaknesses_report_title: Observaciones de riesgo alto
     index_title: Reportes de auditoría
@@ -922,7 +946,7 @@ es:
     tagged_findings_report:
       empty: No hay hallazgos para el filtro aplicado
       findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
-      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge bg-secondary">%{count}</span>'
       pdf_name: seguimiento_de_hallazgos_etiquetados.pdf
       tags_count_label: Cantidad máxima de etiquetas
       title: Hallazgos por cantidad máxima de etiquetas
@@ -954,7 +978,7 @@ es:
       pdf_name: informe_de_seguimiento_de_observaciones.pdf
       title: Informe de seguimiento de observaciones
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     weaknesses_reschedules_title: Resumen de observaciones y reprogramaciones
 
   follow_up_audited:
@@ -976,7 +1000,7 @@ es:
         INFORME DE SINTESIS AL DIRECTORIO
         EVALUACIÓN DEL SISTEMA DE
         CONTROL INTERNO COM. "A" 5042
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_reviews_in_the_period: Sin informes en el periodo seleccionado
       without_weaknesses: Sin observaciones
     process_control_stats_title: Observaciones por proceso de negocio
@@ -988,7 +1012,7 @@ es:
         INFORME DE SINTESIS AL DIRECTORIO
         EVALUACIÓN DEL SISTEMA DE
         CONTROL INTERNO COM. "A" 5042
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_audits_in_the_interval: Sin auditorías en el intervalo seleccionado
       without_weaknesses: Sin observaciones
     weaknesses_by_user_title: Observaciones por usuario
@@ -1223,7 +1247,7 @@ es:
     weaknesses_by_control_objective_process:
       control_objective_tags: Etiquetas objetivos de control
       origination_year: Año de origen
-      pdf_name: Reporte_de_proceso_por_objectivo_de_control_%{from_date}_al_%{to_date}.pdf
+      pdf_name: Reporte_de_proceso_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf
       review_tags: Etiquetas de informe
       subtitle: SEGUIMIENTO OBSERVACIONES PROCESO POR OBJETIVO DE CONTROL / INFORMES DEFINITIVO
       title: |-
@@ -1231,7 +1255,7 @@ es:
         EVALUACIÓN DEL SISTEMA DE
         CONTROL INTERNO COM. "A" 5042
       weakness_tags: Etiquetas de observación
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_weaknesses: Sin observaciones
     weaknesses_by_control_objective_process_title: Reporte de proceso por objetivos de control
     weaknesses_by_control_objective_title: Resultado objetivos de control
@@ -1297,7 +1321,7 @@ es:
         INFORME DE SINTESIS AL DIRECTORIO
         EVALUACIÓN DEL SISTEMA DE
         CONTROL INTERNO COM. "A" 5042
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_audits_in_the_interval: Sin auditorías en el intervalo seleccionado
       without_weaknesses: Sin observaciones
     weaknesses_by_user_title: Observaciones por usuario
@@ -1341,7 +1365,7 @@ es:
         INFORME DE SINTESIS AL DIRECTORIO
         EVALUACIÓN DEL SISTEMA DE
         CONTROL INTERNO COM. "A" 5042
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_audits_in_the_interval: Sin auditorías en el intervalo seleccionado
       without_weaknesses: Sin observaciones
     weaknesses_heatmap_title: Mapa de calor observaciones
@@ -1418,9 +1442,11 @@ es:
     disable: Deshabilitar
     download: Descargar
     download_csv: Descargar CSV
+    download_pdf: Descargar PDF
     download_rtf: Descargar RTF
     downloads: Descargas
     edit: Editar
+    f: 'No' # remove after fixing tests that use this key
     greater_or_equal_than: Mayor o igual a
     import: Importar
     insert_item: Insertar ítem
@@ -1438,6 +1464,7 @@ es:
     search: Buscar
     send: Enviar
     show: Ver
+    t: Sí # remove after fixing tests that use this key
     total: Total
     update: Actualizar
     without_data: Sin datos
@@ -1709,11 +1736,11 @@ es:
 
   user:
     disabled: Deshabilitado
-    pdf:
+    pdf_csv:
       filtered_by:
         one: El listado fue filtrado con la consulta '%{query}' en la columna %{columns}
         other: El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}
-      pdf_name: listado_de_usuarios.pdf
+      pdf_csv_name: listado_de_usuarios
       users_count: 'Cantidad de usuarios: %{count}'
     responsibility_modification:
       new_responsible: 'Responsable actual: %{responsible}'
@@ -1762,9 +1789,6 @@ es:
 
   welcome:
     index_title: Bienvenido
-
-  wicked_pdf:
-    number_pages_html: Pagina <span class="page"></span> de <span class="topage"></span>
 
   work_paper:
     cover_name: "%{prefix}%{filename}-portada.pdf"

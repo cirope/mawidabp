@@ -95,6 +95,11 @@ en:
       finding_data: A comment has been added to the finding **%{finding_code}** of audit report **%{review}**
       finding_link: Show finding
       title: New comment on audit report %{review} [#%{finding_id}]
+    notify_new_findings:
+      created_title:
+        one: New weakness / opportunity
+        other: New weaknesses / opportunities
+      title: Weaknesses / opportunities notifications
     notify_new_oportunity:
       oportunity_link: See improvement opportunity
       title: You have a new opportunity to improve

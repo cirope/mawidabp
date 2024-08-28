@@ -8,7 +8,7 @@ module Tags::Json
   def as_json options = {}
     default_options = {
       only:    [:id],
-      methods: [:label]
+      methods: [:label, :include_description?]
     }
 
     super default_options.merge(options)

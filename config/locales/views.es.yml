@@ -6,7 +6,7 @@ es:
     form:
       add_activity: Agregar actividad
     index:
-      empty_html: No hay grupos de actividades, puede crear uno con el botón <span class="badge badge-primary">Nuevo grupo de actividades</span>
+      empty_html: No hay grupos de actividades, puede crear uno con el botón <span class="badge bg-primary">Nuevo grupo de actividades</span>
       new: Nuevo grupo de actividades
       title: Listado de grupos de actividades
     new:
@@ -17,11 +17,13 @@ es:
   answer_options:
     agree: De acuerdo
     disagree: En desacuerdo
+    f: 'No' # remove after fixing tests that use this key
     neither_agree_nor_disagree: Ni acuerdo ni desacuerdo
     'no': 'No'
     not_apply: No aplica
     strongly_agree: Muy de acuerdo
     strongly_disagree: Muy en desacuerdo
+    t: Sí # remove after fixing tests that use this key
     'yes': Sí
 
   authentications:
@@ -61,7 +63,7 @@ es:
 
   business_unit_kinds:
     index:
-      empty_html: No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge badge-primary">Nuevo</span>
+      empty_html: No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge bg-primary">Nuevo</span>
 
   closing_interviews:
     edit:
@@ -71,7 +73,7 @@ es:
       add_auditor: Agregar auditor
       add_responsible: Agregar responsable
     index:
-      empty_html: No hay entrevistas de cierre, puede crear una con el botón <span class="badge badge-primary">Nueva entrevista de cierre</span>
+      empty_html: No hay entrevistas de cierre, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de cierre</span>
       empty_search_html: No hay entrevistas de cierre que coincidan con el criterio de búsqueda
       new: Nueva entrevista de cierre
       title: Listado de entrevistas de cierre
@@ -89,7 +91,7 @@ es:
     index:
       title: Listado de objetivos de control
     new:
-      add_control_objective_auditor: Agregar auditor a cargo
+      add_control_objective_auditor: Agregar auditor/referente a cargo
       tagging: Agregar etiqueta
     score_type:
       option: Opciones
@@ -101,7 +103,7 @@ es:
     edit:
       title: Editar documento
     index:
-      empty_html: No hay documentos, puede crear uno con el botón <span class="badge badge-primary">Nuevo documento</span>
+      empty_html: No hay documentos, puede crear uno con el botón <span class="badge bg-primary">Nuevo documento</span>
       empty_search_html: No hay documentos que coincidan con el criterio de búsqueda
       new: Nuevo documento
       title: Listado de documentos
@@ -158,6 +160,9 @@ es:
       confirm_finding_without_extension: "¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo"
       follow_up_date_label_append: " - Sugerida: "
       show_status_change_history: Ver historial de cambios de estado
+    graphs:
+      completed: Hallazgos solucionados
+      incomplete: Hallazgos pendientes
     index:
       current_user_answers_count: Comentarios propios
       title: Listado de hallazgos
@@ -166,7 +171,7 @@ es:
         other: Tiene %{count} comentarios sin leer
       unread_answers_filter: Comentarios sin leer
     pdf:
-      issue: Ver en cuadro adjunto, los casos bajo código cam %{review_code}
+      issue: Ver en la tabla adjunta los casos bajo el código %{review_code}
     show:
       title: Detalles del hallazgo
     state:
@@ -192,6 +197,9 @@ es:
     work_papers:
       create:
         from_comment: De comentario por %{user} el %{date}
+
+  footer:
+    support: Soporte
 
   licenses:
     authorizations:
@@ -241,9 +249,9 @@ es:
     form:
       add_file_model: Agregar archivo
       download_cover: Descargar caratula
-      markdown_help_html: <span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}
+      markdown_help_html: <span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}
     index:
-      empty_html: No hay informes externos, puede crear una con el botón <span class="badge badge-primary">Nuevo memo</span>
+      empty_html: No hay informes externos, puede crear una con el botón <span class="badge bg-primary">Nuevo memo</span>
       empty_search_html: No hay informes externos que coincidan con el criterio de búsqueda
       new: Nuevo informe externo
       title: Listado de informes externos
@@ -280,9 +288,9 @@ es:
     edit:
       title: Editar noticia
     form:
-      markdown_help_html: <span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}
+      markdown_help_html: <span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}
     index:
-      empty_html: No hay noticias, puede crear una con el botón <span class="badge badge-primary">Nueva noticia</span>
+      empty_html: No hay noticias, puede crear una con el botón <span class="badge bg-primary">Nueva noticia</span>
       empty_search_html: No hay noticias que coincidan con el criterio de búsqueda
       new: Nueva noticia
       title: Listado de noticias
@@ -301,7 +309,7 @@ es:
       add_auditor: Agregar auditor
       add_responsible: Agregar responsable
     index:
-      empty_html: No hay entrevistas de inicio, puede crear una con el botón <span class="badge badge-primary">Nueva entrevista de inicio</span>
+      empty_html: No hay entrevistas de inicio, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de inicio</span>
       empty_search_html: No hay entrevistas de inicio que coincidan con el criterio de búsqueda
       new: Nueva entrevista de inicio
       title: Listado de entrevistas de inicio
@@ -385,9 +393,12 @@ es:
     csv:
       annual_plan_hours: Hs Plan Anual
       auditor: Auditor (Usuario)
+      aux_but: UO Auxiliar
       csv_name: plan_periodo_%{period}.csv
       csv_name_pat_dprh: grado_de_avance_horas_de_trabajo_detallado_%{current_date}.csv
       csv_name_pat_im: grado_de_avance_reporte_de_gestión_interna_%{current_date}.csv
+      main_but: UO Principal
+      main_or_aux_but: UO Principal/Auxiliar
       number_observations_per_risk: Cantidad observaciones por riesgo
       time_summary_hours: Hs Resumen Horario
       title: Plan de auditoría
@@ -608,7 +619,7 @@ es:
     form:
       add_risk_assessment_weight: Agregar ponderador
     index:
-      empty_html: No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de evaluación de riesgo</span>
+      empty_html: No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de evaluación de riesgo</span>
       empty_search_html: No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda
       new: Nueva plantilla de evaluación de riesgo
       title: Listado de plantillas de evaluación de riesgo
@@ -629,8 +640,9 @@ es:
       apply: Aplicar
       cloned_risk_assessment_items: Luego de crear la evaluación de riesgo verá los ítems copiados y podrá editarlos o agregar nuevos
       new_risk_assessment_items: Luego de crear la evaluación de riesgo podrá agregar ítems a la misma
+    heatmap: Mapa de calor
     index:
-      empty_html: No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva evaluación de riesgo</span>
+      empty_html: No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge bg-primary">Nueva evaluación de riesgo</span>
       empty_search_html: No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda
       merge_to_plan: Crear proyectos en plan a partir de la evaluación
       new: Nueva evaluación de riesgo
@@ -638,12 +650,13 @@ es:
     new:
       title: Crear evaluación de riesgo
     pdf:
+      formula: Fórmula
       pdf_name: evaluacion_de_riesgo_%{name}.pdf
       period:
         range: "%{from_date} al %{to_date}"
         title: Periodo (%{name})
       title: Evaluación de riesgo
-    risk_weight_risks:
+    risk_weight_risks: # Deprecated: remove when all clients are migrated
       high: Alto
       low: Bajo
       medium: Medio
@@ -658,6 +671,45 @@ es:
       draft: Borrador
       final: Definitiva
       merged: Planificada
+
+  risk_registries:
+    edit:
+      title: Editar registro de riesgo
+    form:
+      new_risk_categories: Luego de crear el registro de riesgo podrá completar la carga de los riesgos
+    index:
+      empty_html: No hay registros de riesgo, puede crear uno con el botón <span class="badge bg-primary">Nuevo registro de riesgo</span>
+      empty_search_html: No hay registros de riesgo que coincidan con el criterio de búsqueda
+      new: Nuevo registro de riesgo
+      title: Listado de registros de riesgo
+    new:
+      title: Crear registro de riesgo
+    risk_categories:
+      new: Agregar categoría de riesgo
+    risks:
+      new: Agregar riesgo
+    show:
+      title: Ver registro de riesgo
+
+  risk_score_items:
+    form:
+      add_risk_score_item: Agregar valor
+
+  risks:
+    impacts:
+      almost_certain: Muy probable
+      likely: Probable
+      moderate: Moderado
+      rare: Raro
+      unlikely: Improbable
+    likelihoods:
+      catastrophic: Catastrófica
+      high: Alta
+      insignificant: Insignificante
+      minor: Menor
+      moderate: Moderada
+    new:
+      control_objective: Agregar objetivo de control
 
   sessions:
     create:
@@ -682,8 +734,11 @@ es:
     conclusion_review_receiver: Receptor/es del informe
     edit:
       title: Modificar configuración
+    enable_close_date_edition: Habilitar edición de fecha de cierre
     exchange_directory_path: Directorio de intercambio de archivos
     expire_notification: Aviso de caducidad de la contraseña
+    finding_by_current_user: Filtrar observaciones por usuario actual
+    finding_days_for_next_notifications: Cantidad de días en los que se debe enviar una solicitud de confirmación
     finding_stale_confirmed_days: Cantidad de días que deben pasar para que una observación sin responder se considere desatendida
     finding_warning_expire_days: Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad
     hide_import_from_ldap: Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación
@@ -706,7 +761,9 @@ es:
     show_follow_up_timestamps: Mostrar marcas de tiempo en seguimiento
     show_print_date_on_pdfs: Mostrar fecha de impresión en PDFs
     skip_function_and_manager_from_ldap_sync: No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP
+    skip_reiteration_copy: Omitir copiar los datos de la observación anterior al reiterar
     temporary_polls: Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.
+    uniqueness_username_validation: Validar que el nombre de usuario sea único para todas las organizaciones
 
   tags:
     edit:
@@ -715,7 +772,7 @@ es:
       add_child: Agregar subetiqueta
       children: Subetiquetas
     index:
-      empty_html: No hay etiquetas, puede crear una con el botón <span class="badge badge-primary">Nueva etiqueta</span>
+      empty_html: No hay etiquetas, puede crear una con el botón <span class="badge bg-primary">Nueva etiqueta</span>
       new: Nueva etiqueta
       title: Listado de etiquetas
     list:
@@ -768,6 +825,8 @@ es:
       current_month: Descarga mes actual
       current_week: Descarga semana actual
       current_year: Descarga año actual
+    edit:
+      title: Editar actividad
     form:
       activity: Actividad
       add_business_unit_type: Agregar unidad organizativa
@@ -917,7 +976,7 @@ es:
     form:
       add_control_objective: Agregar objetivo de control
     index:
-      empty_html: No hay plantillas de observación, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de observación</span>
+      empty_html: No hay plantillas de observación, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de observación</span>
       empty_search_html: No hay plantillas de observación que coincidan con el criterio de búsqueda
       new: Nueva plantilla de observación
       title: Listado de plantillas de observación
@@ -926,7 +985,27 @@ es:
     show:
       title: Ver plantilla de observación
 
+  welcome:
+    commented_on: comentó en
+    completed_findings: Hallazgos solucionados
+    current_user_answers: Comentarios propios
+    latest_answers: Últimos comentarios
+    latest_findings: Hallazgos de los últimos meses
+    pending_findings: Hallazgos pendientes
+    version: Versión
+    welcome: Bienvenido
+
   work_papers:
     show:
       error: Recuerde que debe estar autenticado o tener permisos para visualizar el documento
       title: Papel de trabajo
+    statuses:
+      auditor:
+        next_to_finished: Volver a pendiente
+        next_to_pending: Marcar para revisión
+      finished: En revisión
+      pending: Pendiente
+      revised: Revisado
+      supervisor:
+        next_to_finished: Marcar como revisado
+        next_to_revised: Volver a pendiente

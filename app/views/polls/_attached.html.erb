@@ -7,7 +7,7 @@
 </div>
 
 <div class="row">
-  <div class="file-container float-left">
+  <div class="file-container float-start">
     <%= link_to_upload f.object, :attached %>
     <% if answer.attached_cache %>
       <%= f.input :attached_cache, as: :hidden %>
@@ -17,7 +17,7 @@
     <% end %>
   </div>
   <%= link_to_download_attached_file f %>
-  <div class="ml-2">
+  <div class="ms-2">
     <%= link_to_remove_attached_file f %>
   </div>  
 </div>

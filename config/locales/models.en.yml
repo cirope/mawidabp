@@ -3,19 +3,37 @@ en:
   activemodel:
     attributes:
       nbc_annual_report_form:
+        business_unit_types: Organizational units
         cc: CC
         conclusion: Conclusion
         date: Date
         introduction_and_scope: Introduction and Scope
         name: Name
-        objective: Target
+        objective: Objective
+        organizations: Organizations
         period_id: Period
+        previous_period_id: Previous period
       registration:
         email: Email
         last_name: Last name
         name: Name
         organization_name: Organization name
         user: Username
+    errors:
+      models:
+        nbc_internal_control_qualification_as_group_of_companies:
+          attributes:
+            business_unit_types:
+              must_have_the_same_business_unit_type_names:
+                one: 'must have the same names in all three organizations. Currently, the one that differs is: %{different_names}'
+                other: 'must have the same names in all three organizations. Currently, the ones that differ are: %{different_names}'
+            organizations:
+              are_misconfigured: are misconfigured in the application settings. Please contact soporte@mawidabp.com
+            period_id:
+              must_have_the_same_name: 'must have the same name in all organizations. Currently differs in: %{organizations}'
+            previous_period_id:
+              must_be_before_period: must have a start date before the Period start date
+              must_have_the_same_name: 'must have the same name in all organizations. Currently differs in: %{organizations}'
     models:
       registration:
         one: Organization
@@ -137,6 +155,7 @@ en:
       conclusion_review:
         additional_comments: Additional comments
         affects_compliance: Affects compliance
+        applied_data_analytics: Applied Data Analytics
         applied_procedures: Applied procedures
         approved: Approved
         business_unit: Business unit
@@ -157,6 +176,7 @@ en:
         project: Project
         recipients: Audit report recipients
         reference: Frame of reference
+        review_conclusion: Review conclusion
         review_id: Audit report
         scope: Scope limitation
         sectors: Sectors/departments involved
@@ -172,7 +192,6 @@ en:
         order: Order
         sustantive_tests: Substantive tests
       control_objective:
-        affected_sector_id: Bank sector affected by the alert
         audit_sector: Audit Sector
         control_objective_auditors: Auditors in charge
         control_objective_id: Control objective
@@ -717,9 +736,18 @@ en:
         review: Audit report
         user: Member
         user_id: Member
+      risk:
+        cause: Cause
+        effect: Effect
+        identifier: Identifier
+        impact: Impact
+        likelihood: Likelihood
+        name: Name
+        user: Owner
       risk_assessment:
         description: Description
         file_model: Attachment
+        formula: Formula
         name: Name
         period: Period
         risk_assessment_items: Items
@@ -742,20 +770,53 @@ en:
         risk: Risk
       risk_assessment_template:
         description: Description
+        formula: Formula
         name: Name
         risk_assessment_weights: Risk assessment attributes
       risk_assessment_template/risk_assessment_weights:
         description: Description
+        heatmap: Heatmap
+        identifier: Identifier
         name: Attribute
-        weight: Weight
+        risk_score_items: Values
       risk_assessment_weight:
         description: Description
+        heatmap: Heatmap
+        identifier: Identifier
         name: Attribute
         weight: Weight
+      risk_assessment_weights/risk_score_items:
+        name: Name
+        value: Value
+      risk_category:
+        name: Name
+      risk_control_objective:
+        control_objective: Control objective
+      risk_registry:
+        description: Description
+        name: Name
+      risk_registry/risk_categories:
+        name: Name
+      risk_registry/risk_categories/risks:
+        cause: Cause
+        effect: Effect
+        identifier: Identifier
+        impact: Impact
+        likelihood: Likelihood
+        name: Name
+        risk_control_objectives: Control objectives
+        user: Owner
+      risk_registry/risk_categories/risks/risk_control_objectives:
+        control_objective: Control objective
+      risk_score_item:
+        name: Name
+        value: Value
       risk_weight:
+        identifier: Identifier
         value: Value
         weight: Weight
       role:
+        identifier: Identifier
         name: Profile
         privileges: Privileges
         role_type: Profile type
@@ -763,13 +824,20 @@ en:
         assertion_consumer_service_binding: Assertion consumer service binding
         assertion_consumer_service_url: Response URL (Assertion consumer service URL)
         default_role_for_users: Default role for users
+        email_claim: Email claim
+        function_claim: Function claim
         idp_cert: Certificate (Base64)
         idp_entity_id: Azure AD identifier
         idp_homepage: Application federation metadata URL
         idp_sso_target_url: Login URL
+        lastname_claim: Last name claim
+        manager_claim: Manager claim
+        name_claim: Name claim
         name_identifier_format: Name identifier format
         provider: Provider
+        roles_claim: Roles claim
         sp_entity_id: Identifier (entity ID)
+        username_claim: Username claim
       setting:
         description: Description
         name: Name
@@ -784,11 +852,12 @@ en:
         shared: Shared
         style: Style
       tagging:
+        description: Description
         tag: Tag
         tag_id: Tag
       task:
         code: Code
-        description: Descripción
+        description: Description
         due_on: End date
         status: Status
       time_consumption:
@@ -959,7 +1028,7 @@ en:
         control_objective_auditor:
           attributes:
             user_id:
-              invalid: Must be auditor
+              invalid: must be auditor or auditee
         file_model:
           attributes:
             file:
@@ -1073,10 +1142,27 @@ en:
           attributes:
             user_id:
               invalid: must have a profile according to your role within the audit report
+        risk:
+          attributes:
+            risk_control_objectives:
+              blank: must have at least one
         risk_assessment_template:
           attributes:
             risk_assessment_weights:
               blank: must have at least one
+              numericality: must have %{count} main attributes
+        risk_assessment_weight:
+          attributes:
+            risk_score_items:
+              blank: must have at least one
+        setting:
+          attributes:
+            value:
+              array_values_above: "%{days_above} must be less than %{stale_day} (value configured in '%{setting_description}')"
+              array_values_below: must be greater than %{last_notification_day} (highest value configured in '%{setting_description}')
+              duplicate_array_values: "%{duplicate_days} are duplicated"
+              empty: must have at least one
+              invalid: 'must contain only numbers separated by commas. Invalid: %{invalid_days}'
         subsidiary:
           attributes:
             identity:
@@ -1180,8 +1266,8 @@ en:
         one: Control objective
         other: Control objectives
       control_objective_auditor:
-        one: Auditor in charge
-        other: Auditors in charge
+        one: Auditor/Auditee in charge
+        other: Auditors/Auditees in charge
       control_objective_item: Control objective
       cost: Cost
       document:
@@ -1293,9 +1379,24 @@ en:
       risk_assessment_weight:
         one: Risk assessment attribute
         other: Risk assessment attributes
+      risk_category:
+        one: Risk category
+        other: Risk categories
+      risk_control_objective:
+        one: Control Objective
+        other: Control Objectives
+      risk_registry:
+        one: Risk registry
+        other: Risk registries
+      risk_score_item:
+        one: Value
+        other: Values
       risk_weight:
         one: Risk assessment value
         other: Risk assessment values
+      risks:
+        one: Risk
+        other: Risks
       role: Profile
       saml_provider:
         one: SAML configuration

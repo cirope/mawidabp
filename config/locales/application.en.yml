@@ -2,6 +2,7 @@
 en:
   actioncontroller:
     best_practices: Best practices
+    blocked: Blocked license
     business_unit_types: Organizational unit
     conclusion_draft_reviews: Draft audit reports
     conclusion_final_reviews: Final audit reports
@@ -30,6 +31,10 @@ en:
 
   app_copyright: Copyright © 2008-%{year} Hullop Solutions S.A. All rights reserved.
   app_name: Mawidabp
+
+  best_practice:
+    audited: Auditees in charge
+    auditors: Auditors in charge
 
   business_unit:
     correctly_updated: Business unit correctly updated.
@@ -151,13 +156,16 @@ en:
         first_footer: "<b>AUD. Alejandro Camnasio</b>"
         general_conclusion_title: "<b><u>GENERAL CONCLUSION</u></b>"
         objective_title: "<b><u>OBJECTIVE</u></b>"
-        second_footer: <b>"IA/IC Internal Audit Management</b>
+        second_footer: "<b>IA/IC Internal Audit Management</b>"
         title: "<b><u>EXECUTIVE SUMMARY</u></b>"
       front_page:
         first_title: Internal Control Rating of
         footer_prepared_by: Prepared by Internal Audit - NBCH
         footer_title: 'Audit report:'
       internal_control_qualification:
+        classification_title: "<i><b>Table I: Internal Control Rating of NCHB S.A. – %{period}</b></i>"
+        conclusions_body: Based on Table I <i>“NCHB S.A. Internal Control Rating.”</i>, it can be seen that the Entity's internal control rating, according to the parameters used, is <b>“%{calification}”.</b>
+        conclusions_title: "<u><b>CONCLUSIONS</b></u>"
         count_cycles: "<b>Number of cycles</b>"
         count_weight: "<b>Total weight</b>"
         final_qualification: "<b>Internal Control Rating</b>"
@@ -168,6 +176,47 @@ en:
         header_weight: "<b>Weighting by audit report date</b>"
       pdf_name: annual_report_%{from_date}_to_%{to_date}.pdf
     nbc_annual_report_title: Annual summary
+    nbc_internal_control_qualification_as_group_of_companies: Internal Control Rating as Group of Companies
+    nbc_internal_control_qualification_as_group_of_companies_report:
+      comments: "<u><b>COMMENTS</b></u>"
+      comparision_to_actual_situation:
+        actual_qualification: "<b>Current weight (%{date})</b>"
+        classification_title: "<i><b>Table III: Current situation of Internal Control (cut date %{date})</b></i>"
+      comparision_to_previous_period:
+        classification_title: "<i><b>Table II: Comparison with previous year's rating (%{period})</b></i>"
+        conclusions_body: Although the Internal Control Rating of NBCH S.A. is <b>“%{annual_qualification_period}”</b>, and it has not changed compared to the previous year, it is important to note that the current weight <b>“%{annual_weight_period}”</b> is 7% lower than the <b>“%{annual_weight_previous_period}”</b> of the previous period.
+        header_cycle: "<b>Cycle</b>"
+        header_qualification: "<b>Rating</b>"
+        header_weight: "<b>Weighting by audit report dates %{period}</b>"
+      front_page:
+        first_title: Subsidiaries
+        second_title: Cycle Rating
+      internal_control_qualification:
+        classification_title: "<i><b>Table I: Summary of Subsidiaries' Internal Control Rating – %{period}</b></i>"
+      pdf_name: internal_control_rating_as_group_of_companies_report_%{from_date}_to_%{to_date}.pdf
+    nbc_report:
+      cycle_qualification:
+        header_high_risk_observations: "<b>Number of High Risk Issues</b>"
+        header_number: "<b>No.</b>"
+        header_qualification: "<b>Rating</b>"
+        header_weight: "<b>Weight</b>"
+      executive_summary:
+        first_footer: "<b>AUD. Alejandro Camnasio</b>"
+        general_conclusion_title: "<b><u>GENERAL CONCLUSION</u></b>"
+        objective_title: "<b><u>OBJECTIVE</u></b>"
+        second_footer: "<b>IA/IC Internal Audit Management</b>"
+        title: "<b><u>EXECUTIVE SUMMARY</u></b>"
+      front_page:
+        footer_prepared_by: Prepared by Internal Audit - NBCH
+        footer_title: 'Audit report:'
+      introduction_and_scope:
+        classification_methodology: 'The rating methodology for cycles used in the 2019 period was approved by the Audit Committee at its meeting on 14.05.2019 - Minutes No. 294, which we present below:'
+        classification_with_final_weaknesses_title: "<i><b>Table I: Internal Control Rating of NCHB S.A. – %{period}</b></i>"
+        classification_with_not_final_weaknesses_title: "<i><b>Table II: Internal Control Rating of NCHB S.A. – %{period}</b></i>"
+        conclusions_body: Based on Table I <i>“NCHB S.A. Internal Control Rating.”</i>, it can be seen that the Entity's internal control rating, according to the parameters used, is <b>“%{calification}”.</b>
+        conclusions_title: "<u><b>CONCLUSIONS</b></u>"
+        introduction_and_scope_title: "<b><u>INTRODUCTION AND SCOPE OF WORK PERFORMED</u></b>"
+        title: "<b><u>INFORME DETALLADO</u></b>"
     origination_date: Origin date
     period:
       range: from %{from_date} to %{to_date}
@@ -309,7 +358,7 @@ en:
       without_audits_in_the_month: Without audits in the month
       without_weaknesses: Without issues
       year: Origin year
-    weaknesses_by_month_title: Issues by risk
+    weaknesses_by_month_title: Monthly report
     weaknesses_by_risk:
       pdf_name: final_audit_report_issues_by_risk_%{from_date}_to_%{to_date}.pdf
       period_summary: Period summary %{period}
@@ -360,7 +409,7 @@ en:
         SUMMARY REPORT TO THE BOARD OF DIRECTORS
         INTERNAL CONTROL SYSTEM EVALUATION
         COMM. "A" 5042
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_audits_in_the_interval: Without audits in the selected interval
       without_weaknesses: Without issues
     weaknesses_by_user_title: Issues by use
@@ -544,16 +593,34 @@ en:
     email_note: Note to include in the email
     estimated_follow_up_date: Estimated month of normalization
     executive_summary:
+      applied_data_analytics: Applied Data Analytics
+      applied_data_analytics_default_value: There are no automated processes that help meet part of the scope of the work performed.
       assumed_risk_weaknesses: Assumed risk weaknesses
+      attached_png_name: executive-summary-image-%{page}.png
+      conclusion: "<b>Assurance opinion</b>"
       evolution: EVOLUTION (*)
+      issue_date: Date
+      key_weaknesses: "<b>Key findings</b>"
       main_weaknesses: Main Weaknesses
+      no_origin_or_normalization: "-"
       no_weaknesses: No issues
+      no_weaknesses_v2: "<b>No exposures to highlight emerged.</b>"
+      normalization: Normalization
+      objective: "<b>Audit objective:</b> %{objective}"
+      observations: |-
+        <b>New Steps
+        Additional information</b>
+      old_data: "(Old data)"
+      origin: Origin
       other_weaknesses: Other issues
+      pdf_name: executive-summary-%{pdf_name}
       project: 'The audit carried out was circumscribed to the review of:'
-      project_alt: 'In accordance with the provisions of the Professional Services Rental proposal, accepted in all its terms and conditions by Naranja Digital Compañía Financiera S.A.U. dated January 21, 2021, we present the Audit report corresponding to the following process:'
+      project_alt: "<b>Audit:</b> %{project}"
       review_author: Internal Audit Management
       risk_exposure: 'Risk exposure of the evaluated process: <b>%{risk}</b> (Risk Matrix algorithmic formula)'
+      risk_exposure_alt: "<b>Reviewed risk assessment:</b> %{risk}"
       score: Rating
+      survey: "<b>Audit scope:</b> %{survey}"
       title: Executive Summary
     finding_review_assignments: REVIEWED FINDINGS
     findings_follow_up:
@@ -720,7 +787,7 @@ en:
     tagged_findings_report:
       empty: No findings for the applied filter
       findings_count: 'Number of findings that meet the criteria: %{count}'
-      findings_count_html: 'Number of findings that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      findings_count_html: 'Number of findings that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: follow_up_of_findings_in_execution_tagged.pdf
       tags_count_label: Maximum number of tags
       title: Findings by maximum number of tags
@@ -741,7 +808,7 @@ en:
       pdf_name: follow_up_report_of_issues_in_execution.pdf
       title: Issue follow-up report
       weaknesses_count: 'Number of issues that meet the criteria: %{count}'
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     without_findings: No findings
     without_weaknesses: No findings in the period
     without_weaknesses_in_the_interval: No findings in the interval
@@ -816,9 +883,9 @@ en:
     latest_answer: Latest follow-up finding
     next_pending_task_date: Next pending task date
     pdf:
-      filtered_by_html:
-        one: The list was filtered with the query <span class="font-weight-bold">'%{query}'</span> on the <span class="font-weight-bold" column >'%{columns}'</span>
-        other: The list was filtered with the query <span class="font-weight-bold">'%{query}'</span> on the <span class="font-weight-bold" columns >'%{columns}'</span>
+      filtered_by:
+        one: The list was filtered with the query '%{query}' on the column %{columns}
+        other: The list was filtered with the query '%{query}' on the columns %{columns}
     readonly: The finding cannot be created or modified, the final audit report has already been issued
     recode_tasks: Recode tasks
     repeated_ancestors: Repeated of
@@ -870,6 +937,7 @@ en:
       without_oportunities: No improvement opportunities in the period
       without_weaknesses: No issues in the period
     cost_analysis_title: Cost analysis
+    export_issues: Export issues
     fixed_weaknesses_report_title: Resolved issues by risk
     high_risk_weaknesses_report_title: High risk issues
     index_title: Audit reports
@@ -878,7 +946,7 @@ en:
     tagged_findings_report:
       empty: No findings for the applied filter
       findings_count: 'Number of findings that meet the criteria: %{count}'
-      findings_count_html: 'Number of findings that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      findings_count_html: 'Number of findings that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       pdf_name: follow-up_tagged_findings.pdf
       tags_count_label: Maximum number of tags
       title: Findings by maximum number of labels
@@ -910,7 +978,7 @@ en:
       pdf_name: issues_follow-up_report.pdf
       title: Issue follow-up report
       weaknesses_count: 'Number of issues that meet the criteria: %{count}'
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
     weaknesses_reschedules_title: Summary of issues and reschedules
 
   follow_up_audited:
@@ -932,7 +1000,7 @@ en:
         SUMMARY REPORT TO THE BOARD OF DIRECTORS
         INTERNAL CONTROL SYSTEM EVALUATION
         COMM. "A" 5042
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_reviews_in_the_period: Without audit reports in the selected period
       without_weaknesses: Without issues
     process_control_stats_title: Issues per business process
@@ -944,7 +1012,7 @@ en:
         SUMMARY REPORT TO THE BOARD OF DIRECTORS
         INTERNAL CONTROL SYSTEM EVALUATION
         COMM. "A" 5042
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_audits_in_the_interval: Without audits in the selected interval
       without_weaknesses: Without issues
     weaknesses_by_user_title: Issues by user
@@ -1187,7 +1255,7 @@ en:
         INTERNAL CONTROL SYSTEM EVALUATION
         COMM. "A" 5042
       weakness_tags: Issue tags
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_weaknesses: Without issues
     weaknesses_by_control_objective_process_title: Report process by control objectives
     weaknesses_by_control_objective_title: Control objective result
@@ -1253,7 +1321,7 @@ en:
         SUMMARY REPORT TO THE BOARD OF DIRECTORS
         INTERNAL CONTROL SYSTEM EVALUATION
         COMM. "A" 5042
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_audits_in_the_interval: Without audits in the selected interval
       without_weaknesses: Without issues
     weaknesses_by_user_title: Issues by user
@@ -1297,7 +1365,7 @@ en:
         SUMMARY REPORT TO THE BOARD OF DIRECTORS
         INTERNAL CONTROL SYSTEM EVALUATION
         COMM. "A" 5042
-      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      weaknesses_count_html: 'Number of issues that meet the criteria: <span class="badge rounded-pill bg-secondary">%{count}</span>'
       without_audits_in_the_interval: Without audits in the selected interval
       without_weaknesses: Without issues
     weaknesses_heatmap_title: Issues heat map
@@ -1374,9 +1442,11 @@ en:
     disable: Disable
     download: Download
     download_csv: Download CSV
+    download_pdf: Download PDF
     download_rtf: Download RTF
     downloads: Downloads
     edit: Edit
+    f: 'No' # remove after fixing tests that use this key
     greater_or_equal_than: Greater or equal than
     import: Import
     insert_item: Insert item
@@ -1394,6 +1464,7 @@ en:
     search: Search
     send: Send
     show: Show
+    t: 'Yes' # remove after fixing tests that use this key
     total: Total
     update: Update
     without_data: Without data
@@ -1417,6 +1488,7 @@ en:
     download: Download
     empty_result: No results. Please modify your search criteria
     insufficient_privileges: You do not have permission to perform this action
+    invalid_user_or_email: Your user or email cannot be blank
     invalid_user_or_password: Invalid user/password
     ldap_error: The authentication server is currently unavailable. Please try again later
     loading: Loading
@@ -1437,6 +1509,7 @@ en:
     sort_by: Sort by...
     unsaved_data_warning: You have modified the content. If you leave the page, you will lose all the changes made
     validation_failed_message: The entered data is not valid. Please check the highlighted fields and try again
+    welcome: Welcome
     you_are_already_logged: This user is already logged in
 
   notification:
@@ -1663,11 +1736,11 @@ en:
 
   user:
     disabled: Disabled
-    pdf:
+    pdf_csv:
       filtered_by:
         one: The list was filtered with the query '%{query}' on the column %{columns}
         other: The list was filtered with the query '%{query}' on the columns %{columns}
-      pdf_name: user_list.pdf
+      pdf_csv_name: user_list
       users_count: 'Number of users: %{count}'
     responsibility_modification:
       new_responsible: 'Current responsible: %{responsible}'
@@ -1716,9 +1789,6 @@ en:
 
   welcome:
     index_title: Welcome
-
-  wicked_pdf:
-    number_pages_html: Page <span class="page"></span> of <span class="topage"></span>
 
   work_paper:
     cover_name: "%{prefix}%{filename}-cover.pdf"

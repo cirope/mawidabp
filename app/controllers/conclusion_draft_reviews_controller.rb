@@ -2,7 +2,7 @@ class ConclusionDraftReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_draft_review, only: [
     :show, :edit, :update, :export_to_pdf, :export_to_rtf,
-    :score_sheet, :download_work_papers, :create_bundle, 
+    :score_sheet, :download_work_papers, :create_bundle,
     :compose_email, :send_by_email
   ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
@@ -188,16 +188,14 @@ class ConclusionDraftReviewsController < ApplicationController
     @title = t 'conclusion_draft_review.send_by_email'
 
     if @conclusion_draft_review.try(:review).try(:can_be_sended?)
-      users = []
+      users          = []
       export_options = params[:export_options] || {}
 
       if params[:conclusion_review]
-        include_score_sheet =
-          params[:conclusion_review][:include_score_sheet] == '1'
-        include_global_score_sheet =
-          params[:conclusion_review][:include_global_score_sheet] == '1'
-        note = params[:conclusion_review][:email_note]
-        review_type = params[:conclusion_review][:review_type]
+        include_score_sheet        = params[:conclusion_review][:include_score_sheet] == '1'
+        include_global_score_sheet = params[:conclusion_review][:include_global_score_sheet] == '1'
+        note                       = params[:conclusion_review][:email_note]
+        review_type                = params[:conclusion_review][:review_type]
 
         if review_type == 'brief'
           export_options[:brief] = '1'
@@ -206,7 +204,7 @@ class ConclusionDraftReviewsController < ApplicationController
         end
       end
 
-      @conclusion_draft_review.to_pdf(current_organization, export_options)
+      pdf_info = @conclusion_draft_review.to_pdf(current_organization, export_options)
 
       if include_score_sheet
         @conclusion_draft_review.review.score_sheet current_organization, draft: true
@@ -216,6 +214,25 @@ class ConclusionDraftReviewsController < ApplicationController
         @conclusion_draft_review.review.global_score_sheet(current_organization, draft: true)
       end
 
+      if include_executive_summary?
+        executive_summary_pages = pdf_info[:executive_summary_pages]
+        pdf_path                = @conclusion_draft_review.absolute_pdf_path
+        pdf                     = MiniMagick::Image.open(pdf_path)
+
+        executive_summary_pages.times do |page|
+          image_path = "#{pdf_path}_#{page}.png"
+
+          MiniMagick::Tool::Convert.new do |convert|
+            convert.background "white"
+            convert.flatten
+            convert.density 300
+            convert.quality 100
+            convert << pdf.pages[page].path
+            convert << "png32:#{image_path}"
+          end
+        end
+      end
+
       (params[:user].try(:values).try(:reject, &:blank?) || []).each do |user_data|
         user = User.find_by(id: user_data[:id]) if user_data[:id]
         send_options = {
@@ -223,6 +240,10 @@ class ConclusionDraftReviewsController < ApplicationController
           include_score_sheet: include_score_sheet,
           include_global_score_sheet: include_global_score_sheet
         }
+
+        if include_executive_summary?
+          send_options[:executive_summary_pages] = executive_summary_pages
+        end
 
         if user && !users.include?(user)
           @conclusion_draft_review.send_by_email_to(user, send_options)
@@ -297,6 +318,7 @@ class ConclusionDraftReviewsController < ApplicationController
         :affects_compliance, :collapse_control_objectives, :force_approval,
         :reference, :scope, :previous_identification, :previous_date,
         :main_recommendations, :effectiveness_notes, :additional_comments,
+        :review_conclusion, :applied_data_analytics,
         :lock_version, :exclude_regularized_findings,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
@@ -324,5 +346,12 @@ class ConclusionDraftReviewsController < ApplicationController
         compose_email: :modify,
         send_by_email: :modify
       )
+    end
+
+    def include_executive_summary?
+      draft_issue_date = @conclusion_draft_review.issue_date
+      code_change_date = CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_v2']&.to_date
+
+      Current.conclusion_pdf_format == 'gal' && code_change_date && draft_issue_date >= code_change_date
     end
 end

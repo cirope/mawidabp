@@ -22,6 +22,7 @@ es:
         reports: Reportes
       questionnaires_title: Cuestionarios
       risk_assessment_templates: Plantillas evaluación de riesgo
+      risk_registries: Registros de riesgo
       security:
         reports: Reportes de seguridad
         roles: Perfiles y Privilegios

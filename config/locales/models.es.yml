@@ -155,6 +155,7 @@ es:
       conclusion_review:
         additional_comments: Comentarios adicionales
         affects_compliance: Afecta cumplimiento
+        applied_data_analytics: Data Analytics aplicada
         applied_procedures: Procedimientos aplicados
         approved: Aprobado
         business_unit: Unidad de negocio
@@ -175,6 +176,7 @@ es:
         project: Proyecto
         recipients: Destinatarios del informe
         reference: Marco de referencia
+        review_conclusion: Conclusión del informe
         review_id: Informe
         scope: Limitación al alcance
         sectors: Sectores/departamentos involucrados
@@ -190,7 +192,6 @@ es:
         order: Orden
         sustantive_tests: Pruebas sustantivas
       control_objective:
-        affected_sector_id: Sector del banco afectado al alerta
         audit_sector: Sector de Auditoría
         control_objective_auditors: Auditores a cargo
         control_objective_id: Objetivo de control
@@ -693,7 +694,7 @@ es:
         period_id: Periodo
         plan_item: Proyecto
         plan_item_id: Proyecto
-        review_objective: Objectivo del informe
+        review_objective: Objetivo del informe
         review_user_assignments: Integrantes
         risk_exposure: Exposición al riesgo
         scope: Alcance auditoría
@@ -735,9 +736,18 @@ es:
         review: Informe
         user: Integrante
         user_id: Integrante
+      risk:
+        cause: Causa
+        effect: Efecto
+        identifier: Identificador
+        impact: Impacto
+        likelihood: Probabilidad
+        name: Nombre
+        user: Propietario
       risk_assessment:
         description: Descripción
         file_model: Anexo
+        formula: Fórmula
         name: Nombre
         period: Periodo
         risk_assessment_items: Ítems
@@ -760,17 +770,49 @@ es:
         risk: Riesgo
       risk_assessment_template:
         description: Descripción
+        formula: Fórmula
         name: Nombre
         risk_assessment_weights: Atributos de evaluación de riesgo
       risk_assessment_template/risk_assessment_weights:
         description: Descripción
+        heatmap: Principal
+        identifier: Identificador
         name: Atributo
-        weight: Ponderador
+        risk_score_items: Valores
       risk_assessment_weight:
         description: Descripción
+        heatmap: Principal
+        identifier: Identificador
         name: Atributo
         weight: Ponderador
+      risk_assessment_weights/risk_score_items:
+        name: Nombre
+        value: Valor
+      risk_category:
+        name: Nombre
+      risk_control_objective:
+        control_objective: Objetivo de control
+      risk_registry:
+        description: Descripción
+        name: Nombre
+      risk_registry/risk_categories:
+        name: Nombre
+      risk_registry/risk_categories/risks:
+        cause: Causa
+        effect: Efecto
+        identifier: Identificador
+        impact: Impacto
+        likelihood: Probabilidad
+        name: Nombre
+        risk_control_objectives: Objetivos de control
+        user: Propietario
+      risk_registry/risk_categories/risks/risk_control_objectives:
+        control_objective: Objetivo de control
+      risk_score_item:
+        name: Nombre
+        value: Valor
       risk_weight:
+        identifier: Identificador
         value: Valor
         weight: Ponderador
       role:
@@ -782,13 +824,20 @@ es:
         assertion_consumer_service_binding: Enlace de Servicio de consumidor de aserciones
         assertion_consumer_service_url: Dirección URL de respuesta (URL del Servicio de consumidor de aserciones)
         default_role_for_users: Rol por defecto para usuarios
+        email_claim: Atributo con el correo electrónico
+        function_claim: Atribudo con el cargo
         idp_cert: Certificado (Base64)
         idp_entity_id: Identificador de Azure AD
         idp_homepage: Dirección URL de metadatos de federación de aplicación
         idp_sso_target_url: Dirección URL de inicio de sesión
+        lastname_claim: Atributo con el apellido
+        manager_claim: Atribudo con el superior
+        name_claim: Atributo con el nombre
         name_identifier_format: Formato del identificador de nombre
         provider: Proveedor
+        roles_claim: Atribudo con los roles
         sp_entity_id: Identificador (id. de entidad)
+        username_claim: Atributo con el nombre de usuario
       setting:
         description: Descripción
         name: Nombre
@@ -803,6 +852,7 @@ es:
         shared: Compartida
         style: Estilo
       tagging:
+        description: Descripción
         tag: Etiqueta
         tag_id: Etiqueta
       task:
@@ -978,7 +1028,7 @@ es:
         control_objective_auditor:
           attributes:
             user_id:
-              invalid: Debe ser auditor
+              invalid: debe ser auditor o referente
         file_model:
           attributes:
             file:
@@ -1092,10 +1142,27 @@ es:
           attributes:
             user_id:
               invalid: debe tener un perfil acorde a su rol dentro del informe
+        risk:
+          attributes:
+            risk_control_objectives:
+              blank: debe tener al menos uno
         risk_assessment_template:
           attributes:
             risk_assessment_weights:
               blank: debe tener al menos uno
+              numericality: debe tener sólo %{count} atributos marcados como principal
+        risk_assessment_weight:
+          attributes:
+            risk_score_items:
+              blank: debe tener al menos uno
+        setting:
+          attributes:
+            value:
+              array_values_above: "%{days_above} debe ser menor a %{stale_day} (valor configurado en '%{setting_description}')"
+              array_values_below: debe ser mayor a %{last_notification_day} (valor más alto configurado en '%{setting_description}')
+              duplicate_array_values: "%{duplicate_days} está duplicado"
+              empty: debe tener al menos uno
+              invalid: 'debe contener solo números separados por comas. Inválidos: %{invalid_days}'
         subsidiary:
           attributes:
             identity:
@@ -1199,8 +1266,8 @@ es:
         one: Objetivo de control
         other: Objetivos de control
       control_objective_auditor:
-        one: Auditor a cargo
-        other: Auditores a cargo
+        one: Auditor/Referente a cargo
+        other: Auditores/Referentes a cargo
       control_objective_item: Objetivo de control
       cost: Costo
       document:
@@ -1312,9 +1379,24 @@ es:
       risk_assessment_weight:
         one: Atributo de evaluación de riesgo
         other: Atributos de evaluación de riesgo
+      risk_category:
+        one: Categoría de riesgo
+        other: Categorías de riesgo
+      risk_control_objective:
+        one: Objetivo de control
+        other: Objetivos de control
+      risk_registry:
+        one: Registro de riesgo
+        other: Registros de riesgo
+      risk_score_item:
+        one: Valor
+        other: Valores
       risk_weight:
         one: Valor de evaluación de riesgo
         other: Valores de evaluación de riesgo
+      risks:
+        one: Riesgo
+        other: Riesgos
       role: Perfil
       saml_provider:
         one: Configuración SAML

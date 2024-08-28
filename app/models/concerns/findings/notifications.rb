@@ -5,4 +5,8 @@ module Findings::Notifications
     has_many :notification_relations, as: :model, dependent: :destroy
     has_many :notifications, -> { order :created_at }, through: :notification_relations
   end
+
+  def should_notify?
+    !incomplete? && !revoked?
+  end
 end

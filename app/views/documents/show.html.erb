@@ -1,35 +1,41 @@
-<h2>
-  <%= @document %>
-  <span class="float-right"><%= link_to_download_document @document %></span>
-</h2>
+<div class="card">
+  <div class="card-body">
+    <h2>
+      <%= @document %>
+      <span class="float-end"><%= link_to_download_document @document %></span>
+    </h2>
 
-<p class="mb-1">
-  <strong><%= Document.human_attribute_name 'description' %></strong>:
-  <%= @document.description %>
-</p>
+    <p class="mb-1">
+      <strong><%= Document.human_attribute_name 'description' %></strong>:
+      <%= @document.description %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Document.human_attribute_name 'created_at' %></strong>:
-  <%= l @document.created_at, format: :short  %>
-</p>
+    <p class="mb-1">
+      <strong><%= Document.human_attribute_name 'created_at' %></strong>:
+      <%= l @document.created_at, format: :short  %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Document.human_attribute_name 'updated_at' %></strong>:
-  <%= l @document.updated_at, format: :short %>
-</p>
+    <p class="mb-1">
+      <strong><%= Document.human_attribute_name 'updated_at' %></strong>:
+      <%= l @document.updated_at, format: :short %>
+    </p>
 
-<p class="mb-1">
-  <strong><%= Document.human_attribute_name 'shared' %></strong>:
-  <%= t @document.shared ? 'label.yes' : 'label.no' %>
-</p>
+    <p class="mb-1">
+      <strong><%= Document.human_attribute_name 'shared' %></strong>:
+      <%= t @document.shared ? 'label.yes' : 'label.no' %>
+    </p>
 
-<% if @document.taggings.any? %>
-  <ul class="list-inline lead">
-    <% @document.taggings.each do |tagging| %>
-      <%= tagging_item tagging %>
+    <% if @document.taggings.any? %>
+      <ul class="list-inline lead">
+        <% @document.taggings.each do |tagging| %>
+          <%= tagging_item tagging %>
+        <% end %>
+      </ul>
     <% end %>
-  </ul>
-<% end %>
 
-<%= link_to_edit [:edit, @document] %> |
-<%= link_to_index documents_path %>
+    <hr>
+
+    <%= link_to_edit [:edit, @document] %> |
+    <%= link_to_index documents_path %>
+  </div>
+</div>

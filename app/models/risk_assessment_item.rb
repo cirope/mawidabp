@@ -7,6 +7,7 @@ class RiskAssessmentItem < ApplicationRecord
   belongs_to :risk_assessment, optional: true
   belongs_to :business_unit, optional: true
   belongs_to :process_control, optional: true
+  belongs_to :plan_item, optional: true
   has_one :business_unit_type, through: :business_unit
   has_one :best_practice, through: :process_control
 end

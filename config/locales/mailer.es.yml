@@ -95,6 +95,11 @@ es:
       finding_data: Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**
       finding_link: Ver hallazgo
       title: Nuevo comentario en el informe %{review} [#%{finding_id}]
+    notify_new_findings:
+      created_title:
+        one: Nueva observación / oportunidad de mejora
+        other: Nuevas observaciones / oportunidades de mejora
+      title: Notificación de observaciones / oportunidades de mejora
     notify_new_oportunity:
       oportunity_link: Ver oportunidad de mejora
       title: Tiene una nueva oportunidad de mejora

@@ -6,7 +6,7 @@ en:
     form:
       add_activity: Add activity group
     index:
-      empty_html: There are no activity groups, you can create one with the <span class="badge badge-primary">New activity group</span> button
+      empty_html: There are no activity groups, you can create one with the <span class="badge bg-primary">New activity group</span> button
       new: New activity group
       title: Activity group list
     new:
@@ -17,12 +17,20 @@ en:
   answer_options:
     agree: Agree
     disagree: Disagree
+    f: 'No' # remove after fixing tests that use this key
     neither_agree_nor_disagree: Neither agree nor disagree
     'no': 'No'
     not_apply: Does not apply
     strongly_agree: Strongly agree
     strongly_disagree: Strongly disagree
+    t: 'Yes' # remove after fixing tests that use this key
     'yes': 'Yes'
+
+  authentications:
+    new:
+      log_in: Login
+      password: Password
+      title: Authentication
 
   benefits:
     edit:
@@ -55,7 +63,7 @@ en:
 
   business_unit_kinds:
     index:
-      empty_html: There are no types of business units, you can create one with the <span class="badge badge-primary">New</span> button
+      empty_html: There are no types of business units, you can create one with the <span class="badge bg-primary">New</span> button
 
   closing_interviews:
     edit:
@@ -65,7 +73,7 @@ en:
       add_auditor: Add auditor
       add_responsible: Add responsible
     index:
-      empty_html: There are no closing interviews, you can create one with the <span class="badge badge-primary">New closing interview</span> button
+      empty_html: There are no closing interviews, you can create one with the <span class="badge bg-primary">New closing interview</span> button
       empty_search_html: There are no closing interviews that match the search criteria
       new: New closing interview
       title: Closing interview list
@@ -83,7 +91,7 @@ en:
     index:
       title: Control objective list
     new:
-      add_control_objective_auditor: Add auditor in charge
+      add_control_objective_auditor: Add auditor/auditee in charge
       tagging: Add tag
     score_type:
       option: Options
@@ -95,7 +103,7 @@ en:
     edit:
       title: Edit document
     index:
-      empty_html: There are no documents, you can create one with the <span class="badge badge-primary">New document</span> button
+      empty_html: There are no documents, you can create one with the <span class="badge bg-primary">New document</span> button
       empty_search_html: There are no documents that match the search criteria
       new: New document
       title: Document list
@@ -152,6 +160,9 @@ en:
       confirm_finding_without_extension: Are you sure you want to remove %{extension}? Remember that you will not be able to use it again.
       follow_up_date_label_append: " - Suggested: "
       show_status_change_history: Show status change history
+    graphs:
+      completed: Completed findings
+      incomplete: Pending findings
     index:
       current_user_answers_count: Own comments
       title: Finding list
@@ -159,6 +170,8 @@ en:
         one: You have an unread comment
         other: You have %{count} unread comments
       unread_answers_filter: Unread comments
+    pdf:
+      issue: Refer to the attached table for records under the code %{review_code}
     show:
       title: Finding details
     state:
@@ -184,6 +197,9 @@ en:
     work_papers:
       create:
         from_comment: From comment by %{user} on %{date}
+
+  footer:
+    support: Support
 
   licenses:
     authorizations:
@@ -233,9 +249,9 @@ en:
     form:
       add_file_model: Add file
       download_cover: Download cover
-      markdown_help_html: <span class="badge badge-info">Attention</span> within the content you can use %{link}
+      markdown_help_html: <span class="badge bg-info">Attention</span> within the content you can use %{link}
     index:
-      empty_html: There are no external audit reports, you can create one with the <span class="badge badge-primary">New memo</span> button
+      empty_html: There are no external audit reports, you can create one with the <span class="badge bg-primary">New memo</span> button
       empty_search_html: No external audit reports that match the search criteria
       new: New external audit report
       title: External audit report list
@@ -272,9 +288,9 @@ en:
     edit:
       title: Edit news
     form:
-      markdown_help_html: <span class="badge badge-info">Attention</span> within the content you can use %{link}
+      markdown_help_html: <span class="badge bg-info">Attention</span> within the content you can use %{link}
     index:
-      empty_html: There is no news, you can create one with the <span class="badge badge-primary">New news</span> button
+      empty_html: There is no news, you can create one with the <span class="badge bg-primary">New news</span> button
       empty_search_html: There are no news that match the search criteria
       new: New news
       title: News list
@@ -293,7 +309,7 @@ en:
       add_auditor: Add auditor
       add_responsible: Add responsible
     index:
-      empty_html: There are no opening interviews, you can create one with the <span class="badge badge-primary">New opening interview</span> button
+      empty_html: There are no opening interviews, you can create one with the <span class="badge bg-primary">New opening interview</span> button
       empty_search_html: There are no opening interviews that match the search criteria
       new: New opening interview
       title: Opening interview list
@@ -377,9 +393,12 @@ en:
     csv:
       annual_plan_hours: Annual plan hours
       auditor: Auditor (User)
+      aux_but: Auxiliar OU
       csv_name: plan_period_%{period}.csv
       csv_name_pat_dprh: detailed_progress_report_in_hours_%{current_date}.csv
       csv_name_pat_im: internal_management_progress_report_%{current_date}.csv
+      main_but: Main OU
+      main_or_aux_but: Main/Auxiliar OU
       number_observations_per_risk: Number of issues by risk
       time_summary_hours: Time Summary Hours
       title: Audit Plan
@@ -600,7 +619,7 @@ en:
     form:
       add_risk_assessment_weight: Add weight
     index:
-      empty_html: There are no risk assessment templates, you can create one with the <span class="badge badge-primary">New risk assessment template</span> button
+      empty_html: There are no risk assessment templates, you can create one with the <span class="badge bg-primary">New risk assessment template</span> button
       empty_search_html: There are no risk assessment templates that match the search criteria
       new: New risk assessment template
       title: Risk assessment template list
@@ -621,8 +640,9 @@ en:
       apply: Apply
       cloned_risk_assessment_items: After creating the risk assessment you will see the copied items and can edit them or add new ones
       new_risk_assessment_items: After creating the risk assessment you will be able to add items to it
+    heatmap: Heat map
     index:
-      empty_html: There are no risk assessments, you can create one with the <span class="badge badge-primary">New risk assessment</span> button
+      empty_html: There are no risk assessments, you can create one with the <span class="badge bg-primary">New risk assessment</span> button
       empty_search_html: There are no risk assessments that match the search criteria
       merge_to_plan: Create projects in plan from evaluation
       new: New risk assessment
@@ -630,6 +650,7 @@ en:
     new:
       title: Create risk assessment
     pdf:
+      formula: Formula
       pdf_name: risk_assessment_%{name}.pdf
       period:
         range: "%{from_date} to %{to_date}"
@@ -651,6 +672,45 @@ en:
       final: Final
       merged: Scheduled
 
+  risk_registries:
+    edit:
+      title: Edit risk registry
+    form:
+      new_risk_categories: After creating the risk registry you will be able to add risk categories to it
+    index:
+      empty_html: There are no risk registries, you can create one with the <span class="badge bg-primary">New risk registry</span> button
+      empty_search_html: There are no risk registries that match the search criteria
+      new: New risk registry
+      title: Risk registry list
+    new:
+      title: Create risk registry
+    risk_categories:
+      new: Add risk category
+    risks:
+      new: Add risk
+    show:
+      title: Show risk registry
+
+  risk_score_items:
+    form:
+      add_risk_score_item: Add value
+
+  risks:
+    impacts:
+      almost_certain: Almost certain
+      likely: Likely
+      moderate: Moderate
+      rare: Rare
+      unlikely: Unlikely
+    likelihoods:
+      catastrophic: Catastrophic
+      high: High
+      insignificant: Insignificant
+      minor: Minor
+      moderate: Moderate
+    new:
+      control_objective: Add control objective
+
   sessions:
     create:
       invalid: Your email and/or password are incorrect =(
@@ -661,7 +721,6 @@ en:
       email: Email
       forgot_password: Forgot your password?
       log_in: Login
-      password: Password
       remember_me: Remember me
       title: Login
       try_again: Try again
@@ -675,8 +734,11 @@ en:
     conclusion_review_receiver: Audit report receiver(s)
     edit:
       title: Edit settings
+    enable_close_date_edition: Enable close date edition
     exchange_directory_path: File exchange directory
     expire_notification: Password expiration notice
+    finding_by_current_user: Filter findings by current user
+    finding_days_for_next_notifications: Number of days in which a confirmation request must be sent
     finding_stale_confirmed_days: Number of days before an unanswered issue is considered unattended
     finding_warning_expire_days: Number of days before the expiration of an observation in which the system will notify its proximity
     hide_import_from_ldap: Show "Import from LDAP" only to users with approval permissions
@@ -699,7 +761,9 @@ en:
     show_follow_up_timestamps: Show follow-up timestamps
     show_print_date_on_pdfs: Show print date on PDFs
     skip_function_and_manager_from_ldap_sync: Do not sync "Position" and "Superior" fields with LDAP values
+    skip_reiteration_copy: Do not copy previous weakness data on reiteration
     temporary_polls: Temporarily save poll responses. A poll is complete when all of its questions are answered.
+    uniqueness_username_validation: Validates username uniqueness across all organizations
 
   tags:
     edit:
@@ -708,7 +772,7 @@ en:
       add_child: Add Subtag
       children: Subtags
     index:
-      empty_html: No tags, you can create one with the <span class="badge badge-primary">New tag</span> button
+      empty_html: No tags, you can create one with the <span class="badge bg-primary">New tag</span> button
       new: New tag
       title: Tag list
     list:
@@ -761,6 +825,8 @@ en:
       current_month: Download current month
       current_week: Download current week
       current_year: Download current year
+    edit:
+      title: Edit activity
     form:
       activity: Activity
       add_business_unit_type: Add organizational unit
@@ -910,7 +976,7 @@ en:
     form:
       add_control_objective: Add control objective
     index:
-      empty_html: There are no issue templates, you can create one with the <span class="badge badge-primary">New issue template</span> button
+      empty_html: There are no issue templates, you can create one with the <span class="badge bg-primary">New issue template</span> button
       empty_search_html: There are no issue templates that match the search criteria
       new: New issue template
       title: Issue template list
@@ -919,7 +985,27 @@ en:
     show:
       title: Show issue template
 
+  welcome:
+    commented_on: commented on
+    completed_findings: Completed findings
+    current_user_answers: Current user answers
+    latest_answers: Latest answers
+    latest_findings: Latest findings
+    pending_findings: Pending findings
+    version: Version
+    welcome: Welcome
+
   work_papers:
     show:
       error: Please remember that you must be authenticated or have permissions to view the document
       title: Working paper
+    statuses:
+      auditor:
+        next_to_finished: Return to pending
+        next_to_pending: Mark for revision
+      finished: Finished
+      pending: Pending
+      revised: Revised
+      supervisor:
+        next_to_finished: Mark as revised
+        next_to_revised: Return to pending

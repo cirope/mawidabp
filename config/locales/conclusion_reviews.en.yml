@@ -17,8 +17,8 @@ en:
         final_with_weaknesses: 'Attached to this document, we distribute the final version of the referenced audit report, which includes responses from each area.'
         final_without_weaknesses: 'Attached to this document, we distribute the Final version of the referenced audit report, which does not contain relevant issues.'
         recipients: 'Recipients'
-        review_period_title: "Internal Audit Review:"
-        review_period_description: "Started: %{plan_item_start} - Completed: %{plan_item_end}"
+        internal_audit_review: "Internal Audit Review:"
+        internal_audit_review_dates: "Started: %{start_date} - Completed: %{end_date}"
       scope: 'SCOPE'
       audit_comments: 'AUDIT COMMENTS'
       weaknesses:
@@ -26,7 +26,9 @@ en:
         responsible: 'Responsible:'
         audit_recommendations: 'Recommendation:'
         follow_up_date: 'Implementation:'
+        audit_comments: 'Audit comments:'
         repeated: 'REPEATED ISSUE'
+      number_pages_html: 'Page <span class="page"></span> of <span class="topage"></span>'
     cro:
       header:
         legend_html: "<b>Bértora y Asociados</b>\r\nBernardo de Irigoyen 330 Piso 3\r\n\r\nCiudad Autónoma de Buenos Aires\r\nC1072AAF\r\nTeléfono +54 (11)4342 2544\r\n\r\nwww.crowe.com.ar"
@@ -85,7 +87,9 @@ en:
             one: "The following report summarizes the points observed in the benchmark audit. It is intended to allow quick reading at the highest levels. The full report, which will be copied to books under the %{review}, consists of %{count} page ."
             other: "The following report summarizes the points noted in the benchmark audit. It is intended to allow quick reading at the highest levels. The full report, which will be copied to books under the %{review}, consists of %{count} pages ."
           details_title: "The main weaknesses observed are detailed below, as well as their situation at the time of issuing the respective report:"
+          previous_title: "Weaknesses of the previous period:"
           weaknesses_title: "Weaknesses of the current period:"
+          external_weaknesses_title: "Follow-up on aspects observed in other inspections"
       weaknesses:
         title: "Annex I"
         previous_title: "%{prefix} Tracking cycle weaknesses based on our previous report."
