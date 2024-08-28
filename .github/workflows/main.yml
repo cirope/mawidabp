@@ -3,65 +3,11 @@ on:
   push:
     branches:
       - master
-      - c-banco-china
-      - c-bancotdf
-      - c-bica
-      - c-bice-production
-      - c-bna-aud
-      - c-bna-pla
-      - c-bvalores
-      - c-bvalores-test
-      - c-comafi-production
-      - c-comafi-test
-      - c-dino-production
-      - c-galicia-production
-      - c-galicia-test
-      - c-hipotecario-production
-      - c-hipotecario-testing
-      - c-macro-production
-      - c-macro-test
-      - c-mariva-production
-      - c-mariva-testing
-      - c-nbch
-      - c-patagonia-production
-      - c-patagonia-test
-      - c-petersen-production
-      - c-petersen-test
-      - c-smg-production
-      - c-smg-test
-      - c-supervielle-production
-      - c-supervielle-test
+      - c-*
   pull_request:
     branches:
       - master
-      - c-banco-china
-      - c-bancotdf
-      - c-bica
-      - c-bice-production
-      - c-bna-aud
-      - c-bna-pla
-      - c-bvalores
-      - c-bvalores-test
-      - c-comafi-production
-      - c-comafi-test
-      - c-dino-production
-      - c-galicia-production
-      - c-galicia-test
-      - c-hipotecario-production
-      - c-hipotecario-testing
-      - c-macro-production
-      - c-macro-test
-      - c-mariva-production
-      - c-mariva-testing
-      - c-nbch
-      - c-patagonia-production
-      - c-patagonia-test
-      - c-petersen-production
-      - c-petersen-test
-      - c-smg-production
-      - c-smg-test
-      - c-supervielle-production
-      - c-supervielle-test
+      - c-*
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -85,7 +31,6 @@ jobs:
             || contains(github.ref_name, 'bice')
             || contains(github.ref_name, 'bna')
             || contains(github.ref_name, 'bvalores')
-            || contains(github.ref_name, 'comafi')
             || contains(github.ref_name, 'dino')
             || contains(github.ref_name, 'galicia')
             || contains(github.ref_name, 'hipotecario')
@@ -103,7 +48,6 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'bice')
             || contains(github.event.pull_request.base.ref, 'bna')
             || contains(github.event.pull_request.base.ref, 'bvalores')
-            || contains(github.event.pull_request.base.ref, 'comafi')
             || contains(github.event.pull_request.base.ref, 'dino')
             || contains(github.event.pull_request.base.ref, 'galicia')
             || contains(github.event.pull_request.base.ref, 'hipotecario')
@@ -146,7 +90,6 @@ jobs:
             || contains(github.ref_name, 'bica')
             || contains(github.ref_name, 'bna')
             || contains(github.ref_name, 'bvalores')
-            || contains(github.ref_name, 'comafi')
             || contains(github.ref_name, 'dino')
             || contains(github.ref_name, 'macro')
             || contains(github.ref_name, 'mariva')
@@ -159,7 +102,6 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'bica')
             || contains(github.event.pull_request.base.ref, 'bna')
             || contains(github.event.pull_request.base.ref, 'bvalores')
-            || contains(github.event.pull_request.base.ref, 'comafi')
             || contains(github.event.pull_request.base.ref, 'dino')
             || contains(github.event.pull_request.base.ref, 'macro')
             || contains(github.event.pull_request.base.ref, 'mariva')
