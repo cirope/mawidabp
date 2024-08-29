@@ -32,7 +32,7 @@ FILE_UPLOADS_CONSTRAINTS = YAML.load(ENV['FILE_UPLOADS_CONSTRAINTS']) rescue nil
 # Cantidad máxima de observaciones por PDF
 FINDING_MAX_PDF_ROWS = 100
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
-FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1
+FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1 # TODO Remove after migrating all clients to PR #779
 # Fecha inicial para el envío de correo con resumen de observaciones
 FINDING_INITIAL_BRIEF_DATE = Date.new 2018, 1, 1
 # Opciones para crear claves foráneas
@@ -50,7 +50,7 @@ PDF_PAPER = 'A4'.freeze
 # Logo para el pié de página de los PDFs
 PDF_LOGO = File.join(Rails.root, 'app', 'assets', 'images', 'logo_pdf.png').freeze
 # Dimensiones del logo en pixels, primero el ancho y luego el alto
-PDF_LOGO_SIZE = [350, 51].map { |size| (size / 6.0).round }
+PDF_LOGO_SIZE = [350, 45].map { |size| (size / 6.0).round }
 # Escala del logo
 PDF_LOGO_FACTOR = 1.0
 # Tamaño de fuente en los PDF

@@ -48,7 +48,8 @@ module Findings::CurrentUserScopes
       corporate_not_audited   ||
         @auth_user.committee? ||
         @selected_user        ||
-        @selected_user_ids
+        @selected_user_ids    ||
+        !current_organization.finding_by_current_user?
     end
 
     def by_selected_user_conditions
@@ -115,30 +116,15 @@ module Findings::CurrentUserScopes
       else
         conditions[:state] = case params[:completion_state]
                              when 'incomplete'
-                               incomplete_status_list
+                               Finding::INCOMPLETE_STATUS
                              when 'repeated'
-                               repeated_status_list
+                               Finding::REPEATED_STATUS
                              else
-                               completed_status_list
+                               Finding::COMPLETED_STATUS
                              end
       end
 
       conditions
-    end
-
-    def incomplete_status_list
-      Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]]
-    end
-
-    def repeated_status_list
-      [Finding::STATUS[:repeated]]
-    end
-
-    def completed_status_list
-      Finding::STATUS.values         -
-        Finding::PENDING_STATUS      -
-        [Finding::STATUS[:revoked]]  -
-        [Finding::STATUS[:repeated]]
     end
 
     def filtered_current_user_findings

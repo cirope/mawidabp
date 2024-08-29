@@ -2,7 +2,9 @@
 
 <% if @imports.empty? %>
   <div class="alert alert-warning">
-    <strong><%= t '.empty' %></strong>
+    <div class="alert-message">
+      <strong><%= t '.empty' %></strong>
+    </div>
   </div>
 <% else %>
   <ul>

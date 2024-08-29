@@ -6,7 +6,7 @@ module ConclusionReviews::Validations
     validates :applied_procedures, presence: true, unless: :validate_extra_gal_attributes?
     validates :conclusion, :applied_procedures, :summary, :recipients, :sectors,
       :observations, :reference, :scope, :main_weaknesses_text,
-      :main_recommendations, pdf_encoding: true
+      :main_recommendations, :review_conclusion, :applied_data_analytics, pdf_encoding: true
     validates :type, :summary, :evolution, :previous_identification,
       length: { maximum: 255 }
     validates :issue_date, :previous_date, timeliness: { type: :date },

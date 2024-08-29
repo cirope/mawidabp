@@ -1,72 +1,74 @@
+---
 es:
   menu:
-    administration_title: 'Administración'
     administration:
-      organization_title: 'Organización'
-      organization:
-        management: 'Gestión'
-        business_units: 'Unidades organizativas'
-        business_unit_kind: 'Tipos de unidad de negocio'
-      security_title: 'Seguridad'
-      security:
-        reports: 'Reportes de seguridad'
-        users: 'Usuarios'
-        roles: 'Perfiles y Privilegios'
-      best_practices_title: 'Buenas prácticas'
+      activity_groups: Actividades
+      benefits: Beneficios / Perjuicios
       best_practices:
-        best_practices: 'Gestión'
-        control_objectives: 'Objetivos de control'
-      settings: 'Configuraciones'
-      weakness_templates: 'Plantillas de observaciones'
-      risk_assessment_templates: 'Plantillas evaluación de riesgo'
-      tags: 'Etiquetas'
-      documents: 'Documentos'
-      news: 'Noticias'
-      benefits: 'Beneficios / Perjuicios'
-      e_mails: 'Correos'
-      activity_groups: 'Actividades'
-      questionnaires_title: 'Cuestionarios'
+        best_practices: Gestión
+        control_objectives: Objetivos de control
+      best_practices_title: Buenas prácticas
+      documents: Documentos
+      e_mails: Correos
+      news: Noticias
+      organization:
+        business_unit_kind: Tipos de unidad de negocio
+        business_units: Unidades organizativas
+        management: Gestión
+      organization_title: Organización
       questionnaires:
-        definition: 'Definición'
-        polls: 'Encuestas'
-        reports: 'Reportes'
-    planning_title: 'Planificación'
-    planning:
-      periods: 'Períodos'
-      resources: 'Recursos'
-      risk_assessments: 'Evaluaciones de riesgo'
-      plans: 'Planes de trabajo'
-    execution_title: 'Ejecución'
-    execution:
-      reviews: 'Informes'
-      workflows: 'Programas de trabajo'
-      time_summary: 'Resumen horario'
-      control_objectives: 'Objetivos de control'
-      weaknesses: 'Observaciones'
-      oportunities: 'Oportunidades de mejora'
-      interviews_title: 'Entrevistas'
-      interviews:
-        opening_interviews: 'Entrevistas de inicio'
-        closing_interviews: 'Entrevistas de cierre'
-      reports: 'Reportes'
-      findings_title: 'Hallazgos'
-      findings:
-        weaknesses: 'Observaciones'
-        oportunities: 'Oportunidades de mejora'
-      memos: 'Informes externos'
-    conclusion_title: 'Conclusión'
+        definition: Definición
+        polls: Encuestas
+        reports: Reportes
+      questionnaires_title: Cuestionarios
+      risk_assessment_templates: Plantillas evaluación de riesgo
+      risk_registries: Registros de riesgo
+      security:
+        reports: Reportes de seguridad
+        roles: Perfiles y Privilegios
+        users: Usuarios
+      security_title: Seguridad
+      settings: Configuraciones
+      tags: Etiquetas
+      weakness_templates: Plantillas de observaciones
+    administration_title: Administración
     conclusion:
-      draft_reviews: 'Informes borradores'
-      final_reviews: 'Informes definitivos'
-      reports: 'Reportes'
-    follow_up_title: 'Seguimiento'
+      draft_reviews: Informes borradores
+      final_reviews: Informes definitivos
+      reports: Reportes
+    conclusion_title: Conclusión
+    execution:
+      control_objectives: Objetivos de control
+      findings:
+        oportunities: Oportunidades de mejora
+        weaknesses: Observaciones
+      findings_title: Hallazgos
+      interviews:
+        closing_interviews: Entrevistas de cierre
+        opening_interviews: Entrevistas de inicio
+      interviews_title: Entrevistas
+      memos: Informes externos
+      oportunities: Oportunidades de mejora
+      reports: Reportes
+      reviews: Informes
+      time_summary: Resumen horario
+      weaknesses: Observaciones
+      workflows: Programas de trabajo
+    execution_title: Ejecución
     follow_up:
-      pending_findings: 'Hallazgos pendientes'
-      complete_findings: 'Hallazgos solucionados'
-      repeated_findings: 'Hallazgos reiterados'
-      notifications: 'Notificaciones'
-      reports_title: 'Reportes'
+      complete_findings: Hallazgos solucionados
+      notifications: Notificaciones
+      pending_findings: Hallazgos pendientes
+      repeated_findings: Hallazgos reiterados
       reports:
-        audited: 'Generales'
-        audit: 'Auditoría'
-    help_title: 'Ayuda'
+        audit: Auditoría
+        audited: Generales
+      reports_title: Reportes
+    follow_up_title: Seguimiento
+    help_title: Ayuda
+    planning:
+      periods: Períodos
+      plans: Planes de trabajo
+      resources: Recursos
+      risk_assessments: Evaluaciones de riesgo
+    planning_title: Planificación

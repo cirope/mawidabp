@@ -30,5 +30,11 @@ module Tags::Scopes
         where "#{quoted_table_name}.#{qcn 'options'} ->> :option = :value", option: option, value: value
       end
     end
+
+    def by_name name
+      where(
+        "LOWER(#{quoted_table_name}.#{qcn 'name'}) = ?", name&.downcase
+      )
+    end
   end
 end

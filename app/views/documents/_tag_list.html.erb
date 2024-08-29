@@ -5,18 +5,18 @@
 
       <div class="col-md-4">
         <%= link_to tag_documents_path(tag_id), class: "text-decoration-none text-#{tag_style}" do %>
-          <div class="card text-<%= tag_style == 'warning' ? 'dark' : 'light' %> border-<%= tag_style %>">
-            <div class="card-header bg-<%= tag_style %>">
-              <h5 class="mb-0">
+          <div class="card border-1 border-<%= tag_style %>">
+            <div class="card-header pt-2 pb-2 bg-<%= tag_style %>">
+              <h3 class="m-0 text-<%= tag_style == 'warning' ? 'dark' : 'light' %>">
                 <%= tag_name %>
-                <span class="float-right">
-                  <span class="badge badge-pill badge-dark"><%= count %></span>
+                <span class="float-end">
+                  <span class="badge rounded-pill bg-dark"><%= count %></span>
                 </span>
-              </h5>
+              </h3>
             </div>
 
-            <div class="card-body text-center text-<%= tag_style %>">
-              <h4 class="display-4">
+            <div class="card-body text-center">
+              <h4 class="display-4 text-<%= tag_style %>">
                 <%= icon 'fas', tag_icon %>
               </h4>
             </div>

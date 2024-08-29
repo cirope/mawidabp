@@ -229,10 +229,6 @@ module ConclusionFinalReviewsHelper
     content_tag :abbr, issue_date, title: title if issue_date
   end
 
-  def conclusion_options
-    CONCLUSION_OPTIONS.map { |option| [option, option] }
-  end
-
   def can_destroy_final_review? conclusion_final_review
     can_perform?(:destroy) && conclusion_final_review.can_be_destroyed?
   end
@@ -253,5 +249,11 @@ module ConclusionFinalReviewsHelper
 
       content_tag(:div, out, :style => 'margin-bottom: 1em;')
     end
+  end
+
+  def enable_close_date_edition? conclusion_final_review
+    setting = Current.organization.settings.find_by name: 'enable_close_date_edition'
+
+    conclusion_final_review.new_record? || setting.value == '1'
   end
 end

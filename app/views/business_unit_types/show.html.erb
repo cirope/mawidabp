@@ -1,43 +1,47 @@
-<p>
-  <strong><%= BusinessUnitType.human_attribute_name :name %>:</strong>
-  <%= @business_unit_type.name %>
-</p>
+<div class="card">
+  <div class="card-body">
+    <p>
+      <strong><%= BusinessUnitType.human_attribute_name :name %>:</strong>
+      <%= @business_unit_type.name %>
+    </p>
 
-<p>
-  <strong><%= BusinessUnitType.human_attribute_name :business_unit_label %>:</strong>
-  <%= @business_unit_type.business_unit_label %>
-</p>
+    <p>
+      <strong><%= BusinessUnitType.human_attribute_name :business_unit_label %>:</strong>
+      <%= @business_unit_type.business_unit_label %>
+    </p>
 
-<p>
-  <strong><%= BusinessUnitType.human_attribute_name :project_label %>:</strong>
-  <%= @business_unit_type.project_label %>
-</p>
+    <p>
+      <strong><%= BusinessUnitType.human_attribute_name :project_label %>:</strong>
+      <%= @business_unit_type.project_label %>
+    </p>
 
-<p>
-  <strong><%= BusinessUnitType.human_attribute_name :external %>:</strong>
-  <%= t @business_unit_type.external ? 'label.yes' : 'label.no' %>
-</p>
+    <p>
+      <strong><%= BusinessUnitType.human_attribute_name :external %>:</strong>
+      <%= t @business_unit_type.external ? 'label.yes' : 'label.no' %>
+    </p>
 
-<% unless @business_unit_type.business_units.empty? %>
-  <table class="table table-sm table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= BusinessUnit.model_name.human %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @business_unit_type.business_units.each do |bu| %>
-        <tr>
-          <td><%= bu.name %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+    <% unless @business_unit_type.business_units.empty? %>
+      <table class="table table-sm table-striped table-hover">
+        <thead>
+          <tr>
+            <th><%= BusinessUnit.model_name.human %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @business_unit_type.business_units.each do |bu| %>
+            <tr>
+              <td><%= bu.name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
 
-<hr />
+    <hr />
 
-<div>
-  <%= link_to_edit edit_business_unit_type_path(@business_unit_type) %> |
-  <%= link_to_index business_unit_types_path %>
+    <div>
+      <%= link_to_edit edit_business_unit_type_path(@business_unit_type) %> |
+      <%= link_to_index business_unit_types_path %>
+    </div>
+  </div>
 </div>

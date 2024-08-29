@@ -3,7 +3,7 @@ class QuestionnairesController < ApplicationController
 
   before_action :auth, :check_privileges
   before_action :set_questionnaire, only: [:show, :edit, :update, :destroy]
-  before_action :set_title
+  before_action :set_title, except: :destroy
 
   # GET /questionnaires
   # GET /questionnaires.json

@@ -1,7 +1,7 @@
 <div id="poll_user_filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group row">
+      <div class="mb-1 form-group row">
         <% user = params[action] && params[action][:user] %>
 
         <div class="col-md-4">
@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="col-md-6">
-       <div class="form-group row">
+       <div class="mb-1 form-group row">
         <div class="col-md-4">
           <%= f.label :user, t('.user_option'), class: 'col-form-label' %>
         </div>
@@ -33,7 +33,7 @@
           <%= f.select :user_option,
             %w(only_all include_reviews).map { |option| [t(".#{option}"), option] },
             { include_blank: t('.affected_only'), selected: params[action] && params[action][:user_option] },
-            class: 'form-control'
+            class: 'form-select'
           %>
         </div>
       </div>

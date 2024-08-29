@@ -41,8 +41,8 @@ module Findings::WeaknessesHeatmapCsv
         "[#{date}] #{fa.user.full_name}: #{fa.answer}"
       }.join("\n") if Weakness.show_follow_up_timestamps?),
       compliance_observations.to_s,
-      review.conclusion_final_review.conclusion,
-      review.conclusion_final_review.evolution,
+      review&.conclusion_final_review&.conclusion,
+      review&.conclusion_final_review&.evolution,
       process_owner_parents.map(&:full_name).join(', '),
       process_owner_intermediates.map(&:full_name).join('; '),
       process_owner_roots.map(&:full_name).join(', ')

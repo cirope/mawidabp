@@ -4,7 +4,7 @@ class Users::RegistrationsController < ApplicationController
   before_action :set_title
   before_action :set_group, :check_stale_group
 
-  layout 'clean'
+  layout 'public'
 
   # * GET /users/registrations/new?hash=xxxx
   def new

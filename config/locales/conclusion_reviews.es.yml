@@ -2,7 +2,7 @@ es:
   conclusion_review:
     bic:
       cover:
-        review_identification: "Informe de Auditoria N°: %{identification}"
+        review_identification: "Informe de Auditoría N°: %{identification}"
         auditors: 'Auditores:'
         owners: 'Responsables:'
         review_period: 'Periodo de Revisión:'
@@ -12,12 +12,12 @@ es:
         versions:
           draft: 'BORRADOR'
           final: 'FINAL'
-        draft_with_weaknesses: 'Adjunto al presente distribuimos el informe de referencia en versión borrador, solicitando tenga a bien considerar las observaciones y <span class="font-weight-bold">responder</span>, conforme lo requerido por el Directorio (*).'
+        draft_with_weaknesses: 'Adjunto al presente distribuimos el informe de referencia en versión borrador, solicitando tenga a bien considerar las observaciones y <span class="fw-bold">responder</span>, conforme lo requerido por el Directorio (*).'
         final_with_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia conteniendo las respuestas de cada una de las áreas.'
         final_without_weaknesses: 'Adjunto al presente distribuimos la versión Final del Informe de referencia, el que no contiene observaciones de relevancia que formular.'
         recipients: 'Destinatarios'
-        review_period_title: "Revision de Auditoría Interna:"
-        review_period_description: "Iniciada: %{plan_item_start} - Finalizada: %{plan_item_end}"
+        internal_audit_review: "Revisión de Auditoría Interna:"
+        internal_audit_review_dates: "Iniciada: %{start_date} - Finalizada: %{end_date}"
       scope: 'ALCANCE'
       audit_comments: 'COMENTARIOS DE AUDITORIA'
       weaknesses:
@@ -25,7 +25,9 @@ es:
         responsible: 'Responsable:'
         audit_recommendations: 'Recomendación:'
         follow_up_date: 'Implementación:'
+        audit_comments: 'Comentarios de Auditoría:'
         repeated: 'OBSERVACIÓN REITERADA'
+      number_pages_html: 'Página <span class="page"></span> de <span class="topage"></span>'
     cro:
       header:
         legend_html: "<b>Bértora y Asociados</b>\r\nBernardo de Irigoyen 330 Piso 3\r\n\r\nCiudad Autónoma de Buenos Aires\r\nC1072AAF\r\nTeléfono +54 (11)4342 2544\r\n\r\nwww.crowe.com.ar"
@@ -84,7 +86,9 @@ es:
             one: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el %{review}, consta de %{count} página."
             other: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el %{review}, consta de %{count} páginas."
           details_title: "A continuación se detallan las principales debilidades observadas, así como su situación al momento de emitir el respectivo informe:"
+          previous_title: "Observaciones de periodos anteriores:"
           weaknesses_title: "Observaciones del presente período:"
+          external_weaknesses_title: "Seguimiento de aspectos observados en otras inspecciones."
       weaknesses:
         title: "Anexo I"
         previous_title: "%{prefix} Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."

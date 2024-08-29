@@ -249,7 +249,7 @@ module ApplicationHelper
     out = String.new.html_safe
     link_options = {
       :title => t('label.delete'),
-      'data-target' => ".#{class_for_remove || fields.object.class.name.underscore}",
+      'data-bs-target' => ".#{class_for_remove || fields.object.class.name.underscore}",
       'data-event' => (new_record ? 'removeItem' : 'hideItem')
     }
 
