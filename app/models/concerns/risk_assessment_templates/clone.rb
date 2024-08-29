@@ -15,7 +15,8 @@ module RiskAssessmentTemplates::Clone
     def clone_risk_assessment_weights_from other
       other.risk_assessment_weights.each do |raw|
         attributes = raw.attributes.except 'id',
-                                           'risk_assessment_template_id',
+                                           'owner_type',
+                                           'owner_id',
                                            'created_at',
                                            'updated_at'
 

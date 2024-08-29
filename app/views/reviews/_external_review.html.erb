@@ -6,7 +6,7 @@
       <%= f.input :alternative_review_id, label: false, collection: show_external_review_options(@review), input_html: { disabled: readonly } %>
     </div>
     <div class="col-md-2">
-      <div class="mt-2 text-right">
+      <div class="mt-2 text-end">
         <%= link_to_remove_nested_item(f) unless readonly %>
       </div>
     </div>

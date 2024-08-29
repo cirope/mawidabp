@@ -9,7 +9,7 @@ module Findings::Validations
     validates :review_code, :title, length: { maximum: 255 }, allow_blank: true
     validates :audit_comments, presence: true, if: :audit_comments_should_be_present?
     validates :review_code, :description, :answer, :audit_recommendations,
-      :effect, :audit_comments, :title, :current_situation, :compliance,
+      :effect, :audit_comments, :title, :current_situation, :compliance, :brief,
       pdf_encoding: true
     validates :follow_up_date, :solution_date, :origination_date,
       :first_notification_date, timeliness: { type: :date }, allow_blank: true
@@ -169,10 +169,10 @@ module Findings::Validations
     end
 
     def all_roles_fullfilled_by? users
-      has_audited    = users.any? { |u| u.can_act_as_audited? || u.can_act_as_audited_on?(organization_id) }
-      has_auditor    = users.any? { |u| u.auditor?            || u.auditor_on?(organization_id) }
-      has_supervisor = users.any? { |u| u.supervisor?         || u.supervisor_on?(organization_id) }
-      has_manager    = users.any? { |u| u.manager?            || u.manager_on?(organization_id) }
+      has_audited    = users.any? { |u| u.can_act_as_audited? || u.can_act_as_audited?(organization_id) }
+      has_auditor    = users.any? { |u| u.auditor?            || u.auditor?(organization_id) }
+      has_supervisor = users.any? { |u| u.supervisor?         || u.supervisor?(organization_id) }
+      has_manager    = users.any? { |u| u.manager?            || u.manager?(organization_id) }
 
       has_audited && has_auditor && (has_supervisor || has_manager)
     end
@@ -183,7 +183,7 @@ module Findings::Validations
 
     def validate_manager_presence
       users = finding_user_assignments.reject(&:marked_for_destruction?).map &:user
-      has_manager = users.any? { |u| u.manager? || u.manager_on?(organization_id) }
+      has_manager = users.any? { |u| u.manager? || u.manager?(organization_id) }
 
       unless has_manager
         errors.add :finding_user_assignments, :must_have_a_manager

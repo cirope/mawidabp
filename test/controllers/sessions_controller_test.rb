@@ -96,6 +96,11 @@ class SessionsControllerTest < ActionController::TestCase
                                            name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
                                            assertion_consumer_service_binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
                                            idp_cert: 'cert_test',
+                                           username_claim: 'name',
+                                           name_claim: 'givenname',
+                                           lastname_claim: 'surname',
+                                           email_claim: 'name',
+                                           roles_claim: 'groups',
                                            organization: organization
 
       new_saml_provider.save!

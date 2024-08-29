@@ -7,6 +7,7 @@ image_work_paper:
   organization: cirope
   owner_id: <%= ActiveRecord::FixtureSet.identify(:organization_security_4_2_item_editable) %>
   owner_type: ControlObjectiveItem
+  status: 'pending'
 
 text_work_paper_management_dependency_item:
   name: Text Work Paper
@@ -17,6 +18,7 @@ text_work_paper_management_dependency_item:
   organization: cirope
   owner_id: <%= ActiveRecord::FixtureSet.identify(:management_dependency_item) %>
   owner_type: ControlObjectiveItem
+  status: 'pending'
 
 text_work_paper_management_dependency_item_editable:
   name: Text Work Paper
@@ -27,6 +29,7 @@ text_work_paper_management_dependency_item_editable:
   organization: cirope
   owner_id: <%= ActiveRecord::FixtureSet.identify(:management_dependency_item_editable) %>
   owner_type: ControlObjectiveItem
+  status: 'pending'
 
 text_work_paper_being_implemented_weakness_on_approved_draft:
   name: Text Work Paper
@@ -37,6 +40,7 @@ text_work_paper_being_implemented_weakness_on_approved_draft:
   organization: cirope
   owner_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness_on_approved_draft) %>
   owner_type: Finding
+  status: 'pending'
 
 text_work_paper_being_implemented_weakness:
   name: Text Work Paper
@@ -47,6 +51,7 @@ text_work_paper_being_implemented_weakness:
   organization: cirope
   owner_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness) %>
   owner_type: Finding
+  status: 'pending'
 
 text2_work_paper_unconfirmed_weakness:
   name: Text2 Work Paper
@@ -57,6 +62,7 @@ text2_work_paper_unconfirmed_weakness:
   organization: cirope
   owner_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_weakness) %>
   owner_type: Finding
+  status: 'pending'
 
 text_work_paper_unanswered_for_level_1_notification:
   name: Text Work Paper
@@ -67,6 +73,7 @@ text_work_paper_unanswered_for_level_1_notification:
   organization: cirope
   owner_id: <%= ActiveRecord::FixtureSet.identify(:unanswered_for_level_1_notification) %>
   owner_type: Finding
+  status: 'pending'
 
 text_work_paper_unconfirmed_oportunity:
   name: Text Work Paper
@@ -77,6 +84,7 @@ text_work_paper_unconfirmed_oportunity:
   organization: cirope
   owner_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_oportunity) %>
   owner_type: Finding
+  status: 'pending'
 
 text_work_paper_confirmed_oportunity_on_draft:
   name: Text Work Paper
@@ -87,3 +95,4 @@ text_work_paper_confirmed_oportunity_on_draft:
   organization: cirope
   owner_id: <%= ActiveRecord::FixtureSet.identify(:confirmed_oportunity_on_draft) %>
   owner_type: Finding
+  status: 'pending'

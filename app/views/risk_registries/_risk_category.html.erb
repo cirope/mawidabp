@@ -1,0 +1,37 @@
+<% id    = f.object.object_id %>
+<% fetch = should_fetch_risks_for? f.object %>
+
+<fieldset class="risk_category">
+  <div class="form-inputs row">
+    <div class="col-md-11">
+      <div class="d-flex">
+        <div class="flex-shrink-0 mt-2 me-2">
+          <%= link_to_fetch_hide id, fetch ? :fetch : :show %>
+        </div>
+        <div class="flex-grow-1 ms-2">
+          <%= f.input :name, label: false, autofocus: true,
+            input_html: { maxlength: 255 } %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-1 mt-2 text-end">
+      <%= link_to_remove_nested_item(f) %>
+    </div>
+  </div>
+
+  <div class="ps-4 ms-1 mb-3" data-nested hidden>
+    <div data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= risk_category_path f.object %>" hidden>
+      <% if fetch %>
+        <div class="alert alert-warning">
+          <div class="alert-message">
+            <%= t 'navigation.loading' %>
+          </div>
+        </div>
+      <% else %>
+        <%= render 'risk_categories/form', risk_category: f.object, index: f.index %>
+      <% end %>
+    </div>
+
+    <%= link_to_add_fields t('risk_registries.risks.new'), f, :risks, 'risk_categories/risk' %>
+  </div>
+</fieldset>

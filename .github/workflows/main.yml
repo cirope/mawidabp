@@ -3,48 +3,18 @@ on:
   push:
     branches:
       - master
-      - c-bancotdf
-      - c-bica
-      - c-bice-production
-      - c-bna-aud
-      - c-bna-pla
-      - c-bvalores
-      - c-bvalores-test
-      - c-dino-production
-      - c-galicia-production
-      - c-galicia-test
-      - c-hipotecario
-      - c-nbch
-      - c-patagonia-production
-      - c-patagonia-test
-      - c-petersen-production
-      - c-petersen-test
+      - c-*
   pull_request:
     branches:
       - master
-      - c-bancotdf
-      - c-bica
-      - c-bice-production
-      - c-bna-aud
-      - c-bna-pla
-      - c-bvalores
-      - c-bvalores-test
-      - c-dino-production
-      - c-galicia-production
-      - c-galicia-test
-      - c-hipotecario
-      - c-nbch
-      - c-patagonia-production
-      - c-patagonia-test
-      - c-petersen-production
-      - c-petersen-test
+      - c-*
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         ruby-version:
-          - 2.7
+          - 3.1
         config-type:
           - normal
           - gal
@@ -52,9 +22,10 @@ jobs:
           - bh
           - cycle_score
           - reviews_scored_by_weakness
-        use_v27:
+        use_v31:
           - >-
             ${{ contains(github.ref_name, 'master')
+            || contains(github.ref_name, 'china')
             || contains(github.ref_name, 'bancotdf')
             || contains(github.ref_name, 'bica')
             || contains(github.ref_name, 'bice')
@@ -63,10 +34,15 @@ jobs:
             || contains(github.ref_name, 'dino')
             || contains(github.ref_name, 'galicia')
             || contains(github.ref_name, 'hipotecario')
+            || contains(github.ref_name, 'macro')
+            || contains(github.ref_name, 'mariva')
             || contains(github.ref_name, 'nbch')
             || contains(github.ref_name, 'patagonia')
             || contains(github.ref_name, 'petersen')
+            || contains(github.ref_name, 'smg')
+            || contains(github.ref_name, 'supervielle')
             || contains(github.event.pull_request.base.ref, 'master')
+            || contains(github.event.pull_request.base.ref, 'china')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
             || contains(github.event.pull_request.base.ref, 'bica')
             || contains(github.event.pull_request.base.ref, 'bice')
@@ -75,9 +51,13 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'dino')
             || contains(github.event.pull_request.base.ref, 'galicia')
             || contains(github.event.pull_request.base.ref, 'hipotecario')
+            || contains(github.event.pull_request.base.ref, 'macro')
+            || contains(github.event.pull_request.base.ref, 'mariva')
             || contains(github.event.pull_request.base.ref, 'nbch')
             || contains(github.event.pull_request.base.ref, 'patagonia')
-            || contains(github.event.pull_request.base.ref, 'petersen') }}
+            || contains(github.event.pull_request.base.ref, 'petersen')
+            || contains(github.event.pull_request.base.ref, 'smg')
+            || contains(github.event.pull_request.base.ref, 'supervielle') }}
         use_bh:
           - >-
             ${{ contains(github.ref_name, 'master')
@@ -105,19 +85,29 @@ jobs:
         use_normal:
           - >-
             ${{ contains(github.ref_name, 'master')
+            || contains(github.ref_name, 'china')
             || contains(github.ref_name, 'bancotdf')
             || contains(github.ref_name, 'bica')
             || contains(github.ref_name, 'bna')
             || contains(github.ref_name, 'bvalores')
             || contains(github.ref_name, 'dino')
+            || contains(github.ref_name, 'macro')
+            || contains(github.ref_name, 'mariva')
             || contains(github.ref_name, 'petersen')
+            || contains(github.ref_name, 'smg')
+            || contains(github.ref_name, 'supervielle')
             || contains(github.event.pull_request.base.ref, 'master')
+            || contains(github.event.pull_request.base.ref, 'china')
             || contains(github.event.pull_request.base.ref, 'bancotdf')
             || contains(github.event.pull_request.base.ref, 'bica')
             || contains(github.event.pull_request.base.ref, 'bna')
             || contains(github.event.pull_request.base.ref, 'bvalores')
             || contains(github.event.pull_request.base.ref, 'dino')
-            || contains(github.event.pull_request.base.ref, 'petersen') }}
+            || contains(github.event.pull_request.base.ref, 'macro')
+            || contains(github.event.pull_request.base.ref, 'mariva')
+            || contains(github.event.pull_request.base.ref, 'petersen')
+            || contains(github.event.pull_request.base.ref, 'smg')
+            || contains(github.event.pull_request.base.ref, 'supervielle') }}
         use_reviews_scored_by_weakness:
           - >-
             ${{ contains(github.ref_name, 'master')
@@ -125,8 +115,8 @@ jobs:
             || contains(github.event.pull_request.base.ref, 'master')
             || contains(github.event.pull_request.base.ref, 'nbch') }}
         exclude:
-          - use_v27: false
-            ruby-version: 2.7
+          - use_v31: false
+            ruby-version: 3.1
           - use_bh: false
             config-type: bh
           - use_normal: false
@@ -168,13 +158,17 @@ jobs:
       APP_HOST: 'lvh.me'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: update ubuntu packages
-        run: sudo apt-get update
-      - name: Install sldap
+        uses: actions/checkout@v4
+      - name: Update package lists
+        run: sudo apt update
+      - name: Install slapd and ldap-utils
         run: sudo apt -y install slapd ldap-utils
       - name: Install wkhtmltopdf
         run: sudo apt -y install wkhtmltopdf
+      - name: Install ghostscript
+        run: sudo apt install ghostscript
+      - name: Modify ImageMagick policy
+        run: sudo sed -i '/PDF/s/rights="none"/rights="read|write"/' /etc/ImageMagick-6/policy.xml
       - name: Install ruby and gems
         uses: ruby/setup-ruby@v1
         with:

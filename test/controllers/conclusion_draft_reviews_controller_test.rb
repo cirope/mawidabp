@@ -424,10 +424,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
 
-    text_part = ActionMailer::Base.deliveries.last.parts.detect {
-      |p| p.content_type.match(/text/)
-    }.body.decoded
-
+    text_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/text/) }.body.decoded
     assert_match /markdown/, text_part
 
     clear_enqueued_jobs
@@ -454,11 +451,41 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     assert_equal 3, ActionMailer::Base.deliveries.last.attachments.size
 
-    text_part = ActionMailer::Base.deliveries.last.parts.detect {
-      |p| p.content_type.match(/text/)
-    }.body.decoded
-
+    text_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/text/) }.body.decoded
     assert_match /markdown/, text_part
+
+    if Current.conclusion_pdf_format == 'gal'
+      clear_enqueued_jobs
+      clear_performed_jobs
+
+      assert_not_nil CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_v2']
+
+      conclusion_review.update issue_date: CONCLUSION_REVIEW_FEATURE_DATES['exec_summary_v2'].to_date + 1
+
+      assert_enqueued_jobs 1 do
+        patch :send_by_email, :params => {
+          :id => conclusion_review.id,
+          :conclusion_review => {
+            :include_score_sheet => '1',
+            :include_global_score_sheet => '1',
+            :email_note => 'note in **markdown** _format_'
+          },
+          :user => {
+            users(:administrator).id => {
+              :id => users(:administrator).id,
+              :data => users(:administrator).name
+            }
+          }
+        }
+      end
+
+      perform_job_with_current_attributes(enqueued_jobs.first)
+
+      assert_equal 4, ActionMailer::Base.deliveries.last.attachments.size
+
+      image_part = ActionMailer::Base.deliveries.last.parts.detect { |p| p.content_type.match(/multipart/) }
+      assert_not_nil image_part
+    end
   end
 
   test 'can not send by email with final review' do

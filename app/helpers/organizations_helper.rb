@@ -29,7 +29,7 @@ module OrganizationsHelper
       out << link_to(
         icon('fas', 'times-circle'), '#',
         title: t('label.delete'),
-        class: 'float-right',
+        class: 'float-end',
         data: {
           'dynamic-target' => "##{configuration.class.name.underscore}",
           'dynamic-form-event' => 'hideCard',

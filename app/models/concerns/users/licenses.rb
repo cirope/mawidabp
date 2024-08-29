@@ -28,7 +28,7 @@ module Users::Licenses
         audited = if new_record?
                     true
                   else
-                    old_user.can_act_as_audited_on? organization_role.organization_id
+                    old_user.can_act_as_audited? organization_role.organization_id
                   end
 
         audited && Role::ACT_AS[:auditor].include?(organization_role.role.role_type)

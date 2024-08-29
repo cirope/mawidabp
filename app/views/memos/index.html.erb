@@ -1,40 +1,42 @@
-<% if @memos.empty? && search_params[:query].blank? %>
-  <%= render 'shared/empty_index', message: t('.empty_html') %>
-<% else %>
-  <%= render partial: 'shared/search', locals: {
-    options: {},
-    columns: search_columns_for_model(Memo)
-  } %>
+<div class="card">
+  <div class="card-body">
+    <% if @memos.empty? && search_params[:query].blank? %>
+      <%= render 'shared/empty_index', message: t('.empty_html') %>
+    <% else %>
+      <%= render partial: 'shared/search', locals: {
+        options: {},
+        columns: search_columns_for_model(Memo)
+      } %>
 
-  <% if @memos.empty? %>
-    <%= render 'shared/empty_index', message: t('.empty_search_html') %>
-  <% else %>
-    <table class="table table-sm table-striped table-hover">
-      <thead id="column_headers">
-        <tr>
-          <%= make_filterable_column Memo.human_attribute_name('name'), { class: 'd-none d-md-table-cell' }, 'name' %>
-          <%= make_not_available_column Memo.human_attribute_name('description'), { class: 'd-none d-md-table-cell' } %>
-          <th colspan="3" class="text-right"><%= link_to_search %></th>
-        </tr>
-      </thead>
+      <% if @memos.empty? %>
+        <%= render 'shared/empty_index', message: t('.empty_search_html') %>
+      <% else %>
+        <table class="table table-sm table-striped table-hover">
+          <thead id="column_headers">
+            <tr>
+              <%= make_filterable_column Memo.human_attribute_name('name'), { class: 'd-none d-md-table-cell' }, 'name' %>
+              <%= make_not_available_column Memo.human_attribute_name('description'), { class: 'd-none d-md-table-cell' } %>
+              <th colspan="3" class="text-end"><%= link_to_search %></th>
+            </tr>
+          </thead>
 
-      <tbody>
-        <% @memos.each do |memo| %>
-          <tr>
-            <td class="d-none d-sm-table-cell"><%= super_truncate memo.name, 50 %></td>
-            <td class="d-none d-sm-table-cell"><%= super_truncate memo.description, 50 %></td>
-            <td></td>
-            <td class="text-right"><%= link_to_show memo %></td>
-            <td class="text-right"><%= link_to_edit edit_memo_path(memo) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
+          <tbody>
+            <% @memos.each do |memo| %>
+              <tr>
+                <td class="d-none d-sm-table-cell"><%= super_truncate memo.name, 50 %></td>
+                <td class="d-none d-sm-table-cell"><%= super_truncate memo.description, 50 %></td>
+                <td></td>
+                <td class="text-end"><%= link_to_show memo %></td>
+                <td class="text-end"><%= link_to_edit edit_memo_path(memo) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
 
-  <%= paginate @memos %>
-<% end %>
+      <%= paginate @memos %>
+    <% end %>
 
-<hr>
-
-<%= link_to_new new_memo_path, class: 'btn btn-primary' %>
+    <%= link_to_new new_memo_path, class: 'btn btn-primary' %>
+  </div>
+</div>

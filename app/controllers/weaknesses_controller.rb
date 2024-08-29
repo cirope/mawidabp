@@ -208,7 +208,7 @@ class WeaknessesController < ApplicationController
           :id, :code, :description, :status, :due_on, :_destroy
         ],
         taggings_attributes: [
-          :id, :tag_id, :_destroy
+          :id, :description, :tag_id, :_destroy
         ],
         comments_attributes: [
           :user_id, :comment

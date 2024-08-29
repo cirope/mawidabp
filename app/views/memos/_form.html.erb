@@ -1,87 +1,91 @@
 <% readonly = @memo.readonly_fields?  %>
 
-<%= simple_form_for @memo do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
+<div class="card">
+  <div class="card-body">
+    <%= simple_form_for @memo do |f| %>
+      <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form-inputs">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <% if @memo.new_record? %>
-            <%= f.input :period_id, collection: Period.list_all_with_plans.map { |p| [p.inspect, p.id] },
-              prompt: true,
-              input_html: {
-                data: { memo_plan_item_refresh_url: plan_item_refresh_memos_path }
-              }, required: true
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-md-6">
+            <% if @memo.new_record? %>
+              <%= f.input :period_id, collection: Period.list_all_with_plans.map { |p| [p.inspect, p.id] },
+                prompt: true,
+                input_html: {
+                  data: { memo_plan_item_refresh_url: plan_item_refresh_memos_path }
+                }, required: true
+              %>
+            <% else %>
+              <%= f.input :period, label: Memo.human_attribute_name('period_id'),
+                input_html: { value: @memo.period.inspect, readonly: true }, 
+                required: true %>
+            <% end %>
+          </div>
+          <div class="col-md-6">
+            <% if @memo.new_record? %>
+              <div class="form-group">
+                <%= f.label :plan_item_id, required: true %>
+                <%= memo_plan_item_field f %>
+              </div>
+            <% else %>
+              <%= f.input :plan_item, label: Memo.human_attribute_name('plan_item_id'),
+                input_html: { value: @memo.plan_item.project, readonly: true }, 
+                required: true %>
+            <% end %>
+          </div>
+        </div>
+
+        <%= f.input :name, required: true, input_html: { autofocus: true, readonly: readonly } %>
+        <%= f.input :description, input_html: { readonly: readonly } %>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <%= f.input :required_by,
+                        include_blank: t('helpers.select.prompt'),
+                        collection: required_by_options,
+                        input_html: { disabled: readonly,
+                                      data: { input_to_disable: true } } 
             %>
-          <% else %>
-            <%= f.input :period, label: Memo.human_attribute_name('period_id'),
-              input_html: { value: @memo.period.inspect, readonly: true }, 
-              required: true %>
-          <% end %>
+            <%= f.input :manual_required_by,
+                        as: :boolean,
+                        input_html: { disabled: readonly,
+                                      data: { checkbox_enable_disable_inputs: !readonly } } 
+            %>
+            <%= f.input :required_by_text,
+                        label: false,
+                        input_html: { disabled: readonly,
+                                      data: { input_to_enable: true } } %>
+          </div>
         </div>
+
+        <div class="row">
+          <div class="col-sm-3">
+            <%= f.input :close_date, as: :date_picker, required: true, input_html: { readonly: readonly } %>
+          </div>
+        </div>
+
         <div class="col-md-6">
-          <% if @memo.new_record? %>
-            <div class="form-group">
-              <%= f.label :plan_item_id, required: true %>
-              <%= memo_plan_item_field f %>
-            </div>
-          <% else %>
-            <%= f.input :plan_item, label: Memo.human_attribute_name('plan_item_id'),
-              input_html: { value: @memo.plan_item.project, readonly: true }, 
-              required: true %>
-          <% end %>
+          <p class="mb-1"><%= Memo.human_attribute_name 'file_model_memos' %></p>
+
+          <div class="clearfix">
+            <%= f.simple_fields_for :file_model_memos do |fm_m| %>
+              <%= render 'file_model_memo', f: fm_m, readonly: readonly %>
+            <% end %>
+
+            <% unless readonly %>
+              <%= link_to_add_fields t('.add_file_model'), f, :file_model_memos, 'file_model_memo'%>
+            <% end %>
+          </div>
         </div>
       </div>
-    </div>
 
-    <%= f.input :name, required: true, input_html: { autofocus: true, readonly: readonly } %>
-    <%= f.input :description, input_html: { readonly: readonly } %>
+      <hr>
 
-    <div class="row">
-      <div class="col-sm-6">
-        <%= f.input :required_by,
-                    include_blank: t('helpers.select.prompt'),
-                    collection: required_by_options,
-                    input_html: { disabled: readonly,
-                                  data: { input_to_disable: true } } 
-        %>
-        <%= f.input :manual_required_by,
-                    as: :boolean,
-                    input_html: { disabled: readonly,
-                                  data: { checkbox_enable_disable_inputs: !readonly } } 
-        %>
-        <%= f.input :required_by_text,
-                    label: false,
-                    input_html: { disabled: readonly,
-                                  data: { input_to_enable: true } } %>
+      <div class="form-actions mt-2">
+        <%= f.button :submit, class: 'btn-primary' %>
+        <%= f.input :lock_version, as: :hidden %>
+        <div class="float-end"><%= yield :form_actions %></div>
       </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm-3">
-        <%= f.input :close_date, as: :date_picker, required: true, input_html: { readonly: readonly } %>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <p class="mb-1"><%= Memo.human_attribute_name 'file_model_memos' %></p>
-
-      <div class="clearfix">
-        <%= f.simple_fields_for :file_model_memos do |fm_m| %>
-          <%= render 'file_model_memo', f: fm_m, readonly: readonly %>
-        <% end %>
-
-        <% unless readonly %>
-          <%= link_to_add_fields t('.add_file_model'), f, :file_model_memos, 'file_model_memo'%>
-        <% end %>
-      </div>
-    </div>
+    <% end %>
   </div>
-
-  <div class="form-actions mt-2">
-    <%= f.button :submit, class: 'btn-primary' %>
-    <%= f.input :lock_version, as: :hidden %>
-    <div class="float-right"><%= yield :form_actions %></div>
-  </div>
-<% end %>
+</div>
