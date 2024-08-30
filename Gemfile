@@ -35,7 +35,7 @@ gem 'apexcharts'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 gem 'execjs', '< 2.8'
-gem 'net-smtp', require: false
+gem 'net-smtp', '< 0.3.4', require: false
 gem 'net-imap', require: false
 gem 'net-pop', require: false
 gem 'rexml'
