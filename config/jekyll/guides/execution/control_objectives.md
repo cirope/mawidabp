@@ -19,15 +19,15 @@ Permite realizar las siguientes actividades para cada uno de los objetivos de co
 
 **Seleccionamos Ejecución -> Objetivos de control**
 
-![]({% asset execution/ctrol_objectives/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/1.png){: class="img-responsive"}
 
 Nos muestra los objetivos de control.
 
-![]({% asset execution/ctrol_objectives/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/2.png){: class="img-responsive"}
 
 Si necesitamos encontrar en forma rápida tenemos la opción de **Buscar** por Informe, Proceso y Objetivo de control, ingresando alguna letra, palabra o número.
 
-![]({% asset execution/ctrol_objectives/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/3.png){: class="img-responsive"}
 
 Podemos iniciar las siguientes actividades para cada uno de los objetivos de control que se encuentran en el listado, por ejemplo para el **¨objetivo de control: 5.2 Inventario tecnológico¨**:
 
@@ -39,11 +39,11 @@ Para iniciar y realizar estas actividades seleccionamos **Ejecución -> Objetivo
 
 Luego seleccionamos **Editar** en el objetivo de control con el cual necesitamos trabajar (en este caso 5.2 Inventario tecnológico).
 
-![]({% asset execution/ctrol_objectives/4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/4.png){: class="img-responsive"}
 
 A partir de este momento nos muestra la pantalla de trabajo:
 
-![]({% asset execution/ctrol_objectives/5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/5.png){: class="img-responsive"}
 
 Esta pantalla es el "**escritorio"** de trabajo del auditor, el cual le permite analizar y evaluar el control interno del objetivo de control por medio de las pruebas previstas (en este caso pruebas de cumplimiento).
 
@@ -51,16 +51,16 @@ Las pruebas nos permiten revisar si se cumplen los controles previstos y obtener
 
 En este caso vemos que los **controles** no se están cumpliendo según lo previsto, según la prueba de cumplimiento realizada, por tal motivo la Calificación de la prueba de cumplimiento es Medio (5), logrando una efectividad de 50%.
 
-![]({% asset execution/ctrol_objectives/6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/6.png){: class="img-responsive"}
 
 Por tal motivo vamos agregar una observación, para lo cual tenemos que seleccionar la opción **Agregar nueva observación**.
 
-![]({% asset execution/ctrol_objectives/7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/7.png){: class="img-responsive"}
 
 Al seleccionar **Agregar nueva observación**, muestra la siguiente pantalla.
 
-![]({% asset execution/ctrol_objectives/8.png @path %}){: class="img-responsive"}
-![]({% asset execution/ctrol_objectives/9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/8.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/9.png){: class="img-responsive"}
 
 Esta pantalla nos muestra los datos para crear una observación, para guardar los cambios tenemos que seleccionar **Crear Observación**.
 
@@ -94,11 +94,11 @@ Papeles de trabajo: permite agregar evidencias. Nombre, Código (PTO: papel de t
 
 Al finalizar con la carga de datos seleccionamos **Crear Observación** (si no faltan datos se guarda la observación), caso contrario nos muestra un mensaje de error con los aspectos faltantes, a continuación mostramos una pantalla con un mensaje de error.
 
-![]({% asset execution/ctrol_objectives/10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/10.png){: class="img-responsive"}
 
 Al completar los datos faltantes, y seleccionar **Crear Observación**, nos muestra el siguiente mensaje.
 
-![]({% asset execution/ctrol_objectives/11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/11.png){: class="img-responsive"}
 
 El resto de los campos faltantes (respuesta/acción correctiva, fecha de implementación/acción correctiva, fecha de solución, comentario de auditoría), se completan cuando tenga la respuesta de los usuarios auditados y a medida que avance en el proceso de trabajo.
 
@@ -106,17 +106,17 @@ Cuando necesitemos generar el informe borrador y definitivo (en la etapa de conc
 
 Para ver las observaciones generadas, seleccionar **Ejecución -> Observaciones**, nos muestra lo siguiente.
 
-![]({% asset execution/ctrol_objectives/12.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/12.png){: class="img-responsive"}
 
 Podemos observar en primer lugar la observación generada recientemente (Estado Notificar), en caso de necesitar ver los detalles o seguir trabajando con la misma, seleccionó **Editar (Lápiz)**.
 
 A las 20 hs. (o en el horario definido por la organización) el sistema envía un correo a los integrantes (notificación de hallazgos) de esta observación que se ha generado (debido a que se encuentra en estado **Notificar**).
 
-![]({% asset execution/ctrol_objectives/13.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/13.png){: class="img-responsive"}
 
 A continuación mostramos otro ejemplo de notificación de hallazgos.
 
-![]({% asset execution/ctrol_objectives/14.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/14.png){: class="img-responsive"}
 
 El usuario auditado puede seleccionar **Confirmar notificación**, al hacerlo pasa al estado **"Confirmada"**, siempre que ingrese un comentario en “Comentarios de seguimiento”.
 
@@ -124,31 +124,31 @@ A continuación mostramos los pasos luego que el usuario auditado selecciona **C
 
 Aparece la pantalla de ingreso al sistema (ingresa usuario y contraseña), selecciona Ingresar.
 
-![]({% asset execution/ctrol_objectives/15.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/15.png){: class="img-responsive"}
 
 Muestra la pantalla con la observación en estado **No confirmada**, al seleccionar **Editar**, muestra la siguiente pantalla:
 
-![]({% asset execution/ctrol_objectives/16.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/16.png){: class="img-responsive"}
 
 El usuario auditado ingresa:  un comentario, la fecha de compromiso y puede dejar el tilde en enviar notificación (si lo saca no envía la notificación a los integrantes). También tiene que ingresar el tiempo dedicado (por defecto esta en minutos), y una descripción de las actividades realizadas (es opcional).
 
 Seleccionamos **Actualizar observación**, aparece la siguiente pantalla (con el cambio de estado a confirmada):
 
-![]({% asset execution/ctrol_objectives/17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/17.png){: class="img-responsive"}
 
 Además envía un correo a los integrantes de la observación, ya que dejamos con el tilde Enviar notificación.
 
-![]({% asset execution/ctrol_objectives/18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/18.png){: class="img-responsive"}
 
 Luego de esto el usuario auditor, puede ingresar al sistema o por medio de **Ver hallazgo**, y seguir con el proceso de trabajo en la observación.
 
 Luego podemos ver en el listado de observaciones, como cambio al estado Confirmada, y resta una observación en estado No confirmada:
 
-![]({% asset execution/ctrol_objectives/19.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/19.png){: class="img-responsive"}
 
 En el caso de la observación que quedó en estado No confirmada, el sistema envía un correo a las 20 hs. (notificaciones pendientes) a modo de recordatorio a los involucrados en la observación, a continuación mostramos el correo:
 
-![]({% asset execution/ctrol_objectives/20.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/20.png){: class="img-responsive"}
 
 El usuario auditado también puede seleccionar **Ver Hallazgo**, al hacerlo pasa al estado Confirmada, siempre que ingrese un comentario en "Comentarios de seguimiento".
 
@@ -156,13 +156,13 @@ A continuación mostramos los pasos luego que el usuario auditado selecciona **V
 
 Aparece la pantalla de ingreso al sistema (ingresa usuario y contraseña), selecciona Ingresar.
 
-![]({% asset execution/ctrol_objectives/21.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/21.png){: class="img-responsive"}
 
 Luego de ingresar muestra la siguiente pantalla:
 
 Podemos observar que la observación sigue en estado No confirmada (hasta que el usuario auditado no ingrese un comentario en "Comentarios de seguimiento", la observación no cambia al estado Confirmada.
 
-![]({% asset execution/ctrol_objectives/22.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/22.png){: class="img-responsive"}
 
 Seleccionamos el lápiz (editar), el sistema nos muestra todos los datos de la observación, para que podamos ingresar un comentario.
 
@@ -172,19 +172,19 @@ Además nos informa las Fechas a considerar:
 
 * Pasará al estado "Sin Respuesta" el día 14 de Diciembre de 2015 si ningún auditado proporciona una respuesta
 
-![]({% asset execution/ctrol_objectives/23.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/23.png){: class="img-responsive"}
 
 En este caso ingresamos comentario, fecha de compromiso, dejamos tildado enviar notificación, tiempo dedicado y descripción de las actividades realizadas (estos 2 últimos datos son opcionales):
 
-![]({% asset execution/ctrol_objectives/24.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/24.png){: class="img-responsive"}
 
 Seleccionamos Actualizar observación, aparece la siguiente pantalla, donde muestra el mensaje: Respuesta a hallazgo actualizada correctamente, y el estado pasa a **Confirmada**.
 
-![]({% asset execution/ctrol_objectives/25.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/25.png){: class="img-responsive"}
 
 Además notifica al resto de los integrantes de la observación por correo, informando del comentario realizado.
 
-![]({% asset execution/ctrol_objectives/26.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/26.png){: class="img-responsive"}
 
 Luego de esto el usuario auditor, puede ingresar al sistema o por medio de **Ver hallazgo**, y seguir con el proceso de trabajo en la observación.
 
@@ -206,19 +206,19 @@ También tenemos la posibilidad de Calificar (cargar la efectividad de control) 
 
 Seleccionamos "Editar" de un objetivo de control.
 
-![]({% asset execution/ctrol_objectives/27.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/27.png){: class="img-responsive"}
 
 Luego "Agregar calificación de unidad de negocio", permite seleccionar una unidad de negocio (por ejemplo Sucursal 3), y realizar la calificación de “evaluación de diseño”, “Pruebas de cumplimiento” y “Pruebas sustantivas”.
 
-![]({% asset execution/ctrol_objectives/28.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/28.png){: class="img-responsive"}
 
 También podemos seleccionar "Agregar unidad de negocio por tipo", esto permite seleccionar una unidad de negocio completa (por ejemplo Sucursales, muestra todas las Sucursales), y realizar la calificación de “evaluación de diseño”, “Pruebas de cumplimiento” y “Pruebas sustantivas”.
 
-![]({% asset execution/ctrol_objectives/29.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/29.png){: class="img-responsive"}
 
 Luego  seleccionamos "Actualizar objetivo de control", nos muestra la siguiente pantalla:
 
-![]({% asset execution/ctrol_objectives/30.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/30.png){: class="img-responsive"}
 
 Ingresamos las calificaciones correspondientes (por defecto trae el valor óptimo para las pruebas que tenemos cargados procedimientos, en este caso "Pruebas de cumplimiento".
 
@@ -238,7 +238,7 @@ Incorporamos la funcionalidad que permite identificar los objetivos de control q
 
 Los objetivos de control marcados como "No calificar", ahora se muestra tachado el porcentaje del campo "Efectividad de control" (Ejemplo: último objetivo de control en el listado de la pantalla), y si posamos el mouse nos muestra el siguiente mensaje: “No se tiene en cuenta en la calificación del informe”.
 
-![]({% asset execution/ctrol_objectives/31.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/31.png){: class="img-responsive"}
 
 <hr>
 
@@ -254,4 +254,4 @@ Mejora en los**¨Enlaces¨** para buscar observaciones y oportunidades de mejora
 
 En la edición de los objetivos de control se reemplazó la tabla "resumen" de las observaciones y oportunidades de mejora, ahora se muestra una lista con enlaces a ver y editar cada una (junto con los estados en el caso de las observaciones).
 
-![]({% asset execution/ctrol_objectives/32.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/ctrol_objectives/32.png){: class="img-responsive"}

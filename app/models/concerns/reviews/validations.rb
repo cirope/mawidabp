@@ -85,7 +85,7 @@ module Reviews::Validations
     def validate_required_tags
       if will_save_change_to_scope? || taggings.any?(&:marked_for_destruction?)
         tag_options   = REVIEW_SCOPES[scope]&.fetch(:require_tags, nil) || []
-        required_tags = tag_options.flat_map { |option| Tag.list.with_option option }.uniq
+        required_tags = tag_options.flat_map { |option| Tag.list.with_option option, '1' }.uniq
         tags          = taggings.reject(&:marked_for_destruction?).map &:tag
 
         if required_tags.any? && (required_tags & tags).empty?

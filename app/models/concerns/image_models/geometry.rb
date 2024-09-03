@@ -1,7 +1,7 @@
 module ImageModels::Geometry
   extend ActiveSupport::Concern
 
-  def image_size style_name = :original
+  def image_size style_name = nil
     image_geometry = image_geometry style_name
 
     "#{image_geometry[:width]}x#{image_geometry[:height]}"

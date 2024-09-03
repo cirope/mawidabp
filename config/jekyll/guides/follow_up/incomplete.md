@@ -11,7 +11,7 @@ article_order: 2
 
 Seleccionamos **Seguimiento -> Hallazgos pendientes**, nos muestra la siguiente pantalla.
 
-![]({% asset follow_up/incomplete-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-1.png){: class="img-responsive"}
 
 Podemos ¨**Descargar CSV**¨ y ¨**Resumen en PDF**¨ todos los hallazgos pendientes.
 
@@ -19,29 +19,29 @@ Tenemos las opciones de ¨**Ver**¨ y ¨**Editar**¨ para cada uno de los hallaz
 
 Seleccionamos ¨**Ver**¨ del hallazgo que se encuentra en la segunda fila ¨**2018 TI 01 2**¨ nos permite ver los datos del hallazgo.
 
-![]({% asset follow_up/incomplete-2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-2.png){: class="img-responsive"}
 
-![]({% asset follow_up/incomplete-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-3.png){: class="img-responsive"}
 
 Tenemos las opciones de ¨**Editar**¨, ¨**Descargas**¨ y seleccionando ¨**Listado**¨ nos lleva a la pantalla principal de hallazgos pendientes.
 
 Seleccionamos¨**Descargas**¨ nos muestra
 
-![]({% asset follow_up/incomplete-4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-4.png){: class="img-responsive"}
 
 Si seleccionamos ¨**Descargar Seguimiento**¨, nos permite descargar un documento pdf con los datos más importantes del seguimiento del hallazgo realizado a la fecha (no tiene los apartados de Historial de cambios y comentarios de seguimiento, y agregamos la columna ¨Etiquetas¨).
 
-![]({% asset follow_up/incomplete-5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-5.png){: class="img-responsive"}
 
 Si seleccionamos ¨**Descargar Seguimiento completo**¨, nos permite descargar un documento pdf con todos los datos del hallazgo a la fecha.
 
-![]({% asset follow_up/incomplete-6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-6.png){: class="img-responsive"}
 
-![]({% asset follow_up/incomplete-7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-7.png){: class="img-responsive"}
 
 Seleccionamos ¨**Listado**¨ nos muestra la pantalla principal
 
-![]({% asset follow_up/incomplete-8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-8.png){: class="img-responsive"}
 
 Seleccionamos ¨**Editar**¨ del hallazgo que se encuentra en la segunda fila ¨**2018 TI 01 2**¨ nos permite ver el detalle del hallazgo
 
@@ -57,17 +57,17 @@ El auditor si puede ir modificando los datos de la observación (estado, respues
 
 En caso que no llegue a solucionarse la observación, queda todo el registro con la trazabilidad de las tareas realizadas, al igual que si se soluciona.
 
-![]({% asset follow_up/incomplete-9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-9.png){: class="img-responsive"}
 
-![]({% asset follow_up/incomplete-10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-10.png){: class="img-responsive"}
 
-![]({% asset follow_up/incomplete-11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-11.png){: class="img-responsive"}
 
 Podemos ¨**Ver**¨, ¨**Descargas**¨ y seleccionar ¨**Listado**¨ para volver a la pantalla principal hallazgos pendientes.
 
 Si seleccionamos ¨Descargas¨, podemos descargar el seguimiento.
 
-![]({% asset follow_up/incomplete-12.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-12.png){: class="img-responsive"}
 
 Si seleccionamos ¨**Descargar Seguimiento**¨, nos permite descargar un documento pdf con los datos más importantes del seguimiento del hallazgo realizado a la fecha (no tiene los apartados de Historial de cambios y comentarios de seguimiento, y agregamos la columna ¨Etiquetas¨).
 
@@ -87,7 +87,7 @@ Seleccionamos **Seguimiento -> Hallazgos pendientes**
 
 Se agregó en "Ordenar por"
 
-![]({% asset follow_up/incomplete-13.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-13.png){: class="img-responsive"}
 
 <hr>
 
@@ -103,7 +103,7 @@ Incorporamos el ordenamiento por default.
 
 Para la vista de **"Hallazgos Pendientes"** (por default): se ordenan los hallazgos desde la fecha de implementación más antigua a la más reciente
 
-![]({% asset follow_up/incomplete-14.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-14.png){: class="img-responsive"}
 
 <hr>
 
@@ -117,7 +117,7 @@ Incorporamos la carga de datos **"Tiempo dedicado"** para la solución de una ob
 
 Seleccionamos **Seguimiento -> Hallazgos pendientes**
 
-![]({% asset follow_up/incomplete-15.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-15.png){: class="img-responsive"}
 
 <hr>
 
@@ -157,7 +157,7 @@ Si hacen clic sobre el nombre de la columna que no necesitan buscar (por ejemplo
 
 Las columnas que se encuentran tachadas, tampoco se tienen en cuenta para la búsqueda.
 
-![]({% asset follow_up/incomplete-16.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-16.png){: class="img-responsive"}
 
 <hr>
 
@@ -201,7 +201,7 @@ Seleccionamos **Seguimiento -> Hallazgos pendientes**
 
 Ahora en el listado se muestra resaltada la columna "Fecha de implementación", para observaciones "En proceso de implementación". Cuando las observaciones tienen esta fecha en el pasado, además del tachado ahora se muestran resaltadas en rojo.
 
-![]({% asset follow_up/incomplete-17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-17.png){: class="img-responsive"}
 
 <hr>
 
@@ -219,7 +219,7 @@ Agregamos nuevas columnas al CSV: unidad organizativa, unidad de negocio, recome
 
 Seleccionamos ¨**Descargar CSV**¨.
 
-![]({% asset follow_up/incomplete-18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-18.png){: class="img-responsive"}
 
 <hr>
 
@@ -237,11 +237,11 @@ La columna de la derecha quedó para ingresar la fecha de compromiso.
 
 A continuación mostramos un ejemplo con la pantalla que ve el auditado (Carrizo Juan) al recibir una notificación del auditor (Cuenca Francisco).
 
-![]({% asset follow_up/incomplete-19.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-19.png){: class="img-responsive"}
 
 El auditado (Carrizo Juan) ingresa un comentario y la fecha de compromiso.
 
-![]({% asset follow_up/incomplete-20.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-20.png){: class="img-responsive"}
 
 Luego debe seleccionar **"Actualizar observación"**, para que lleguen los correos a los usuarios auditores y auditados involucrados en la observación con el comentario ingresado.
 
@@ -257,19 +257,19 @@ Incorporamos la posibilidad de consultar las observaciones **¨Pendientes¨** de
 
 Primero deben ir al listado de usuarios en "Administración" -> "Seguridad"  -> "Usuarios". Van a ver un nuevo icono que representa un gráfico de barras, es un enlace más directo al "Estado" de cada usuario.
 
-![]({% asset follow_up/incomplete-21.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-21.png){: class="img-responsive"}
 
 Seleccionamos el icono "gráfico de barras", dentro del estado a la derecha del nombre del usuario van a ver un icono con un "+". La idea aquí sería agregarlo a una especie de "Carrito" (icono lista) similar al que se utiliza cuando uno realiza una compra online.
 
-![]({% asset follow_up/incomplete-22.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-22.png){: class="img-responsive"}
 
 Seleccionamos "+", una vez agregado van a ver que el icono cambia por un "-", que funciona para eliminarlo del carrito, a su vez aparece un nuevo icono que representa una lista.
 
-![]({% asset follow_up/incomplete-23.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-23.png){: class="img-responsive"}
 
 Pueden repetir la operación con los usuarios que crean necesario, el carrito va manteniendo la lista con las observaciones pendientes de los usuarios que vamos seleccionando (a la lista se van sumando las observaciones de los usuarios seleccionados).
 
-![]({% asset follow_up/incomplete-24.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-24.png){: class="img-responsive"}
 
 Para este ejemplo llevamos 2 usuarios seleccionados.
 
@@ -277,7 +277,7 @@ Una vez que tenemos todos los usuarios seleccionados que necesitamos listar, rec
 
 Luego de esto vemos el listado de observaciones pendientes de los mismos.
 
-![]({% asset follow_up/incomplete-25.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-25.png){: class="img-responsive"}
 
 Lo importante a tener en cuenta es que en el momento que hagan clic en la lista, la misma se "vacía" (una vez utilizado el enlace el carrito se "limpia")
 
@@ -315,19 +315,19 @@ Por ejemplo para la primera observación del listado, hay 2 comentarios sin leer
 
 Para este ejemplo, hay 2 comentarios sin leer (esto lo indica al pasar el puntero por encima del triángulo).
 
-![]({% asset follow_up/incomplete-26.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-26.png){: class="img-responsive"}
 
 Para marcar un comentario como leído, seleccionamos **"Editar"** en una observación (para este caso seleccionamos la observación que figura primero en el listado, la cual tiene 2 comentarios sin leer).
 
 Nos muestra la siguiente pantalla, donde figuran los comentarios sin leer van a ver un icono azul con un sobre.
 
-![]({% asset follow_up/incomplete-27.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-27.png){: class="img-responsive"}
 
 Si hacemos clic (en el icono azul con el sobre) se marca ese comentario como leído (cambia a un icono negro, con la forma de un tilde).
 
 Para este caso, marcamos el primero de los comentarios.
 
-![]({% asset follow_up/incomplete-28.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-28.png){: class="img-responsive"}
 
 Luego de leer el comentario, podemos ver que se actualizó la primera observación del listado, al pasar el puntero por encima del triángulo nos indica que tiene "1 comentario sin leer".
 
@@ -337,21 +337,21 @@ Los comentarios propios, al momento de crearlos, se marcan automáticamente como
 
 Luego podemos seleccionar **"Editar"** en la misma observación (primera en el listado), para agregar un comentario.
 
-![]({% asset follow_up/incomplete-29.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-29.png){: class="img-responsive"}
 
 En este ejemplo, el usuario auditor (Cuenca, Francisco) agrega un comentario.
 
-![]({% asset follow_up/incomplete-30.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-30.png){: class="img-responsive"}
 
 Luego seleccionamos **"Actualizar observación"**.
 
 Nos muestra el siguiente mensaje
 
-![]({% asset follow_up/incomplete-31.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-31.png){: class="img-responsive"}
 
 Y muestra marcado como leído el "Comentario" (debido a que los comentarios propios, al momento de crearlos, se marcan automáticamente como leídos)
 
-![]({% asset follow_up/incomplete-32.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-32.png){: class="img-responsive"}
 
 <hr>
 
@@ -365,19 +365,19 @@ Incorporamos una nueva funcionalidad que permite ordenar en forma descendente lo
 
 Seleccionamos **Seguimiento -> Hallazgos pendientes**
 
-![]({% asset follow_up/incomplete-33.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-33.png){: class="img-responsive"}
 
 Luego seleccionamos "Buscar"
 
-![]({% asset follow_up/incomplete-34.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-34.png){: class="img-responsive"}
 
 Luego seleccionamos en "Ordenar por" la opción “Comentarios sin leer (Descendente)
 
-![]({% asset follow_up/incomplete-35.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-35.png){: class="img-responsive"}
 
 Luego nuevamente "Buscar", nos muestra los comentarios sin leer ordenados en forma descendente (posicionando el mouse en el triángulo nos muestra la cantidad de comentarios sin leer):
 
-![]({% asset follow_up/incomplete-36.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-36.png){: class="img-responsive"}
 
 Al final de la pantalla, tenemos las opciones "Descargar CSV" y “Resumen en PDF” del filtro que hemos realizado.
 
@@ -405,11 +405,11 @@ Luego **¨Buscar¨**, ingresamos ¨desde 1/2/2018 y hasta 15/2/2018¨, dejamos a
 
 Seleccionamos **¨Buscar¨**, nos muestra las observaciones que se modificaron en ese periodo (1/2/2018 y hasta 15/2/2018).
 
-![]({% asset follow_up/incomplete-37.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-37.png){: class="img-responsive"}
 
 Si seleccionamos **¨Resumen en PDF¨** nos muestra las mismas observaciones, informando al final del listado como fue elaborado el filtrado (filtrado con la consulta 'desde 1/2/2018 y hasta 15/2/2018' en la columna Última actualización).
 
-![]({% asset follow_up/incomplete-38.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-38.png){: class="img-responsive"}
 
 <hr>
 
@@ -441,21 +441,21 @@ Luego seleccionamos ¨Editar¨ en la observación donde vamos agregar tareas.
 
 Para este ejemplo agregamos 2 tareas con fecha de finalización 1 y 2/08/2018.
 
-![]({% asset follow_up/incomplete-39.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-39.png){: class="img-responsive"}
 
 Al agregar las tareas con esta fecha se bloquea la edición del campo ¨Fecha de implementación¨ de la observación. Esto es porque se entiende que ahora está definido por las tareas, donde se toma la mayor como la nueva fecha de implementación.
 
-![]({% asset follow_up/incomplete-40.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-40.png){: class="img-responsive"}
 
 Se envían recordatorios similares a los de las observaciones, siempre que estén en estado ¨Pendiente¨ o ¨En Proceso¨ (Por ejemplo: Notificación de tareas cercanas al vencimiento, Notificación de tareas vencidas).
 
 **¨Notificación de tareas cercanas al vencimiento¨**
 
-![]({% asset follow_up/incomplete-41.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-41.png){: class="img-responsive"}
 
 **¨Notificación de tareas vencidas¨**
 
-![]({% asset follow_up/incomplete-42.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-42.png){: class="img-responsive"}
 
 **Reprogramaciones**
 
@@ -465,17 +465,17 @@ A tiempo sin reprogramación: muestra un icono **¨tilde verde¨** (código 02).
 
 A tiempo reprogramada: muestra un icono **¨círculo con una flecha de color amarillo¨** (código 01).
 
-![]({% asset follow_up/incomplete-43.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-43.png){: class="img-responsive"}
 
 Vencida: fuera de tiempo, muestra un icono **¨reloj en rojo¨** (código 01 y 02).
 
-![]({% asset follow_up/incomplete-44.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-44.png){: class="img-responsive"}
 
 Dentro del CSV agregamos la columna con la fecha más temprana pendiente de una tarea en la descarga del CSV (luego puedo sacar las vencidas).
 
 Al final de la pantalla (a la izquierda) seleccionamos ¨Descargar CSV¨.
 
-![]({% asset follow_up/incomplete-45.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/follow_up/incomplete-45.png){: class="img-responsive"}
 
 <hr>
 

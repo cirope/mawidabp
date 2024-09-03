@@ -1,18 +1,22 @@
-<%= render partial: 'shared/search', locals: {
-  options: {},
-  columns: search_columns_for_model(Document)
-} %>
+<div class="card">
+  <div class="card-body">
+    <%= render partial: 'shared/search', locals: {
+      options: {},
+      columns: search_columns_for_model(Document)
+    } %>
 
-<% if @tag.blank? && @documents_count == 0 %>
-  <%= render 'shared/empty_index', message: @query.blank? ? t('.empty_html') : t('.empty_search_html') %>
-<% else %>
-  <% if @documents %>
-    <%= render 'list' %>
-  <% else %>
-    <%= render 'tag_list' %>
-  <% end %>
-<% end %>
+    <% if @tag.blank? && @documents_count == 0 %>
+      <%= render 'shared/empty_index', message: @query.blank? ? t('.empty_html') : t('.empty_search_html') %>
+    <% else %>
+      <% if @documents %>
+        <%= render 'list' %>
+      <% else %>
+        <%= render 'tag_list' %>
+      <% end %>
+    <% end %>
 
-<% if can? :modify, :administration_documents %>
-  <%= link_to_new new_document_path, class: 'btn btn-primary' %>
-<% end %>
+    <% if can? :modify, :administration_documents %>
+      <%= link_to_new new_document_path, class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>

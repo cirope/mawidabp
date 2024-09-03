@@ -6,11 +6,17 @@ module ConclusionFinalReviews::Destroy
   end
 
   def can_be_destroyed?
-    ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION &&
-      has_not_repeated_in_weakness?
+    within_allowed_deletion_period? &&
+      has_not_repeated_in_weakness? &&
+      has_not_a_review_as_external_review?
   end
 
   private
+
+    def within_allowed_deletion_period?
+      ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0 &&
+        created_at >= ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS.business_days.ago
+    end
 
     def check_if_can_be_destroyed
       throw :abort unless can_be_destroyed?
@@ -18,6 +24,10 @@ module ConclusionFinalReviews::Destroy
 
     def has_not_repeated_in_weakness?
       review.weaknesses.none?(&:repeated?)
+    end
+
+    def has_not_a_review_as_external_review?
+      is_nbc? ? ExternalReview.where(alternative_review_id: review.id).blank? : true
     end
 
     def undo_final_findings

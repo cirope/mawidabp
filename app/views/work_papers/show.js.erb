@@ -1,0 +1,20 @@
+$(function() {
+  var remoteUrl = '<%= @work_paper.to_remote_url %>'
+
+  $('body').append(
+    '<%= j render('shared/modal', title: @title, body: render('show')) %>'
+  );
+  $('#modal').modal('show')
+
+  $.ajax({
+      type: 'HEAD',
+      async: true,
+      url: remoteUrl,
+      complete: function() {
+        $('.work-paper-container').attr('src', remoteUrl)
+      },
+      error: function(response) {
+        $('.work-paper-alert').show()
+      }
+  })
+})

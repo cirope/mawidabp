@@ -12,7 +12,7 @@ Posibilita incorporar novedades para las distintas áreas del equipo de trabajo,
 
 Seleccionamos **Administración -> Noticias**.
 
-![]({% asset administration/news/1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/news/1.png){: class="img-responsive"}
 
 En este caso no tenemos ninguna noticia generada.
 
@@ -28,13 +28,13 @@ Seleccionamos **Nueva noticia**, muestra la siguiente pantalla para completar.
 
 Completamos los campos obligatorios identificados con *, el resto son opcionales.
 
-![]({% asset administration/news/2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/news/2.png){: class="img-responsive"}
 
 Para que se guarde seleccionamos **Crear Noticia**.
 
 Si hay una sola noticia en la pantalla principal se "comparte" con el contenido actual.
 
-![]({% asset administration/news/3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/news/3.png){: class="img-responsive"}
 
 Si hay más de una ya quedan solamente las noticias.
 

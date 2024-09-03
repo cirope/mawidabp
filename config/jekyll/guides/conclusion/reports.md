@@ -15,7 +15,7 @@ La mayoría de los reportes tienen el mismo formato para el ingreso de datos per
 
 Seleccionamos **Conclusión -> Reportes**, muestra la siguiente pantalla.
 
-![]({% asset conclusion/reports-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-1.png){: class="img-responsive"}
 
 Los reportes de conclusión siempre utilizan la base de observaciones ¨congeladas¨ (es decir, con el estado y demás valores tal cual estuvieron al momento de la emisión del informe definitivo).
 
@@ -33,7 +33,7 @@ Los reportes de conclusión siempre utilizan la base de observaciones ¨congelad
 
 Seleccionamos **Conclusión -> Reportes**
 
-![]({% asset conclusion/reports-2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-2.png){: class="img-responsive"}
 
 <hr>
 
@@ -53,13 +53,13 @@ Permite ejecutar el reporte sin necesidad que la auditoría tenga informe "Defin
 
 El filtro de fecha funciona con la fecha de emisión del definitivo o la fecha de creación del informe en caso que todavía no se haya emitido (en ejecución).
 
-![]({% asset conclusion/reports-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-3.png){: class="img-responsive"}
 
 Seleccionamos **Conclusión -> Análisis de costos detallado**
 
 Muestra los "Recursos humanos" y “Recursos material”
 
-![]({% asset conclusion/reports-4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-4.png){: class="img-responsive"}
 
 Seleccionamos **Conclusión -> Resumen de costos**
 
@@ -69,7 +69,7 @@ La fecha que se usa para agrupar los resultados es la de emisión del informe de
 
 Muestra por auditor las unidades estimadas, reales y la desviación.
 
-![]({% asset conclusion/reports-5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-5.png){: class="img-responsive"}
 
 <hr>
 
@@ -85,7 +85,7 @@ Los reportes de conclusión siempre utilizan la base de observaciones ¨congelad
 
 Seleccionamos **Conclusión -> Reportes -> Estadísticas de Informes**
 
-![]({% asset conclusion/reports-6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-6.png){: class="img-responsive"}
 
 <hr>
 
@@ -101,7 +101,7 @@ Seleccionamos **Conclusión -> Reportes -> Observaciones por proceso de negocio*
 
 Al final del reporte muestra los informes definitivos emitidos.
 
-![]({% asset conclusion/reports-7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-7.png){: class="img-responsive"}
 
 <hr>
 
@@ -115,11 +115,11 @@ Incorporamos un nuevo reporte "Calificación de informes".
 
 Seleccionamos **Conclusión -> Reportes -> Calificaciones de informes**
 
-![]({% asset conclusion/reports-8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-8.png){: class="img-responsive"}
 
 Nos muestra la calificación de: informes, unidades de negocio y total por unidad de negocio para el rango de fecha ingresado.
 
-![]({% asset conclusion/reports-9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-9.png){: class="img-responsive"}
 
 <hr>
 
@@ -135,9 +135,9 @@ Seleccionamos **Reportes -> Hallazgos totales por riesgo y unidad de negocio**.
 
 Los reportes de conclusión siempre utilizan la base de observaciones ¨congeladas¨ (es decir, con el estado y demás valores tal cual estuvieron al momento de la emisión del informe definitivo).
 
-![]({% asset conclusion/reports-10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-10.png){: class="img-responsive"}
 
-![]({% asset conclusion/reports-11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/reports-11.png){: class="img-responsive"}
 
 Tenemos la posibilidad de **¨Descargar¨** (en formato .pdf)
 

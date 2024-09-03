@@ -5,13 +5,13 @@
   <div id="order_bys_filter" class="row" <%== 'style="display: none;"' unless display %>>
 <% end %>
   <div class="col-md-6" <%== 'style="display: none;"' unless display %>>
-    <div class="form-group row">
+    <div class="mb-1 form-group row">
       <% selected = params[action] ? params[action][:order_by] : nil %>
       <%= f.label :order_by, t('message.sort_by').gsub('...', ''), class: 'col-md-4 col-form-label' %>
       <div class="col-md-8">
         <%= f.select :order_by, order_bys.map { |s| [t(".#{s}"), s] }, {
           selected: selected, include_blank: t('message.sort_by')
-        }, class: 'form-control' %>
+        }, class: 'form-select' %>
       </div>
     </div>
   </div>

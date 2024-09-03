@@ -15,6 +15,19 @@ jQuery(function ($) {
       fileInput.attr('hidden', true)
   })
 
+  $(document).on('click', '[data-file-url]', function () {
+    var hrefUrl = $(this).attr('href') || ''
+    var gDrive  = hrefUrl.match(/https:\/\/docs.google.com\/[\\\w\-.:%]+(\/\S*)?/)
+
+    if (gDrive)
+      var workPaperUrl = $(this).attr('data-work-paper-url')
+      var fileUrl      = workPaperUrl.replace('file-url', hrefUrl)
+
+      $.getScript(fileUrl)
+
+      return false
+  })
+
   $(document).on('dynamic-item:removed', '.work_paper', function () {
     var workPaperCode = $(this).find('input[name$="[code]"]').val()
 

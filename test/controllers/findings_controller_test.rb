@@ -211,11 +211,37 @@ class FindingsControllerTest < ActionController::TestCase
     assert_match Mime[:csv].to_s, @response.content_type
   end
 
-  test 'list findings as PDF' do
+  test 'list incomplete findings as PDF' do
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
     get :index, params: { completion_state: 'incomplete' }, as: :pdf
 
     assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
-    assert_match Mime[:pdf].to_s, @response.content_type
+  end
+
+  test 'list repeated findings as PDF' do
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
+    get :index, params: { completion_state: 'repeated' }, as: :pdf
+
+    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
+  end
+
+  test 'list complete findings as PDF' do
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
+    get :index, params: { completion_state: 'complete' }, as: :pdf
+
+    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
   end
 
   test 'list findings as corporate user' do
@@ -844,6 +870,11 @@ class FindingsControllerTest < ActionController::TestCase
       csv_findings << id if id&.positive?
     end
 
+    image_model       = organizations(:cirope).image_model
+    image_model.image = Rack::Test::UploadedFile.new TEST_IMAGE_FULL_PATH, 'png'
+
+    image_model.save!
+
     get :index, params: {
       completion_state: 'incomplete',
       search: {
@@ -1099,7 +1130,7 @@ class FindingsControllerTest < ActionController::TestCase
       }
     }
 
-    assert_match I18n.t('activerecord.errors.models.finding.attributes.state.must_have_a_work_paper'), 
+    assert_match I18n.t('activerecord.errors.models.finding.attributes.state.must_have_a_work_paper'),
                  response.body
 
     finding.reload

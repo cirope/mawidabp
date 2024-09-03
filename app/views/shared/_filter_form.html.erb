@@ -1,6 +1,6 @@
 <% url = url_for({ action: action }.merge(extra_params)) %>
 
-<div data-hide-in-search>
+<div class="mb-3" data-hide-in-search>
   <%= simple_form_for action, url: url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
     <div class="row">
       <div class="col-md-10">

@@ -160,7 +160,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             business_unit_ids: [business_units(:business_unit_three).id],
             compliance: 'yes',
             compliance_observations: 'test',
-            compliance_susceptible_to_sanction: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values.first,
+            compliance_maybe_sanction: COMPLIANCE_MAYBE_SANCTION_OPTIONS.values.first,
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
@@ -313,7 +313,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               follow_up_date: '',
               compliance: 'yes',
               compliance_observations: 'test',
-              compliance_susceptible_to_sanction: COMPLIANCE_SUCEPTIBLE_TO_SANCTION_OPTIONS.values.first,
+              compliance_maybe_sanction: COMPLIANCE_MAYBE_SANCTION_OPTIONS.values.first,
               operational_risk: ['internal fraud'],
               impact: ['econimic', 'regulatory'],
               internal_control_components: ['risk_evaluation', 'monitoring'],
@@ -598,5 +598,21 @@ class WeaknessesControllerTest < ActionController::TestCase
     wts = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, wts.size # No results
+  end
+
+  test 'update weakness with required tags' do
+    set_organization
+    login
+
+    tag    = tags :important
+    subtag = tag.children.create!(name: 'Subtag')
+
+    assert tag.update!(options: { 'required_min_count': 1 })
+
+    weakness = Finding.find(findings(:unanswered_for_level_1_notification).id)
+    assert weakness.update(
+      title: 'New Title',
+      taggings_attributes: [ { tag_id: subtag.id } ]
+    )
   end
 end

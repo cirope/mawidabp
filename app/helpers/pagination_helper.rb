@@ -1,7 +1,7 @@
 module PaginationHelper
   def paginate collection
     will_paginate collection,
-      class:    'float-right pagination-sm',
-      renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer
+      list_classes: %w(float-end pagination pagination-sm mb-0),
+      renderer: WillPaginate::ActionView::BootstrapLinkRenderer
   end
 end

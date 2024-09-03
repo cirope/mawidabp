@@ -8,6 +8,20 @@ namespace :help do
     end
   end
 
+  desc 'Create symlinks to the fonts and stylesheets folders of the boostrap gem'
+  task :create_bootstrap_symlinks do
+    Dir.chdir('config/jekyll') do
+      Bundler.with_unbundled_env do
+        bootstrap_path   = `bundle show bootstrap`.chop
+        fonts_path       = './assets/fonts'
+        stylesheets_path = './_sass/stylesheets'
+
+        File.symlink("#{bootstrap_path}/assets/fonts/bootstrap", fonts_path) unless File.exist?(fonts_path)
+        File.symlink("#{bootstrap_path}/assets/stylesheets", stylesheets_path) unless File.exist?(stylesheets_path)
+      end
+    end
+  end
+
   desc 'Run Jekyll in config/jekyll directory without having to cd there'
   task :generate do
     Dir.chdir('config/jekyll') do

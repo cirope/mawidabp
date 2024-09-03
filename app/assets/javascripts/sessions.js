@@ -13,7 +13,7 @@ jQuery(function ($) {
   var setMessage = function (message) {
     $('[data-time-left]').
       removeAttr('hidden').
-      find('[data-toggle="popover"]').
+      find('[data-bs-toggle="popover"]').
       attr('data-content', message)
   }
 
@@ -56,5 +56,5 @@ jQuery(function ($) {
     ajaxSuccess: resetTimers
   })
 
-  $('[data-toggle="popover"]').popover()
+  $('[data-bs-toggle="popover"]').popover()
 })

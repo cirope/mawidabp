@@ -1,0 +1,103 @@
+---
+en:
+  approach_types:
+    control: Control
+    control_sustantive: Control/Substantive
+    sustantive: Substantive
+  bic_impact_risk_types:
+    high: High
+    low: Low
+    moderate: Moderate
+  degree_compliance_types:
+    comply: Complies
+    fails: Does not comply
+    partially: Partially complies
+  external_repeated_types:
+    no_repeated: 'No'
+    repeated_with_action_plan: Yes, with an action plan
+    repeated_without_action_plan: Yes, without an action plan
+  frequencies_types:
+    high: High
+    low: Remote
+    moderate: Probable
+  frequency_types:
+    biyearly: Biannual
+    monthly: Monthly
+    yearly: Annual
+  impact_risk_types:
+    critical: Critical
+    high: High
+    low: Low
+    moderate: Moderate
+    small: Insignificant
+  observation_originated_tests_types:
+    compliance: Compliance
+    design: Design
+    sustantive: Substantive
+  priority_types:
+    high: High
+    low: Low
+    medium: Medium
+    none: Regulatory body
+  probability_types:
+    almost_certain: Almost certain
+    possible: Possible
+    probable: Probable
+    rare: Rare
+    unlikely: Unlikely
+  qualification_types:
+    excellent: Excellent
+    high: High
+    low: Low
+    medium: Medium
+    medium_high: Medium high
+    medium_low: Medium low
+    moderately_high: Moderately high
+    moderately_low: Moderately low
+    not_rated: 'Null'
+    very_high: Very high
+    very_low: Very low
+    # Short qualifications
+    not_apply: Not apply
+    observed: Observed
+    ok: OK
+  relevance_types:
+    critical: Critical
+    high: High
+    low: Low
+    moderate: Moderate
+    moderate_low: Moderate/Low
+    not_rated: 'Null'
+    # Short relevance
+    'no': 'No'
+    'yes': 'Yes'
+  risk_types:
+    high: High
+    low: Low
+    medium: Medium
+    none: Regulatory body
+  sample_deviation_types:
+    less_expected: Less expected
+    most_expected: Most expected
+  score_types:
+    improve: Needs improvement
+    regular: Regular
+    satisfactory: Satisfactory
+    unsatisfactory: Unsatisfactory
+    # When score for weaknesses is used
+    adequate: Adequate
+    inadequate: Inadequate
+    none: Not applicable
+    require_improvements: Requires improvements
+    require_lots_of_improvements: Requires significant improvements
+    require_some_improvements: Requires some improvements
+  state_regulations_types:
+    exist: Exists updated
+    inadequate: Outdated/inadequate/requires adjustment
+    not_exist: Not exist
+  suggested_type_probabilities:
+    repeatability: Repeatability
+    representativeness: Representativeness
+  suggested_type_risks:
+    absolute_value: Absolute value
+    representativeness: Representativeness

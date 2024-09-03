@@ -15,6 +15,34 @@ class MemosControllerTest < ActionController::TestCase
     assert_not_nil assigns(:memos)
   end
 
+  test 'list memos with search' do
+    get :index, params: {
+      search: {
+        query: @memo.name,
+        columns: ['name']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:memos)
+    assert_equal 1, assigns(:memos).count
+    assert_template 'memos/index'
+  end
+
+  test 'dont list memos with search' do
+    get :index, params: {
+      search: {
+        query: @memo.name * 4,
+        columns: ['name']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:memos)
+    assert_equal 0, assigns(:memos).count
+    assert_template 'memos/index'
+  end
+
   test 'should get new' do
     get :new
     assert_response :success

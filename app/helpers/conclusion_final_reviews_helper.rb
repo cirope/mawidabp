@@ -229,11 +229,31 @@ module ConclusionFinalReviewsHelper
     content_tag :abbr, issue_date, title: title if issue_date
   end
 
-  def conclusion_options
-    CONCLUSION_OPTIONS.map { |option| [option, option] }
-  end
-
   def can_destroy_final_review? conclusion_final_review
     can_perform?(:destroy) && conclusion_final_review.can_be_destroyed?
+  end
+
+  def show_conclusion_final_reviews_previous_close_dates conclusion_final_review
+    list  = String.new.html_safe
+    out   = String.new.html_safe
+    dates = conclusion_final_review.all_close_dates
+
+    if dates.present?
+      dates.each { |d| list << content_tag(:li, l(d, :format => :long)) }
+
+      out << link_to(t('conclusion_final_review.previous_close_dates'), '#', :onclick =>
+        "$('#previous_close_dates').slideToggle();return false;")
+
+      out << content_tag(:div, content_tag(:ul, list),
+        :id => 'previous_close_dates', :style => 'display: none; margin-bottom: 1em;')
+
+      content_tag(:div, out, :style => 'margin-bottom: 1em;')
+    end
+  end
+
+  def enable_close_date_edition? conclusion_final_review
+    setting = Current.organization.settings.find_by name: 'enable_close_date_edition'
+
+    conclusion_final_review.new_record? || setting.value == '1'
   end
 end

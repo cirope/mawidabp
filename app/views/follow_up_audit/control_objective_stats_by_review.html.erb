@@ -1,54 +1,58 @@
-<%= render partial: 'shared/filter_form',
-  locals: {
-    action: :control_objective_stats_by_review, extra_params: {
-      controller_name: 'follow_up', final: false
-    },
-    forms: {
-      control_objective: 1, date_range: 2, business_unit: 3, finding: 4
-    }
-  }
-%>
+<div class="card">
+  <div class="card-body">
+    <%= render partial: 'shared/filter_form',
+      locals: {
+        action: :control_objective_stats_by_review, extra_params: {
+          controller_name: 'follow_up', final: false
+        },
+        forms: {
+          control_objective: 1, date_range: 2, business_unit: 3, finding: 4
+        }
+      }
+    %>
 
-<% @periods.each do |period| %>
-  <h2 class="mb-3"><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+    <% @periods.each do |period| %>
+      <h2 class="mb-3"><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
 
-  <% if @process_control_data[period].blank? %>
-    <p class="my-2">
-      <em><%= t 'follow_up_committee_report.control_objective_stats_by_review.without_audits_in_the_period' %></em>
-    </p>
-  <% else %>
-    <table class="table table-sm table-striped table-hover">
-      <thead>
-        <tr>
-          <% @columns.each do |col_name, col_title, col_width| %>
-            <th><%= col_title %></th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <% @process_control_data[period].each do |data| %>
-          <tr>
-            <% @columns.each do |col_name, _| %>
-              <% col_data = data[col_name] %>
-              <td>
-                <%= col_name == 'weaknesses_count' ?
-                  show_control_objective_final_weaknesses_report_links(data, period) :
-                  raw(col_data.gsub("\n", '<br>')) %>
-              </td>
+      <% if @process_control_data[period].blank? %>
+        <p class="my-2">
+          <em><%= t 'follow_up_committee_report.control_objective_stats_by_review.without_audits_in_the_period' %></em>
+        </p>
+      <% else %>
+        <table class="table table-sm table-striped table-hover">
+          <thead>
+            <tr>
+              <% @columns.each do |col_name, col_title, col_width| %>
+                <th><%= col_title %></th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% @process_control_data[period].each do |data| %>
+              <tr>
+                <% @columns.each do |col_name, _| %>
+                  <% col_data = data[col_name] %>
+                  <td>
+                    <%= col_name == 'weaknesses_count' ?
+                      show_control_objective_final_weaknesses_report_links(data, period) :
+                      raw(col_data.gsub("\n", '<br>')) %>
+                  </td>
+                <% end %>
+              </tr>
             <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-<% end %>
+          </tbody>
+        </table>
+      <% end %>
+    <% end %>
 
-<hr />
+    <hr />
 
-<div>
-  <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#',
-    data: { toggle: 'modal', target: '#customize_report' } %>
+    <div>
+      <%= link_to t('label.back'), action: :index %> |
+      <%= link_to t('label.download'), '#',
+        data: { bs_toggle: 'modal', bs_target: '#customize_report' } %>
+    </div>
+  </div>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {

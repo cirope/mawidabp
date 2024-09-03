@@ -12,4 +12,4 @@ Seleccionamos **Administración**
 
 Permite la gestión del sistema de una manera simple, segura y confiable.
 
-![]({% asset administration/menu.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/menu.png){: class="img-responsive"}

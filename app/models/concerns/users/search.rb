@@ -17,5 +17,13 @@ module Users::Search
         column: "LOWER(#{quoted_table_name}.#{qcn 'function'})"
       }
     }.with_indifferent_access
+
+    if POSTGRESQL_ADAPTER
+      COLUMNS_FOR_SEARCH.merge!(
+        tags: {
+          column: "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'})"
+        }
+      ).with_indifferent_access
+    end
   end
 end

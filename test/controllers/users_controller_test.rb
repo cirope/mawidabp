@@ -246,6 +246,12 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to UserPdf.new.relative_path
   end
 
+  test 'should download user list as csv' do
+    get :index, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'export with search' do
     get :index, params: {
       search: {

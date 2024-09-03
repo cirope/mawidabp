@@ -3,4 +3,8 @@ module PeriodsHelper
     content_tag :abbr, period.name,
       :title => "#{period.dates_range_text(false)}"
   end
+
+  def period_filter_options
+    Period.list.map { |period| [period.name, period.id] }
+  end
 end

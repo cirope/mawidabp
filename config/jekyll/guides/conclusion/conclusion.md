@@ -15,4 +15,4 @@ Este módulo además de facilitar la entrega de informes aporta confiabilidad so
 
 Seleccionamos **Conclusión**, nos muestra la siguiente pantalla
 
-![]({% asset conclusion/main.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/conclusion/main.png){: class="img-responsive"}

@@ -55,6 +55,23 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert response.to.include?(user.email)
   end
 
+  test 'notify new findings' do
+    user = User.find(users(:administrator).id)
+
+    assert user.findings.for_notification.all?(&:mark_as_unconfirmed)
+
+    finding  = user.findings.recently_notified
+    response = NotifierMailer.notify_new_findings(user).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.notify_new_findings.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.notify_new_findings.created_title',
+                                   :count => finding.size)), response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
   test 'notify new finding' do
     user = users :administrator
     response = NotifierMailer.notify_new_finding(user, user.findings.first).deliver_now
@@ -143,8 +160,9 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'deliver stale notification' do
-    user = User.find(users(:bare).id)
-    response = NotifierMailer.stale_notification(user).deliver_now
+    user     = User.find(users(:bare).id)
+    days     = 1
+    response = NotifierMailer.stale_notification(user, days).deliver_now
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(I18n.t('notifier.notification.pending'))
@@ -504,5 +522,28 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     refute ActionMailer::Base.deliveries.empty?
     assert_equal response.to.sort, users.map(&:email).sort
+  end
+
+  test 'notify implemented finding with follow up date last changed greater than 90 days' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    finding                             = findings :being_implemented_weakness
+    finding.state                       = Finding::STATUS[:implemented]
+    finding.follow_up_date_last_changed = Time.zone.today - 91.days
+
+    finding.save!
+
+    response = NotifierMailer.notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days(finding)
+                             .deliver_now
+
+    refute ActionMailer::Base.deliveries.empty?
+
+    expected_emails_to_send = finding.finding_user_assignments
+                                     .joins(user: { organization_roles: :role })
+                                     .where('roles.role_type = ?', ::Role::TYPES[:supervisor])
+                                     .map { |f_u_a| f_u_a.user }
+                                     .map(&:email)
+
+    assert_equal response.to.sort, expected_emails_to_send.sort
   end
 end

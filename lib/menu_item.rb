@@ -1,16 +1,17 @@
 class MenuItem
   include Comparable
 
-  attr_reader :name, :order, :children, :url, :html_class, :extra_conditions,
+  attr_reader :name, :order, :icon, :children, :url, :html_class, :extra_conditions,
     :exclude_from_privileges, :drop_down_menu
   attr_accessor :parent
 
   def initialize(name = nil, options = {})
-    options.assert_valid_keys(:order, :controllers, :children, :url, :class,
+    options.assert_valid_keys(:order, :icon, :controllers, :children, :url, :class,
       :extra_conditions, :exclude_from_privileges, :drop_down_menu)
 
     @name = name
     @order = options[:order] || 0
+    @icon  = options[:icon] || 'file-lines'
     @base_controllers = options[:controllers] || []
     @children = options[:children] || []
     @html_class = options[:class]

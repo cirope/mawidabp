@@ -17,7 +17,7 @@ class FindingUserAssignment < ApplicationRecord
   validates_each :process_owner do |record, attr, value|
     organization_id = record.finding.try(:organization_id)
 
-    if value && !record.user&.can_act_as_audited? && !record.user&.can_act_as_audited_on?(organization_id)
+    if value && !record.user&.can_act_as_audited? && !record.user&.can_act_as_audited?(organization_id)
       record.errors.add attr, :invalid
     end
   end
@@ -56,7 +56,7 @@ class FindingUserAssignment < ApplicationRecord
   end
 
   def users_notification
-    if user_id_changed? && persisted? && !finding.incomplete?
+    if user_id_changed? && persisted? && finding.should_notify?
       user_removed = User.find user_id_was
 
       NotifierMailer.reassigned_findings_notification(

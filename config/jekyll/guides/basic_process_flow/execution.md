@@ -10,7 +10,7 @@ article_order: 4
 
 Seleccionamos **Ejecución**, nos muestra la siguiente pantalla
 
-![]({% asset basic_process_flow/execution.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/execution.png){: class="img-responsive"}
 
 
 Tenemos que crear un informe, a partir de los datos generados en los pasos anteriores (etapa planificación)
@@ -20,7 +20,7 @@ Y luego agregar observaciones.
 #### Informes
 Seleccionamos **Ejecución -> Informes**
 
-![]({% asset basic_process_flow/reviews.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/reviews.png){: class="img-responsive"}
 
 
 Muestra todos los informes creados para distintos períodos con la identificación, relacionados con la unidad de negocio, proyecto y etiquetas en caso de haber sido creada.
@@ -28,7 +28,7 @@ Muestra todos los informes creados para distintos períodos con la identificaci�
 
 Seleccionamos **Nuevo**
 
-![]({% asset basic_process_flow/new_review.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/new_review.png){: class="img-responsive"}
 
 
 **Identificación:** podemos utilizar la nomenclatura adoptada por la organización (letras, números, guiones, etc.)
@@ -76,9 +76,9 @@ Al seleccionar esta opción nos muestra los hallazgos pendientes de toda la orga
 
 A continuación mostramos las pantallas con los datos cargados para el proyecto Acuerdo.
 
-![]({% asset basic_process_flow/new_review-1.png @path %}){: class="img-responsive"}
-![]({% asset basic_process_flow/new_review-2.png @path %}){: class="img-responsive"}
-![]({% asset basic_process_flow/new_review-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/new_review-1.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/new_review-2.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/new_review-3.png){: class="img-responsive"}
 
 
 
@@ -92,13 +92,13 @@ Luego de crear el informe, podemos agregar observaciones al objetivo de control 
 
 Seleccionar **Ejecución -> Informes**- seleccionar el informe con el que necesitamos trabajar,  luego seleccionar **Editar**, aparecen los objetivos de control separados por proceso (Préstamos) con los cuales trabajar.
 
-![]({% asset basic_process_flow/execution_control_objetive.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/execution_control_objetive.png){: class="img-responsive"}
 
 Luego seleccionar **Editar** en el objetivo de control que necesitamos trabajar (por ejemplo: Préstamos - Otorgamiento - Instrumentación), muestra la siguiente pantalla.
 
-![]({% asset basic_process_flow/control_objective_items_1.png @path %}){: class="img-responsive"}
-![]({% asset basic_process_flow/control_objective_items_2.png @path %}){: class="img-responsive"}
-![]({% asset basic_process_flow/control_objective_items_3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_1.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_2.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_3.png){: class="img-responsive"}
 
 
 Esta pantalla es el **escritorio** de trabajo del usuario **auditor**, el cual le permite **analizar y evaluar el control interno del objetivo de control** por medio de las pruebas previstas (en este caso pruebas de cumplimiento).
@@ -111,8 +111,8 @@ Para realizar la Calificación de las pruebas (evaluación de diseño, cumplimie
 
 Realizamos la calificación de la prueba ejecutada (en este caso seleccionamos Medio alto 7), se actualiza la efectividad de control (pasa a ser 70%), también tenemos la opción de tildar No calificar (en este caso el objetivo de control no es calificado).
 
-![]({% asset basic_process_flow/control_objective_items_1_1.png @path %}){: class="img-responsive"}
-![]({% asset basic_process_flow/control_objective_items_2_2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_1_1.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_2_2.png){: class="img-responsive"}
 
 Cuando creemos que hemos finalizado con las actividades, tildamos **Terminado**. En este caso el sistema revisa que se encuentren completas todas las actividades previstas para el objetivo de control que estamos revisando.
 
@@ -120,13 +120,13 @@ Para que se guarden los cambios realizados tenemos que seleccionar la opción **
 
 Seleccionamos **Actualizar objetivo de control**, nos muestra la siguiente pantalla:
 
-![]({% asset basic_process_flow/control_objective_items_4.png @path %}){: class="img-responsive"}
-![]({% asset basic_process_flow/control_objective_items_5.png @path %}){: class="img-responsive"}
-![]({% asset basic_process_flow/control_objective_items_6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_4.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_5.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_6.png){: class="img-responsive"}
 
 Procedemos a solucionar los errores encontrados (completar los campos faltantes), luego muestra la siguiente pantalla.
 
-![]({% asset basic_process_flow/control_objective_items_7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_7.png){: class="img-responsive"}
 
 Para observar que el objetivo de control está terminado, podemos hacerlo de la siguiente manera.
 
@@ -134,18 +134,18 @@ Seleccionamos **Ejecución -> Informes -> Editar**
 
 Muestra todos los objetivos de control correspondientes al informe que hemos seleccionado, el que aparece tachado es el que hemos terminado.
 
-![]({% asset basic_process_flow/control_objective_items_8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_8.png){: class="img-responsive"}
 
 
 También podemos seleccionar **Ejecución -> Objetivos de control**, aparece de la siguiente manera (**Terminado: SI**):
 
-![]({% asset basic_process_flow/control_objective_items_9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_9.png){: class="img-responsive"}
 
 También tenemos la posibilidad de agregar papeles de trabajo como evidencia del trabajo realizado en el objetivo de control.
 
 Para que se guarden los cambios seleccionar la opción **Actualizar objetivo de control**. La codificación es PTOC 001 (PTOC: papeles de trabajo objetivo de control. 001: primer papel de trabajo cargado). Si agregamos otro papel de trabajo va indicar PTOC 002.
 
-![]({% asset execution/reviews/17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/execution/reviews/17.png){: class="img-responsive"}
 
 
 **Opción 2 (Ejecución -> Objetivos de control -> Editar)**
@@ -156,13 +156,13 @@ Ahora vamos a realizar las actividades de control para el objetivo de control **
 Seleccionamos **Ejecución -> Objetivos de control**. Muestra la siguiente pantallas con los objetivos de control:
 
 
-![]({% asset basic_process_flow/control_objective_items_10.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_10.png){: class="img-responsive"}
 
 Luego seleccionamos **Editar** en el objetivo de control con el cual necesitamos trabajar (en este caso Mantenimiento de una base de...).
 
 A partir de este momento nos muestra las mismas pantallas de trabajo que la **opción 1**.
 
-![]({% asset basic_process_flow/control_objective_items_11.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_11.png){: class="img-responsive"}
 
 
 Esta pantalla es el "**escritorio"** de trabajo del auditor, el cual le permite analizar y evaluar el control interno del objetivo de control por medio de las pruebas previstas (en este caso pruebas de cumplimiento).
@@ -171,18 +171,18 @@ Las pruebas nos permiten revisar si se cumplen los controles previstos y obtener
 
 En este caso vemos que los **controles** no se están cumpliendo según lo previsto, según la prueba de cumplimiento realizada, por tal motivo la Calificación de la prueba de cumplimiento es Medio (5), logrando una efectividad de 50%.
 
-![]({% asset basic_process_flow/control_objective_items_12.png @path %}){: class="img-responsive"}
-![]({% asset basic_process_flow/control_objective_items_13.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_12.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_13.png){: class="img-responsive"}
 
 
 Por tal motivo vamos agregar una observación, para lo cual tenemos que seleccionar la opción **Agregar nueva observación**.
 
-![]({% asset basic_process_flow/control_objective_items_14.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_14.png){: class="img-responsive"}
 
 Al seleccionar **Agregar nueva observación**, muestra la siguiente pantalla.
 
-![]({% asset basic_process_flow/control_objective_items_15.png @path %}){: class="img-responsive"}
-![]({% asset basic_process_flow/control_objective_items_16.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_15.png){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_16.png){: class="img-responsive"}
 
 Esta pantalla nos muestra los datos para crear una observación, para guardar los cambios tenemos que seleccionar **Crear Observación**.
 
@@ -216,11 +216,11 @@ Si la colocamos en estado **Notificar**, el sistema envía un correo en forma au
 
 Al finalizar con la carga de datos seleccionamos **Crear Observación** (si no nos faltan datos se guarda la observación), caso contrario nos muestra un mensaje de error con los aspectos faltantes, a continuación mostramos una pantalla con un mensaje de error.
 
-![]({% asset basic_process_flow/control_objective_items_17.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_17.png){: class="img-responsive"}
 
 Al completar los datos faltantes, y seleccionar **Crear Observación**, nos muestra el siguiente mensaje.
 
-![]({% asset basic_process_flow/control_objective_items_18.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_18.png){: class="img-responsive"}
 
 El resto de los campos faltantes (respuesta/acción correctiva, fecha de implementación/acción correctiva, fecha de solución, comentario de auditoría), se completan cuando tenga la respuesta de los usuarios auditados y a medida que avance en el proceso de trabajo.
 
@@ -228,13 +228,13 @@ Cuando necesitemos generar el informe borrador y definitivo (en la etapa de conc
 
 Para ver las observaciones generadas, seleccionar **Ejecución -> Observaciones**, nos muestra lo siguiente.
 
-![]({% asset basic_process_flow/control_objective_items_19.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_19.png){: class="img-responsive"}
 
 Podemos observar en primer lugar la observación generada recientemente (Estado Notificar), en caso de necesitar ver los detalles o seguir trabajando con la misma, seleccionó **Editar (Lápiz)**.
 
 A las 20 hs. (o en el horario definido por la organización) el sistema envía un correo a los integrantes (notificación de hallazgos) de esta observación que se ha generado (debido a que se encuentra en estado **Notificar**).
 
-![]({% asset basic_process_flow/control_objective_items_20.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_20.png){: class="img-responsive"}
 
 
 El usuario auditado puede seleccionar **Confirmar notificación**, al hacerlo pasa al estado **"Confirmada"**, siempre que ingrese un comentario en “Comentarios de seguimiento”.
@@ -243,32 +243,32 @@ A continuación mostramos los pasos luego que el usuario auditado selecciona **C
 
 Aparece la pantalla de ingreso al sistema (ingresa usuario y contraseña), selecciona Ingresar.
 
-![]({% asset basic_process_flow/control_objective_items_21.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_21.png){: class="img-responsive"}
 
 Muestra la pantalla con la observación en estado **No confirmada**, al seleccionar **Editar**, muestra la siguiente pantalla:
 
-![]({% asset basic_process_flow/control_objective_items_22.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_22.png){: class="img-responsive"}
 
 El usuario auditado ingresa:  un comentario, la fecha de compromiso y puede dejar el tilde en enviar notificación (si lo saca no envía la notificación a los integrantes). También tiene que ingresar el tiempo dedicado (por defecto esta en minutos), y una descripción de las actividades realizadas (es opcional).
 
 Seleccionamos **Actualizar observación**, aparece la siguiente pantalla (con el cambio de estado a confirmada):
 
-![]({% asset basic_process_flow/control_objective_items_23.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_23.png){: class="img-responsive"}
 
 Además envía un correo a los integrantes de la observación, ya que dejamos con el tilde Enviar notificación.
 
-![]({% asset basic_process_flow/control_objective_items_24.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_24.png){: class="img-responsive"}
 
 Luego de esto el usuario auditor, puede ingresar al sistema o por medio de **Ver hallazgo**, y seguir con el proceso de trabajo en la observación.
 
 Luego podemos ver en el listado de observaciones, como cambio al estado Confirmada.
 
-![]({% asset basic_process_flow/control_objective_items_25.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_25.png){: class="img-responsive"}
 
 
 Para el informe creado en  las etapas anteriores se agregaron  2 observaciones, que se muestran a continuación:
 
-![]({% asset basic_process_flow/control_objective_items_26.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/basic_process_flow/control_objective_items_26.png){: class="img-responsive"}
 
 En la imagen anterior una de las observaciónes se ha modificado al estado **"En proceso de Implementación"**. Un auditor puede tomar la decisión de cambiar ese estado dependiendo el comentario del usuario auditado. 
 

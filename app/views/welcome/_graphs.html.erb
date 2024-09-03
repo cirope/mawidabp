@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          <%= t 'welcome.latest_findings' %>
+        </h5>
+      </div>
+      <div class="card-body">
+        <%= column_chart Finding.graph_findings(@auth_user.findings.list.finals(false)), stacked: true %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          <%= t 'welcome.latest_answers' %>
+        </h5>
+      </div>
+      <div class="card-body">
+        <% @auth_user.finding_answers.latest.each do |fa| %>
+          <%= link_to finding_comment_url(fa), class: 'text-secondary text-decoration-none' do %>
+            <div class="d-flex align-items-start">
+              <div class="flex-grow-1">
+                <small class="float-end"><%= l fa.created_at.to_date %></small>
+                <strong class="text-info"><%= fa.user %> <%= t 'welcome.commented_on' %> <%= fa.label %></strong><br>
+                <%= fa.answer %>
+              </div>
+            </div>
+          <% end %>
+          <hr />
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

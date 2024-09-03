@@ -1,0 +1,74 @@
+---
+en:
+  menu:
+    administration:
+      activity_groups: Activities
+      benefits: Benefits / Detriments
+      best_practices:
+        best_practices: Management
+        control_objectives: Control objectives
+      best_practices_title: Best practices
+      documents: Documents
+      e_mails: Emails
+      news: News
+      organization:
+        business_unit_kind: Type of business unit
+        business_units: Business units
+        management: Management
+      organization_title: Organization
+      questionnaires:
+        definition: Definition
+        polls: Polls
+        reports: Reports
+      questionnaires_title: Questionnaires
+      risk_assessment_templates: Risk assessment templates
+      risk_registries: Risk Registries
+      security:
+        reports: Security reports
+        roles: Profiles and Privileges
+        users: Users
+      security_title: Security
+      settings: Settings
+      tags: Labels
+      weakness_templates: Issue templates
+    administration_title: Administration
+    conclusion:
+      draft_reviews: Draft audit reports
+      final_reviews: Final audit reports
+      reports: Other reports
+    conclusion_title: Conclusion
+    execution:
+      control_objectives: Control objectives
+      findings:
+        oportunities: Improvement opportunities
+        weaknesses: Issues
+      findings_title: Findings
+      interviews:
+        closing_interviews: Closing interviews
+        opening_interviews: Opening interviews
+      interviews_title: Interviews
+      memos: External reports
+      oportunities: Improvement opportunities
+      reports: Other reports
+      reviews: Audit reports
+      time_summary: Time summary
+      weaknesses: Issues
+      workflows: Workflows
+    execution_title: Execution
+    follow_up:
+      complete_findings: Resolved findings
+      notifications: Notifications
+      pending_findings: Pending findings
+      repeated_findings: Repeated findings
+      reports:
+        audit: Audit
+        audited: Generals
+      reports_title: Other reports
+    follow_up_title: Follow-Up
+    help_title: Help
+    planning:
+      periods: Periods
+      plans: Work plans
+      resources: Resources
+      risk_assessments: Risk assessments
+    planning_title: Planning

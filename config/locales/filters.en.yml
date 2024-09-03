@@ -1,0 +1,23 @@
+---
+en:
+  shared:
+    filters:
+      answer_option:
+        filter_answers: Show only matching answers
+      date_field:
+        between: Between
+      order_by:
+        first_follow_up_date: First implementation date
+        issue_date: Issue date
+        risk: Risk
+      poll_user:
+        affected_only: Assigned
+        include_reviews: Assigned and by audit report
+        only_all: Only all
+        user_option: Show
+      repeated:
+        allow_latest: Show latest repeated
+      user:
+        include_user_tree: Include staff in charge
+        user_in_comments: Include users in comments
+        user_inverted: Exclude

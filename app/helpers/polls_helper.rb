@@ -5,9 +5,21 @@ module PollsHelper
       label: '&nbsp;'.html_safe,
       value_method: :first,
       label_method: :second,
-      collection: answer_options(form.object.question),
-      wrapper_html: { class: 'mt-n3' },
-      item_wrapper_class: 'custom-control custom-radio'
+      collection: answer_options(form.object.question)
+  end
+
+  def link_to_download_answer_attached answer, options = {}
+    if answer.attached?
+      options = {
+        class: 'btn btn-outline-secondary',
+        title: answer.attached.identifier.titleize,
+        data: { ignore_unsaved_data: true }
+        }.merge(options)
+
+      link_to answer.attached.url, options do
+        icon 'fas', 'download'
+      end
+    end
   end
 
   private

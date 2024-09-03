@@ -14,23 +14,23 @@ Seleccionamos **Administración** -> **Organización**
 
 Nos muestra las organizaciones generadas hasta el momento
 
-![]({% asset administration/organization/org-1.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/org-1.png){: class="img-responsive"}
 
 En el caso que no tengamos ninguna organización generada, seleccionamos **Nuevo**
 
 Se cargan los siguientes datos de la organización: nombre, prefijo, y la descripción.
 
-![]({% asset administration/organization/org-2.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/org-2.png){: class="img-responsive"}
 
 Seleccionamos **Crear organización** para que se genere.
 
 Luego de creada la organización se puede cargar el isologotipo. A continuación mostramos la vista global de la organización creada (por ejemplo en este caso: Demo):
 
-![]({% asset administration/organization/org-3.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/org-3.png){: class="img-responsive"}
 
 Luego mostramos los datos en detalle de la organización creada:
 
-![]({% asset administration/organization/org-4.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/org-4.png){: class="img-responsive"}
 
 #### Configuración LDAP
 
@@ -38,7 +38,7 @@ Esta opción es utilizada cuando el sistema es instalado en la infraestructura d
 
 Se cargan los datos de acuerdo a la configuración de Active Directory informados por las áreas de sistemas y seguridad informática de la organización.
 
-![]({% asset administration/organization/org-5.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/org-5.png){: class="img-responsive"}
 
 <hr>
 
@@ -56,11 +56,11 @@ Si lo hacemos de manera automática, todos los días llega un correo a los super
 
 Seleccionamos ¨Administración¨ -> ¨Organización¨
 
-![]({% asset administration/organization/org-6.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/org-6.png){: class="img-responsive"}
 
 Seleccionamos ¨Editar¨ de la organización que necesitamos cargar los datos.
 
-![]({% asset administration/organization/org-7.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/org-7.png){: class="img-responsive"}
 
 Luego, seleccionamos ¨Configuración LDAP¨
 
@@ -68,8 +68,8 @@ Se cargan los datos de acuerdo a la configuración de Active Directory informado
 
 Para la opción automática se agregaron dos campos: Usuario de servicio y Contraseña de servicio. Al finalizar la carga de datos seleccionamos ¨Actualizar Organización¨.
 
-![]({% asset administration/organization/org-8.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/org-8.png){: class="img-responsive"}
 
 Si lo hacemos de manera automática, todos los días llega un correo a los supervisores y gerente de auditoría como el siguiente:
 
-![]({% asset administration/organization/org-9.png @path %}){: class="img-responsive"}
+![image]({{ site.baseurl }}/assets/images/administration/organization/org-9.png){: class="img-responsive"}

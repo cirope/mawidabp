@@ -22,13 +22,13 @@ module Plans::CsvPrsPat
     def csv_headers_prs
       [
         I18n.t('plans.csv_prs_pat.business_unit'),
-        I18n.t('plans.item_status_csv_pat.completed'),
-        I18n.t('plans.item_status_csv_pat.completed_early'),
-        I18n.t('plans.item_status_csv_pat.in_early_progress'),
-        I18n.t('plans.item_status_csv_pat.not_started_no_delayed'),
-        I18n.t('plans.item_status_csv_pat.in_progress_no_delayed'),
-        I18n.t('plans.item_status_csv_pat.delayed_pat'),
-        I18n.t('plans.item_status_csv_pat.overdue'),
+        I18n.t('plans.item_status_csv_pat.completed.long'),
+        I18n.t('plans.item_status_csv_pat.completed_early.long'),
+        I18n.t('plans.item_status_csv_pat.in_early_progress.long'),
+        I18n.t('plans.item_status_csv_pat.not_started_no_delayed.long'),
+        I18n.t('plans.item_status_csv_pat.in_progress_no_delayed.long'),
+        I18n.t('plans.item_status_csv_pat.delayed_pat.long'),
+        I18n.t('plans.item_status_csv_pat.overdue.long'),
         I18n.t('plans.csv_prs_pat.totals')
       ]
     end
@@ -48,7 +48,7 @@ module Plans::CsvPrsPat
     end
 
     def put_csv_rows_on_prs csv, business_unit_type, totals_row_data
-      plan_items = Array(grouped_plan_items[business_unit_type]).sort
+      plan_items = plan_items_for_but_and_abut business_unit_type&.id
       pi_status  = Hash.new(0)
 
       if plan_items.present?
@@ -59,7 +59,7 @@ module Plans::CsvPrsPat
         values = [
           pi_status[:completed],
           pi_status[:completed_early],
-          pi_status[:in_early_progres],
+          pi_status[:in_early_progress],
           pi_status[:not_started_no_delayed],
           pi_status[:in_progress_no_delayed],
           pi_status[:delayed_pat],

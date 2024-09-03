@@ -277,7 +277,7 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.state = Finding::STATUS[:assumed_risk]
     @oportunity.audit_comments = '  '
 
-    if Current.conclusion_pdf_format == 'gal'
+    if %w(bic gal).include? Current.conclusion_pdf_format
       assert @oportunity.must_be_approved?
     else
       refute @oportunity.must_be_approved?
