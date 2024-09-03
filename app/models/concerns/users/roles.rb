@@ -56,34 +56,24 @@ module Users::Roles
   end
 
   Role::TYPES.each do |type, value|
-    define_method("#{type}?") do
-      roles(Current.organization&.id).any? { |role| role.role_type == value }
-    end
-
-    define_method("#{type}_on?") do |organization_id|
+    define_method("#{type}?") do |organization_id = Current.organization&.id|
       roles(organization_id).any? { |role| role.role_type == value }
     end
   end
 
-  def can_act_as_audited?
-    USE_SCOPE_CYCLE ? roles_audited? : (roles_audited? && !roles_auditors?)
+  def can_act_as_audited? organization_id = Current.organization&.id
+    if USE_SCOPE_CYCLE
+      roles_audited? organization_id
+    else
+      roles_audited?(organization_id) &&
+        !can_act_as_auditor?(organization_id)
+    end
   end
 
-  def can_act_as_auditor?
-    roles_auditors?
-  end
-
-  def can_act_as_audited_on? organization_id
-    (
-      audited_on?(organization_id)           ||
-      executive_manager_on?(organization_id) ||
-      admin_on?(organization_id)             ||
-      committee_on?(organization_id)
-    ) && !(
-      auditor_on?(organization_id)    ||
-      supervisor_on?(organization_id) ||
-      manager_on?(organization_id)
-    )
+  def can_act_as_auditor? organization_id = Current.organization&.id
+    auditor?(organization_id)    ||
+    supervisor?(organization_id) ||
+    manager?(organization_id)
   end
 
   def roles_has_changed?
@@ -125,12 +115,10 @@ module Users::Roles
 
   private
 
-    def roles_audited?
-      audited? || executive_manager? || admin?
-    end
-
-    def roles_auditors?
-      auditor? || supervisor? || manager?
+    def roles_audited? organization_id
+      audited?(organization_id)           ||
+      executive_manager?(organization_id) ||
+      admin?(organization_id)
     end
 
     def inject_auth_privileges_in_roles
@@ -159,8 +147,8 @@ module Users::Roles
 
       organization_roles.reject(&:marked_for_destruction?).any? do |organization_role|
         o_id               = organization_role.organization_id
-        auditor_to_audited = old_user.auditor_on?(o_id) && can_act_as_audited_on?(o_id)
-        audited_to_auditor = old_user.can_act_as_audited_on?(o_id) && auditor_on?(o_id)
+        auditor_to_audited = old_user.auditor?(o_id) && can_act_as_audited?(o_id)
+        audited_to_auditor = old_user.can_act_as_audited?(o_id) && auditor?(o_id)
 
         auditor_to_audited || audited_to_auditor
       end
@@ -181,9 +169,9 @@ module Users::Roles
 
       org_ids = organization_roles.reject(&:marked_for_destruction?).map do |organization_role|
         organization_id = organization_role.organization_id
-        was_admin       = old_user&.admin_on? organization_id
+        was_admin       = old_user&.admin? organization_id
 
-        organization_id if !was_admin && admin_on?(organization_id)
+        organization_id if !was_admin && admin?(organization_id)
       end.compact.uniq
 
       org_ids.each do |organization_id|

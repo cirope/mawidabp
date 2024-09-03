@@ -165,13 +165,13 @@ module Findings::Csv
       process_owners = self.process_owners
 
       users.select do |u|
-        u.can_act_as_audited_on?(organization_id) && process_owners.exclude?(u)
+        u.can_act_as_audited?(organization_id) && process_owners.exclude?(u)
       end.map &:full_name
     end
 
     def auditor_users
       users.select do |u|
-        u.auditor_on?(organization_id)
+        u.auditor?(organization_id)
       end.map &:full_name
     end
 
