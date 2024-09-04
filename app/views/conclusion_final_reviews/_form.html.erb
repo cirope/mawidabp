@@ -50,13 +50,13 @@
               <%= f.input :evolution, collection: evolution_options(@conclusion_final_review), prompt: true, input_html: { disabled: readonly } %>
               <%= f.input :evolution_justification, input_html: { rows: 1, readonly: readonly } %>
             <% else %>
-              <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 2 } %>
               <% if SHOW_CONCLUSION_AS_OPTIONS %>
                 <%= f.input :conclusion, collection: conclusion_options, prompt: true,
                   input_html: { disabled: readonly } %>
               <% else %>
                 <%= f.input :conclusion, input_html: { readonly: readonly, rows: 2 } %>
               <% end %>
+              <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
             <% end %>
 
             <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
