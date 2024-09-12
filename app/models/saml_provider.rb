@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class SamlProvider < ApplicationRecord
+  include Auditable
   include Trimmer
   include SamlProviders::Validation
 
