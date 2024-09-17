@@ -94,15 +94,17 @@ module Users::Import
         users_by_file = {}
 
         File.foreach(extra_users_info_file(prefix)) do |line|
-          row     = line.unpack field_pattern
-          manager = find_manager row[6]
+          row = line.unpack field_pattern
 
           if (process_args = process_entry? entry, row)
             users << (result = process_entry entry, **process_args)
-            user   = result[:user]
+            user = result[:user]
 
             if user.persisted?
               users_by_file[user.user] = user.user
+
+              manager = find_manager row[6], user
+
               managers[user] = manager if manager
             end
           end
@@ -158,10 +160,16 @@ module Users::Import
         { user: user, state: state }
       end
 
-      def find_manager managers
+      def find_manager managers, user
         hierarchy = managers.split(/\W/).reject &:blank?
 
-        hierarchy.first if hierarchy.present?
+        if hierarchy.present?
+          if hierarchy.last == user.user
+            hierarchy.last - 1
+          else
+            hierarchy.last
+          end
+        end
       end
 
       def create_user data, roles
