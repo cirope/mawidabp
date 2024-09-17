@@ -98,7 +98,7 @@ module Users::Import
 
           if (process_args = process_entry? entry, row)
             users << (result = process_entry entry, **process_args)
-            user = result[:user]
+            user   = result[:user]
 
             if user.persisted?
               users_by_file[user.user] = user.user
