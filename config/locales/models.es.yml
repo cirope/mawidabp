@@ -1080,6 +1080,7 @@ es:
             image_content_type:
               invalid: no es válido
             image_file_size:
+              invalid: no es válido
         ldap_config:
           attributes:
             user:
