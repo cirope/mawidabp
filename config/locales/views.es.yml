@@ -1,1014 +1,1013 @@
+---
 es:
-  messages:
-    confirmation: '¿Está seguro?'
-    not_authorized: 'Debe ingresar para ver el contenido'
-    truncated: 'Truncado, cantidad máxima de caracteres %{count}'
-
-  navigation:
-    back: 'Volver'
-    copy: 'Copiar'
-    destroy: 'Eliminar'
-    download: 'Descargar'
-    edit: 'Editar'
-    index: 'Listado'
-    loading: 'Cargando...'
-    logout: 'Salir'
-    new: 'Nuevo'
-    show: 'Ver'
-    calendar: 'Cronograma'
-    resources: 'Recursos'
-    stats: 'Estadísticas'
-    warning: 'Advertencia'
-    upload: 'Adjuntar'
-    _yes: 'Sí'
-    _no: 'No'
-
-  footer:
-    support: 'Soporte'
-
   activity_groups:
     edit:
-      title: 'Editar grupo de actividades'
-    index:
-      new: 'Nuevo grupo de actividades'
-      title: 'Listado de grupos de actividades'
-      empty_html: 'No hay grupos de actividades, puede crear uno con el botón <span class="badge bg-primary">Nuevo grupo de actividades</span>'
-    new:
-      title: 'Crear grupo de actividades'
-    show:
-      title: 'Ver grupo de actividades'
+      title: Editar grupo de actividades
     form:
-      add_activity: 'Agregar actividad'
+      add_activity: Agregar actividad
+    index:
+      empty_html: No hay grupos de actividades, puede crear uno con el botón <span class="badge bg-primary">Nuevo grupo de actividades</span>
+      new: Nuevo grupo de actividades
+      title: Listado de grupos de actividades
+    new:
+      title: Crear grupo de actividades
+    show:
+      title: Ver grupo de actividades
 
   answer_options:
-    not_apply: 'No aplica'
-    strongly_disagree: 'Muy en desacuerdo'
-    disagree: 'En desacuerdo'
-    neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
-    agree: 'De acuerdo'
-    strongly_agree: 'Muy de acuerdo'
-    'yes': 'Sí'
-    'no': 'No'
-    t: 'Sí' # remove after fixing tests that use this key
+    agree: De acuerdo
+    disagree: En desacuerdo
     f: 'No' # remove after fixing tests that use this key
+    neither_agree_nor_disagree: Ni acuerdo ni desacuerdo
+    'no': 'No'
+    not_apply: No aplica
+    strongly_agree: Muy de acuerdo
+    strongly_disagree: Muy en desacuerdo
+    t: Sí # remove after fixing tests that use this key
+    'yes': Sí
+
+  authentications:
+    new:
+      log_in: Ingresar
+      password: Contraseña
+      title: Autenticación
 
   benefits:
-    index:
-      title: 'Listado de beneficios / perjuicios'
-    kinds:
-      benefit_tangible: 'Beneficio tangible'
-      benefit_intangible: 'Beneficio intangible'
-      damage_tangible: 'Perjuicio tangible'
-      damage_intangible: 'Perjuicio intangible'
-    show:
-      title: 'Detalles del beneficio / perjuicio'
-    new:
-      title: 'Agregar beneficio / perjuicio'
     edit:
-      title: 'Modificar beneficio / perjuicio'
+      title: Modificar beneficio / perjuicio
+    index:
+      title: Listado de beneficios / perjuicios
+    kinds:
+      benefit_intangible: Beneficio intangible
+      benefit_tangible: Beneficio tangible
+      damage_intangible: Perjuicio intangible
+      damage_tangible: Perjuicio tangible
+    new:
+      title: Agregar beneficio / perjuicio
+    show:
+      title: Detalles del beneficio / perjuicio
 
   best_practices:
-    index:
-      title: 'Listado de buenas prácticas'
-    show:
-      title: 'Detalles de la buena práctica'
-    new:
-      title: 'Agregar buena práctica'
-    edit:
-      title: 'Modificar buena práctica'
-    process_controls:
-      new: 'Agregar proceso'
     control_objectives:
-      new: 'Agregar objetivo'
+      new: Agregar objetivo
+    edit:
+      title: Modificar buena práctica
+    index:
+      title: Listado de buenas prácticas
+    new:
+      title: Agregar buena práctica
+    process_controls:
+      new: Agregar proceso
+    show:
+      title: Detalles de la buena práctica
 
   business_unit_kinds:
     index:
-      empty_html: 'No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge bg-primary">Nuevo</span>'
+      empty_html: No hay tipos de unidad de negocio, puede crear uno con el botón <span class="badge bg-primary">Nuevo</span>
+
   closing_interviews:
     edit:
-      title: 'Editar entrevista de cierre'
-    index:
-      new: 'Nueva entrevista de cierre'
-      title: 'Listado de entrevistas de cierre'
-      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de cierre</span>'
-      empty_search_html: 'No hay entrevistas de cierre que coincidan con el criterio de búsqueda'
-    new:
-      title: 'Crear entrevista de cierre'
+      title: Editar entrevista de cierre
     form:
-      add_responsible: 'Agregar responsable'
-      add_auditor: 'Agregar auditor'
-      add_assistant: 'Agregar asistente'
-    show:
-      title: 'Ver entrevista de cierre'
-      auditeds: 'Responsables del ciclo'
-      auditors: 'Auditores asignados'
-      download_pdf: 'Descargar PDF'
+      add_assistant: Agregar asistente
+      add_auditor: Agregar auditor
+      add_responsible: Agregar responsable
+    index:
+      empty_html: No hay entrevistas de cierre, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de cierre</span>
+      empty_search_html: No hay entrevistas de cierre que coincidan con el criterio de búsqueda
+      new: Nueva entrevista de cierre
+      title: Listado de entrevistas de cierre
+    new:
+      title: Crear entrevista de cierre
     pdf:
-      pdf_name: 'entrevista_de_cierre_%{name}.pdf'
+      pdf_name: entrevista_de_cierre_%{name}.pdf
+    show:
+      auditeds: Responsables del ciclo
+      auditors: Auditores asignados
+      download_pdf: Descargar PDF
+      title: Ver entrevista de cierre
 
   control_objectives:
     index:
-      title: 'Listado de objetivos de control'
-    show:
-      title: 'Detalles del objetivo de control'
+      title: Listado de objetivos de control
     new:
-      tagging: 'Agregar etiqueta'
-      add_control_objective_auditor: 'Agregar auditor/referente a cargo'
+      add_control_objective_auditor: Agregar auditor/referente a cargo
+      tagging: Agregar etiqueta
     score_type:
-      option: 'Opciones'
-      percentage: 'Porcentaje'
+      option: Opciones
+      percentage: Porcentaje
+    show:
+      title: Detalles del objetivo de control
 
   documents:
     edit:
-      title: 'Editar documento'
+      title: Editar documento
     index:
-      new: 'Nuevo documento'
-      title: 'Listado de documentos'
-      empty_html: 'No hay documentos, puede crear uno con el botón <span class="badge bg-primary">Nuevo documento</span>'
-      empty_search_html: 'No hay documentos que coincidan con el criterio de búsqueda'
+      empty_html: No hay documentos, puede crear uno con el botón <span class="badge bg-primary">Nuevo documento</span>
+      empty_search_html: No hay documentos que coincidan con el criterio de búsqueda
+      new: Nuevo documento
+      title: Listado de documentos
     new:
-      title: 'Crear documento'
-      tagging: 'Agregar etiqueta'
+      tagging: Agregar etiqueta
+      title: Crear documento
     show:
-      title: 'Ver documento'
+      title: Ver documento
 
   e_mails:
     index:
-      title: 'Listado de correos'
+      title: Listado de correos
     show:
-      title: 'Detalles del correo'
+      title: Detalles del correo
 
   error_records:
-    error_on_login: 'Ingreso erróneo'
-    error_on_password_change: 'Cambio de contraseña incorrecto'
-    error_user_disabled: 'Usuario deshabilitado'
+    error_on_login: Ingreso erróneo
+    error_on_password_change: Cambio de contraseña incorrecto
+    error_user_disabled: Usuario deshabilitado
     index:
-      title: 'Registros de error'
-    pdf_list_name: 'registros_de_error_%{from_date}_%{to_date}.pdf'
+      title: Registros de error
+    pdf_list_name: registros_de_error_%{from_date}_%{to_date}.pdf
     period:
-      title: 'Intervalo'
-      range: 'desde el %{from_date} al %{to_date}'
+      range: desde el %{from_date} al %{to_date}
+      title: Intervalo
     show:
-      title: 'Detalles del registro'
-      list: 'Ver registros de error'
-    void_user: 'Inexistente'
+      list: Ver registros de error
+      title: Detalles del registro
+    void_user: Inexistente
 
   findings:
-    index:
-      title: 'Listado de observaciones'
-      current_user_answers_count: 'Comentarios propios'
-      unread_answers_filter: 'Comentarios sin leer'
-      unread_answers:
-        one: 'Tiene un comentario sin leer'
-        other: 'Tiene %{count} comentarios sin leer'
-    show:
-      title: 'Detalles de la observación'
-    edit:
-      title: 'Editar observación'
-    form:
-      show_status_change_history: 'Ver historial de cambios de estado'
-      follow_up_date_label_append: ' - Sugerida: '
-      confirm_finding_without_extension: '¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo'
     auditor_form:
-      origin: 'origen'
-    edit_bic_sigen_fields:
-      title: 'Editar campos sigen de observación'
+      origin: origen
     current_user_filters:
-      pending_to_endorsement: 'Pendientes de aprobación'
-      as_owner: '%{kind} como responsable'
-      incomplete: 'Pendientes'
-      complete: 'Solucionados'
-      repeated: 'Reiterados'
-    state:
-      confirmed: 'Confirmada'
-      unconfirmed: 'No confirmada'
-      unanswered: 'Sin respuesta'
-      awaiting: 'A regularizar'
-      failure: 'Falla'
-      being_implemented: 'Pendiente'
-      being_implemented_current: 'Vigente'
-      being_implemented_current_rescheduled: 'Reprogramada vigente'
-      being_implemented_stale: 'Vencida'
-      being_implemented_stale_rescheduled: 'Reprogramada vencida'
-      implemented: 'Implementada'
-      implemented_audited: 'Normalizada'
-      assumed_risk: 'Pendiente - Riesgo asumido'
-      notify: 'Notificar'
-      incomplete: 'Incompleta'
-      repeated: 'Reiterada'
-      revoked: 'Anulada'
-      criteria_mismatch: 'Difiere criterio'
-      expired: 'Cerrada / No aplica'
-    work_papers:
-      create:
-        from_comment: 'De comentario por %{user} el %{date}'
+      as_owner: "%{kind} como responsable"
+      complete: Solucionados
+      incomplete: Pendientes
+      pending_to_endorsement: Pendientes de aprobación
+      repeated: Reiterados
+    edit:
+      title: Editar observación
+    edit_bic_sigen_fields:
+      title: Editar campos sigen de observación
+    endorsement_item:
+      approve: Aprobar
+      reject: Rechazar
     endorsements:
       status:
-        pending: 'Pendiente'
-        approved: 'Aprobado'
-        rejected: 'Rechazado'
-    endorsement_item:
-      approve: 'Aprobar'
-      reject: 'Rechazar'
-    finding_answers: 'Comentarios de'
-    pdf:
-      issue: 'Ver en la tabla adjunta los casos bajo el código %{review_code}'
+        approved: Aprobado
+        pending: Pendiente
+        rejected: Rechazado
+    finding_answers: Comentarios de
+    form:
+      confirm_finding_without_extension: "¿Seguro desea quitar %{extension}? Recuerde que luego no va a poder volver a utilizarlo"
+      follow_up_date_label_append: " - Sugerida: "
+      show_status_change_history: Ver historial de cambios de estado
     graphs:
-      incomplete: 'Hallazgos pendientes'
-      completed: 'Hallazgos solucionados'
+      completed: Hallazgos solucionados
+      incomplete: Hallazgos pendientes
+    index:
+      current_user_answers_count: Comentarios propios
+      title: Listado de observaciones
+      unread_answers:
+        one: Tiene un comentario sin leer
+        other: Tiene %{count} comentarios sin leer
+      unread_answers_filter: Comentarios sin leer
+    pdf:
+      issue: Ver en la tabla adjunta los casos bajo el código %{review_code}
+    show:
+      title: Detalles de la observación
+    state:
+      assumed_risk: Pendiente - Riesgo asumido
+      awaiting: A regularizar
+      being_implemented: Pendiente
+      being_implemented_current: Vigente
+      being_implemented_current_rescheduled: Reprogramada vigente
+      being_implemented_stale: Vencida
+      being_implemented_stale_rescheduled: Reprogramada vencida
+      confirmed: Confirmada
+      criteria_mismatch: Difiere criterio
+      expired: Cerrada / No aplica
+      failure: Falla
+      implemented: Implementada
+      implemented_audited: Normalizada
+      incomplete: Incompleta
+      notify: Notificar
+      repeated: Reiterada
+      revoked: Anulada
+      unanswered: Sin respuesta
+      unconfirmed: No confirmada
+    work_papers:
+      create:
+        from_comment: De comentario por %{user} el %{date}
+
+  footer:
+    support: Soporte
 
   licenses:
-    trial_valid_until: 'Fin período de prueba'
-    price_per_month: 'Precio por mes'
-    statuses:
-      unpaid: 'Impago'
-      active: 'Activo'
-      trial: 'En período de prueba'
-      cancelled: 'Cancelado'
+    authorizations:
+      create:
+        title: Licencia
+      new:
+        title: Licencia
     blocked:
       show:
-        body: 'Su organización está inhabilitada, contacte soporte@mawidabp.com'
-        check: 'Volver a comprobar pago'
+        body: Su organización está inhabilitada, contacte soporte@mawidabp.com
+        check: Volver a comprobar pago
     license:
-      check: 'Volver a comprobar pago'
-      approve: 'Ir a Paypal'
+      approve: Ir a Paypal
       authorize_new_plan:
-        title: 'Autorizar nuevo plan'
         body: |-
           Para cambiar de plan, deberá autorizar el nuevo plan mensual.
           El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios auditores en el momento.'
-    authorizations:
-      new:
-        title: 'Licencia'
-      create:
-        title: 'Licencia'
+        title: Autorizar nuevo plan
+      check: Volver a comprobar pago
     paypal_button:
-      create: 'Suscribirse'
-      create_error: 'Se ha detectado un problema. Por favor, comuníquese con soporte@mawidabp.com para verificar si el pago ha sido acreditado'
+      create: Suscribirse
+      create_error: Se ha detectado un problema. Por favor, comuníquese con soporte@mawidabp.com para verificar si el pago ha sido acreditado
+    price_per_month: Precio por mes
+    statuses:
+      active: Activo
+      cancelled: Cancelado
+      trial: En período de prueba
+      unpaid: Impago
+    trial_valid_until: Fin período de prueba
 
   login_records:
     choose:
-      title: 'Reportes de seguridad'
+      title: Reportes de seguridad
     index:
-      title: 'Registros de ingreso'
-    pdf_list_name: 'listado_de_registros_de_ingreso_%{from_date}_%{to_date}.pdf'
+      title: Registros de ingreso
+    pdf_list_name: listado_de_registros_de_ingreso_%{from_date}_%{to_date}.pdf
     period:
-      title: 'Intervalo'
-      range: 'desde el %{from_date} al %{to_date}'
+      range: desde el %{from_date} al %{to_date}
+      title: Intervalo
     show:
-      title: 'Detalles del registro de ingreso'
-      list: 'Ver registros de ingreso'
+      list: Ver registros de ingreso
+      title: Detalles del registro de ingreso
 
   memos:
     edit:
-      title: 'Editar informe externo'
-    index:
-      new: 'Nuevo informe externo'
-      title: 'Listado de informes externos'
-      empty_html: 'No hay informes externos, puede crear una con el botón <span class="badge bg-primary">Nuevo memo</span>'
-      empty_search_html: 'No hay informes externos que coincidan con el criterio de búsqueda'
-    new:
-      title: 'Crear informe externo'
+      title: Editar informe externo
     form:
-      markdown_help_html: '<span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}'
-      add_file_model: 'Agregar archivo'
-      download_cover: 'Descargar caratula'
+      add_file_model: Agregar archivo
+      download_cover: Descargar caratula
+      markdown_help_html: <span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}
+    index:
+      empty_html: No hay informes externos, puede crear una con el botón <span class="badge bg-primary">Nuevo memo</span>
+      empty_search_html: No hay informes externos que coincidan con el criterio de búsqueda
+      new: Nuevo informe externo
+      title: Listado de informes externos
+    new:
+      title: Crear informe externo
     show:
-      title: 'Ver Informe externo'
+      title: Ver Informe externo
+
+  messages:
+    confirmation: "¿Está seguro?"
+    not_authorized: Debe ingresar para ver el contenido
+    truncated: Truncado, cantidad máxima de caracteres %{count}
+
+  navigation:
+    _no: 'No'
+    _yes: Sí
+    back: Volver
+    calendar: Cronograma
+    copy: Copiar
+    destroy: Eliminar
+    download: Descargar
+    edit: Editar
+    index: Listado
+    loading: Cargando...
+    logout: Salir
+    new: Nuevo
+    resources: Recursos
+    show: Ver
+    stats: Estadísticas
+    upload: Adjuntar
+    warning: Advertencia
 
   news:
     edit:
-      title: 'Editar noticia'
-    index:
-      new: 'Nueva noticia'
-      title: 'Listado de noticias'
-      empty_html: 'No hay noticias, puede crear una con el botón <span class="badge bg-primary">Nueva noticia</span>'
-      empty_search_html: 'No hay noticias que coincidan con el criterio de búsqueda'
-    new:
-      title: 'Crear noticia'
-      tagging: 'Agregar etiqueta'
-      image_model: 'Agregar imagen'
+      title: Editar noticia
     form:
-      markdown_help_html: '<span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+      markdown_help_html: <span class="badge bg-info">Atención</span> dentro del contenido puedes utilizar %{link}
+    index:
+      empty_html: No hay noticias, puede crear una con el botón <span class="badge bg-primary">Nueva noticia</span>
+      empty_search_html: No hay noticias que coincidan con el criterio de búsqueda
+      new: Nueva noticia
+      title: Listado de noticias
+    new:
+      image_model: Agregar imagen
+      tagging: Agregar etiqueta
+      title: Crear noticia
     show:
-      title: 'Ver noticia'
+      title: Ver noticia
 
   opening_interviews:
     edit:
-      title: 'Editar entrevista de inicio'
-    index:
-      new: 'Nueva entrevista de inicio'
-      title: 'Listado de entrevistas de inicio'
-      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de inicio</span>'
-      empty_search_html: 'No hay entrevistas de inicio que coincidan con el criterio de búsqueda'
-    new:
-      title: 'Crear entrevista de inicio'
+      title: Editar entrevista de inicio
     form:
-      add_responsible: 'Agregar responsable'
-      add_auditor: 'Agregar auditor'
-      add_assistant: 'Agregar asistente'
-    show:
-      title: 'Ver entrevista de inicio'
-      auditeds: 'Responsables del ciclo'
-      auditors: 'Auditores asignados'
-      download_pdf: 'Descargar PDF'
+      add_assistant: Agregar asistente
+      add_auditor: Agregar auditor
+      add_responsible: Agregar responsable
+    index:
+      empty_html: No hay entrevistas de inicio, puede crear una con el botón <span class="badge bg-primary">Nueva entrevista de inicio</span>
+      empty_search_html: No hay entrevistas de inicio que coincidan con el criterio de búsqueda
+      new: Nueva entrevista de inicio
+      title: Listado de entrevistas de inicio
+    new:
+      title: Crear entrevista de inicio
     pdf:
-      pdf_name: 'entrevista_de_inicio_%{name}.pdf'
+      pdf_name: entrevista_de_inicio_%{name}.pdf
+    show:
+      auditeds: Responsables del ciclo
+      auditors: Auditores asignados
+      download_pdf: Descargar PDF
+      title: Ver entrevista de inicio
 
   organizations:
-    index:
-      title: 'Listado de organizaciones'
-    show:
-      title: 'Detalles de la organización'
-    new:
-      title: 'Agregar organización'
     edit:
-      title: 'Modificar organización'
-    new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de crearla'
+      title: Modificar organización
+    index:
+      title: Listado de organizaciones
     logo_styles:
-      default: 'Por defecto'
-      success: 'Exitoso'
-      info: 'Informativo'
-      warning: 'Advertencia'
-      danger: 'Peligro'
+      danger: Peligro
+      default: Por defecto
+      info: Informativo
+      success: Exitoso
+      warning: Advertencia
+    new:
+      title: Agregar organización
+    new_organization_can_not_have_image: Podrá cargar un isologotipo de la organización luego de crearla
     saml_providers:
-      azure: 'Azure'
+      azure: Azure
+    show:
+      title: Detalles de la organización
 
   periods:
     edit:
-      title: 'Modificar período'
+      title: Modificar período
     errors:
-      can_not_be_destroyed: 'El período no puede ser eliminado'
+      can_not_be_destroyed: El período no puede ser eliminado
       plan:
-        one: 'Tiene un plan asociado'
-        other: 'Tiene %{count} planes asociados'
+        one: Tiene un plan asociado
+        other: Tiene %{count} planes asociados
       reviews:
-        one: 'Tiene un informe asociado'
-        other: 'Tiene %{count} informes asociados'
+        one: Tiene un informe asociado
+        other: Tiene %{count} informes asociados
       workflows:
-        one: 'Tiene un programa de trabajo asociado'
-        other: 'Tiene %{count} programas de trabajo asociados'
+        one: Tiene un programa de trabajo asociado
+        other: Tiene %{count} programas de trabajo asociados
     index:
-      title: 'Listado de periodos'
+      title: Listado de periodos
     new:
-      title: 'Agregar período'
+      title: Agregar período
     show:
-      title: 'Detalles del período'
+      title: Detalles del período
 
   plan_items:
     best_practice:
       best_practice_projects:
-        save: 'Asociar buena práctica'
-        done: 'Guardar'
+        done: Guardar
+        save: Asociar buena práctica
     control_objective:
       control_objective_projects:
-        save: 'Asociar objetivo de control'
-        done: 'Guardar'
+        done: Guardar
+        save: Asociar objetivo de control
 
   plans:
-    index:
-      title: 'Listado de planes de trabajo'
-      copy: 'Copiar'
-    show:
-      title: 'Detalles del plan de trabajo'
-    new:
-      title: 'Agregar plan de trabajo'
-    edit:
-      title: 'Modificar plan de trabajo'
-    plan_item:
-      add_human_resource_utilization: 'Agregar recurso humano'
-      add_material_resource_utilization: 'Agregar recurso material'
-      add_tagging: 'Agregar etiqueta'
-      add_auxiliar_business_unit_type: 'Agregar sector auxiliar'
-    plan_items:
-      add_plan_item: 'Agregar proyecto'
-    duplication_or_overload_form:
-      allow_duplication: '¿Permitir duplicados?'
-      allow_overload: '¿Permitir superposición?'
-    cost:
-      human_resources_abbr: 'RRHH'
-      human_resources: 'Recursos humanos'
-      material_resources_abbr: 'RRMM'
-      material_resources: 'Recursos materiales'
-    item_status:
-      note: 'Los estados deben leerse: C = Concluido; E = En ejecución dentro de lo planeado; E (FP) = En ejecución fuera de lo planeado; R = Retrasado'
-      concluded:
-        long: 'Concluido'
-        short: 'C'
-      executing_in_time:
-        long: 'En ejecución (dentro de lo planeado)'
-        short: 'E'
-      executing_overtime:
-        long: 'En ejecución (fuera de lo planeado)'
-        short: 'E (FP)'
-      delayed:
-        long: 'Retrasado'
-        short: 'R'
-    item_status_csv_pat:
-      completed:
-        long: 'Concluidos (Azul)'
-        short: 'Concluido'
-      completed_early:
-        long: 'Adelantados con informe emitido (Gris)'
-        short: 'Adelantado con informe emitido'
-      in_early_progress:
-        long: 'Adelantados en proceso (Celeste)'
-        short: 'Adelantado en proceso'
-      not_started_no_delayed:
-        long: 'Sin retrasos no iniciados (Verde Claro)'
-        short: 'Sin retraso no iniciado'
-      in_progress_no_delayed:
-        long: 'Sin retrasos en proceso (Verde Oscuro)'
-        short: 'Sin retraso en proceso'
-      delayed_pat:
-        long: 'Retrasados (Amarillo)'
-        short: 'Retrasado'
-      overdue:
-        long: 'Vencidos (Rojo)'
-        short: 'Vencido'
-    period:
-      title: 'Periodo (%{name})'
-      range: 'desde el %{from_date} al %{to_date}'
-    pdf:
-      title: 'Plan de auditoría'
-      pdf_name: 'plan_periodo_%{period}.pdf'
-      resource_utilization: 'Recursos utilizados'
-    csv:
-      title: 'Plan de auditoría'
-      csv_name: 'plan_periodo_%{period}.csv'
-      csv_name_pat_im: 'grado_de_avance_reporte_de_gestión_interna_%{current_date}.csv'
-      csv_name_pat_dprh: 'grado_de_avance_horas_de_trabajo_detallado_%{current_date}.csv'
-      number_observations_per_risk: 'Cantidad observaciones por riesgo'
-      annual_plan_hours: 'Hs Plan Anual'
-      auditor: 'Auditor (Usuario)'
-      time_summary_hours: 'Hs Resumen Horario'
-      main_or_aux_but: UO Principal/Auxiliar
-      main_but: UO Principal
-      aux_but: UO Auxiliar
-    csv_prs_pat:
-      csv_name: 'grado_de_avance_estados_de_trabajos_%{current_date}.csv'
-      business_unit: 'Sector'
-      totals: 'Totales'
-      total_plan_items: 'Total de Trabajos Planificados'
-    csv_prh_pat:
-      csv_name: 'grado_de_avance_horas_de_trabajo_totalizador_%{current_date}.csv'
-      business_unit: 'Sector'
-      budgeted_hours: 'Horas Presupuestadas'
-      progress: 'Avance Total'
-      percentage: 'Porcentaje'
-      total_hours: 'Total de Horas'
-      period_name: 'Periodo'
-      period_start: 'Periodo Inicio'
-      period_end: 'Periodo Fin'
+    business_unit_type_plan_items:
+      associate_best_practice: Asociar buena práctica
+      associate_control_objective: Asociar objetivo de control
     calendar:
       show:
-        title: 'Cronograma'
-        empty: 'No hay proyectos en el plan seleccionado'
-        empty_with_no_business_units: 'No hay unidades de negocio seleccionadas'
-        detail: 'Detalle'
-        by_business_unit: 'Ver calendario por unidad de negocio'
-        by_project: 'Ver calendario por proyecto'
+        by_business_unit: Ver calendario por unidad de negocio
+        by_project: Ver calendario por proyecto
+        detail: Detalle
+        empty: No hay proyectos en el plan seleccionado
+        empty_with_no_business_units: No hay unidades de negocio seleccionadas
+        title: Cronograma
+    cost:
+      human_resources: Recursos humanos
+      human_resources_abbr: RRHH
+      material_resources: Recursos materiales
+      material_resources_abbr: RRMM
+    csv:
+      annual_plan_hours: Hs Plan Anual
+      auditor: Auditor (Usuario)
+      aux_but: UO Auxiliar
+      csv_name: plan_periodo_%{period}.csv
+      csv_name_pat_dprh: grado_de_avance_horas_de_trabajo_detallado_%{current_date}.csv
+      csv_name_pat_im: grado_de_avance_reporte_de_gestión_interna_%{current_date}.csv
+      main_but: UO Principal
+      main_or_aux_but: UO Principal/Auxiliar
+      number_observations_per_risk: Cantidad observaciones por riesgo
+      time_summary_hours: Hs Resumen Horario
+      title: Plan de auditoría
+    csv_prh_pat:
+      budgeted_hours: Horas Presupuestadas
+      business_unit: Sector
+      csv_name: grado_de_avance_horas_de_trabajo_totalizador_%{current_date}.csv
+      percentage: Porcentaje
+      period_end: Periodo Fin
+      period_name: Periodo
+      period_start: Periodo Inicio
+      progress: Avance Total
+      total_hours: Total de Horas
+    csv_prs_pat:
+      business_unit: Sector
+      csv_name: grado_de_avance_estados_de_trabajos_%{current_date}.csv
+      total_plan_items: Total de Trabajos Planificados
+      totals: Totales
+    download_business_unit_type_plan: Descargar plan %{business_unit_type}
+    download_business_unit_type_plan_csv: Descargar plan en CSV
+    download_detailed_business_unit_type_plan: Descargar plan %{business_unit_type} detallado
+    download_detailed_business_unit_type_plan_csv: Descargar plan %{business_unit_type} en CSV
+    download_detailed_plan: Descargar plan de auditoria detallado
+    download_detailed_progress_report_in_hours_of_work_pat: Descargar grado de avance horas de trabajo detallado
+    download_global_plan: Descargar plan de auditoria global
+    download_progress_report_internal_management_pat: Descargar grado de avance reporte de gestión interna
+    download_progress_report_with_statuses_pat: Descargar grado de avance estados de trabajos
+    download_totalizer_progress_report_in_hours_of_work_pat: Descargar grado de avance horas de trabajo totalizador
+    duplication_or_overload_form:
+      allow_duplication: "¿Permitir duplicados?"
+      allow_overload: "¿Permitir superposición?"
+    edit:
+      title: Modificar plan de trabajo
+    index:
+      copy: Copiar
+      title: Listado de planes de trabajo
+    item_status:
+      concluded:
+        long: Concluido
+        short: C
+      delayed:
+        long: Retrasado
+        short: R
+      executing_in_time:
+        long: En ejecución (dentro de lo planeado)
+        short: E
+      executing_overtime:
+        long: En ejecución (fuera de lo planeado)
+        short: E (FP)
+      note: 'Los estados deben leerse: C = Concluido; E = En ejecución dentro de lo planeado; E (FP) = En ejecución fuera de lo planeado; R = Retrasado'
+    item_status_csv_pat:
+      completed:
+        long: Concluidos (Azul)
+        short: Concluido
+      completed_early:
+        long: Adelantados con informe emitido (Gris)
+        short: Adelantado con informe emitido
+      delayed_pat:
+        long: Retrasados (Amarillo)
+        short: Retrasado
+      in_early_progress:
+        long: Adelantados en proceso (Celeste)
+        short: Adelantado en proceso
+      in_progress_no_delayed:
+        long: Sin retrasos en proceso (Verde Oscuro)
+        short: Sin retraso en proceso
+      not_started_no_delayed:
+        long: Sin retrasos no iniciados (Verde Claro)
+        short: Sin retraso no iniciado
+      overdue:
+        long: Vencidos (Rojo)
+        short: Vencido
+    new:
+      title: Agregar plan de trabajo
+    pdf:
+      pdf_name: plan_periodo_%{period}.pdf
+      resource_utilization: Recursos utilizados
+      title: Plan de auditoría
+    period:
+      range: desde el %{from_date} al %{to_date}
+      title: Periodo (%{name})
+    plan_item:
+      add_auxiliar_business_unit_type: Agregar sector auxiliar
+      add_human_resource_utilization: Agregar recurso humano
+      add_material_resource_utilization: Agregar recurso material
+      add_tagging: Agregar etiqueta
+    plan_items:
+      add_plan_item: Agregar proyecto
     resources:
       show:
-        title: 'Resumen por recurso'
-        empty: 'No hay recursos humanos utilizados en el plan seleccionado'
+        empty: No hay recursos humanos utilizados en el plan seleccionado
+        title: Resumen por recurso
+    show:
+      title: Detalles del plan de trabajo
     stats:
       show:
-        title: 'Estadísiticas del plan de auditoría'
-        now: 'Ahora'
-        total: 'Total'
-        planned: 'Planificados'
-        concluded: 'Concluidos'
-        on_time: 'En fecha'
-        progress: 'Avance total'
-        compliance: 'Cumplimiento'
-    business_unit_type_plan_items:
-      associate_control_objective: 'Asociar objetivo de control'
-      associate_best_practice: 'Asociar buena práctica'
-    download_progress_report_with_statuses_pat: 'Descargar grado de avance estados de trabajos'
-    download_totalizer_progress_report_in_hours_of_work_pat: 'Descargar grado de avance horas de trabajo totalizador'
-    download_detailed_progress_report_in_hours_of_work_pat: 'Descargar grado de avance horas de trabajo detallado'
-    download_progress_report_internal_management_pat: 'Descargar grado de avance reporte de gestión interna'
-    download_global_plan: 'Descargar plan de auditoria global'
-    download_detailed_plan: 'Descargar plan de auditoria detallado'
-    download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
-    download_detailed_business_unit_type_plan: 'Descargar plan %{business_unit_type} detallado'
-    download_detailed_business_unit_type_plan_csv: 'Descargar plan %{business_unit_type} en CSV'
-    download_business_unit_type_plan_csv: 'Descargar plan en CSV'
-    without_business_unit_type: 'Sin ciclo'
+        compliance: Cumplimiento
+        concluded: Concluidos
+        now: Ahora
+        on_time: En fecha
+        planned: Planificados
+        progress: Avance total
+        title: Estadísiticas del plan de auditoría
+        total: Total
+    without_business_unit_type: Sin ciclo
+
+  polls:
+    about: Acerca de
+    about_html: Acerca de <strong>%{entity}</strong>
+    access_denied: La encuesta ya ha sido contestada
+    already_exists: Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente
+    answer_poll: "¿Contestar encuesta?"
+    answers:
+      index:
+        title: Resumen de respuestas
+    business_units:
+      index:
+        title: Resumen por sector
+    edit:
+      title: Modificar encuesta
+    has_unanswered:
+      one: Tiene una encuesta pendiente por responder
+      other: Tiene %{count} encuestas pendientes por responder
+    index:
+      title: Listado de encuestas
+    new:
+      title: Agregar encuesta
+    not_found: No se encontró la encuesta o ya ha sido contestada
+    pdf:
+      name: resumen_encuestas_del_%{from_date}_al_%{to_date}.pdf
+    questionnaires:
+      index:
+        title: Resumen por tipo de cuestionario
+    reports:
+      title: Reportes de encuestas
+    reviews:
+      index:
+        title: Resumen por informe
+    score: Nivel de satisfacción promedio
+    show:
+      title: Detalles de la encuesta
+    total_answered: Total encuestas contestadas
+    total_unanswered: Total encuestas no contestadas
+    without_data: Sin datos para los filtros ingresados
 
   profiles:
     edit:
-      title: 'Mis datos'
-      submit: 'Actualizar mis datos'
+      submit: Actualizar mis datos
+      title: Mis datos
     update:
-      success: 'Tus datos se actualizaron correctamente'
-
-  polls:
-    access_denied: 'La encuesta ya ha sido contestada'
-    already_exists: 'Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente'
-    answer_poll: '¿Contestar encuesta?'
-    about: 'Acerca de'
-    about_html: 'Acerca de <strong>%{entity}</strong>'
-    answers:
-      index:
-        title: 'Resumen de respuestas'
-    business_units:
-      index:
-        title: 'Resumen por sector'
-    reviews:
-      index:
-        title: 'Resumen por informe'
-    index:
-      title: 'Listado de encuestas'
-    edit:
-      title: 'Modificar encuesta'
-    has_unanswered:
-      one: 'Tiene una encuesta pendiente por responder'
-      other: 'Tiene %{count} encuestas pendientes por responder'
-    new:
-      title: 'Agregar encuesta'
-    not_found: 'No se encontró la encuesta o ya ha sido contestada'
-    pdf:
-      name: 'resumen_encuestas_del_%{from_date}_al_%{to_date}.pdf'
-    questionnaires:
-      index:
-        title: 'Resumen por tipo de cuestionario'
-    reports:
-      title: 'Reportes de encuestas'
-    show:
-      title: 'Detalles de la encuesta'
-    total_answered: 'Total encuestas contestadas'
-    total_unanswered: 'Total encuestas no contestadas'
-    without_data: 'Sin datos para los filtros ingresados'
-    score: 'Nivel de satisfacción promedio'
+      success: Tus datos se actualizaron correctamente
 
   questionnaires:
-    index:
-      title: 'Listado de cuestionarios'
     edit:
-      title: 'Modificar cuestionario'
+      title: Modificar cuestionario
+    index:
+      title: Listado de cuestionarios
     new:
-      title: 'Agregar cuestionario'
-    show:
-      title: 'Detalles del cuestionario'
+      title: Agregar cuestionario
     questions:
-      new: 'Agregar pregunta'
+      new: Agregar pregunta
+    show:
+      title: Detalles del cuestionario
 
   readings:
     reading:
-      mark_as_read: 'Marcar como leído'
-      readed_on: 'Marcado como leído el %{on}'
+      mark_as_read: Marcar como leído
+      readed_on: Marcado como leído el %{on}
 
   registrations:
     new:
-      title: 'Nueva Organización'
+      title: Nueva Organización
     show:
-      title: 'Organización creada'
-      body: 'Su registro está completo, recibirá un correo con instrucciones para ingresar'
+      body: Su registro está completo, recibirá un correo con instrucciones para ingresar
+      title: Organización creada
 
   report:
-    index_title: 'Listado de reportes'
+    index_title: Listado de reportes
 
   reports:
-    customization_titles: 'Personalización de títulos'
-    generating: 'Generando reporte...'
-    file_will_be_sent: 'Le enviaremos el reporte por correo, revíselo en unos minutos'
+    customization_titles: Personalización de títulos
+    file_will_be_sent: Le enviaremos el reporte por correo, revíselo en unos minutos
+    generating: Generando reporte...
 
   resource_classes:
     edit:
-      title: 'Modificar clase de recurso'
+      title: Modificar clase de recurso
     index:
-      title: 'Listado de clases de recursos'
+      title: Listado de clases de recursos
     new:
-      title: 'Agregar clase de recurso'
-    show:
-      title: 'Detalles de la clase de recurso'
+      title: Agregar clase de recurso
     resources:
-      new: 'Agregar recurso'
+      new: Agregar recurso
+    show:
+      title: Detalles de la clase de recurso
     types:
-      human: 'Personas'
-      material: 'Materiales'
+      human: Personas
+      material: Materiales
 
   reviews:
     auxiliar_business_unit_types:
-      title: 'Unidades organizativas auxiliares'
-    index:
-      control_objective_items_open:
-        title: 'Objetivos de control abiertos'
-        label: 'OCA'
-      control_objective_items_finished:
-        title: 'Objetivos de control finalizados'
-        label: 'OCF'
+      title: Unidades organizativas auxiliares
     form:
-      add_business_unit_type: 'Agregar unidad organizativa'
-      operational_audit: 'Auditoría operativa'
-      system_audit: 'Auditoría de sistema'
+      add_business_unit_type: Agregar unidad organizativa
+      operational_audit: Auditoría operativa
+      system_audit: Auditoría de sistema
+    index:
+      control_objective_items_finished:
+        label: OCF
+        title: Objetivos de control finalizados
+      control_objective_items_open:
+        label: OCA
+        title: Objetivos de control abiertos
 
-  authentications:
+  risk_assessment_templates:
+    edit:
+      title: Editar plantilla de evaluación de riesgo
+    form:
+      add_risk_assessment_weight: Agregar ponderador
+    index:
+      empty_html: No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de evaluación de riesgo</span>
+      empty_search_html: No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda
+      new: Nueva plantilla de evaluación de riesgo
+      title: Listado de plantillas de evaluación de riesgo
     new:
-      title: 'Autenticación'
-      password: 'Contraseña'
-      log_in: 'Ingresar'
+      title: Crear plantilla de evaluación de riesgo
+    show:
+      title: Ver plantilla de evaluación de riesgo
+
+  risk_assessments:
+    edit:
+      other_actions: Acciones
+      sort_by_risk: Ordenar por riesgo descendente
+      title: Editar evaluación de riesgo
+    form:
+      add_best_practice: Agregar buena práctica
+      add_business_unit_type: Agregar sector
+      add_risk_assessment_item: Agregar item
+      apply: Aplicar
+      cloned_risk_assessment_items: Luego de crear la evaluación de riesgo verá los ítems copiados y podrá editarlos o agregar nuevos
+      new_risk_assessment_items: Luego de crear la evaluación de riesgo podrá agregar ítems a la misma
+    heatmap: Mapa de calor
+    index:
+      empty_html: No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge bg-primary">Nueva evaluación de riesgo</span>
+      empty_search_html: No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda
+      merge_to_plan: Crear proyectos en plan a partir de la evaluación
+      new: Nueva evaluación de riesgo
+      title: Listado de evaluaciones de riesgo
+    new:
+      title: Crear evaluación de riesgo
+    pdf:
+      formula: Fórmula
+      pdf_name: evaluacion_de_riesgo_%{name}.pdf
+      period:
+        range: "%{from_date} al %{to_date}"
+        title: Periodo (%{name})
+      title: Evaluación de riesgo
+    risk_weight_risks: # Deprecated: remove when all clients are migrated
+      high: Alto
+      low: Bajo
+      medium: Medio
+      medium_high: Medio alto
+      medium_low: Medio bajo
+      none: Nulo
+    show:
+      download_csv: Descargar CSV
+      download_pdf: Descargar PDF
+      title: Ver evaluación de riesgo
+    status:
+      draft: Borrador
+      final: Definitiva
+      merged: Planificada
+
+  risk_registries:
+    edit:
+      title: Editar registro de riesgo
+    form:
+      new_risk_categories: Luego de crear el registro de riesgo podrá completar la carga de los riesgos
+    index:
+      empty_html: No hay registros de riesgo, puede crear uno con el botón <span class="badge bg-primary">Nuevo registro de riesgo</span>
+      empty_search_html: No hay registros de riesgo que coincidan con el criterio de búsqueda
+      new: Nuevo registro de riesgo
+      title: Listado de registros de riesgo
+    new:
+      title: Crear registro de riesgo
+    risk_categories:
+      new: Agregar categoría de riesgo
+    risks:
+      new: Agregar riesgo
+    show:
+      title: Ver registro de riesgo
+
+  risk_score_items:
+    form:
+      add_risk_score_item: Agregar valor
+
+  risks:
+    impacts:
+      almost_certain: Muy probable
+      likely: Probable
+      moderate: Moderado
+      rare: Raro
+      unlikely: Improbable
+    likelihoods:
+      catastrophic: Catastrófica
+      high: Alta
+      insignificant: Insignificante
+      minor: Menor
+      moderate: Moderada
+    new:
+      control_objective: Agregar objetivo de control
 
   sessions:
-    new:
-      title: 'Ingreso'
-      log_in: 'Ingresar'
-      email: 'Correo'
-      user: 'Usuario'
-      remember_me: 'Recordarme'
-      try_again: 'Intentar nuevamente'
-      forgot_password: '¿Olvidaste tu contraseña?'
     create:
-      invalid: 'Tu correo y/o contraseña no están bien =('
-      logged_in: 'Bienvenido'
+      invalid: Tu correo y/o contraseña no están bien =(
+      logged_in: Bienvenido
     destroy:
-      logged_out: 'Hasta la próxima'
+      logged_out: Hasta la próxima
+    new:
+      email: Correo
+      forgot_password: "¿Olvidaste tu contraseña?"
+      log_in: Ingresar
+      remember_me: Recordarme
+      title: Ingreso
+      try_again: Intentar nuevamente
+      user: Usuario
 
   settings:
-    index:
-      title: 'Listado de configuraciones'
-    show:
-      title: 'Detalles de la configuración'
-    new:
-      title: 'Agregar configuración'
+    account_expire_time: Días para la eliminación de cuentas inactivas
+    allow_concurrent_sessions: Permitir sesiones simultáneas para el mismo usuario
+    attempts_count: Cantidad de intentos fallidos de conexión
+    brief_period_in_weeks: Periodo de notificación "Resumen de observaciones" en semanas
+    conclusion_review_receiver: Receptor/es del informe
     edit:
-      title: 'Modificar configuración'
-    finding_stale_confirmed_days: 'Cantidad de días que deben pasar para que una observación sin responder se considere desatendida'
-    review_code_expresion: 'Formato del código de identificación de informes'
-    account_expire_time: 'Días para la eliminación de cuentas inactivas'
-    allow_concurrent_sessions: 'Permitir sesiones simultáneas para el mismo usuario'
-    attempts_count: 'Cantidad de intentos fallidos de conexión'
-    expire_notification: 'Aviso de caducidad de la contraseña'
-    password_constraint: 'Control de composición de contraseñas'
-    password_count: 'Historia de contraseña'
-    password_expire_time: 'Duración máxima de la contraseña'
-    password_minimum_length: 'Longitud mínima de la contraseña'
-    password_minimum_time: 'Duración mínima de la contraseña'
-    session_expire_time: 'Desconexión por inactividad'
-    exchange_directory_path: 'Directorio de intercambio de archivos'
-    show_print_date_on_pdfs: 'Mostrar fecha de impresión en PDFs'
-    brief_period_in_weeks: 'Periodo de notificación "Resumen de observaciones" en semanas'
-    show_follow_up_timestamps: 'Mostrar marcas de tiempo en seguimiento'
-    require_manager_on_findings: 'Requerir gerente de auditoría en observaciones'
-    hide_import_from_ldap: 'Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación'
-    skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
-    hide_obsolete_best_practices: 'Ocultar buenas practicas obsoletas'
-    hours_of_work_per_day: 'Horas de trabajo por día'
-    conclusion_review_receiver: 'Receptor/es del informe'
-    temporary_polls: 'Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.'
-    finding_warning_expire_days: 'Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad'
-    finding_by_current_user: 'Filtrar observaciones por usuario actual'
-    enable_close_date_edition: 'Habilitar edición de fecha de cierre'
-    finding_days_for_next_notifications: 'Cantidad de días en los que se debe enviar una solicitud de confirmación'
-    uniqueness_username_validation: 'Validar que el nombre de usuario sea único para todas las organizaciones'
-    skip_reiteration_copy: 'Omitir copiar los datos de la observación anterior al reiterar'
+      title: Modificar configuración
+    enable_close_date_edition: Habilitar edición de fecha de cierre
+    exchange_directory_path: Directorio de intercambio de archivos
+    expire_notification: Aviso de caducidad de la contraseña
+    finding_by_current_user: Filtrar observaciones por usuario actual
+    finding_days_for_next_notifications: Cantidad de días en los que se debe enviar una solicitud de confirmación
+    finding_stale_confirmed_days: Cantidad de días que deben pasar para que una observación sin responder se considere desatendida
+    finding_warning_expire_days: Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad
+    hide_import_from_ldap: Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación
+    hide_obsolete_best_practices: Ocultar buenas practicas obsoletas
+    hours_of_work_per_day: Horas de trabajo por día
+    index:
+      title: Listado de configuraciones
+    new:
+      title: Agregar configuración
+    password_constraint: Control de composición de contraseñas
+    password_count: Historia de contraseña
+    password_expire_time: Duración máxima de la contraseña
+    password_minimum_length: Longitud mínima de la contraseña
+    password_minimum_time: Duración mínima de la contraseña
+    require_manager_on_findings: Requerir gerente de auditoría en observaciones
+    review_code_expresion: Formato del código de identificación de informes
+    session_expire_time: Desconexión por inactividad
+    show:
+      title: Detalles de la configuración
+    show_follow_up_timestamps: Mostrar marcas de tiempo en seguimiento
+    show_print_date_on_pdfs: Mostrar fecha de impresión en PDFs
+    skip_function_and_manager_from_ldap_sync: No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP
+    skip_reiteration_copy: Omitir copiar los datos de la observación anterior al reiterar
+    temporary_polls: Guarda temporalmente las respuestas de una encuesta. Una encuesta estará completa cuando todas sus preguntas sean contestadas.
+    uniqueness_username_validation: Validar que el nombre de usuario sea único para todas las organizaciones
 
   tags:
     edit:
-      title: 'Editar etiqueta'
+      title: Editar etiqueta
     form:
-      children: 'Subetiquetas'
-      add_child: 'Agregar subetiqueta'
+      add_child: Agregar subetiqueta
+      children: Subetiquetas
     index:
-      new: 'Nueva etiqueta'
-      title: 'Listado de etiquetas'
-      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="badge bg-primary">Nueva etiqueta</span>'
+      empty_html: No hay etiquetas, puede crear una con el botón <span class="badge bg-primary">Nueva etiqueta</span>
+      new: Nueva etiqueta
+      title: Listado de etiquetas
     list:
-      childless: 'Sin subetiquetas'
+      childless: Sin subetiquetas
     new:
-      title: 'Crear etiqueta'
-    show:
-      title: 'Ver etiqueta'
-    styles:
-      secondary: 'Por defecto'
-      primary: 'Importante'
-      success: 'Exitosa'
-      info: 'Informativa'
-      warning: 'Advertencia'
-      danger: 'Peligro'
+      title: Crear etiqueta
     options:
-      origination_audit: 'Origen auditoria'
+      origination_audit: Origen auditoria
+    show:
+      title: Ver etiqueta
+    styles:
+      danger: Peligro
+      info: Informativa
+      primary: Importante
+      secondary: Por defecto
+      success: Exitosa
+      warning: Advertencia
 
   tasks:
-    on_time: 'A tiempo, sin reprogramación'
-    rescheduled: 'A tiempo, reprogramada'
-    expired: 'Fuera de tiempo'
+    expired: Fuera de tiempo
+    on_time: A tiempo, sin reprogramación
+    rescheduled: A tiempo, reprogramada
     status:
-      pending: 'Pendiente'
-      in_progress: 'En proceso'
-      finished: 'Finalizada'
+      finished: Finalizada
+      in_progress: En proceso
+      pending: Pendiente
 
   time_summary:
+    auxiliar_business_unit_types:
+      activity: Actividad
+      review: Informe
+      time_consumption_amount: Cantidad de horas asignadas
+      title: Unidades organizativas auxiliares
+      workflow_amount: Cantidad de horas programadas
+    downloads:
+      csv:
+        business_unit_types: Unidades organizativas
+        date: Fecha
+        detail: Detalle
+        organization: Organización
+        period: Periodo
+        period_end: Periodo Fin
+        period_start: Periodo Inicio
+        plan_item: Proyecto
+        plan_item_end: Proyecto Fin
+        plan_item_start: Proyecto Inicio
+        quantity_hours_per_day: Cantidad horas por día
+        task: Tarea
+        user: Usuario
+      current_month: Descarga mes actual
+      current_week: Descarga semana actual
+      current_year: Descarga año actual
+    edit:
+      title: Editar actividad
+    form:
+      activity: Actividad
+      add_business_unit_type: Agregar sector
+      operational_audit: Auditoría operativa
+      review: Informe
+      system_audit: Auditoría de sistema
+      time_consumption_amount: 'Cantidad de horas asignadas:'
+      workflow_amount: 'Cantidad de horas programadas:'
     index:
-      title: 'Resumen horario'
-      period: 'Desde el %{start} al %{end}'
-      current_week: 'Semana actual'
-      empty: 'Sin registros'
-      add: 'Agregar actividad'
-      edit: 'Editar actividad'
-      destroy: 'Eliminar actividad'
+      add: Agregar actividad
+      current_week: Semana actual
+      destroy: Eliminar actividad
+      edit: Editar actividad
+      empty: Sin registros
+      period: Desde el %{start} al %{end}
+      title: Resumen horario
       total_amount:
         one: 'Total de horas acumuladas: %{amount}'
         other: 'Total de horas acumuladas por %{count} personas: %{amount}'
     new:
-      title: 'Nueva actividad'
-    edit:
-      title: Editar actividad
-    form:
-      add_business_unit_type: 'Agregar sector'
-      operational_audit: 'Auditoría operativa'
-      system_audit: 'Auditoría de sistema'
-      activity: 'Actividad'
-      review: 'Informe'
-      workflow_amount: 'Cantidad de horas programadas:'
-      time_consumption_amount: 'Cantidad de horas asignadas:'
-    auxiliar_business_unit_types:
-      title: 'Unidades organizativas auxiliares'
-      activity: 'Actividad'
-      review: 'Informe'
-      workflow_amount: 'Cantidad de horas programadas'
-      time_consumption_amount: 'Cantidad de horas asignadas'
-    downloads:
-      current_week: "Descarga semana actual"
-      current_month: "Descarga mes actual"
-      current_year: "Descarga año actual"
-      csv:
-        date: "Fecha"
-        quantity_hours_per_day: "Cantidad horas por día"
-        task: "Tarea"
-        user: "Usuario"
-        business_unit_types: "Unidades organizativas"
-        detail: "Detalle"
-        organization: "Organización"
-        period: "Periodo"
-        period_start: "Periodo Inicio"
-        period_end: "Periodo Fin"
-        plan_item: "Proyecto"
-        plan_item_start: "Proyecto Inicio"
-        plan_item_end: "Proyecto Fin"
+      title: Nueva actividad
 
   users:
-    index:
-      title: 'Listado de usuarios'
-      import_from_ldap: 'Importar desde LDAP'
-      show_hidden: 'Mostrar ocultos'
-    show:
-      title: 'Detalles del usuario'
-      profiles: 'Perfiles'
-      organizations: 'Organizaciones'
-    new:
-      title: 'Nuevo usuario'
-    edit:
-      title: 'Editar usuario'
-      other_actions: 'Acciones'
-    form:
-      unlink_manager: 'Desvincular'
-      children: 'Personal a cargo'
-      add_child: 'Agregar persona a cargo'
-      add_business_unit_type: 'Agregar unidades organizativas'
-      add_related_user_relations: 'Agregar usuario relacionado'
-      add_organization_role: 'Agregar un nuevo perfil'
-      add_tagging: 'Agregar etiqueta'
     create:
       correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
+    edit:
+      other_actions: Acciones
+      title: Editar usuario
+    form:
+      add_business_unit_type: Agregar unidades organizativas
+      add_child: Agregar persona a cargo
+      add_organization_role: Agregar un nuevo perfil
+      add_related_user_relations: Agregar usuario relacionado
+      add_tagging: Agregar etiqueta
+      children: Personal a cargo
+      unlink_manager: Desvincular
     imports:
-      new:
-        title: 'Importar usuarios desde LDAP'
-        credentials: 'Credenciales'
-        import: 'Importar'
       create:
-        title: 'Resultados de la importación'
-        empty: 'No se importó ningún usuario'
-        connection: 'No se pudo conectar con el servidor, revise el usuario y la contraseña'
-        record_invalid: 'Se produjo un error en la importación, algunos usuarios tienen campos no válidos'
-        created: 'Creado'
-        updated: 'Actualizado'
-        deleted: 'Eliminado'
-        unchanged: 'Sin cambios'
-        errored: 'Con errores'
-        deprecated_users: 'Usuarios ausentes en el servidor LDAP'
+        connection: No se pudo conectar con el servidor, revise el usuario y la contraseña
+        created: Creado
+        deleted: Eliminado
+        deprecated_users: Usuarios ausentes en el servidor LDAP
+        empty: No se importó ningún usuario
+        errored: Con errores
+        record_invalid: Se produjo un error en la importación, algunos usuarios tienen campos no válidos
+        title: Resultados de la importación
+        unchanged: Sin cambios
+        updated: Actualizado
+      new:
+        credentials: Credenciales
+        import: Importar
+        title: Importar usuarios desde LDAP
+    index:
+      import_from_ldap: Importar desde LDAP
+      show_hidden: Mostrar ocultos
+      title: Listado de usuarios
+    new:
+      title: Nuevo usuario
     passwords:
-      edit:
-        title: 'Cambiar contraseña'
-        update: 'Actualizar contraseña'
-        new_password: 'Nueva contraseña'
-      update:
-        success: 'Contraseña cambiada correctamente'
-        expired: 'El enlace ha expirado, pida de nuevo las instrucciones'
-      new:
-        title: 'Restablecer contraseña'
-        email: 'Correo'
-        send_instructions: 'Enviar instrucciones'
-        back: 'Volver'
-        note: 'Para restablecer su contraseña, ingrese su dirección de correo electrónico'
       create:
-        success: 'Se envió un correo con las instrucciones para restablecer la contraseña'
-        not_found: 'El correo ingresado no está registrado, verifica que no esté mal escrito'
+        not_found: El correo ingresado no está registrado, verifica que no esté mal escrito
+        success: Se envió un correo con las instrucciones para restablecer la contraseña
+      edit:
+        new_password: Nueva contraseña
+        title: Cambiar contraseña
+        update: Actualizar contraseña
+      new:
+        back: Volver
+        email: Correo
+        note: Para restablecer su contraseña, ingrese su dirección de correo electrónico
+        send_instructions: Enviar instrucciones
+        title: Restablecer contraseña
+      update:
+        expired: El enlace ha expirado, pida de nuevo las instrucciones
+        success: Contraseña cambiada correctamente
     profiles:
       edit:
-        title: 'Modificar información personal'
+        title: Modificar información personal
     reassignments:
       edit:
-        title: 'Reasignar responsabilidades'
-        new_user: 'Nuevo responsable'
-        old_user: 'Responsable anterior'
-        with_findings: '¿Incluir observaciones pendientes?'
-        with_reviews: '¿Incluir informes en ejecución?'
-        submit: 'Reasignar'
-      must_select_a_user: 'Debe seleccionar un usuario'
-
+        new_user: Nuevo responsable
+        old_user: Responsable anterior
+        submit: Reasignar
+        title: Reasignar responsabilidades
+        with_findings: "¿Incluir observaciones pendientes?"
+        with_reviews: "¿Incluir informes en ejecución?"
+      must_select_a_user: Debe seleccionar un usuario
     registrations:
       new:
-        title: 'Registrar nuevo usuario'
-
+        title: Registrar nuevo usuario
     releases:
       edit:
-        title: 'Liberar responsabilidades'
-        with_findings: '¿Incluir observaciones pendientes?'
-        with_reviews: '¿Incluir informes en ejecución?'
-        submit: 'Liberar responsabilidades'
-
+        submit: Liberar responsabilidades
+        title: Liberar responsabilidades
+        with_findings: "¿Incluir observaciones pendientes?"
+        with_reviews: "¿Incluir informes en ejecución?"
+    show:
+      organizations: Organizaciones
+      profiles: Perfiles
+      title: Detalles del usuario
     status:
-      status_controls:
-        add: 'Agregar usuario a lista de estado de seguimiento'
-        remove: 'Eliminar usuario de lista de estado de seguimiento'
-        list: 'Ver lista de observaciones pendientes de los usuarios seleccionados'
-        user_findings: 'Ver lista de observaciones pendientes del usuario y su jerarquía'
       show:
-        title: 'Estado'
-        table: 'Ver tabla'
-        graph: 'Ver gráfico'
-        pending_weaknesses:
-          one: '**Una** observación **pendiente**'
-          other: '**%{count}** observaciones **pendientes**'
+        graph: Ver gráfico
         high_risk_weaknesses:
-          one: '**Una** observación de **riesgo alto**'
-          other: '**%{count}** observaciones de **riesgo alto**'
+          one: "**Una** observación de **riesgo alto**"
+          other: "**%{count}** observaciones de **riesgo alto**"
+        pending_weaknesses:
+          one: "**Una** observación **pendiente**"
+          other: "**%{count}** observaciones **pendientes**"
+        table: Ver tabla
+        title: Estado
         weaknesses:
-          pending:
-            one: '**Una** observación pendiente'
-            other: '**%{count}** observaciones pendientes'
           complete:
-            one: '**Una** observación solucionada'
-            other: '**%{count}** observaciones solucionadas'
+            one: "**Una** observación solucionada"
+            other: "**%{count}** observaciones solucionadas"
+          pending:
+            one: "**Una** observación pendiente"
+            other: "**%{count}** observaciones pendientes"
           repeated:
-            one: '**Una** observación reiterada'
-            other: '**%{count}** observaciones reiteradas'
-
-  risk_assessments:
-    edit:
-      title: 'Editar evaluación de riesgo'
-      other_actions: 'Acciones'
-      sort_by_risk: 'Ordenar por riesgo descendente'
-    index:
-      new: 'Nueva evaluación de riesgo'
-      title: 'Listado de evaluaciones de riesgo'
-      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge bg-primary">Nueva evaluación de riesgo</span>'
-      empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
-      merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
-    new:
-      title: 'Crear evaluación de riesgo'
-    show:
-      title: 'Ver evaluación de riesgo'
-      download_pdf: 'Descargar PDF'
-      download_csv: 'Descargar CSV'
-    form:
-      new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar ítems a la misma'
-      cloned_risk_assessment_items: 'Luego de crear la evaluación de riesgo verá los ítems copiados y podrá editarlos o agregar nuevos'
-      add_risk_assessment_item: 'Agregar item'
-      add_best_practice: 'Agregar buena práctica'
-      add_business_unit_type: 'Agregar sector'
-      apply: 'Aplicar'
-    heatmap: 'Mapa de calor'
-    risk_weight_risks: # Deprecated: remove when all clients are migrated
-      none: 'Nulo'
-      low: 'Bajo'
-      medium_low: 'Medio bajo'
-      medium: 'Medio'
-      medium_high: 'Medio alto'
-      high: 'Alto'
-    status:
-      draft: 'Borrador'
-      final: 'Definitiva'
-      merged: 'Planificada'
-    pdf:
-      title: 'Evaluación de riesgo'
-      pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
-      formula: 'Fórmula'
-      period:
-        title: "Periodo (%{name})"
-        range: "%{from_date} al %{to_date}"
-
-  risk_assessment_templates:
-    edit:
-      title: 'Editar plantilla de evaluación de riesgo'
-    index:
-      new: 'Nueva plantilla de evaluación de riesgo'
-      title: 'Listado de plantillas de evaluación de riesgo'
-      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de evaluación de riesgo</span>'
-      empty_search_html: 'No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda'
-    new:
-      title: 'Crear plantilla de evaluación de riesgo'
-    show:
-      title: 'Ver plantilla de evaluación de riesgo'
-    form:
-      add_risk_assessment_weight: 'Agregar ponderador'
-
-  risk_registries:
-    edit:
-      title: 'Editar registro de riesgo'
-    form:
-      new_risk_categories: 'Luego de crear el registro de riesgo podrá completar la carga de los riesgos'
-    index:
-      new: 'Nuevo registro de riesgo'
-      title: 'Listado de registros de riesgo'
-      empty_html: 'No hay registros de riesgo, puede crear uno con el botón <span class="badge bg-primary">Nuevo registro de riesgo</span>'
-      empty_search_html: 'No hay registros de riesgo que coincidan con el criterio de búsqueda'
-    new:
-      title: 'Crear registro de riesgo'
-    show:
-      title: 'Ver registro de riesgo'
-    risk_categories:
-      new: 'Agregar categoría de riesgo'
-    risks:
-      new: 'Agregar riesgo'
-
-  risk_score_items:
-    form:
-      add_risk_score_item: 'Agregar valor'
-
-  risks:
-    likelihoods:
-      insignificant: 'Insignificante'
-      minor: 'Menor'
-      moderate: 'Moderada'
-      high: 'Alta'
-      catastrophic: 'Catastrófica'
-    impacts:
-      rare: 'Raro'
-      unlikely: 'Improbable'
-      moderate: 'Moderado'
-      likely: 'Probable'
-      almost_certain: 'Muy probable'
-    new:
-      control_objective: 'Agregar objetivo de control'
+            one: "**Una** observación reiterada"
+            other: "**%{count}** observaciones reiteradas"
+      status_controls:
+        add: Agregar usuario a lista de estado de seguimiento
+        list: Ver lista de observaciones pendientes de los usuarios seleccionados
+        remove: Eliminar usuario de lista de estado de seguimiento
+        user_findings: Ver lista de observaciones pendientes del usuario y su jerarquía
 
   versions:
-    index:
-      title: 'Ver reporte de cambios de seguridad'
-    security_changes_report:
-      title: 'Reporte de cambios de seguridad'
-    show:
-      title: 'Detalles del registro de cambios'
+    changes: Cambios
+    column_attribute: Atributo
+    column_new_value: Valor nuevo
+    column_old_value: Valor anterior
     events:
-      create: 'Alta'
-      update: 'Modificación'
-      destroy: 'Baja'
-    changes: 'Cambios'
-    column_attribute: 'Atributo'
-    column_new_value: 'Valor nuevo'
-    column_old_value: 'Valor anterior'
-    without_changes: 'Sin cambios'
-    pdf_list_name: 'reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf'
+      create: Alta
+      destroy: Baja
+      update: Modificación
+    index:
+      title: Ver reporte de cambios de seguridad
+    pdf_list_name: reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf
+    security_changes_report:
+      title: Reporte de cambios de seguridad
+    show:
+      title: Detalles del registro de cambios
+    without_changes: Sin cambios
 
   weakness_templates:
     edit:
-      title: 'Editar plantilla de observación'
-    index:
-      new: 'Nueva plantilla de observación'
-      title: 'Listado de plantillas de observación'
-      empty_html: 'No hay plantillas de observación, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de observación</span>'
-      empty_search_html: 'No hay plantillas de observación que coincidan con el criterio de búsqueda'
-    new:
-      title: 'Crear plantilla de observación'
-    show:
-      title: 'Ver plantilla de observación'
+      title: Editar plantilla de observación
     form:
-      add_control_objective: 'Agregar objetivo de control'
+      add_control_objective: Agregar objetivo de control
+    index:
+      empty_html: No hay plantillas de observación, puede crear una con el botón <span class="badge bg-primary">Nueva plantilla de observación</span>
+      empty_search_html: No hay plantillas de observación que coincidan con el criterio de búsqueda
+      new: Nueva plantilla de observación
+      title: Listado de plantillas de observación
+    new:
+      title: Crear plantilla de observación
+    show:
+      title: Ver plantilla de observación
 
   welcome:
-    completed_findings: 'Hallazgos solucionados'
-    commented_on: 'comentó en'
-    current_user_answers: 'Comentarios propios'
-    latest_answers: 'Últimos comentarios'
-    latest_findings: 'Hallazgos de los últimos meses'
-    pending_findings: 'Hallazgos pendientes'
-    version: 'Versión'
-    welcome: 'Bienvenido'
+    commented_on: comentó en
+    completed_findings: Hallazgos solucionados
+    current_user_answers: Comentarios propios
+    latest_answers: Últimos comentarios
+    latest_findings: Hallazgos de los últimos meses
+    pending_findings: Hallazgos pendientes
+    version: Versión
+    welcome: Bienvenido
 
   work_papers:
     show:
-      title: 'Papel de trabajo'
-      error: 'Recuerde que debe estar autenticado o tener permisos para visualizar el documento'
+      error: Recuerde que debe estar autenticado o tener permisos para visualizar el documento
+      title: Papel de trabajo
     statuses:
-      pending: 'Pendiente'
-      finished: 'En revisión'
-      revised: 'Revisado'
       auditor:
-        next_to_pending: 'Marcar para revisión'
-        next_to_finished: 'Volver a pendiente'
+        next_to_finished: Volver a pendiente
+        next_to_pending: Marcar para revisión
+      finished: En revisión
+      pending: Pendiente
+      revised: Revisado
       supervisor:
-        next_to_finished: 'Marcar como revisado'
-        next_to_revised: 'Volver a pendiente'
+        next_to_finished: Marcar como revisado
+        next_to_revised: Volver a pendiente
