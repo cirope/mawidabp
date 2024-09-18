@@ -832,6 +832,8 @@ en:
       current_month: Download current month
       current_week: Download current week
       current_year: Download current year
+    edit:
+      title: Edit activity
     form:
       activity: Activity
       add_business_unit_type: Add organizational unit
