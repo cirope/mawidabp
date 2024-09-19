@@ -830,9 +830,7 @@ es:
     form:
       activity: Actividad
       add_business_unit_type: Agregar sector
-      operational_audit: Auditoría operativa
       review: Informe
-      system_audit: Auditoría de sistema
       time_consumption_amount: 'Cantidad de horas asignadas:'
       workflow_amount: 'Cantidad de horas programadas:'
     index:

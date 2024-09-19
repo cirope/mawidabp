@@ -124,9 +124,6 @@ es:
       business_unit_type_review:
         business_unit_type_id: Sector
         review_id: Informe
-      business_unit_type_reviews:
-        business_unit_type_id: Sector
-        review_id: Informe
       business_unit_type_user:
         business_unit_type_id: Sector
         user_id: Usuario

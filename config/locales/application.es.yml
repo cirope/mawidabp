@@ -173,7 +173,7 @@ es:
         header_count_findings: "<b>Cantidad de Observaciones</b>"
         header_cycle: "<b>Ciclo</b>"
         header_qualification: "<b>Calificación</b>"
-        header_weight: "<b>Ponderador a fecha de los Informes</b>"
+        header_weight: "<b>Ponderador por fecha de informe</b>"
       pdf_name: resumen_anual_%{from_date}_al_%{to_date}.pdf
     nbc_annual_report_title: Resumen anual
     nbc_internal_control_qualification_as_group_of_companies: Calificacion del control interno como grupo de sociedades
@@ -588,7 +588,7 @@ es:
     detailed_review:
       legend: |-
         Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.
-        En cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.
+        En cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados por el BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.
         La puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad.
       title: Informe detallado
     email_note: Nota a incluir en el correo
@@ -649,7 +649,7 @@ es:
     repeated_findings: Seguimiento de observaciones
     repeated_findings_empty: No se registran observaciones pendientes de regularización.
     responsibles: Responsables
-    review_not_approved: El informe no fue enviado, debe estar aprobado
+    review_not_approved: El informe no fue enviado. Por favor, asegúrese de obtener la aprobación necesaria e inténtelo de nuevo
     review_repeated_finding_label: Informe nro.
     review_sended: El informe fue enviado a todos los destinatarios indicados
     scope_detail:
@@ -703,7 +703,7 @@ es:
     review:
       edit: Editar informe
       show: Ver informe
-    show_title: Detalle objetivo de control
+    show_title: Detalles del objetivo de control
     stale_object_error: El objetivo de control no fue actualizado, intente nuevamente.
     view_all_oportunities: Ver listado de oportunidades de mejora
     view_all_weaknesses: Ver listado de observaciones
@@ -784,10 +784,10 @@ es:
       without_audits_in_the_period: Sin auditorías en el periodo
     planned_cost_summary_title: Resumen de costos planificados
     reviews_with_incomplete_work_papers_report:
-      empty_incomplete: No hay informes cerrados sin conformidad auditor en papeles de trabajo
-      empty_revised: No hay informes cerrados sin revisión supervisor en papeles de trabajo
-    reviews_with_incomplete_work_papers_report_incomplete_title: Informes cerrados sin conformidad auditor
-    reviews_with_incomplete_work_papers_report_revised_title: Informes cerrados sin revisión supervisor
+      empty_incomplete: No hay informes cerrados sin conformidad del auditor en papeles de trabajo
+      empty_revised: No hay informes cerrados sin revisión del supervisor en papeles de trabajo
+    reviews_with_incomplete_work_papers_report_incomplete_title: Informes cerrados sin conformidad del auditor
+    reviews_with_incomplete_work_papers_report_revised_title: Informes cerrados sin revisión del supervisor
     tagged_findings_report:
       empty: No hay observaciones para el filtro aplicado
       findings_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
@@ -813,7 +813,7 @@ es:
       title: Informe de seguimiento de observaciones
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge rounded-pill bg-secondary">%{count}</span>'
-    without_findings: Sin Observaciones
+    without_findings: Sin observaciones
     without_weaknesses: Sin observaciones en el periodo
     without_weaknesses_in_the_interval: Sin observaciones en el intervalo
 
@@ -914,9 +914,7 @@ es:
     user_assignment:
       audit_team: Auditoría
       others: Usuarios
-    view_completed: Ver implementadas
     view_cost_details: Listado de actividades anteriores relacionadas a la observación
-    view_pending: Ver pendientes
     weakness_template_previous: Repite Observación
     without_conclusion_final_review: Sin informe definitivo
     without_work_papers: Sin papeles de trabajo
@@ -940,8 +938,8 @@ es:
         DE SEGUIMIENTO DE OBSERVACIONES
         POR INFORME DE AUDITORIA INTERNA
       weaknesses: OBSERVACIONES
-      without_oportunities: Sin Oportunidades de Mejora en el periodo
-      without_weaknesses: Sin Observaciones en el periodo
+      without_oportunities: Sin oportunidades de mejora en el periodo
+      without_weaknesses: Sin observaciones en el periodo
     cost_analysis_title: Análisis de costos
     export_issues: Exportar casos
     fixed_weaknesses_report_title: Observaciones por riesgo solucionadas
@@ -1525,7 +1523,7 @@ es:
     edit_title: Modificar notificación
     index_title: Listado de notificaciones
     reject: Rechazar
-    rejected: Notificación rechazada correctamente, por favor autentíquese e ingrese un comentario de la misma.
+    rejected: Notificación rechazada correctamente. Por favor, inicie sesión e ingrese un comentario sobre la misma.
     show_title: Detalles de la notificación
     stale_object_error: La notificación no fue actualizada, intente nuevamente.
     status_confirmed: Confirmada
@@ -1645,7 +1643,7 @@ es:
     no_excluded_control_objectives: Todos los objetivos de control de este proceso se encuentran en el informe
     notes: Notas
     old_weaknesses: Antigua data
-    oportunities_count: Cantidad de Oportunidades de Mejora
+    oportunities_count: Cantidad de oportunidades de mejora
     oportunities_count_summary: Cantidad de oportunidades de mejora ordenadas por estado
     oportunities_summary: Resumen de oportunidades de mejora ordenadas por estado
     oportunities_work_papers: Oportunidades
