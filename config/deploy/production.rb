@@ -10,6 +10,6 @@ set :default_env, {
 
 role :web, %w{deployer@hipotecario.mawidabp.com}
 role :app, %w{deployer@hipotecario.mawidabp.com}
-role :db,  %w{deployer@hitotecario.mawidabp.com}
+role :db,  %w{deployer@hipotecario.mawidabp.com}
 
 server 'hipotecario.mawidabp.com', user: 'deployer', roles: %w{web app db}
