@@ -197,7 +197,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     conclusion_review_id = conclusion_reviews(:conclusion_past_final_review).id
     conclusion_review    = ConclusionFinalReview.find conclusion_review_id
-    created_at           = (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS - 1).business_days.ago
+    created_at           = (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS - 1).days.ago
 
     conclusion_review.update_column :created_at, created_at
 
