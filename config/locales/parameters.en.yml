@@ -23,7 +23,7 @@ en:
   frequency_types:
     biyearly: Biannual
     monthly: Monthly
-    yearly: Annaul
+    yearly: Annual
   impact_risk_types:
     critical: Critical
     high: High
@@ -40,7 +40,7 @@ en:
     medium: Medium
     none: Regulatory body
   probability_types:
-    almost_certain: Almost Certain
+    almost_certain: Almost certain
     possible: Possible
     probable: Probable
     rare: Rare
