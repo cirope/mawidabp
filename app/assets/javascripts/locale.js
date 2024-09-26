@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function changeLocale(locale) {
   const url = new URL(window.location.href);
+
   url.searchParams.set('locale', locale);
   window.location.href = url.toString();
 }
