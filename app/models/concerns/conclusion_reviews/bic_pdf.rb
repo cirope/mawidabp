@@ -28,12 +28,11 @@ module ConclusionReviews::BicPdf
     File.open(pdf_path, 'wb') { |file| file << pdf }
   end
 
-  def bic_exclude_regularized_findings weaknesses
-    if exclude_regularized_findings
-      weaknesses.where.not(state: Finding::STATUS[:implemented_audited])
-    else
-      weaknesses
-    end
+  def bic_exclude_regularized_findings(weaknesses)
+    states_to_exclude = [Finding::STATUS[:criteria_mismatch]]
+    states_to_exclude << Finding::STATUS[:implemented_audited] if exclude_regularized_findings
+
+    weaknesses.where.not(state: states_to_exclude)
   end
 
   private
