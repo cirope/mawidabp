@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
   def new
     locale = params[:locale]
 
-    if locale.present?
+    if locale.present? && I18n.available_locales.map(&:to_s).include?(locale)
       session[:locale] = locale
       I18n.locale      = locale
     end
