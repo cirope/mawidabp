@@ -7,9 +7,10 @@ class SessionsController < ApplicationController
   before_action :set_title, except: [:destroy]
 
   def new
-    locale = params[:locale]
+    available_locales = I18n.available_locales.map(&:to_s)
+    locale            = params[:locale]
 
-    if locale.present? && I18n.available_locales.map(&:to_s).include?(locale)
+    if available_locales.include?(locale)
       session[:locale] = locale
       I18n.locale      = locale
     end
