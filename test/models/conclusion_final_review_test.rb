@@ -548,7 +548,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'cannot be destroyed after allowed business days' do
     skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
-    @conclusion_review.update created_at: (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS + 1).business_days.ago
+    @conclusion_review.update created_at: (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS + 1).days.ago
 
     assert_no_difference 'ConclusionFinalReview.count' do
       @conclusion_review.destroy
@@ -558,7 +558,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'can be destroyed within allowed business days' do
     skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0
 
-    @conclusion_review.update created_at: (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS - 1).business_days.ago
+    @conclusion_review.update created_at: (ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS - 1).days.ago
 
     assert_difference 'ConclusionFinalReview.count', -1 do
       @conclusion_review.destroy
