@@ -370,7 +370,7 @@ es:
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       empty: Sin observaciones para el filtro aplicado.
-      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
+      implemented: "'Sujetas a revisión' entre el %{from_date} y el %{to_date}"
       pdf_name: observaciones_informes_definitivos_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf
       period_summary: Resumen del periodo %{period}
       title: |-
@@ -1284,7 +1284,7 @@ es:
       being_implemented: "'En proceso de implementación' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       empty: Sin observaciones para el filtro aplicado.
-      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
+      implemented: "'Sujetas a revisión' entre el %{from_date} y el %{to_date}"
       pdf_name: observaciones_seguimiento_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf
       period_summary: Resumen del periodo %{period}
       title: |-
