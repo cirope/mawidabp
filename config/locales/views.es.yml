@@ -186,8 +186,8 @@ es:
       criteria_mismatch: Difiere criterio
       expired: Desestimada / No aplica
       failure: Falla
-      implemented: Implementada
-      implemented_audited: Implementada / Auditada
+      implemented: Sujeta a revisión
+      implemented_audited: Regularizada
       incomplete: Incompleta
       notify: Notificar
       repeated: Reiterada
