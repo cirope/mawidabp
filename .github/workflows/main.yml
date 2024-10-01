@@ -24,17 +24,17 @@ jobs:
           patagonia_check="${{ contains(github.ref_name, 'patagonia') || contains(github.event.pull_request.base.ref, 'patagonia') }}"
           nbch_check="${{ contains(github.ref_name, 'nbch') || contains(github.event.pull_request.base.ref, 'nbch') }}"
 
-          if [[ "$master_check" == "true" ]]; then
+          if $master_check; then
             echo 'configs=["normal","gal","bic","bh","cycle_score","reviews_scored_by_weakness"]' >> $GITHUB_OUTPUT
-          elif [[ "$galicia_check" == "true" ]]; then
+          elif $galicia_check; then
             echo 'configs=["gal"]' >> $GITHUB_OUTPUT
-          elif [[ "$bice_check" == "true" ]]; then
+          elif $bice_check; then
             echo 'configs=["bic"]' >> $GITHUB_OUTPUT
-          elif [[ "$hipotecario_check" == "true" ]]; then
+          elif $hipotecario_check; then
             echo 'configs=["bh"]' >> $GITHUB_OUTPUT
-          elif [[ "$patagonia_check" == "true" ]]; then
+          elif $patagonia_check; then
             echo 'configs=["cycle_score"]' >> $GITHUB_OUTPUT
-          elif [[ "$nbch_check" == "true" ]]; then
+          elif $nbch_check; then
             echo 'configs=["reviews_scored_by_weakness"]' >> $GITHUB_OUTPUT
           else
             echo 'configs=["normal"]' >> $GITHUB_OUTPUT
