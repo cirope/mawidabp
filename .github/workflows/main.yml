@@ -9,126 +9,43 @@ on:
       - master
       - c-*
 jobs:
+  determine-config:
+    runs-on: ubuntu-latest
+    outputs:
+      configs: ${{ steps.set-configs.outputs.configs }}
+    steps:
+      - name: Set configuration matrix
+        id: set-configs
+        run: |
+          master_check="${{ contains(github.ref_name, 'master') || contains(github.event.pull_request.base.ref, 'master') }}"
+          galicia_check="${{ contains(github.ref_name, 'galicia') || contains(github.event.pull_request.base.ref, 'galicia') }}"
+          bice_check="${{ contains(github.ref_name, 'bice') || contains(github.event.pull_request.base.ref, 'bice') }}"
+          hipotecario_check="${{ contains(github.ref_name, 'hipotecario') || contains(github.event.pull_request.base.ref, 'hipotecario') }}"
+          patagonia_check="${{ contains(github.ref_name, 'patagonia') || contains(github.event.pull_request.base.ref, 'patagonia') }}"
+          nbch_check="${{ contains(github.ref_name, 'nbch') || contains(github.event.pull_request.base.ref, 'nbch') }}"
+
+          if $master_check; then
+            echo 'configs=["normal","gal","bic","bh","cycle_score","reviews_scored_by_weakness"]' >> $GITHUB_OUTPUT
+          elif $galicia_check; then
+            echo 'configs=["gal"]' >> $GITHUB_OUTPUT
+          elif $bice_check; then
+            echo 'configs=["bic"]' >> $GITHUB_OUTPUT
+          elif $hipotecario_check; then
+            echo 'configs=["bh"]' >> $GITHUB_OUTPUT
+          elif $patagonia_check; then
+            echo 'configs=["cycle_score"]' >> $GITHUB_OUTPUT
+          elif $nbch_check; then
+            echo 'configs=["reviews_scored_by_weakness"]' >> $GITHUB_OUTPUT
+          else
+            echo 'configs=["normal"]' >> $GITHUB_OUTPUT
+          fi
   test:
+    needs: determine-config
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version:
-          - 3.1
-        config-type:
-          - normal
-          - gal
-          - bic
-          - bh
-          - cycle_score
-          - reviews_scored_by_weakness
-        use_v31:
-          - >-
-            ${{ contains(github.ref_name, 'master')
-            || contains(github.ref_name, 'china')
-            || contains(github.ref_name, 'bancotdf')
-            || contains(github.ref_name, 'bica')
-            || contains(github.ref_name, 'bice')
-            || contains(github.ref_name, 'bna')
-            || contains(github.ref_name, 'bvalores')
-            || contains(github.ref_name, 'dino')
-            || contains(github.ref_name, 'galicia')
-            || contains(github.ref_name, 'hipotecario')
-            || contains(github.ref_name, 'macro')
-            || contains(github.ref_name, 'mariva')
-            || contains(github.ref_name, 'nbch')
-            || contains(github.ref_name, 'patagonia')
-            || contains(github.ref_name, 'petersen')
-            || contains(github.ref_name, 'smg')
-            || contains(github.ref_name, 'supervielle')
-            || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'china')
-            || contains(github.event.pull_request.base.ref, 'bancotdf')
-            || contains(github.event.pull_request.base.ref, 'bica')
-            || contains(github.event.pull_request.base.ref, 'bice')
-            || contains(github.event.pull_request.base.ref, 'bna')
-            || contains(github.event.pull_request.base.ref, 'bvalores')
-            || contains(github.event.pull_request.base.ref, 'dino')
-            || contains(github.event.pull_request.base.ref, 'galicia')
-            || contains(github.event.pull_request.base.ref, 'hipotecario')
-            || contains(github.event.pull_request.base.ref, 'macro')
-            || contains(github.event.pull_request.base.ref, 'mariva')
-            || contains(github.event.pull_request.base.ref, 'nbch')
-            || contains(github.event.pull_request.base.ref, 'patagonia')
-            || contains(github.event.pull_request.base.ref, 'petersen')
-            || contains(github.event.pull_request.base.ref, 'smg')
-            || contains(github.event.pull_request.base.ref, 'supervielle') }}
-        use_bh:
-          - >-
-            ${{ contains(github.ref_name, 'master')
-            || contains(github.ref_name, 'hipotecario')
-            || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'hipotecario') }}
-        use_bic:
-          - >-
-            ${{ contains(github.ref_name, 'master')
-            || contains(github.ref_name, 'bice')
-            || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'bice') }}
-        use_cycle_score:
-          - >-
-            ${{ contains(github.ref_name, 'master')
-            || contains(github.ref_name, 'patagonia')
-            || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'patagonia') }}
-        use_gal:
-          - >-
-            ${{ contains(github.ref_name, 'master')
-            || contains(github.ref_name, 'galicia')
-            || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'galicia') }}
-        use_normal:
-          - >-
-            ${{ contains(github.ref_name, 'master')
-            || contains(github.ref_name, 'china')
-            || contains(github.ref_name, 'bancotdf')
-            || contains(github.ref_name, 'bica')
-            || contains(github.ref_name, 'bna')
-            || contains(github.ref_name, 'bvalores')
-            || contains(github.ref_name, 'dino')
-            || contains(github.ref_name, 'macro')
-            || contains(github.ref_name, 'mariva')
-            || contains(github.ref_name, 'petersen')
-            || contains(github.ref_name, 'smg')
-            || contains(github.ref_name, 'supervielle')
-            || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'china')
-            || contains(github.event.pull_request.base.ref, 'bancotdf')
-            || contains(github.event.pull_request.base.ref, 'bica')
-            || contains(github.event.pull_request.base.ref, 'bna')
-            || contains(github.event.pull_request.base.ref, 'bvalores')
-            || contains(github.event.pull_request.base.ref, 'dino')
-            || contains(github.event.pull_request.base.ref, 'macro')
-            || contains(github.event.pull_request.base.ref, 'mariva')
-            || contains(github.event.pull_request.base.ref, 'petersen')
-            || contains(github.event.pull_request.base.ref, 'smg')
-            || contains(github.event.pull_request.base.ref, 'supervielle') }}
-        use_reviews_scored_by_weakness:
-          - >-
-            ${{ contains(github.ref_name, 'master')
-            || contains(github.ref_name, 'nbch')
-            || contains(github.event.pull_request.base.ref, 'master')
-            || contains(github.event.pull_request.base.ref, 'nbch') }}
-        exclude:
-          - use_v31: false
-            ruby-version: 3.1
-          - use_bh: false
-            config-type: bh
-          - use_normal: false
-            config-type: normal
-          - use_gal: false
-            config-type: gal
-          - use_bic: false
-            config-type: bic
-          - use_cycle_score: false
-            config-type: cycle_score
-          - use_reviews_scored_by_weakness: false
-            config-type: reviews_scored_by_weakness
+        ruby-version: [3.1]
+        config-type: ${{ fromJson(needs.determine-config.outputs.configs) }}
     services:
       postgres:
         image: postgres:14
