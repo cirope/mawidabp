@@ -1,22 +1,23 @@
+---
 es:
   shared:
     filters:
       answer_option:
-        filter_answers: 'Mostrar únicamente respuestas coincidentes'
+        filter_answers: Mostrar únicamente respuestas coincidentes
       date_field:
-        between: 'Entre'
-      user:
-        user_in_comments: 'Incluir usuarios en comentarios'
-        user_inverted: 'Excluir'
-        include_user_tree: 'Incluir personal a cargo'
-      poll_user:
-        user_option: 'Ver'
-        affected_only: 'Asignadas'
-        only_all: 'Solo a todos'
-        include_reviews: 'Asignadas y por informe'
+        between: Entre
       order_by:
-        issue_date: 'Fecha de emisión'
-        risk: 'Riesgo'
-        first_follow_up_date: 'Primer fecha estimada de regularización'
+        first_follow_up_date: Primer fecha estimada de regularización
+        issue_date: Fecha de emisión
+        risk: Riesgo
+      poll_user:
+        affected_only: Asignadas
+        include_reviews: Asignadas y por informe
+        only_all: Solo a todos
+        user_option: Ver
       repeated:
-        allow_latest: 'Mostrar últimas reiteradas'
+        allow_latest: Mostrar últimas reiteradas
+      user:
+        include_user_tree: Incluir personal a cargo
+        user_in_comments: Incluir usuarios en comentarios
+        user_inverted: Excluir
