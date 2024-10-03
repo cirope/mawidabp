@@ -1746,15 +1746,15 @@ es:
       new_responsible: 'Responsable actual: %{responsible}'
       old_responsible: 'Responsable anterior: %{responsible}'
       reassigned_to_findings_from_reviews:
-        one: Se han reasignado las hallazgos pendientes del informe %{reviews}
-        other: Se han reasignado las hallazgos pendientes de los informes %{reviews}
+        one: Se han reasignado los hallazgos pendientes del informe %{reviews}
+        other: Se han reasignado los hallazgos pendientes de los informes %{reviews}
       reassigned_to_reviews:
         one: Se ha reasignado la responsabilidad del informe en ejecución %{reviews}
-        other: Se han reasignado la responsabilidad de los informes en ejecución %{reviews}
+        other: Se ha reasignado la responsabilidad de los informes en ejecución %{reviews}
       title: Modificación de responsabilidades
     responsibility_release:
       title: Liberación de responsabilidades
-    unconfirmed_findings: Observaciones sin confirmar a la fecha
+    unconfirmed_findings: Observaciones sin confirmar
     will_be_orphan_findings: No se eliminó el usuario, tiene a la fecha hallazgos pendientes, deberá reasignarlas primero
     without_organization: El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema
 
@@ -1765,7 +1765,7 @@ es:
     edit_follow_up: Editar en seguimiento
     edit_title: Modificar observación
     errors:
-      cannot_update_sigen_fields_in_repeated_of: 'No se pudieron actualizar los campos sigen en el finding con id: %{id} debido a los errores: %{messages}'
+      cannot_update_sigen_fields_in_repeated_of: 'No se pudieron actualizar los campos sigen en el hallazgo con id: %{id} debido a los errores: %{messages}'
       is_unconfirmed: está en estado 'No confirmada'
       not_valid_state: tiene un estado no permitido
       with_expired_tasks: tiene tareas pendientes o en proceso vencidas
@@ -1789,9 +1789,6 @@ es:
 
   welcome:
     index_title: Bienvenido
-
-  wicked_pdf:
-    number_pages_html: Pagina <span class="page"></span> de <span class="topage"></span>
 
   work_paper:
     cover_name: "%{prefix}%{filename}-portada.pdf"
