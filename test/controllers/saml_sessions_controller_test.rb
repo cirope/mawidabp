@@ -23,6 +23,8 @@ class SamlSessionsControllerTest < ActionController::TestCase
   end
 
   test 'should create user with roles and redirect to welcome' do
+    set_organization
+
     original_limit = Rails.application.credentials.auditors_limit
 
     create_saml_provider @organization
