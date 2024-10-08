@@ -1,1011 +1,1011 @@
+---
 en:
-  messages:
-    confirmation: 'Are you sure?'
-    not_authorized: 'Must be logged in to view content'
-    truncated: 'Truncated, maximum number of characters %{count}'
-
-  navigation:
-    back: 'Back'
-    copy: 'Copy'
-    destroy: 'Delete'
-    download: 'Download'
-    edit: 'Edit'
-    index: 'List'
-    loading: 'Loading...'
-    logout: 'Logout'
-    new: 'New'
-    show: 'Show'
-    calendar: 'Calendar'
-    resources: 'Resources'
-    stats: 'Stats'
-    warning: 'Warning'
-    upload: 'Upload'
-    _yes: 'Yes'
-    _no: 'No'
-
-  footer:
-    support: 'Support'
-
   activity_groups:
     edit:
-      title: 'Edit activity group'
-    index:
-      new: 'New activity group'
-      title: 'Activity group list'
-      empty_html: 'There are no activity groups, you can create one with the <span class="badge bg-primary">New activity group</span> button'
-    new:
-      title: 'Create activity group'
-    show:
-      title: 'Show activity group'
+      title: Edit activity group
     form:
-      add_activity: 'Add activity group'
+      add_activity: Add activity group
+    index:
+      empty_html: There are no activity groups, you can create one with the <span class="badge bg-primary">New activity group</span> button
+      new: New activity group
+      title: Activity group list
+    new:
+      title: Create activity group
+    show:
+      title: Show activity group
 
   answer_options:
-    not_apply: 'Does not apply'
-    strongly_disagree: 'Strongly disagree'
-    disagree: 'Disagree'
-    neither_agree_nor_disagree: 'Neither agree nor disagree'
-    agree: 'Agree'
-    strongly_agree: 'Strongly agree'
-    'yes': 'Yes'
-    'no': 'No'
-    t: 'Yes' # remove after fixing tests that use this key
+    agree: Agree
+    disagree: Disagree
     f: 'No' # remove after fixing tests that use this key
+    neither_agree_nor_disagree: Neither agree nor disagree
+    'no': 'No'
+    not_apply: Does not apply
+    strongly_agree: Strongly agree
+    strongly_disagree: Strongly disagree
+    t: 'Yes' # remove after fixing tests that use this key
+    'yes': 'Yes'
+
+  authentications:
+    new:
+      log_in: Login
+      password: Password
+      title: Authentication
 
   benefits:
-    index:
-      title: 'Benefit / Detriment list'
-    kinds:
-      benefit_tangible: 'Tangible benefit'
-      benefit_intangible: 'Intangible benefit'
-      damage_tangible: 'Tangible detriment'
-      damage_intangible: 'Intangible detriment'
-    show:
-      title: 'Benefit / Detriment details'
-    new:
-      title: 'Add benefit / detriment'
     edit:
-      title: 'Edit benefit / detriment'
+      title: Edit benefit / detriment
+    index:
+      title: Benefit / Detriment list
+    kinds:
+      benefit_intangible: Intangible benefit
+      benefit_tangible: Tangible benefit
+      damage_intangible: Intangible detriment
+      damage_tangible: Tangible detriment
+    new:
+      title: Add benefit / detriment
+    show:
+      title: Benefit / Detriment details
 
   best_practices:
-    index:
-      title: 'Best practice list'
-    show:
-      title: 'Best practice details'
-    new:
-      title: 'Add best practice'
-    edit:
-      title: 'Edit best practice'
-    process_controls:
-      new: 'Add process'
     control_objectives:
-      new: 'Add objective'
+      new: Add objective
+    edit:
+      title: Edit best practice
+    index:
+      title: Best practice list
+    new:
+      title: Add best practice
+    process_controls:
+      new: Add process
+    show:
+      title: Best practice details
 
   business_unit_kinds:
     index:
-      empty_html: 'There are no types of business units, you can create one with the <span class="badge bg-primary">New</span> button'
+      empty_html: There are no types of business units, you can create one with the <span class="badge bg-primary">New</span> button
+
   closing_interviews:
     edit:
-      title: 'Edit closing interview'
-    index:
-      new: 'New closing interview'
-      title: 'Closing interview list'
-      empty_html: 'There are no closing interviews, you can create one with the <span class="badge bg-primary">New closing interview</span> button'
-      empty_search_html: 'There are no closing interviews that match the search criteria'
-    new:
-      title: 'Create closing interview'
+      title: Edit closing interview
     form:
-      add_responsible: 'Add responsible'
-      add_auditor: 'Add auditor'
-      add_assistant: 'Add assistant'
-    show:
-      title: 'Show closing interview'
-      auditeds: 'Cycle responsibles'
-      auditors: 'Assigned auditors'
-      download_pdf: 'Download PDF'
+      add_assistant: Add assistant
+      add_auditor: Add auditor
+      add_responsible: Add responsible
+    index:
+      empty_html: There are no closing interviews, you can create one with the <span class="badge bg-primary">New closing interview</span> button
+      empty_search_html: There are no closing interviews that match the search criteria
+      new: New closing interview
+      title: Closing interview list
+    new:
+      title: Create closing interview
     pdf:
-      pdf_name: 'closing_interview_%{name}.pdf'
+      pdf_name: closing_interview_%{name}.pdf
+    show:
+      auditeds: Cycle responsibles
+      auditors: Assigned auditors
+      download_pdf: Download PDF
+      title: Show closing interview
 
   control_objectives:
     index:
-      title: 'Control objective list'
-    show:
-      title: 'Control objective details'
+      title: Control objective list
     new:
-      tagging: 'Add tag'
-      add_control_objective_auditor: 'Add auditor/auditee in charge'
+      add_control_objective_auditor: Add auditor/auditee in charge
+      tagging: Add tag
     score_type:
-      option: 'Options'
-      percentage: 'Percentage'
+      option: Options
+      percentage: Percentage
+    show:
+      title: Control objective details
 
   documents:
     edit:
-      title: 'Edit document'
+      title: Edit document
     index:
-      new: 'New document'
-      title: 'Document list'
-      empty_html: 'There are no documents, you can create one with the <span class="badge bg-primary">New document</span> button'
-      empty_search_html: 'There are no documents that match the search criteria'
+      empty_html: There are no documents, you can create one with the <span class="badge bg-primary">New document</span> button
+      empty_search_html: There are no documents that match the search criteria
+      new: New document
+      title: Document list
     new:
-      title: 'Create document'
-      tagging: 'Add tag'
+      tagging: Add tag
+      title: Create document
     show:
-      title: 'Show document'
+      title: Show document
 
   e_mails:
     index:
-      title: 'Mailing list'
+      title: Mailing list
     show:
-      title: 'Mail details'
+      title: Mail details
 
   error_records:
-    error_on_login: 'Incorrect login'
-    error_on_password_change: 'Incorrect password change'
-    error_user_disabled: 'User disabled'
+    error_on_login: Incorrect login
+    error_on_password_change: Incorrect password change
+    error_user_disabled: User disabled
     index:
-      title: 'Error logs'
-    pdf_list_name: 'error_logs_%{from_date}_%{to_date}.pdf'
+      title: Error logs
+    pdf_list_name: error_logs_%{from_date}_%{to_date}.pdf
     period:
-      title: 'Interval'
-      range: 'from %{from_date} to %{to_date}'
+      range: from %{from_date} to %{to_date}
+      title: Interval
     show:
-      title: 'Record details'
-      list: 'Show error logs'
-    void_user: 'Non-existent'
+      list: Show error logs
+      title: Record details
+    void_user: Non-existent
 
   findings:
-    index:
-      title: 'Finding list'
-      current_user_answers_count: 'Own comments'
-      unread_answers_filter: 'Unread comments'
-      unread_answers:
-        one: 'You have an unread comment'
-        other: 'You have %{count} unread comments'
-    show:
-      title: 'Finding details'
-    edit:
-      title: 'Edit finding'
-    form:
-      show_status_change_history: 'Show status change history'
-      follow_up_date_label_append: ' - Suggested: '
-      confirm_finding_without_extension: "Are you sure you want to remove %{extension}? Remember that you will not be able to use it again."
     auditor_form:
-      origin: 'origin'
-    edit_bic_sigen_fields:
-      title: 'Edit issue sigen fields'
+      origin: origin
     current_user_filters:
-      pending_to_endorsement: 'Pending approval'
-      as_owner: '%{kind} as owner'
-      incomplete: 'Pending'
-      complete: 'Resolved'
-      repeated: 'Repeated'
-    state:
-      confirmed: 'Confirmed'
-      unconfirmed: 'Unconfirmed'
-      unanswered: 'Unanswered'
-      awaiting: 'To be regularized'
-      failure: 'Failure'
-      being_implemented: 'Being implemented'
-      being_implemented_current: 'Active'
-      being_implemented_current_rescheduled: 'Re-scheduled active'
-      being_implemented_stale: 'Overdue'
-      being_implemented_stale_rescheduled: 'Re-scheduled overdue'
-      implemented: 'Implemented'
-      implemented_audited: 'Implemented / Audited'
-      assumed_risk: 'Assumed risk'
-      notify: 'Notify'
-      incomplete: 'Incomplete'
-      repeated: 'Repeated'
-      revoked: 'Cancelled'
-      criteria_mismatch: 'Different criteria'
-      expired: 'Dismissed / Not applicable'
-    work_papers:
-      create:
-        from_comment: 'From comment by %{user} on %{date}'
+      as_owner: "%{kind} as owner"
+      complete: Resolved
+      incomplete: Pending
+      pending_to_endorsement: Pending approval
+      repeated: Repeated
+    edit:
+      title: Edit finding
+    edit_bic_sigen_fields:
+      title: Edit issue sigen fields
+    endorsement_item:
+      approve: Approve
+      reject: Reject
     endorsements:
       status:
-        pending: 'Pending'
-        approved: 'Approved'
-        rejected: 'Rejected'
-    endorsement_item:
-      approve: 'Approve'
-      reject: 'Reject'
-    finding_answers: 'Comments of'
-    pdf:
-      issue: 'Refer to the attached table for records under the code %{review_code}'
+        approved: Approved
+        pending: Pending
+        rejected: Rejected
+    finding_answers: Comments of
+    form:
+      confirm_finding_without_extension: Are you sure you want to remove %{extension}? Remember that you will not be able to use it again.
+      follow_up_date_label_append: " - Suggested: "
+      show_status_change_history: Show status change history
     graphs:
-      incomplete: 'Pending findings'
-      completed: 'Completed findings'
+      completed: Completed findings
+      incomplete: Pending findings
+    index:
+      current_user_answers_count: Own comments
+      title: Finding list
+      unread_answers:
+        one: You have an unread comment
+        other: You have %{count} unread comments
+      unread_answers_filter: Unread comments
+    pdf:
+      issue: Refer to the attached table for records under the code %{review_code}
+    show:
+      title: Finding details
+    state:
+      assumed_risk: Assumed risk
+      awaiting: To be regularized
+      being_implemented: Being implemented
+      being_implemented_current: Active
+      being_implemented_current_rescheduled: Re-scheduled active
+      being_implemented_stale: Overdue
+      being_implemented_stale_rescheduled: Re-scheduled overdue
+      confirmed: Confirmed
+      criteria_mismatch: Different criteria
+      expired: Dismissed / Not applicable
+      failure: Failure
+      implemented: Implemented
+      implemented_audited: Implemented / Audited
+      incomplete: Incomplete
+      notify: Notify
+      repeated: Repeated
+      revoked: Cancelled
+      unanswered: Unanswered
+      unconfirmed: Unconfirmed
+    work_papers:
+      create:
+        from_comment: From comment by %{user} on %{date}
+
+  footer:
+    support: Support
 
   licenses:
-    trial_valid_until: 'End of trial period'
-    price_per_month: 'Price per month'
-    statuses:
-      unpaid: 'Unpaid'
-      active: 'Active'
-      trial: 'In trial period'
-      cancelled: 'Cancelled'
+    authorizations:
+      create:
+        title: License
+      new:
+        title: License
     blocked:
       show:
-        body: 'Your organization is disabled, contact soporte@mawidabp.com'
-        check: 'Recheck payment'
+        body: Your organization is disabled, contact soporte@mawidabp.com
+        check: Recheck payment
     license:
-      check: 'Recheck payment'
-      approve: 'Go to Paypal'
+      approve: Go to Paypal
       authorize_new_plan:
-        title: 'Authorize new plan'
         body: |-
           To switch plans, you will need to authorize the new monthly plan.
           The new plan will be billed in the next billing cycle, but you will see the desired number of auditor users reflected immediately.
-    authorizations:
-      new:
-        title: 'License'
-      create:
-        title: 'License'
+        title: Authorize new plan
+      check: Recheck payment
     paypal_button:
-      create: 'Subscribe'
-      create_error: 'A problem has been detected. Please contact soporte@mawidabp.com to verify if the payment has been credited'
+      create: Subscribe
+      create_error: A problem has been detected. Please contact soporte@mawidabp.com to verify if the payment has been credited
+    price_per_month: Price per month
+    statuses:
+      active: Active
+      cancelled: Cancelled
+      trial: In trial period
+      unpaid: Unpaid
+    trial_valid_until: End of trial period
 
   login_records:
     choose:
-      title: 'Security reports'
+      title: Security reports
     index:
-      title: 'Login records'
-    pdf_list_name: 'list_of_login_records_%{from_date}_%{to_date}.pdf'
+      title: Login records
+    pdf_list_name: list_of_login_records_%{from_date}_%{to_date}.pdf
     period:
-      title: 'Interval'
-      range: 'from %{from_date} to %{to_date}'
+      range: from %{from_date} to %{to_date}
+      title: Interval
     show:
-      title: 'Login record details'
-      list: 'Show login records'
+      list: Show login records
+      title: Login record details
 
   memos:
     edit:
-      title: 'Edit external audit report'
-    index:
-      new: 'New external audit report'
-      title: 'External audit report list'
-      empty_html: 'There are no external audit reports, you can create one with the <span class="badge bg-primary">New memo</span> button'
-      empty_search_html: 'No external audit reports that match the search criteria'
-    new:
-      title: 'Create external audit report'
+      title: Edit external audit report
     form:
-      markdown_help_html: '<span class="badge bg-info">Attention</span> within the content you can use %{link}'
-      add_file_model: 'Add file'
-      download_cover: 'Download cover'
+      add_file_model: Add file
+      download_cover: Download cover
+      markdown_help_html: <span class="badge bg-info">Attention</span> within the content you can use %{link}
+    index:
+      empty_html: There are no external audit reports, you can create one with the <span class="badge bg-primary">New memo</span> button
+      empty_search_html: No external audit reports that match the search criteria
+      new: New external audit report
+      title: External audit report list
+    new:
+      title: Create external audit report
     show:
-      title: 'Show external report'
+      title: Show external report
+
+  messages:
+    confirmation: Are you sure?
+    not_authorized: Must be logged in to view content
+    truncated: Truncated, maximum number of characters %{count}
+
+  navigation:
+    _no: 'No'
+    _yes: 'Yes'
+    back: Back
+    calendar: Calendar
+    copy: Copy
+    destroy: Delete
+    download: Download
+    edit: Edit
+    index: List
+    loading: Loading...
+    logout: Logout
+    new: New
+    resources: Resources
+    show: Show
+    stats: Stats
+    upload: Upload
+    warning: Warning
 
   news:
     edit:
-      title: 'Edit news'
-    index:
-      new: 'New news'
-      title: 'News list'
-      empty_html: 'There is no news, you can create one with the <span class="badge bg-primary">New news</span> button'
-      empty_search_html: 'There are no news that match the search criteria'
-    new:
-      title: 'Create news'
-      tagging: 'Add tag'
-      image_model: 'Add image'
+      title: Edit news
     form:
-      markdown_help_html: '<span class="badge bg-info">Attention</span> within the content you can use %{link}'
+      markdown_help_html: <span class="badge bg-info">Attention</span> within the content you can use %{link}
+    index:
+      empty_html: There is no news, you can create one with the <span class="badge bg-primary">New news</span> button
+      empty_search_html: There are no news that match the search criteria
+      new: New news
+      title: News list
+    new:
+      image_model: Add image
+      tagging: Add tag
+      title: Create news
     show:
-      title: 'Show news'
+      title: Show news
 
   opening_interviews:
     edit:
-      title: 'Edit opening interview'
-    index:
-      new: 'New opening interview'
-      title: 'Opening interview list'
-      empty_html: 'There are no opening interviews, you can create one with the <span class="badge bg-primary">New opening interview</span> button'
-      empty_search_html: 'There are no opening interviews that match the search criteria'
-    new:
-      title: 'Create opening interview'
+      title: Edit opening interview
     form:
-      add_responsible: 'Add responsible'
-      add_auditor: 'Add auditor'
-      add_assistant: 'Add assistant'
-    show:
-      title: 'Show opening interview'
-      auditeds: 'Cycle responsibles'
-      auditors: 'Assigned auditors'
-      download_pdf: 'Download PDF'
+      add_assistant: Add assistant
+      add_auditor: Add auditor
+      add_responsible: Add responsible
+    index:
+      empty_html: There are no opening interviews, you can create one with the <span class="badge bg-primary">New opening interview</span> button
+      empty_search_html: There are no opening interviews that match the search criteria
+      new: New opening interview
+      title: Opening interview list
+    new:
+      title: Create opening interview
     pdf:
-      pdf_name: 'opening_interview_%{name}.pdf'
+      pdf_name: opening_interview_%{name}.pdf
+    show:
+      auditeds: Cycle responsibles
+      auditors: Assigned auditors
+      download_pdf: Download PDF
+      title: Show opening interview
 
   organizations:
-    index:
-      title: 'Organization list'
-    show:
-      title: 'Organization details'
-    new:
-      title: 'Add organization'
     edit:
-      title: 'Edit organization'
-    new_organization_can_not_have_image: 'You will be able to load an organization logo after creating it'
+      title: Edit organization
+    index:
+      title: Organization list
     logo_styles:
-      default: 'Default'
-      success: 'Success'
-      info: 'Information'
-      warning: 'Warning'
-      danger: 'Danger'
+      danger: Danger
+      default: Default
+      info: Information
+      success: Success
+      warning: Warning
+    new:
+      title: Add organization
+    new_organization_can_not_have_image: You will be able to load an organization logo after creating it
     saml_providers:
-      azure: 'Azure'
+      azure: Azure
+    show:
+      title: Organization details
 
   periods:
     edit:
-      title: 'Edit period'
+      title: Edit period
     errors:
-      can_not_be_destroyed: 'Period cannot be deleted'
+      can_not_be_destroyed: Period cannot be deleted
       plan:
-        one: 'Has an associated plan'
-        other: 'Has %{count} associated plans'
+        one: Has an associated plan
+        other: Has %{count} associated plans
       reviews:
-        one: 'Has an associated audit report'
-        other: 'Has %{count} associated audit reports'
+        one: Has an associated audit report
+        other: Has %{count} associated audit reports
       workflows:
-        one: 'Has an associated workflow'
-        other: 'Has %{count} associated workflows'
+        one: Has an associated workflow
+        other: Has %{count} associated workflows
     index:
-      title: 'Period list'
+      title: Period list
     new:
-      title: 'Add period'
+      title: Add period
     show:
-      title: 'Period details'
+      title: Period details
 
   plan_items:
     best_practice:
       best_practice_projects:
-        save: 'Associate best practice'
-        done: 'Save'
+        done: Save
+        save: Associate best practice
     control_objective:
       control_objective_projects:
-        save: 'Associate control objective'
-        done: 'Save'
+        done: Save
+        save: Associate control objective
 
   plans:
-    index:
-      title: 'Work plan list'
-      copy: 'Copy'
-    show:
-      title: 'Work plan details'
-    new:
-      title: 'Add work plan'
-    edit:
-      title: 'Edit work plan'
-    plan_item:
-      add_human_resource_utilization: 'Add human resource'
-      add_material_resource_utilization: 'Add material resource'
-      add_tagging: 'Add tag'
-      add_auxiliar_business_unit_type: 'Add auxiliary organizational unit'
-    plan_items:
-      add_plan_item: 'Add project'
-    duplication_or_overload_form:
-      allow_duplication: 'Allow duplicates?'
-      allow_overload: 'Allow overload?'
-    cost:
-      human_resources_abbr: 'HR'
-      human_resources: 'Human resources'
-      material_resources_abbr: 'MR'
-      material_resources: 'Material resources'
-    item_status:
-      note: 'Status must be read as: C = Concluded; E = Executing (in time); E (O) = Executing (overtime); D = Delayed'
-      concluded:
-        long: 'Concluded'
-        short: 'C'
-      executing_in_time:
-        long: 'Executing (in time)'
-        short: 'E'
-      executing_overtime:
-        long: 'Executing (overtime)'
-        short: 'E (O)'
-      delayed:
-        long: 'Delayed'
-        short: 'D'
-    item_status_csv_pat:
-      completed:
-        long: 'Completed (Blue)'
-        short: 'Completed'
-      completed_early:
-        long: 'Completed early (Grey)'
-        short: 'Completed early'
-      in_early_progress:
-        long: 'In early progress (Light Blue)'
-        short: 'In early progress'
-      not_started_no_delayed:
-        long: 'No started no delayed (Light Green)'
-        short: 'No started no delayed'
-      in_progress_no_delayed:
-        long: 'In progress no delayed (Dark Green)'
-        short: 'In progress no delayed'
-      delayed_pat:
-        long: 'Delayed (Yellow)'
-        short: 'Delayed'
-      overdue:
-        long: 'Overdue (Red)'
-        short: 'Overdue'
-    period:
-      title: 'Period (%{name})'
-      range: 'from %{from_date} to %{to_date}'
-    pdf:
-      title: 'Audit plan'
-      pdf_name: 'plan_period_%{period}.pdf'
-      resource_utilization: 'Resources used'
-    csv:
-      title: 'Audit Plan'
-      csv_name: 'plan_period_%{period}.csv'
-      csv_name_pat_im: 'internal_management_progress_report_%{current_date}.csv'
-      csv_name_pat_dprh: 'detailed_progress_report_in_hours_%{current_date}.csv'
-      number_observations_per_risk: 'Number of issues by risk'
-      annual_plan_hours: 'Annual plan hours'
-      auditor: 'Auditor (User)'
-      time_summary_hours: 'Time Summary Hours'
-      main_or_aux_but: Main/Auxiliar OU
-      main_but: Main OU
-      aux_but: Auxiliar OU
-    csv_prs_pat:
-      csv_name: 'progress_report_by_status_%{current_date}.csv'
-      business_unit: 'Sector'
-      totals: 'Totals'
-      total_plan_items: 'Total projects in workplan'
-    csv_prh_pat:
-      csv_name: 'totalizing_progress_report_in_hours_%{current_date}.csv'
-      business_unit: 'Sector'
-      budgeted_hours: 'Budgeted Hours'
-      progress: 'Total Progress'
-      percentage: 'Percentage'
-      total_hours: 'Total Hours'
-      period_name: 'Period'
-      period_start: 'Period Start'
-      period_end: 'Period End'
+    business_unit_type_plan_items:
+      associate_best_practice: Associate best practice
+      associate_control_objective: Associate control objective
     calendar:
       show:
-        title: 'Calendar'
-        empty: 'There are no projects in the selected plan'
-        empty_with_no_business_units: 'No business units selected'
-        detail: 'Detail'
-        by_business_unit: 'Show calendar by business unit'
-        by_project: 'Show calendar by project'
+        by_business_unit: Show calendar by business unit
+        by_project: Show calendar by project
+        detail: Detail
+        empty: There are no projects in the selected plan
+        empty_with_no_business_units: No business units selected
+        title: Calendar
+    cost:
+      human_resources: Human resources
+      human_resources_abbr: HR
+      material_resources: Material resources
+      material_resources_abbr: MR
+    csv:
+      annual_plan_hours: Annual plan hours
+      auditor: Auditor (User)
+      aux_but: Auxiliar OU
+      csv_name: plan_period_%{period}.csv
+      csv_name_pat_dprh: detailed_progress_report_in_hours_%{current_date}.csv
+      csv_name_pat_im: internal_management_progress_report_%{current_date}.csv
+      main_but: Main OU
+      main_or_aux_but: Main/Auxiliar OU
+      number_observations_per_risk: Number of issues by risk
+      time_summary_hours: Time Summary Hours
+      title: Audit Plan
+    csv_prh_pat:
+      budgeted_hours: Budgeted Hours
+      business_unit: Sector
+      csv_name: totalizing_progress_report_in_hours_%{current_date}.csv
+      percentage: Percentage
+      period_end: Period End
+      period_name: Period
+      period_start: Period Start
+      progress: Total Progress
+      total_hours: Total Hours
+    csv_prs_pat:
+      business_unit: Sector
+      csv_name: progress_report_by_status_%{current_date}.csv
+      total_plan_items: Total projects in workplan
+      totals: Totals
+    download_business_unit_type_plan: Download %{business_unit_type} plan
+    download_business_unit_type_plan_csv: Download plan in CSV
+    download_detailed_business_unit_type_plan: Download detailed %{business_unit_type} plan
+    download_detailed_business_unit_type_plan_csv: Download %{business_unit_type} plan in CSV
+    download_detailed_plan: Download detailed audit plan
+    download_detailed_progress_report_in_hours_of_work_pat: Download detailed progress report in hours of work
+    download_global_plan: Download global audit plan
+    download_progress_report_internal_management_pat: Download internal management progress report
+    download_progress_report_with_statuses_pat: Download progress statuses of work
+    download_totalizer_progress_report_in_hours_of_work_pat: Download totalizing progress report in hours of work
+    duplication_or_overload_form:
+      allow_duplication: Allow duplicates?
+      allow_overload: Allow overload?
+    edit:
+      title: Edit work plan
+    index:
+      copy: Copy
+      title: Work plan list
+    item_status:
+      concluded:
+        long: Concluded
+        short: C
+      delayed:
+        long: Delayed
+        short: D
+      executing_in_time:
+        long: Executing (in time)
+        short: E
+      executing_overtime:
+        long: Executing (overtime)
+        short: E (O)
+      note: 'Status must be read as: C = Concluded; E = Executing (in time); E (O) = Executing (overtime); D = Delayed'
+    item_status_csv_pat:
+      completed:
+        long: Completed (Blue)
+        short: Completed
+      completed_early:
+        long: Completed early (Grey)
+        short: Completed early
+      delayed_pat:
+        long: Delayed (Yellow)
+        short: Delayed
+      in_early_progress:
+        long: In early progress (Light Blue)
+        short: In early progress
+      in_progress_no_delayed:
+        long: In progress no delayed (Dark Green)
+        short: In progress no delayed
+      not_started_no_delayed:
+        long: No started no delayed (Light Green)
+        short: No started no delayed
+      overdue:
+        long: Overdue (Red)
+        short: Overdue
+    new:
+      title: Add work plan
+    pdf:
+      pdf_name: plan_period_%{period}.pdf
+      resource_utilization: Resources used
+      title: Audit plan
+    period:
+      range: from %{from_date} to %{to_date}
+      title: Period (%{name})
+    plan_item:
+      add_auxiliar_business_unit_type: Add auxiliary organizational unit
+      add_human_resource_utilization: Add human resource
+      add_material_resource_utilization: Add material resource
+      add_tagging: Add tag
+    plan_items:
+      add_plan_item: Add project
     resources:
       show:
-        title: 'Summary by resource'
-        empty: 'There are no human resources used in the selected plan'
+        empty: There are no human resources used in the selected plan
+        title: Summary by resource
+    show:
+      title: Work plan details
     stats:
       show:
-        title: 'Audit plan stats'
-        now: 'Now'
-        total: 'Total'
-        planned: 'Planned'
-        concluded: 'Concluded'
-        on_time: 'On time'
-        progress: 'Total progress'
-        compliance: 'Compliance'
-    business_unit_type_plan_items:
-      associate_control_objective: 'Associate control objective'
-      associate_best_practice: 'Associate best practice'
-    download_progress_report_with_statuses_pat: 'Download progress statuses of work'
-    download_totalizer_progress_report_in_hours_of_work_pat: 'Download totalizing progress report in hours of work'
-    download_detailed_progress_report_in_hours_of_work_pat: 'Download detailed progress report in hours of work'
-    download_progress_report_internal_management_pat: 'Download internal management progress report'
-    download_global_plan: 'Download global audit plan'
-    download_detailed_plan: 'Download detailed audit plan'
-    download_business_unit_type_plan: 'Download %{business_unit_type} plan'
-    download_detailed_business_unit_type_plan: 'Download detailed %{business_unit_type} plan'
-    download_detailed_business_unit_type_plan_csv: 'Download %{business_unit_type} plan in CSV'
-    download_business_unit_type_plan_csv: 'Download plan in CSV'
-    without_business_unit_type: 'Without business unit'
+        compliance: Compliance
+        concluded: Concluded
+        now: Now
+        on_time: On time
+        planned: Planned
+        progress: Total progress
+        title: Audit plan stats
+        total: Total
+    without_business_unit_type: Without business unit
+
+  polls:
+    about: About
+    about_html: About <strong>%{entity}</strong>
+    access_denied: The poll has already been answered
+    already_exists: Some of the polls for %{user} already exist and were not resubmitted
+    answer_poll: Answer poll?
+    answers:
+      index:
+        title: Answers summary
+    business_units:
+      index:
+        title: Summary by organizational unit
+    edit:
+      title: Edit poll
+    has_unanswered:
+      one: You have a pending poll to answer
+      other: You have %{count} pending polls to answer
+    index:
+      title: Poll list
+    new:
+      title: Add poll
+    not_found: The poll was not found or it has already been answered
+    pdf:
+      name: poll_summary_from_%{from_date}_to_%{to_date}.pdf
+    questionnaires:
+      index:
+        title: Summary by questionnaire type
+    reports:
+      title: Poll reports
+    reviews:
+      index:
+        title: Summary by audit report
+    score: Average level of satisfaction
+    show:
+      title: Poll details
+    total_answered: Total answered polls
+    total_unanswered: Total unanswered polls
+    without_data: No data for the entered filters
 
   profiles:
     edit:
-      title: 'My profile'
-      submit: 'Update my profile'
+      submit: Update my profile
+      title: My profile
     update:
-      success: 'Your profile was updated successfully'
-
-  polls:
-    access_denied: 'The poll has already been answered'
-    already_exists: 'Some of the polls for %{user} already exist and were not resubmitted'
-    answer_poll: 'Answer poll?'
-    about: 'About'
-    about_html: 'About <strong>%{entity}</strong>'
-    answers:
-      index:
-        title: 'Answers summary'
-    business_units:
-      index:
-        title: 'Summary by organizational unit'
-    reviews:
-      index:
-        title: 'Summary by audit report'
-    index:
-      title: 'Poll list'
-    edit:
-      title: 'Edit poll'
-    has_unanswered:
-      one: 'You have a pending poll to answer'
-      other: 'You have %{count} pending polls to answer'
-    new:
-      title: 'Add poll'
-    not_found: 'The poll was not found or it has already been answered'
-    pdf:
-      name: 'poll_summary_from_%{from_date}_to_%{to_date}.pdf'
-    questionnaires:
-      index:
-        title: 'Summary by questionnaire type'
-    reports:
-      title: 'Poll reports'
-    show:
-      title: 'Poll details'
-    total_answered: 'Total answered polls'
-    total_unanswered: 'Total unanswered polls'
-    without_data: 'No data for the entered filters'
-    score: 'Average level of satisfaction'
+      success: Your profile was updated successfully
 
   questionnaires:
-    index:
-      title: 'Questionnaire list'
     edit:
-      title: 'Edit questionnaire'
+      title: Edit questionnaire
+    index:
+      title: Questionnaire list
     new:
-      title: 'Add questionnaire'
-    show:
-      title: 'Questionnaire details'
+      title: Add questionnaire
     questions:
-      new: 'Add question'
+      new: Add question
+    show:
+      title: Questionnaire details
 
   readings:
     reading:
-      mark_as_read: 'Mark as read'
-      readed_on: 'Marked as read on %{on}'
+      mark_as_read: Mark as read
+      readed_on: Marked as read on %{on}
 
   registrations:
     new:
-      title: 'New Organization'
+      title: New Organization
     show:
-      title: 'Organization created'
-      body: 'Your registration is complete, you will receive an email with instructions to login'
+      body: Your registration is complete, you will receive an email with instructions to login
+      title: Organization created
 
   report:
-    index_title: 'Report list'
+    index_title: Report list
 
   reports:
-    customization_titles: 'Title customization'
-    generating: 'Generating report...'
-    file_will_be_sent: "We will send you the report by email, please review it in a few minutes"
+    customization_titles: Title customization
+    file_will_be_sent: We will send you the report by email, please review it in a few minutes
+    generating: Generating report...
 
   resource_classes:
     edit:
-      title: 'Edit resource class'
+      title: Edit resource class
     index:
-      title: 'Resource class list'
+      title: Resource class list
     new:
-      title: 'Add resource class'
-    show:
-      title: 'Resource class details'
+      title: Add resource class
     resources:
-      new: 'Add resource'
+      new: Add resource
+    show:
+      title: Resource class details
     types:
-      human: 'People'
-      material: 'Materials'
+      human: People
+      material: Materials
 
   reviews:
     auxiliar_business_unit_types:
-      title: 'Auxiliary organizational units'
-    index:
-      control_objective_items_open:
-        title: 'Open control objectives'
-        label: 'OCO'
-      control_objective_items_finished:
-        title: 'Completed control objectives'
-        label: 'CCO'
+      title: Auxiliary organizational units
     form:
-      add_business_unit_type: 'Add organizational unit'
-      operational_audit: 'Operational audit'
-      system_audit: 'System audit'
+      add_business_unit_type: Add organizational unit
+      operational_audit: Operational audit
+      system_audit: System audit
+    index:
+      control_objective_items_finished:
+        label: CCO
+        title: Completed control objectives
+      control_objective_items_open:
+        label: OCO
+        title: Open control objectives
 
-  authentications:
+  risk_assessment_templates:
+    edit:
+      title: Edit risk assessment template
+    form:
+      add_risk_assessment_weight: Add weight
+    index:
+      empty_html: There are no risk assessment templates, you can create one with the <span class="badge bg-primary">New risk assessment template</span> button
+      empty_search_html: There are no risk assessment templates that match the search criteria
+      new: New risk assessment template
+      title: Risk assessment template list
     new:
-      title: 'Authentication'
-      password: 'Password'
-      log_in: 'Login'
+      title: Create risk assessment template
+    show:
+      title: Show risk assessment template
+
+  risk_assessments:
+    edit:
+      other_actions: Actions
+      sort_by_risk: Sort by descending risk
+      title: Edit risk assessment
+    form:
+      add_best_practice: Add best practice
+      add_business_unit_type: Add organizational unit
+      add_risk_assessment_item: Add item
+      apply: Apply
+      cloned_risk_assessment_items: After creating the risk assessment you will see the copied items and can edit them or add new ones
+      new_risk_assessment_items: After creating the risk assessment you will be able to add items to it
+    heatmap: Heat map
+    index:
+      empty_html: There are no risk assessments, you can create one with the <span class="badge bg-primary">New risk assessment</span> button
+      empty_search_html: There are no risk assessments that match the search criteria
+      merge_to_plan: Create projects in plan from evaluation
+      new: New risk assessment
+      title: Risk assessment list
+    new:
+      title: Create risk assessment
+    pdf:
+      formula: Formula
+      pdf_name: risk_assessment_%{name}.pdf
+      period:
+        range: "%{from_date} to %{to_date}"
+        title: Period (%{name})
+      title: Risk assessment
+    risk_weight_risks: # Deprecated: remove when all clients are migrated
+      high: High
+      low: Low
+      medium: Medium
+      medium_high: Medium high
+      medium_low: Medium low
+      none: None
+    show:
+      download_csv: Download CSV
+      download_pdf: Download PDF
+      title: Show risk assessment
+    status:
+      draft: Draft
+      final: Final
+      merged: Scheduled
+
+  risk_registries:
+    edit:
+      title: Edit risk registry
+    form:
+      new_risk_categories: After creating the risk registry you will be able to add risk categories to it
+    index:
+      empty_html: There are no risk registries, you can create one with the <span class="badge bg-primary">New risk registry</span> button
+      empty_search_html: There are no risk registries that match the search criteria
+      new: New risk registry
+      title: Risk registry list
+    new:
+      title: Create risk registry
+    risk_categories:
+      new: Add risk category
+    risks:
+      new: Add risk
+    show:
+      title: Show risk registry
+
+  risk_score_items:
+    form:
+      add_risk_score_item: Add value
+
+  risks:
+    impacts:
+      almost_certain: Almost certain
+      likely: Likely
+      moderate: Moderate
+      rare: Rare
+      unlikely: Unlikely
+    likelihoods:
+      catastrophic: Catastrophic
+      high: High
+      insignificant: Insignificant
+      minor: Minor
+      moderate: Moderate
+    new:
+      control_objective: Add control objective
 
   sessions:
-    new:
-      title: 'Login'
-      log_in: 'Login'
-      email: 'Email'
-      user: 'User'
-      password: 'Password'
-      remember_me: 'Remember me'
-      try_again: 'Try again'
-      forgot_password: 'Forgot your password?'
     create:
-      invalid: 'Your email and/or password are incorrect =('
-      logged_in: 'Welcome'
+      invalid: Your email and/or password are incorrect =(
+      logged_in: Welcome
     destroy:
-      logged_out: 'See you next time'
+      logged_out: See you next time
+    new:
+      email: Email
+      forgot_password: Forgot your password?
+      log_in: Login
+      remember_me: Remember me
+      title: Login
+      try_again: Try again
+      user: User
 
   settings:
-    index:
-      title: 'Setting list'
-    show:
-      title: 'Setting details'
-    new:
-      title: 'Add settings'
-    edit:
-      title: 'Edit settings'
-    finding_stale_confirmed_days: 'Number of days before an unanswered issue is considered unattended'
-    review_code_expresion: 'Audit report identification code format'
-    account_expire_time: 'Days to delete inactive accounts'
-    allow_concurrent_sessions: 'Allow simultaneous sessions for the same user'
-    attempts_count: 'Number of failed connection attempts'
-    expire_notification: 'Password expiration notice'
-    password_constraint: 'Password composition control'
-    password_count: 'Password history'
-    password_expire_time: 'Password expire time'
-    password_minimum_length: 'Minimum password length'
-    password_minimum_time: 'Minimum password time'
-    session_expire_time: 'Disconnect due to inactivity'
-    exchange_directory_path: 'File exchange directory'
-    show_print_date_on_pdfs: 'Show print date on PDFs'
+    account_expire_time: Days to delete inactive accounts
+    allow_concurrent_sessions: Allow simultaneous sessions for the same user
+    attempts_count: Number of failed connection attempts
     brief_period_in_weeks: '"Brief of findings" reporting period in weeks'
-    show_follow_up_timestamps: 'Show follow-up timestamps'
-    require_manager_on_findings: 'Require audit manager on findings'
-    hide_import_from_ldap: 'Show "Import from LDAP" only to users with approval permissions'
-    skip_function_and_manager_from_ldap_sync: 'Do not sync "Position" and "Superior" fields with LDAP values'
-    hide_obsolete_best_practices: 'Hide obsolete best practices'
-    hours_of_work_per_day: 'Hours of work per day'
-    conclusion_review_receiver: 'Audit report receiver(s)'
-    temporary_polls: 'Temporarily save poll responses. A poll is complete when all of its questions are answered.'
-    finding_warning_expire_days: 'Number of days before the expiration of an observation in which the system will notify its proximity'
-    finding_by_current_user: 'Filter findings by current user'
-    enable_close_date_edition: 'Enable close date edition'
-    finding_days_for_next_notifications: 'Number of days in which a confirmation request must be sent'
-    uniqueness_username_validation: 'Validates username uniqueness across all organizations'
-    skip_reiteration_copy: 'Do not copy previous weakness data on reiteration'
+    conclusion_review_receiver: Audit report receiver(s)
+    edit:
+      title: Edit settings
+    enable_close_date_edition: Enable close date edition
+    exchange_directory_path: File exchange directory
+    expire_notification: Password expiration notice
+    finding_by_current_user: Filter findings by current user
+    finding_days_for_next_notifications: Number of days in which a confirmation request must be sent
+    finding_stale_confirmed_days: Number of days before an unanswered issue is considered unattended
+    finding_warning_expire_days: Number of days before the expiration of an observation in which the system will notify its proximity
+    hide_import_from_ldap: Show "Import from LDAP" only to users with approval permissions
+    hide_obsolete_best_practices: Hide obsolete best practices
+    hours_of_work_per_day: Hours of work per day
+    index:
+      title: Setting list
+    new:
+      title: Add settings
+    password_constraint: Password composition control
+    password_count: Password history
+    password_expire_time: Password expire time
+    password_minimum_length: Minimum password length
+    password_minimum_time: Minimum password time
+    require_manager_on_findings: Require audit manager on findings
+    review_code_expresion: Audit report identification code format
+    session_expire_time: Disconnect due to inactivity
+    show:
+      title: Setting details
+    show_follow_up_timestamps: Show follow-up timestamps
+    show_print_date_on_pdfs: Show print date on PDFs
+    skip_function_and_manager_from_ldap_sync: Do not sync "Position" and "Superior" fields with LDAP values
+    skip_reiteration_copy: Do not copy previous weakness data on reiteration
+    temporary_polls: Temporarily save poll responses. A poll is complete when all of its questions are answered.
+    uniqueness_username_validation: Validates username uniqueness across all organizations
 
   tags:
     edit:
-      title: 'Edit tag'
+      title: Edit tag
     form:
-      children: 'Subtags'
-      add_child: 'Add Subtag'
+      add_child: Add Subtag
+      children: Subtags
     index:
-      new: 'New tag'
-      title: 'Tag list'
-      empty_html: 'No tags, you can create one with the <span class="badge bg-primary">New tag</span> button'
+      empty_html: No tags, you can create one with the <span class="badge bg-primary">New tag</span> button
+      new: New tag
+      title: Tag list
     list:
-      childless: 'No subtags'
+      childless: No subtags
     new:
-      title: 'Create tag'
-    show:
-      title: 'Show tag'
-    styles:
-      secondary: 'Default'
-      primary: 'Important'
-      success: 'Success'
-      info: 'Info'
-      warning: 'Warning'
-      danger: 'Danger'
+      title: Create tag
     options:
-      origination_audit: 'Origination audit'
+      origination_audit: Origination audit
+    show:
+      title: Show tag
+    styles:
+      danger: Danger
+      info: Info
+      primary: Important
+      secondary: Default
+      success: Success
+      warning: Warning
 
   tasks:
-    on_time: 'On time, without rescheduling'
-    rescheduled: 'On time, rescheduled'
-    expired: 'Out of time'
+    expired: Out of time
+    on_time: On time, without rescheduling
+    rescheduled: On time, rescheduled
     status:
-      pending: 'Pending'
-      in_progress: 'In progress'
-      finished: 'Finished'
+      finished: Finished
+      in_progress: In progress
+      pending: Pending
 
   time_summary:
+    auxiliar_business_unit_types:
+      activity: Activity
+      review: Audit report
+      time_consumption_amount: Amount of hours allocated
+      title: Auxiliary organizational units
+      workflow_amount: Amount of scheduled hours
+    downloads:
+      csv:
+        business_unit_types: Organizational units
+        date: Date
+        detail: Detail
+        organization: Organization
+        period: Period
+        period_end: Period End
+        period_start: Period Start
+        plan_item: Project
+        plan_item_end: Project End
+        plan_item_start: Project Start
+        quantity_hours_per_day: Number of hours per day
+        task: Task
+        user: User
+      current_month: Download current month
+      current_week: Download current week
+      current_year: Download current year
+    edit:
+      title: Edit activity
+    form:
+      activity: Activity
+      add_business_unit_type: Add organizational unit
+      review: Audit report
+      time_consumption_amount: 'Amount of hours allocated:'
+      workflow_amount: 'Amount of scheduled hours:'
     index:
-      title: 'Time summary'
-      period: 'From %{start} to %{end}'
-      current_week: 'Current week'
-      empty: 'No records'
-      add: 'Add activity'
-      edit: 'Edit activity'
-      destroy: 'Delete activity'
+      add: Add activity
+      current_week: Current week
+      destroy: Delete activity
+      edit: Edit activity
+      empty: No records
+      period: From %{start} to %{end}
+      title: Time summary
       total_amount:
         one: 'Total accumulated hours: %{amount}'
         other: 'Total hours accumulated by %{count} people: %{amount}'
     new:
-      title: 'New activity'
-    form:
-      add_business_unit_type: 'Add organizational unit'
-      activity: 'Activity'
-      review: 'Audit report'
-      workflow_amount: 'Amount of scheduled hours:'
-      time_consumption_amount: 'Amount of hours allocated:'
-    auxiliar_business_unit_types:
-      title: 'Auxiliary organizational units'
-      activity: 'Activity'
-      review: 'Audit report'
-      workflow_amount: 'Amount of scheduled hours'
-      time_consumption_amount: 'Amount of hours allocated'
-    downloads:
-      current_week: "Download current week"
-      current_month: "Download current month"
-      current_year: "Download current year"
-      csv:
-        date: "Date"
-        quantity_hours_per_day: "Number of hours per day"
-        task: "Task"
-        user: "User"
-        business_unit_types: "Organizational units"
-        detail: "Detail"
-        organization: "Organization"
-        period: "Period"
-        period_start: "Period Start"
-        period_end: "Period End"
-        plan_item: "Project"
-        plan_item_start: "Project Start"
-        plan_item_end: "Project End"
+      title: New activity
 
   users:
-    index:
-      title: 'User list'
-      import_from_ldap: 'Import from LDAP'
-      show_hidden: 'Show hidden'
-    show:
-      title: 'User details'
-      profiles: 'Profiles'
-      organizations: 'Organizations'
-    new:
-      title: 'New user'
-    edit:
-      title: 'Edit user'
-      other_actions: 'Actions'
-    form:
-      unlink_manager: 'Unlink'
-      children: 'Staff in charge'
-      add_child: 'Add person in charge'
-      add_business_unit_type: 'Add organizational units'
-      add_related_user_relations: 'Add related user'
-      add_organization_role: 'Add new profile'
-      add_tagging: 'Add tag'
     create:
       correctly_created_with_count: 'User created, number of auditors remaining for your license: %{count}'
+    edit:
+      other_actions: Actions
+      title: Edit user
+    form:
+      add_business_unit_type: Add organizational units
+      add_child: Add person in charge
+      add_organization_role: Add new profile
+      add_related_user_relations: Add related user
+      add_tagging: Add tag
+      children: Staff in charge
+      unlink_manager: Unlink
     imports:
-      new:
-        title: 'Import users from LDAP'
-        credentials: 'Credentials'
-        import: 'Import'
       create:
-        title: 'Import results'
-        empty: 'No user imported'
-        connection: 'Could not connect to server, please check username and password'
-        record_invalid: 'Import failed, some users have invalid fields'
-        created: 'Created'
-        updated: 'Updated'
-        deleted: 'Deleted'
-        unchanged: 'Unchanged'
-        errored: 'Errored'
-        deprecated_users: 'Users deprecated in LDAP server'
+        connection: Could not connect to server, please check username and password
+        created: Created
+        deleted: Deleted
+        deprecated_users: Users deprecated in LDAP server
+        empty: No user imported
+        errored: Errored
+        record_invalid: Import failed, some users have invalid fields
+        title: Import results
+        unchanged: Unchanged
+        updated: Updated
+      new:
+        credentials: Credentials
+        import: Import
+        title: Import users from LDAP
+    index:
+      import_from_ldap: Import from LDAP
+      show_hidden: Show hidden
+      title: User list
+    new:
+      title: New user
     passwords:
-      edit:
-        title: 'Change password'
-        update: 'Update password'
-        new_password: 'New password'
-      update:
-        success: 'Password changed successfully'
-        expired: 'The link has expired, please ask for instructions again'
-      new:
-        title: 'Reset password'
-        email: 'Email'
-        send_instructions: 'Send instructions'
-        back: 'Back'
-        note: 'To reset your password, please enter your email address'
       create:
-        success: 'An email was sent with instructions to reset the password'
-        not_found: 'The email entered is not registered, please check for typing error'
+        not_found: The email entered is not registered, please check for typing error
+        success: An email was sent with instructions to reset the password
+      edit:
+        new_password: New password
+        title: Change password
+        update: Update password
+      new:
+        back: Back
+        email: Email
+        note: To reset your password, please enter your email address
+        send_instructions: Send instructions
+        title: Reset password
+      update:
+        expired: The link has expired, please ask for instructions again
+        success: Password changed successfully
     profiles:
       edit:
-        title: 'Edit personal information'
+        title: Edit personal information
     reassignments:
       edit:
-        title: 'Reassign responsibilities'
-        new_user: 'New responsible'
-        old_user: 'Old responsible'
-        with_findings: 'Include pending findings?'
-        with_reviews: 'Include executing audit reports?'
-        submit: 'Reassign'
-      must_select_a_user: 'You must select a user'
-
+        new_user: New responsible
+        old_user: Old responsible
+        submit: Reassign
+        title: Reassign responsibilities
+        with_findings: Include pending findings?
+        with_reviews: Include executing audit reports?
+      must_select_a_user: You must select a user
     registrations:
       new:
-        title: 'Register new user'
-
+        title: Register new user
     releases:
       edit:
-        title: 'Release responsibilities'
-        with_findings: 'Include pending findings?'
-        with_reviews: 'Include executing audit reports?'
-        submit: 'Release responsibilities'
-
+        submit: Release responsibilities
+        title: Release responsibilities
+        with_findings: Include pending findings?
+        with_reviews: Include executing audit reports?
+    show:
+      organizations: Organizations
+      profiles: Profiles
+      title: User details
     status:
-      status_controls:
-        add: 'Add user to the follow-up status list'
-        remove: 'Remove user from the follow-up status list'
-        list: 'Show pending issues list of the selected users'
-        user_findings: "Show user pending issues list and their hierarchy"
       show:
-        title: 'Status'
-        table: 'Show table'
-        graph: 'Show graph'
-        pending_weaknesses:
-          one: '**One** issue **pending**'
-          other: '**%{count}** issues **pending**'
+        graph: Show graph
         high_risk_weaknesses:
-          one: '**One** issue of **high risk**'
-          other: '**%{count}** **high risk** issues'
+          one: "**One** issue of **high risk**"
+          other: "**%{count}** **high risk** issues"
+        pending_weaknesses:
+          one: "**One** issue **pending**"
+          other: "**%{count}** issues **pending**"
+        table: Show table
+        title: Status
         weaknesses:
-          pending:
-            one: '**One** pending issue'
-            other: '**%{count}** pending issues'
           complete:
-            one: '**One** issue resolved'
-            other: '**%{count}** issues resolved'
+            one: "**One** issue resolved"
+            other: "**%{count}** issues resolved"
+          pending:
+            one: "**One** pending issue"
+            other: "**%{count}** pending issues"
           repeated:
-            one: '**One** repeated issue'
-            other: '**%{count}** repeated issues'
-
-  risk_assessments:
-    edit:
-      title: 'Edit risk assessment'
-      other_actions: 'Actions'
-      sort_by_risk: 'Sort by descending risk'
-    index:
-      new: 'New risk assessment'
-      title: 'Risk assessment list'
-      empty_html: 'There are no risk assessments, you can create one with the <span class="badge bg-primary">New risk assessment</span> button'
-      empty_search_html: 'There are no risk assessments that match the search criteria'
-      merge_to_plan: 'Create projects in plan from evaluation'
-    new:
-      title: 'Create risk assessment'
-    show:
-      title: 'Show risk assessment'
-      download_pdf: 'Download PDF'
-      download_csv: 'Download CSV'
-    form:
-      new_risk_assessment_items: 'After creating the risk assessment you will be able to add items to it'
-      cloned_risk_assessment_items: 'After creating the risk assessment you will see the copied items and can edit them or add new ones'
-      add_risk_assessment_item: 'Add item'
-      add_best_practice: 'Add best practice'
-      add_business_unit_type: 'Add organizational unit'
-      apply: 'Apply'
-    heatmap: 'Heat map'
-    risk_weight_risks: # Deprecated: remove when all clients are migrated
-      none: 'None'
-      low: 'Low'
-      medium_low: 'Medium low'
-      medium: 'Medium'
-      medium_high: 'Medium high'
-      high: 'High'
-    status:
-      draft: 'Draft'
-      final: 'Final'
-      merged: 'Scheduled'
-    pdf:
-      title: 'Risk assessment'
-      pdf_name: 'risk_assessment_%{name}.pdf'
-      formula: 'Formula'
-      period:
-        title: "Period (%{name})"
-        range: "%{from_date} to %{to_date}"
-
-  risk_assessment_templates:
-    edit:
-      title: 'Edit risk assessment template'
-    index:
-      new: 'New risk assessment template'
-      title: 'Risk assessment template list'
-      empty_html: 'There are no risk assessment templates, you can create one with the <span class="badge bg-primary">New risk assessment template</span> button'
-      empty_search_html: 'There are no risk assessment templates that match the search criteria'
-    new:
-      title: 'Create risk assessment template'
-    show:
-      title: 'Show risk assessment template'
-    form:
-      add_risk_assessment_weight: 'Add weight'
-
-  risk_registries:
-    edit:
-      title: 'Edit risk registry'
-    form:
-      new_risk_categories: 'After creating the risk registry you will be able to add risk categories to it'
-    index:
-      new: 'New risk registry'
-      title: 'Risk registry list'
-      empty_html: 'There are no risk registries, you can create one with the <span class="badge bg-primary">New risk registry</span> button'
-      empty_search_html: 'There are no risk registries that match the search criteria'
-    new:
-      title: 'Create risk registry'
-    show:
-      title: 'Show risk registry'
-    risk_categories:
-      new: 'Add risk category'
-    risks:
-      new: 'Add risk'
-
-  risk_score_items:
-    form:
-      add_risk_score_item: 'Add value'
-
-  risks:
-    likelihoods:
-      insignificant: 'Insignificant'
-      minor: 'Minor'
-      moderate: 'Moderate'
-      high: 'High'
-      catastrophic: 'Catastrophic'
-    impacts:
-      rare: 'Rare'
-      unlikely: 'Unlikely'
-      moderate: 'Moderate'
-      likely: 'Likely'
-      almost_certain: 'Almost certain'
-    new:
-      control_objective: 'Add control objective'
+            one: "**One** repeated issue"
+            other: "**%{count}** repeated issues"
+      status_controls:
+        add: Add user to the follow-up status list
+        list: Show pending issues list of the selected users
+        remove: Remove user from the follow-up status list
+        user_findings: Show user pending issues list and their hierarchy
 
   versions:
-    index:
-      title: 'Show security change report'
-    security_changes_report:
-      title: 'Security change report'
-    show:
-      title: 'Change log details'
+    changes: Changes
+    column_attribute: Attribute
+    column_new_value: New value
+    column_old_value: Old value
     events:
-      create: 'Create'
-      update: 'Update'
-      destroy: 'Delete'
-    changes: 'Changes'
-    column_attribute: 'Attribute'
-    column_new_value: 'New value'
-    column_old_value: 'Old value'
-    without_changes: 'No changes'
-    pdf_list_name: 'security_change_report_%{from_date}_%{to_date}.pdf'
+      create: Create
+      destroy: Delete
+      update: Update
+    index:
+      title: Show security change report
+    pdf_list_name: security_change_report_%{from_date}_%{to_date}.pdf
+    security_changes_report:
+      title: Security change report
+    show:
+      title: Change log details
+    without_changes: No changes
 
   weakness_templates:
     edit:
-      title: 'Edit issue template'
-    index:
-      new: 'New issue template'
-      title: 'Issue template list'
-      empty_html: 'There are no issue templates, you can create one with the <span class="badge bg-primary">New issue template</span> button'
-      empty_search_html: 'There are no issue templates that match the search criteria'
-    new:
-      title: 'Create issue template'
-    show:
-      title: 'Show issue template'
+      title: Edit issue template
     form:
-      add_control_objective: 'Add control objective'
+      add_control_objective: Add control objective
+    index:
+      empty_html: There are no issue templates, you can create one with the <span class="badge bg-primary">New issue template</span> button
+      empty_search_html: There are no issue templates that match the search criteria
+      new: New issue template
+      title: Issue template list
+    new:
+      title: Create issue template
+    show:
+      title: Show issue template
 
   welcome:
-    completed_findings: 'Completed findings'
-    commented_on: 'commented on'
-    current_user_answers: 'Current user answers'
-    latest_answers: 'Latest answers'
-    latest_findings: 'Latest findings'
-    pending_findings: 'Pending findings'
-    version: 'Version'
-    welcome: 'Welcome'
+    commented_on: commented on
+    completed_findings: Completed findings
+    current_user_answers: Current user answers
+    latest_answers: Latest answers
+    latest_findings: Latest findings
+    pending_findings: Pending findings
+    version: Version
+    welcome: Welcome
 
   work_papers:
     show:
-      title: 'Working paper'
-      error: 'Please remember that you must be authenticated or have permissions to view the document'
+      error: Please remember that you must be authenticated or have permissions to view the document
+      title: Working paper
     statuses:
-      pending: 'Pending'
-      finished: 'Finished'
-      revised: 'Revised'
       auditor:
-        next_to_pending: 'Mark for revision'
-        next_to_finished: 'Return to pending'
+        next_to_finished: Return to pending
+        next_to_pending: Mark for revision
+      finished: Finished
+      pending: Pending
+      revised: Revised
       supervisor:
-        next_to_finished: 'Mark as revised'
-        next_to_revised: 'Return to pending'
+        next_to_finished: Mark as revised
+        next_to_revised: Return to pending
