@@ -38,6 +38,14 @@ class Authentication
     @valid && @valid_user
   end
 
+  def require_mfa?
+    current_organization_role = @valid_user.organization_roles.where(organization_id: @current_organization.id).take
+    require_mfa               = current_organization_role&.require_mfa
+    @redirect_url             = { controller: 'mfa_sessions', action: 'new' } if require_mfa
+
+    require_mfa
+  end
+
   private
 
     def set_resources

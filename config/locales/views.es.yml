@@ -265,6 +265,14 @@ es:
     not_authorized: Debe ingresar para ver el contenido
     truncated: Truncado, cantidad máxima de caracteres %{count}
 
+  mfa_sessions:
+    create:
+      invalid_code: Código inválido
+    new:
+      mfa_code: Código
+      send_code: Enviar código
+      title: Autenticación Multifactor
+
   navigation:
     _no: 'No'
     _yes: Sí

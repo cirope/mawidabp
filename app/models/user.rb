@@ -34,6 +34,8 @@ class User < ApplicationRecord
   include Users::Update
   include Taggable
 
+  acts_as_google_authenticated lookup_token: :mfa_secret, drift: 15
+
   trimmed_fields :user, :email, :name, :last_name
 
   has_many :login_records, dependent: :destroy

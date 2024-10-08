@@ -53,6 +53,7 @@ class OrganizationRole < ApplicationRecord
 
   # Atributos
   attribute :sync_ldap, :boolean
+  attribute :require_mfa, :boolean
 
   def to_s
     "#{self.role.name} (#{self.organization.name})"
