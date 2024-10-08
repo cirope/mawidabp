@@ -23,6 +23,8 @@ class SamlSessionsControllerTest < ActionController::TestCase
   end
 
   test 'should create user with roles and redirect to welcome' do
+    original_limit = Rails.application.credentials.auditors_limit
+
     create_saml_provider @organization
 
     set_host_for_organization @organization.prefix
@@ -45,6 +47,10 @@ class SamlSessionsControllerTest < ActionController::TestCase
 
     IdpSettingsAdapter.stub :saml_settings, response_stub do
       OneLogin::RubySaml::Response.stub :new, mock do
+        Rails.application.credentials.auditors_limit = (
+          Current.group.users.can_act_as(:auditor).reload.count + 1
+        )
+
         assert_difference ['User.count', 'OrganizationRole.count', 'LoginRecord.count'] do
           post :create
 
@@ -59,6 +65,8 @@ class SamlSessionsControllerTest < ActionController::TestCase
           assert flash[:notice].blank?
           assert_redirected_to welcome_url
         end
+
+        Rails.application.credentials.auditors_limit = original_limit
       end
     end
   end
