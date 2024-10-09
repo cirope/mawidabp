@@ -228,6 +228,10 @@ class AuthenticationTest < ActionController::TestCase
 
     original_limit = Rails.application.credentials.auditors_limit
 
+    Rails.application.credentials.auditors_limit = (
+      Current.group.users.can_act_as(:auditor).reload.count + 1
+    )
+
     create_saml_provider @organization
 
     Current.group = @organization.group
@@ -250,10 +254,6 @@ class AuthenticationTest < ActionController::TestCase
 
     IdpSettingsAdapter.stub :saml_settings, response_stub do
       OneLogin::RubySaml::Response.stub :new, mock do
-        Rails.application.credentials.auditors_limit = (
-          Current.group.users.can_act_as(:auditor).reload.count + 1
-        )
-
         assert_difference ['User.count', 'OrganizationRole.count'] do
           assert_valid_authentication
 
@@ -267,17 +267,21 @@ class AuthenticationTest < ActionController::TestCase
           assert last_user.enable
           assert_equal last_user.organization_roles.first.role, roles(:supervisor_role)
         end
-
-      ensure
-        Rails.application.credentials.auditors_limit = original_limit
       end
     end
+
+  ensure
+    Rails.application.credentials.auditors_limit = original_limit
   end
 
   test 'should create user with default role and redirect to welcome - saml authentication' do
     set_organization
 
     original_limit = Rails.application.credentials.auditors_limit
+
+    Rails.application.credentials.auditors_limit = (
+      Current.group.users.can_act_as(:auditor).reload.count + 1
+    )
 
     create_saml_provider @organization
 
@@ -305,10 +309,6 @@ class AuthenticationTest < ActionController::TestCase
 
     IdpSettingsAdapter.stub :saml_settings, response_stub do
       OneLogin::RubySaml::Response.stub :new, mock do
-        Rails.application.credentials.auditors_limit = (
-          Current.group.users.can_act_as(:auditor).reload.count + 1
-        )
-
         assert_difference ['User.count', 'OrganizationRole.count'] do
           assert_valid_authentication
 
@@ -322,11 +322,11 @@ class AuthenticationTest < ActionController::TestCase
           assert last_user.enable
           assert_equal default_role_for_user, last_user.organization_roles.where(organization: @organization).take!.role
         end
-
-      ensure
-        Rails.application.credentials.auditors_limit = original_limit
       end
     end
+
+  ensure
+    Rails.application.credentials.auditors_limit = original_limit
   end
 
   test 'should not create user when dont have default role - saml authentication' do
