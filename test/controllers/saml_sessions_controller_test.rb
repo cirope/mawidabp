@@ -67,7 +67,7 @@ class SamlSessionsControllerTest < ActionController::TestCase
           assert flash[:notice].blank?
           assert_redirected_to welcome_url
         end
-
+      ensure
         Rails.application.credentials.auditors_limit = original_limit
       end
     end
