@@ -47,8 +47,8 @@
             <td class="d-none d-xl-table-cell"><%= count_control_objective_items_by_finished_status(review, finished: true) %></td>
             <td class="text-end"><%= link_to_clone new_review_path(:clone_from => review.id) %></td>
             <td class="text-end"><%= link_to_show review %></td>
-            <td class="text-end"><%= link_to_edit edit_review_path(review) %></td>
-            <td class="text-end"><%= link_to_destroy review if review.can_be_destroyed? %></td>
+            <td class="text-end"><%= link_to_edit edit_review_path(review) if review.can_be_modified_by?(@auth_user) %></td>
+            <td class="text-end"><%= link_to_destroy review if review.can_be_destroyed? && review.can_be_modified_by?(@auth_user) %></td>
           </tr>
         <% end %>
       </tbody>

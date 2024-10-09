@@ -14,6 +14,7 @@ class ReviewsController < ApplicationController
     :excluded_control_objectives, :reset_control_objective_name,
     :recode_work_papers
   ]
+  before_action :check_permissions, only: [:edit, :update, :destroy]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
@@ -575,5 +576,11 @@ class ReviewsController < ApplicationController
         recode_weaknesses_by_control_objective_order: :modify,
         reset_control_objective_name: :modify
       )
+    end
+
+    def check_permissions
+      unless @review.can_be_modified_by? @auth_user
+        redirect_to reviews_url, alert: t('messages.not_allowed')
+      end
     end
 end
