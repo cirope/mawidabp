@@ -267,6 +267,7 @@ class AuthenticationTest < ActionController::TestCase
           assert last_user.enable
           assert_equal last_user.organization_roles.first.role, roles(:supervisor_role)
         end
+
       ensure
         Rails.application.credentials.auditors_limit = original_limit
       end
@@ -321,6 +322,7 @@ class AuthenticationTest < ActionController::TestCase
           assert last_user.enable
           assert_equal default_role_for_user, last_user.organization_roles.where(organization: @organization).take!.role
         end
+
       ensure
         Rails.application.credentials.auditors_limit = original_limit
       end
