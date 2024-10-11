@@ -44,7 +44,9 @@ class ConclusionReviewsHelperTest < ActionView::TestCase
 
   test 'Should return an array for conclusion_review_options_collection' do
     result = conclusion_review_options_collection
+
     assert_kind_of Array, result
+
     CONCLUSION_REVIEW_OPTIONS.each do |label, key|
       assert_includes result, [label, key]
     end
