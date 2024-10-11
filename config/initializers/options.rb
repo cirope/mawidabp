@@ -296,7 +296,7 @@ TAG_OPTIONS = {
 }
 
 CONCLUSION_REVIEW_OPTIONS = {
-  'Excluir hallazgos regularizados' => 'exclude_implemented_audited_findings',
+  'Excluir hallazgos regularizados'           => 'exclude_implemented_audited_findings',
   'Excluir hallazgos cerrados/reclasificados' => 'exclude_criteria_mismatch_findings'
 }
 
