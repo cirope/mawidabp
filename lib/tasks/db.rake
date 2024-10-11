@@ -35,6 +35,7 @@ namespace :db do
       update_risk_assessments_changes            # 2023-10-02
       add_risk_registries_privilege              # 2023-10-26
       add_claim_values_in_saml_provider          # 2023-11-02
+      update_conclusion_review_options           # 2024-10-14
     end
   end
 end
@@ -961,6 +962,28 @@ private
 
   def add_claim_values_in_saml_provider?
     SamlProvider.where(username_claim: nil).any?
+  end
+
+  def update_conclusion_review_options
+    if update_conclusion_review_options?
+      ConclusionReview.find_each do |conclusion_review|
+        options = conclusion_review.options
+
+        if conclusion_review.exclude_regularized_findings
+          options['exclude_implemented_audited_findings'] = "1"
+        end
+
+        conclusion_review.update_columns(
+          options: options,
+          exclude_regularized_findings: nil
+        )
+      end
+    end
+  end
+
+  def update_conclusion_review_options?
+    ActiveRecord::Base.connection.column_exists?(:conclusion_reviews, :exclude_regularized_findings) &&
+      ConclusionReview.where.not(exclude_regularized_findings: nil).exists?
   end
 
   def claim_fields_empty? provider
