@@ -431,14 +431,14 @@ class ConclusionFinalReviewsController < ApplicationController
         :affects_compliance, :collapse_control_objectives,
         :reference, :scope, :previous_identification, :previous_date,
         :main_recommendations, :effectiveness_notes, :additional_comments,
-        :review_conclusion, :applied_data_analytics,
-        :lock_version, :exclude_regularized_findings,
+        :review_conclusion, :applied_data_analytics, :lock_version,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [
             :id, :best_practice_id, :auditor_comment
           ]
-        ]
+        ],
+        options: {}
       )
     end
 
