@@ -9,7 +9,7 @@ module Users::ReviewAssignment
     options[:supervisor] = types[:supervisor] if supervisor?
     options[:manager]    = types[:manager]    if manager?
 
-    if can_act_as_auditor?
+    if auditor?
       options[:auditor]           = types[:auditor]
       options[:auditor_read_only] = types[:auditor_read_only]
     end

@@ -1689,7 +1689,7 @@ en:
       readonly: The members cannot be modified, the final audit report has already been issued
       type_audited: Auditee
       type_auditor: Auditor
-      type_auditor_read_only: Auditor Read Only
+      type_auditor_read_only: Auditor read only
       type_manager: Manager
       type_responsible: Head of internal audit
       type_supervisor: Supervisor

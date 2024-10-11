@@ -23,6 +23,7 @@ module Reviews::Users
   end
 
   private
+
     def review_assignment_type user
       assignment = user.review_user_assignments.where(review: self).take
 
