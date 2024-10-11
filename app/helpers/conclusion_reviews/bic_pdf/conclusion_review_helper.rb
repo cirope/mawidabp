@@ -114,7 +114,7 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
                    control_objective_item.weaknesses
                  end
 
-    weaknesses = conclusion_review.bic_exclude_regularized_findings weaknesses
+    weaknesses = conclusion_review.bic_exclude_findings weaknesses
 
     weaknesses.not_revoked.sort_for_review
   end
@@ -162,6 +162,6 @@ module ConclusionReviews::BicPdf::ConclusionReviewHelper
                      conclusion_review.review.final_weaknesses
                    end
 
-      conclusion_review.bic_exclude_regularized_findings weaknesses
+      conclusion_review.bic_exclude_findings weaknesses
     end
 end
