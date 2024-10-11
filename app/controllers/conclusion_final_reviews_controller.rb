@@ -1,10 +1,15 @@
 class ConclusionFinalReviewsController < ApplicationController
+  include Reviews::Permissions
+
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_final_review, only: [
     :show, :edit, :update, :destroy, :export_to_pdf, :score_sheet,
     :download_work_papers, :create_bundle, :compose_email, :send_by_email,
     :export_to_rtf
   ]
+  before_action -> {
+    check_review_permissions(@conclusion_final_review)
+  }, only: [:edit, :update, :destroy]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   def index

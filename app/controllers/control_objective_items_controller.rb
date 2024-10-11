@@ -1,11 +1,15 @@
 class ControlObjectiveItemsController < ApplicationController
   include AutoCompleteFor::BusinessUnit
   include AutoCompleteFor::BusinessUnitType
+  include Reviews::Permissions
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_control_objective_item, only: [
     :show, :edit, :update, :destroy
   ]
+  before_action -> {
+    check_review_permissions(@control_objective_item)
+  }, only: [:edit, :update, :destroy]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista los objetivos de control

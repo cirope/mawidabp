@@ -177,7 +177,7 @@
     <hr />
 
     <div>
-      <% if @review.can_be_modified_by? @auth_user %>
+      <% if review_can_be_modified? @review %>
         <%= link_to_edit edit_review_path(@review) %> |
       <% end %>
       <%= link_to t('label.download'), [@review, format: :pdf] %> |
