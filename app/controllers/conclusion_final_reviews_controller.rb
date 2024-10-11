@@ -8,7 +8,7 @@ class ConclusionFinalReviewsController < ApplicationController
     :export_to_rtf
   ]
   before_action -> {
-    check_review_permissions(@conclusion_final_review)
+    check_review_permissions @conclusion_final_review
   }, only: [:edit, :update, :destroy]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 

@@ -10,9 +10,7 @@ class WeaknessesController < ApplicationController
   before_action :set_weakness, only: [
     :show, :edit, :update, :undo_reiteration
   ]
-  before_action -> {
-    check_review_permissions(@weakness)
-  }, only: [:edit, :update]
+  before_action -> { check_review_permissions @weakness }, only: [:edit, :update]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista las observaciones

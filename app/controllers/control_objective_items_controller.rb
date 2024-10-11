@@ -8,7 +8,7 @@ class ControlObjectiveItemsController < ApplicationController
     :show, :edit, :update, :destroy
   ]
   before_action -> {
-    check_review_permissions(@control_objective_item)
+    check_review_permissions @control_objective_item
   }, only: [:edit, :update, :destroy]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 

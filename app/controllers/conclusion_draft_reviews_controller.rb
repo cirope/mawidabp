@@ -7,9 +7,7 @@ class ConclusionDraftReviewsController < ApplicationController
     :score_sheet, :download_work_papers, :create_bundle,
     :compose_email, :send_by_email
   ]
-  before_action -> {
-    check_review_permissions(@conclusion_draft_review)
-  }, only: [:edit, :update]
+  before_action -> { check_review_permissions @conclusion_draft_review }, only: [:edit, :update]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista los informes borradores
