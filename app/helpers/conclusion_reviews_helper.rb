@@ -29,4 +29,25 @@ module ConclusionReviewsHelper
       NEW_EVOLUTION_OPTIONS.map { |option| [option, option] }
     end
   end
+
+  def conclusion_review_options_collection
+    Array CONCLUSION_REVIEW_OPTIONS.dup
+  end
+
+  def conclusion_review_input_option form, review, option, readonly: false
+    option_key    = option.last
+    resource_name = review.model_name.param_key
+
+    input_html = {
+      id:       "#{resource_name}_#{option_key}_options",
+      name:     "#{resource_name}[options][#{option_key}]",
+      checked:  review.option_value(option_key),
+      readonly: readonly
+    }
+
+    form.input :options,
+      as:         :boolean,
+      label:      option.first,
+      input_html: input_html
+  end
 end

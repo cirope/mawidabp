@@ -160,11 +160,13 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-6">
-              <%= f.input :exclude_regularized_findings, input_html: { readonly: readonly } %>
+          <% conclusion_review_options_collection.each do |option| %>
+            <div class="row">
+              <div class="col-md-6">
+                <%= conclusion_review_input_option(f, @conclusion_final_review, option, readonly: readonly) %>
+              </div>
             </div>
-          </div>
+          <% end %>
         <% end %>
 
         <% if show_review_best_practice_comments? %>
