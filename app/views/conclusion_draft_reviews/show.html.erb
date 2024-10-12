@@ -99,7 +99,9 @@
         <%= link_to t('conclusion_draft_review.new_conclusion_final_review'),
           new_conclusion_final_review_path(:review => @conclusion_draft_review.review_id) %> |
       <% end %>
-      <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
+      <% if review_can_be_modified? @conclusion_draft_review %>
+        <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
+      <% end %>
       <%= link_to_index conclusion_draft_reviews_path %> |
       <% if Current.conclusion_pdf_format == 'gal' %>
         <%= render 'gal_downloads' %>
