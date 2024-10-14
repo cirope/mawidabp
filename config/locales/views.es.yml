@@ -263,6 +263,7 @@ es:
   messages:
     confirmation: "¿Está seguro?"
     not_authorized: Debe ingresar para ver el contenido
+    not_allowed: No está autorizado para realizar la operación
     truncated: Truncado, cantidad máxima de caracteres %{count}
 
   navigation:

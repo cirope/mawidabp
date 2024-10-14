@@ -134,6 +134,7 @@ es:
         subtitle: "<b>OBJETIVO</b>"
         main_being_implemented: "<b>OBSERVACIONES EN PROCESO DE REGULARIZACIÓN</b>"
         main_implemented_audited: "<b>OBSERVACIONES REGULARIZADAS</b>"
+        no_main_weaknesses: "<b>SIN OBSERVACIONES</b>"
         from_external_review: "De Informe"
         audit_conclusion: "<b>CONCLUSIÓN GENERAL DE LA AUDITORÍA</b>"
         highest_responsible: "<b>%{responsible}</b>"

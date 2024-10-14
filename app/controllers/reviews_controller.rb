@@ -3,6 +3,7 @@ class ReviewsController < ApplicationController
   include AutoCompleteFor::ControlObjective
   include AutoCompleteFor::ProcessControl
   include AutoCompleteFor::Tagging
+  include Reviews::Permissions
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
@@ -14,6 +15,7 @@ class ReviewsController < ApplicationController
     :excluded_control_objectives, :reset_control_objective_name,
     :recode_work_papers
   ]
+  before_action -> { check_review_permissions @review }, only: [:edit, :update, :destroy]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
