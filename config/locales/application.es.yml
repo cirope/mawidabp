@@ -1690,6 +1690,7 @@ es:
       readonly: Los integrantes no pueden ser modificados, ya se emitió el informe definitivo
       type_audited: Auditado
       type_auditor: Auditor
+      type_auditor_read_only: Auditor solo lectura
       type_manager: Gerente
       type_responsible: Responsable máximo de auditoría interna
       type_supervisor: Supervisor

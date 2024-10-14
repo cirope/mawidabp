@@ -15,4 +15,18 @@ module Reviews::Users
       end
     end
   end
+
+  def can_be_modified_by? user
+    assignment_type = review_assignment_type user
+
+    ReviewUserAssignment::TYPES.invert[assignment_type] != :auditor_read_only
+  end
+
+  private
+
+    def review_assignment_type user
+      assignment = user.review_user_assignments.where(review: self).take
+
+      assignment&.assignment_type
+    end
 end
