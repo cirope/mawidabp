@@ -1083,7 +1083,7 @@ es:
       type_viewer: "Veedor"
       type_auditor: "Auditor"
       type_supervisor: "Supervisor"
-      type_manager: "Gerente"
+      type_manager: "Líder"
       type_responsible: "Responsable máximo de auditoría interna"
       type_audited: "Auditado"
       audit_team: "Auditoría"
