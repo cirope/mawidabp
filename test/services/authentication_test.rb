@@ -224,6 +224,14 @@ class AuthenticationTest < ActionController::TestCase
   #authentication with saml
 
   test 'should create user with roles and redirect to welcome - saml authentication' do
+    set_organization
+
+    original_limit = Rails.application.credentials.auditors_limit
+
+    Rails.application.credentials.auditors_limit = (
+      Current.group.users.can_act_as(:auditor).reload.count + 1
+    )
+
     create_saml_provider @organization
 
     Current.group = @organization.group
@@ -261,9 +269,20 @@ class AuthenticationTest < ActionController::TestCase
         end
       end
     end
+
+  ensure
+    Rails.application.credentials.auditors_limit = original_limit
   end
 
   test 'should create user with default role and redirect to welcome - saml authentication' do
+    set_organization
+
+    original_limit = Rails.application.credentials.auditors_limit
+
+    Rails.application.credentials.auditors_limit = (
+      Current.group.users.can_act_as(:auditor).reload.count + 1
+    )
+
     create_saml_provider @organization
 
     Current.group                                      = @organization.group
@@ -305,6 +324,9 @@ class AuthenticationTest < ActionController::TestCase
         end
       end
     end
+
+  ensure
+    Rails.application.credentials.auditors_limit = original_limit
   end
 
   test 'should not create user when dont have default role - saml authentication' do
