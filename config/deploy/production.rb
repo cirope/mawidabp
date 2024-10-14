@@ -8,8 +8,8 @@ set :default_env, {
   'LC_ALL':   'en_US.UTF-8'
 }
 
-role :web, %w{deployer@bcra-test.mawidabp.com}
-role :app, %w{deployer@bcra-test.mawidabp.com}
-role :db,  %w{deployer@bcra-test.mawidabp.com}
+role :web, %w{deployer@bcra-testing.mawidabp.com}
+role :app, %w{deployer@bcra-testing.mawidabp.com}
+role :db,  %w{deployer@bcra-testing.mawidabp.com}
 
-server 'bcra-test.mawidabp.com', user: 'deployer', roles: %w{web app db}
+server 'bcra-testing.mawidabp.com', user: 'deployer', roles: %w{web app db}
