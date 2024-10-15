@@ -267,11 +267,12 @@ es:
     truncated: Truncado, cantidad máxima de caracteres %{count}
 
   mfa_sessions:
-    create:
-      invalid_code: Código inválido
+    invalid_code: Código inválido
+    send_code: Enviar código
     new:
       mfa_code: Código
-      send_code: Enviar código
+      title: Autenticación Multifactor
+    edit:
       title: Autenticación Multifactor
 
   navigation:

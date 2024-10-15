@@ -16,6 +16,7 @@ class User < ApplicationRecord
   include Users::Group
   include Users::Licenses
   include Users::MarkChanges
+  include Users::Mfa
   include Users::Name
   include Users::Notifications
   include Users::Password
@@ -33,8 +34,6 @@ class User < ApplicationRecord
   include Users::Tree
   include Users::Update
   include Taggable
-
-  acts_as_google_authenticated lookup_token: :mfa_secret, drift: 15
 
   trimmed_fields :user, :email, :name, :last_name
 

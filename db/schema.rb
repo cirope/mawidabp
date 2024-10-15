@@ -1353,7 +1353,9 @@ ActiveRecord::Schema.define(version: 2024_10_03_170852) do
     t.string "organizational_unit"
     t.string "office"
     t.string "saml_request_id"
-    t.integer "mfa_secret"
+    t.string "google_secret"
+    t.string "mfa_secret"
+    t.boolean "mfa_done", default: false, null: false
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"

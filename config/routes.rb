@@ -12,8 +12,7 @@ Rails.application.routes.draw do
   post 'auth',   to: 'authentications#create', as: 'auth'
 
   # MFA Authentication
-  get  'mfa_signin', to: 'mfa_sessions#new',    as: 'mfa_signin'
-  post 'mfa_auth',   to: 'mfa_sessions#create', as: 'mfa_auth'
+  resource :mfa_sessions, only: [:new, :create]
 
   # SAML
   post 'saml/callback', to: 'saml_sessions#create', as: :saml_session
