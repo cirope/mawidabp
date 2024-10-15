@@ -33,7 +33,7 @@
             <td class="d-none d-sm-table-cell"><%= tags oportunity.tags.reload %></td>
             <td class="d-none d-sm-table-cell"><%= t oportunity.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
             <td class="text-end"><%= link_to_show oportunity %></td>
-            <td class="text-end"><%= link_to_edit edit_oportunity_path(oportunity) %></td>
+            <td class="text-end"><%= link_to_edit edit_oportunity_path(oportunity) if review_can_be_modified?(oportunity) %></td>
           </tr>
         <% end %>
       </tbody>
