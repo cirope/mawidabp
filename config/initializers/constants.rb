@@ -32,7 +32,7 @@ FILE_UPLOADS_CONSTRAINTS = YAML.load(ENV['FILE_UPLOADS_CONSTRAINTS']) rescue nil
 # Cantidad máxima de observaciones por PDF
 FINDING_MAX_PDF_ROWS = 100
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
-FINDING_DAYS_FOR_SECOND_NOTIFICATION = 0
+FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1 # TODO Remove after migrating all clients to PR #779
 # Fecha inicial para el envío de correo con resumen de observaciones
 FINDING_INITIAL_BRIEF_DATE = Date.new 2018, 1, 1
 # Opciones para crear claves foráneas
