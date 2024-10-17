@@ -1050,6 +1050,29 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'no notifications sent if finding_days_for_next_notifications is 0' do
+    Organization.all.each do |organization|
+      setting = organization.settings.find_by(name: 'finding_days_for_next_notifications')
+      setting.update(value: '0') if setting
+    end
+
+    assert_enqueued_emails 0 do
+      Finding.notify_for_unconfirmed_for_notification_findings
+    end
+  end
+
+  test 'notify on specified days from finding_days_for_next_notifications' do
+    Organization.all.each do |organization|
+      setting = organization.settings.find_by(name: 'finding_days_for_next_notifications')
+
+      setting.update(value: '1,2') if setting
+    end
+
+    assert_enqueued_emails 3 do
+      Finding.notify_for_unconfirmed_for_notification_findings
+    end
+  end
+
   test 'warning users about findings expiration' do
     Current.organization = nil
     # Only if no weekend
