@@ -1,4 +1,4 @@
-class MfaSessionsController < ApplicationController
+class MfasController < ApplicationController
 
   layout 'public'
 
@@ -11,9 +11,9 @@ class MfaSessionsController < ApplicationController
   # POST mfa_sessions
   def create
     if @auth_user.google_authentic?(params[:mfa_code])
-      @auth_user.mfa_config_done! unless @auth_user.mfa_done
+      @auth_user.mfa_config_done! unless @auth_user.mfa_configured_at
 
-      UserMfaSession.create(@auth_user)
+      UserMfaSession.create @auth_user
 
       redirect_to welcome_url
     else

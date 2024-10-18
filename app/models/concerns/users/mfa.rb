@@ -12,6 +12,6 @@ module Users::Mfa
   end
 
   def mfa_config_done!
-    update_column :mfa_done, true
+    update_column :mfa_configured_at, Time.zone.now
   end
 end

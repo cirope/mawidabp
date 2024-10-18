@@ -40,7 +40,7 @@ class Authentication
 
   def require_mfa?
     require_mfa   = @valid_user.require_mfa?
-    @redirect_url = { controller: 'mfa_sessions', action: 'new' } if require_mfa
+    @redirect_url = { controller: 'mfas', action: 'new' } if require_mfa
 
     require_mfa
   end
