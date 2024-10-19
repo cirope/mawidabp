@@ -6,6 +6,7 @@ module Findings::UpdateCallbacks
     after_save :users_notification
     after_update :save_changed_users
     after_commit :notify_changes_to_users
+    after_update_commit :state_change_notification
   end
 
   def can_be_modified?
@@ -68,5 +69,12 @@ module Findings::UpdateCallbacks
         review_code: [review_code, title].join(' - '),
         review: review.try(:identification)
       )
+    end
+
+    def state_change_notification
+      if saved_change_to_state? &&
+          organization.finding_state_change_notification
+        NotifierMailer.notify_finding_state_changed(self).deliver_later
+      end
     end
 end

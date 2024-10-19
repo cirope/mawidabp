@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_27_024428) do
+ActiveRecord::Schema.define(version: 2024_10_18_140903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -835,6 +835,7 @@ ActiveRecord::Schema.define(version: 2024_05_27_024428) do
     t.boolean "corporate", default: false, null: false
     t.string "logo_style", default: "default", null: false
     t.string "saml_provider"
+    t.boolean "finding_state_change_notification", default: false, null: false
     t.index ["corporate"], name: "index_organizations_on_corporate"
     t.index ["group_id"], name: "index_organizations_on_group_id"
     t.index ["image_model_id"], name: "index_organizations_on_image_model_id"

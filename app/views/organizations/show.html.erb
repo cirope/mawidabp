@@ -20,6 +20,16 @@
       <%= simple_format @organization.description, class: 'mb-1' unless @organization.description.blank? %>
     </div>
 
+    <p class="mb-0">
+      <strong><%= Organization.human_attribute_name 'corporate' %></strong>:
+      <%= t_boolean @organization.corporate %>
+    </p>
+
+    <p class="mb-0">
+      <strong><%= Organization.human_attribute_name 'finding_state_change_notification' %></strong>:
+      <%= t_boolean @organization.finding_state_change_notification %>
+    </p>
+
     <% if @organization.image_model %>
       <p class="mb-2">
         <strong><%= Organization.human_attribute_name 'image_model' %></strong>:

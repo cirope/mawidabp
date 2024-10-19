@@ -20,6 +20,7 @@
       <div class="row">
         <div class="col-md-6">
           <%= f.input :corporate, input_html: { disabled: @organization.corporate } %>
+          <%= f.input :finding_state_change_notification %>
         </div>
         <div class="col-md-6">
           <%= f.input :logo_style, collection: organization_logo_style_options, include_blank: false %>
