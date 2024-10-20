@@ -5,6 +5,7 @@ cirope:
   description: ''
   group: main_group
   corporate: false
+  finding_state_change_notification: false
 
 twitter:
   name: Twitter Inc.
@@ -13,6 +14,7 @@ twitter:
   description: ''
   group: main_group
   corporate: true
+  finding_state_change_notification: false
 
 google:
   name: Google Inc.
@@ -21,6 +23,7 @@ google:
   description: ''
   group: second_group
   corporate: false
+  finding_state_change_notification: false
 
 alphabet:
   name: Alphabet Inc.
@@ -29,3 +32,4 @@ alphabet:
   description: ''
   group: second_group
   corporate: true
+  finding_state_change_notification: false

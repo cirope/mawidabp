@@ -2722,6 +2722,16 @@ class FindingTest < ActiveSupport::TestCase
     assert_nil finding.next_task_expiration
   end
 
+  test 'should notify when finding state changed' do
+    finding = findings :being_implemented_weakness
+
+    finding.organization.update! finding_state_change_notification: true
+
+    assert_enqueued_emails 1 do
+      finding.update! state: Finding::STATUS[:implemented]
+    end
+  end
+
   private
 
     def new_email_pop3 from, subject, body
