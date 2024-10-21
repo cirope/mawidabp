@@ -17,7 +17,7 @@ module Parameters::Risk
         end
       end
 
-      RISK_TYPES.merge! types.symbolize_keys
+      RISK_TYPES.merge(types.symbolize_keys).sort_by { |key, value| value }.to_h
     end
 
     def risks_values
