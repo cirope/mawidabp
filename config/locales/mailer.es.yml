@@ -104,7 +104,7 @@ es:
       oportunity_link: Ver oportunidad de mejora
       title: Tiene una nueva oportunidad de mejora
     notify_finding_state_changed:
-      title: El estado del hallazgo cambió
+      title: El estado del hallazgo ha cambiado
     pending_poll_email:
       about_html: Encuesta acerca de <strong>%{entity}</strong>
     reassigned_findings:

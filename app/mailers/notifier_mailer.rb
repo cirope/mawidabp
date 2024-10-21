@@ -386,7 +386,7 @@ class NotifierMailer < ApplicationMailer
   def notify_finding_state_changed finding
     @finding = finding
     prefix   = "[#{finding.organization.prefix}] "
-    users    = finding.users.reject { |user| user.can_act_as_audited? }
+    users    = finding.users.reject &:can_act_as_audited?
 
     mail to: users.map(&:email),
          subject: prefix.upcase + t('notifier.notify_finding_state_changed.title')

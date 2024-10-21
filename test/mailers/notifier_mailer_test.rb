@@ -550,7 +550,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   test 'notify finding state changed' do
     finding  = findings :being_implemented_weakness
     response = NotifierMailer.notify_finding_state_changed(finding).deliver_now
-    users    = finding.users.reject { |u| u.can_act_as_audited? }
+    users    = finding.users.reject &:can_act_as_audited?
 
     refute ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
