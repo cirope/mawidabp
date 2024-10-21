@@ -4,11 +4,13 @@ class WeaknessesController < ApplicationController
   include AutoCompleteFor::Tagging
   include AutoCompleteFor::WeaknessTemplate
   include Reports::FileResponder
+  include Reviews::Permissions
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
     :show, :edit, :update, :undo_reiteration
   ]
+  before_action -> { check_review_permissions @weakness }, only: [:edit, :update]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista las observaciones

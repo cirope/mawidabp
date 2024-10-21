@@ -237,7 +237,9 @@
     <% end %>
 
     <div>
-      <%= link_to_edit edit_oportunity_path(@oportunity) %> |
+      <% if review_can_be_modified? @oportunity %>
+        <%= link_to_edit edit_oportunity_path(@oportunity) %> |
+      <% end %>
       <%= link_to_index oportunities_path %>
       <% if !@oportunity.is_in_a_final_review? && @oportunity.pending? && !@oportunity.incomplete? %>
         | <%= link_to t('oportunity.show_follow_up'), finding_path('incomplete', @oportunity) %>

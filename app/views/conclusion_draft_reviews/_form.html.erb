@@ -55,7 +55,7 @@
             <% end %>
 
             <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
-              <%= f.input :recipients, input_html: { rows: USE_SCOPE_CYCLE ? 2 : 3 } %>
+              <%= f.input :recipients, input_html: { rows: USE_SCOPE_CYCLE ? 2 : 4 } %>
 
               <% if USE_SCOPE_CYCLE %>
                 <%= f.input :additional_comments, input_html: { rows: 2 } %>

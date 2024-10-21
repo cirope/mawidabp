@@ -135,6 +135,7 @@ en:
         subtitle: "<b>OBJECTIVE</b>"
         main_being_implemented: "<b>ISSUES BEING IMPLEMENTED</b>"
         main_implemented_audited: "<b>REGULARIZED ISSUES</b>"
+        no_main_weaknesses: "<b>NO ISSUES</b>"
         from_external_review: "From Review"
         audit_conclusion: "<b>OVERALL AUDIT CONCLUSION</b>"
         highest_responsible: "<b>%{responsible}</b>"
