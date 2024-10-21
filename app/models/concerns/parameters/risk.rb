@@ -13,8 +13,7 @@ module Parameters::Risk
 
       types.each do |key, _|
         unless I18n.exists?("risk_types.#{key}")
-          errors.add :base,
-            I18n.t('')
+          raise 'Traslation error'
         end
       end
 
