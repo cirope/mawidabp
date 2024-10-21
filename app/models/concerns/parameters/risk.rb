@@ -1,31 +1,25 @@
 module Parameters::Risk
   extend ActiveSupport::Concern
 
-  included do
-    ::RISK_TYPES = risk_types unless defined? ::RISK_TYPES
-  end
+  RISK_TYPES = {
+    low: 0,
+    medium: 1,
+    high: 2
+  }
 
   module ClassMethods
     def risks
-      RISK_TYPES
+      types = JSON.parse ENV['RISK_TYPES'] || '{}'
+
+      RISK_TYPES.merge! types.symbolize_keys
     end
 
     def risks_values
-      RISK_TYPES.values
+      risks.values
     end
 
     def highest_risks
       [RISK_TYPES[:high]]
     end
-
-    private
-
-      def risk_types
-        if USE_SCOPE_CYCLE
-          { none: 0, low: 1, medium: 2, high: 3 }
-        else
-          { low: 0, medium: 1, high: 2 }
-        end
-      end
   end
 end
