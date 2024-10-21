@@ -3,6 +3,5 @@ module Organizations::AttributeTypes
 
   included do
     attribute :corporate, :boolean
-    attribute :finding_state_change_notification, :boolean
   end
 end

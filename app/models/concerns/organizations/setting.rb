@@ -30,6 +30,10 @@ module Organizations::Setting
     setting(:skip_reiteration_copy) != '0'
   end
 
+  def finding_state_change_notification?
+    setting(:finding_state_change_notification) != '0'
+  end
+
   private
 
     def setting name

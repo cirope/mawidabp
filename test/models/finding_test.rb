@@ -2725,7 +2725,9 @@ class FindingTest < ActiveSupport::TestCase
   test 'should notify when finding state changed' do
     finding = findings :being_implemented_weakness
 
-    finding.organization.update! finding_state_change_notification: true
+    finding.organization.settings.find_by(
+      name: 'finding_state_change_notification'
+    ).update! value: '1'
 
     assert_enqueued_emails 1 do
       finding.update! state: Finding::STATUS[:implemented]

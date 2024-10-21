@@ -73,7 +73,7 @@ module Findings::UpdateCallbacks
 
     def state_change_notification
       if saved_change_to_state? &&
-          organization.finding_state_change_notification
+          organization.finding_state_change_notification?
         NotifierMailer.notify_finding_state_changed(self).deliver_later
       end
     end

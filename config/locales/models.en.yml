@@ -545,7 +545,6 @@ en:
         name: Name
         prefix: Prefix
         saml_provider: SAML provider
-        finding_state_change_notification: Notify issue state changes
       organization/co_brand_image_model:
         image_content_type: Secondary isologotype (file type)
         image_file_name: Secondary isologotype (filename)

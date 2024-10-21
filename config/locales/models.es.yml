@@ -545,7 +545,6 @@ es:
         name: Nombre
         prefix: Prefijo
         saml_provider: Proveedor SAML
-        finding_state_change_notification: Notificar cambios de estado en los hallazgos
       organization/co_brand_image_model:
         image_content_type: Isologotipo secundario (tipo de archivo)
         image_file_name: Isologotipo secundario (nombre de archivo)
