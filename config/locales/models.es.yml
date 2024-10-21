@@ -182,6 +182,7 @@ es:
         sectors: Sectores/departamentos involucrados
         summary: Acta
         type: Tipo
+        work_scope: Alcance del trabajo
       conclusion_review/review/best_practice_comments:
         auditor_comment: Conclusiones del auditor (proceso)
       control:

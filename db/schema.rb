@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_27_024428) do
+ActiveRecord::Schema.define(version: 2024_10_10_193759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -295,6 +295,7 @@ ActiveRecord::Schema.define(version: 2024_05_27_024428) do
     t.boolean "exclude_regularized_findings", default: false, null: false
     t.text "review_conclusion"
     t.text "applied_data_analytics"
+    t.jsonb "fields", default: {}, null: false
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"

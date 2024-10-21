@@ -65,16 +65,17 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_extra_brief_info_on pdf, organization
-      title = I18n.t(
-        'conclusion_review.pat.cover.brief.title',
-        description: review.scope.presence || review.description,
-        review: review.identification
-      )
-      notice = I18n.t(
-        'conclusion_review.pat.cover.brief.notice',
-        review: review.identification,
-        count: pat_pdf(organization, return_object: true).page_count
-      )
+      title = I18n.t 'conclusion_review.pat.cover.brief.title',
+                     description: review.scope.presence || review.description,
+                     review: review.identification
+
+      notice = if use_brief_v2?
+                 I18n.t 'conclusion_review.pat.cover.brief.notice_v2'
+               else
+                 I18n.t 'conclusion_review.pat.cover.brief.notice',
+                        review: review.identification,
+                        count: pat_pdf(organization, return_object: true).page_count
+               end
 
       pdf.text "<u><i><b>#{title}</b></i></u>", align: :center, inline_format: true
 
@@ -82,15 +83,25 @@ module ConclusionReviews::PatPdf
       pdf.text notice, style: :bold, align: :justify, size: (PDF_FONT_SIZE * 0.8).round
       pdf.put_hr
 
+      put_pat_brief_work_scope_on         pdf
       put_pat_brief_conclusion_on         pdf
       put_pat_brief_weaknesses_section_on pdf
       put_pat_brief_footer_on             pdf
     end
 
+    def put_pat_brief_work_scope_on pdf
+      if use_brief_v2?
+        title = "#{ConclusionReview.human_attribute_name :work_scope}."
+
+        pdf.text "<b><u>#{title}</u></b>\n\n", inline_format: true
+        pdf.text work_scope, style: :italic, align: :justify
+      end
+    end
+
     def put_pat_brief_conclusion_on pdf
       title = I18n.t 'conclusion_review.pat.cover.conclusion', prefix: ''
 
-      pdf.text "<b><u>#{title}</u></b>\n\n", inline_format: true
+      pdf.text "\n<b><u>#{title}</u></b>\n\n", inline_format: true
       pdf.text conclusion, style: :italic, align: :justify
     end
 
@@ -182,42 +193,55 @@ module ConclusionReviews::PatPdf
       end
     end
 
-    def put_pat_supervisors_on pdf
-      supervisors = review.review_user_assignments.select do |rua|
+    def get_supervisors
+      review.review_user_assignments.select do |rua|
         rua.supervisor? || rua.manager? || rua.responsible?
-      end
+      end.map(&:user)
+    end
+
+    def put_pat_supervisors_on pdf
+      supervisors = get_supervisors
 
       pdf.text "\n<u><i><b>#{I18n.t 'conclusion_review.pat.cover.supervisors'}</b></i></u>\n\n", inline_format: true
 
       supervisors.each do |supervisor|
-        pdf.text "#{Prawn::Text::NBSP * 8}• #{supervisor.user.full_name}", align: :justify
+        pdf.text "#{Prawn::Text::NBSP * 8}• #{supervisor.full_name}", align: :justify
       end
     end
 
     def put_pat_signature_on pdf
-      supervisors = review.review_user_assignments.select do |rua|
-        rua.supervisor? || rua.manager? || rua.responsible?
-      end
+      supervisors = get_supervisors
 
       pdf.move_down PDF_FONT_SIZE
 
       add_review_signatures_table pdf, supervisors
     end
 
-    def add_review_signatures_table pdf, review_user_assignments
-      if review_user_assignments.size > 0
-        column_data   = []
-        column_widths = []
+    def format_with_italics text
+      text.present? ? "<i>#{text}</i>" : nil
+    end
 
-        review_user_assignments.each do |rua, i|
-          data = [
-            rua.user.informal_name,
-            rua.user.function,
-            (I18n.t('conclusion_review.pat.cover.organization') if organization&.prefix == 'gpat')
-          ].compact.reject(&:blank?).join "\n"
+    def add_review_signatures_table pdf, users
+      column_count = 2
 
-          column_data   << ["\n\n\n\n#{data}"]
-          column_widths << pdf.percent_width(100.0 / review_user_assignments.size)
+      if users.any?
+        column_data = []
+        column_widths = Array.new column_count, pdf.bounds.width / column_count
+
+        users.each_slice column_count do |user_group|
+          row_data = user_group.map do |user|
+            data = [
+              format_with_italics(user.informal_name),
+              format_with_italics(user.function),
+              (format_with_italics I18n.t('conclusion_review.pat.cover.organization') if organization&.prefix == 'gpat')
+            ].compact.join "\n"
+
+            "\n\n\n\n\n\n#{data}"
+          end
+
+          row_data = [''] + row_data if row_data.size == 1
+
+          column_data << row_data
         end
 
         table_options = {
@@ -270,24 +294,18 @@ module ConclusionReviews::PatPdf
           end
         end
       end
+
+      pdf.put_hr
     end
 
     def put_pat_brief_footer_on pdf
-      manager = User.list.managers.not_hidden.take
+      users = if use_brief_v2?
+                get_supervisors
+              else
+                User.list.managers.not_hidden
+              end
 
-      pdf.put_hr
-      pdf.move_down PDF_FONT_SIZE * 8
-
-      style_options = { style: :italic, align: :center }
-
-      if manager
-        pdf.text manager.informal_name, style_options
-        pdf.text manager.function, style_options
-
-        if organization&.prefix == 'gpat'
-          pdf.text I18n.t('conclusion_review.pat.cover.organization'), style_options
-        end
-      end
+      add_review_signatures_table pdf, users
     end
 
     def put_pat_weaknesses_section_on pdf
@@ -590,5 +608,12 @@ module ConclusionReviews::PatPdf
       review.subsidiary &&
         CONCLUSION_REVIEW_FEATURE_DATES['conclusion_review_check_repated_weakness'] &&
         created_at >= CONCLUSION_REVIEW_FEATURE_DATES['conclusion_review_check_repated_weakness'].to_date
+    end
+
+    def use_brief_v2?
+      draft_issue_date = review.conclusion_draft_review.issue_date
+      code_change_date = CONCLUSION_REVIEW_FEATURE_DATES['brief_v2']&.to_date
+
+      code_change_date && draft_issue_date >= code_change_date
     end
 end
