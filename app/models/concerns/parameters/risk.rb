@@ -29,7 +29,7 @@ module Parameters::Risk
     private
 
       def risk_types
-        finding_risk_types = ENV['FINDING_RISK_TYPES'] || {}
+        finding_risk_types = ENV['FINDING_RISK_TYPES'] || '{}'
 
         if JSON.parse(finding_risk_types).present?
           JSON.parse(finding_risk_types).with_indifferent_access
