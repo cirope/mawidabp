@@ -13,7 +13,7 @@ module Parameters::Risk
 
   module ClassMethods
     def risks
-      raise 'Risk configuration error' if valid_risk_types?
+      raise 'Risk configuration error' unless valid_risk_types?
 
       RISK_TYPES
     end
@@ -29,20 +29,21 @@ module Parameters::Risk
     private
 
       def risk_types
-        finding_risk_types = ENV['FINDING_RISK_TYPES'] || '{}'
+        finding_risk_types = JSON.parse ENV['FINDING_RISK_TYPES'] || '{}'
 
-        if JSON.parse(finding_risk_types).present?
-          JSON.parse(finding_risk_types).with_indifferent_access
+        if finding_risk_types.present?
+          finding_risk_types.symbolize_keys
         else
           DEFAULT_RISK_TYPES
         end
       end
 
       def valid_risk_types?
-        risk_types      = RISK_TYPES.keys.map &:to_sym
-        i18n_risk_types = I18n.translate('risk_types').keys
+        risk_types        = RISK_TYPES.keys
+        risk_types_values = RISK_TYPES.values.tally.select { |_, count| count > 1 }.keys
+        i18n_risk_types   = I18n.translate('risk_types').keys
 
-        (risk_types - i18n_risk_types).any?
+        (risk_types - i18n_risk_types).blank? && risk_types_values.blank?
       end
   end
 end
