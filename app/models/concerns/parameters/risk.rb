@@ -5,7 +5,7 @@ module Parameters::Risk
     ::RISK_TYPES = risk_types unless defined? ::RISK_TYPES
   end
 
-  RISK_TYPES_DEFAULT = {
+  DEFAULT_RISK_TYPES = {
     low:    0,
     medium: 1,
     high:   2
@@ -13,13 +13,13 @@ module Parameters::Risk
 
   module ClassMethods
     def risks
-      raise 'Traslation error' if untranslated_risk_types?
+      raise 'Risk configuration error' if valid_risk_types?
 
       RISK_TYPES
     end
 
     def risks_values
-      risks.values
+      RISK_TYPES.values
     end
 
     def highest_risks
@@ -29,17 +29,17 @@ module Parameters::Risk
     private
 
       def risk_types
-        if ENV['FINDING_RISK_TYPES'].present? && JSON.parse(ENV['FINDING_RISK_TYPES']).present?
-          JSON.parse(ENV['FINDING_RISK_TYPES']).transform_keys &:to_sym
+        finding_risk_types = ENV['FINDING_RISK_TYPES'] || {}
+
+        if JSON.parse(finding_risk_types).present?
+          JSON.parse(finding_risk_types).with_indifferent_access
         else
-          RISK_TYPES_DEFAULT
+          DEFAULT_RISK_TYPES
         end
       end
 
-      def untranslated_risk_types?
-        types = JSON.parse ENV['FINDING_RISK_TYPES'] || {}
-
-        risk_types      = types.keys.map &:to_sym
+      def valid_risk_types?
+        risk_types      = RISK_TYPES.keys.map &:to_sym
         i18n_risk_types = I18n.translate('risk_types').keys
 
         (risk_types - i18n_risk_types).any?

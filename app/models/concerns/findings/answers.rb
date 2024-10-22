@@ -62,7 +62,7 @@ module Findings::Answers
     date ||= last_commitment_date
 
     if date && first_follow_up_date
-      requirements = Array(commitment_requirements[self.class.risks.invert[risk]])
+      requirements = Array(commitment_requirements[self.class.risks.invert[risk].to_sym])
       required     = requirements.detect do |month_number, level|
         if first_follow_up_date.at_end_of_month == first_follow_up_date
           date <= (first_follow_up_date + month_number.months).at_end_of_month
