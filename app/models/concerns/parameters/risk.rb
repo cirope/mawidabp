@@ -27,9 +27,9 @@ module Parameters::Risk
     private
 
       def risk_types
-        raise 'Risk configuration error' unless valid_risk_types?
-
         risk_types = JSON.parse ENV['RISK_TYPES'] || '{}'
+
+        raise 'Risk configuration error' unless valid_risk_types? risk_types
 
         if risk_types.present?
           risk_types.symbolize_keys
@@ -38,14 +38,12 @@ module Parameters::Risk
         end
       end
 
-      def valid_risk_types?
-        risk_types = JSON.parse ENV['RISK_TYPES'] || '{}'
+      def valid_risk_types? risk_types
+        risk_types_keys    = risk_types.symbolize_keys.keys
+        risk_values_unique = risk_types.values.uniq.size == risk_types.values.size
+        i18n_risk_types    = I18n.translate('risk_types').keys
 
-        risk_types_keys   = risk_types.symbolize_keys.keys
-        risk_types_values = risk_types.values.uniq.size == risk_types.values.size
-        i18n_risk_types   = I18n.translate('risk_types').keys
-
-        (risk_types_keys - i18n_risk_types).blank? && risk_types_values
+        (risk_types_keys - i18n_risk_types).blank? && risk_values_unique
       end
   end
 end
