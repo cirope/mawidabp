@@ -75,6 +75,8 @@ es:
     high: Alto
     low: Bajo
     medium: Medio
+    medium_high: Medio alto
+    medium_low: Medio bajo
     none: Organismo controlador
   sample_deviation_types:
     less_expected: Menos esperado
