@@ -1,7 +1,11 @@
 module Parameters::Risk
   extend ActiveSupport::Concern
 
-  RISK_TYPES = {
+  included do
+    ::RISK_TYPES = risk_types unless defined? ::RISK_TYPES
+  end
+
+  RISK_TYPES_DEFAULT = {
     low:    0,
     medium: 1,
     high:   2
@@ -9,15 +13,9 @@ module Parameters::Risk
 
   module ClassMethods
     def risks
-      types = JSON.parse ENV['RISK_TYPES'] || '{}'
+      raise 'Traslation error' if untranslated_risk_types?
 
-      types.each do |key, _|
-        unless I18n.exists?("risk_types.#{key}")
-          raise 'Traslation error'
-        end
-      end
-
-      RISK_TYPES.merge(types.symbolize_keys).sort_by { |key, value| value }.to_h
+      RISK_TYPES
     end
 
     def risks_values
@@ -27,5 +25,24 @@ module Parameters::Risk
     def highest_risks
       [RISK_TYPES[:high]]
     end
+
+    private
+
+      def risk_types
+        if JSON.parse(ENV['FINDING_RISK_TYPES']).blank?
+          RISK_TYPES_DEFAULT
+        else
+          JSON.parse(ENV['FINDING_RISK_TYPES']).transform_keys &:to_sym
+        end
+      end
+
+      def untranslated_risk_types?
+        types = JSON.parse ENV['FINDING_RISK_TYPES'] || {}
+
+        risk_types      = types.keys.map &:to_sym
+        i18n_risk_types = I18n.translate('risk_types').keys
+
+        (risk_types - i18n_risk_types).any?
+      end
   end
 end
