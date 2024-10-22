@@ -29,10 +29,10 @@ module Parameters::Risk
     private
 
       def risk_types
-        if JSON.parse(ENV['FINDING_RISK_TYPES']).blank?
-          RISK_TYPES_DEFAULT
-        else
+        if ENV['FINDING_RISK_TYPES'].present? && JSON.parse(ENV['FINDING_RISK_TYPES']).present?
           JSON.parse(ENV['FINDING_RISK_TYPES']).transform_keys &:to_sym
+        else
+          RISK_TYPES_DEFAULT
         end
       end
 
