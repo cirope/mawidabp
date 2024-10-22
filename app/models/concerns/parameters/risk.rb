@@ -40,10 +40,10 @@ module Parameters::Risk
 
       def valid_risk_types? risk_types
         risk_types_keys    = risk_types.symbolize_keys.keys
-        risk_values_unique = risk_types.values.uniq.size == risk_types.values.size
+        unique_risk_values = risk_types.values.uniq.size == risk_types.values.size
         i18n_risk_types    = I18n.translate('risk_types').keys
 
-        (risk_types_keys - i18n_risk_types).blank? && risk_values_unique
+        (risk_types_keys - i18n_risk_types).blank? && unique_risk_values
       end
   end
 end
