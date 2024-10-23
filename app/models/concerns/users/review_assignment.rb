@@ -5,10 +5,14 @@ module Users::ReviewAssignment
     options = {}
     types   = ReviewUserAssignment::TYPES
 
-    options[:viewer]      = types[:viewer]      if committee?
-    options[:auditor]     = types[:auditor]     if auditor?
-    options[:supervisor]  = types[:supervisor]  if supervisor?
-    options[:manager]     = types[:manager]     if manager?
+    options[:viewer]     = types[:viewer]     if committee?
+    options[:supervisor] = types[:supervisor] if supervisor?
+    options[:manager]    = types[:manager]    if manager?
+
+    if auditor?
+      options[:auditor]           = types[:auditor]
+      options[:auditor_read_only] = types[:auditor_read_only]
+    end
 
     if can_act_as_audited?
       options[:audited] = types[:audited]

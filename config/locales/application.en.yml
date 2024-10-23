@@ -886,7 +886,7 @@ en:
     latest_answer: Latest follow-up finding
     next_pending_task_date: Next pending task date
     pdf:
-      filtered_by_html:
+      filtered_by:
         one: The list was filtered with the query '%{query}' on the column %{columns}
         other: The list was filtered with the query '%{query}' on the columns %{columns}
     readonly: The finding cannot be created or modified, the final audit report has already been issued
@@ -1692,6 +1692,7 @@ en:
       readonly: The members cannot be modified, the final audit report has already been issued
       type_audited: Auditee
       type_auditor: Auditor
+      type_auditor_read_only: Auditor read only
       type_manager: Manager
       type_responsible: Head of internal audit
       type_supervisor: Supervisor
