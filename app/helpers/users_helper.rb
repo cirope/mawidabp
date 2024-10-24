@@ -4,11 +4,7 @@ module UsersHelper
   end
 
   def user_language_field(form, disabled: false)
-    options = AVAILABLE_LOCALES.map do |lang|
-      [t("lang.#{lang}"), lang.to_s]
-    end.sort{ |a, b| a[0] <=> b[0] }
-
-   form.input :language, collection: options, prompt: true, input_html: { disabled: disabled }
+   form.input :language, collection: language_options, prompt: true, input_html: { disabled: disabled }
   end
 
   def user_row_class user

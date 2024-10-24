@@ -15,7 +15,7 @@ module ConclusionFinalReviews::Destroy
 
     def within_allowed_deletion_period?
       ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS > 0 &&
-        created_at >= ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS.business_days.ago
+        created_at >= ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS.days.ago
     end
 
     def check_if_can_be_destroyed

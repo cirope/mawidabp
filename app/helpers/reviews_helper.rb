@@ -262,4 +262,12 @@ module ReviewsHelper
   def subsidiaries_options
     Subsidiary.list.map { |s| [s.to_s, s.id] }
   end
+
+  def review_can_be_modified? object
+    if object
+      review = object.kind_of?(Review) ? object : object.send(:review)
+
+      review&.can_be_modified_by? @auth_user
+    end
+  end
 end
