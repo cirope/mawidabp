@@ -920,4 +920,22 @@ class ReviewsControllerTest < ActionController::TestCase
       coi.control_objective.name
     )
   end
+
+  test 'should not edit review' do
+    review_auditor = review_user_assignments :review_with_conclusion_bare_auditor
+    user           = review_auditor.user
+    review         = review_auditor.review
+
+    assert review.can_be_modified_by? user
+
+    review_auditor.update!(
+      assignment_type: ReviewUserAssignment::TYPES[:auditor_read_only]
+    )
+
+    login user: user
+
+    get :edit, params: { id: review.id }
+    assert_redirected_to reviews_url
+    assert_equal I18n.t('messages.not_allowed'), flash.alert
+  end
 end

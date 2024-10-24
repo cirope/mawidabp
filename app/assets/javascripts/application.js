@@ -50,6 +50,7 @@
 //= require hide
 //= require input_text_only_accept_numerics
 //= require licenses
+//= require locale
 //= require memos
 //= require needs_confirm_form
 //= require news

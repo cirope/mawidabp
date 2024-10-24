@@ -2,11 +2,13 @@
   include AutoCompleteFor::ControlObjectiveItem
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
+  include Reviews::Permissions
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_oportunity, only: [
     :show, :edit, :update, :undo_reiteration
   ]
+  before_action -> { check_review_permissions @oportunity }, only: [:edit, :update]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las oportunidades de mejora

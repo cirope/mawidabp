@@ -1122,6 +1122,19 @@ class ReviewTest < ActiveSupport::TestCase
     FileUtils.rm @review.absolute_pdf_path
   end
 
+  test 'review should not be modified' do
+    review_auditor = review_user_assignments :review_with_conclusion_bare_auditor
+    user           = review_auditor.user
+
+    assert @review.can_be_modified_by? user
+
+    review_auditor.update!(
+      assignment_type: ReviewUserAssignment::TYPES[:auditor_read_only]
+    )
+
+    assert !@review.can_be_modified_by?(user)
+  end
+
   private
 
     def clone_finding_user_assignments(finding)
