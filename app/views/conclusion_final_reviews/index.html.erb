@@ -31,8 +31,16 @@
             <td class="d-none d-sm-table-cell"><%= show_conclusion_review_issue_date conclusion_final_review %></td>
             <td class="d-none d-sm-table-cell"><%= conclusion_final_review.review.score.to_s + '%' %>
             <td class="text-end"><%= link_to_show conclusion_final_review %></td>
-            <td class="text-end"><%= link_to_edit edit_conclusion_final_review_path(conclusion_final_review) %></td>
-            <td class="text-end"><%= link_to_destroy conclusion_final_review if can_destroy_final_review? conclusion_final_review %></td>
+            <td class="text-end">
+              <% if review_can_be_modified? conclusion_final_review %>
+                <%= link_to_edit edit_conclusion_final_review_path(conclusion_final_review) %>
+              <% end %>
+            </td>
+            <td class="text-end">
+              <% if can_destroy_final_review?(conclusion_final_review) && review_can_be_modified?(conclusion_final_review) %>
+                <%= link_to_destroy conclusion_final_review %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>

@@ -263,6 +263,7 @@ en:
   messages:
     confirmation: Are you sure?
     not_authorized: Must be logged in to view content
+    not_allowed: You are not authorized to perform the operation
     truncated: Truncated, maximum number of characters %{count}
 
   navigation:
@@ -721,7 +722,6 @@ en:
       email: Email
       forgot_password: Forgot your password?
       log_in: Login
-      password: Password
       remember_me: Remember me
       title: Login
       try_again: Try again
@@ -741,6 +741,7 @@ en:
     finding_by_current_user: Filter findings by current user
     finding_days_for_next_notifications: Number of days in which a confirmation request must be sent
     finding_stale_confirmed_days: Number of days before an unanswered issue is considered unattended
+    finding_state_change_notification: Notify issue state changes
     finding_warning_expire_days: Number of days before the expiration of an observation in which the system will notify its proximity
     hide_import_from_ldap: Show "Import from LDAP" only to users with approval permissions
     hide_obsolete_best_practices: Hide obsolete best practices
@@ -826,6 +827,8 @@ en:
       current_month: Download current month
       current_week: Download current week
       current_year: Download current year
+    edit:
+      title: Edit activity
     form:
       activity: Activity
       add_business_unit_type: Add organizational unit

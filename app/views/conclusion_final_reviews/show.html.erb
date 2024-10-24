@@ -93,7 +93,9 @@
     <% end %>
 
     <div>
-      <%= link_to_edit edit_conclusion_final_review_path(@conclusion_final_review) %> |
+      <% if review_can_be_modified? @conclusion_final_review %>
+        <%= link_to_edit edit_conclusion_final_review_path(@conclusion_final_review) %> |
+      <% end %>
       <%= link_to_index conclusion_final_reviews_path %> |
       <% if Current.conclusion_pdf_format == 'gal' %>
         <%= render 'gal_downloads' %>

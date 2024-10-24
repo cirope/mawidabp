@@ -124,6 +124,12 @@ module ConclusionReviews::NbcPdf
         main_weaknesses_partial pdf, implemented_audited_w, implemented_audited_alt_w, 'implemented_audited'
       end
 
+      if being_implemented_w.empty? && being_implemented_alt_w.empty? &&
+        implemented_audited_w.empty? && implemented_audited_alt_w.empty?
+          pdf.move_down PDF_FONT_SIZE * 2
+          pdf.text I18n.t('conclusion_review.nbc.weaknesses.no_main_weaknesses'), inline_format: true
+      end
+
       pdf.start_new_page
     end
 

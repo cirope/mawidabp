@@ -40,7 +40,7 @@ es:
     medium: Media
     none: Organismo controlador
   probability_types:
-    almost_certain: Casi Certeza
+    almost_certain: Casi certeza
     possible: Posible
     probable: Probable
     rare: Raro
@@ -69,12 +69,14 @@ es:
     moderate_low: Moderado/bajo
     not_rated: Nulo
     # Short relevance
-    'no': 'No'
+    'no': No
     'yes': Sí
   risk_types:
     high: Alto
     low: Bajo
     medium: Medio
+    medium_high: Medio alto
+    medium_low: Medio bajo
     none: Organismo controlador
   sample_deviation_types:
     less_expected: Menos esperado
