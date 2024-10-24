@@ -416,6 +416,8 @@ class AuthenticationTest < ActionController::TestCase
   end
 
   test 'should update user with roles and redirect to welcome - saml authentication' do
+    set_organization
+
     create_saml_provider @organization
 
     response_stub =
