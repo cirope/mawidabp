@@ -8,19 +8,24 @@
         <div class="card-body py-0 px-5">
           <div class="form-inputs">
             <div class="mb-3 form-group">
-              <%= label_tag :mfa_code, t('.mfa_code'), class: 'col-form-label' %>
+              <%= label_tag :code, t('.code'), class: 'col-form-label' %>
               <div class="controls">
-                <%= text_field_tag :mfa_code, params[:mfa_code], class: 'form-control form-control-lg',
+                <%= text_field_tag :code, params[:code], class: 'form-control form-control-lg',
                   autofocus: true, autocomplete: 'off', maxlength: 255 %>
               </div>
-              <%= image_tag @auth_user.google_qr_uri unless @auth_user.mfa_configured_at %>
             </div>
           </div>
         </div>
 
+        <% unless @auth_user.mfa_configured_at %>
+          <div class="mt-2 mb-1 text-center">
+            <%== @auth_user.mfa_qr %>
+          </div>
+        <% end %>
+
         <div class="card-footer text-center bg-white border-white pb-4">
           <div class="form-actions">
-            <%= submit_tag t('mfa_sessions.send_code'), class: 'btn btn-lg btn-primary' %>
+            <%= submit_tag t('mfas.send_code'), class: 'btn btn-lg btn-primary' %>
           </div>
         </div>
       </div>

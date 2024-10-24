@@ -1354,7 +1354,7 @@ ActiveRecord::Schema.define(version: 2024_10_03_170852) do
     t.string "office"
     t.string "saml_request_id"
     t.string "google_secret"
-    t.string "mfa_secret"
+    t.string "mfa_salt"
     t.datetime "mfa_configured_at"
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
     t.index ["email"], name: "index_users_on_email"

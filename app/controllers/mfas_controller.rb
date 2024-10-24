@@ -4,13 +4,13 @@ class MfasController < ApplicationController
 
   before_action :auth, :set_title
 
-  # GET mfa_sessions/new
+  # GET mfas/new
   def new
   end
 
-  # POST mfa_sessions
+  # POST mfas
   def create
-    if @auth_user.google_authentic?(params[:mfa_code])
+    if @auth_user.google_authentic?(params[:code])
       @auth_user.mfa_config_done! unless @auth_user.mfa_configured_at
 
       UserMfaSession.create @auth_user

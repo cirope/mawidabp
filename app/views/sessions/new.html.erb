@@ -31,6 +31,13 @@
               <%= link_to t('sessions.new.forgot_password'), new_users_password_path %>
             </p>
           <% end %>
+
+          <div class="form-group mt-3 d-flex justify-content-center align-items-center">
+            <i class="fa-solid fa-language fa-2xl me-2"></i>
+            <div class="controls">
+              <%= select_tag :locale, options_for_select(language_options, I18n.locale), class: 'form-select form-select-sm w-auto', data: { locale_selector: true } %>
+            </div>
+          </div>
         </div>
       </div>
     <% end %>

@@ -75,7 +75,13 @@ class ApplicationController < ActionController::Base
 
     def set_locale
       current_user
-      I18n.locale = Current.user ? Current.user.language.to_sym : I18n.default_locale
+      I18n.locale = if Current.user.present?
+                      Current.user.language.to_sym
+                    elsif session[:locale].present?
+                      session[:locale].to_sym
+                    else
+                      I18n.default_locale
+                    end
     end
 
     def scope_current_organization
@@ -197,8 +203,13 @@ class ApplicationController < ActionController::Base
 
     # Reinicia la sessión (conservando el contenido de flash)
     def restart_session #:doc:
-      flash_temp = flash.to_hash
+      locale_temp = session[:locale]
+      flash_temp  = flash.to_hash
+
       reset_session if session.present?
+
+      session[:locale] = locale_temp
+
       flash.replace flash_temp
     end
 

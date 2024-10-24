@@ -546,4 +546,18 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     assert_equal response.to.sort, expected_emails_to_send.sort
   end
+
+  test 'notify finding state changed' do
+    finding  = findings :being_implemented_weakness
+    response = NotifierMailer.notify_finding_state_changed(finding).deliver_now
+    users    = finding.users.reject &:can_act_as_audited?
+
+    refute ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.notify_finding_state_changed.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.notify_finding_state_changed.title')),
+      response.body.decoded
+    assert_equal users.map(&:email), response.to
+  end
 end
