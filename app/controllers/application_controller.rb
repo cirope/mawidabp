@@ -121,11 +121,12 @@ class ApplicationController < ActionController::Base
     end
 
     def check_mfa
-      if @auth_user&.require_mfa? &&
-          controller_name != 'mfas' &&
-            (!@auth_user.mfa_configured_at ||
-              !(user_mfa_session = UserMfaSession.find) && (user_mfa_session ? user_mfa_session.record == @auth_user : !user_mfa_session))
-        redirect_to new_mfa_url
+      if @auth_user&.require_mfa? && controller_name != 'mfas'
+        user_mfa_session = UserMfaSession.find&.record == @auth_user
+
+        if !@auth_user.mfa_configured_at || !user_mfa_session
+          redirect_to new_mfa_url
+        end
       end
     end
 

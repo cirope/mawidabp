@@ -67,7 +67,7 @@ class OrganizationRole < ApplicationRecord
     end
 
     def set_mfa_secret
-      if user && require_mfa && user.google_secret.nil?
+      if user && require_mfa && user.google_secret.blank?
         user.set_google_secret
       end
     end

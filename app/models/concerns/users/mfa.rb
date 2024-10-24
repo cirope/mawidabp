@@ -6,13 +6,13 @@ module Users::Mfa
   end
 
   def require_mfa?
-    organization_role = organization_roles.where(organization_id: Current.organization&.id).take
+    organizations = organization_roles.where organization_id: Current.organization&.id
 
-    organization_role&.require_mfa
+    organizations.any? &:require_mfa
   end
 
   def mfa_config_done!
-    update_columns(
+    update!(
       mfa_configured_at: Time.zone.now,
       mfa_salt:          SecureRandom.hex
     )
