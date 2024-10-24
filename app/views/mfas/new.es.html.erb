@@ -6,6 +6,23 @@
           <%= image_tag 'logo.svg', alt: t('app_name'), height: 27 %>
         </div>
         <div class="card-body py-0 px-5">
+          <% unless @auth_user.mfa_configured_at %>
+            <h4 class="text-center">
+              Configura la Autenticación de Dos Factores (2FA)
+            </h4>
+            <p>
+              Este proceso requiere, además de tu contraseña, un código generado en tu dispositivo móvil.
+            </p>
+            <ul>
+              <li>Descarga una applicación de autenticación (Google Authenticator).</li>
+              <li>Escanea el código QR con la applicación.</li>
+              <li>Ingresa el código de 6 dígitos generado por la applicación.</li>
+            </ul>
+            <div class="m-2 text-center">
+              <%== @auth_user.mfa_qr %>
+            </div>
+          <% end %>
+
           <div class="form-inputs">
             <div class="mb-3 form-group">
               <%= label_tag :code, t('.code'), class: 'col-form-label' %>
@@ -16,12 +33,6 @@
             </div>
           </div>
         </div>
-
-        <% unless @auth_user.mfa_configured_at %>
-          <div class="mt-2 mb-1 text-center">
-            <%== @auth_user.mfa_qr %>
-          </div>
-        <% end %>
 
         <div class="card-footer text-center bg-white border-white pb-4">
           <div class="form-actions">
