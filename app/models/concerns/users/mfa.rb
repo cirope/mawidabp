@@ -6,9 +6,9 @@ module Users::Mfa
   end
 
   def require_mfa?
-    organizations = organization_roles.where organization_id: Current.organization&.id
+    org_roles = organization_roles.where organization_id: Current.organization&.id
 
-    organizations.any? &:require_mfa
+    org_roles.any? &:require_mfa
   end
 
   def mfa_config_done!

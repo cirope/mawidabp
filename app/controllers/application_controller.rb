@@ -124,7 +124,7 @@ class ApplicationController < ActionController::Base
       if @auth_user&.require_mfa? && controller_name != 'mfas'
         user_mfa_session = UserMfaSession.find&.record == @auth_user
 
-        if !@auth_user.mfa_configured_at || !user_mfa_session
+        if @auth_user.mfa_configured_at.blank? || user_mfa_session.blank?
           redirect_to new_mfa_url
         end
       end

@@ -559,7 +559,7 @@ es:
         organization_id: Organización
         role_id: Perfil
         sync_ldap: ¿Sincronizar con LDAP?
-        require_mfa: Requerir MFA
+        require_mfa: Requerir AMF
         user_id: Usuario
       paper_trail/version:
         created_at: Fecha
