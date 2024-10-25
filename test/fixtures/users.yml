@@ -19,6 +19,9 @@ administrator:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:poll] = 'poll_user123' %>
 <% salt = Digest::SHA512.hexdigest("poll#{rand}") %>
@@ -41,6 +44,9 @@ poll:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:admin_second] = 'admin123' %>
 <% salt = Digest::SHA512.hexdigest("admin_second#{rand}") %>
@@ -64,6 +70,9 @@ administrator_second:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:bare] = 'bare123' %>
 <% salt = Digest::SHA512.hexdigest("bare#{rand}") %>
@@ -87,6 +96,9 @@ bare:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:first_time] = 'first_time_user' %>
 <% salt = Digest::SHA512.hexdigest("first_time#{rand}") %>
@@ -109,6 +121,9 @@ first_time:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:expired] = 'expired123' %>
 <% salt = Digest::SHA512.hexdigest("expired#{rand}") %>
@@ -133,6 +148,9 @@ expired:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:disabled] = 'diasabled123' %>
 <% salt = Digest::SHA512.hexdigest("disabled#{rand}") %>
@@ -156,6 +174,9 @@ disabled:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:blank_password] = 'blank_password123' %>
 <% salt = Digest::SHA512.hexdigest("blank_password#{rand}") %>
@@ -181,6 +202,9 @@ blank_password:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:expired_blank_password] = 'expired_blank_password123' %>
 <% salt = Digest::SHA512.hexdigest("expired_blank_password#{rand}") %>
@@ -205,6 +229,9 @@ expired_blank_password:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:president] = 'president123' %>
 <% salt = Digest::SHA512.hexdigest("president#{rand}") %>
@@ -227,6 +254,9 @@ president:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:general_manager] = 'general_manager123' %>
 <% salt = Digest::SHA512.hexdigest("general_manager#{rand}") %>
@@ -250,6 +280,9 @@ general_manager:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:general_manager] = 'coordinator_manager123' %>
 <% salt = Digest::SHA512.hexdigest("coordinator_manager#{rand}") %>
@@ -273,6 +306,9 @@ coordinator_manager:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:plain_manager] = 'plain_manager123' %>
 <% salt = Digest::SHA512.hexdigest("plain_manager#{rand}") %>
@@ -296,6 +332,9 @@ plain_manager:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:manager] = 'manager123' %>
 <% salt = Digest::SHA512.hexdigest("manager#{rand}") %>
@@ -319,6 +358,9 @@ manager:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:manager_second] = 'manager_second123' %>
 <% salt = Digest::SHA512.hexdigest("manager_second#{rand}") %>
@@ -342,6 +384,9 @@ manager_second:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:plain_manager_second] = 'plain_manager_second123' %>
 <% salt = Digest::SHA512.hexdigest("plain_manager_second#{rand}") %>
@@ -365,6 +410,9 @@ plain_manager_second:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:supervisor] = 'supervisor123' %>
 <% salt = Digest::SHA512.hexdigest("supervisor#{rand}") %>
@@ -388,6 +436,9 @@ supervisor:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:supervisor_second] = 'supervisor_second123' %>
 <% salt = Digest::SHA512.hexdigest("supervisor_second#{rand}") %>
@@ -411,6 +462,9 @@ supervisor_second:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:audited] = 'audited123' %>
 <% salt = Digest::SHA512.hexdigest("audited#{rand}") %>
@@ -434,6 +488,9 @@ audited:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:audited_second] = 'audited_second123' %>
 <% salt = Digest::SHA512.hexdigest("audited_second#{rand}") %>
@@ -457,6 +514,9 @@ audited_second:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:committee] = 'committee123' %>
 <% salt = Digest::SHA512.hexdigest("committee#{rand}") %>
@@ -480,6 +540,9 @@ committee:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:auditor] = 'auditor123' %>
 <% salt = Digest::SHA512.hexdigest("auditor#{rand}") %>
@@ -503,6 +566,9 @@ auditor:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:corporate] = 'corporate123' %>
 <% salt = Digest::SHA512.hexdigest("corporate#{rand}") %>
@@ -525,6 +591,9 @@ corporate:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:
 
 <% ::PLAIN_PASSWORDS[:jane] = 'jane123' %>
 <% salt = Digest::SHA512.hexdigest("jane#{rand}") %>
@@ -545,3 +614,6 @@ jane:
   notes: User notes
   hidden: false
   organizational_unit:
+  google_secret:
+  mfa_salt:
+  mfa_configured_at:

@@ -13,7 +13,7 @@ class OrganizationRole < ApplicationRecord
   }
 
   before_validation :set_sync_ldap
-  after_update_commit :set_mfa_secret
+  after_save :set_mfa_secret
 
   # Restricciones
   validates :organization_id, :role_id, :presence => true
