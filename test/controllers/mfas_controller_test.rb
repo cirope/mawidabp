@@ -32,6 +32,17 @@ class MfasControllerTest < ActionController::TestCase
     assert_redirected_to new_mfa_url
   end
 
+  test 'should redirec to to welcome' do
+    login
+
+    @controller = MfasController.new
+    code        = GoogleAuthenticatorRails::time_based_password(@user.google_secret_value)
+
+    post :create, params: { code: code }
+
+    assert_redirected_to welcome_url
+  end
+
   private
 
     def set_require_mfa
