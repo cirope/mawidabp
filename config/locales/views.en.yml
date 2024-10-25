@@ -266,6 +266,14 @@ en:
     not_allowed: You are not authorized to perform the operation
     truncated: Truncated, maximum number of characters %{count}
 
+  mfas:
+    create:
+      invalid_code: Invalid code
+    new:
+      code: Code
+      title: Multifactor Authentication
+    send_code: Send code
+
   navigation:
     _no: 'No'
     _yes: 'Yes'

@@ -559,6 +559,7 @@ en:
         organization_id: Organization
         role_id: Profile
         sync_ldap: Synchronize with LDAP?
+        require_mfa: Require MFA
         user_id: User
       paper_trail/version:
         created_at: Date
