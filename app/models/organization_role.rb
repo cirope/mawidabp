@@ -48,7 +48,7 @@ class OrganizationRole < ApplicationRecord
   end
 
   # Relaciones
-  belongs_to :user, -> { readonly }
+  belongs_to :user
   belongs_to :organization, -> { readonly }
   belongs_to :role, -> { readonly }
 
