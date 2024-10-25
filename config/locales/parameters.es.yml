@@ -40,7 +40,7 @@ es:
     medium: Media
     none: Organismo controlador
   probability_types:
-    almost_certain: Casi Certeza
+    almost_certain: Casi certeza
     possible: Posible
     probable: Probable
     rare: Raro
@@ -69,27 +69,29 @@ es:
     moderate_low: Moderado/bajo
     not_rated: Nulo
     # Short relevance
-    'no': 'No'
+    'no': No
     'yes': Sí
   risk_types:
     high: Alto
     low: Bajo
     medium: Moderado
+    medium_high: Moderado alto
+    medium_low: Moderado bajo
     none: Organismo controlador
   sample_deviation_types:
     less_expected: Menos esperado
     most_expected: Mas esperado
   score_types:
     improve: Satisfactorio
-    regular: Con Necesidad de Mejora
+    regular: Con necesidad de mejora
     satisfactory: Bueno
-    unsatisfactory: Con Falencias
+    unsatisfactory: Con falencias
     # When score by weaknesses is used
     adequate: Bueno
-    inadequate: Con Falencias
+    inadequate: Con falencias
     none: No aplica
-    require_improvements: Con Necesidad de Mejora
-    require_lots_of_improvements: Con Falencias
+    require_improvements: Con necesidad de mejora
+    require_lots_of_improvements: Con falencias
     require_some_improvements: Satisfactorio
   state_regulations_types:
     exist: Existe actualizada

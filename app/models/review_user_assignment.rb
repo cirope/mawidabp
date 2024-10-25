@@ -13,7 +13,8 @@ class ReviewUserAssignment < ApplicationRecord
     auditor: 0,
     supervisor: 1,
     manager: 2,
-    responsible: 3
+    responsible: 3,
+    auditor_read_only: 4
   }
 
   AUDIT_TEAM_TYPES = [

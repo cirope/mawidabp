@@ -37,8 +37,8 @@ es:
     auditors: Auditores a cargo
 
   business_unit:
-    correctly_updated: Proceso Crítico actualizada correctamente.
-    edit_title: Modificar Proceso Crítico
+    correctly_updated: Proceso crítico actualizado correctamente.
+    edit_title: Modificar Proceso crítico
 
   business_unit_kind:
     errors:
@@ -173,7 +173,7 @@ es:
         header_count_findings: "<b>Cantidad de Observaciones</b>"
         header_cycle: "<b>Ciclo</b>"
         header_qualification: "<b>Calificación</b>"
-        header_weight: "<b>Ponderador a fecha de los Informes</b>"
+        header_weight: "<b>Ponderador por fecha de informe</b>"
       pdf_name: resumen_anual_%{from_date}_al_%{to_date}.pdf
     nbc_annual_report_title: Resumen anual
     nbc_internal_control_qualification_as_group_of_companies: Calificacion del control interno como grupo de sociedades
@@ -588,7 +588,7 @@ es:
     detailed_review:
       legend: |-
         Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.
-        En cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.
+        En cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados por el BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.
         La puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad.
       title: Informe detallado
     email_note: Nota a incluir en el correo
@@ -600,12 +600,8 @@ es:
       attached_png_name: imagen-resumen-ejecutivo-%{page}.png
       conclusion: "<b>Conclusión</b>"
       evolution: EVOLUCIÓN (*)
-      intro_alt: 'Conforme a lo previsto en la propuesta de Locación de Servicios Profesionales, aceptada en todos sus términos y condiciones por Naranja Digital Compañía Financiera S.A.U. con fecha 21 de Enero de 2021, presentamos el informe de Auditoria correspondiente al siguiente proceso:'
-      intro_default: 'La Auditoría practicada estuvo circunscripta a la revisión de:'
       issue_date: Fecha
       key_weaknesses: "<b>Hallazgos significativos</b>"
-      keywords:
-        review: informe
       main_weaknesses: Principales debilidades
       no_origin_or_normalization: "-"
       no_weaknesses: No hay observaciones
@@ -649,7 +645,7 @@ es:
     repeated_findings: Seguimiento de observaciones
     repeated_findings_empty: No se registran observaciones pendientes de regularización.
     responsibles: Responsables
-    review_not_approved: El informe no fue enviado, debe estar aprobado
+    review_not_approved: El informe no fue enviado. Por favor, asegúrese de obtener la aprobación necesaria e inténtelo de nuevo
     review_repeated_finding_label: Informe nro.
     review_sended: El informe fue enviado a todos los destinatarios indicados
     scope_detail:
@@ -698,13 +694,12 @@ es:
     not_applicable: No aplica
     not_apply_text: No aplica calificación
     not_rated: No evaluado
-    not_scored_business_unit: Mismo proceso crítico del proyecto
     previous_effectiveness: Efectividad anterior %{effectiveness}%
     readonly: El objetivo de control no puede ser modificado, ya se emitió el informe definitivo
     review:
       edit: Editar informe
       show: Ver informe
-    show_title: Detalle objetivo de control
+    show_title: Detalles del objetivo de control
     stale_object_error: El objetivo de control no fue actualizado, intente nuevamente.
     view_all_oportunities: Ver listado de oportunidades de mejora
     view_all_weaknesses: Ver listado de observaciones
@@ -939,8 +934,8 @@ es:
         DE SEGUIMIENTO DE HALLAZGOS
         POR INFORME DE AUDITORIA INTERNA
       weaknesses: OBSERVACIONES
-      without_oportunities: Sin Oportunidades de Mejora en el periodo
-      without_weaknesses: Sin Observaciones en el periodo
+      without_oportunities: Sin oportunidades de mejora en el periodo
+      without_weaknesses: Sin observaciones en el periodo
     cost_analysis_title: Análisis de costos
     export_issues: Exportar casos
     fixed_weaknesses_report_title: Observaciones por riesgo solucionadas
@@ -1694,6 +1689,7 @@ es:
       readonly: Los integrantes no pueden ser modificados, ya se emitió el informe definitivo
       type_audited: Auditado
       type_auditor: Auditor
+      type_auditor_read_only: Auditor solo lectura
       type_manager: Gerente
       type_responsible: Responsable máximo de auditoría interna
       type_supervisor: Supervisor
