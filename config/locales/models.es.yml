@@ -297,8 +297,8 @@ es:
         external_repeated: Reiterada externa
         finding_answers: Respuestas
         finding_user_assignments: Usuarios
-        first_follow_up_date: Primer fecha de implementación
-        follow_up_date: Fecha de implementación
+        first_follow_up_date: Primer fecha estimada de regularización
+        follow_up_date: Fecha estimada de regularización
         frequency: Frecuencia
         impact_amount: Monto universo
         impact_risk: Impacto
@@ -903,7 +903,7 @@ es:
         effect: Efecto
         extension: Días de gracia
         finding_user_assignments: Usuarios
-        first_follow_up_date: Primer fecha de implementación
+        first_follow_up_date: Primer fecha estimada de regularización
         follow_up_date: Fecha estimada de regularización
         impact: Impacto
         impact_risk: Impacto

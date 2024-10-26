@@ -858,8 +858,8 @@ es:
     endorsements: Revisores
     finding_answers: Comentarios de seguimiento
     finding_relations: Relacionada con
-    follow_up_date_changed_warning: La fecha de implementación cambió para adecuarse a las tareas
-    follow_up_date_last_changed: Último cambio de fecha de implementación
+    follow_up_date_changed_warning: La fecha estimada de regularización cambió para adecuarse a las tareas
+    follow_up_date_last_changed: Último cambio de fecha estimada de regularización
     follow_up_report:
       download: Descargar seguimiento completo
       download_brief: Descargar seguimiento
@@ -1537,14 +1537,14 @@ es:
       is_unconfirmed: está en estado 'No confirmada'
       not_valid_state: tiene un estado no permitido
       with_expired_tasks: tiene tareas pendientes o en proceso vencidas
-      with_follow_up_date: tiene fecha de implementación (y no debería)
+      with_follow_up_date: tiene fecha estimada de regularización (y no debería)
       with_solution_date: tiene fecha de solución (y no debería)
       without_answer: no tiene respuesta
       without_audit_comments: no tiene comentarios de auditoría
       without_audit_recommendations: no tiene recomendaciones de auditoria
       without_audited: no tiene auditado
       without_auditor: no tiene auditor
-      without_follow_up_date: no tiene fecha de implementación
+      without_follow_up_date: no tiene fecha estimada de regularización
       without_solution_date: no tiene fecha de solución
     index_title: Listado de oportunidades
     new_title: Agregar oportunidad
@@ -1770,7 +1770,7 @@ es:
       is_unconfirmed: está en estado 'No confirmada'
       not_valid_state: tiene un estado no permitido
       with_expired_tasks: tiene tareas pendientes o en proceso vencidas
-      with_follow_up_date: tiene fecha de implementación (y no debería)
+      with_follow_up_date: tiene fecha estimada de regularización (y no debería)
       with_solution_date: tiene fecha de solución (y no debería)
       without_answer: no tiene respuesta
       without_audit_comments: no tiene comentarios de auditoría
@@ -1778,7 +1778,7 @@ es:
       without_audited: no tiene auditado
       without_auditor: no tiene auditor
       without_effect: no tiene efecto
-      without_follow_up_date: no tiene fecha de implementación
+      without_follow_up_date: no tiene fecha estimada de regularización
       without_solution_date: no tiene fecha de solución
     index_title: Listado de observaciones
     new_title: Agregar observación

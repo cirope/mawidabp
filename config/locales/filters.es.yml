@@ -7,7 +7,7 @@ es:
       date_field:
         between: Entre
       order_by:
-        first_follow_up_date: Primer fecha de implementación
+        first_follow_up_date: Primer fecha estimada de regularización
         issue_date: Fecha de emisión
         risk: Riesgo
       poll_user:
