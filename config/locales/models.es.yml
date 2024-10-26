@@ -320,7 +320,7 @@ es:
         risk_justification: Justificar riesgo
         sample_deviation: Desvio de la muestra
         skip_work_paper: No requiere papel de trabajo
-        solution_date: Fecha de solución
+        solution_date: Fecha de finalización
         state: Estado
         state_regulations: Normativa Estado
         state_was: Estado anterior
@@ -531,7 +531,7 @@ es:
         finding_user_assignments: Usuarios
         origination_date: Fecha de origen
         review_code: Código
-        solution_date: Fecha de solución
+        solution_date: Fecha de finalización
         state: Estado
         title: Título
         user_ids: Usuario
