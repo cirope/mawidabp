@@ -244,7 +244,7 @@ es:
       indicators:
         digitalized: Digitalización
         highest_solution_rate: Solución de Observaciones de Riesgo Alto
-        medium_solution_rate: Solución de Observaciones de Riesgo Medio
+        medium_solution_rate: Solución de Observaciones de Riesgo Moderado
       pdf_name: indicadores_de_calidad_%{from_date}_al_%{to_date}.pdf
       subtitle: ''
       title: Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad
@@ -1119,10 +1119,10 @@ es:
       indicator: Indicador
       indicators:
         ancient_highest_risk_weaknesses: Anticuación de Observaciones de Riesgo Alto
-        ancient_medium_risk_weaknesses: Anticuación de Observaciones de Riesgo Medio
+        ancient_medium_risk_weaknesses: Anticuación de Observaciones de Riesgo Moderado
         digitalized: Digitalización
         highest_solution_rate: Solución de Observaciones de Riesgo Alto
-        medium_solution_rate: Solución de Observaciones de Riesgo Medio
+        medium_solution_rate: Solución de Observaciones de Riesgo Moderado
         oportunities_solution_rate: Solución de Oportunidades de Mejora
         production_level: Nivel de Producción
         score_average: Calificación de informes
