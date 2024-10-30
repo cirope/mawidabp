@@ -101,7 +101,9 @@ module ConclusionReviews::PatPdf
     def put_pat_brief_conclusion_on pdf
       title = I18n.t 'conclusion_review.pat.cover.conclusion', prefix: ''
 
-      pdf.text "\n<b><u>#{title}</u></b>\n\n", inline_format: true
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.text "<b><u>#{title}</u></b>\n\n", inline_format: true
       pdf.text conclusion, style: :italic, align: :justify
     end
 
