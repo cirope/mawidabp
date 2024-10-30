@@ -17,7 +17,7 @@ module ConclusionReviews::Fields
 
     def assign_field(name, value)
       self.fields ||= {}
-      prev_value = self.fields[name]
+      prev_value    = self.fields[name]
 
       fields_will_change! unless prev_value == value
       self.fields[name] = value
