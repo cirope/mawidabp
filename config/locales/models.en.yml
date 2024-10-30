@@ -182,6 +182,7 @@ en:
         sectors: Sectors/departments involved
         summary: Summary
         type: Type
+        work_scope: Work scope
       conclusion_review/review/best_practice_comments:
         auditor_comment: Auditor conclusions (process)
       control:
