@@ -20,6 +20,7 @@ module ConclusionReviews::Fields
       prev_value    = self.fields[name]
 
       fields_will_change! unless prev_value == value
+
       self.fields[name] = value
     end
 end
