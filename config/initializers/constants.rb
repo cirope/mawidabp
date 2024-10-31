@@ -2,7 +2,7 @@
 COOKIES_DOMAIN = ".#{ENV['APP_HOST'].sub /:.*/, ''}"
 SHARED_SESSION = ENV['SHARED_SESSION'] == 'true'
 # Dirección del correo electrónico de soporte
-SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
+SUPPORT_EMAIL = 'AUD-MAWIDA@bna.com.ar'.freeze
 # Ruta relativa directorio privado de almacenamiento de archivos
 RELATIVE_PRIVATE_PATH =
   if Rails.env.test?
