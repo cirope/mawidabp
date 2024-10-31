@@ -266,6 +266,14 @@ es:
     not_allowed: No está autorizado para realizar la operación
     truncated: Truncado, cantidad máxima de caracteres %{count}
 
+  mfas:
+    create:
+      invalid_code: Código inválido
+    new:
+      code: Código
+      title: Autenticación Multifactor
+    send_code: Enviar código
+
   navigation:
     _no: 'No'
     _yes: Sí
@@ -741,6 +749,7 @@ es:
     finding_by_current_user: Filtrar observaciones por usuario actual
     finding_days_for_next_notifications: Cantidad de días en los que se debe enviar una solicitud de confirmación
     finding_stale_confirmed_days: Cantidad de días que deben pasar para que una observación sin responder se considere desatendida
+    finding_state_change_notification: Notificar cambios de estado en los hallazgos
     finding_warning_expire_days: Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad
     hide_import_from_ldap: Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación
     hide_obsolete_best_practices: Ocultar buenas practicas obsoletas

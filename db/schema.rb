@@ -819,6 +819,7 @@ ActiveRecord::Schema.define(version: 2024_10_10_193759) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "sync_ldap", null: false
+    t.boolean "require_mfa", default: false, null: false
     t.index ["organization_id"], name: "index_organization_roles_on_organization_id"
     t.index ["role_id"], name: "index_organization_roles_on_role_id"
     t.index ["user_id"], name: "index_organization_roles_on_user_id"
@@ -1354,6 +1355,9 @@ ActiveRecord::Schema.define(version: 2024_10_10_193759) do
     t.string "organizational_unit"
     t.string "office"
     t.string "saml_request_id"
+    t.string "google_secret"
+    t.string "mfa_salt"
+    t.datetime "mfa_configured_at"
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"

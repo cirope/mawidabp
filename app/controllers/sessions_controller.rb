@@ -44,6 +44,8 @@ class SessionsController < ApplicationController
 
     @auth_user.logout! if @auth_user
 
+    UserMfaSession.destroy if @auth_user&.require_mfa?
+
     restart_session
     redirect_to_login t('message.session_closed_correctly'), :notice, logout_params
   end
