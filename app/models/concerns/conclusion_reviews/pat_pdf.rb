@@ -227,7 +227,7 @@ module ConclusionReviews::PatPdf
       column_count = 2
 
       if users.any?
-        column_data = []
+        column_data   = []
         column_widths = Array.new column_count, pdf.bounds.width / column_count
 
         users.each_slice column_count do |user_group|
