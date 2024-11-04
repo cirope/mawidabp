@@ -1,7 +1,7 @@
 Rails.logger.info "Starting daily runner (version #{APP_REVISION[0,8]})"
 
 if Organization.any?
-  ConclusionFinalReview.notify_recent
+  Finding.notify_recently_finalized
 
   User.notify_auditors_about_close_date
 

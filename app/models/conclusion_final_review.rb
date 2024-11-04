@@ -1,7 +1,6 @@
 class ConclusionFinalReview < ConclusionReview
   include ConclusionFinalReviews::Defaults
   include ConclusionFinalReviews::Destroy
-  include ConclusionFinalReviews::Notify
   include ConclusionFinalReviews::Scopes
   include ConclusionFinalReviews::Search
   include ConclusionFinalReviews::Sort
