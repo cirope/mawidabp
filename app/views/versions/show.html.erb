@@ -21,7 +21,7 @@
       <%= t("versions.events.#{@version.event}") %>
     </p>
 
-    <% changes = @version.changes_from_next %>
+    <% changes = @version.changeset %>
     <% unless changes.blank? %>
       <div class="card my-3">
         <div class="card-header">
@@ -37,11 +37,11 @@
             </tr>
           </thead>
           <tbody>
-            <% changes.each do |change| %>
+            <% changes.each do |attr, (old_value, new_value) | %>
               <tr>
-                <td><%= change[:attribute] %></td>
-                <td><%= change[:old_value] %></td>
-                <td><%= change[:new_value] %></td>
+                <td><%= attr %></td>
+                <td><%= old_value %></td>
+                <td><%= new_value %></td>
               </tr>
             <% end %>
           </tbody>
