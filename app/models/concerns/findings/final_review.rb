@@ -14,7 +14,7 @@ module Findings::FinalReview
   module ClassMethods
     def notify_recently_finalized
       findings = Finding.joins(review: :conclusion_final_review).where(
-        findings: { final: false }, conclusion_reviews: { created_at: 1.day.ago..}
+        findings: { final: false }, conclusion_reviews: { created_at: 1.day.ago.. }
       ).not_revoked
 
       users = findings.inject([]) do |u, finding|
