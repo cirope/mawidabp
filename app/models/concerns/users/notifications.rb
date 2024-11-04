@@ -35,7 +35,11 @@ module Users::Notifications
             end
           end
         else
-          users.each { |user| NotifierMailer.notify_new_findings(user).deliver_later }
+          users.each do |user|
+            findings = user.findings.recently_notified
+
+            NotifierMailer.notify_new_findings(user, findings).deliver_later
+          end
         end
       end
     end
