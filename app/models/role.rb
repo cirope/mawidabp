@@ -108,6 +108,10 @@ class Role < ApplicationRecord
     @auth_privileges[module_name] || @auth_privileges[module_name.to_sym] || {}
   end
 
+  def to_s
+    self.name
+  end
+
   def privileges_hash
     privileges = ActiveSupport::HashWithIndifferentAccess.new
 
