@@ -34,4 +34,14 @@ jQuery(function ($) {
     if (workPaperCode === lastWorkPaperCode)
       lastWorkPaperCode = lastWorkPaperCode.previous(3)
   })
+
+  $(document).on('change', '[data-work-paper-file]', function () {
+    var fileInput = $(this)
+    var fileName = fileInput.val().split('\\').pop()
+    var nameField = fileInput.closest('.work_paper').find('input[name*="[name]"]')
+
+    if (fileName && nameField.val() === '') {
+      nameField.val(fileName)
+    }
+  });
 })
