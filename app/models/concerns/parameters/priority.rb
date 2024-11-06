@@ -6,9 +6,9 @@ module Parameters::Priority
   end
 
   DEFAULT_PRIORITY_TYPES = {
-    low: 0,
+    low:    0,
     medium: 1,
-    high: 2
+    high:   2
   }
 
   module ClassMethods
