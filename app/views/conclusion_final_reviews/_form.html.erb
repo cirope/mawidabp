@@ -63,6 +63,7 @@
               <%= f.input :recipients, input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 2 : 4 } %>
 
               <% if USE_SCOPE_CYCLE %>
+                <%= f.input :work_scope, input_html: { readonly: readonly } %>
                 <%= f.input :additional_comments, input_html: { readonly: readonly, rows: 2 } %>
               <% end %>
 

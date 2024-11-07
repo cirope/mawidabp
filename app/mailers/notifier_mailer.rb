@@ -39,9 +39,7 @@ class NotifierMailer < ApplicationMailer
          )
   end
 
-  def notify_new_findings(user)
-    findings = user.findings.recently_notified
-
+  def notify_new_findings user, findings
     @user             = user
     @grouped_findings = findings.group_by(&:organization)
     @notification     = Notification.create(user: user, findings: findings)

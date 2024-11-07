@@ -38,6 +38,13 @@ class Authentication
     @valid && @valid_user
   end
 
+  def require_mfa?
+    require_mfa   = @valid_user.require_mfa?
+    @redirect_url = { controller: 'mfas', action: 'new' } if require_mfa
+
+    require_mfa
+  end
+
   private
 
     def set_resources

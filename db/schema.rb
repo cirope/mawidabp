@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_27_024428) do
+ActiveRecord::Schema.define(version: 2024_11_04_145001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -295,8 +295,10 @@ ActiveRecord::Schema.define(version: 2024_05_27_024428) do
     t.boolean "exclude_regularized_findings", default: false, null: false
     t.text "review_conclusion"
     t.text "applied_data_analytics"
+    t.jsonb "fields", default: {}, null: false
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
+    t.index ["created_at"], name: "index_conclusion_reviews_on_created_at"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
     t.index ["organization_id"], name: "index_conclusion_reviews_on_organization_id"
     t.index ["review_id"], name: "index_conclusion_reviews_on_review_id"
@@ -818,6 +820,7 @@ ActiveRecord::Schema.define(version: 2024_05_27_024428) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "sync_ldap", null: false
+    t.boolean "require_mfa", default: false, null: false
     t.index ["organization_id"], name: "index_organization_roles_on_organization_id"
     t.index ["role_id"], name: "index_organization_roles_on_role_id"
     t.index ["user_id"], name: "index_organization_roles_on_user_id"
@@ -1353,6 +1356,9 @@ ActiveRecord::Schema.define(version: 2024_05_27_024428) do
     t.string "organizational_unit"
     t.string "office"
     t.string "saml_request_id"
+    t.string "google_secret"
+    t.string "mfa_salt"
+    t.datetime "mfa_configured_at"
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"
