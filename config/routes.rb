@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   get  'signin', to: 'authentications#new',    as: 'signin'
   post 'auth',   to: 'authentications#create', as: 'auth'
 
+  # MFA Authentication
+  resource :mfa, only: [:new, :create]
+
   # SAML
   post 'saml/callback', to: 'saml_sessions#create', as: :saml_session
   get 'saml/metadata', to: 'saml_sessions#metadata', as: :saml_metadata

@@ -13,6 +13,7 @@ class OrganizationRole < ApplicationRecord
   }
 
   before_validation :set_sync_ldap
+  after_save :set_mfa_secret
 
   # Restricciones
   validates :organization_id, :role_id, :presence => true
@@ -47,19 +48,27 @@ class OrganizationRole < ApplicationRecord
   end
 
   # Relaciones
-  belongs_to :user, -> { readonly }
+  belongs_to :user
   belongs_to :organization, -> { readonly }
   belongs_to :role, -> { readonly }
 
   # Atributos
   attribute :sync_ldap, :boolean
+  attribute :require_mfa, :boolean
 
   def to_s
     "#{self.role.name} (#{self.organization.name})"
   end
 
   private
+
     def set_sync_ldap
       self.sync_ldap = true if sync_ldap.nil?
+    end
+
+    def set_mfa_secret
+      if user && require_mfa && user.google_secret.blank?
+        user.set_google_secret
+      end
     end
 end

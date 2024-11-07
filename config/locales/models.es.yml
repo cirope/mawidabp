@@ -182,6 +182,7 @@ es:
         sectors: Sectores/departamentos involucrados
         summary: Acta
         type: Tipo
+        work_scope: Alcance del trabajo
       conclusion_review/review/best_practice_comments:
         auditor_comment: Conclusiones del auditor (proceso)
       control:
@@ -558,7 +559,8 @@ es:
       organization_role:
         organization_id: Organización
         role_id: Perfil
-        sync_ldap: "¿Sincronizar con LDAP?"
+        sync_ldap: ¿Sincronizar con LDAP?
+        require_mfa: Requerir AMF
         user_id: Usuario
       paper_trail/version:
         created_at: Fecha

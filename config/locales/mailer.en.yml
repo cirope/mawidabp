@@ -103,6 +103,8 @@ en:
     notify_new_oportunity:
       oportunity_link: See improvement opportunity
       title: You have a new opportunity to improve
+    notify_finding_state_changed:
+      title: Finding state changed
     pending_poll_email:
       about_html: Survey about <strong>%{entity}</strong>
     reassigned_findings:
