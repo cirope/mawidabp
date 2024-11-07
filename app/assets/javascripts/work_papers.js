@@ -38,10 +38,10 @@ jQuery(function ($) {
   $(document).on('change', '[data-work-paper-file]', function () {
     var $fileInput = $(this)
     var fileName   = $fileInput.val().split('\\').pop()
-    var nameField  = $fileInput.closest('.work_paper').find('input[name*="[name]"]')
+    var $nameField  = $fileInput.closest('.work_paper').find('input[name*="[name]"]')
 
-    if (fileName && nameField.val() === '') {
-      nameField.val(fileName)
+    if (fileName && $nameField.val() === '') {
+      $nameField.val(fileName)
     }
   })
 })
