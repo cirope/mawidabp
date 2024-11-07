@@ -30,5 +30,6 @@ DEFAULT_SETTINGS = {
   finding_days_for_next_notifications: { value: FINDING_DAYS_FOR_SECOND_NOTIFICATION, validates: 'presence' },
   uniqueness_username_validation: { value: '1', validates: 'numericality'},
   skip_reiteration_copy: { value: '0', validates: 'numericality' },
-  finding_state_change_notification: { value: '0', validates: 'numericality' }
+  finding_state_change_notification: { value: '0', validates: 'numericality' },
+  notify_recently_finalized_findings: { value: '0', validates: 'numericality' }
 }.with_indifferent_access.freeze
