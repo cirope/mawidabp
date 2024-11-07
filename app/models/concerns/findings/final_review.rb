@@ -14,14 +14,15 @@ module Findings::FinalReview
   module ClassMethods
     def notify_recently_finalized
       findings = joins(
-        organization: :settings, review: :conclusion_final_review
+        organization: :settings,
+        review:       :conclusion_final_review
       ).where(
-        findings: { final: false },
+        findings:           { final: false            },
         conclusion_reviews: { created_at: 1.day.ago.. },
-        settings: {
-          name: 'notify_recently_finalized_findings',
-          value: '1'
-        }
+        settings:           {
+                              name: 'notify_recently_finalized_findings',
+                              value: '1'
+                            }
       ).not_revoked
 
       users = findings.inject([]) do |u, finding|
