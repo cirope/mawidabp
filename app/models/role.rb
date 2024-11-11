@@ -4,7 +4,6 @@ class Role < ApplicationRecord
   include Roles::Scopes
   include ParameterSelector
 
-  include Roles::Auditable
   # REMINDER: DO NOT use 4 until all clients are migrated from "old"
   # auditor junior role
   TYPES = {
@@ -110,7 +109,7 @@ class Role < ApplicationRecord
   end
 
   def to_s
-    self.name
+    name
   end
 
   def privileges_hash
