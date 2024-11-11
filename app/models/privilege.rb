@@ -3,7 +3,8 @@ class Privilege < ApplicationRecord
   include Privileges::AttributeTypes
 
   has_paper_trail meta: {
-    organization_id: ->(model) { Current.organization&.id }
+    organization_id: ->(model) { Current.organization&.id },
+    important: true
   }
 
   after_validation :mark_implicit_privileges

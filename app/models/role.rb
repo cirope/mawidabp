@@ -1,9 +1,10 @@
 class Role < ApplicationRecord
-  include Auditable
   include Comparable
+  include Roles::Auditable
   include Roles::Scopes
   include ParameterSelector
 
+  include Roles::Auditable
   # REMINDER: DO NOT use 4 until all clients are migrated from "old"
   # auditor junior role
   TYPES = {

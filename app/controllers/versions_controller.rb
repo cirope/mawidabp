@@ -16,7 +16,7 @@ class VersionsController < ApplicationController
   # * GET /versions/1
   def show
     @version = PaperTrail::Version.where(
-      id: params[:id], organization_id: current_organization.id
+      id: params[:id], organization_id: current_organization.id, important: true
     ).first
   end
 
@@ -36,7 +36,7 @@ class VersionsController < ApplicationController
       [
         'organization_id = :organization_id',
         'created_at BETWEEN :from_date AND :to_date',
-        'item_type IN (:types)'
+        'item_type IN (:types)', 'important = :boolean_true'
       ].join(' AND ')
     end
 
@@ -45,7 +45,8 @@ class VersionsController < ApplicationController
         from_date: @from_date.to_time.at_beginning_of_day,
         to_date: @to_date.to_time.at_end_of_day,
         organization_id: current_organization.id,
-        types: ['User', 'Parameter', 'Role', 'Privilege', 'OrganizationRole']
+        types: ['User', 'Parameter', 'Role', 'Privilege', 'OrganizationRole'],
+        boolean_true: true
       }
     end
 end
