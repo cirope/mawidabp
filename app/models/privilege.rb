@@ -43,7 +43,7 @@ class Privilege < ApplicationRecord
   end
 
   def to_s
-    privilege_string = I18n.t(self.module, :scope => :actioncontroller)
+    privilege_string = self.module
 
     privilege_array = [:approval, :erase, :modify, :read].map do |p|
       "#{Privilege.human_attribute_name(p)}: " +
