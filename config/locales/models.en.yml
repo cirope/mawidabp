@@ -1328,6 +1328,9 @@ en:
       organization:
         one: Organization
         other: Organizations
+      organization_role:
+        one: Profile
+        other: Profiles
       paper_trail/version:
         one: Version
         other: Versions
