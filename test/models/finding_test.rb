@@ -2737,6 +2737,18 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'should notify recently finalized' do
+    conclusion_final_review = conclusion_reviews :conclusion_current_final_review
+    organization            = conclusion_final_review.organization
+
+    organization.settings.find_by(name: 'notify_recently_finalized_findings').update! value: '1'
+    conclusion_final_review.update! created_at: 2.hours.ago
+
+    assert_enqueued_emails 7 do
+      Finding.notify_recently_finalized
+    end
+  end
+
   private
 
     def new_email_pop3 from, subject, body

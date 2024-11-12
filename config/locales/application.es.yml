@@ -1490,6 +1490,7 @@ es:
     insufficient_privileges: No tiene permisos para realizar la acción
     invalid_user_or_email: Tu usuario o correo no puede estar en blanco
     invalid_user_or_password: Usuario/contraseña inválido
+    invalid_code: Código inválido
     ldap_error: El servidor de autenticación no está disponible en este momento. Por favor, inténtelo de nuevo más tarde
     loading: Cargando
     must_be_authenticated: Debe iniciar sesión para continuar

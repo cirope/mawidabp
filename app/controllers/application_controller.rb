@@ -120,11 +120,22 @@ class ApplicationController < ActionController::Base
       !@auth_user.nil? && (@auth_user.is_group_admin? || @auth_user.is_enable?)
     end
 
+    def check_mfa
+      if @auth_user&.require_mfa? && controller_name != 'mfas'
+        user_mfa_session = UserMfaSession.find&.record == @auth_user
+
+        if @auth_user.mfa_configured_at.blank? || user_mfa_session.blank?
+          redirect_to new_mfa_url
+        end
+      end
+    end
+
     def auth
       action = (params[:action] || 'none').to_sym
 
       if login_check
         check_access_time
+        check_mfa
 
         session[:back_to] = nil if action == :index
 

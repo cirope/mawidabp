@@ -1490,6 +1490,7 @@ en:
     insufficient_privileges: You do not have permission to perform this action
     invalid_user_or_email: Your user or email cannot be blank
     invalid_user_or_password: Invalid user/password
+    invalid_code: Invalid code
     ldap_error: The authentication server is currently unavailable. Please try again later
     loading: Loading
     must_be_authenticated: You must log in to continue

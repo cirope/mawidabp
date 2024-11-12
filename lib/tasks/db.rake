@@ -2,7 +2,7 @@ namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
     ActiveRecord::Base.transaction do
-      update_organization_settings               # 2017-03-15 last 2024-10-21
+      update_organization_settings               # 2017-03-15 last 2024-11-06
       add_new_answer_options                     # 2017-06-29
       add_best_practice_privilege                # 2018-01-31
       add_control_objective_privilege            # 2018-01-31
@@ -177,6 +177,14 @@ private
                            description: I18n.t('settings.finding_state_change_notification')
       end
     end
+
+    if add_notify_recently_finalized_findings? #2024-11-06
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'notify_recently_finalized_findings',
+                           value:       DEFAULT_SETTINGS[:notify_recently_finalized_findings][:value],
+                           description: I18n.t('settings.notify_recently_finalized_findings')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -245,6 +253,10 @@ private
 
   def add_finding_state_change_notification?
     Setting.where(name: 'finding_state_change_notification').empty?
+  end
+
+  def add_notify_recently_finalized_findings?
+    Setting.where(name: 'notify_recently_finalized_findings').empty?
   end
 
   def add_new_answer_options
