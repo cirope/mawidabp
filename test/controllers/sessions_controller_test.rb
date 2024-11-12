@@ -79,6 +79,18 @@ class SessionsControllerTest < ActionController::TestCase
     assert_redirected_to login_url
   end
 
+  test 'should set locale from params on new session' do
+    get :new, params: { locale: 'en' }
+    assert_equal 'en', session[:locale]
+    assert_equal 'en', I18n.locale.to_s
+  end
+
+  test 'should default to application locale if no locale param' do
+    get :new
+    assert_nil session[:locale]
+    assert_equal I18n.default_locale.to_s, I18n.locale.to_s
+  end
+
   private
 
     def error_record error_type

@@ -87,7 +87,7 @@ es:
         best_practice: Buena práctica
       business_unit:
         business_unit_kind_id: Tipo de proceso crítico
-        business_unit_type_id: Proceso Crítico
+        business_unit_type_id: Unidad organizativa
         name: Nombre
       business_unit_kind:
         name: Nombre
@@ -125,7 +125,7 @@ es:
         business_unit_type_id: Unidad organizativa
         review_id: Informe
       business_unit_type_user:
-        business_unit_type_id: Proceso crítico
+        business_unit_type_id: Unidad organizativa
         user_id: Usuario
       business_unit_type_users:
         business_unit_type_id: Unidad organizativa
@@ -154,7 +154,7 @@ es:
         force_approval: Forzar aprobación
       conclusion_review:
         additional_comments: Comentarios adicionales
-        affects_compliance: Afecta compliance
+        affects_compliance: Afecta cumplimiento
         applied_data_analytics: Data Analytics aplicada
         applied_procedures: Procedimientos aplicados
         approved: Aprobado
@@ -217,7 +217,6 @@ es:
         oportunities: Oportunidades de mejora
         process_control_id: Proceso de negocio
         relevance: Importancia
-        scored_business_unit_id: Proceso crítico evaluado
         scored_business_unit_type_id: Unidad organizativa evaluada
         support: Soporte
         sustantive_score: Calificación pruebas sustantivas
@@ -298,8 +297,8 @@ es:
         external_repeated: Reiterada externa
         finding_answers: Respuestas
         finding_user_assignments: Usuarios
-        first_follow_up_date: Primer fecha de implementación
-        follow_up_date: Fecha de implementación
+        first_follow_up_date: Primer fecha estimada de regularización
+        follow_up_date: Fecha estimada de regularización
         frequency: Frecuencia
         impact_amount: Monto universo
         impact_risk: Impacto
@@ -321,7 +320,7 @@ es:
         risk_justification: Justificar riesgo
         sample_deviation: Desvio de la muestra
         skip_work_paper: No requiere papel de trabajo
-        solution_date: Fecha de solución
+        solution_date: Fecha de finalización
         state: Estado
         state_regulations: Normativa Estado
         state_was: Estado anterior
@@ -532,7 +531,7 @@ es:
         finding_user_assignments: Usuarios
         origination_date: Fecha de origen
         review_code: Código
-        solution_date: Fecha de solución
+        solution_date: Fecha de finalización
         state: Estado
         title: Título
         user_ids: Usuario
@@ -904,7 +903,7 @@ es:
         effect: Efecto
         extension: Días de gracia
         finding_user_assignments: Usuarios
-        first_follow_up_date: Primer fecha de implementación
+        first_follow_up_date: Primer fecha estimada de regularización
         follow_up_date: Fecha estimada de regularización
         impact: Impacto
         impact_risk: Impacto

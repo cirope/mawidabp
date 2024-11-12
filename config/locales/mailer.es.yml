@@ -25,7 +25,7 @@ es:
 
   notifier:
     being_implemented_and_stale_finding_to_manager:
-      the_following_finding_is_being_implemented_and_stale: La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación
+      the_following_finding_is_being_implemented_and_stale: La fecha estimada de regularización de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación
       title: Notificación de observaciones en proceso de implementación vencidas
     change_password: Cambiar contraseña
     changes_notification:
@@ -44,7 +44,7 @@ es:
     expired_finding_to_manager:
       managers_clarification: Las personas pueden cambiar si se modifican los usuarios del hallazgo o si se altera el organigrama
       subject: Hallazgo vencido [#%{finding_id}]
-      the_following_finding_is_expired: No se ha propuesto una nueva fecha de implementación del siguiente hallazgo
+      the_following_finding_is_expired: No se ha propuesto una nueva fecha estimada de regularización del siguiente hallazgo
       title: Hallazgo vencido
     findings_brief:
       title: Resumen de hallazgos pendientes
@@ -85,8 +85,8 @@ es:
       title: No se procesó su correo
       warning: No se tomó acción con el correo recibido.
     notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
-      finding_follow_up_date_last_changed_is_grerater_90_days: Han pasado 90 días desde el último cambio en la fecha de implementación de la observación
-      follow_up_date_last_changed: 'Último cambio en fecha de implementación: %{follow_up_date_last_changed}'
+      finding_follow_up_date_last_changed_is_grerater_90_days: Han pasado 90 días desde el último cambio en la fecha estimada de regularización de la observación
+      follow_up_date_last_changed: 'Último cambio en fecha estimada de regularización: %{follow_up_date_last_changed}'
       title: Vencimiento de observación implementada
     notify_new_finding:
       created_title: Nuevo hallazgo
@@ -103,6 +103,8 @@ es:
     notify_new_oportunity:
       oportunity_link: Ver oportunidad de mejora
       title: Tiene una nueva oportunidad de mejora
+    notify_finding_state_changed:
+      title: El estado del hallazgo ha cambiado
     pending_poll_email:
       about_html: Encuesta acerca de <strong>%{entity}</strong>
     reassigned_findings:
