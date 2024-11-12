@@ -1,0 +1,51 @@
+name: Generate Changelog
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  generate-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Generate changelog
+        run: ruby scripts/generate_changelog.rb
+
+      - name: Commit and push changelog
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git checkout -b update-changelog
+          git add CHANGELOG.en.md CHANGELOG.es.md
+          git commit -m 'Update changelog'
+          git push origin update-changelog
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update-changelog
+          title: 'Update changelog'
+          body: 'This PR updates the changelog files.'
+          labels: 'changelog'
+
+      - name: Check if PR is from changelog update
+        id: check-pr
+        run: |
+          echo "::set-output name=is_changelog_update::$(echo ${{ github.event.pull_request.title }} | grep -q 'Update changelog' && echo true || echo false)"
+
+      - name: Skip changelog update PR
+        if: steps.check-pr.outputs.is_changelog_update == 'true'
+        run: echo "Skipping changelog update PR to avoid endless cycle."
