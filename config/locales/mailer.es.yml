@@ -1,30 +1,166 @@
 ---
 es:
+  common_mailer:
+    alt_footer:
+      title_html: 'Si usted desea acceder a sus observaciones, haga clic en el siguiente enlace e ingrese legajo y contraseña de Windows: %{url}'
+      warning: Por favor, **no contestar** el presente correo. Para realizar cualquier interacción, debe ingresar al sistema.
+    footer:
+      email_label: Correo
+      recommendations: Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 10 o superior*
+      title: Correo enviado por el sistema 'Mawidabp', cualquier inquietud comunicarse al área de soporte.
+      warning: Por favor, **no contestar** el presente correo. Para realizar cualquier interacción, debe ingresar al sistema.
+    header_repĺy:
+      reply_delimiter: "-- PARA AGREGAR UN COMENTARIO RESPONDA ESTE EMAIL SIN MODIFICAR EL ASUNTO. DESPUES DEL COMENTARIO ESCRIBA LA FRASE %{regex_reply_email} --"
+
   ldap_mailer:
     import_notifier:
-      subject: "Han habido cambios en los usuarios"
-      body_title: "Se han sincronizado usuarios, estos son los cambios realizados:"
-      greetings: "Hola Supervisores,"
+      body_title: 'Se han sincronizado usuarios, estos son los cambios realizados:'
+      greetings: Hola Supervisores,
       states:
         created: 'Creados:'
         deleted: 'Eliminados:'
         errored: 'Con errores:'
         updated: 'Actualizados:'
+      subject: Han habido cambios en los usuarios
 
-  common_mailer:
-    header_repĺy:
-      reply_delimiter: '-- PARA AGREGAR UN COMENTARIO RESPONDA ESTE EMAIL SIN MODIFICAR EL ASUNTO. DESPUES DEL COMENTARIO ESCRIBA LA FRASE %{regex_reply_email} --'
-    alt_footer:
-      warning: "Por favor, **no contestar** el presente correo. Para realizar cualquier interacción, debe ingresar al sistema."
-      title_html: "Si usted desea acceder a sus observaciones, haga clic en el siguiente enlace e ingrese legajo y contraseña de Windows: %{url}"
-    footer:
-      email_label: "Correo"
-      warning: "Por favor, **no contestar** el presente correo. Para realizar cualquier interacción, debe ingresar al sistema."
-      title: "Correo enviado por el sistema 'Mawidabp', cualquier inquietud comunicarse al área de soporte."
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 10 o superior*"
+  notifier:
+    being_implemented_and_stale_finding_to_manager:
+      the_following_finding_is_being_implemented_and_stale: La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de regularización
+      title: Notificación de observaciones en proceso de regularización vencidas
+    change_password: Cambiar contraseña
+    changes_notification:
+      title: Notificación de cambios
+    conclusion_final_review_close_date_warning:
+      body_title: Los siguientes informes están próximos al cierre
+      title: Notificación de informes cercanos al cierre
+    conclusion_review_notification:
+      body_title: 'Se adjuntan los siguientes documentos: %{elements}'
+      draft: borrador
+      final: definitivo
+      title: Informe de auditoría %{type} %{review}
+    endorsement_update:
+      body_title: Se actualizó el estado de la solucitud de aprobación
+      title: Actualización de aprobación
+    expired_finding_to_manager:
+      managers_clarification: Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama
+      subject: Debilidad vencida
+      the_following_finding_is_expired: No se ha propuesto una nueva fecha de implementación de la siguiente debilidad
+      title: Debilidad vencida
+    findings_brief:
+      title: Resumen de debilidades pendientes
+    findings_expiration_warning:
+      body_title:
+        one: Gestión del Comité de Auditoria - Seguimiento de observaciones
+        other: Gestión del Comité de Auditoria - Seguimiento de observaciones
+      title: Notificación de debilidades cercanas al vencimiento
+    findings_expired_warning:
+      body_title:
+        one: La siguiente debilidad está vencida
+        other: Las siguientes debilidades están vencidas
+      title: Notificación de debilidades vencidas
+    findings_unanswered_warning:
+      body_title:
+        one: La siguiente debilidad se encuentra sin respuesta
+        other: Las siguientes debilidades están sin respuesta
+      title: Notificación de debilidades sin respuesta desatendidas
+    group_welcome_email:
+      clarification: Ha recibido este correo porque se le ha asignado un grupo en el sistema 'Mawidabp'
+      create_user: Crear usuario
+      initial_user: Para comenzar a utilizar el sistema debe primero crear un usuario
+      title: El grupo %{name} ha sido creado
+    new_admin_user:
+      body: "%{name} (%{user}) ahora es administrador"
+      body_title: Se asigno un nuevo administrador a la organización
+      title: Nuevo administrador
+    new_endorsement:
+      body_title: Se ha propuesto una nueva fecha de compromiso que requiere su aprobación
+      title: Aprobación requerida
+    notification:
+      confirm: Confirmar notificación
+      pending: Notificaciones pendientes
+      the_following_findings_are_still_unconfirmed: Las siguientes debilidades han sido notificadas pero no han recibido una confirmación
+      unconfirmed: Notificaciones sin confirmar
+    notify_action_not_found:
+      reply_receive: Respuesta recibida
+      title: No se procesó su correo
+      warning: No se tomó acción con el correo recibido.
+    notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days:
+      finding_follow_up_date_last_changed_is_grerater_90_days: Han pasado 90 días desde el último cambio en la fecha de implementación de la observación
+      follow_up_date_last_changed: 'Último cambio en fecha de implementación: %{follow_up_date_last_changed}'
+      title: Vencimiento de observación implementada
+    notify_new_finding:
+      created_title: Nueva debilidad
+      title: Tiene una nueva debilidad
+    notify_new_finding_answer:
+      finding_data: Se ha agregado un comentario a la debilidad **%{finding_code}** del informe **%{review}**
+      finding_link: Ver debilidad
+      finding_link_guidance: Para realizar cualquier interacción debe ingresar al link
+      title: Nuevo comentario en el informe %{review}
+    notify_new_findings:
+      created_title:
+        one: Nueva debilidad
+        other: Nuevas debilidades
+      title: Notificación de debilidades
+    notify_new_oportunity:
+      oportunity_link: Ver oportunidad de mejora
+      title: Tiene una nueva oportunidad de mejora
+    pending_poll_email:
+      about_html: Encuesta acerca de <strong>%{entity}</strong>
+    reassigned_findings:
+      new_responsibles:
+        one: 'Usuario actual: %{responsible}'
+        other: 'Usuarios actuales: %{responsible}'
+      old_responsibles:
+        one: 'Usuario anterior: %{responsible}'
+        other: 'Usuarios anteriores: %{responsible}'
+      the_following_findings_are_now_reassigned:
+        one: La siguiente debilidad ha sido reasignada
+        other: Las siguientes debilidades han sido reasignadas
+      title:
+        one: Debilidad reasignada
+        other: Debilidades reasignadas
+    restore_password:
+      body_title: "%{user_name}, para restablecer la contraseña de su usuario (%{user}) utilice el siguiente enlace:"
+      clarification: Si usted **no pidió** el restablecimiento **no haga nada**, su usuario y contraseña siguen vigentes
+      title: Restablecer contraseña
+      valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día **%{date}** inclusive)"
+    tasks_expiration_warning:
+      body_title:
+        one: La siguiente tarea está próxima a vencer
+        other: Las siguientes tareas están próximas a vencer
+      title: Notificación de tareas cercanas al vencimiento
+    tasks_expired_warning:
+      body_title:
+        one: La siguiente tarea está vencida
+        other: Las siguientes tareas están vencidas
+      title: Notificación de tareas vencidas
+    unanswered_finding:
+      if_no_answer_is_given_the_following_users_will_be_notified: De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones
+      subject: Notificación de cambio a hallazgo [#%{finding_id}]
+      the_following_finding_are_now_unanswered: El siguiente hallazgo ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta
+      title: Notificación de cambios
+    unanswered_finding_to_manager:
+      managers_clarification: Las personas pueden cambiar si se modifican los usuarios de la debilidad o si se altera el organigrama
+      subject: Notificación por inactividad [#%{finding_id}]
+      the_following_finding_is_stale_and_unanswered: No se ha recibido ninguna respuesta por parte de los usuarios de la siguiente debilidad
+      title: Notificación por inactividad
+    unanswered_findings:
+      if_no_answer_is_given_the_following_users_will_be_notified: De continuar en el mismo estado (Sin respuesta), se generarán las siguientes notificaciones
+      the_following_findings_are_now_unanswered:
+        one: La siguiente observación / oportunidad de mejora ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta
+        other: Las siguientes observaciones / oportunidades de mejora han cambiado su estado a **Sin respuesta**, por no recibir una respuesta
+      title: Notificación de cambios
+    welcome_email:
+      change_password: Establecer contraseña
+      clarification: Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp'.
+      initial_password: Para empezar a utilizar el sistema, primero debe establecer su contraseña
+      organizations_sites:
+        one: 'Luego puede acceder a la siguiente dirección URL:'
+        other: 'Luego puede acceder a cualquiera de las siguientes direcciones URL (dependiendo de la organización que seleccione):'
+      title: "%{name}, su cuenta ha sido creada"
 
   report_mailer:
     attached_report:
-      subject: '[%{organization}] Su reporte está listo'
-      body: 'El reporte solicitado está adjunto.'
-      greetings: 'Hola %{name}'
+      body: El reporte solicitado está adjunto.
+      greetings: Hola %{name}
+      subject: "[%{organization}] Su reporte está listo"
