@@ -38,6 +38,8 @@ en:
     high: High
     low: Low
     medium: Medium
+    medium_high: Medium high
+    medium_low: Medium low
     none: Regulatory body
   probability_types:
     almost_certain: Almost certain
@@ -75,6 +77,8 @@ en:
     high: High
     low: Low
     medium: Medium
+    medium_high: Medium high
+    medium_low: Medium low
     none: Regulatory body
   sample_deviation_types:
     less_expected: Less expected

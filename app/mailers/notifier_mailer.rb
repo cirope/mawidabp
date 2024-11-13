@@ -39,9 +39,7 @@ class NotifierMailer < ApplicationMailer
          )
   end
 
-  def notify_new_findings(user)
-    findings = user.findings.recently_notified
-
+  def notify_new_findings user, findings
     @user             = user
     @grouped_findings = findings.group_by(&:organization)
     @notification     = Notification.create(user: user, findings: findings)
@@ -381,6 +379,15 @@ class NotifierMailer < ApplicationMailer
 
     mail to: finding_supervisors(@finding).map(&:email),
          subject: prefix.upcase + t('notifier.notify_implemented_finding_with_follow_up_date_last_changed_greater_than_90_days.title')
+  end
+
+  def notify_finding_state_changed finding
+    @finding = finding
+    prefix   = "[#{finding.organization.prefix}] "
+    users    = finding.users.reject &:can_act_as_audited?
+
+    mail to: users.map(&:email),
+         subject: prefix.upcase + t('notifier.notify_finding_state_changed.title')
   end
 
   private

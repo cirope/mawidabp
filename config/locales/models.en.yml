@@ -181,6 +181,7 @@ en:
         sectors: Sectors/departments involved
         summary: Summary
         type: Type
+        work_scope: Work scope
       conclusion_review/review/best_practice_comments:
         auditor_comment: Auditor conclusions (process)
       control:
@@ -558,6 +559,7 @@ en:
         organization_id: Organization
         role_id: Profile
         sync_ldap: Synchronize with LDAP?
+        require_mfa: Require MFA
         user_id: User
       paper_trail/version:
         created_at: Date
@@ -1325,6 +1327,9 @@ en:
       organization:
         one: Organization
         other: Organizations
+      organization_role:
+        one: Profile
+        other: Profiles
       paper_trail/version:
         one: Version
         other: Versions
