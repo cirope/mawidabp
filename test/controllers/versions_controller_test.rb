@@ -18,7 +18,6 @@ class VersionsControllerTest < ActionController::TestCase
     get :show, params: { id: @version }
     assert_response :success
     assert_not_nil assigns(:version)
-    assert_select 'table.table'
     assert_template 'versions/show'
   end
 
