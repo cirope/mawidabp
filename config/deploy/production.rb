@@ -10,6 +10,6 @@ set :default_env, {
 
 role :web, %w{deployer@prisma-test.mawidabp.com}
 role :app, %w{deployer@prisma-test.mawidabp.com}
-role :db,  %w{deployer@pristma-test.mawidabp.com}
+role :db,  %w{deployer@prisma-test.mawidabp.com}
 
 server 'prisma-test.mawidabp.com', user: 'deployer', roles: %w{web app db}
