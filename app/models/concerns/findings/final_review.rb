@@ -32,7 +32,7 @@ module Findings::FinalReview
       users.each do |user|
         user_findings = findings.select { |finding| finding.users.include? user }
 
-        NotifierMailer.notify_new_findings(user, user_findings).deliver_later
+        NotifierMailer.notify_new_findings(user, user_findings.to_a).deliver_later
       end
     end
   end
