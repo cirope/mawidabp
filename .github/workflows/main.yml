@@ -95,7 +95,7 @@ jobs:
         run: bin/rails db:migrate
       - name: Copy application.yml
         run: cp config/application.${{ matrix.config-type }}.yml config/application.yml
-      - name: Set up and run slpad
+      - name: Set up and run slapd
         run: |
           sudo cp test/fixtures/ldap/slapd.conf /etc/ldap/
           sudo slapd -f /etc/ldap/slapd.conf -h ldap://localhost:3389
