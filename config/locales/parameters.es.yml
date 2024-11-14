@@ -64,11 +64,11 @@ es:
     observed: Observado
     ok: OK
   relevance_types:
-    critical: Crítico
-    high: Alto
+    critical: Alto
+    high: Medio-Alto
     low: Bajo
-    moderate: Moderado
-    moderate_low: Moderado/bajo
+    moderate: Medio
+    moderate_low: Medio-Bajo
     not_rated: Nulo
     # Short relevance
     'no': No
