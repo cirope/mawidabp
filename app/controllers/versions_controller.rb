@@ -45,7 +45,8 @@ class VersionsController < ApplicationController
         from_date: @from_date.to_time.at_beginning_of_day,
         to_date: @to_date.to_time.at_end_of_day,
         organization_id: current_organization.id,
-        types: ['User', 'Parameter'], boolean_true: true
+        types: ['User', 'Parameter', 'Role', 'Privilege', 'OrganizationRole'],
+        boolean_true: true
       }
     end
 end
