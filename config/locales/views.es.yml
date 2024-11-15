@@ -265,6 +265,7 @@ es:
     not_authorized: Debe ingresar para ver el contenido
     not_allowed: No está autorizado para realizar la operación
     truncated: Truncado, cantidad máxima de caracteres %{count}
+    finding_updated_after_complete: 'El hallazgo ha sido modificado después de solucionado. Por favor, revise el historial de cambios.'
 
   mfas:
     create:
