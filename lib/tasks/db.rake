@@ -1007,7 +1007,7 @@ private
 
   def update_conclusion_review_options?
     ActiveRecord::Base.connection.column_exists?(:conclusion_reviews, :exclude_regularized_findings) &&
-      ConclusionReview.where.not(exclude_regularized_findings: nil).exists?
+      ConclusionReview.where(exclude_regularized_findings: nil).blank?
   end
 
   def claim_fields_empty? provider
