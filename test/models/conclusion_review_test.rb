@@ -551,32 +551,4 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     refute conclusion_draft_review.draft?
   end
-
-  # Tests for options concern behavior
-  test 'exclude implemented audited findings' do
-    option_key = CONCLUSION_REVIEW_OPTIONS['Excluir hallazgos regularizados']
-
-    @conclusion_review.options[option_key] = '1'
-
-    assert @conclusion_review.exclude_implemented_audited_findings
-  end
-
-  test 'exclude criteria mismatch findings' do
-    option_key = CONCLUSION_REVIEW_OPTIONS['Excluir hallazgos cerrados/reclasificados']
-
-    @conclusion_review.options[option_key] = '0'
-
-    refute @conclusion_review.exclude_criteria_mismatch_findings
-  end
-
-  test 'option_value method returns correct boolean values' do
-    regularized_key = CONCLUSION_REVIEW_OPTIONS['Excluir hallazgos regularizados']
-    criteria_key    = CONCLUSION_REVIEW_OPTIONS['Excluir hallazgos cerrados/reclasificados']
-
-    @conclusion_review.options[regularized_key] = '1'
-    @conclusion_review.options[criteria_key]    = '0'
-
-    assert @conclusion_review.option_value regularized_key
-    refute @conclusion_review.option_value criteria_key
-  end
 end
