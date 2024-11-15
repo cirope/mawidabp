@@ -166,6 +166,8 @@ es:
         effectiveness_notes: Nota efectividad
         evolution: Evolución de la calificación
         evolution_justification: Justificación de la evolución
+        exclude_implemented_audited_findings: Excluir hallazgos regularizados
+        exclude_criteria_mismatch_findings: Excluir hallazgos cerrados/reclasificados
         issue_date: Fecha de emisión
         main_recommendations: Principales Recomendaciones de Auditoría
         main_weaknesses_text: Principales debilidades

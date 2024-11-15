@@ -161,13 +161,17 @@
             </div>
           </div>
 
-          <% conclusion_review_options_collection.each do |option| %>
-            <div class="row">
-              <div class="col-md-6">
-                <%= conclusion_review_input_option(f, @conclusion_final_review, option, readonly: readonly) %>
-              </div>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :exclude_implemented_audited_findings, as: :boolean, input_html: { disabled: readonly } %>
             </div>
-          <% end %>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :exclude_criteria_mismatch_findings, as: :boolean, input_html: { disabled: readonly } %>
+            </div>
+          </div>
         <% end %>
 
         <% if show_review_best_practice_comments? %>

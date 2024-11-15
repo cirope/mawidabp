@@ -295,11 +295,6 @@ TAG_OPTIONS = {
   }
 }
 
-CONCLUSION_REVIEW_OPTIONS = {
-  'Excluir hallazgos regularizados'           => 'exclude_implemented_audited_findings',
-  'Excluir hallazgos cerrados/reclasificados' => 'exclude_criteria_mismatch_findings'
-}
-
 WEAKNESS_OPERATIONAL_RISK = {
   'Debilidad de control/errores' => {},
   'Fraude interno'               => { data: { tag: 'Fraude Interno' } },

@@ -994,7 +994,7 @@ private
         options = conclusion_review.options
 
         if conclusion_review.exclude_regularized_findings
-          options['exclude_implemented_audited_findings'] = "1"
+          options['exclude_implemented_audited_findings'] = true
         end
 
         conclusion_review.update_columns(

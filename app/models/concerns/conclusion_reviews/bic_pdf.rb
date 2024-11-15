@@ -29,11 +29,11 @@ module ConclusionReviews::BicPdf
   end
 
   def bic_exclude_findings weaknesses
-    if exclude_implemented_audited_findings
+    if exclude_implemented_audited_findings?
       weaknesses = weaknesses.where.not state: Finding::STATUS[:implemented_audited]
     end
 
-    if exclude_criteria_mismatch_findings
+    if exclude_criteria_mismatch_findings?
       weaknesses = weaknesses.where.not state: Finding::STATUS[:criteria_mismatch]
     end
 

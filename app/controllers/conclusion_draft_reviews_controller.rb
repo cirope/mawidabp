@@ -322,6 +322,7 @@ class ConclusionDraftReviewsController < ApplicationController
         :reference, :scope, :previous_identification, :previous_date,
         :main_recommendations, :effectiveness_notes, :additional_comments,
         :review_conclusion, :applied_data_analytics, :work_scope, :lock_version,
+        :exclude_implemented_audited_findings, :exclude_criteria_mismatch_findings,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [
@@ -333,8 +334,7 @@ class ConclusionDraftReviewsController < ApplicationController
           image_models_attributes: [
             :id, :image, :image_cache, :_destroy
           ]
-        ],
-        options: {}
+        ]
       )
     end
 
