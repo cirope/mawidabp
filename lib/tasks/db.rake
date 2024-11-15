@@ -35,7 +35,7 @@ namespace :db do
       update_risk_assessments_changes            # 2023-10-02
       add_risk_registries_privilege              # 2023-10-26
       add_claim_values_in_saml_provider          # 2023-11-02
-      update_conclusion_review_options           # 2024-10-14
+      update_conclusion_review_options           # 2024-11-14
     end
   end
 end
