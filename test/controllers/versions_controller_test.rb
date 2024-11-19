@@ -36,4 +36,15 @@ class VersionsControllerTest < ActionController::TestCase
         from_date: from.to_s(:db), to_date: to.to_s(:db)
       ), PaperTrail::Version.table_name)
   end
+
+  test 'download security changes report as CSV' do
+    from = Date.today.at_beginning_of_month
+    to   = Date.today.at_end_of_month
+
+    assert_nothing_raised do
+      get :index, params: {
+        index: { from_date: from, to_date: to }
+      }, as: :csv
+    end
+  end
 end
