@@ -955,6 +955,10 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when not bic pdf format and get edit bic sigen fields' do
+    set_organization
+
+    skip if Current.conclusion_pdf_format == 'bic'
+
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
@@ -1039,6 +1043,10 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when client is not bic and update bic sigen fields' do
+    set_organization
+
+    skip if Current.conclusion_pdf_format == 'bic'
+
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
