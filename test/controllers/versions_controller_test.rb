@@ -46,5 +46,8 @@ class VersionsControllerTest < ActionController::TestCase
         index: { from_date: from, to_date: to }
       }, as: :csv
     end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 end
