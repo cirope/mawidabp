@@ -1052,7 +1052,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'no notifications sent if finding_days_for_next_notifications is 0' do
     Organization.all.each do |organization|
-      setting = organization.settings.find_by(name: 'finding_days_for_next_notifications')
+      setting = organization.settings.find_by name: 'finding_days_for_next_notifications'
 
       setting.update! value: '0' if setting
     end
