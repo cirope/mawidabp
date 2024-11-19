@@ -1064,7 +1064,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'notify on specified days from finding_days_for_next_notifications' do
     Organization.all.each do |organization|
-      setting = organization.settings.find_by(name: 'finding_days_for_next_notifications')
+      setting = organization.settings.find_by name: 'finding_days_for_next_notifications'
 
       setting.update! value: '1,2' if setting
     end
