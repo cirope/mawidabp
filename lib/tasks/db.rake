@@ -35,6 +35,7 @@ namespace :db do
       update_risk_assessments_changes            # 2023-10-02
       add_risk_registries_privilege              # 2023-10-26
       add_claim_values_in_saml_provider          # 2023-11-02
+      update_process_control_text                # 2024-11-19
     end
   end
 end
@@ -995,4 +996,20 @@ private
       provider.email_claim,
       provider.roles_claim
     ].all? &:blank?
+  end
+
+  def update_process_control_text
+    if update_process_control_text?
+      ControlObjectiveItem.find_each do |control_objective_item|
+        if process_control = control_objective_item.control_objective&.process_control
+          process_control_text = process_control.name
+
+          control_objective_item.update_column :process_control_text, process_control_text
+        end
+      end
+    end
+  end
+
+  def update_process_control_text?
+    ControlObjectiveItem.where(process_control_text: nil).exists?
   end

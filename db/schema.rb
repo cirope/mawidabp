@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_04_145001) do
+ActiveRecord::Schema.define(version: 2024_11_19_110959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -332,6 +332,7 @@ ActiveRecord::Schema.define(version: 2024_11_04_145001) do
     t.integer "organization_id"
     t.integer "issues_count"
     t.integer "alerts_count"
+    t.text "process_control_text"
     t.index ["control_objective_id"], name: "index_control_objective_items_on_control_objective_id"
     t.index ["organization_id"], name: "index_control_objective_items_on_organization_id"
     t.index ["review_id"], name: "index_control_objective_items_on_review_id"

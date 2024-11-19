@@ -4,9 +4,9 @@ module ControlObjectiveItems::Validations
   included do
     attr_accessor :creating_final_review
 
-    validates :control_objective_text, :control_objective_id,
+    validates :control_objective_text, :process_control_text, :control_objective_id,
       :organization_id, presence: true
-    validates :control_objective_text, :auditor_comment, pdf_encoding: true
+    validates :control_objective_text, :process_control_text, :auditor_comment, pdf_encoding: true
     validates :relevance, :issues_count, :alerts_count, numericality: {
       only_integer: true,
       greater_than_or_equal_to: 0,
