@@ -80,10 +80,10 @@ es:
     less_expected: Menos esperado
     most_expected: Mas esperado
   score_types:
-    improve: Necesita mejorar
+    improve: Susceptible de Mejoras
     regular: Regular
-    satisfactory: Satisfactorio
-    unsatisfactory: No satisfactorio
+    satisfactory: Aceptable
+    unsatisfactory: Inadecuado
     # When score by weaknesses is used
     adequate: Adecuado
     inadequate: Inadecuado
