@@ -37,17 +37,17 @@ class VersionsController < ApplicationController
       "\uFEFF#{csv_str}"
     end
 
-   def versions_header_csv
-     [
-      PaperTrail::Version.human_attribute_name('created_at'),
-      PaperTrail::Version.human_attribute_name('whodunnit'),
-      PaperTrail::Version.human_attribute_name('item'),
-      PaperTrail::Version.human_attribute_name('event'),
-      I18n.t('versions.column_attribute'),
-      I18n.t('versions.column_old_value'),
-      I18n.t('versions.column_new_value')
-     ]
-   end
+    def versions_header_csv
+      [
+        PaperTrail::Version.human_attribute_name('created_at'),
+        PaperTrail::Version.human_attribute_name('whodunnit'),
+        PaperTrail::Version.human_attribute_name('item'),
+        PaperTrail::Version.human_attribute_name('event'),
+        I18n.t('versions.column_attribute'),
+        I18n.t('versions.column_old_value'),
+        I18n.t('versions.column_new_value')
+      ]
+    end
 
    def versions_data_csv
      item = []
