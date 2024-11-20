@@ -177,6 +177,7 @@ es:
         recipients: Destinatarios del informe
         reference: Marco de referencia
         review_conclusion: Conclusión del informe
+        review: Informe
         review_id: Informe
         scope: Limitación al alcance
         sectors: Sectores/departamentos involucrados

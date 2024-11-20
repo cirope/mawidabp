@@ -93,7 +93,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
-    assert_error @conclusion_review, :review_id, :blank
+    assert_error @conclusion_review, :review, :blank
 
     if Current.conclusion_pdf_format == 'gal'
       assert_error @conclusion_review, :recipients, :blank
