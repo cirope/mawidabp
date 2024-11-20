@@ -1328,6 +1328,9 @@ es:
       organization:
         one: Organización
         other: Organizaciones
+      organization_role:
+        one: Perfil
+        other: Perfiles
       paper_trail/version:
         one: Versión
         other: Versiones
