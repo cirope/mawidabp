@@ -1635,6 +1635,7 @@ es:
     global_score_sheet_title: PLANILLA DE PROCESO DE CALIFICACIÓN GLOBAL
     hide_control_objective: Ocultar detalles del objetivo de control
     index_title: Listado de informes
+    manual: Manual
     new_title: Agregar informe
     new_weaknesses: Nuevas
     no_excluded_control_objectives: Todos los objetivos de control de este proceso se encuentran en el informe

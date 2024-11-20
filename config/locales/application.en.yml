@@ -1635,6 +1635,7 @@ en:
     global_score_sheet_title: GLOBAL RATING PROCESS FORM
     hide_control_objective: Hide control objective details
     index_title: Audit reports list
+    manual: Manual
     new_title: Add audit report
     new_weaknesses: New
     no_excluded_control_objectives: All control objectives for this process are in the audit report

@@ -509,7 +509,7 @@ class ReviewsController < ApplicationController
           :id, :tag_id, :_destroy
         ],
         control_objective_items_attributes: [
-          :id, :control_objective_id, :control_objective_text, :relevance, :order_number, :_destroy,
+          :id, :control_objective_id, :control_objective_text, :process_control_text, :relevance, :order_number, :_destroy,
           control_attributes: [
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]
