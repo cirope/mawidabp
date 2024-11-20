@@ -2,7 +2,7 @@ namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
     ActiveRecord::Base.transaction do
-      update_organization_settings               # 2017-03-15 last 2024-11-06
+      update_organization_settings               # 2017-03-15 last 2024-11-20
       add_new_answer_options                     # 2017-06-29
       add_best_practice_privilege                # 2018-01-31
       add_control_objective_privilege            # 2018-01-31
@@ -185,6 +185,14 @@ private
                            description: I18n.t('settings.notify_recently_finalized_findings')
       end
     end
+
+    if add_review_filtered_by_user_assignments? #2024-11-20
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'review_filtered_by_user_assignments',
+                           value:       DEFAULT_SETTINGS[:review_filtered_by_user_assignments][:value],
+                           description: I18n.t('settings.review_filtered_by_user_assignments')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -257,6 +265,10 @@ private
 
   def add_notify_recently_finalized_findings?
     Setting.where(name: 'notify_recently_finalized_findings').empty?
+  end
+
+  def add_review_filtered_by_user_assignments?
+    Setting.where(name: 'review_filtered_by_user_assignments').empty?
   end
 
   def add_new_answer_options
