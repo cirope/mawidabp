@@ -166,7 +166,8 @@ en:
         effectiveness_notes: Effectiveness note
         evolution: Rating evolution
         evolution_justification: Evolution justification
-        exclude_regularized_findings: Exclude regularized findings
+        exclude_implemented_audited_findings: Exclude regularized findings
+        exclude_criteria_mismatch_findings: Exclude closed/reclassified findings
         issue_date: Issue date
         main_recommendations: Main Audit Recommendations
         main_weaknesses_text: Main weaknesses

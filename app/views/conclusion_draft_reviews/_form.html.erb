@@ -159,7 +159,13 @@
 
           <div class="row">
             <div class="col-md-6">
-              <%= f.input :exclude_regularized_findings %>
+              <%= f.input :exclude_implemented_audited_findings, as: :boolean %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.input :exclude_criteria_mismatch_findings, as: :boolean %>
             </div>
           </div>
         <% end %>

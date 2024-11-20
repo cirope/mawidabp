@@ -292,14 +292,16 @@ ActiveRecord::Schema.define(version: 2024_11_04_145001) do
     t.text "main_recommendations"
     t.text "effectiveness_notes"
     t.text "additional_comments"
-    t.boolean "exclude_regularized_findings", default: false, null: false
+    t.boolean "exclude_regularized_findings"
     t.text "review_conclusion"
     t.text "applied_data_analytics"
+    t.jsonb "options", default: {}, null: false
     t.jsonb "fields", default: {}, null: false
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["created_at"], name: "index_conclusion_reviews_on_created_at"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
+    t.index ["options"], name: "index_conclusion_reviews_on_options", using: :gin
     t.index ["organization_id"], name: "index_conclusion_reviews_on_organization_id"
     t.index ["review_id"], name: "index_conclusion_reviews_on_review_id"
     t.index ["summary"], name: "index_conclusion_reviews_on_summary"

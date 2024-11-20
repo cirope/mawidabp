@@ -321,8 +321,8 @@ class ConclusionDraftReviewsController < ApplicationController
         :affects_compliance, :collapse_control_objectives, :force_approval,
         :reference, :scope, :previous_identification, :previous_date,
         :main_recommendations, :effectiveness_notes, :additional_comments,
-        :review_conclusion, :applied_data_analytics, :work_scope,
-        :lock_version, :exclude_regularized_findings,
+        :review_conclusion, :applied_data_analytics, :work_scope, :lock_version,
+        :exclude_implemented_audited_findings, :exclude_criteria_mismatch_findings,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [
