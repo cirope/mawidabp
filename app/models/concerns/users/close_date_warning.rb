@@ -34,7 +34,7 @@ module Users::CloseDateWarning
           end
         else
           users.each do |user|
-            findings = user.findings.recently_notified
+            findings = user.findings.recently_notified.to_a
 
             NotifierMailer.notify_new_findings(user, findings).deliver_later
           end

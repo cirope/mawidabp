@@ -975,6 +975,7 @@ es:
     index:
       title: Ver reporte de cambios de seguridad
     pdf_list_name: reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf
+    csv_list_name: reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.csv
     security_changes_report:
       title: Reporte de cambios de seguridad
     show:
