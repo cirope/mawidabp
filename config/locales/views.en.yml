@@ -975,6 +975,7 @@ en:
     index:
       title: Show security change report
     pdf_list_name: security_change_report_%{from_date}_%{to_date}.pdf
+    csv_list_name: security_change_report_%{from_date}_%{to_date}.csv
     security_changes_report:
       title: Security change report
     show:

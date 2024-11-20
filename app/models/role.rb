@@ -1,6 +1,6 @@
 class Role < ApplicationRecord
-  include Auditable
   include Comparable
+  include Roles::Auditable
   include Roles::Scopes
   include ParameterSelector
 
@@ -106,6 +106,10 @@ class Role < ApplicationRecord
     module_name = '_' if module_name.blank?
 
     @auth_privileges[module_name] || @auth_privileges[module_name.to_sym] || {}
+  end
+
+  def to_s
+    name
   end
 
   def privileges_hash
