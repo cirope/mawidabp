@@ -171,15 +171,18 @@ class WorkflowsController < ApplicationController
     def set_workflow
       @workflow = Workflow.list.includes(
         { workflow_items: :resource_utilizations }
-      ).
-      merge(Review.scoped_for(Workflow, @auth_user)).
-      find(params[:id])
+      ).merge(
+        Review.scoped_for Workflow, @auth_user
+      ).find(
+        params[:id]
+      )
     end
 
     def set_workflow_clone
       @workflow_clone = Workflow.list.
-        merge(Review.scoped_for(Workflow, @auth_user)).
-        find_by(
+        merge(
+          Review.scoped_for Workflow, @auth_user
+        ).find_by(
           id: params[:clone_from].try(:to_i)
         )
     end

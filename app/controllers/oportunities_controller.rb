@@ -40,10 +40,11 @@
       order_param
     ).references(
       control_objective_item: :review
-    ).
-    merge(Review.allowed_by_business_units).
-    merge(Review.scoped_for(Oportunity, @auth_user)).
-    page params[:page]
+    ).merge(
+      Review.allowed_by_business_units
+    ).merge(
+      Review.scoped_for Oportunity, @auth_user
+    ).page params[:page]
 
     respond_to do |format|
       format.html
@@ -143,9 +144,11 @@
         :finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
-      ).
-      merge(Review.scoped_for(Oportunity, @auth_user)).
-      find(params[:id])
+      ).merge(
+        Review.scoped_for Oportunity, @auth_user
+      ).find(
+        params[:id]
+      )
     end
 
     def oportunity_params

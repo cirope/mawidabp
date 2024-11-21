@@ -31,7 +31,7 @@ class ReviewsController < ApplicationController
         review_user_assignments: :user
       ).
       merge(ReviewUserAssignment.audit_team).
-      merge(Review.scoped_by(@auth_user)).
+      merge(Review.scoped_by @auth_user).
       references(:periods, :conclusion_final_review, :user).
       search(**search_params).
       order_by(order_param).
@@ -538,15 +538,19 @@ class ReviewsController < ApplicationController
             { control_objective: :process_control }
           ]
         }
-      ).
-      merge(Review.scoped_by(@auth_user)).
-      find(params[:id])
+      ).merge(
+        Review.scoped_by @auth_user
+      ).find(
+        params[:id]
+      )
     end
 
     def set_review_clone
-      @review_clone = Review.list.
-        merge(Review.scoped_by(@auth_user)).
-        find_by(id: params[:clone_from].try(:to_i))
+      @review_clone = Review.list.merge(
+        Review.scoped_by @auth_user
+      ).find_by(
+        id: params[:clone_from].try(:to_i)
+      )
     end
 
     def review_pdf_path

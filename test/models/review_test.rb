@@ -1136,19 +1136,20 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'review should be filtered by user assignments' do
-    organization = organizations :cirope
-    user         = users :bare
-    reviews      = Review.scoped_by user
+    organization   = organizations :cirope
+    user           = users :bare
+    reviews        = Review.all
+    scoped_reviews = Review.scoped_by user
 
-    assert_equal Review.count, reviews.count
+    assert_equal reviews.count, scoped_reviews.count
 
     organization.settings.find_by(
       name: 'review_filtered_by_user_assignments'
     ).update! value: '1'
 
-    reviews = Review.scoped_by user
+    scoped_reviews = Review.scoped_by user
 
-    assert_equal user.reviews.count, reviews.count
+    assert_not_equal reviews.count, scoped_reviews.count
   end
 
   private

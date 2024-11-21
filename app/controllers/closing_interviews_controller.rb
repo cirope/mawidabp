@@ -12,7 +12,7 @@ class ClosingInterviewsController < ApplicationController
       references(:reviews, :plan_items).
       search(**search_params).
       merge(Review.allowed_by_business_units).
-      merge(Review.scoped_for(ClosingInterview, @auth_user)).
+      merge(Review.scoped_for ClosingInterview, @auth_user).
       order(interview_date: :desc).
       page params[:page]
   end
@@ -66,8 +66,11 @@ class ClosingInterviewsController < ApplicationController
 
     def set_closing_interview
       @closing_interview = ClosingInterview.list.
-                             merge(Review.scoped_for(ClosingInterview, @auth_user)).
-                             find params[:id]
+                             merge(
+                               Review.scoped_for ClosingInterview, @auth_user
+                             ).find(
+                               params[:id]
+                             )
     end
 
     def closing_interview_params
