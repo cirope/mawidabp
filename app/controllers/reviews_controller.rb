@@ -4,7 +4,6 @@ class ReviewsController < ApplicationController
   include AutoCompleteFor::ProcessControl
   include AutoCompleteFor::Tagging
   include Reviews::Permissions
-  include Reviews::CurrentUserScoped
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
@@ -25,13 +24,14 @@ class ReviewsController < ApplicationController
   # * GET /reviews
   def index
     @title   = t 'review.index_title'
-    @reviews = @reviews.
+    @reviews = Review.list.
       includes(
         :conclusion_final_review, :period, :tags,
         plan_item: :business_unit,
         review_user_assignments: :user
       ).
       merge(ReviewUserAssignment.audit_team).
+      merge(Review.scoped_by(@auth_user)).
       references(:periods, :conclusion_final_review, :user).
       search(**search_params).
       order_by(order_param).
@@ -528,7 +528,7 @@ class ReviewsController < ApplicationController
     end
 
     def set_review
-      @review = @reviews.includes(
+      @review = Review.list.includes(
         { plan_item: :business_unit },
         { review_user_assignments: :user },
         { finding_review_assignments: :finding },
@@ -538,11 +538,15 @@ class ReviewsController < ApplicationController
             { control_objective: :process_control }
           ]
         }
-      ).find(params[:id])
+      ).
+      merge(Review.scoped_by(@auth_user)).
+      find(params[:id])
     end
 
     def set_review_clone
-      @review_clone = @reviews.find_by(id: params[:clone_from].try(:to_i))
+      @review_clone = Review.list.
+        merge(Review.scoped_by(@auth_user)).
+        find_by(id: params[:clone_from].try(:to_i))
     end
 
     def review_pdf_path

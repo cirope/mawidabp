@@ -1,4 +1,6 @@
 class OpeningInterviewsController < ApplicationController
+  include Reviews::CurrentUserScoped
+
   respond_to :html, :js
 
   before_action :auth, :check_privileges

@@ -147,10 +147,19 @@ module Reviews::Scopes
           references :plan_item
     end
 
-    def scoped_by current_user
-      joins(:review_user_assignments).where(
-        review_user_assignments: { user: current_user }
-      )
+    def scoped_by current_user, model = Review
+      if review_filtered_by_user_assignments?
+        relations = case model.to_s
+                    when 'Review' then :review_user_assignments
+                    else               { review: :review_user_assignments }
+                    end
+
+        model.joins(relations).where(
+          review_user_assignments: { user: current_user }
+        )
+      else
+        {}
+      end
     end
 
     private
@@ -163,6 +172,13 @@ module Reviews::Scopes
           "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
           "#{quoted_table_name}.#{qcn('created_at')} ASC"
         ].map { |o| Arel.sql o }
+      end
+
+      def review_filtered_by_user_assignments?
+        setting         = Current.organization.settings.find_by name: 'review_filtered_by_user_assignments'
+        review_filtered = setting ? setting.value : DEFAULT_SETTINGS[:review_filtered_by_user_assignments][:value]
+
+        review_filtered.to_i != 0
       end
   end
 end

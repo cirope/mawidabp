@@ -3,6 +3,7 @@
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
   include Reviews::Permissions
+  include Reviews::CurrentUserScoped
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_oportunity, only: [
@@ -17,7 +18,7 @@
   def index
     @title = t 'oportunity.index_title'
 
-    default_scope = Oportunity.list.includes(
+    default_scope = scoped_reviews_for(Oportunity).includes(
       :work_papers, :tags,
       control_objective_item: {
         review: [:period, :plan_item, :conclusion_final_review]
@@ -138,7 +139,7 @@
 
   private
     def set_oportunity
-      @oportunity = Oportunity.list.includes(
+      @oportunity = scoped_reviews_for(Oportunity).includes(
         :finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
