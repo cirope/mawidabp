@@ -1,6 +1,4 @@
 class OpeningInterviewsController < ApplicationController
-  include Reviews::CurrentUserScoped
-
   respond_to :html, :js
 
   before_action :auth, :check_privileges
@@ -14,6 +12,7 @@ class OpeningInterviewsController < ApplicationController
       references(:reviews, :plan_items).
       search(**search_params).
       merge(Review.allowed_by_business_units).
+      merge(Review.scoped_for(OpeningInterview, @auth_user)).
       order(interview_date: :desc).
       page params[:page]
   end
@@ -66,7 +65,9 @@ class OpeningInterviewsController < ApplicationController
   private
 
     def set_opening_interview
-      @opening_interview = OpeningInterview.list.find params[:id]
+      @opening_interview = OpeningInterview.list.
+                             merge(Review.scoped_for(OpeningInterview, @auth_user)).
+                             find params[:id]
     end
 
     def opening_interview_params

@@ -61,7 +61,7 @@ class WeaknessesController < ApplicationController
     ).
     references(:periods, :conclusion_reviews).
     merge(Review.allowed_by_business_units).
-    merge Review.scoped_by(@auth_user, Weakness)
+    merge Review.scoped_for(Weakness, @auth_user)
 
     respond_to do |format|
       format.html { @weaknesses = @weaknesses.page params[:page] }
@@ -160,7 +160,7 @@ class WeaknessesController < ApplicationController
   # * GET /weaknesses/weakness_template_changed
   def weakness_template_changed
     control_objective_item   = ControlObjectiveItem.list.
-                                 merge(Review.scoped_by(@auth_user, ControlObjectiveItem)).
+                                 merge(Review.scoped_for(Weakness, @auth_user)).
                                  find_by id: params[:control_objective_item_id]
     @weakness_template       = WeaknessTemplate.list.find_by id: params[:id]
     @probability_risk_amount = Finding.list.probability_risk_previous control_objective_item&.review,
@@ -234,7 +234,7 @@ class WeaknessesController < ApplicationController
         { finding_user_assignments: :user },
         { control_objective_item: { review: :period } }
       ).
-      merge(Review.scoped_by(@auth_user, Weakness)).
+      merge(Review.scoped_for(Weakness, @auth_user)).
       find(params[:id])
     end
 

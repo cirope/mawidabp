@@ -27,7 +27,9 @@ class ConclusionFinalReviewsController < ApplicationController
       :periods, :reviews, :business_units
     ).merge(
       PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
-    )
+    ).
+    merge Review.scoped_for(ConclusionFinalReview, @auth_user)
+
     respond_to do |format|
       format.html
     end
@@ -50,7 +52,9 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/new.json
   def new
     conclusion_final_review =
-      ConclusionFinalReview.list.find_by(review_id: params[:review])
+      ConclusionFinalReview.list.
+        merge(Review.scoped_for(ConclusionFinalReview, @auth_user)).
+        find_by review_id: params[:review]
 
     unless conclusion_final_review
       @title = t 'conclusion_final_review.new_title'
@@ -329,7 +333,9 @@ class ConclusionFinalReviewsController < ApplicationController
       **search_params
     ).references(
       :periods, :reviews, :business_units
-    ).order_by(
+    ).
+    merge(Review.scoped_for(ConclusionFinalReview, @auth_user)).
+    order_by(
       order_param
     )
 
@@ -425,7 +431,9 @@ class ConclusionFinalReviewsController < ApplicationController
             ]
           }
         ]
-      ).find(params[:id])
+      ).
+      merge(Review.scoped_for(ConclusionFinalReview, @auth_user)).
+      find(params[:id])
     end
 
     def conclusion_final_review_params

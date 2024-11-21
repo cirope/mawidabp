@@ -147,14 +147,19 @@ module Reviews::Scopes
           references :plan_item
     end
 
-    def scoped_by current_user, model = Review
+    def scoped_by current_user
       if review_filtered_by_user_assignments?
-        relations = case model.to_s
-                    when 'Review' then :review_user_assignments
-                    else               { review: :review_user_assignments }
-                    end
+        joins(:review_user_assignments).where(
+          review_user_assignments: { user: current_user }
+        )
+      else
+        {}
+      end
+    end
 
-        model.joins(relations).where(
+    def scoped_for model, current_user
+      if review_filtered_by_user_assignments?
+        model.joins(review: :review_user_assignments).where(
           review_user_assignments: { user: current_user }
         )
       else

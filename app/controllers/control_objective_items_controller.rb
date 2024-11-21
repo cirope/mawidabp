@@ -29,7 +29,7 @@ class ControlObjectiveItemsController < ApplicationController
     search(**search_params).
     references(:review).
     merge(Review.allowed_by_business_units).
-    merge(Review.scoped_by(@auth_user, ControlObjectiveItem)).
+    merge(Review.scoped_for(ControlObjectiveItem, @auth_user)).
     default_order.
     page params[:page]
 
@@ -57,7 +57,7 @@ class ControlObjectiveItemsController < ApplicationController
 
     if params[:control_objective] && params[:review]
       @control_objective_item = ControlObjectiveItem.list.includes(:review).
-      merge(Review.scoped_by(@auth_user, ControlObjectiveItem)).
+      merge(Review.scoped_for(ControlObjectiveItem, @auth_user)).
       where(
         control_objective_id: params[:control_objective],
         review_id: params[:review]
@@ -133,7 +133,7 @@ class ControlObjectiveItemsController < ApplicationController
       @control_objective_item = ControlObjectiveItem.list.includes(
         :control, :weaknesses, :work_papers
       ).
-      merge(Review.scoped_by(@auth_user, ControlObjectiveItem)).
+      merge(Review.scoped_for(ControlObjectiveItem, @auth_user)).
       find(params[:id])
     end
 
