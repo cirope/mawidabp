@@ -362,7 +362,11 @@ class FindingsControllerTest < ActionController::TestCase
     end
   end
 
-  test 'edit implemented audited finding' do
+  test 'edit implemented audited finding when client is not nbc' do
+    set_organization
+
+    skip if Current.conclusion_pdf_format == 'nbc'
+
     finding = findings :being_implemented_weakness
 
     finding.update_columns state:         Finding::STATUS[:implemented_audited],
@@ -374,6 +378,39 @@ class FindingsControllerTest < ActionController::TestCase
         id:               finding
       }
     end
+  end
+
+  test 'edit implemented audited finding when client is nbc' do
+    skip_if_client_is_not_nbc
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_columns state:         Finding::STATUS[:implemented_audited],
+                           solution_date: Time.zone.today
+
+    get :edit, params: {
+      completion_state: 'complete',
+      id:               finding
+    }
+
+    assert_response :success
+    assert_template :edit
+  end
+
+  test 'edit repeated finding when client is nbc' do
+    skip_if_client_is_not_nbc
+
+    finding = findings :being_implemented_weakness
+
+    finding.update_columns state: Finding::STATUS[:repeated]
+
+    get :edit, params: {
+      completion_state: 'complete',
+      id:               finding
+    }
+
+    assert_response :success
+    assert_template :edit
   end
 
   test 'update finding' do
@@ -918,7 +955,9 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when not bic pdf format and get edit bic sigen fields' do
-    skip_if_bic_include_in_current_pdf_format
+    set_organization
+
+    skip if Current.conclusion_pdf_format == 'bic'
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -936,7 +975,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when finding is pending and get edit bic sigen fields' do
-    skip_if_bic_exclude_in_current_pdf_format
+    skip_if_client_is_not_bic
 
     assert_raise ActiveRecord::RecordNotFound do
       get :edit_bic_sigen_fields, params: {
@@ -947,7 +986,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when finding is repeated and get edit bic sigen fields' do
-    skip_if_bic_exclude_in_current_pdf_format
+    skip_if_client_is_not_bic
 
     finding       = findings :being_implemented_weakness
     finding.state = Finding::STATUS[:repeated]
@@ -962,8 +1001,8 @@ class FindingsControllerTest < ActionController::TestCase
     end
   end
 
-  test 'assert exception when user is can act as audited, exclude in finding and get edit bic sigen fields' do
-    skip_if_bic_exclude_in_current_pdf_format
+  test 'assert exception when user can act as audited, is not assigned to the finding and get edit bic sigen fields' do
+    skip_if_client_is_not_bic
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -985,7 +1024,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert response get edit bic sigen fields' do
-    skip_if_bic_exclude_in_current_pdf_format
+    skip_if_client_is_not_bic
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -1003,8 +1042,10 @@ class FindingsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'assert exception when not bic pdf format and update bic sigen fields' do
-    skip_if_bic_include_in_current_pdf_format
+  test 'assert exception when client is not bic and update bic sigen fields' do
+    set_organization
+
+    skip if Current.conclusion_pdf_format == 'bic'
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -1031,7 +1072,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when finding is pending and update bic sigen fields' do
-    skip_if_bic_exclude_in_current_pdf_format
+    skip_if_client_is_not_bic
 
     work_paper = work_papers :text_work_paper_being_implemented_weakness
 
@@ -1052,7 +1093,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert exception when finding is repeated and update bic sigen fields' do
-    skip_if_bic_exclude_in_current_pdf_format
+    skip_if_client_is_not_bic
 
     finding       = findings :being_implemented_weakness
     finding.state = Finding::STATUS[:repeated]
@@ -1076,8 +1117,8 @@ class FindingsControllerTest < ActionController::TestCase
     end
   end
 
-  test 'assert exception when user is can act as audited, exclude in finding and update bic sigen fields' do
-    skip_if_bic_exclude_in_current_pdf_format
+  test 'assert exception when user can act as audited, is not assigned to the finding and update bic sigen fields' do
+    skip_if_client_is_not_bic
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -1108,7 +1149,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'not update bic sigen fields when not send skip work paper' do
-    skip_if_bic_exclude_in_current_pdf_format
+    skip_if_client_is_not_bic
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -1141,7 +1182,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'assert response update bic sigen fields' do
-    skip_if_bic_exclude_in_current_pdf_format
+    skip_if_client_is_not_bic
 
     Current.user          = users :supervisor
     finding               = findings :being_implemented_weakness
@@ -1193,15 +1234,15 @@ class FindingsControllerTest < ActionController::TestCase
       [Finding::STATUS[:repeated]]
     end
 
-    def skip_if_bic_include_in_current_pdf_format
+    def skip_if_client_is_not_bic
       set_organization
 
-      skip if %w(bic).include?(Current.conclusion_pdf_format)
+      skip if Current.conclusion_pdf_format != 'bic'
     end
 
-    def skip_if_bic_exclude_in_current_pdf_format
+    def skip_if_client_is_not_nbc
       set_organization
 
-      skip if %w(bic).exclude?(Current.conclusion_pdf_format)
+      skip if Current.conclusion_pdf_format != 'nbc'
     end
 end

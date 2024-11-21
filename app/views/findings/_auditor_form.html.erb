@@ -15,6 +15,12 @@
             next_oportunity_work_paper_code(@finding)}';" %>
       <% end %>
 
+      <% if show_finding_updated_warning?(@finding) %>
+        <div class="alert alert-warning">
+          <%= t 'messages.finding_updated_after_complete' %>
+        </div>
+      <% end %>
+
       <%= render 'shared/error_explanation', f: f %>
 
       <div class="form-inputs">
