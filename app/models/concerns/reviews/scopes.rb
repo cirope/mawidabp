@@ -153,7 +153,7 @@ module Reviews::Scopes
           review_user_assignments: { user: current_user }
         )
       else
-        list
+        all
       end
     end
 
@@ -163,7 +163,7 @@ module Reviews::Scopes
           review_user_assignments: { user: current_user }
         )
       else
-        list
+        all
       end
     end
 
