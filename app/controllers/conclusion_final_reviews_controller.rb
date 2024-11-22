@@ -28,7 +28,7 @@ class ConclusionFinalReviewsController < ApplicationController
     ).merge(
       PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
     ).merge(
-      Review.scoped_for ConclusionFinalReview, @auth_user
+      Review.scoped_by_current_user_for ConclusionFinalReview
     )
 
     respond_to do |format|
@@ -55,7 +55,7 @@ class ConclusionFinalReviewsController < ApplicationController
     conclusion_final_review =
       ConclusionFinalReview.list.
         merge(
-          Review.scoped_for ConclusionFinalReview, @auth_user
+          Review.scoped_by_current_user_for ConclusionFinalReview
         ).find_by(
           review_id: params[:review]
         )
@@ -338,7 +338,7 @@ class ConclusionFinalReviewsController < ApplicationController
     ).references(
       :periods, :reviews, :business_units
     ).merge(
-      Review.scoped_for ConclusionFinalReview, @auth_user
+      Review.scoped_by_current_user_for ConclusionFinalReview
     ).order_by(
       order_param
     )
@@ -436,7 +436,7 @@ class ConclusionFinalReviewsController < ApplicationController
           }
         ]
       ).merge(
-        Review.scoped_for ConclusionFinalReview, @auth_user
+        Review.scoped_by_current_user_for ConclusionFinalReview
       ).find(
         params[:id]
       )

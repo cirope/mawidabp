@@ -12,7 +12,7 @@ class OpeningInterviewsController < ApplicationController
       references(:reviews, :plan_items).
       search(**search_params).
       merge(Review.allowed_by_business_units).
-      merge(Review.scoped_for OpeningInterview, @auth_user).
+      merge(Review.scoped_by_current_user_for OpeningInterview).
       order(interview_date: :desc).
       page params[:page]
   end
@@ -67,7 +67,7 @@ class OpeningInterviewsController < ApplicationController
     def set_opening_interview
       @opening_interview = OpeningInterview.list.
                              merge(
-                               Review.scoped_for OpeningInterview, @auth_user
+                               Review.scoped_by_current_user_for OpeningInterview
                              ).find(
                                params[:id]
                              )

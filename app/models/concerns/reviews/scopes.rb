@@ -147,20 +147,20 @@ module Reviews::Scopes
           references :plan_item
     end
 
-    def scoped_by current_user
+    def scoped_by_current_user
       if review_filtered_by_user_assignments?
         joins(:review_user_assignments).where(
-          review_user_assignments: { user: current_user }
+          review_user_assignments: { user: Current.user }
         )
       else
         all
       end
     end
 
-    def scoped_for model, current_user
+    def scoped_by_current_user_for model
       if review_filtered_by_user_assignments?
         model.joins(review: :review_user_assignments).where(
-          review_user_assignments: { user: current_user }
+          review_user_assignments: { user: Current.user }
         )
       else
         all

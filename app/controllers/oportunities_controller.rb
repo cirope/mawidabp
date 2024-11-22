@@ -43,7 +43,7 @@
     ).merge(
       Review.allowed_by_business_units
     ).merge(
-      Review.scoped_for Oportunity, @auth_user
+      Review.scoped_by_current_user_for Oportunity
     ).page params[:page]
 
     respond_to do |format|
@@ -145,7 +145,7 @@
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
       ).merge(
-        Review.scoped_for Oportunity, @auth_user
+        Review.scoped_by_current_user_for Oportunity
       ).find(
         params[:id]
       )
