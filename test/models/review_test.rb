@@ -1139,7 +1139,8 @@ class ReviewTest < ActiveSupport::TestCase
     organization   = organizations :cirope
     user           = users :bare
     reviews        = Review.all
-    scoped_reviews = Review.scoped_by user
+    scoped_reviews = Review.scoped_by_current_user
+    Current.user   = user
 
     assert_equal reviews.count, scoped_reviews.count
 
@@ -1147,7 +1148,7 @@ class ReviewTest < ActiveSupport::TestCase
       name: 'review_filtered_by_user_assignments'
     ).update! value: '1'
 
-    scoped_reviews = Review.scoped_by user
+    scoped_reviews = Review.scoped_by_current_user
 
     assert_not_equal reviews.count, scoped_reviews.count
   end

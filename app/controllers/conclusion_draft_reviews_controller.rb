@@ -29,7 +29,7 @@ class ConclusionDraftReviewsController < ApplicationController
     ).merge(
       PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
     ).merge(
-      Review.scoped_for ConclusionDraftReview, @auth_user
+      Review.scoped_by_current_user_for ConclusionDraftReview
     ).order_by.page params[:page]
 
     respond_to do |format|
@@ -311,7 +311,7 @@ class ConclusionDraftReviewsController < ApplicationController
           { control_objective_items: [:control, :weaknesses, :oportunities] }
         ]
       ).merge(
-        Review.scoped_for ConclusionDraftReview, @auth_user
+        Review.scoped_by_current_user_for ConclusionDraftReview
       ).find(
         params[:id]
       )
