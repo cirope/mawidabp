@@ -28,6 +28,8 @@ class ConclusionDraftReviewsController < ApplicationController
       :reviews, :business_units
     ).merge(
       PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
+    ).merge(
+      Review.scoped_by_current_user_for ConclusionDraftReview
     ).order_by.page params[:page]
 
     respond_to do |format|
@@ -308,7 +310,11 @@ class ConclusionDraftReviewsController < ApplicationController
           :plan_item,
           { control_objective_items: [:control, :weaknesses, :oportunities] }
         ]
-      ).find(params[:id])
+      ).merge(
+        Review.scoped_by_current_user_for ConclusionDraftReview
+      ).find(
+        params[:id]
+      )
 
       @conclusion_draft_review = nil if @conclusion_draft_review.has_final_review?
     end

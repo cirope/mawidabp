@@ -751,7 +751,6 @@ en:
     finding_stale_confirmed_days: Number of days before an unanswered issue is considered unattended
     finding_state_change_notification: Notify issue state changes
     finding_warning_expire_days: Number of days before the expiration of an observation in which the system will notify its proximity
-    notify_recently_finalized_findings: Notify findings after conclusion final review
     hide_import_from_ldap: Show "Import from LDAP" only to users with approval permissions
     hide_obsolete_best_practices: Hide obsolete best practices
     hours_of_work_per_day: Hours of work per day
@@ -759,6 +758,7 @@ en:
       title: Setting list
     new:
       title: Add settings
+    notify_recently_finalized_findings: Notify findings after conclusion final review
     password_constraint: Password composition control
     password_count: Password history
     password_expire_time: Password expire time
@@ -766,6 +766,7 @@ en:
     password_minimum_time: Minimum password time
     require_manager_on_findings: Require audit manager on findings
     review_code_expresion: Audit report identification code format
+    review_filtered_by_user_assignments: Filter reviews by assigned users
     session_expire_time: Disconnect due to inactivity
     show:
       title: Setting details
