@@ -1135,6 +1135,24 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.can_be_modified_by?(user)
   end
 
+  test 'review should be filtered by user assignments' do
+    organization   = organizations :cirope
+    user           = users :bare
+    reviews        = Review.all
+    scoped_reviews = Review.scoped_by_current_user
+    Current.user   = user
+
+    assert_equal reviews.count, scoped_reviews.count
+
+    organization.settings.find_by(
+      name: 'review_filtered_by_user_assignments'
+    ).update! value: '1'
+
+    scoped_reviews = Review.scoped_by_current_user
+
+    assert_not_equal reviews.count, scoped_reviews.count
+  end
+
   private
 
     def clone_finding_user_assignments(finding)

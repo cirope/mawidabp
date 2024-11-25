@@ -751,7 +751,6 @@ es:
     finding_stale_confirmed_days: Cantidad de días que deben pasar para que una observación sin responder se considere desatendida
     finding_state_change_notification: Notificar cambios de estado en los hallazgos
     finding_warning_expire_days: Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad
-    notify_recently_finalized_findings: Notificar hallazgos luego del informe definitivo
     hide_import_from_ldap: Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación
     hide_obsolete_best_practices: Ocultar buenas practicas obsoletas
     hours_of_work_per_day: Horas de trabajo por día
@@ -759,6 +758,7 @@ es:
       title: Listado de configuraciones
     new:
       title: Agregar configuración
+    notify_recently_finalized_findings: Notificar hallazgos luego del informe definitivo
     password_constraint: Control de composición de contraseñas
     password_count: Historia de contraseña
     password_expire_time: Duración máxima de la contraseña
@@ -766,6 +766,7 @@ es:
     password_minimum_time: Duración mínima de la contraseña
     require_manager_on_findings: Requerir gerente de auditoría en hallazgos
     review_code_expresion: Formato del código de identificación de informes
+    review_filtered_by_user_assignments: Filtrar informes por usuarios asignados
     session_expire_time: Desconexión por inactividad
     show:
       title: Detalles de la configuración
