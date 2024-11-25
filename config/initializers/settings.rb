@@ -32,5 +32,6 @@ DEFAULT_SETTINGS = {
   skip_reiteration_copy: { value: '0', validates: 'numericality' },
   finding_state_change_notification: { value: '0', validates: 'numericality' },
   notify_recently_finalized_findings: { value: '0', validates: 'numericality' },
-  review_filtered_by_user_assignments: { value: '0', validates: 'numericality' }
+  review_filtered_by_user_assignments: { value: '0', validates: 'numericality' },
+  review_permission_by_assignment: { value: '0', validates: 'numericality' }
 }.with_indifferent_access.freeze

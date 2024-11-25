@@ -78,7 +78,9 @@
     <% end %>
 
     <div>
-      <%= link_to_edit edit_workflow_path(@workflow) %> |
+      <% if review_can_be_modified? @workflow %>
+        <%= link_to_edit edit_workflow_path(@workflow) %> |
+      <% end %>
       <%= link_to_index workflows_path %> |
       <%= link_to t('workflow.download_global_workflow'),
         export_to_pdf_workflow_path(:_ts => Time.now.to_i) %> |

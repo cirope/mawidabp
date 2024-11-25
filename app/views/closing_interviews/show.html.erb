@@ -94,7 +94,9 @@
     <hr>
 
     <div>
-      <%= link_to_edit [:edit, @closing_interview] %> |
+      <% if review_can_be_modified? @closing_interview %>
+        <%= link_to_edit [:edit, @closing_interview] %> |
+      <% end %>
       <%= link_to t('.download_pdf'), [@closing_interview, _ts: Time.now.to_i, format: :pdf] %> |
       <%= link_to_index closing_interviews_path %>
     </div>

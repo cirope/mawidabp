@@ -28,8 +28,14 @@
                 <td class="d-none d-md-table-cell"><%= closing_interview.review.plan_item.project %></td>
                 <td><%= l closing_interview.interview_date %></td>
                 <td class="text-end"><%= link_to_show closing_interview %></td>
-                <td class="text-end"><%= link_to_edit [:edit, closing_interview] %></td>
-                <td class="text-end"><%= link_to_destroy closing_interview if closing_interview.can_be_destroyed? %></td>
+                <td class="text-end">
+                  <%= link_to_edit [:edit, closing_interview] if review_can_be_modified?(closing_interview) %>
+                </td>
+                <td class="text-end">
+                  <% if closing_interview.can_be_destroyed? && review_can_be_modified?(closing_interview) %>
+                    <%= link_to_destroy closing_interview %>
+                  <% end %>
+                </td>
               </tr>
             <% end %>
           </tbody>
