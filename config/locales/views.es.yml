@@ -767,6 +767,7 @@ es:
     require_manager_on_findings: Requerir gerente de auditoría en hallazgos
     review_code_expresion: Formato del código de identificación de informes
     review_filtered_by_user_assignments: Filtrar informes por usuarios asignados
+    review_permission_by_assignment: Limitar modificación de informes por asignación
     session_expire_time: Desconexión por inactividad
     show:
       title: Detalles de la configuración

@@ -1,9 +1,12 @@
 class OpeningInterviewsController < ApplicationController
+  include Reviews::Permissions
+
   respond_to :html, :js
 
   before_action :auth, :check_privileges
   before_action :set_opening_interview, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
+  before_action -> { check_review_permissions @opening_interview }, only: [:edit, :update, :destroy]
 
   # GET /opening_interviews
   def index

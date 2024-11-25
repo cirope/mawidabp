@@ -25,8 +25,16 @@
             <td class="d-none d-sm-table-cell"><%= l(workflow.created_at, :format => :short) %></td>
             <td class="text-end"><%= link_to_clone new_workflow_path(:clone_from => workflow.id) %></td>
             <td class="text-end"><%= link_to_show workflow %></td>
-            <td class="text-end"><%= link_to_edit edit_workflow_path(workflow) %></td>
-            <td class="text-end"><%= link_to_destroy(workflow) if workflow.can_be_destroyed? %></td>
+            <td class="text-end">
+              <% if review_can_be_modified? workflow %>
+                <%= link_to_edit edit_workflow_path(workflow) %>
+              <% end %>
+            </td>
+            <td class="text-end">
+              <% if workflow.can_be_destroyed? && review_can_be_modified?(workflow) %>
+                <%= link_to_destroy workflow %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>
