@@ -60,15 +60,15 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     assert user.findings.for_notification.all?(&:mark_as_unconfirmed)
 
-    finding  = user.findings.recently_notified
-    response = NotifierMailer.notify_new_findings(user).deliver_now
+    findings = user.findings.recently_notified
+    response = NotifierMailer.notify_new_findings(user, findings).deliver_now
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
       I18n.t('notifier.notify_new_findings.title')
     )
     assert_match Regexp.new(I18n.t('notifier.notify_new_findings.created_title',
-                                   :count => finding.size)), response.body.decoded
+                                   :count => findings.size)), response.body.decoded
     assert_equal user.email, response.to.first
   end
 
@@ -545,5 +545,19 @@ class NotifierMailerTest < ActionMailer::TestCase
                                      .map(&:email)
 
     assert_equal response.to.sort, expected_emails_to_send.sort
+  end
+
+  test 'notify finding state changed' do
+    finding  = findings :being_implemented_weakness
+    response = NotifierMailer.notify_finding_state_changed(finding).deliver_now
+    users    = finding.users.reject &:can_act_as_audited?
+
+    refute ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.notify_finding_state_changed.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.notify_finding_state_changed.title')),
+      response.body.decoded
+    assert_equal users.map(&:email), response.to
   end
 end

@@ -28,7 +28,7 @@ module Findings::Scopes
         parameters[:"ids_#{i}"] = finding_ids
       end
 
-      includes(review: :conclusion_final_review).where(
+      list.includes(review: :conclusion_final_review).where(
         conditions.map { |c| "(#{c})" }.join(' OR '), parameters
       )
     end

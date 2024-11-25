@@ -1,102 +1,107 @@
+---
 en:
   approach_types:
-    control: 'Control'
-    sustantive: 'Substantive'
-    control_sustantive: 'Control/Substantive'
-  frequency_types:
-    monthly: 'Monthly'
-    biyearly: 'Biannual'
-    yearly: 'Annaul'
-  impact_risk_types:
-    small: 'Insignificant'
-    low: 'Low'
-    moderate: 'Moderate'
-    high: 'High'
-    critical: 'Critical'
+    control: Control
+    control_sustantive: Control/Substantive
+    sustantive: Substantive
   bic_impact_risk_types:
-    low: 'Low'
-    moderate: 'Moderate'
-    high: 'High'
-  relevance_types:
-    not_rated: 'Null'
-    low: 'Low'
-    moderate_low: 'Moderate/Low'
-    moderate: 'Moderate'
-    high: 'High'
-    critical: 'Critical'
-    # Short relevance
-    'yes': 'Yes'
-    'no': 'No'
-  qualification_types:
-    not_rated: 'Null'
-    very_low: 'Very low'
-    low: 'Low'
-    moderately_low: 'Moderately low'
-    medium_low: 'Medium low'
-    medium: 'Medium'
-    moderately_high: 'Moderately high'
-    medium_high: 'Medium high'
-    high: 'High'
-    very_high: 'Very high'
-    excellent: 'Excellent'
-    # Short qualifications
-    ok: 'OK'
-    observed: 'Observed'
-    not_apply: 'Not apply'
-  risk_types:
-    low: 'Low'
-    medium: 'Medium'
-    high: 'High'
-    none: 'Regulatory body'
-  priority_types:
-    low: 'Low'
-    medium: 'Medium'
-    high: 'High'
-    none: 'Regulatory body'
-  probability_types:
-    rare: 'Rare'
-    unlikely: 'Unlikely'
-    possible: 'Possible'
-    probable: 'Probable'
-    almost_certain: 'Almost Certain'
-  frequencies_types:
-    low: 'Remote'
-    moderate: 'Probable'
-    high: 'High'
-  state_regulations_types:
-    not_exist: 'Not exist'
-    inadequate: 'Outdated/inadequate/requires adjustment'
-    exist: 'Exists updated'
+    high: High
+    low: Low
+    moderate: Moderate
   degree_compliance_types:
-    fails: 'Does not comply'
-    partially: 'Partially complies'
-    comply: 'Complies'
-  observation_originated_tests_types:
-    design: 'Design'
-    compliance: 'Compliance'
-    sustantive: 'Substantive'
-  sample_deviation_types:
-    less_expected: 'Less expected'
-    most_expected: 'Most expected'
+    comply: Complies
+    fails: Does not comply
+    partially: Partially complies
   external_repeated_types:
-    repeated_without_action_plan: 'Yes, without an action plan'
-    repeated_with_action_plan: 'Yes, with an action plan'
     no_repeated: 'No'
-  suggested_type_risks:
-    representativeness: 'Representativeness'
-    absolute_value: 'Absolute value'
-  suggested_type_probabilities:
-    representativeness: 'Representativeness'
-    repeatability: 'Repeatability'
+    repeated_with_action_plan: Yes, with an action plan
+    repeated_without_action_plan: Yes, without an action plan
+  frequencies_types:
+    high: High
+    low: Remote
+    moderate: Probable
+  frequency_types:
+    biyearly: Biannual
+    monthly: Monthly
+    yearly: Annual
+  impact_risk_types:
+    critical: Critical
+    high: High
+    low: Low
+    moderate: Moderate
+    small: Insignificant
+  observation_originated_tests_types:
+    compliance: Compliance
+    design: Design
+    sustantive: Substantive
+  priority_types:
+    high: High
+    low: Low
+    medium: Medium
+    medium_high: Medium high
+    medium_low: Medium low
+    none: Regulatory body
+  probability_types:
+    almost_certain: Almost certain
+    possible: Possible
+    probable: Probable
+    rare: Rare
+    unlikely: Unlikely
+  qualification_types:
+    excellent: Excellent
+    high: High
+    low: Low
+    medium: Medium
+    medium_high: Medium high
+    medium_low: Medium low
+    moderately_high: Moderately high
+    moderately_low: Moderately low
+    not_rated: 'Null'
+    very_high: Very high
+    very_low: Very low
+    # Short qualifications
+    not_apply: Not apply
+    observed: Observed
+    ok: OK
+  relevance_types:
+    critical: Critical
+    high: High
+    low: Low
+    moderate: Moderate
+    moderate_low: Moderate/Low
+    not_rated: 'Null'
+    # Short relevance
+    'no': 'No'
+    'yes': 'Yes'
+  risk_types:
+    high: High
+    low: Low
+    medium: Medium
+    medium_high: Medium high
+    medium_low: Medium low
+    none: Regulatory body
+  sample_deviation_types:
+    less_expected: Less expected
+    most_expected: Most expected
   score_types:
-    satisfactory: 'Satisfactory'
-    improve: 'Needs improvement'
-    regular: 'Regular'
-    unsatisfactory: 'Unsatisfactory'
+    improve: Needs improvement
+    regular: Regular
+    satisfactory: Satisfactory
+    unsatisfactory: Unsatisfactory
     # When score for weaknesses is used
-    adequate: 'Adequate'
-    require_some_improvements: 'Requires some improvements'
-    require_improvements: 'Requires improvements'
-    require_lots_of_improvements: 'Requires significant improvements'
-    inadequate: 'Inadequate'
-    none: 'Not applicable'
+    adequate: Adequate
+    inadequate: Inadequate
+    none: Not applicable
+    require_improvements: Requires improvements
+    require_lots_of_improvements: Requires significant improvements
+    require_some_improvements: Requires some improvements
+  state_regulations_types:
+    exist: Exists updated
+    inadequate: Outdated/inadequate/requires adjustment
+    not_exist: Not exist
+  suggested_type_probabilities:
+    repeatability: Repeatability
+    representativeness: Representativeness
+  suggested_type_risks:
+    absolute_value: Absolute value
+    representativeness: Representativeness

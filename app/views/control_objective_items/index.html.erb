@@ -31,8 +31,16 @@
             <td class="d-none d-sm-table-cell"><%= control_objective_weaknesses_link(control_objective) %></td>
             <td class="d-none d-sm-table-cell"><%= t control_objective.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
             <td class="text-end"><%= link_to_show control_objective_item_path(control_objective) %></td>
-            <td class="text-end"><%= link_to_edit edit_control_objective_item_path(control_objective) %></td>
-            <td class="text-end"><%= link_to_destroy(control_objective_item_path(control_objective)) if control_objective.can_be_destroyed? %></td>
+            <td class="text-end">
+              <% if review_can_be_modified? control_objective %>
+                <%= link_to_edit edit_control_objective_item_path(control_objective) %>
+              <% end %>
+            </td>
+            <td class="text-end">
+              <% if control_objective.can_be_destroyed? && review_can_be_modified?(control_objective) %>
+                <%= link_to_destroy control_objective_item_path(control_objective) %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>

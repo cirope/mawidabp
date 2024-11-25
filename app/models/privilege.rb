@@ -3,7 +3,8 @@ class Privilege < ApplicationRecord
   include Privileges::AttributeTypes
 
   has_paper_trail meta: {
-    organization_id: ->(model) { Current.organization&.id }
+    organization_id: ->(model) { Current.organization&.id },
+    important: true
   }
 
   after_validation :mark_implicit_privileges
@@ -43,13 +44,11 @@ class Privilege < ApplicationRecord
   end
 
   def to_s
-    privilege_string = I18n.t(self.module, :scope => :actioncontroller)
-
     privilege_array = [:approval, :erase, :modify, :read].map do |p|
       "#{Privilege.human_attribute_name(p)}: " +
         I18n.t(self.send(p) ? 'label.yes' : 'label.no')
     end
 
-    "#{privilege_string} (#{privilege_array.join(', ')})"
+    "#{self.module} (#{privilege_array.join(', ')})"
   end
 end

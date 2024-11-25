@@ -2,11 +2,13 @@
   include AutoCompleteFor::ControlObjectiveItem
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
+  include Reviews::Permissions
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_oportunity, only: [
     :show, :edit, :update, :undo_reiteration
   ]
+  before_action -> { check_review_permissions @oportunity }, only: [:edit, :update]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las oportunidades de mejora
@@ -40,6 +42,8 @@
       control_objective_item: :review
     ).merge(
       Review.allowed_by_business_units
+    ).merge(
+      Review.scoped_by_current_user_for Oportunity
     ).page params[:page]
 
     respond_to do |format|
@@ -140,7 +144,11 @@
         :finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
-      ).find(params[:id])
+      ).merge(
+        Review.scoped_by_current_user_for Oportunity
+      ).find(
+        params[:id]
+      )
     end
 
     def oportunity_params

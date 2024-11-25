@@ -1,10 +1,15 @@
 class ConclusionFinalReviewsController < ApplicationController
+  include Reviews::Permissions
+
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_final_review, only: [
     :show, :edit, :update, :destroy, :export_to_pdf, :score_sheet,
     :download_work_papers, :create_bundle, :compose_email, :send_by_email,
     :export_to_rtf
   ]
+  before_action -> {
+    check_review_permissions @conclusion_final_review
+  }, only: [:edit, :update, :destroy]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   def index
@@ -22,7 +27,10 @@ class ConclusionFinalReviewsController < ApplicationController
       :periods, :reviews, :business_units
     ).merge(
       PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
+    ).merge(
+      Review.scoped_by_current_user_for ConclusionFinalReview
     )
+
     respond_to do |format|
       format.html
     end
@@ -45,7 +53,12 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/new.json
   def new
     conclusion_final_review =
-      ConclusionFinalReview.list.find_by(review_id: params[:review])
+      ConclusionFinalReview.list.
+        merge(
+          Review.scoped_by_current_user_for ConclusionFinalReview
+        ).find_by(
+          review_id: params[:review]
+        )
 
     unless conclusion_final_review
       @title = t 'conclusion_final_review.new_title'
@@ -324,6 +337,8 @@ class ConclusionFinalReviewsController < ApplicationController
       **search_params
     ).references(
       :periods, :reviews, :business_units
+    ).merge(
+      Review.scoped_by_current_user_for ConclusionFinalReview
     ).order_by(
       order_param
     )
@@ -420,7 +435,11 @@ class ConclusionFinalReviewsController < ApplicationController
             ]
           }
         ]
-      ).find(params[:id])
+      ).merge(
+        Review.scoped_by_current_user_for ConclusionFinalReview
+      ).find(
+        params[:id]
+      )
     end
 
     def conclusion_final_review_params
@@ -431,7 +450,7 @@ class ConclusionFinalReviewsController < ApplicationController
         :affects_compliance, :collapse_control_objectives,
         :reference, :scope, :previous_identification, :previous_date,
         :main_recommendations, :effectiveness_notes, :additional_comments,
-        :review_conclusion, :applied_data_analytics,
+        :review_conclusion, :applied_data_analytics, :work_scope,
         :lock_version, :exclude_regularized_findings,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,

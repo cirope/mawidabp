@@ -147,6 +147,26 @@ module Reviews::Scopes
           references :plan_item
     end
 
+    def scoped_by_current_user
+      if review_filtered_by_user_assignments?
+        joins(:review_user_assignments).where(
+          review_user_assignments: { user: Current.user }
+        )
+      else
+        all
+      end
+    end
+
+    def scoped_by_current_user_for model
+      if review_filtered_by_user_assignments?
+        model.joins(review: :review_user_assignments).where(
+          review_user_assignments: { user: Current.user }
+        )
+      else
+        all
+      end
+    end
+
     private
 
       def without_final_review_order
@@ -157,6 +177,13 @@ module Reviews::Scopes
           "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
           "#{quoted_table_name}.#{qcn('created_at')} ASC"
         ].map { |o| Arel.sql o }
+      end
+
+      def review_filtered_by_user_assignments?
+        setting         = Current.organization.settings.find_by name: 'review_filtered_by_user_assignments'
+        review_filtered = setting ? setting.value : DEFAULT_SETTINGS[:review_filtered_by_user_assignments][:value]
+
+        review_filtered.to_i != 0
       end
   end
 end

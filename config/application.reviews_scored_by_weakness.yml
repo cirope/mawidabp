@@ -19,7 +19,7 @@ RAILS_MASTER_KEY: 'REPLACE with THE master key'
 RETURN_PATH: 'noreply@change.me'
 
 # Extra application options
-ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS: 30
+ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION_DAYS: '30'
 ALLOW_FINDING_ASSUMED_RISK_TO_PENDING: 'false'
 ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION: 'false'
 AUTOMATICALLY_SORT_FINDINGS_ON_CONCLUSION: '{"cirope":"recode_weaknesses_by_repetition_and_risk"}' # In JSON
@@ -58,8 +58,10 @@ ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS: ''
 ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS: 'cirope'
 ORGANIZATIONS_WITH_INTERNAL_CONTROL_QUALIFICATION_REPORT: '["broker", "bursatil", "fondos"]'
 PLAN_ITEM_REVIEW_CONCLUDED_ON: 'created_at'
+PRIORITY_TYPES: '{}'
 REQUIRED_BY_OPTIONS_MEMO: '[]'
 REVIEW_SCORES: '{}' # In JSON and must be sorted by date in descending order
+RISK_TYPES: '{}'
 RISK_WEIGHTS: '{}'
 SCORE_BY_WEAKNESS: '{"adequate": 98, "require_some_improvements": 85, "require_improvements": 50, "require_lots_of_improvements": 32.66, "inadequate": 0}' # In JSON
 SHARED_SESSION: 'true'

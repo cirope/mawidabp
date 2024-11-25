@@ -13,6 +13,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::DefaultRtf
   include ConclusionReviews::DestroyValidation
   include ConclusionReviews::Email
+  include ConclusionReviews::Fields
   include ConclusionReviews::FindingsFollowUpPdf
   include ConclusionReviews::FindingsSheetPdf
   include ConclusionReviews::GalPdf

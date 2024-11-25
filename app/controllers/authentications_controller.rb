@@ -16,7 +16,7 @@ class AuthenticationsController < ApplicationController
       current_organization, @admin_mode, @current_user
 
     if auth.authenticated?
-      flash.notice = auth.message
+      flash.notice = auth.message unless auth.require_mfa?
 
       set_session_values auth.user
     else

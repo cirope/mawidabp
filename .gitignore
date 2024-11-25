@@ -19,3 +19,6 @@ config/application.yml
 config/jekyll/_vendor/bundle/
 config/jekyll/_sass/stylesheets
 config/jekyll/assets/fonts
+
+# Ignore simplecov
+coverage

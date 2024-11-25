@@ -1,10 +1,13 @@
 class ConclusionDraftReviewsController < ApplicationController
+  include Reviews::Permissions
+
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_draft_review, only: [
     :show, :edit, :update, :export_to_pdf, :export_to_rtf,
     :score_sheet, :download_work_papers, :create_bundle,
     :compose_email, :send_by_email
   ]
+  before_action -> { check_review_permissions @conclusion_draft_review }, only: [:edit, :update]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista los informes borradores
@@ -25,6 +28,8 @@ class ConclusionDraftReviewsController < ApplicationController
       :reviews, :business_units
     ).merge(
       PlanItem.allowed_by_business_units_and_auxiliar_business_units_types
+    ).merge(
+      Review.scoped_by_current_user_for ConclusionDraftReview
     ).order_by.page params[:page]
 
     respond_to do |format|
@@ -305,7 +310,11 @@ class ConclusionDraftReviewsController < ApplicationController
           :plan_item,
           { control_objective_items: [:control, :weaknesses, :oportunities] }
         ]
-      ).find(params[:id])
+      ).merge(
+        Review.scoped_by_current_user_for ConclusionDraftReview
+      ).find(
+        params[:id]
+      )
 
       @conclusion_draft_review = nil if @conclusion_draft_review.has_final_review?
     end
@@ -318,7 +327,7 @@ class ConclusionDraftReviewsController < ApplicationController
         :affects_compliance, :collapse_control_objectives, :force_approval,
         :reference, :scope, :previous_identification, :previous_date,
         :main_recommendations, :effectiveness_notes, :additional_comments,
-        :review_conclusion, :applied_data_analytics,
+        :review_conclusion, :applied_data_analytics, :work_scope,
         :lock_version, :exclude_regularized_findings,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,

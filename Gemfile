@@ -56,6 +56,9 @@ gem 'unicorn-worker-killer'
 
 gem 'wicked_pdf'
 
+gem 'google-authenticator-rails'
+gem 'rqrcode'
+
 group :development do
   gem 'web-console'
   gem 'listen'
@@ -73,6 +76,7 @@ end
 
 group :test do
   gem 'timecop'
+  gem 'simplecov', require: false
 end
 
 group :development, :test do

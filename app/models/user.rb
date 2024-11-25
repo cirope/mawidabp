@@ -16,6 +16,7 @@ class User < ApplicationRecord
   include Users::Group
   include Users::Licenses
   include Users::MarkChanges
+  include Users::Mfa
   include Users::Name
   include Users::Notifications
   include Users::Password

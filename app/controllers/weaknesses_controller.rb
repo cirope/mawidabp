@@ -4,11 +4,13 @@ class WeaknessesController < ApplicationController
   include AutoCompleteFor::Tagging
   include AutoCompleteFor::WeaknessTemplate
   include Reports::FileResponder
+  include Reviews::Permissions
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
     :show, :edit, :update, :undo_reiteration
   ]
+  before_action -> { check_review_permissions @weakness }, only: [:edit, :update]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista las observaciones
@@ -58,7 +60,8 @@ class WeaknessesController < ApplicationController
       ].map { |o| Arel.sql o }
     ).
     references(:periods, :conclusion_reviews).
-    merge Review.allowed_by_business_units
+    merge(Review.allowed_by_business_units).
+    merge Review.scoped_by_current_user_for(Weakness)
 
     respond_to do |format|
       format.html { @weaknesses = @weaknesses.page params[:page] }
@@ -156,7 +159,12 @@ class WeaknessesController < ApplicationController
 
   # * GET /weaknesses/weakness_template_changed
   def weakness_template_changed
-    control_objective_item   = ControlObjectiveItem.list.find_by id: params[:control_objective_item_id]
+    control_objective_item   = ControlObjectiveItem.list.
+                                 merge(
+                                   Review.scoped_by_current_user_for Weakness
+                                 ).find_by(
+                                   id: params[:control_objective_item_id]
+                                 )
     @weakness_template       = WeaknessTemplate.list.find_by id: params[:id]
     @probability_risk_amount = Finding.list.probability_risk_previous control_objective_item&.review,
                                  @weakness_template
@@ -228,7 +236,11 @@ class WeaknessesController < ApplicationController
         :finding_relations, :work_papers,
         { finding_user_assignments: :user },
         { control_objective_item: { review: :period } }
-      ).find(params[:id])
+      ).merge(
+        Review.scoped_by_current_user_for Weakness
+      ).find(
+        params[:id]
+      )
     end
 
     def load_privileges

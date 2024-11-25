@@ -45,24 +45,25 @@
                 <%= f.input :conclusion, collection: conclusion_options, prompt: true,
                   input_html: { disabled: readonly } %>
               <% else %>
-                <%= f.input :conclusion, input_html: { readonly: readonly, rows: 2 } %>
+                <%= f.input :conclusion, input_html: { readonly: readonly, rows: 3 } %>
               <% end %>
               <%= f.input :evolution, collection: evolution_options(@conclusion_final_review), prompt: true, input_html: { disabled: readonly } %>
               <%= f.input :evolution_justification, input_html: { rows: 1, readonly: readonly } %>
             <% else %>
-              <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 2 } %>
               <% if SHOW_CONCLUSION_AS_OPTIONS %>
                 <%= f.input :conclusion, collection: conclusion_options, prompt: true,
                   input_html: { disabled: readonly } %>
               <% else %>
-                <%= f.input :conclusion, input_html: { readonly: readonly, rows: 2 } %>
+                <%= f.input :conclusion, input_html: { readonly: readonly, rows: 3 } %>
               <% end %>
+              <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
             <% end %>
 
             <% if %w(default pat nbc).include? Current.conclusion_pdf_format %>
-              <%= f.input :recipients, input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 2 : 5 } %>
+              <%= f.input :recipients, input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 2 : 4 } %>
 
               <% if USE_SCOPE_CYCLE %>
+                <%= f.input :work_scope, input_html: { readonly: readonly } %>
                 <%= f.input :additional_comments, input_html: { readonly: readonly, rows: 2 } %>
               <% end %>
 
