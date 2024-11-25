@@ -1123,16 +1123,24 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'review should not be modified' do
-    review_auditor = review_user_assignments :review_with_conclusion_bare_auditor
-    user           = review_auditor.user
+    review_auditor       = review_user_assignments :review_with_conclusion_bare_auditor
+    user                 = review_auditor.user
+    organization         = review_auditor.review.organization
 
-    assert @review.can_be_modified_by? user
+    Current.user         = user
+    Current.organization = organization
+
+    assert @review.can_be_modified_by_current_user?
+
+    organization.settings.find_by(
+      name: 'review_permission_by_assignment'
+    ).update! value: '1'
 
     review_auditor.update!(
       assignment_type: ReviewUserAssignment::TYPES[:auditor_read_only]
     )
 
-    assert !@review.can_be_modified_by?(user)
+    assert !@review.can_be_modified_by_current_user?
   end
 
   test 'review should be filtered by user assignments' do

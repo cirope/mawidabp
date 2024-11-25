@@ -1,8 +1,13 @@
 class WorkflowsController < ApplicationController
+  include Reviews::Permissions
+
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_workflow, only: [
     :show, :edit, :update, :destroy, :export_to_pdf
   ]
+  before_action -> {
+    check_review_permissions @workflow
+  }, only: [:edit, :update, :destroy]
   before_action :set_workflow_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 

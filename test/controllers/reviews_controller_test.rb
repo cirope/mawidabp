@@ -922,11 +922,19 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'should not edit review' do
-    review_auditor = review_user_assignments :review_with_conclusion_bare_auditor
-    user           = review_auditor.user
-    review         = review_auditor.review
+    review_auditor       = review_user_assignments :review_with_conclusion_bare_auditor
+    user                 = review_auditor.user
+    review               = review_auditor.review
+    organization         = review.organization
 
-    assert review.can_be_modified_by? user
+    Current.user         = user
+    Current.organization = organization
+
+    assert review.can_be_modified_by_current_user?
+
+    organization.settings.find_by(
+      name: 'review_permission_by_assignment'
+    ).update! value: '1'
 
     review_auditor.update!(
       assignment_type: ReviewUserAssignment::TYPES[:auditor_read_only]
