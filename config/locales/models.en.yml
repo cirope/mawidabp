@@ -950,6 +950,7 @@ en:
         file_model: File
         name: Name
         number_of_pages: Pages
+        status: Status
       work_papers/file_model:
         file: Work paper (file)
       workflow:
