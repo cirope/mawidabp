@@ -2,6 +2,7 @@ class WorkPaper < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable
+  include WorkPapers::History
   include WorkPapers::LocalFiles
   include WorkPapers::RemoteFiles
   include WorkPapers::Statuses
