@@ -12,9 +12,9 @@ module Findings::WorkPapersHelper
 
     if work_paper.persisted? && status.present?
       result    = work_paper_info_for status
-      icon_text = if @auth_user.auditor?
+      icon_text = if current_user_is? :auditor?, work_paper
                     t "work_papers.statuses.auditor.next_to_#{work_paper.status}"
-                  elsif @auth_user.supervisor? || @auth_user.manager?
+                  elsif current_user_is?(:supervisor?, work_paper) || current_user_is?(:manager?, work_paper)
                     t "work_papers.statuses.supervisor.next_to_#{work_paper.status}"
                   end
 
@@ -37,5 +37,13 @@ module Findings::WorkPapersHelper
         when 'finished'     then ['text-info',    'file-circle-check']
         when 'revised'      then ['text-success', 'file-shield']
       end
+    end
+
+    def current_user_is? role, work_paper
+      work_paper.
+        owner.
+        review.
+        review_user_assignments.
+        where(user: Current.user).any? &role
     end
 end
