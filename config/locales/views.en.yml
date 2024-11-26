@@ -1011,12 +1011,13 @@ en:
 
   work_papers:
     history:
+      action: Action
       actions:
         create: created
         destroy: deleted
         update: modified
       changes: Change history
-      new_file: Attached new file
+      new_file: Attached
       show: Show change history
     show:
       error: Please remember that you must be authenticated or have permissions to view the document

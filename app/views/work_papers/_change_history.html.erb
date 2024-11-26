@@ -4,7 +4,14 @@
     <ul class="mb-3">
       <% work_paper.change_history.each do |history| %>
         <li>
-          <%= history %>
+          <%= history[:date] %>
+          <ul>
+            <li><%= t 'work_papers.history.action' %>: <%= history[:action] %></li>
+            <li><%= User.model_name.human %>: <%= history[:user] %></li>
+            <% history[:changes].each do |change| %>
+              <li><%= change.keys.first %>: <%= change.values.first %></li>
+            <% end %>
+          </ul>
         </li>
       <% end %>
     </ul>
