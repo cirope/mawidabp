@@ -767,6 +767,7 @@ en:
     require_manager_on_findings: Require audit manager on findings
     review_code_expresion: Audit report identification code format
     review_filtered_by_user_assignments: Filter reviews by assigned users
+    review_permission_by_assignment: Review permissions by assignment
     session_expire_time: Disconnect due to inactivity
     show:
       title: Setting details
@@ -1009,6 +1010,15 @@ en:
     welcome: Welcome
 
   work_papers:
+    history:
+      action: Action
+      actions:
+        create: created
+        destroy: deleted
+        update: modified
+      changes: Change history
+      new_file: Attached
+      show: Show change history
     show:
       error: Please remember that you must be authenticated or have permissions to view the document
       title: Working paper

@@ -54,7 +54,9 @@
 
   <div class="form-actions">
     <div class="float-end">
-      <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
+      <% if review_can_be_modified? @conclusion_draft_review %>
+        <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
+      <% end %>
       <%= link_to_index conclusion_draft_reviews_path %>
     </div>
     <%= f.submit t('label.send'), class: 'btn btn-primary' %>

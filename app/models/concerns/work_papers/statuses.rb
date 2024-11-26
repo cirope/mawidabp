@@ -33,6 +33,13 @@ module WorkPapers::Statuses
     end
   end
 
+  def current_user_is? role
+    owner.
+      review.
+        review_user_assignments.
+          where(user: Current.user).any? &role
+  end
+
   private
 
     def set_status
@@ -53,12 +60,5 @@ module WorkPapers::Statuses
 
         review.update_status status
       end
-    end
-
-    def current_user_is? role
-      owner.
-        review.
-          review_user_assignments.
-            where(user: Current.user).any? &role
     end
 end
