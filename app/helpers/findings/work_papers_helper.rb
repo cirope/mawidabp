@@ -1,4 +1,12 @@
 module Findings::WorkPapersHelper
+  def work_paper_show_change_history element_id
+    link_to icon('fas', 'history'), "##{element_id}", {
+      title: t('work_papers.history.show'),
+      data:  { bs_toggle: 'collapse' },
+      class: 'me-4'
+    }
+  end
+
   def show_status_work_paper work_paper
     status = work_paper.status
     result = work_paper_info_for status
@@ -12,9 +20,9 @@ module Findings::WorkPapersHelper
 
     if work_paper.persisted? && status.present?
       result    = work_paper_info_for status
-      icon_text = if current_user_is? :auditor?, work_paper
+      icon_text = if work_paper.current_user_is? :auditor?
                     t "work_papers.statuses.auditor.next_to_#{work_paper.status}"
-                  elsif current_user_is?(:supervisor?, work_paper) || current_user_is?(:manager?, work_paper)
+                  elsif work_paper.current_user_is?(:supervisor?) || work_paper.current_user_is?(:manager?)
                     t "work_papers.statuses.supervisor.next_to_#{work_paper.status}"
                   end
 
@@ -37,13 +45,5 @@ module Findings::WorkPapersHelper
         when 'finished'     then ['text-info',    'file-circle-check']
         when 'revised'      then ['text-success', 'file-shield']
       end
-    end
-
-    def current_user_is? role, work_paper
-      work_paper.
-        owner.
-        review.
-        review_user_assignments.
-        where(user: Current.user).any? &role
     end
 end
