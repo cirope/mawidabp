@@ -94,7 +94,7 @@ module ConclusionReviews::PatPdf
         title = "#{ConclusionReview.human_attribute_name :work_scope}."
 
         pdf.text "<b><u>#{title}</u></b>\n\n", inline_format: true
-        pdf.text work_scope, style: :italic, align: :justify
+        pdf.text work_scope, align: :justify
       end
     end
 
