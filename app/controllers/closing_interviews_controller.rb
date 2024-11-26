@@ -1,9 +1,12 @@
 class ClosingInterviewsController < ApplicationController
+  include Reviews::Permissions
+
   respond_to :html, :js
 
   before_action :auth, :check_privileges
   before_action :set_closing_interview, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
+  before_action -> { check_review_permissions @closing_interview }, only: [:edit, :update, :destroy]
 
   # GET /closing_interviews
   def index

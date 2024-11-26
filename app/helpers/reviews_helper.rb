@@ -267,7 +267,7 @@ module ReviewsHelper
     if object
       review = object.kind_of?(Review) ? object : object.send(:review)
 
-      review&.can_be_modified_by? @auth_user
+      review&.can_be_modified_by_current_user?
     end
   end
 end

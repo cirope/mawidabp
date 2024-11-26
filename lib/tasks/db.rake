@@ -2,7 +2,7 @@ namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
     ActiveRecord::Base.transaction do
-      update_organization_settings               # 2017-03-15 last 2024-11-20
+      update_organization_settings               # 2017-03-15 last 2024-11-24
       add_new_answer_options                     # 2017-06-29
       add_best_practice_privilege                # 2018-01-31
       add_control_objective_privilege            # 2018-01-31
@@ -193,6 +193,14 @@ private
                            description: I18n.t('settings.review_filtered_by_user_assignments')
       end
     end
+
+    if add_review_permission_by_assignment? #2024-11-25
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'review_permission_by_assignment',
+                           value:       DEFAULT_SETTINGS[:review_permission_by_assignment][:value],
+                           description: I18n.t('settings.review_permission_by_assignment')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -269,6 +277,10 @@ private
 
   def add_review_filtered_by_user_assignments?
     Setting.where(name: 'review_filtered_by_user_assignments').empty?
+  end
+
+  def add_review_permission_by_assignment?
+    Setting.where(name: 'review_permission_by_assignment').empty?
   end
 
   def add_new_answer_options
