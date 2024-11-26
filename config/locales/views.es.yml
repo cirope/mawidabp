@@ -764,6 +764,7 @@ es:
     password_expire_time: Duración máxima de la contraseña
     password_minimum_length: Longitud mínima de la contraseña
     password_minimum_time: Duración mínima de la contraseña
+    plan_and_review_approval: Requerir aprobación de planes e informes
     require_manager_on_findings: Requerir gerente de auditoría en hallazgos
     review_code_expresion: Formato del código de identificación de informes
     review_filtered_by_user_assignments: Filtrar informes por usuarios asignados

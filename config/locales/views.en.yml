@@ -764,6 +764,7 @@ en:
     password_expire_time: Password expire time
     password_minimum_length: Minimum password length
     password_minimum_time: Minimum password time
+    plan_and_review_approval: Require approval of workplans and reviews
     require_manager_on_findings: Require audit manager on findings
     review_code_expresion: Audit report identification code format
     review_filtered_by_user_assignments: Filter reviews by assigned users
