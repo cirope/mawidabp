@@ -1,0 +1,12 @@
+<div id="work_paper_change_history-<%= work_paper.id %>" class="collapse">
+  <div>
+    <h5><%= t('work_papers.history.changes') %></h5>
+    <ul class="mb-3">
+      <% work_paper.change_history.each do |history| %>
+        <li>
+          <%= history %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

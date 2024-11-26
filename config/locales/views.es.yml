@@ -1010,6 +1010,14 @@ es:
     welcome: Bienvenido
 
   work_papers:
+    history:
+      actions:
+        create: creó
+        destroy: eliminó
+        update: modificó
+      changes: Historial de cambios
+      new_file: Adjuntó nuevo archivo
+      show: Ver historial de cambios
     show:
       error: Recuerde que debe estar autenticado o tener permisos para visualizar el documento
       title: Papel de trabajo
