@@ -2,7 +2,7 @@ namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
     ActiveRecord::Base.transaction do
-      update_organization_settings               # 2017-03-15 last 2024-11-24
+      update_organization_settings               # 2017-03-15 last 2024-11-27
       add_new_answer_options                     # 2017-06-29
       add_best_practice_privilege                # 2018-01-31
       add_control_objective_privilege            # 2018-01-31
@@ -42,245 +42,248 @@ end
 private
 
   def update_organization_settings
-    if add_show_print_date_on_pdfs? # 2017-03-15
-      Organization.all.each do |o|
-        o.settings.create! name:        'show_print_date_on_pdfs',
-                           value:       DEFAULT_SETTINGS[:show_print_date_on_pdfs][:value],
-                           description: I18n.t('settings.show_print_date_on_pdfs')
-      end
-    end
+    migrate_settings_to_organizations             # 2024-11-27
 
-    if add_brief_period_in_weeks? # 2018-08-14
-      Organization.all.each do |o|
-        o.settings.create! name:        'brief_period_in_weeks',
-                           value:       DEFAULT_SETTINGS[:brief_period_in_weeks][:value],
-                           description: I18n.t('settings.brief_period_in_weeks')
-      end
-    end
+    add_show_print_date_on_pdfs                   # 2017-03-15
+    add_brief_period_in_weeks                     # 2018-08-14
+    add_show_follow_up_timestamps                 # 2018-10-28
+    add_require_manager_on_findings               # 2018-11-09
+    add_hide_import_from_ldap                     # 2020-01-02
+    add_skip_function_and_manager_from_ldap_sync  # 2020-01-02
+    add_hide_obsolete_best_practices              # 2020-10-19
+    set_hours_of_work_per_day                     # 2021-04-30
+    set_conclusion_review_receiver                # 2021-08-09
+    add_temporary_polls                           # 2023-02-01
+    add_finding_warning_expire_days               # 2023-06-06
+    add_finding_by_current_user                   # 2024-01-26
+    add_enable_close_date_edition                 # 2024-01-31
+    add_finding_days_for_next_notifications       # 2024-04-16
+    add_uniqueness_username_validation            # 2024-05-24
+    add_skip_reiteration_copy                     # 2024-06-08
+    add_finding_state_change_notification         # 2024-10-21
+    add_notify_recently_finalized_findings        # 2024-11-06
+    add_review_filtered_by_user_assignments       # 2024-11-20
+    add_review_permission_by_assignment           # 2024-11-25
+  end
 
-    if add_show_follow_up_timestamps? # 2018-10-28
-      Organization.all.each do |o|
-        o.settings.create! name:        'show_follow_up_timestamps',
-                           value:       DEFAULT_SETTINGS[:show_follow_up_timestamps][:value],
-                           description: I18n.t('settings.show_follow_up_timestamps')
-      end
-    end
-
-    if add_require_manager_on_findings? # 2018-11-09
-      Organization.all.each do |o|
-        o.settings.create! name:        'require_manager_on_findings',
-                           value:       DEFAULT_SETTINGS[:require_manager_on_findings][:value],
-                           description: I18n.t('settings.require_manager_on_findings')
-      end
-    end
-
-    if add_hide_import_from_ldap? # 2020-01-02
-      Organization.all.each do |o|
-        o.settings.create! name:        'hide_import_from_ldap',
-                           value:       DEFAULT_SETTINGS[:hide_import_from_ldap][:value],
-                           description: I18n.t('settings.hide_import_from_ldap')
-      end
-    end
-
-    if add_skip_function_and_manager_from_ldap_sync? # 2020-01-02
-      Organization.all.each do |o|
-        o.settings.create! name:        'skip_function_and_manager_from_ldap_sync',
-                           value:       DEFAULT_SETTINGS[:skip_function_and_manager_from_ldap_sync][:value],
-                           description: I18n.t('settings.skip_function_and_manager_from_ldap_sync')
-      end
-    end
-
-    if add_hide_obsolete_best_practices? # 2020-10-19
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'hide_obsolete_best_practices',
-                           value:       DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value],
-                           description: I18n.t('settings.hide_obsolete_best_practices')
-      end
-    end
-
-    if set_hours_of_work_per_day? # 2021-04-30
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'hours_of_work_per_day',
-                           value:       DEFAULT_SETTINGS[:hours_of_work_per_day][:value],
-                           description: I18n.t('settings.hours_of_work_per_day')
-      end
-    end
-
-    if set_conclusion_review_receiver? # 2021-08-09
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'conclusion_review_receiver',
-                           value:       DEFAULT_SETTINGS[:conclusion_review_receiver][:value],
-                           description: I18n.t('settings.conclusion_review_receiver')
-      end
-    end
-
-    if add_temporary_polls? # 2023-02-01
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'temporary_polls',
-                           value:       DEFAULT_SETTINGS[:temporary_polls][:value],
-                           description: I18n.t('settings.temporary_polls')
-      end
-    end
-
-    if add_finding_warning_expire_days? #2023-06-06
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'finding_warning_expire_days',
-                           value:       DEFAULT_SETTINGS[:finding_warning_expire_days][:value],
-                           description: I18n.t('settings.finding_warning_expire_days')
-      end
-    end
-
-    if add_finding_by_current_user? #2024-01-26
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'finding_by_current_user',
-                           value:       DEFAULT_SETTINGS[:finding_by_current_user][:value],
-                           description: I18n.t('settings.finding_by_current_user')
-      end
-    end
-
-    if add_enable_close_date_edition? #2024-01-31
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'enable_close_date_edition',
-                           value:       DEFAULT_SETTINGS[:enable_close_date_edition][:value],
-                           description: I18n.t('settings.enable_close_date_edition')
-      end
-    end
-
-    if add_finding_days_for_next_notifications? #2024-04-16
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'finding_days_for_next_notifications',
-                           value:       DEFAULT_SETTINGS[:finding_days_for_next_notifications][:value],
-                           description: I18n.t('settings.finding_days_for_next_notifications')
-      end
-    end
-
-    if add_uniqueness_username_validation? #2024-05-24
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'uniqueness_username_validation',
-                           value:       DEFAULT_SETTINGS[:uniqueness_username_validation][:value],
-                           description: I18n.t('settings.uniqueness_username_validation')
-      end
-    end
-
-    if add_skip_reiteration_copy? #2024-06-08
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'skip_reiteration_copy',
-                           value:       DEFAULT_SETTINGS[:skip_reiteration_copy][:value],
-                           description: I18n.t('settings.skip_reiteration_copy')
-      end
-    end
-
-    if add_finding_state_change_notification? #2024-10-21
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'finding_state_change_notification',
-                           value:       DEFAULT_SETTINGS[:finding_state_change_notification][:value],
-                           description: I18n.t('settings.finding_state_change_notification')
-      end
-    end
-
-    if add_notify_recently_finalized_findings? #2024-11-06
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'notify_recently_finalized_findings',
-                           value:       DEFAULT_SETTINGS[:notify_recently_finalized_findings][:value],
-                           description: I18n.t('settings.notify_recently_finalized_findings')
-      end
-    end
-
-    if add_review_filtered_by_user_assignments? #2024-11-20
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'review_filtered_by_user_assignments',
-                           value:       DEFAULT_SETTINGS[:review_filtered_by_user_assignments][:value],
-                           description: I18n.t('settings.review_filtered_by_user_assignments')
-      end
-    end
-
-    if add_review_permission_by_assignment? #2024-11-25
-      Organization.all.find_each do |o|
-        o.settings.create! name:        'review_permission_by_assignment',
-                           value:       DEFAULT_SETTINGS[:review_permission_by_assignment][:value],
-                           description: I18n.t('settings.review_permission_by_assignment')
+  def add_show_print_date_on_pdfs
+    Organization.find_each do |organization|
+      unless organization.settings.key?('show_print_date_on_pdfs')
+        organization.settings['show_print_date_on_pdfs'] = DEFAULT_SETTINGS[:show_print_date_on_pdfs]
+        organization.save!
       end
     end
   end
 
-  def set_conclusion_review_receiver?
-    USE_SCOPE_CYCLE && Setting.where(name: 'conclusion_review_receiver').empty?
+  def add_brief_period_in_weeks
+    Organization.find_each do |organization|
+      unless organization.settings.key?('brief_period_in_weeks')
+        organization.settings['brief_period_in_weeks'] = DEFAULT_SETTINGS[:brief_period_in_weeks]
+        organization.save!
+      end
+    end
   end
 
-  def set_hours_of_work_per_day?
-    Setting.where(name: 'hours_of_work_per_day').empty?
+  def add_show_follow_up_timestamps
+    Organization.find_each do |organization|
+      unless organization.settings.key?('show_follow_up_timestamps')
+        organization.settings['show_follow_up_timestamps'] = DEFAULT_SETTINGS[:show_follow_up_timestamps]
+        organization.save!
+      end
+    end
   end
 
-  def add_hide_obsolete_best_practices?
-    Setting.where(name: 'hide_obsolete_best_practices').empty?
+  def add_require_manager_on_findings
+    Organization.find_each do |organization|
+      unless organization.settings.key?('require_manager_on_findings')
+        organization.settings['require_manager_on_findings'] = DEFAULT_SETTINGS[:require_manager_on_findings]
+        organization.save!
+      end
+    end
   end
 
-  def add_skip_function_and_manager_from_ldap_sync?
-    Setting.where(name: 'skip_function_and_manager_from_ldap_sync').empty?
+  def add_hide_import_from_ldap
+    Organization.find_each do |organization|
+      unless organization.settings.key?('hide_import_from_ldap')
+        organization.settings['hide_import_from_ldap'] = DEFAULT_SETTINGS[:hide_import_from_ldap]
+        organization.save!
+      end
+    end
   end
 
-  def add_hide_import_from_ldap?
-    Setting.where(name: 'hide_import_from_ldap').empty?
+  def add_skip_function_and_manager_from_ldap_sync
+    Organization.find_each do |organization|
+      unless organization.settings.key?('skip_function_and_manager_from_ldap_sync')
+        organization.settings['skip_function_and_manager_from_ldap_sync'] = DEFAULT_SETTINGS[:skip_function_and_manager_from_ldap_sync]
+        organization.save!
+      end
+    end
   end
 
-  def add_require_manager_on_findings?
-    Setting.where(name: 'require_manager_on_findings').empty?
+  def add_hide_obsolete_best_practices
+    Organization.find_each do |organization|
+      unless organization.settings.key?('hide_obsolete_best_practices')
+        organization.settings['hide_obsolete_best_practices'] = DEFAULT_SETTINGS[:hide_obsolete_best_practices]
+        organization.save!
+      end
+    end
   end
 
-  def add_show_follow_up_timestamps?
-    Setting.where(name: 'show_follow_up_timestamps').empty?
+  def set_hours_of_work_per_day
+    Organization.find_each do |organization|
+      unless organization.settings.key?('hours_of_work_per_day')
+        organization.settings['hours_of_work_per_day'] = DEFAULT_SETTINGS[:hours_of_work_per_day]
+        organization.save!
+      end
+    end
   end
 
-  def add_show_print_date_on_pdfs?
-    Setting.where(name: 'show_print_date_on_pdfs').empty?
+  def set_conclusion_review_receiver
+    return unless USE_SCOPE_CYCLE
+
+    Organization.find_each do |organization|
+      unless organization.settings.key?('conclusion_review_receiver')
+        organization.settings['conclusion_review_receiver'] = DEFAULT_SETTINGS[:conclusion_review_receiver]
+        organization.save!
+      end
+    end
   end
 
-  def add_brief_period_in_weeks?
-    Setting.where(name: 'brief_period_in_weeks').empty?
+  def add_temporary_polls
+    Organization.find_each do |organization|
+      unless organization.settings.key?('temporary_polls')
+        organization.settings['temporary_polls'] = DEFAULT_SETTINGS[:temporary_polls]
+        organization.save!
+      end
+    end
   end
 
-  def add_temporary_polls?
-    Setting.where(name: 'temporary_polls').empty?
+  def add_finding_warning_expire_days
+    Organization.find_each do |organization|
+      unless organization.settings.key?('finding_warning_expire_days')
+        organization.settings['finding_warning_expire_days'] = DEFAULT_SETTINGS[:finding_warning_expire_days]
+        organization.save!
+      end
+    end
   end
 
-  def add_finding_warning_expire_days?
-    Setting.where(name: 'finding_warning_expire_days').empty?
+  def add_finding_by_current_user
+    Organization.find_each do |organization|
+      unless organization.settings.key?('finding_by_current_user')
+        organization.settings['finding_by_current_user'] = DEFAULT_SETTINGS[:finding_by_current_user]
+        organization.save!
+      end
+    end
   end
 
-  def add_finding_by_current_user?
-    Setting.where(name: 'finding_by_current_user').empty?
+  def add_enable_close_date_edition
+    Organization.find_each do |organization|
+      unless organization.settings.key?('enable_close_date_edition')
+        organization.settings['enable_close_date_edition'] = DEFAULT_SETTINGS[:enable_close_date_edition]
+        organization.save!
+      end
+    end
   end
 
-  def add_enable_close_date_edition?
-    Setting.where(name: 'enable_close_date_edition').empty?
+  def add_finding_days_for_next_notifications
+    Organization.find_each do |organization|
+      unless organization.settings.key?('finding_days_for_next_notifications')
+        organization.settings['finding_days_for_next_notifications'] = DEFAULT_SETTINGS[:finding_days_for_next_notifications]
+        organization.save!
+      end
+    end
   end
 
-  def add_finding_days_for_next_notifications?
-    Setting.where(name: 'finding_days_for_next_notifications').empty?
+  def add_uniqueness_username_validation
+    Organization.find_each do |organization|
+      unless organization.settings.key?('uniqueness_username_validation')
+        organization.settings['uniqueness_username_validation'] = DEFAULT_SETTINGS[:uniqueness_username_validation]
+        organization.save!
+      end
+    end
   end
 
-  def add_uniqueness_username_validation?
-    Setting.where(name: 'uniqueness_username_validation').empty?
+  def add_skip_reiteration_copy
+    Organization.find_each do |organization|
+      unless organization.settings.key?('skip_reiteration_copy')
+        organization.settings['skip_reiteration_copy'] = DEFAULT_SETTINGS[:skip_reiteration_copy]
+        organization.save!
+      end
+    end
   end
 
-  def add_skip_reiteration_copy?
-    Setting.where(name: 'skip_reiteration_copy').empty?
+  def add_finding_state_change_notification
+    Organization.find_each do |organization|
+      unless organization.settings.key?('finding_state_change_notification')
+        organization.settings['finding_state_change_notification'] = DEFAULT_SETTINGS[:finding_state_change_notification]
+        organization.save!
+      end
+    end
   end
 
-  def add_finding_state_change_notification?
-    Setting.where(name: 'finding_state_change_notification').empty?
+  def add_notify_recently_finalized_findings
+    Organization.find_each do |organization|
+      unless organization.settings.key?('notify_recently_finalized_findings')
+        organization.settings['notify_recently_finalized_findings'] = DEFAULT_SETTINGS[:notify_recently_finalized_findings]
+        organization.save!
+      end
+    end
   end
 
-  def add_notify_recently_finalized_findings?
-    Setting.where(name: 'notify_recently_finalized_findings').empty?
+  def add_review_filtered_by_user_assignments
+    Organization.find_each do |organization|
+      unless organization.settings.key?('review_filtered_by_user_assignments')
+        organization.settings['review_filtered_by_user_assignments'] = DEFAULT_SETTINGS[:review_filtered_by_user_assignments]
+        organization.save!
+      end
+    end
   end
 
-  def add_review_filtered_by_user_assignments?
-    Setting.where(name: 'review_filtered_by_user_assignments').empty?
+  def add_review_permission_by_assignment
+    Organization.find_each do |organization|
+      unless organization.settings.key?('review_permission_by_assignment')
+        organization.settings['review_permission_by_assignment'] = DEFAULT_SETTINGS[:review_permission_by_assignment]
+        organization.save!
+      end
+    end
   end
 
-  def add_review_permission_by_assignment?
-    Setting.where(name: 'review_permission_by_assignment').empty?
+  def migrate_settings_to_organizations
+    return unless migrate_settings_to_organizations?
+
+    old_setting = Class.new(ActiveRecord::Base) do
+      self.table_name = 'settings'
+    end
+
+    old_setting.find_each do |setting|
+      organization = Organization.find setting.organization_id
+
+      new_value = convert_to_new_setting_format setting.name.to_sym, setting.value
+
+      organization.settings[setting.name] = new_value
+      organization.save!
+    end
+  end
+
+  def migrate_settings_to_organizations?
+    Organization.where.not(settings: {}).empty?
+  end
+
+  def convert_to_new_setting_format key, value
+    expected_type = DEFAULT_SETTINGS[key].class
+
+    case expected_type.to_s
+    when 'Integer'
+      value.to_i
+    when 'TrueClass', 'FalseClass'
+      ActiveModel::Type::Boolean.new.cast(value)
+    when 'String'
+      value.to_s
+    when 'Array'
+      value.include?(',') ? value.split(',').map { |v| v.strip.to_i } : [value.to_i]
+    else
+      value
+    end
   end
 
   def add_new_answer_options
