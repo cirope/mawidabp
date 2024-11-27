@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_04_145001) do
+ActiveRecord::Schema.define(version: 2024_11_11_093425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -838,11 +838,13 @@ ActiveRecord::Schema.define(version: 2024_11_04_145001) do
     t.boolean "corporate", default: false, null: false
     t.string "logo_style", default: "default", null: false
     t.string "saml_provider"
+    t.jsonb "settings", default: {}, null: false
     t.index ["corporate"], name: "index_organizations_on_corporate"
     t.index ["group_id"], name: "index_organizations_on_group_id"
     t.index ["image_model_id"], name: "index_organizations_on_image_model_id"
     t.index ["name"], name: "index_organizations_on_name"
     t.index ["prefix"], name: "index_organizations_on_prefix", unique: true
+    t.index ["settings"], name: "index_organizations_on_settings", using: :gin
   end
 
   create_table "periods", id: :serial, force: :cascade do |t|
