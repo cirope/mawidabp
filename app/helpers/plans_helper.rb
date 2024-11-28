@@ -161,12 +161,14 @@ module PlansHelper
   end
 
   def show_plan_status plan
-    icon, badge = plan.approved? ? ['circle-check', 'success'] : ['clock', 'secondary']
+    if Current.organization.require_plan_and_review_approval?
+      icon, badge = plan.approved? ? ['circle-check', 'success'] : ['clock', 'secondary']
 
-    content_tag :span,
-      icon('fas', icon),
-      class: "text-#{badge}",
-      title: t("plans.statuses.#{plan.status}")
+      content_tag :span,
+        icon('fas', icon),
+        class: "text-#{badge}",
+        title: t("plans.statuses.#{plan.status}")
+    end
   end
 
   private

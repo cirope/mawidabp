@@ -2,8 +2,7 @@ module Plans::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list,     -> { where organization_id: Current.organization&.id }
-    scope :approved, -> { where status: 'approved' }
+    scope :list, -> { where organization_id: Current.organization&.id }
   end
 
   def allowed_business_units
