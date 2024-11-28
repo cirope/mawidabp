@@ -383,6 +383,9 @@ en:
         save: Associate control objective
 
   plans:
+    actions:
+      approve: Approve
+      revoke: Revoke approval
     business_unit_type_plan_items:
       associate_best_practice: Associate best practice
       associate_control_objective: Associate control objective
@@ -513,6 +516,9 @@ en:
         progress: Total progress
         title: Audit plan stats
         total: Total
+    statuses:
+      approved: Approved
+      draft: Pending approval
     without_business_unit_type: Without business unit
 
   polls:

@@ -447,9 +447,10 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :calendar, to: 'plans/calendar#show'
+      get :calendar,  to: 'plans/calendar#show'
       get :resources, to: 'plans/resources#show'
-      get :stats, to: 'plans/stats#show'
+      get :stats,     to: 'plans/stats#show'
+      patch :actions, to: 'plans/actions#update'
     end
 
     collection do

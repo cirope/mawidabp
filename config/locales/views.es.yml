@@ -383,6 +383,9 @@ es:
         save: Asociar objetivo de control
 
   plans:
+    actions:
+      approve: Aprobar
+      revoke: Revocar aprobación
     business_unit_type_plan_items:
       associate_best_practice: Asociar buena práctica
       associate_control_objective: Asociar objetivo de control
@@ -513,6 +516,9 @@ es:
         progress: Avance total
         title: Estadísiticas del plan de auditoría
         total: Total
+    statuses:
+      approved: Aprobado
+      draft: Pendiente de aprobación
     without_business_unit_type: Sin unidad de negocio
 
   polls:

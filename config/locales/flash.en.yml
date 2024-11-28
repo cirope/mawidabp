@@ -82,6 +82,12 @@ en:
         stale: Period was not updated, please try again
 
     plans:
+      actions:
+        approved: El plan ha sido aprobado
+        draft: El plan ha sido rebocado
+      update:
+        approved: Work plan has been approved
+        revoke: Work plan has been reboked
       destroy:
         alert: Plan cannot be deleted, it is related to at least one audit report
         notice: Work plan deleted
