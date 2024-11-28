@@ -1,9 +1,11 @@
 class Plans::ActionsController < ApplicationController
+  include Plans::Permissions
+
   respond_to :html
 
   before_action :auth,
     :check_privileges,
-    :check_action,
+    :check_plan_approval,
     :set_title,
     :set_plan
 
@@ -15,18 +17,7 @@ class Plans::ActionsController < ApplicationController
 
   private
 
-    def check_action
-      unless can_approve_plans_and_reviews?
-        redirect_to plans_url, alert: t('messages.not_allowed')
-      end
-    end
-
     def set_plan
       @plan = Plan.list.find params[:id]
-    end
-
-    def can_approve_plans_and_reviews?
-      can_perform?(:edit, :approval) &&
-        Current.organization.require_plan_and_review_approval?
     end
 end

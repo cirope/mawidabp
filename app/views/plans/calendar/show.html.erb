@@ -94,7 +94,9 @@
     <div>
       <%= link_to_show @plan %> |
       <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
-      <%= link_to_edit edit_plan_path(@plan, business_unit_type: params[:business_unit_type]) %> |
+      <% if @plan.draft? %>
+        <%= link_to_edit edit_plan_path(@plan, business_unit_type: params[:business_unit_type]) %> |
+      <% end %>
       <%= link_to t('.by_project'), [:calendar, @plan, business_unit_type: params[:business_unit_type], project: true] %> |
       <%= link_to_index plans_path %>
     </div>

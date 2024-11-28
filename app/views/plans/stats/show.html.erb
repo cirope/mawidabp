@@ -51,7 +51,9 @@
     <div>
       <%= link_to_show @plan %> |
       <%= link_to_calendar [:calendar, @plan] %> |
-      <%= link_to_edit edit_plan_path(@plan) %> |
+      <% if @plan.draft? %>
+        <%= link_to_edit edit_plan_path(@plan) %> |
+      <% end %>
       <%= link_to_index plans_path %>
     </div>
   </div>

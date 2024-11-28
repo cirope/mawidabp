@@ -13,7 +13,9 @@
     <% end %>
 
     <div>
-      <%= link_to_edit [:edit, @plan] %> |
+      <% if @plan.draft? %>
+        <%= link_to_edit [:edit, @plan] %> |
+      <% end %>
       <%= link_to_calendar [:calendar, @plan] %> |
       <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
       <%= link_to_index plans_path %> |

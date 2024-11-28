@@ -2,12 +2,14 @@ class PlansController < ApplicationController
   include AutoCompleteFor::BusinessUnit
   include AutoCompleteFor::BusinessUnitType
   include AutoCompleteFor::Tagging
+  include Plans::Permissions
 
   respond_to :html, :js
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_business_unit_type, only: [:show, :new, :edit, :update]
   before_action :set_plan, only: [:show, :edit, :update, :destroy, :export_to_pdf]
+  before_action :check_plan_permissions, only: [:edit, :update, :destroy]
   before_action :set_plan_clone, only: [:new, :create]
   before_action :set_title, except: [:destroy, :auto_complete_for_business_unit_type,
                                      :auto_complete_for_business_unit]
