@@ -441,6 +441,7 @@ en:
       allow_overload: Allow overload?
     edit:
       title: Edit work plan
+      other_actions: Actions
     index:
       copy: Copy
       title: Work plan list

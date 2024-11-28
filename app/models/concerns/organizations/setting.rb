@@ -42,6 +42,10 @@ module Organizations::Setting
     setting(:review_permission_by_assignment) != '0'
   end
 
+  def require_plan_and_review_approval?
+    setting(:plan_and_review_approval) != '0'
+  end
+
   private
 
     def setting name

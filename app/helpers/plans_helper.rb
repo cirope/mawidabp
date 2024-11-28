@@ -155,6 +155,11 @@ module PlansHelper
     end
   end
 
+  def can_approve_plans_and_reviews?
+    can_perform?(:edit, :approval) &&
+      Current.organization.require_plan_and_review_approval?
+  end
+
   private
 
     def pat_download_options

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_04_145001) do
+ActiveRecord::Schema.define(version: 2024_11_27_110647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -898,8 +898,10 @@ ActiveRecord::Schema.define(version: 2024_11_04_145001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "organization_id"
+    t.string "status", default: "draft", null: false
     t.index ["organization_id"], name: "index_plans_on_organization_id"
     t.index ["period_id"], name: "index_plans_on_period_id"
+    t.index ["status"], name: "index_plans_on_status"
   end
 
   create_table "polls", id: :serial, force: :cascade do |t|

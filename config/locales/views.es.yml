@@ -440,6 +440,7 @@ es:
       allow_duplication: "¿Permitir duplicados?"
       allow_overload: "¿Permitir superposición?"
     edit:
+      other_actions: Acciones
       title: Modificar plan de trabajo
     index:
       copy: Copiar
