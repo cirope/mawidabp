@@ -58,7 +58,7 @@
               <%= f.input :recipients, input_html: { rows: USE_SCOPE_CYCLE ? 2 : 4 } %>
 
               <% if USE_SCOPE_CYCLE %>
-                <%= f.input :work_scope %>
+                <%= f.input :work_scope, as: :text, input_html: { rows: 3 } %>
                 <%= f.input :additional_comments, input_html: { rows: 2 } %>
               <% end %>
             <% else %>
