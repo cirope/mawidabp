@@ -1,0 +1,19 @@
+<% attribute = attribute %>
+
+<div id="control_objective_item_change_history-<%= attribute %>" class="collapse">
+  <div>
+    <h5><%= t('control_objective_items.history.changes') %></h5>
+    <ul class="mb-3">
+      <% control_objective_item.change_history(attribute).each do |history| %>
+        <li>
+          <%= history[:date] %>
+          <ul>
+            <li><%= t 'control_objective_items.history.action' %>: <%= history[:action] %></li>
+            <li><%= User.model_name.human %>: <%= history[:user] %></li>
+            <li><%= t 'control_objective_items.history.change' %>: <%= history[:change] %></li>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

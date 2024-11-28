@@ -99,6 +99,16 @@ es:
     show:
       title: Detalles del objetivo de control
 
+  control_objective_items:
+    history:
+      action: Acción
+      actions:
+        create: creó
+        destroy: eliminó
+        update: modificó
+      changes: Historial de cambios
+      show: Ver historial de cambios
+
   documents:
     edit:
       title: Editar documento
