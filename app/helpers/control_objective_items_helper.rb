@@ -60,14 +60,14 @@ module ControlObjectiveItemsHelper
     end
   end
 
-  def auditor_comment_show_history_changes
+  def auditor_comment_show_history_changes?
     show_follow_up_timestamps? &&
-      @control_objective_item.change_history('auditor_comment').size > 0
+      @control_objective_item.change_history('auditor_comment').present?
   end
 
   def control_objective_item_show_change_history element_id
     link_to icon('fas', 'history'), "##{element_id}", {
-      title: t('work_papers.history.show'),
+      title: t('control_objective_items.history.show'),
       data:  { bs_toggle: 'collapse' },
       class: 'me-4'
     }
