@@ -1,0 +1,11 @@
+<div class="dropdown dropup d-inline">
+  <%= link_to '#', class: 'dropdown-toggle', data: { bs_toggle: 'dropdown' } do %>
+    <%= t 'plans.edit.other_actions' %>
+  <% end %>
+  <div class="dropdown-menu dropdown-menu-end">
+    <%= link_to t("plans.actions.#{@plan.approved? ? 'revoke' : 'approve'}"),
+      [:actions, @plan, _ts: Time.now.to_i], data: {
+        method: :patch, confirm: t('messages.confirmation')
+      }, class: 'dropdown-item' %>
+  </div>
+</div>

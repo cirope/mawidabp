@@ -383,6 +383,9 @@ es:
         save: Asociar objetivo de control
 
   plans:
+    actions:
+      approve: Aprobar
+      revoke: Revocar aprobación
     business_unit_type_plan_items:
       associate_best_practice: Asociar buena práctica
       associate_control_objective: Asociar objetivo de control
@@ -440,6 +443,7 @@ es:
       allow_duplication: "¿Permitir duplicados?"
       allow_overload: "¿Permitir superposición?"
     edit:
+      other_actions: Acciones
       title: Modificar plan de trabajo
     index:
       copy: Copiar
@@ -512,6 +516,9 @@ es:
         progress: Avance total
         title: Estadísiticas del plan de auditoría
         total: Total
+    statuses:
+      approved: Aprobado
+      draft: Pendiente de aprobación
     without_business_unit_type: Sin unidad de negocio
 
   polls:
@@ -608,6 +615,9 @@ es:
       material: Materiales
 
   reviews:
+    actions:
+      approve: Aprobar
+      revoke: Revocar aprobación
     auxiliar_business_unit_types:
       title: Unidades organizativas auxiliares
     form:
@@ -764,6 +774,7 @@ es:
     password_expire_time: Duración máxima de la contraseña
     password_minimum_length: Longitud mínima de la contraseña
     password_minimum_time: Duración mínima de la contraseña
+    plan_and_review_approval: Requerir aprobación de planes e informes
     require_manager_on_findings: Requerir gerente de auditoría en hallazgos
     review_code_expresion: Formato del código de identificación de informes
     review_filtered_by_user_assignments: Filtrar informes por usuarios asignados

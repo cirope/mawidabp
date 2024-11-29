@@ -82,6 +82,9 @@ en:
         stale: Period was not updated, please try again
 
     plans:
+      actions:
+        approved: Work plan has been approved
+        draft: Work plan has been reboked
       destroy:
         alert: Plan cannot be deleted, it is related to at least one audit report
         notice: Work plan deleted
@@ -107,6 +110,11 @@ en:
       create:
         # With this we skip showing a flash message, the show view is enough
         notice: ''
+
+    reviews:
+      actions:
+        approved: Review has been approved
+        draft: Review has been reboked
 
     resource_classes:
       create:

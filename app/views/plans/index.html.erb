@@ -6,7 +6,7 @@
           <th><%= Period.model_name.human %></th>
           <th class="d-none d-sm-table-cell"><%= Period.human_attribute_name 'start' %></th>
           <th class="d-none d-sm-table-cell"><%= Period.human_attribute_name 'end' %></th>
-          <th colspan="7"></th>
+          <th colspan="8"></th>
         </tr>
       </thead>
 
@@ -16,12 +16,13 @@
             <td><%= show_period_with_dates_as_abbr plan.period %></td>
             <td class="d-none d-sm-table-cell"><%= l plan.period.start, format: :short %></td>
             <td class="d-none d-sm-table-cell"><%= l plan.period.end, format: :short %></td>
+            <td class="d-none d-sm-table-cell"><%= show_plan_and_review_status plan %></td>
             <td class="d-none d-sm-table-cell text-end"><%= link_to_calendar [:calendar, plan] %></td>
             <td class="d-none d-sm-table-cell text-end"><%= link_to_resources [:resources, plan] %></td>
             <td class="d-none d-sm-table-cell text-end"><%= link_to_stats [:stats, plan, until: Time.zone.today.to_s(:db)] %></td>
             <td class="d-none d-sm-table-cell text-end"><%= link_to_clone new_plan_path(clone_from: plan.id) %></td>
             <td class="text-end"><%= link_to_show plan %></td>
-            <td class="text-end"><%= link_to_edit [:edit, plan] %></td>
+            <td class="text-end"><%= link_to_edit [:edit, plan] if plan.draft? %></td>
             <td class="text-end"><%= link_to_destroy plan if plan.can_be_destroyed? %></td>
           </tr>
         <% end %>

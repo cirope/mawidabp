@@ -1,11 +1,14 @@
 current_plan:
   period: current_period
   organization: cirope
+  status: draft
 
 past_plan:
   period: past_period
   organization: cirope
+  status: draft
 
 unrelated_plan:
   period: third_period
   organization: cirope
+  status: draft

@@ -383,6 +383,9 @@ en:
         save: Associate control objective
 
   plans:
+    actions:
+      approve: Approve
+      revoke: Revoke approval
     business_unit_type_plan_items:
       associate_best_practice: Associate best practice
       associate_control_objective: Associate control objective
@@ -441,6 +444,7 @@ en:
       allow_overload: Allow overload?
     edit:
       title: Edit work plan
+      other_actions: Actions
     index:
       copy: Copy
       title: Work plan list
@@ -512,6 +516,9 @@ en:
         progress: Total progress
         title: Audit plan stats
         total: Total
+    statuses:
+      approved: Approved
+      draft: Pending approval
     without_business_unit_type: Without business unit
 
   polls:
@@ -764,6 +771,7 @@ en:
     password_expire_time: Password expire time
     password_minimum_length: Minimum password length
     password_minimum_time: Minimum password time
+    plan_and_review_approval: Require approval of workplans and reviews
     require_manager_on_findings: Require audit manager on findings
     review_code_expresion: Audit report identification code format
     review_filtered_by_user_assignments: Filter reviews by assigned users
