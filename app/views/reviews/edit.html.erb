@@ -9,7 +9,7 @@
       <%= link_to t("reviews.actions.#{@review.approved? ? 'revoke' : 'approve'}"),
         [:actions, @review, _ts: Time.now.to_i], data: {
           method: :patch, confirm: t('messages.confirmation')
-        }, class: 'dropdown-item' %>
+        }, class: 'dropdown-item' if can_approve_plans_and_reviews? %>
       <%= link_to t('review.download_work_papers'), {
         action: :download_work_papers, id: @review, _ts: Time.now.to_i
       }, class: 'dropdown-item' %>
