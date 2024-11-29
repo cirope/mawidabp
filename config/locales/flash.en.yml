@@ -83,11 +83,8 @@ en:
 
     plans:
       actions:
-        approved: El plan ha sido aprobado
-        draft: El plan ha sido rebocado
-      update:
         approved: Work plan has been approved
-        revoke: Work plan has been reboked
+        draft: Work plan has been reboked
       destroy:
         alert: Plan cannot be deleted, it is related to at least one audit report
         notice: Work plan deleted
@@ -113,6 +110,11 @@ en:
       create:
         # With this we skip showing a flash message, the show view is enough
         notice: ''
+
+    reviews:
+      actions:
+        approved: Review has been approved
+        draft: Review has been reboked
 
     resource_classes:
       create:

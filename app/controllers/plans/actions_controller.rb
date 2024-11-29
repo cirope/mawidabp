@@ -1,13 +1,11 @@
 class Plans::ActionsController < ApplicationController
-  include Plans::Permissions
+  include PlanAndReviewApproval
 
   respond_to :html
 
-  before_action :auth,
-    :check_privileges,
-    :check_plan_approval,
-    :set_title,
-    :set_plan
+  before_action :auth, :check_privileges, :set_title, :set_plan
+  before_action -> { check_plan_and_review_approval @plan },
+    only: [:edit, :update, :destroy]
 
   def update
     @plan.approved? ? @plan.draft! : @plan.approved!

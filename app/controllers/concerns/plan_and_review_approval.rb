@@ -1,15 +1,9 @@
-module Plans::Permissions
+module PlanAndReviewApproval
   extend ActiveSupport::Concern
 
-  def check_plan_permissions
-    if @plan.approved?
-      redirect_to plans_url, alert: t('messages.not_allowed')
-    end
-  end
-
-  def check_plan_approval
+  def check_plan_and_review_approval object
     unless can_approve_plans_and_reviews?
-      redirect_to plans_url, alert: t('messages.not_allowed')
+      redirect_to object.model_name.plural.to_sym, alert: t('messages.not_allowed')
     end
   end
 

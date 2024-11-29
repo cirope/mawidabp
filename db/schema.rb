@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_27_110647) do
+ActiveRecord::Schema.define(version: 2024_11_28_221751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1067,11 +1067,13 @@ ActiveRecord::Schema.define(version: 2024_11_27_110647) do
     t.text "review_objective"
     t.integer "type_review"
     t.bigint "subsidiary_id"
+    t.string "status", default: "draft", null: false
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "index_reviews_on_identification"
     t.index ["organization_id"], name: "index_reviews_on_organization_id"
     t.index ["period_id"], name: "index_reviews_on_period_id"
     t.index ["plan_item_id"], name: "index_reviews_on_plan_item_id"
+    t.index ["status"], name: "index_reviews_on_status"
     t.index ["subsidiary_id"], name: "index_reviews_on_subsidiary_id"
   end
 

@@ -160,14 +160,14 @@ module PlansHelper
       Current.organization.require_plan_and_review_approval?
   end
 
-  def show_plan_status plan
+  def show_plan_and_review_status object
     if Current.organization.require_plan_and_review_approval?
-      icon, badge = plan.approved? ? ['circle-check', 'success'] : ['clock', 'secondary']
+      icon, badge = object.approved? ? ['circle-check', 'success'] : ['clock', 'secondary']
 
       content_tag :span,
         icon('fas', icon),
         class: "text-#{badge}",
-        title: t("plans.statuses.#{plan.status}")
+        title: t("#{object.model_name.plural}.statuses.#{object.status}")
     end
   end
 

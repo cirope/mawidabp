@@ -121,6 +121,11 @@ es:
         notice: Clase de recurso actualizada correctamente
         stale: La clase de recurso no fue actualizada, intente nuevamente
 
+    reviews:
+      actions:
+        approved: El informe ha sido aprobado
+        draft: El informe ha sido rebocado
+
     risk_assessment_templates:
       create:
         notice: Plantilla de evaluación de riesgo agregada correctamente

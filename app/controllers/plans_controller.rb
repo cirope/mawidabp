@@ -2,7 +2,7 @@ class PlansController < ApplicationController
   include AutoCompleteFor::BusinessUnit
   include AutoCompleteFor::BusinessUnitType
   include AutoCompleteFor::Tagging
-  include Plans::Permissions
+  include PlanAndReviewApproval
 
   respond_to :html, :js
 
@@ -138,5 +138,9 @@ class PlansController < ApplicationController
         auto_complete_for_business_unit: :read,
         auto_complete_for_tagging: :read
       )
+    end
+
+    def check_plan_permissions
+      redirect_to plans_url, alert: t('messages.not_allowed') if @plan.approved?
     end
 end

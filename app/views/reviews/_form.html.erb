@@ -238,7 +238,7 @@
         <%= render 'control_objective_items', f: f, readonly: readonly, frozen: frozen %>
       <% end %>
 
-      <% unless readonly %>
+      <% if !readonly && @review.draft? %>
         <ul class="nav nav-tabs mt-4">
           <li class="nav-item">
             <a class="nav-link active" href="#control-objective" data-bs-toggle="tab">

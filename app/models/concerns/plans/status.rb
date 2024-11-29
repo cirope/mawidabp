@@ -1,4 +1,4 @@
-module Plans::Statuses
+module Plans::Status
   extend ActiveSupport::Concern
 
   included do
