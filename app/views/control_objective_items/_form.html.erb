@@ -94,16 +94,13 @@
               <%= f.input :auditor_comment, collection: auditor_comment_options,
                 prompt: true, input_html: { disabled: readonly } %>
             <% else %>
-              <%= f.label :auditor_comment,
-                raw(ControlObjectiveItem.human_attribute_name(:auditor_comment) + ' ' +
-                    (auditor_comment_show_history_changes? ? control_objective_item_show_change_history('control_objective_item_change_history-auditor_comment') : '')) %>
+              <%= f.label :auditor_comment, raw(control_objective_item_label_field('auditor_comment')) %>
+              <% if control_objective_item_show_history_changes?('auditor_comment') %>
+                <%= render 'history_changes', attribute: 'auditor_comment' %>
+              <% end %>
 
-                  <% if auditor_comment_show_history_changes? %>
-                    <%= render 'history_changes', control_objective_item: @control_objective_item, attribute: 'auditor_comment' %>
-                  <% end %>
-
-                  <%= f.input :auditor_comment, label: false, input_html: { readonly: readonly, rows: 5 } %>
-                <% end %>
+              <%= f.input :auditor_comment, label: false, input_html: { readonly: readonly, rows: 5 } %>
+            <% end %>
 
             <div class="row">
               <div class="col-md-6">

@@ -4,7 +4,7 @@
   <div>
     <h5><%= t('control_objective_items.history.changes') %></h5>
     <ul class="mb-3">
-      <% control_objective_item.change_history(attribute).each do |history| %>
+      <% @control_objective_item.change_history(attribute).each do |history| %>
         <li>
           <%= history[:date] %>
           <ul>

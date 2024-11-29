@@ -60,16 +60,26 @@ module ControlObjectiveItemsHelper
     end
   end
 
-  def auditor_comment_show_history_changes?
-    show_follow_up_timestamps? &&
-      @control_objective_item.change_history('auditor_comment').present?
-  end
+
 
   def control_objective_item_show_change_history element_id
-    link_to icon('fas', 'history'), "##{element_id}", {
+    link_to icon('fas', 'history'), "#control_objective_item_change_history-#{element_id}", {
       title: t('control_objective_items.history.show'),
       data:  { bs_toggle: 'collapse' },
       class: 'me-4'
     }
+  end
+
+  def control_objective_item_label_field field
+    icon = if control_objective_item_show_history_changes?(field)
+             control_objective_item_show_change_history field
+           end
+
+    [ControlObjectiveItem.human_attribute_name(field), icon].join '  '
+  end
+
+  def control_objective_item_show_history_changes? field
+    show_follow_up_timestamps? &&
+      @control_objective_item.change_history(field).present?
   end
 end
