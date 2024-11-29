@@ -60,8 +60,8 @@ module ControlObjectiveItemsHelper
     end
   end
 
-  def control_objective_item_show_change_history element_id
-    link_to icon('fas', 'history'), "#control_objective_item_change_history-#{element_id}", {
+  def control_objective_item_show_change_history attribute
+    link_to icon('fas', 'history'), "#control_objective_item_change_history-#{attribute}", {
       title: t('control_objective_items.history.show'),
       data:  { bs_toggle: 'collapse' },
       class: 'me-4'
