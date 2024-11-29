@@ -1617,6 +1617,7 @@ es:
     edit_title: Modificar informe
     errors:
       can_not_be_destroyed: El informe no puede ser eliminado
+      must_be_approved: debe estar aprobado
       related_finding_incomplete: está pendiente y no se ha marcado como reiterada o solucionada
       without_audited: no tiene usuario auditado
       without_control_objectives: no tiene objetivos de control
