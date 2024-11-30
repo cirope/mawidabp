@@ -60,8 +60,8 @@ module ControlObjectiveItemsHelper
     end
   end
 
-  def control_objective_item_show_change_history attribute
-    link_to icon('fas', 'history'), "#control_objective_item_change_history-#{attribute}", {
+  def control_objective_item_show_change_history
+    link_to icon('fas', 'history'), '#control_objective_item_change_history', {
       title: t('control_objective_items.history.show'),
       data:  { bs_toggle: 'collapse' },
       class: 'me-4'
@@ -69,8 +69,8 @@ module ControlObjectiveItemsHelper
   end
 
   def control_objective_item_label_field field
-    icon = if control_objective_item_show_history_changes?(field)
-             control_objective_item_show_change_history field
+    icon = if control_objective_item_show_history_changes? field
+             control_objective_item_show_change_history
            end
 
     [ControlObjectiveItem.human_attribute_name(field), icon].join '  '
