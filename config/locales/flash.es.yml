@@ -82,6 +82,9 @@ es:
         stale: El período no fue actualizado, intente nuevamente
 
     plans:
+      actions:
+        approved: El plan ha sido aprobado
+        draft: El plan ha sido rebocado
       destroy:
         alert: El plan no puede ser eliminado, se encuentra relacionado con al menos un informe
         notice: Plan de trabajo eliminado
@@ -117,6 +120,11 @@ es:
       update:
         notice: Clase de recurso actualizada correctamente
         stale: La clase de recurso no fue actualizada, intente nuevamente
+
+    reviews:
+      actions:
+        approved: El informe ha sido aprobado
+        draft: El informe ha sido rebocado
 
     risk_assessment_templates:
       create:

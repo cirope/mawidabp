@@ -19,18 +19,25 @@ module WorkPapers::Statuses
 
   def next_status
     if persisted?
-      if Current.user.auditor?
+      if current_user_is? :auditor?
         case status
         when 'pending'  then 'finished'
         when 'finished' then 'pending'
         end
-      elsif Current.user.supervisor? || Current.user.manager?
+      elsif current_user_is?(:supervisor?) || current_user_is?(:manager?)
         case status
         when 'finished' then 'revised'
         when 'revised'  then 'pending'
         end
       end
     end
+  end
+
+  def current_user_is? role
+    owner.
+      review.
+        review_user_assignments.
+          where(user: Current.user).any? &role
   end
 
   private

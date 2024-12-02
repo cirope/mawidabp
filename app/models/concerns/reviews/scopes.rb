@@ -147,6 +147,26 @@ module Reviews::Scopes
           references :plan_item
     end
 
+    def scoped_by_current_user
+      if Current.organization.review_filtered_by_user_assignments?
+        joins(:review_user_assignments).where(
+          review_user_assignments: { user: Current.user }
+        )
+      else
+        all
+      end
+    end
+
+    def scoped_by_current_user_for model
+      if Current.organization.review_filtered_by_user_assignments?
+        model.joins(review: :review_user_assignments).where(
+          review_user_assignments: { user: Current.user }
+        )
+      else
+        all
+      end
+    end
+
     private
 
       def without_final_review_order

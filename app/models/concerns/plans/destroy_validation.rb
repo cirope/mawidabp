@@ -6,7 +6,7 @@ module Plans::DestroyValidation
   end
 
   def can_be_destroyed?
-    if plan_items.all?(&:can_be_destroyed?)
+    if plan_items.all?(&:can_be_destroyed?) && draft?
       true
     else
       _errors = plan_items.map do |pi|

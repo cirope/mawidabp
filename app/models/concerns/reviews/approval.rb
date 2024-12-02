@@ -9,7 +9,8 @@ module Reviews::Approval
   def must_be_approved?
     self.can_be_approved_by_force = true
 
-    errors  = control_objective_items_errors
+    errors  = approval_review_errors
+    errors += control_objective_items_errors
     errors += finding_review_assignment_errors
     errors += alternative_reviews_errors if Current.conclusion_pdf_format == 'nbc'
 
@@ -163,6 +164,18 @@ module Reviews::Approval
       end
 
       self.can_be_approved_by_force = false if errors.present?
+
+      errors
+    end
+
+    def approval_review_errors
+      errors = []
+
+      if Current.organization.require_plan_and_review_approval? && draft?
+        errors << [
+          "#{Review.model_name.human}: #{I18n.t('review.errors.must_be_approved')}",
+        ]
+      end
 
       errors
     end

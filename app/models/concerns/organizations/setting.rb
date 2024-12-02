@@ -34,6 +34,18 @@ module Organizations::Setting
     setting(:finding_state_change_notification) != '0'
   end
 
+  def review_filtered_by_user_assignments?
+    setting(:review_filtered_by_user_assignments) != '0'
+  end
+
+  def review_permission_by_assignment?
+    setting(:review_permission_by_assignment) != '0'
+  end
+
+  def require_plan_and_review_approval?
+    setting(:plan_and_review_approval) != '0'
+  end
+
   private
 
     def setting name

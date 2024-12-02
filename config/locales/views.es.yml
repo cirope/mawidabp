@@ -99,6 +99,16 @@ es:
     show:
       title: Detalles del objetivo de control
 
+  control_objective_items:
+    history:
+      action: Acción
+      actions:
+        create: creó
+        destroy: eliminó
+        update: modificó
+      changes: Historial de cambios
+      show: Ver historial de cambios
+
   documents:
     edit:
       title: Editar documento
@@ -383,6 +393,9 @@ es:
         save: Asociar objetivo de control
 
   plans:
+    actions:
+      approve: Aprobar
+      revoke: Revocar aprobación
     business_unit_type_plan_items:
       associate_best_practice: Asociar buena práctica
       associate_control_objective: Asociar objetivo de control
@@ -440,6 +453,7 @@ es:
       allow_duplication: "¿Permitir duplicados?"
       allow_overload: "¿Permitir superposición?"
     edit:
+      other_actions: Acciones
       title: Modificar plan de trabajo
     index:
       copy: Copiar
@@ -512,6 +526,9 @@ es:
         progress: Avance total
         title: Estadísiticas del plan de auditoría
         total: Total
+    statuses:
+      approved: Aprobado
+      draft: Pendiente de aprobación
     without_business_unit_type: Sin unidad de negocio
 
   polls:
@@ -608,6 +625,9 @@ es:
       material: Materiales
 
   reviews:
+    actions:
+      approve: Aprobar
+      revoke: Revocar aprobación
     auxiliar_business_unit_types:
       title: Unidades organizativas auxiliares
     form:
@@ -751,7 +771,6 @@ es:
     finding_stale_confirmed_days: Cantidad de días que deben pasar para que una observación sin responder se considere desatendida
     finding_state_change_notification: Notificar cambios de estado en los hallazgos
     finding_warning_expire_days: Cantidad de días anteriores al vencimiento de una observación en los que el sistema notificará su proximidad
-    notify_recently_finalized_findings: Notificar hallazgos luego del informe definitivo
     hide_import_from_ldap: Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación
     hide_obsolete_best_practices: Ocultar buenas practicas obsoletas
     hours_of_work_per_day: Horas de trabajo por día
@@ -759,13 +778,17 @@ es:
       title: Listado de configuraciones
     new:
       title: Agregar configuración
+    notify_recently_finalized_findings: Notificar hallazgos luego del informe definitivo
     password_constraint: Control de composición de contraseñas
     password_count: Historia de contraseña
     password_expire_time: Duración máxima de la contraseña
     password_minimum_length: Longitud mínima de la contraseña
     password_minimum_time: Duración mínima de la contraseña
+    plan_and_review_approval: Requerir aprobación de planes e informes
     require_manager_on_findings: Requerir gerente de auditoría en hallazgos
     review_code_expresion: Formato del código de identificación de informes
+    review_filtered_by_user_assignments: Filtrar informes por usuarios asignados
+    review_permission_by_assignment: Limitar modificación de informes por asignación
     session_expire_time: Desconexión por inactividad
     show:
       title: Detalles de la configuración
@@ -1008,6 +1031,15 @@ es:
     welcome: Bienvenido
 
   work_papers:
+    history:
+      action: Acción
+      actions:
+        create: creó
+        destroy: eliminó
+        update: modificó
+      changes: Historial de cambios
+      new_file: Nuevo adjunto
+      show: Ver historial de cambios
     show:
       error: Recuerde que debe estar autenticado o tener permisos para visualizar el documento
       title: Papel de trabajo

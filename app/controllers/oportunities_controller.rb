@@ -42,6 +42,8 @@
       control_objective_item: :review
     ).merge(
       Review.allowed_by_business_units
+    ).merge(
+      Review.scoped_by_current_user_for Oportunity
     ).page params[:page]
 
     respond_to do |format|
@@ -142,7 +144,11 @@
         :finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
-      ).find(params[:id])
+      ).merge(
+        Review.scoped_by_current_user_for Oportunity
+      ).find(
+        params[:id]
+      )
     end
 
     def oportunity_params

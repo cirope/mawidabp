@@ -10,6 +10,7 @@ current_review:
   manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
+  status: draft
   organization: cirope
 
 past_review:
@@ -24,6 +25,7 @@ past_review:
   manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
+  status: draft
   organization: cirope
 
 review_with_conclusion:
@@ -38,6 +40,7 @@ review_with_conclusion:
   manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
+  status: draft
   organization: cirope
 
 review_without_conclusion:
@@ -52,6 +55,7 @@ review_without_conclusion:
   manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
+  status: draft
   organization: cirope
 
 review_without_conclusion_and_without_findings:
@@ -66,6 +70,7 @@ review_without_conclusion_and_without_findings:
   manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
+  status: draft
   organization: cirope
 
 review_approved_with_conclusion:
@@ -80,4 +85,5 @@ review_approved_with_conclusion:
   manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
+  status: draft
   organization: cirope

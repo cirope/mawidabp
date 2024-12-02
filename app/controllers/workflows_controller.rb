@@ -1,8 +1,13 @@
 class WorkflowsController < ApplicationController
+  include Reviews::Permissions
+
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_workflow, only: [
     :show, :edit, :update, :destroy, :export_to_pdf
   ]
+  before_action -> {
+    check_review_permissions @workflow
+  }, only: [:edit, :update, :destroy]
   before_action :set_workflow_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
@@ -20,6 +25,7 @@ class WorkflowsController < ApplicationController
               .page(params[:page])
               .references(:reviews)
               .merge(Review.allowed_by_business_units)
+              .merge Review.scoped_by_current_user_for(Workflow)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -170,13 +176,20 @@ class WorkflowsController < ApplicationController
     def set_workflow
       @workflow = Workflow.list.includes(
         { workflow_items: :resource_utilizations }
-      ).find(params[:id])
+      ).merge(
+        Review.scoped_by_current_user_for Workflow
+      ).find(
+        params[:id]
+      )
     end
 
     def set_workflow_clone
-      @workflow_clone = Workflow.list.find_by(
-        id: params[:clone_from].try(:to_i)
-      )
+      @workflow_clone = Workflow.list.
+        merge(
+          Review.scoped_by_current_user_for Workflow
+        ).find_by(
+          id: params[:clone_from].try(:to_i)
+        )
     end
 
     def load_privileges

@@ -99,6 +99,17 @@ en:
     show:
       title: Control objective details
 
+  control_objective_items:
+    history:
+      action: Action
+      actions:
+        create: Created
+        destroy: Removed
+        update: Modified
+      change: Change
+      changes: Change history
+      show: Show change history
+
   documents:
     edit:
       title: Edit document
@@ -383,6 +394,9 @@ en:
         save: Associate control objective
 
   plans:
+    actions:
+      approve: Approve
+      revoke: Revoke approval
     business_unit_type_plan_items:
       associate_best_practice: Associate best practice
       associate_control_objective: Associate control objective
@@ -441,6 +455,7 @@ en:
       allow_overload: Allow overload?
     edit:
       title: Edit work plan
+      other_actions: Actions
     index:
       copy: Copy
       title: Work plan list
@@ -512,6 +527,9 @@ en:
         progress: Total progress
         title: Audit plan stats
         total: Total
+    statuses:
+      approved: Approved
+      draft: Pending approval
     without_business_unit_type: Without business unit
 
   polls:
@@ -751,7 +769,6 @@ en:
     finding_stale_confirmed_days: Number of days before an unanswered issue is considered unattended
     finding_state_change_notification: Notify issue state changes
     finding_warning_expire_days: Number of days before the expiration of an observation in which the system will notify its proximity
-    notify_recently_finalized_findings: Notify findings after conclusion final review
     hide_import_from_ldap: Show "Import from LDAP" only to users with approval permissions
     hide_obsolete_best_practices: Hide obsolete best practices
     hours_of_work_per_day: Hours of work per day
@@ -759,13 +776,17 @@ en:
       title: Setting list
     new:
       title: Add settings
+    notify_recently_finalized_findings: Notify findings after conclusion final review
     password_constraint: Password composition control
     password_count: Password history
     password_expire_time: Password expire time
     password_minimum_length: Minimum password length
     password_minimum_time: Minimum password time
+    plan_and_review_approval: Require approval of workplans and reviews
     require_manager_on_findings: Require audit manager on findings
     review_code_expresion: Audit report identification code format
+    review_filtered_by_user_assignments: Filter reviews by assigned users
+    review_permission_by_assignment: Review permissions by assignment
     session_expire_time: Disconnect due to inactivity
     show:
       title: Setting details
@@ -1008,6 +1029,15 @@ en:
     welcome: Welcome
 
   work_papers:
+    history:
+      action: Action
+      actions:
+        create: created
+        destroy: deleted
+        update: modified
+      changes: Change history
+      new_file: Attached
+      show: Show change history
     show:
       error: Please remember that you must be authenticated or have permissions to view the document
       title: Working paper
