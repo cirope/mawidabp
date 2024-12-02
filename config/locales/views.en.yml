@@ -99,6 +99,17 @@ en:
     show:
       title: Control objective details
 
+  control_objective_items:
+    history:
+      action: Action
+      actions:
+        create: Created
+        destroy: Removed
+        update: Modified
+      change: Change
+      changes: Change history
+      show: Show change history
+
   documents:
     edit:
       title: Edit document
