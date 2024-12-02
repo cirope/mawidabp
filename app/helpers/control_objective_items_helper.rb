@@ -68,16 +68,16 @@ module ControlObjectiveItemsHelper
     }
   end
 
-  def control_objective_item_label_field field
-    icon = if control_objective_item_show_history_changes? field
+  def control_objective_item_label_field
+    icon = if control_objective_item_show_history_changes?
              control_objective_item_show_change_history
            end
 
-    [ControlObjectiveItem.human_attribute_name(field), icon].join '  '
+    [ControlObjectiveItem.human_attribute_name(:auditor_comment), icon].join '  '
   end
 
-  def control_objective_item_show_history_changes? field
+  def control_objective_item_show_history_changes?
     show_follow_up_timestamps? &&
-      @control_objective_item.change_history(field).present?
+      @control_objective_item.change_history.present?
   end
 end

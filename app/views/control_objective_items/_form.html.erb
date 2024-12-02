@@ -94,9 +94,9 @@
               <%= f.input :auditor_comment, collection: auditor_comment_options,
                 prompt: true, input_html: { disabled: readonly } %>
             <% else %>
-              <%= f.label :auditor_comment, raw(control_objective_item_label_field('auditor_comment')) %>
-              <% if control_objective_item_show_history_changes?('auditor_comment') %>
-                <%= render 'history_changes', attribute: 'auditor_comment' %>
+              <%= f.label :auditor_comment, raw(control_objective_item_label_field) %>
+              <% if control_objective_item_show_history_changes? %>
+                <%= render 'history_changes' %>
               <% end %>
 
               <%= f.input :auditor_comment, label: false, input_html: { readonly: readonly, rows: 5 } %>

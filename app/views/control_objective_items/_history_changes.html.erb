@@ -1,10 +1,8 @@
-<% attribute = attribute %>
-
 <div id="control_objective_item_change_history" class="collapse">
   <div>
     <h5><%= t('control_objective_items.history.changes') %></h5>
     <ul class="mb-3">
-      <% @control_objective_item.change_history(attribute).each do |history| %>
+      <% @control_objective_item.change_history.each do |history| %>
         <li>
           <%= history[:date] %>
           <ul>
