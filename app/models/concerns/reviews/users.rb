@@ -17,15 +17,17 @@ module Reviews::Users
   end
 
   def can_be_modified_by_current_user?
+    can_be_modified = true
+
     if Current.organization.review_permission_by_assignment?
       assignment_type = review_assignment_type
 
-      [
+      can_be_modified = [
         :auditor, :supervisor, :manager, :responsible
-      ].include?  ReviewUserAssignment::TYPES.invert[assignment_type]
-    else
-      true
+      ].include? ReviewUserAssignment::TYPES.invert[assignment_type]
     end
+
+    can_be_modified
   end
 
   private

@@ -1617,6 +1617,7 @@ en:
     edit_title: Edit audit report
     errors:
       can_not_be_destroyed: Audit report cannot be deleted
+      must_be_approved: must be approved
       related_finding_incomplete: is pending and has not been marked as repeated or resolved
       without_audited: has no audited user
       without_control_objectives: has no control objectives

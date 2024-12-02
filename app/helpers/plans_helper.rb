@@ -155,6 +155,22 @@ module PlansHelper
     end
   end
 
+  def can_approve_plans_and_reviews?
+    can_perform?(:edit, :approval) &&
+      Current.organization.require_plan_and_review_approval?
+  end
+
+  def show_plan_and_review_status object
+    if Current.organization.require_plan_and_review_approval?
+      icon, badge = object.approved? ? ['circle-check', 'success'] : ['clock', 'secondary']
+
+      content_tag :span,
+        icon('fas', icon),
+        class: "text-#{badge}",
+        title: t("#{object.model_name.plural}.statuses.#{object.status}")
+    end
+  end
+
   private
 
     def pat_download_options
