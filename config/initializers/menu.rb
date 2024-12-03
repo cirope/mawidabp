@@ -77,6 +77,12 @@ APP_AUDITOR_MENU_ITEMS = [
             url: { controller: '/business_unit_types' }
           ),
           (MenuItem.new(
+            :options,
+            order: 2,
+            controllers: :options,
+            url: { controller: '/options' }
+          ) if REVIEW_MANUAL_SCORE),
+          (MenuItem.new(
             :business_unit_kind,
             order: 3,
             controllers: :business_unit_kinds,

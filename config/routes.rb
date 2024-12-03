@@ -499,6 +499,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :options, only: [:index, :edit, :update]
   resources :organizations
 
   resources :risk_registries do
