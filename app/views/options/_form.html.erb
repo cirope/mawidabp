@@ -3,7 +3,7 @@
     <ul class="nav nav-tabs">
       <li class="nav-item">
         <a class="nav-link active" href="#review-scores" data-bs-toggle="tab">
-          <%= t 'options.review_scores' %>
+          <%= t 'options.review_scores.title' %>
         </a>
       </li>
     </ul>
@@ -13,10 +13,19 @@
         <%= simple_form_for current_organization do |f| %>
 
           <div class="form-inputs">
-            <% current_scores.each do |key, value| %>
+            <div class="row">
+              <div class="col-md-6">
+                <strong><%= t 'options.review_scores.score' %></strong>
+              </div>
+              <div class="col-md-6">
+                <strong><%= t 'options.review_scores.value' %></strong>
+              </div>
+            </div>
+
+            <% @current_scores.each do |score, value| %>
               <div class="row">
                 <div class="col-md-6">
-                  <%= f.input :key, input_html: { value: key }, label: false %>
+                  <%= f.input :score, input_html: { value: score }, label: false %>
                 </div>
                 <div class="col-md-6">
                   <%= f.input :value, input_html: { value: value }, label: false %>

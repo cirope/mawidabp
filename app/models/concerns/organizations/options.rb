@@ -1,6 +1,10 @@
 module Organizations::Options
   extend ActiveSupport::Concern
 
+  included do
+    after_create_commit :create_options
+  end
+
   DEFAULT_SCORES = {
     satisfactory:                   100,
     needs_minor_improvements:       80,
@@ -10,8 +14,27 @@ module Organizations::Options
   }
 
   def current_scores
-    values = options.values.first
-
-    values.sort_by { |key, value| value }.reverse.to_h
+    manual_scores.first.last.sort_by { |score, value| value }.reverse.to_h
   end
+
+  def manual_scores
+    options['manual_scores'].sort_by { |score, value| score }.reverse.to_h
+  end
+
+  def create_options
+    update! options: default_scores
+  end
+
+  private
+
+    def default_scores
+      scores = {}
+
+      Organization::DEFAULT_SCORES.each do |key, value|
+        score         = I18n.t "options.manual_scores.#{key}"
+        scores[score] = value
+      end
+
+      { manual_scores: { Time.zone.now.to_i => scores } }
+    end
 end

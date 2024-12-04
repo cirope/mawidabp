@@ -3,7 +3,7 @@
     <ul class="nav nav-tabs">
       <li class="nav-item">
         <a class="nav-link active" href="#review-scores" data-bs-toggle="tab">
-          <%= t 'options.review_scores' %>
+          <%= t 'options.review_scores.title' %>
         </a>
       </li>
     </ul>
@@ -13,8 +13,8 @@
         <table class="table table-sm table-striped table-hover">
           <thead>
             <tr>
-              <% @current_scores.keys.each do |key| %>
-                <th><%= key %></th>
+              <% @current_scores.keys.each do |score| %>
+                <th><%= score %></th>
               <% end %>
               <th></th>
             </tr>

@@ -344,7 +344,10 @@ en:
       title: Show opening interview
 
   options:
-    review_scores: Review scores
+    review_scores:
+      score: Score
+      value: Value
+      title: Review scores
     manual_scores:
       satisfactory: Satisfactory
       needs_minor_improvements: Needs minor improvements

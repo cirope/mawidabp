@@ -1035,23 +1035,9 @@ private
   end
 
   def add_organization_options
-    if add_organization_options?
-      manual_scores = {}
-
-      Organization::DEFAULT_SCORES.each do |key, value|
-        score = I18n.t "options.manual_scores.#{key}"
-
-        manual_scores[score] = value
-      end
-
-      options = { 'manual_scores': { Time.zone.now.to_i => manual_scores } }
-
-      Organization.find_each do |org|
-        org.update options: options
-      end
-    end
+    Organization.all.map &:create_options if add_organization_options?
   end
 
   def add_organization_options?
-    Organization.where(options: nil).exists?
+    Organization.where(options: nil).any?
   end
