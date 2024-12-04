@@ -343,6 +343,15 @@ en:
       download_pdf: Download PDF
       title: Show opening interview
 
+  options:
+    review_scores: Review scores
+    manual_scores:
+      satisfactory: Satisfactory
+      needs_minor_improvements: Needs minor improvements
+      needs_improvement: Needs improvement
+      needs_significant_improvements: Needs significant improvements
+      unsatisfactory: Unsatisfactory
+
   organizations:
     edit:
       title: Edit organization

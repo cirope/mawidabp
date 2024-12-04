@@ -342,6 +342,15 @@ es:
       download_pdf: Descargar PDF
       title: Ver entrevista de inicio
 
+  options:
+    review_scores: Calificaciones de informes
+    manual_scores:
+      satisfactory: Satisfactoria
+      needs_minor_improvements: Necesita mejoras no significativas
+      needs_improvement: Necesita mejoras
+      needs_significant_improvements: Necesita mejoras significativas
+      unsatisfactory: Insatisfactorio
+
   organizations:
     edit:
       title: Modificar organización

@@ -1,0 +1,38 @@
+<div class="card">
+  <div class="card-body">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" href="#review-scores" data-bs-toggle="tab">
+          <%= t 'options.review_scores' %>
+        </a>
+      </li>
+    </ul>
+
+    <div class="tab-content pt-3">
+      <div class="tab-pane active" id="review-scores">
+        <%= simple_form_for current_organization do |f| %>
+
+          <div class="form-inputs">
+            <% current_scores.each do |key, value| %>
+              <div class="row">
+                <div class="col-md-6">
+                  <%= f.input :key, input_html: { value: key }, label: false %>
+                </div>
+                <div class="col-md-6">
+                  <%= f.input :value, input_html: { value: value }, label: false %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <hr />
+
+          <div class="form-actions">
+            <%= f.submit class: 'btn btn-primary' %>
+            <div class="float-end"><%= yield :form_actions %></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

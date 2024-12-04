@@ -838,7 +838,7 @@ ActiveRecord::Schema.define(version: 2024_12_03_113445) do
     t.boolean "corporate", default: false, null: false
     t.string "logo_style", default: "default", null: false
     t.string "saml_provider"
-    t.jsonb "options", default: {}, null: false
+    t.jsonb "options"
     t.index ["corporate"], name: "index_organizations_on_corporate"
     t.index ["group_id"], name: "index_organizations_on_group_id"
     t.index ["image_model_id"], name: "index_organizations_on_image_model_id"

@@ -35,6 +35,7 @@ namespace :db do
       update_risk_assessments_changes            # 2023-10-02
       add_risk_registries_privilege              # 2023-10-26
       add_claim_values_in_saml_provider          # 2023-11-02
+      add_organization_options                   # 2024-12-03
     end
   end
 end
@@ -1031,4 +1032,26 @@ private
       provider.email_claim,
       provider.roles_claim
     ].all? &:blank?
+  end
+
+  def add_organization_options
+    if add_organization_options?
+      manual_scores = {}
+
+      Organization::DEFAULT_SCORES.each do |key, value|
+        score = I18n.t "options.manual_scores.#{key}"
+
+        manual_scores[score] = value
+      end
+
+      options = { 'manual_scores': { Time.zone.now.to_i => manual_scores } }
+
+      Organization.find_each do |org|
+        org.update options: options
+      end
+    end
+  end
+
+  def add_organization_options?
+    Organization.where(options: nil).exists?
   end
