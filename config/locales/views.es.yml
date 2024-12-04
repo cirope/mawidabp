@@ -187,7 +187,7 @@ es:
     state:
       assumed_risk: Riesgo asumido
       awaiting: A regularizar
-      being_implemented: En proceso de implementación
+      being_implemented: En progreso
       being_implemented_current: Vigente
       being_implemented_current_rescheduled: Reprogramada vigente
       being_implemented_stale: Vencida

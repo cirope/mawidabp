@@ -367,7 +367,7 @@ es:
         TOTALES POR NIVEL DE RIESGO
       total: TOTAL
     weaknesses_by_risk_and_business_unit:
-      being_implemented: "'En proceso de implementación' al %{date}"
+      being_implemented: "'En progreso' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       empty: Sin observaciones para el filtro aplicado.
       implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
@@ -1281,7 +1281,7 @@ es:
         TOTALES POR NIVEL DE RIESGO
       total: TOTAL
     weaknesses_by_risk_and_business_unit:
-      being_implemented: "'En proceso de implementación' al %{date}"
+      being_implemented: "'En progreso' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       empty: Sin observaciones para el filtro aplicado.
       implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
