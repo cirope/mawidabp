@@ -186,7 +186,7 @@ es:
       title: Detalles del hallazgo
     state:
       assumed_risk: Cerrado - La administración acepta el riesgo
-      awaiting: A regularizar
+      awaiting: Pendiente
       being_implemented: En progreso
       being_implemented_current: Vigente
       being_implemented_current_rescheduled: Reprogramada vigente
