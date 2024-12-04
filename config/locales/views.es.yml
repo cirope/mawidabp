@@ -185,7 +185,7 @@ es:
     show:
       title: Detalles del hallazgo
     state:
-      assumed_risk: Riesgo asumido
+      assumed_risk: Cerrado - La administración acepta el riesgo
       awaiting: A regularizar
       being_implemented: En progreso
       being_implemented_current: Vigente
