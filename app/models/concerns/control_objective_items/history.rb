@@ -13,8 +13,7 @@ module ControlObjectiveItems::History
         history = {
           date:   date.strip,
           user:   user.informal_name,
-          action: action,
-          change: coi.auditor_comment
+          action: action
         }
 
         result << history
