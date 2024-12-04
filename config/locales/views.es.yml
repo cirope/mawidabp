@@ -194,7 +194,7 @@ es:
       being_implemented_stale_rescheduled: Reprogramada vencida
       confirmed: Confirmada
       criteria_mismatch: Difiere criterio
-      expired: Desestimada / No aplica
+      expired: Cerrado - No aplica más tiempo
       failure: Falla
       implemented: Implementado
       implemented_audited: Cerrado - Verificado
