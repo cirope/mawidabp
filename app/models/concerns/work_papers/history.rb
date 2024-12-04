@@ -1,6 +1,10 @@
 module WorkPapers::History
   extend ActiveSupport::Concern
 
+  included do
+    before_save :check_for_file_model_changes
+  end
+
   def change_history
     versions.each_with_object([]) do |version, result|
       date    = I18n.l version.created_at, format: :long
@@ -40,5 +44,9 @@ module WorkPapers::History
 
         result << changes if changes.present?
       end
+    end
+
+    def check_for_file_model_changes
+      file_model_id_will_change! if file_model&.changed?
     end
 end
