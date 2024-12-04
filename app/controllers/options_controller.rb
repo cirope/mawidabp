@@ -8,7 +8,11 @@ class OptionsController < ApplicationController
   end
 
   def update
-    if @organization.update options_params
+    current_organization.options['manual_scores'].merge!(
+      Time.zone.now.to_i => @current_scores
+    )
+
+    if current_organization.save
       redirect_to options_path
     else
       render 'edit'
@@ -18,10 +22,14 @@ class OptionsController < ApplicationController
   private
 
     def set_options
-      @current_scores = current_organization.current_scores
+      @current_scores = if params.dig(:options)
+                          options_params.values.to_h.transform_values &:to_i
+                        else
+                          current_organization.current_scores
+                        end
     end
 
     def options_params
-      params.require(:organization).permit options: {}
+      params.require(:options).permit!
     end
 end

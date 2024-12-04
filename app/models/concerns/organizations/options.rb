@@ -14,18 +14,30 @@ module Organizations::Options
   }
 
   def current_scores
-    manual_scores.first.last.sort_by { |score, value| value }.reverse.to_h
+    sorted_scores manual_scores.first.last
   end
 
   def manual_scores
-    options['manual_scores'].sort_by { |score, value| score }.reverse.to_h
+    options['manual_scores'].sort_by { |score, value| score.to_i }.reverse.to_h
   end
 
   def create_options
     update! options: default_scores
   end
 
+  def scores_for date
+    epoch = (date || Time.zone.now).to_i
+
+    sorted_scores(
+      manual_scores.detect { |date, values| date.to_i <= epoch }&.last
+    )
+  end
+
   private
+
+    def sorted_scores scores
+      scores.sort_by { |score, value| value.to_i }.reverse.to_h if scores.present?
+    end
 
     def default_scores
       scores = {}

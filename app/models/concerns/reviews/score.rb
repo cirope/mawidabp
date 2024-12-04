@@ -171,6 +171,10 @@ module Reviews::Score
     score_type == 'splitted_effectiveness'
   end
 
+  def current_manual_scores
+    Current.organization.scores_for(created_at) || []
+  end
+
   private
 
     def _score_text score

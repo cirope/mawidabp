@@ -149,6 +149,16 @@
             </div>
           </div>
         <% end %>
+
+        <% if REVIEW_MANUAL_SCORE %>
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <%= f.input :manual_score, collection: f.object.current_manual_scores,
+                prompt: true, input_html: { disabled: readonly },
+                selected: (f.object.manual_score.present? ? f.object.manual_score.to_i : '') %>
+            </div>
+          </div>
+        <% end %>
       </div>
 
       <div class="row mt-3">

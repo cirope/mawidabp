@@ -10,10 +10,21 @@
 
     <div class="tab-content pt-3">
       <div class="tab-pane active" id="review-scores">
-        <%= simple_form_for current_organization do |f| %>
+        <%= simple_form_for current_organization, url: options_path, method: :patch do |f| %>
+          <% if f.object.errors[:base].present? %>
+            <div class="alert alert-danger">
+              <div class="alert-message">
+                <ul class="m-0">
+                  <% f.object.errors[:base].each do |error| %>
+                    <li><%= error %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          <% end %>
 
           <div class="form-inputs">
-            <div class="row">
+            <div class="row mb-2">
               <div class="col-md-6">
                 <strong><%= t 'options.review_scores.score' %></strong>
               </div>
@@ -22,13 +33,15 @@
               </div>
             </div>
 
-            <% @current_scores.each do |score, value| %>
+            <% @current_scores.each_with_index do |(score, value), idx| %>
               <div class="row">
                 <div class="col-md-6">
-                  <%= f.input :score, input_html: { value: score }, label: false %>
+                  <%= f.input :score, label: false, autofocus: idx == 0,
+                    input_html: { value: score, name: "options[#{idx}][]" } %>
                 </div>
                 <div class="col-md-6">
-                  <%= f.input :value, input_html: { value: value }, label: false %>
+                  <%= f.input :value, label: false,
+                    input_html: { value: value, name: "options[#{idx}][]" } %>
                 </div>
               </div>
             <% end %>

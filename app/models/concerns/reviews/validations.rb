@@ -26,7 +26,7 @@ module Reviews::Validations
 
     validates :manual_score, numericality: {
       greater_than_or_equal_to: 0,
-      less_than_or_equal_to: USE_SCOPE_CYCLE ? 100 : 1000,
+      less_than_or_equal_to: (USE_SCOPE_CYCLE || REVIEW_MANUAL_SCORE) ? 100 : 1000,
     }, allow_nil: true, if: :validate_manual_score?
     validates :manual_score_alt, numericality: {
       greater_than_or_equal_to: 0, less_than_or_equal_to: 100
@@ -67,7 +67,7 @@ module Reviews::Validations
     end
 
     def validate_manual_score?
-      SHOW_REVIEW_EXTRA_ATTRIBUTES || USE_SCOPE_CYCLE
+      SHOW_REVIEW_EXTRA_ATTRIBUTES || USE_SCOPE_CYCLE || REVIEW_MANUAL_SCORE
     end
 
     def validate_extra_attributes?
