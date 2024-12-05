@@ -1,6 +1,6 @@
-<% readonly = @review.has_final_review? %>
+<% readonly                  = @review.has_final_review? %>
 <% user_assignments_readonly = readonly || @review.user_assignments_readonly? %>
-<% frozen = @review.is_frozen? %>
+<% frozen                    = @review.is_frozen? %>
 
 <div class="card">
   <div class="card-body">
