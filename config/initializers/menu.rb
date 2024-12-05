@@ -80,7 +80,7 @@ APP_AUDITOR_MENU_ITEMS = [
             :options,
             order: 2,
             controllers: :options,
-            url: { controller: '/options' }
+            url: { controller: '/options', action: :edit }
           ) if REVIEW_MANUAL_SCORE),
           (MenuItem.new(
             :business_unit_kind,

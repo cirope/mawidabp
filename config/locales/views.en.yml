@@ -348,6 +348,7 @@ en:
       score: Score
       value: Value
       title: Review scores
+      submit: Update scores
     manual_scores:
       satisfactory: Satisfactory
       needs_minor_improvements: Needs minor improvements

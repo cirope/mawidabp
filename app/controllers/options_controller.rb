@@ -1,9 +1,6 @@
 class OptionsController < ApplicationController
   before_action :auth, :check_privileges, :set_options
 
-  def index
-  end
-
   def edit
   end
 
@@ -13,7 +10,7 @@ class OptionsController < ApplicationController
     )
 
     if current_organization.save
-      redirect_to options_path
+      redirect_to [:edit, :options], notice: t('flash.options.update.notice')
     else
       render 'edit'
     end
@@ -23,7 +20,9 @@ class OptionsController < ApplicationController
 
     def set_options
       @current_scores = if params.dig(:options)
-                          options_params.values.to_h.transform_values &:to_i
+                          options_params.values.to_h.
+                            transform_keys(&:strip).
+                            transform_values &:to_i
                         else
                           current_organization.current_scores
                         end

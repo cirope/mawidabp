@@ -14,11 +14,13 @@ module Organizations::Options
   }
 
   def current_scores
-    sorted_scores manual_scores.first.last
+    sorted_scores manual_scores.first&.last
   end
 
   def manual_scores
-    options['manual_scores'].sort_by { |score, value| score.to_i }.reverse.to_h
+    if options&.dig('manual_scores')
+      options['manual_scores'].sort_by { |score, value| score.to_i }.reverse.to_h
+    end
   end
 
   def create_options

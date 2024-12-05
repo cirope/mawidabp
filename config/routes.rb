@@ -499,7 +499,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :options, only: [:index] do
+  resources :options, only: [] do
     collection do
       get :edit
       patch :update

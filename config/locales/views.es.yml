@@ -347,6 +347,7 @@ es:
       score: Calificación
       value: Valor
       title: Calificaciones de informes
+      submit: Actualizar calificaciones
     manual_scores:
       satisfactory: Satisfactoria
       needs_minor_improvements: Necesita mejoras no significativas

@@ -19,17 +19,26 @@ module Organizations::Validations
   private
 
     def validate_manual_scores
-      scores = manual_scores.first.last
+      scores = manual_scores.to_a
 
-      if scores.values.count != scores.values.uniq.count
-        errors.add :base, :invalid, message: 'No se pueden repetir valores'
-      end
+      if scores.present?
+        repeated   = []
+        score_last = scores.first.last
 
-      current_scores.each do |score, value|
-        if value.to_s !~ /\A\d+\Z/i
-          errors.add :base, message: "El valor de '#{score}' no es válido"
-        elsif value.to_i < 0 || value.to_i > 100
-          errors.add :base, message: "El valor de '#{score}' debe estar entre 0 y 100"
+        if score_last == scores[1]&.last
+          errors.add :base, :invalid, message: 'Las calificaciones no cambiaron'
+        end
+
+        current_scores.each do |score, value|
+          if value.to_s !~ /\A\d+\Z/i
+            errors.add :base, message: "El valor de \"#{score}\" no es válido"
+          elsif value.to_i < 0 || value.to_i > 100
+            errors.add :base, message: "El valor de \"#{score}\" debe estar entre 0 y 100"
+          elsif repeated.include? value
+            errors.add :base, message: "El valor de \"#{score}\" está repetido"
+          end
+
+          repeated << value
         end
       end
     end

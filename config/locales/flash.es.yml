@@ -67,6 +67,10 @@ es:
         notice: Entrevista de inicio actualizada correctamente
         stale: La entrevista de inicio no fue actualizada, intente nuevamente
 
+    options:
+      update:
+        notice: Calificaciones actualizadas correctamente
+
     organizations:
       create:
         notice: Organización agregada correctamente
