@@ -8,6 +8,8 @@ class OptionsControllerTest < ActionController::TestCase
   end
 
   test 'edit options' do
+    skip unless REVIEW_MANUAL_SCORE
+
     get :edit
     assert_response :success
     assert_not_nil assigns(:current_scores)
@@ -15,6 +17,8 @@ class OptionsControllerTest < ActionController::TestCase
   end
 
   test 'should update options' do
+    skip unless REVIEW_MANUAL_SCORE
+
     Current.organization = organizations :cirope
 
     options = {
