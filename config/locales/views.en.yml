@@ -276,6 +276,7 @@ en:
     not_authorized: Must be logged in to view content
     not_allowed: You are not authorized to perform the operation
     truncated: Truncated, maximum number of characters %{count}
+    finding_updated_after_complete: 'The finding has been modified after being resolved. Please review the change history.'
 
   mfas:
     create:
