@@ -25,8 +25,8 @@ es:
 
   notifier:
     being_implemented_and_stale_finding_to_manager:
-      the_following_finding_is_being_implemented_and_stale: La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación
-      title: Notificación de observaciones en proceso de implementación vencidas
+      the_following_finding_is_being_implemented_and_stale: La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en progreso
+      title: Notificación de observaciones en progreso vencidas
     change_password: Cambiar contraseña
     changes_notification:
       title: Notificación de cambios

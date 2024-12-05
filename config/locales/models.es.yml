@@ -303,7 +303,7 @@ es:
         frequency: Frecuencia
         impact_amount: Monto universo
         impact_risk: Impacto
-        implemented_at: Fecha de cambio a "Implementada"
+        implemented_at: Fecha de cambio a "Implementado"
         manual_risk: Manual
         nobs: N_Obs
         nsisio: N_SISAC
@@ -909,7 +909,7 @@ es:
         follow_up_date: Fecha de implementación
         impact: Impacto
         impact_risk: Impacto
-        implemented_at: Fecha de cambio a "Implementada"
+        implemented_at: Fecha de cambio a "Implementado"
         internal_control_components: Componentes de CI
         manual_risk: Manual
         nobs: N_Obs
