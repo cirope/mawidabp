@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_04_145001) do
+ActiveRecord::Schema.define(version: 2024_12_03_113445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -838,10 +838,12 @@ ActiveRecord::Schema.define(version: 2024_11_04_145001) do
     t.boolean "corporate", default: false, null: false
     t.string "logo_style", default: "default", null: false
     t.string "saml_provider"
+    t.jsonb "options"
     t.index ["corporate"], name: "index_organizations_on_corporate"
     t.index ["group_id"], name: "index_organizations_on_group_id"
     t.index ["image_model_id"], name: "index_organizations_on_image_model_id"
     t.index ["name"], name: "index_organizations_on_name"
+    t.index ["options"], name: "index_organizations_on_options", using: :gin
     t.index ["prefix"], name: "index_organizations_on_prefix", unique: true
   end
 
@@ -898,8 +900,10 @@ ActiveRecord::Schema.define(version: 2024_11_04_145001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "organization_id"
+    t.string "status", default: "draft", null: false
     t.index ["organization_id"], name: "index_plans_on_organization_id"
     t.index ["period_id"], name: "index_plans_on_period_id"
+    t.index ["status"], name: "index_plans_on_status"
   end
 
   create_table "polls", id: :serial, force: :cascade do |t|
@@ -1065,11 +1069,13 @@ ActiveRecord::Schema.define(version: 2024_11_04_145001) do
     t.text "review_objective"
     t.integer "type_review"
     t.bigint "subsidiary_id"
+    t.string "status", default: "draft", null: false
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "index_reviews_on_identification"
     t.index ["organization_id"], name: "index_reviews_on_organization_id"
     t.index ["period_id"], name: "index_reviews_on_period_id"
     t.index ["plan_item_id"], name: "index_reviews_on_plan_item_id"
+    t.index ["status"], name: "index_reviews_on_status"
     t.index ["subsidiary_id"], name: "index_reviews_on_subsidiary_id"
   end
 

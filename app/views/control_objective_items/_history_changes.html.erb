@@ -1,0 +1,16 @@
+<div id="control_objective_item_change_history" class="collapse">
+  <div>
+    <h5><%= t('control_objective_items.history.changes') %></h5>
+    <ul class="mb-3">
+      <% @control_objective_item.change_history.last(5).each do |history| %>
+        <li>
+          <%= history[:date] %>
+          <ul>
+            <li><%= t 'control_objective_items.history.action' %>: <%= history[:action] %></li>
+            <li><%= User.model_name.human %>: <%= history[:user] %></li>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

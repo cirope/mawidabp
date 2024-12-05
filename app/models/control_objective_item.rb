@@ -15,6 +15,7 @@ class ControlObjectiveItem < ApplicationRecord
   include ControlObjectiveItems::Effectiveness
   include ControlObjectiveItems::FindingPdfData
   include ControlObjectiveItems::Findings
+  include ControlObjectiveItems::History
   include ControlObjectiveItems::Overrides
   include ControlObjectiveItems::Pdf
   include ControlObjectiveItems::Relevance

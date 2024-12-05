@@ -60,6 +60,7 @@ ORGANIZATIONS_WITH_INTERNAL_CONTROL_QUALIFICATION_REPORT: '[]'
 PLAN_ITEM_REVIEW_CONCLUDED_ON: 'created_at'
 PRIORITY_TYPES: '{}'
 REQUIRED_BY_OPTIONS_MEMO: '[]'
+REVIEW_MANUAL_SCORE: 'false'
 REVIEW_SCORES: '{}' # In JSON and must be sorted by date in descending order
 RISK_TYPES: '{}'
 RISK_WEIGHTS: '{ "none": 0, "low": 1, "medium": 2, "high": 3 }'

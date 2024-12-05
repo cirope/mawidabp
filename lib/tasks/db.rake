@@ -2,7 +2,7 @@ namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
     ActiveRecord::Base.transaction do
-      update_organization_settings               # 2017-03-15 last 2024-11-24
+      update_organization_settings               # 2017-03-15 last 2024-11-26
       add_new_answer_options                     # 2017-06-29
       add_best_practice_privilege                # 2018-01-31
       add_control_objective_privilege            # 2018-01-31
@@ -35,6 +35,7 @@ namespace :db do
       update_risk_assessments_changes            # 2023-10-02
       add_risk_registries_privilege              # 2023-10-26
       add_claim_values_in_saml_provider          # 2023-11-02
+      add_organization_options                   # 2024-12-03
     end
   end
 end
@@ -201,6 +202,14 @@ private
                            description: I18n.t('settings.review_permission_by_assignment')
       end
     end
+
+    if add_plan_and_review_approval? #2024-11-26
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'plan_and_review_approval',
+                           value:       DEFAULT_SETTINGS[:plan_and_review_approval][:value],
+                           description: I18n.t('settings.plan_and_review_approval')
+      end
+    end
   end
 
   def set_conclusion_review_receiver?
@@ -281,6 +290,10 @@ private
 
   def add_review_permission_by_assignment?
     Setting.where(name: 'review_permission_by_assignment').empty?
+  end
+
+  def add_plan_and_review_approval?
+    Setting.where(name: 'plan_and_review_approval').empty?
   end
 
   def add_new_answer_options
@@ -1019,4 +1032,12 @@ private
       provider.email_claim,
       provider.roles_claim
     ].all? &:blank?
+  end
+
+  def add_organization_options
+    Organization.all.map &:create_options if add_organization_options?
+  end
+
+  def add_organization_options?
+    Organization.where(options: nil).any?
   end

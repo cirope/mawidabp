@@ -99,6 +99,16 @@ es:
     show:
       title: Detalles del objetivo de control
 
+  control_objective_items:
+    history:
+      action: Acción
+      actions:
+        create: creó
+        destroy: eliminó
+        update: modificó
+      changes: Historial de cambios
+      show: Ver historial de cambios
+
   documents:
     edit:
       title: Editar documento
@@ -175,20 +185,20 @@ es:
     show:
       title: Detalles del hallazgo
     state:
-      assumed_risk: Riesgo asumido
-      awaiting: A regularizar
-      being_implemented: En proceso de implementación
+      assumed_risk: Cerrado - La administración acepta el riesgo
+      awaiting: Pendiente
+      being_implemented: En progreso
       being_implemented_current: Vigente
       being_implemented_current_rescheduled: Reprogramada vigente
       being_implemented_stale: Vencida
       being_implemented_stale_rescheduled: Reprogramada vencida
       confirmed: Confirmada
       criteria_mismatch: Difiere criterio
-      expired: Desestimada / No aplica
+      expired: Cerrado - No aplica más tiempo
       failure: Falla
-      implemented: Implementada
-      implemented_audited: Implementada / Auditada
-      incomplete: Incompleta
+      implemented: Implementado
+      implemented_audited: Cerrado - Verificado
+      incomplete: Abierto
       notify: Notificar
       repeated: Reiterada
       revoked: Anulada
@@ -332,6 +342,25 @@ es:
       download_pdf: Descargar PDF
       title: Ver entrevista de inicio
 
+  options:
+    review_scores:
+      score: Calificación
+      submit: Actualizar calificaciones
+      title: Calificaciones de informes
+      value: Valor
+      errors:
+        invalid: "El valor de \"%{value}\" no es válido"
+        numericality: "El valor de \"%{value}\" debe estar entre 0 y 100"
+        presence: Existen calificaciones en blanco
+        score_not_change: Las calificaciones no cambiaron
+        taken: "El valor de \"%{value}\" se encuentra repetido"
+    manual_scores:
+      needs_improvement: Necesita mejoras
+      needs_minor_improvements: Necesita mejoras no significativas
+      needs_significant_improvements: Necesita mejoras significativas
+      satisfactory: Satisfactoria
+      unsatisfactory: Insatisfactorio
+
   organizations:
     edit:
       title: Modificar organización
@@ -383,6 +412,9 @@ es:
         save: Asociar objetivo de control
 
   plans:
+    actions:
+      approve: Aprobar
+      revoke: Revocar aprobación
     business_unit_type_plan_items:
       associate_best_practice: Asociar buena práctica
       associate_control_objective: Asociar objetivo de control
@@ -440,6 +472,7 @@ es:
       allow_duplication: "¿Permitir duplicados?"
       allow_overload: "¿Permitir superposición?"
     edit:
+      other_actions: Acciones
       title: Modificar plan de trabajo
     index:
       copy: Copiar
@@ -512,6 +545,9 @@ es:
         progress: Avance total
         title: Estadísiticas del plan de auditoría
         total: Total
+    statuses:
+      approved: Aprobado
+      draft: Pendiente de aprobación
     without_business_unit_type: Sin unidad de negocio
 
   polls:
@@ -608,6 +644,9 @@ es:
       material: Materiales
 
   reviews:
+    actions:
+      approve: Aprobar
+      revoke: Revocar aprobación
     auxiliar_business_unit_types:
       title: Unidades organizativas auxiliares
     form:
@@ -764,6 +803,7 @@ es:
     password_expire_time: Duración máxima de la contraseña
     password_minimum_length: Longitud mínima de la contraseña
     password_minimum_time: Duración mínima de la contraseña
+    plan_and_review_approval: Requerir aprobación de planes e informes
     require_manager_on_findings: Requerir gerente de auditoría en hallazgos
     review_code_expresion: Formato del código de identificación de informes
     review_filtered_by_user_assignments: Filtrar informes por usuarios asignados

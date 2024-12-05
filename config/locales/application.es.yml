@@ -17,6 +17,7 @@ es:
     login_records: Registros de ingreso
     notifications: Notificaciones
     oportunities: Oportunidades de mejora
+    options: Opciones
     organizations: Organizaciones
     periods: Periodos
     plans: Planes de trabajo
@@ -367,10 +368,10 @@ es:
         TOTALES POR NIVEL DE RIESGO
       total: TOTAL
     weaknesses_by_risk_and_business_unit:
-      being_implemented: "'En proceso de implementación' al %{date}"
+      being_implemented: "'En progreso' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       empty: Sin observaciones para el filtro aplicado.
-      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
+      implemented: "'Implementados' entre el %{from_date} y el %{to_date}"
       pdf_name: observaciones_informes_definitivos_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf
       period_summary: Resumen del periodo %{period}
       title: |-
@@ -1281,10 +1282,10 @@ es:
         TOTALES POR NIVEL DE RIESGO
       total: TOTAL
     weaknesses_by_risk_and_business_unit:
-      being_implemented: "'En proceso de implementación' al %{date}"
+      being_implemented: "'En progreso' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       empty: Sin observaciones para el filtro aplicado.
-      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
+      implemented: "'Implementados' entre el %{from_date} y el %{to_date}"
       pdf_name: observaciones_seguimiento_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf
       period_summary: Resumen del periodo %{period}
       title: |-
@@ -1617,6 +1618,7 @@ es:
     edit_title: Modificar informe
     errors:
       can_not_be_destroyed: El informe no puede ser eliminado
+      must_be_approved: debe estar aprobado
       related_finding_incomplete: está pendiente y no se ha marcado como reiterada o solucionada
       without_audited: no tiene usuario auditado
       without_control_objectives: no tiene objetivos de control

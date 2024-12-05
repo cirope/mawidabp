@@ -384,6 +384,7 @@ Rails.application.routes.draw do
       patch :recode_work_papers
       patch :reorder
       patch :reset_control_objective_name
+      patch :actions, to: 'reviews/actions#update'
     end
 
     collection do
@@ -447,9 +448,10 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :calendar, to: 'plans/calendar#show'
+      get :calendar,  to: 'plans/calendar#show'
       get :resources, to: 'plans/resources#show'
-      get :stats, to: 'plans/stats#show'
+      get :stats,     to: 'plans/stats#show'
+      patch :actions, to: 'plans/actions#update'
     end
 
     collection do
@@ -494,6 +496,13 @@ Rails.application.routes.draw do
       get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
+    end
+  end
+
+  resources :options, only: [] do
+    collection do
+      get :edit
+      patch :update
     end
   end
 

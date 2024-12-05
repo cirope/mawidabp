@@ -11,6 +11,7 @@ class Plan < ApplicationRecord
   include Plans::Pdf
   include Plans::PlanItems
   include Plans::Scopes
+  include Plans::Status
   include Plans::Units
   include Plans::ValidationCallbacks
   include Plans::Validations

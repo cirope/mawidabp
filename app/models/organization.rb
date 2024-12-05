@@ -9,6 +9,7 @@ class Organization < ApplicationRecord
   include Organizations::Group
   include Organizations::Images
   include Organizations::LdapConfigs
+  include Organizations::Options
   include Organizations::Parameters
   include Organizations::Roles
   include Organizations::Scopes

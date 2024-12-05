@@ -40,7 +40,7 @@ jQuery(function ($) {
     var fileName   = $fileInput.val().split('\\').pop()
     var $nameField = $fileInput.closest('.work_paper').find('input[name*="[name]"]')
 
-    if (fileName && $nameField.val() === '') {
+    if (fileName) {
       $nameField.val(fileName)
     }
   })
