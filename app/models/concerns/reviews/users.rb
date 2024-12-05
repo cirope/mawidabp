@@ -33,10 +33,11 @@ module Reviews::Users
   def user_assignments_readonly?
     return false unless Current.organization.require_plan_and_review_approval?
 
-    assignment_type = review_assignment_type
-    plan_approved   = plan_item&.plan&.approved?
+    manager_or_supervisor = [:manager, :supervisor].include?(
+      ReviewUserAssignment::TYPES.invert[review_assignment_type]
+    )
 
-    plan_approved && ![:manager, :supervisor].include?(ReviewUserAssignment::TYPES.invert[assignment_type])
+    approved? && !manager_or_supervisor
   end
 
   private
