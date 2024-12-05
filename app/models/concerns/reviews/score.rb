@@ -175,6 +175,12 @@ module Reviews::Score
     Current.organization.scores_for(created_at) || []
   end
 
+  def manual_score_text
+    manual_scores = current_manual_scores
+
+    current_manual_scores.invert.dig(manual_score.to_i) if manual_scores.present?
+  end
+
   private
 
     def _score_text score
