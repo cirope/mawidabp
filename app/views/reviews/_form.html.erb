@@ -170,7 +170,7 @@
       </div>
 
       <div id="review_user_assignments">
-        <% audit_team, others = @review.review_user_assignments.partition(&:in_audit_team?) %>
+        <% audit_team, others = @review.review_user_assignments.partition &:in_audit_team? %>
 
         <% if audit_team.present? %>
           <h5 class="text-muted"><%= t 'review.user_assignment.audit_team' %></h5>
