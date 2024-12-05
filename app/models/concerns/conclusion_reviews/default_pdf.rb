@@ -161,14 +161,18 @@ module ConclusionReviews::DefaultPdf
         pdf.text applied_procedures, align: :justify, inline_format: true
       end
 
-      pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
+      if REVIEW_MANUAL_SCORE
+        pdf.text "\n#{Review.human_attribute_name('manual_score')}: #{review.manual_score_text}\n"
+      else
+        pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
 
-      if review.score_type == 'effectiveness'
-        put_default_score_table_on pdf unless options[:hide_score]
-      elsif review.score_type == 'weaknesses'
-        put_default_score_text_on pdf unless options[:hide_score]
-      elsif review.score_type == 'none'
-        put_default_no_score_text_on pdf unless options[:hide_score]
+        if review.score_type == 'effectiveness'
+          put_default_score_table_on pdf unless options[:hide_score]
+        elsif review.score_type == 'weaknesses'
+          put_default_score_text_on pdf unless options[:hide_score]
+        elsif review.score_type == 'none'
+          put_default_no_score_text_on pdf unless options[:hide_score]
+        end
       end
     end
 
