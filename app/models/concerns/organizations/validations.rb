@@ -30,12 +30,14 @@ module Organizations::Validations
           repeated = []
 
           current_scores.each do |score, value|
-            if value.to_s !~ /\A\d+\Z/i
-              errors.add :base, message: I18n.t('options.review_scores.errors.invalid', value: score)
-            elsif value.to_i < 0 || value.to_i > 100
+            if value.to_i < 0 || value.to_i > 100
               errors.add :base, message: I18n.t('options.review_scores.errors.numericality', value: score)
+            elsif value.to_s !~ /\A\d+\Z/i
+              errors.add :base, message: I18n.t('options.review_scores.errors.invalid', value: score)
             elsif repeated.include? value
               errors.add :base, message: I18n.t('options.review_scores.errors.taken', value: score)
+            elsif score.blank?
+              errors.add :base, message: I18n.t('options.review_scores.errors.presence')
             end
 
             repeated << value

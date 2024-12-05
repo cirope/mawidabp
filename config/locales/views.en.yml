@@ -352,6 +352,7 @@ en:
       errors:
         invalid: "The score \"%{value}\" is invalid"
         numericality: "The score \"%{value}\" must be between 0 and 100"
+        presence: There are blank scores
         score_not_change: The scores did not change
         taken: "The score \"%{value}\" is repeated"
     manual_scores:

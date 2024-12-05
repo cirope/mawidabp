@@ -351,6 +351,7 @@ es:
       errors:
         invalid: "El valor de \"%{value}\" no es válido"
         numericality: "El valor de \"%{value}\" debe estar entre 0 y 100"
+        presence: Existen calificaciones en blanco
         score_not_change: Las calificaciones no cambiaron
         taken: "El valor de \"%{value}\" se encuentra repetido"
     manual_scores:
