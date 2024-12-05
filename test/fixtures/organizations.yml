@@ -1,3 +1,5 @@
+<% scores = { manual_scores: { Time.zone.now.to_i => Organization::DEFAULT_SCORES } }.to_json %>
+
 cirope:
   name: Cirope S.A.
   prefix: cirope
@@ -5,6 +7,7 @@ cirope:
   description: ''
   group: main_group
   corporate: false
+  options: <%= scores %>
 
 twitter:
   name: Twitter Inc.
@@ -13,6 +16,7 @@ twitter:
   description: ''
   group: main_group
   corporate: true
+  options: <%= scores %>
 
 google:
   name: Google Inc.
@@ -21,6 +25,7 @@ google:
   description: ''
   group: second_group
   corporate: false
+  options: <%= scores %>
 
 alphabet:
   name: Alphabet Inc.
@@ -29,3 +34,4 @@ alphabet:
   description: ''
   group: second_group
   corporate: true
+  options: <%= scores %>

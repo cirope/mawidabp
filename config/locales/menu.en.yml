@@ -15,6 +15,7 @@ en:
         business_unit_kind: Type of business unit
         business_units: Business units
         management: Management
+        options: Options
       organization_title: Organization
       questionnaires:
         definition: Definition
