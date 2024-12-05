@@ -346,14 +346,19 @@ en:
   options:
     review_scores:
       score: Score
-      value: Value
-      title: Review scores
       submit: Update scores
+      title: Review scores
+      value: Value
+      errors:
+        invalid: "The score \"%{value}\" is invalid"
+        numericality: "The score \"%{value}\" must be between 0 and 100"
+        score_not_change: The scores did not change
+        taken: "The score \"%{value}\" is repeated"
     manual_scores:
-      satisfactory: Satisfactory
-      needs_minor_improvements: Needs minor improvements
       needs_improvement: Needs improvement
+      needs_minor_improvements: Needs minor improvements
       needs_significant_improvements: Needs significant improvements
+      satisfactory: Satisfactory
       unsatisfactory: Unsatisfactory
 
   organizations:

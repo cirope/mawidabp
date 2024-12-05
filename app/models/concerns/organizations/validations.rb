@@ -22,23 +22,24 @@ module Organizations::Validations
       scores = manual_scores.to_a
 
       if scores.present?
-        repeated   = []
-        score_last = scores.first.last
+        last_score = scores.first.last
 
-        if score_last == scores[1]&.last
-          errors.add :base, :invalid, message: 'Las calificaciones no cambiaron'
-        end
+        if last_score == scores[1]&.last
+          errors.add :base, :invalid, message: I18n.t('options.review_scores.errors.score_not_change')
+        else
+          repeated = []
 
-        current_scores.each do |score, value|
-          if value.to_s !~ /\A\d+\Z/i
-            errors.add :base, message: "El valor de \"#{score}\" no es válido"
-          elsif value.to_i < 0 || value.to_i > 100
-            errors.add :base, message: "El valor de \"#{score}\" debe estar entre 0 y 100"
-          elsif repeated.include? value
-            errors.add :base, message: "El valor de \"#{score}\" está repetido"
+          current_scores.each do |score, value|
+            if value.to_s !~ /\A\d+\Z/i
+              errors.add :base, message: I18n.t('options.review_scores.errors.invalid', value: score)
+            elsif value.to_i < 0 || value.to_i > 100
+              errors.add :base, message: I18n.t('options.review_scores.errors.numericality', value: score)
+            elsif repeated.include? value
+              errors.add :base, message: I18n.t('options.review_scores.errors.taken', value: score)
+            end
+
+            repeated << value
           end
-
-          repeated << value
         end
       end
     end

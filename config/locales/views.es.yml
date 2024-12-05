@@ -345,14 +345,19 @@ es:
   options:
     review_scores:
       score: Calificación
-      value: Valor
-      title: Calificaciones de informes
       submit: Actualizar calificaciones
+      title: Calificaciones de informes
+      value: Valor
+      errors:
+        invalid: "El valor de \"%{value}\" no es válido"
+        numericality: "El valor de \"%{value}\" debe estar entre 0 y 100"
+        score_not_change: Las calificaciones no cambiaron
+        taken: "El valor de \"%{value}\" se encuentra repetido"
     manual_scores:
-      satisfactory: Satisfactoria
-      needs_minor_improvements: Necesita mejoras no significativas
       needs_improvement: Necesita mejoras
+      needs_minor_improvements: Necesita mejoras no significativas
       needs_significant_improvements: Necesita mejoras significativas
+      satisfactory: Satisfactoria
       unsatisfactory: Insatisfactorio
 
   organizations:
