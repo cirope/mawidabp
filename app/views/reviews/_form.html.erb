@@ -1,5 +1,6 @@
-<% readonly = @review.has_final_review? %>
-<% frozen = @review.is_frozen? %>
+<% readonly                  = @review.has_final_review? %>
+<% user_assignments_readonly = readonly || @review.user_assignments_readonly? %>
+<% frozen                    = @review.is_frozen? %>
 
 <div class="card">
   <div class="card-body">
@@ -185,7 +186,7 @@
           <h5 class="text-muted"><%= t 'review.user_assignment.audit_team' %></h5>
 
           <%= f.simple_fields_for :review_user_assignments, audit_team do |rua_f| %>
-            <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+            <%= render 'review_user_assignment', f: rua_f, readonly: user_assignments_readonly %>
           <% end %>
         <% end %>
 
@@ -193,17 +194,17 @@
           <h5 class="text-muted"><%= t 'review.user_assignment.others' %></h5>
 
           <%= f.simple_fields_for :review_user_assignments, others do |rua_f| %>
-            <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+            <%= render 'review_user_assignment', f: rua_f, readonly: user_assignments_readonly %>
           <% end %>
         <% end %>
 
-        <% unless readonly %>
+        <% unless user_assignments_readonly %>
           <hr>
 
           <div data-review-user-assignments-container></div>
 
           <%= link_to_add_fields(
-            t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
+            t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: user_assignments_readonly }
           ) %>
         <% end %>
       </div>
