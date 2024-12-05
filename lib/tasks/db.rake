@@ -35,6 +35,7 @@ namespace :db do
       update_risk_assessments_changes            # 2023-10-02
       add_risk_registries_privilege              # 2023-10-26
       add_claim_values_in_saml_provider          # 2023-11-02
+      add_organization_options                   # 2024-12-03
     end
   end
 end
@@ -1031,4 +1032,12 @@ private
       provider.email_claim,
       provider.roles_claim
     ].all? &:blank?
+  end
+
+  def add_organization_options
+    Organization.all.map &:create_options if add_organization_options?
+  end
+
+  def add_organization_options?
+    Organization.where(options: nil).any?
   end

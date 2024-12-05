@@ -67,6 +67,10 @@ en:
         notice: Opening interview successfully updated
         stale: Opening interview was not updated, please try again
 
+    options:
+      update:
+        notice: Scores updated successfully
+
     organizations:
       create:
         notice: Organization created successfully
