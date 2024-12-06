@@ -19,25 +19,25 @@ module Organizations::Validations
   private
 
     def validate_manual_scores
-      scores = manual_scores.to_a
+      scores = scores_by('manual_scores').to_a
 
       if scores.present?
         last_score = scores.first.last
 
         if last_score == scores[1]&.last
-          errors.add :base, :invalid, message: I18n.t('options.review_scores.errors.score_not_change')
+          errors.add :base, :manual_scores, message: I18n.t('options.manual_scores.errors.score_not_change')
         else
           repeated = []
 
-          current_scores.each do |score, value|
+          current_scores_by('manual_scores').each do |score, value|
             if value.to_i < 0 || value.to_i > 100
-              errors.add :base, message: I18n.t('options.review_scores.errors.numericality', value: score)
+              errors.add :base, :manual_scores, message: I18n.t('options.manual_scores.errors.numericality', value: score)
             elsif value.to_s !~ /\A\d+\Z/i
-              errors.add :base, message: I18n.t('options.review_scores.errors.invalid', value: score)
+              errors.add :base, :manual_scores, message: I18n.t('options.manual_scores.errors.invalid', value: score)
             elsif repeated.include? value
-              errors.add :base, message: I18n.t('options.review_scores.errors.taken', value: score)
+              errors.add :base, :manual_scores, message: I18n.t('options.manual_scores.errors.taken', value: score)
             elsif score.blank?
-              errors.add :base, message: I18n.t('options.review_scores.errors.presence')
+              errors.add :base, :manual_scores, message: I18n.t('options.manual_scores.errors.presence')
             end
 
             repeated << value

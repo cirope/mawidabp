@@ -172,7 +172,7 @@ module Reviews::Score
   end
 
   def current_manual_scores
-    Current.organization.scores_for(created_at) || []
+    Current.organization.scores_for('manual_scores', created_at) || []
   end
 
   def manual_score_text

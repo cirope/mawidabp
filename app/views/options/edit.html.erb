@@ -1,1 +1,20 @@
-<%= render 'form' %>
+<div class="card">
+  <div class="card-body">
+    <ul class="nav nav-tabs">
+      <% Organization::TYPES.each do |type| %>
+        <li class="nav-item">
+          <%= link_to t("options.#{type}.title"), "##{type}", data: { bs_toggle: 'tab' },
+            class: "nav-link #{ @type == type ? 'active' : '' }" %>
+        </li>
+      <% end %>
+    </ul>
+
+    <div class="tab-content pt-3">
+      <% Organization::TYPES.each do |type| %>
+        <div class="tab-pane <%== 'active' if @type == type %>" id="<%= type %>">
+          <%= render 'options/form', type: type %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

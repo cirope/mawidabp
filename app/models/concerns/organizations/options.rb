@@ -5,6 +5,10 @@ module Organizations::Options
     after_create_commit :create_options
   end
 
+  TYPES = [
+    'manual_scores', 'control_objective_item_scores'
+  ]
+
   DEFAULT_SCORES = {
     satisfactory:                   100,
     needs_minor_improvements:       80,
@@ -13,26 +17,28 @@ module Organizations::Options
     unsatisfactory:                 20
   }
 
-  def current_scores
-    sorted_scores manual_scores.first&.last
+  def current_scores_by type
+    scores = scores_by type
+
+    scores.present? ? sorted_scores(scores.first&.last) : []
   end
 
-  def manual_scores
-    if options&.dig('manual_scores')
-      options['manual_scores'].sort_by { |score, value| score.to_i }.reverse.to_h
+  def scores_by type
+    if options&.dig(type)
+      options[type].sort_by { |score, value| score.to_i }.reverse.to_h
     end
+  end
+
+  def scores_for type, date
+    epoch = (date || Time.zone.now).to_i
+
+    sorted_scores(
+      scores_by(type).detect { |date, values| date.to_i <= epoch }&.last
+    )
   end
 
   def create_options
     update! options: default_scores
-  end
-
-  def scores_for date
-    epoch = (date || Time.zone.now).to_i
-
-    sorted_scores(
-      manual_scores.detect { |date, values| date.to_i <= epoch }&.last
-    )
   end
 
   private

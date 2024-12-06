@@ -344,23 +344,25 @@ en:
       title: Show opening interview
 
   options:
-    review_scores:
-      score: Score
-      submit: Update scores
+    control_objective_item_scores:
+      title: Control objetive scores
+    manual_scores:
       title: Review scores
-      value: Value
       errors:
         invalid: "The score \"%{value}\" is invalid"
         numericality: "The score \"%{value}\" must be between 0 and 100"
         presence: There are blank scores
         score_not_change: The scores did not change
         taken: "The score \"%{value}\" is repeated"
-    manual_scores:
       needs_improvement: Needs improvement
       needs_minor_improvements: Needs minor improvements
       needs_significant_improvements: Needs significant improvements
       satisfactory: Satisfactory
       unsatisfactory: Unsatisfactory
+    scores:
+      score: Score
+      submit: Update scores
+      value: Value
 
   organizations:
     edit:

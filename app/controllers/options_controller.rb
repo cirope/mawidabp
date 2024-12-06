@@ -1,11 +1,12 @@
 class OptionsController < ApplicationController
-  before_action :auth, :check_privileges, :set_options
+  before_action :auth, :check_privileges, :set_type
+  before_action :set_options, only: [:update]
 
   def edit
   end
 
   def update
-    current_organization.options['manual_scores'].merge!(
+    current_organization.options[@type].merge!(
       Time.zone.now.to_i => @current_scores
     )
 
@@ -18,14 +19,14 @@ class OptionsController < ApplicationController
 
   private
 
+    def set_type
+      @type = params[:type] || 'manual_scores'
+    end
+
     def set_options
-      @current_scores = if params.dig(:options)
-                          options_params.values.to_h.
-                            transform_keys(&:strip).
-                            transform_values &:to_i
-                        else
-                          current_organization.current_scores
-                        end
+      @current_scores = options_params.values.to_h.
+                          transform_keys(&:strip).
+                          transform_values &:to_i
     end
 
     def options_params

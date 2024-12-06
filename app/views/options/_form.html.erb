@@ -1,60 +1,49 @@
-<div class="card">
-  <div class="card-body">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" href="#review-scores" data-bs-toggle="tab">
-          <%= t 'options.review_scores.title' %>
-        </a>
-      </li>
-    </ul>
-
-    <div class="tab-content pt-3">
-      <div class="tab-pane active" id="review-scores">
-        <%= simple_form_for current_organization, url: options_path, method: :patch do |f| %>
-          <% if f.object.errors[:base].present? %>
-            <div class="alert alert-danger">
-              <div class="alert-message">
-                <ul class="m-0">
-                  <% f.object.errors[:base].each do |error| %>
-                    <li><%= error %></li>
-                  <% end %>
-                </ul>
-              </div>
-            </div>
+<%= simple_form_for current_organization, url: options_path(type: type), method: :patch do |f| %>
+  <% if f.object.errors.select { |e| e.type == type.to_sym }.present? %>
+    <div class="alert alert-danger">
+      <div class="alert-message">
+        <ul class="m-0">
+          <% f.object.errors.select { |e| e.type == type.to_sym }.each do |error| %>
+            <li><%= error.message %></li>
           <% end %>
-
-          <div class="form-inputs">
-            <div class="row mb-2">
-              <div class="col-md-6">
-                <strong><%= t 'options.review_scores.score' %></strong>
-              </div>
-              <div class="col-md-6">
-                <strong><%= t 'options.review_scores.value' %></strong>
-              </div>
-            </div>
-
-            <% @current_scores.each_with_index do |(score, value), idx| %>
-              <div class="row">
-                <div class="col-md-6">
-                  <%= f.input :score, label: false, autofocus: idx == 0,
-                    input_html: { value: score, name: "options[#{idx}][]" } %>
-                </div>
-                <div class="col-md-6">
-                  <%= f.input :value, label: false,
-                    input_html: { value: value, name: "options[#{idx}][]" } %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <hr />
-
-          <div class="form-actions">
-            <%= f.submit t('options.review_scores.submit'), class: 'btn btn-primary' %>
-            <div class="float-end"><%= yield :form_actions %></div>
-          </div>
-        <% end %>
+        </ul>
       </div>
     </div>
+  <% end %>
+
+  <div class="form-inputs">
+    <div class="row mb-2">
+      <div class="col-md-5">
+        <strong><%= t 'options.scores.score' %></strong>
+      </div>
+      <div class="col-md-5">
+        <strong><%= t 'options.scores.value' %></strong>
+      </div>
+    </div>
+
+    <% current_organization.current_scores_by(type).each_with_index do |(score, value), idx| %>
+      <fieldset>
+        <div class="row" id="<%= type %>-<%= idx %>">
+          <div class="col-md-5">
+            <%= f.input :score, label: false, autofocus: idx == 0,
+              input_html: { value: score, name: "options[#{idx}][]" } %>
+          </div>
+          <div class="col-md-5">
+            <%= f.input :value, label: false,
+              input_html: { value: value, name: "options[#{idx}][]" } %>
+          </div>
+          <div class="col-md-2">
+            <%= link_to_remove_option %>
+          </div>
+        </div>
+      </fieldset>
+    <% end %>
   </div>
-</div>
+
+  <hr />
+
+  <div class="form-actions">
+    <%= f.submit t('options.scores.submit'), class: 'btn btn-primary' %>
+    <div class="float-end"><%= yield :form_actions %></div>
+  </div>
+<% end %>
