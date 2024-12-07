@@ -21,23 +21,13 @@
       </div>
     </div>
 
-    <% current_organization.current_scores_by(type).each_with_index do |(score, value), idx| %>
-      <fieldset>
-        <div class="row" id="<%= type %>-<%= idx %>">
-          <div class="col-md-5">
-            <%= f.input :score, label: false, autofocus: idx == 0,
-              input_html: { value: score, name: "options[#{idx}][]" } %>
-          </div>
-          <div class="col-md-5">
-            <%= f.input :value, label: false,
-              input_html: { value: value, name: "options[#{idx}][]" } %>
-          </div>
-          <div class="col-md-2">
-            <%= link_to_remove_option %>
-          </div>
-        </div>
-      </fieldset>
-    <% end %>
+    <div class="options-container">
+      <% current_organization.current_scores_by(type).each_with_index do |(score, value), idx| %>
+        <%= render 'options/option', score: score, value: value, idx: idx, f: f %>
+      <% end %>
+    </div>
+
+    <%= link_to_add_option type %>
   </div>
 
   <hr />

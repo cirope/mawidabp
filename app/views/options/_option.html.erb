@@ -1,0 +1,15 @@
+<fieldset>
+  <div class="row">
+    <div class="col-md-5">
+      <%= f.input :score, label: false, autofocus: idx == 0,
+        input_html: { value: score, name: "options[#{idx}][]" } %>
+    </div>
+    <div class="col-md-5">
+      <%= f.input :value, label: false,
+        input_html: { value: value, name: "options[#{idx}][]" } %>
+    </div>
+    <div class="col-md-2">
+      <%= link_to_remove_option %>
+    </div>
+  </div>
+</fieldset>

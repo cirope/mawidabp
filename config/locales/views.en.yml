@@ -348,21 +348,23 @@ en:
       title: Control objetive scores
     manual_scores:
       title: Review scores
-      errors:
-        invalid: "The score \"%{value}\" is invalid"
-        numericality: "The score \"%{value}\" must be between 0 and 100"
-        presence: There are blank scores
-        score_not_change: The scores did not change
-        taken: "The score \"%{value}\" is repeated"
       needs_improvement: Needs improvement
       needs_minor_improvements: Needs minor improvements
       needs_significant_improvements: Needs significant improvements
       satisfactory: Satisfactory
       unsatisfactory: Unsatisfactory
     scores:
+      add: Add score
+      delete: Delete score
       score: Score
       submit: Update scores
       value: Value
+      errors:
+        blank: There are blank scores
+        invalid: "The score \"%{value}\" is invalid"
+        numericality: "The score \"%{value}\" must be between 0 and 100"
+        score_not_change: The scores did not change
+        taken: "The score \"%{value}\" is repeated"
 
   organizations:
     edit:

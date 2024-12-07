@@ -347,21 +347,23 @@ es:
       title: Calificaciones de objetivos de control
     manual_scores:
       title: Calificaciones de informes
-      errors:
-        invalid: "El valor de \"%{value}\" no es válido"
-        numericality: "El valor de \"%{value}\" debe estar entre 0 y 100"
-        presence: Existen calificaciones en blanco
-        score_not_change: Las calificaciones no cambiaron
-        taken: "El valor de \"%{value}\" se encuentra repetido"
       needs_improvement: Necesita mejoras
       needs_minor_improvements: Necesita mejoras no significativas
       needs_significant_improvements: Necesita mejoras significativas
       satisfactory: Satisfactoria
       unsatisfactory: Insatisfactorio
     scores:
+      add: Agregar calificación
+      delete: Eliminar calificación
       score: Calificación
       submit: Actualizar calificaciones
       value: Valor
+      errors:
+        blank: Existen calificaciones en blanco
+        invalid: "El valor de \"%{value}\" no es válido"
+        numericality: "El valor de \"%{value}\" debe estar entre 0 y 100"
+        score_not_change: Las calificaciones no cambiaron
+        taken: "El valor de \"%{value}\" se encuentra repetido"
 
   organizations:
     edit:

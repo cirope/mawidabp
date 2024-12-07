@@ -2,6 +2,8 @@ module Organizations::Options
   extend ActiveSupport::Concern
 
   included do
+    attr_accessor :option_type
+
     after_create_commit :create_options
   end
 
@@ -44,7 +46,11 @@ module Organizations::Options
   private
 
     def sorted_scores scores
-      scores.sort_by { |score, value| value.to_i }.reverse.to_h if scores.present?
+      if scores.present?
+        scores.sort_by { |score, value| value.to_i }.reverse.to_h
+      else
+        {}
+      end
     end
 
     def default_scores
