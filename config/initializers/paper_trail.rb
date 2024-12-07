@@ -1,5 +1,17 @@
 PaperTrail.serializer = PaperTrail::Serializers::JSON
 
+module PaperTrail
+  class Version < ActiveRecord::Base
+    after_commit :changes_log
+
+    def changes_log
+      logger = Logger.new ::Rails.root.join('log', 'changes.log')
+
+      logger.info self if self.important == true
+    end
+  end
+end
+
 module PaperTrail::VersionConcern
   def changes_until other
     new_attributes = (other.try(:reify, has_one: false) || item).try(:attributes) || {}
