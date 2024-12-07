@@ -2,7 +2,7 @@ PaperTrail.serializer = PaperTrail::Serializers::JSON
 
 module PaperTrail
   class Version < ActiveRecord::Base
-    VERSION_LOG = Logger.new(::Rails.root.join('log', 'version.log'))
+    VERSION_LOG = Logger.new ::Rails.root.join('log', 'version.log')
 
     after_commit :log_changes
 
