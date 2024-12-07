@@ -346,13 +346,20 @@ en:
   options:
     control_objective_item_scores:
       title: Control objetive scores
+    importance_scores:
+      title: Importance scores
     manual_scores:
       title: Review scores
-      needs_improvement: Needs improvement
-      needs_minor_improvements: Needs minor improvements
-      needs_significant_improvements: Needs significant improvements
-      satisfactory: Satisfactory
-      unsatisfactory: Unsatisfactory
+      defaults:
+        needs_improvement: Needs improvement
+        needs_minor_improvements: Needs minor improvements
+        needs_significant_improvements: Needs significant improvements
+        satisfactory: Satisfactory
+        unsatisfactory: Unsatisfactory
+    priority_scores:
+      title: Priority scores
+    risk_scores:
+      title: Risk scores
     scores:
       add: Add score
       delete: Delete score

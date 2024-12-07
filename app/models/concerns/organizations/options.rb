@@ -8,7 +8,11 @@ module Organizations::Options
   end
 
   TYPES = [
-    'manual_scores', 'control_objective_item_scores'
+    'manual_scores',
+    'control_objective_item_scores',
+    'importance_scores',
+    'priority_scores',
+    'risk_scores'
   ]
 
   DEFAULT_SCORES = {
@@ -57,7 +61,7 @@ module Organizations::Options
       scores = {}
 
       Organization::DEFAULT_SCORES.each do |key, value|
-        score         = I18n.t "options.manual_scores.#{key}"
+        score         = I18n.t "options.manual_scores.defaults.#{key}"
         scores[score] = value
       end
 

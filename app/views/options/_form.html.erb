@@ -23,7 +23,7 @@
 
     <div class="options-container">
       <% current_organization.current_scores_by(type).each_with_index do |(score, value), idx| %>
-        <%= render 'options/option', score: score, value: value, idx: idx, f: f %>
+        <%= render 'options/option', score: score, value: value, id: idx, f: f %>
       <% end %>
     </div>
 

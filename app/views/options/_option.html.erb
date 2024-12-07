@@ -1,12 +1,12 @@
 <fieldset>
   <div class="row">
     <div class="col-md-5">
-      <%= f.input :score, label: false, autofocus: idx == 0,
-        input_html: { value: score, name: "options[#{idx}][]" } %>
+      <%= f.input :score, label: false, autofocus: id == 0, input_html: {
+        id: "score-#{id}", class: 'options-score', value: score, name: "options[#{id}][]" } %>
     </div>
     <div class="col-md-5">
-      <%= f.input :value, label: false,
-        input_html: { value: value, name: "options[#{idx}][]" } %>
+      <%= f.input :value, label: false, input_html: { id: "value-#{id}",
+        class: 'options-value', value: value, name: "options[#{id}][]" } %>
     </div>
     <div class="col-md-2">
       <%= link_to_remove_option %>
