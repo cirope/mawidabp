@@ -22,7 +22,7 @@ module ConclusionFinalReviewsHelper
     if REVIEW_MANUAL_SCORE
       review.manual_score_text
     else
-      "#{conclusion_final_review.review.score.to_s} %"
+      "#{review.score.to_s} %"
     end
   end
 
