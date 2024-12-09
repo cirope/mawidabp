@@ -53,7 +53,7 @@
             <% end %>
           </div>
           <div class="col-md-6">
-            <%= f.input :design_score, collection: qualifications,
+            <%= f.input :design_score, collection: qualifications(control_objective_item: @control_objective_item),
               include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
               prompt: SHOW_CONCLUSION_AS_OPTIONS,
               input_html: {
@@ -66,16 +66,17 @@
                 }
               }
             %>
+
             <%= yield :design_tests %>
 
             <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
-              <%= f.input :compliance_score, collection: qualifications,
+              <%= f.input :compliance_score, collection: qualifications(control_objective_item: @control_objective_item),
                 include_blank: t('control_objective_item.not_rated'),
                 input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
             <% end %>
             <%= yield :compliance_tests unless HIDE_CONTROL_COMPLIANCE_TESTS %>
 
-            <%= f.input :sustantive_score, collection: qualifications,
+            <%= f.input :sustantive_score, collection: qualifications(control_objective_item: @control_objective_item),
               include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
               prompt: SHOW_CONCLUSION_AS_OPTIONS,
               input_html: {

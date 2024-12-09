@@ -1,4 +1,11 @@
-<% scores = { manual_scores: { Time.zone.now.to_i => Organization::DEFAULT_SCORES } }.to_json %>
+<%
+  now = Time.zone.now.to_i
+
+  scores = {
+    manual_scores:                 { now => Organization::DEFAULT_SCORES },
+    control_objective_item_scores: { now => {} }
+  }.to_json
+%>
 
 cirope:
   name: Cirope S.A.

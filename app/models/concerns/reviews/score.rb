@@ -171,14 +171,16 @@ module Reviews::Score
     score_type == 'splitted_effectiveness'
   end
 
-  def current_manual_scores
-    Current.organization.scores_for('manual_scores', created_at) || []
+  def manual_score_text
+    manual_scores = Review.current_manual_scores(created_at)
+
+    manual_scores.invert.dig manual_score.to_i
   end
 
-  def manual_score_text
-    manual_scores = current_manual_scores
-
-    current_manual_scores.invert.dig(manual_score.to_i) if manual_scores.present?
+  module ClassMethods
+    def current_manual_scores date
+      Current.organization.scores_for 'manual_scores', date
+    end
   end
 
   private

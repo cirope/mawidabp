@@ -13,6 +13,12 @@ module ControlObjectiveItems::Scores
     score_text_for sustantive_score, show_value
   end
 
+  module ClassMethods
+    def qualification_scores date
+      Current.organization.scores_for 'control_objective_item_scores', date
+    end
+  end
+
   private
 
     def score_text_for score, show_value

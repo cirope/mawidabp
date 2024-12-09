@@ -15,14 +15,18 @@ module SettingsHelper
     end
   end
 
-  def qualifications show_value: !SHOW_SHORT_QUALIFICATIONS
-    ::QUALIFICATION_TYPES.map do |k, v|
-      text = [
-        t("qualification_types.#{k}"),
-        ("(#{v})" if show_value)
-      ].compact.join(' ')
+  def qualifications show_value: !SHOW_SHORT_QUALIFICATIONS, control_objective_item: nil
+    if REVIEW_MANUAL_SCORE
+      ControlObjectiveItem.qualification_scores control_objective_item&.created_at
+    else
+      ::QUALIFICATION_TYPES.map do |k, v|
+        text = [
+          t("qualification_types.#{k}"),
+          ("(#{v})" if show_value)
+        ].compact.join(' ')
 
-      [text, v]
+        [text, v]
+      end
     end
   end
 
