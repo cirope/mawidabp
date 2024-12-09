@@ -99,7 +99,7 @@
                 </div>
                 <div class="row">
                   <div class="col">
-                    <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
+                    <%= f.input :risk, collection: risks(date: @finding.created_at), prompt: true, disabled: @finding.automatic_risk?, input_html: {
                       data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date('finding'))
                     } %>
                   </div>
@@ -150,7 +150,7 @@
                 </div>
                 <div class="row">
                   <div class="col-9">
-                    <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
+                    <%= f.input :risk, collection: risks(date: @finding.created_at), prompt: true, disabled: @finding.automatic_risk?, input_html: {
                       data: weakness_risk_data_options.merge({ bic_field_to_disabled_when_is_automatic: true })
                     } %>
                     <%= f.hidden_field :risk, disabled: !@finding.automatic_risk?,
@@ -164,7 +164,7 @@
                   </div>
                 </div>
               <% else %>
-                <%= f.input :risk, collection: risks, prompt: true, input_html: {
+                <%= f.input :risk, collection: risks(date: @finding.created_at), prompt: true, input_html: {
                   autofocus: true,
                   data: weakness_risk_data_options
                 } %>

@@ -246,7 +246,7 @@
               </div>
 
             <% else %>
-              <%= f.input :risk, collection: risks, prompt: true, disabled: readonly, input_html: {
+              <%= f.input :risk, collection: risks(date: @weakness.created_at), prompt: true, disabled: readonly, input_html: {
                 data: weakness_risk_data_options
               } %>
             <% end %>
