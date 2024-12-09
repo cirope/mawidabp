@@ -2,15 +2,15 @@ module Organizations::Options
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :option_type
+    attr_accessor :score_type
 
     after_create_commit :create_options
   end
 
-  TYPES = [
+  SCORE_TYPES = [
     'manual_scores',
     'control_objective_item_scores',
-    'importance_scores',
+    'relevance_scores',
     'priority_scores',
     'risk_scores'
   ]
@@ -35,12 +35,18 @@ module Organizations::Options
     end
   end
 
-  def scores_for type, date
+  def scores_for type:, date:
     epoch = (date || Time.zone.now).to_i
 
     sorted_scores(
       scores_by(type).detect { |date, values| date.to_i <= epoch }&.last
     )
+  end
+
+  def score_text_for type:, date:, value:
+    scores = scores_for type: type, date: date
+
+    scores.invert.dig value.to_i
   end
 
   def create_options

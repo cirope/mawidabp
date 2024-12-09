@@ -25,8 +25,7 @@ class OptionsControllerTest < ActionController::TestCase
                             '2' => [ 'unsatisfactory', 10 ]
                           }
 
-    assert_equal Organization::DEFAULT_SCORES.count,
-      Current.organization.current_scores_by(type).count
+    assert_equal 0, Current.organization.current_scores_by(type).count
 
     patch :update, params: { options: options }
 

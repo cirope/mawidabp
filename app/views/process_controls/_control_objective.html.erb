@@ -10,7 +10,7 @@
       </div>
 
       <div class="col-md-2">
-        <%= f.input :relevance, collection: relevances, prompt: true %>
+        <%= f.input :relevance, collection: relevances(date: f.object.created_at), prompt: true %>
       </div>
       <% unless HIDE_CONTROL_OBJECTIVE_RISK %>
         <div class="col-md-2">

@@ -346,8 +346,8 @@ en:
   options:
     control_objective_item_scores:
       title: Control objetive scores
-    importance_scores:
-      title: Importance scores
+    relevance_scores:
+      title: Relevance scores
     manual_scores:
       title: Review scores
       defaults:

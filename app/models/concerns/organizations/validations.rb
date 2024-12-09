@@ -19,28 +19,28 @@ module Organizations::Validations
   private
 
     def validate_scores
-      scores = scores_by(option_type).to_a
+      scores = scores_by(score_type).to_a
 
       if scores.present?
         last_score    = scores.first.last
-        current_score = current_scores_by option_type
+        current_score = current_scores_by score_type
 
         if last_score == scores[1]&.last
-          errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.score_not_change')
+          errors.add :base, score_type.to_sym, message: I18n.t('options.scores.errors.score_not_change')
         elsif current_score.blank?
-          errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.blank')
+          errors.add :base, score_type.to_sym, message: I18n.t('options.scores.errors.blank')
         else
           repeated = []
 
           current_score.each do |score, value|
             if value.to_i < 0 || value.to_i > 100
-              errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.numericality', value: score)
+              errors.add :base, score_type.to_sym, message: I18n.t('options.scores.errors.numericality', value: score)
             elsif value.to_s !~ /\A\d+\Z/i
-              errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.invalid', value: score)
+              errors.add :base, score_type.to_sym, message: I18n.t('options.scores.errors.invalid', value: score)
             elsif repeated.include? value
-              errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.taken', value: score)
+              errors.add :base, score_type.to_sym, message: I18n.t('options.scores.errors.taken', value: score)
             elsif score.blank?
-              errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.blank')
+              errors.add :base, score_type.to_sym, message: I18n.t('options.scores.errors.blank')
             end
 
             repeated << value

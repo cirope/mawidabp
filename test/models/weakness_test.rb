@@ -304,6 +304,8 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'priority text' do
+    skip if REVIEW_MANUAL_SCORE
+
     priority = Weakness.priorities.detect { |p| p.last == @weakness.priority }
 
     assert_equal I18n.t("priority_types.#{priority.first}"), @weakness.priority_text
