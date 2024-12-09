@@ -18,6 +18,14 @@ module ConclusionFinalReviewsHelper
     end
   end
 
+  def conclusion_final_review_score review
+    if REVIEW_MANUAL_SCORE
+      review.manual_score_text
+    else
+      "#{conclusion_final_review.review.score.to_s} %"
+    end
+  end
+
   def conclusion_review_score_details_table(review)
     scores = review.class.scores.to_a
     review_score = review.score_array.first
