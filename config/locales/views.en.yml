@@ -475,6 +475,14 @@ en:
     edit:
       title: Edit work plan
       other_actions: Actions
+    history:
+      action: Action
+      actions:
+        create: created
+        destroy: deleted
+        update: updated
+      changes: Change history
+      show: Show change history
     index:
       copy: Copy
       title: Work plan list

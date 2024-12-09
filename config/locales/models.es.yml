@@ -581,6 +581,7 @@ es:
         estimated_amount: Costo estimado
         organization_id: Organización
         period_id: Periodo
+        status: Estado
       plan/plan_items:
         auxiliar_business_unit_types: Unidades organizativas auxiliares
         business_unit_id: Proyecto (unidad de negocio)

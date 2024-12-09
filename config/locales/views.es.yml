@@ -474,6 +474,14 @@ es:
     edit:
       other_actions: Acciones
       title: Modificar plan de trabajo
+    history:
+      action: Acción
+      actions:
+        create: creó
+        destroy: eliminó
+        update: modificó
+      changes: Historial de cambios
+      show: Ver historial de cambios
     index:
       copy: Copiar
       title: Listado de planes de trabajo

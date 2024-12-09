@@ -1,0 +1,52 @@
+module Plans::History
+  extend ActiveSupport::Concern
+
+  included do
+    before_save :check_for_status_changes
+  end
+
+  def change_history
+    versions.each_with_object([]) do |version, result|
+      date    = I18n.l version.created_at, format: :long
+      user    = User.find_by id: version.whodunnit
+      action  = I18n.t "plans.history.actions.#{version.event}"
+      changes = version_changes version
+
+      history = {
+        date:    date.strip,
+        user:    user.informal_name,
+        action:  action,
+        changes: changes
+      }
+
+      result << history
+    end
+  end
+
+  private
+
+    def version_changes version
+      version.object_changes.each_with_object([]) do |(attr, values), result|
+        changes = {}
+
+        case attr
+        when 'status'
+          if Current.organization.require_plan_and_review_approval?
+            new_status = I18n.t "plans.statuses.#{values.last}"
+
+            changes[Plan.human_attribute_name(attr)] = new_status
+          end
+        when 'period_id'
+          new_period = Period.find(values.last).name
+
+          changes[Plan.human_attribute_name(attr)] = new_period
+        end
+
+        result << changes if changes.present?
+      end
+    end
+
+    def check_for_status_changes
+      self.status_will_change! if new_record?
+    end
+end
