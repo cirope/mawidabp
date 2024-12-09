@@ -691,7 +691,7 @@ es:
         file_model_id: Anexos
         identification: Identificación
         include_sox: Incluye prueba SOX
-        manual_score: Puntaje de auditoría
+        manual_score: Conclusión de la auditoría
         manual_score_alt: Puntaje de auditoría cumplimiento
         period_id: Periodo
         plan_item: Proyecto
