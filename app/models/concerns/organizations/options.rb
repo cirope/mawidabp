@@ -39,7 +39,7 @@ module Organizations::Options
     epoch = (date || Time.zone.now).to_i
 
     sorted_scores(
-      scores_by(type).detect { |date, values| date.to_i <= epoch }&.last
+      scores_by(type)&.detect { |date, values| date.to_i <= epoch }&.last
     )
   end
 

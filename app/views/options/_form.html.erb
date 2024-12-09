@@ -1,9 +1,9 @@
 <%= simple_form_for current_organization, url: options_path(type: type), method: :patch do |f| %>
-  <% if f.object.errors.select { |e| e.type == type.to_sym }.present? %>
+  <% if options_errors_for(f.object, type).present? %>
     <div class="alert alert-danger">
       <div class="alert-message">
         <ul class="m-0">
-          <% f.object.errors.select { |e| e.type == type.to_sym }.each do |error| %>
+          <% options_errors_for(f.object, type).each do |error| %>
             <li><%= error.message %></li>
           <% end %>
         </ul>

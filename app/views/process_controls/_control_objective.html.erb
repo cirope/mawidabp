@@ -14,7 +14,7 @@
       </div>
       <% unless HIDE_CONTROL_OBJECTIVE_RISK %>
         <div class="col-md-2">
-          <%= f.input :risk, collection: risks, prompt: true %>
+          <%= f.input :risk, collection: risks(date: f.object.created_at), prompt: true %>
         </div>
       <% end %>
       <div class="col-md-1">

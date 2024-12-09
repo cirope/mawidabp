@@ -38,9 +38,15 @@ module SettingsHelper
     end
   end
 
-  def risks
-    RISK_TYPES.map do |k, v|
-      [[t("risk_types.#{k}"), "(#{v})"].join(' '), v]
+  def risks date: nil
+    if REVIEW_MANUAL_SCORE
+      Current.organization.scores_for(
+        type: 'risk_scores', date: date
+      )
+    else
+      RISK_TYPES.map do |k, v|
+        [[t("risk_types.#{k}"), "(#{v})"].join(' '), v]
+      end
     end
   end
 

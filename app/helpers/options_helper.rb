@@ -15,4 +15,8 @@ module OptionsHelper
       class: 'text-danger'
     )
   end
+
+  def options_errors_for object, type
+    object.errors.select { |error| error.type == type.to_sym }
+  end
 end

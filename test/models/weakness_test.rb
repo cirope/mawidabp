@@ -298,6 +298,8 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'risk text' do
+    skip if REVIEW_MANUAL_SCORE
+
     risk = Weakness.risks.detect { |r| r.last == @weakness.risk }
 
     assert_equal I18n.t("risk_types.#{risk.first}"), @weakness.risk_text
