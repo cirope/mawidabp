@@ -703,6 +703,7 @@ en:
         scope: Audit scope
         score: Rating
         score_alt: Compliance rating
+        status: Estado
         subsidiary: Branch
         subsidiary_id: Branch
         survey: Survey

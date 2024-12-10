@@ -703,6 +703,7 @@ es:
         scope: Alcance auditoría
         score: Calificación
         score_alt: Calificación cumplimiento
+        status: Estado
         subsidiary: Sucursal
         subsidiary_id: Sucursal
         survey: Relevamiento

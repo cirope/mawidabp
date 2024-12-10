@@ -659,6 +659,14 @@ en:
       add_business_unit_type: Add organizational unit
       operational_audit: Operational audit
       system_audit: System audit
+    history:
+      action: Action
+      actions:
+        create: created
+        destroy: deleted
+        update: updated
+      changes: Change history
+      show: Show change history
     index:
       control_objective_items_finished:
         label: CCO
