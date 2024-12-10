@@ -30,6 +30,16 @@ module Reviews::Users
     can_be_modified
   end
 
+  def user_assignments_readonly?
+    return false unless Current.organization.require_plan_and_review_approval?
+
+    manager_or_supervisor = [:manager, :supervisor].include?(
+      ReviewUserAssignment::TYPES.invert[review_assignment_type]
+    )
+
+    approved? && !manager_or_supervisor
+  end
+
   private
 
     def review_assignment_type

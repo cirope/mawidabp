@@ -21,6 +21,7 @@ module ControlObjectiveItems::Validations
     validate :control_objective_uniqueness
     validate :tests_completion
     validate :score_with_test_completion
+    validate :readonly_attribute_change
   end
 
   private
@@ -79,6 +80,14 @@ module ControlObjectiveItems::Validations
 
         if sustantive_score.blank? && control.sustantive_tests.present?
           errors.add :sustantive_score, :blank
+        end
+      end
+    end
+
+    def readonly_attribute_change
+      if review&.approved?
+        if control_objective_text_changed? || control.control_changed?
+          raise ActiveRecord::RecordInvalid.new(self)
         end
       end
     end
