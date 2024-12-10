@@ -39,7 +39,7 @@
     <div class="col-md-1">
       <div class="mt-2 text-end">
         <%= (f.object.persisted? ? work_paper_show_change_history("work_paper_change_history-#{f.object.id}") : '') %>
-        <%= link_to_remove_nested_item(f) unless frozen %>
+        <%= link_to_remove_nested_item(f) if !frozen && !f.object.finished? %>
         <%= f.input :lock_version, as: :hidden %>
       </div>
     </div>
