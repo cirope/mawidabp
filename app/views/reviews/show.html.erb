@@ -180,8 +180,15 @@
       <% if review_can_be_modified? @review %>
         <%= link_to_edit edit_review_path(@review) %> |
       <% end %>
+      <% if Current.organization.require_plan_and_review_approval? %>
+        <%= review_show_change_history %> |
+      <% end %>
       <%= link_to t('label.download'), [@review, format: :pdf] %> |
       <%= link_to_index reviews_path %>
     </div>
+
+    <% if Current.organization.require_plan_and_review_approval? %>
+      <%= render 'reviews/change_history', review: @review %>
+    <% end %>
   </div>
 </div>

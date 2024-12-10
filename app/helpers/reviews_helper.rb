@@ -1,4 +1,11 @@
 module ReviewsHelper
+  def review_show_change_history
+    link_to icon('fas', 'history'), "#review_change_history", {
+      title: t('reviews.history.show'),
+      data:  { bs_toggle: 'collapse' }
+    }
+  end
+  
   def show_review_with_close_date_as_abbr(review)
     close_date = review.conclusion_final_review.try(:close_date)
     review_data = close_date ?

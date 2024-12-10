@@ -1,0 +1,19 @@
+<div id="review_change_history" class="collapse mt-3">
+  <div>
+    <h5><%= t('reviews.history.changes') %></h5>
+    <ul class="mb-3">
+      <% review.change_history.each do |history| %>
+        <li>
+          <%= history[:date] %>
+          <ul>
+            <li><%= t 'reviews.history.action' %>: <%= history[:action] %></li>
+            <li><%= User.model_name.human %>: <%= history[:user] %></li>
+            <% history[:changes].each do |change| %>
+              <li><%= change.keys.first %>: <%= change.values.first %></li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

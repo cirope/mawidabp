@@ -7,6 +7,7 @@ class Plan < ApplicationRecord
   include Plans::CsvPrhPat
   include Plans::DestroyValidation
   include Plans::Duplication
+  include Plans::History
   include Plans::Overload
   include Plans::Pdf
   include Plans::PlanItems
