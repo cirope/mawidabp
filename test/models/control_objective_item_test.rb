@@ -490,6 +490,19 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     Current.user = nil
   end
 
+  test 'readonly attribute change' do
+    @control_objective_item.control_objective_text = 'Updated text'
+    @control_objective_item.control.control = 'Updated control'
+
+    assert @control_objective_item.valid?
+
+    @control_objective_item.review.approved!
+
+    assert_raises ActiveRecord::RecordInvalid do
+      @control_objective_item.valid?
+    end
+  end
+
   private
     def use_review_weaknesses_score?
       ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization.prefix
