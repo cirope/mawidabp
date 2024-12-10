@@ -6,7 +6,7 @@ module Plans::History
   end
 
   def change_history
-    versions.each_with_object([]) do |version, result|
+    relevant_versions.each_with_object([]) do |version, result|
       date    = I18n.l version.created_at, format: :long
       user    = User.find_by id: version.whodunnit
       action  = I18n.t "plans.history.actions.#{version.event}"
@@ -25,21 +25,20 @@ module Plans::History
 
   private
 
+    def relevant_versions
+      versions.select do |version|
+        version.object_changes.key?('status')
+      end
+    end
+
     def version_changes version
       version.object_changes.each_with_object([]) do |(attr, values), result|
         changes = {}
 
-        case attr
-        when 'status'
-          if Current.organization.require_plan_and_review_approval?
-            new_status = I18n.t "plans.statuses.#{values.last}"
+        if attr == 'status'
+          new_status = I18n.t "plans.statuses.#{values.last}"
 
-            changes[Plan.human_attribute_name(attr)] = new_status
-          end
-        when 'period_id'
-          new_period = Period.find(values.last).name
-
-          changes[Plan.human_attribute_name(attr)] = new_period
+          changes[Plan.human_attribute_name(attr)] = new_status
         end
 
         result << changes if changes.present?
