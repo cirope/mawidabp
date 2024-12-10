@@ -345,7 +345,7 @@ es:
   options:
     control_objective_item_scores:
       title: Calificaciones de objetivos de control
-    relevance_scores:
+    relevance:
       title: Importancia
     manual_scores:
       defaults:
@@ -355,21 +355,21 @@ es:
         satisfactory: Satisfactoria
         unsatisfactory: Insatisfactorio
       title: Calificaciones de informes
-    priority_scores:
+    priorities:
       title: Prioridades
-    risk_scores:
+    risks:
       title: Riesgos
     scores:
-      add: Agregar etiqueta
-      delete: Eliminar etiqueta
+      add: Agregar valor
+      delete: Eliminar valor
       score: Etiqueta
-      submit: Actualizar etiquetas
+      submit: Actualizar valores
       value: Valor
       errors:
         blank: Existen etiquetas en blanco
         invalid: "El valor de \"%{value}\" no es válido"
         numericality: "El valor de \"%{value}\" debe estar entre 0 y 100"
-        score_not_change: Las etiquetas no cambiaron
+        score_not_change: Los valores no cambiaron
         taken: "El valor de \"%{value}\" se encuentra repetido"
 
   organizations:

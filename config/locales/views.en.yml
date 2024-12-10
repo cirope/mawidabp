@@ -346,7 +346,7 @@ en:
   options:
     control_objective_item_scores:
       title: Control objetive scores
-    relevance_scores:
+    relevance:
       title: Relevance
     manual_scores:
       defaults:
@@ -356,21 +356,21 @@ en:
         satisfactory: Satisfactory
         unsatisfactory: Unsatisfactory
       title: Review scores
-    priority_scores:
+    priorities:
       title: Priorities
-    risk_scores:
+    risks:
       title: Risks
     scores:
-      add: Add score
-      delete: Delete score
+      add: Add value
+      delete: Delete value
       score: Score
-      submit: Update scores
+      submit: Update values
       value: Value
       errors:
-        blank: There are blank scores
+        blank: There are blank values
         invalid: "The score \"%{value}\" is invalid"
         numericality: "The score \"%{value}\" must be between 0 and 100"
-        score_not_change: The scores did not change
+        score_not_change: The values did not change
         taken: "The score \"%{value}\" is repeated"
 
   organizations:

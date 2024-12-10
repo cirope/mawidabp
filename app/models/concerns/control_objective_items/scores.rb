@@ -17,10 +17,8 @@ module ControlObjectiveItems::Scores
 
     def score_text_for score, show_value
       if REVIEW_MANUAL_SCORE
-        Current.organization.score_text_for(
-          type:  'control_objective_item_scores',
-          date:  created_at,
-          value: score
+        Current.organization.control_objective_item_scores_text_for(
+          date: created_at, value: score
         )
       else
         full_score = self.class.qualifications.detect do |r|

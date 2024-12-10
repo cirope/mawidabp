@@ -3,11 +3,7 @@ module ControlObjectiveItems::Relevance
 
   def relevance_text show_value: false
     if REVIEW_MANUAL_SCORE
-      Current.organization.score_text_for(
-        type:  'relevance_scores',
-        date:  created_at,
-        value: relevance
-      )
+      Current.organization.relevance_text_for date: created_at, value: relevance
     else
       relevance = self.class.relevances.detect do |r|
         r.last == self.relevance

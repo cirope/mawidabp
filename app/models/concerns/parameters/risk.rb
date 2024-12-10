@@ -12,16 +12,20 @@ module Parameters::Risk
   }
 
   module ClassMethods
-    def risks
-      RISK_TYPES
+    def risks date: nil
+      if REVIEW_MANUAL_SCORE && Current.organization
+        Current.organization.risks(date: date).symbolize_keys
+      else
+        RISK_TYPES
+      end
     end
 
-    def risks_values
-      RISK_TYPES.values
+    def risks_values date: nil
+      risks(date: date).values
     end
 
-    def highest_risks
-      [RISK_TYPES[:high]]
+    def highest_risks date: nil
+      [risks_values(date: date).max]
     end
 
     private

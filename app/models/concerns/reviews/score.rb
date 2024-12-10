@@ -172,19 +172,14 @@ module Reviews::Score
   end
 
   def manual_score_text
-    Current.organization.score_text_for(
-      type:  'manual_scores',
-      date:  created_at,
-      value: manual_score
+    Current.organization.manual_scores_text_for(
+      date: created_at, value: manual_score
     )
   end
 
   module ClassMethods
     def current_manual_scores date
-      Current.organization.scores_for(
-        type: 'manual_scores',
-        date: date
-      )
+      Current.organization.manual_scores date: date
     end
   end
 

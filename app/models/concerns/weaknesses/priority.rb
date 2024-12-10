@@ -3,11 +3,7 @@ module Weaknesses::Priority
 
   def priority_text
     if REVIEW_MANUAL_SCORE
-      Current.organization.score_text_for(
-        type:  'priority_scores',
-        date:  created_at,
-        value: priority
-      )
+      Current.organization.priorities_text_for date: created_at, value: priority
     else
       priority = self.class.priorities.detect { |p| p.last == self.priority }
 

@@ -5,10 +5,8 @@ module SettingsHelper
   include Parameters::Qualification
 
   def relevances show_value: !USE_SHORT_RELEVANCE, date: nil
-    if REVIEW_MANUAL_SCORE
-      Current.organization.scores_for(
-        type: 'relevance_scores', date: date
-      )
+    if REVIEW_MANUAL_SCORE && Current.organization
+      Current.organization.relevance date: date
     else
       RELEVANCE_TYPES.map do |k, v|
         text = [
@@ -22,10 +20,8 @@ module SettingsHelper
   end
 
   def qualifications show_value: !SHOW_SHORT_QUALIFICATIONS, date: nil
-    if REVIEW_MANUAL_SCORE
-      Current.organization.scores_for(
-        type: 'control_objective_item_scores', date: date
-      )
+    if REVIEW_MANUAL_SCORE && Current.organization
+      Current.organization.control_objective_item_scores date: date
     else
       ::QUALIFICATION_TYPES.map do |k, v|
         text = [
@@ -39,10 +35,8 @@ module SettingsHelper
   end
 
   def risks date: nil
-    if REVIEW_MANUAL_SCORE
-      Current.organization.scores_for(
-        type: 'risk_scores', date: date
-      )
+    if REVIEW_MANUAL_SCORE && Current.organization
+      Current.organization.risks date: date
     else
       RISK_TYPES.map do |k, v|
         [[t("risk_types.#{k}"), "(#{v})"].join(' '), v]
@@ -55,10 +49,8 @@ module SettingsHelper
       PRIORITY_TYPES.map do |k, v|
         [t("priority_types.#{k}"), v]
       end
-    elsif REVIEW_MANUAL_SCORE
-      Current.organization.scores_for(
-        type: 'priority_scores', date: date
-      )
+    elsif REVIEW_MANUAL_SCORE && Current.organization
+      Current.organization.priorities date: date
     else
       PRIORITY_TYPES.map do |k, v|
         [[t("priority_types.#{k}"), "(#{v})"].join(' '), v]

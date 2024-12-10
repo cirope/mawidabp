@@ -178,7 +178,7 @@
               <% end %>
 
               <% if %w(gal).exclude? Current.conclusion_pdf_format %>
-                <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
+                <%= f.input :priority, collection: priorities(date: @finding.created_at), prompt: !SHOW_CONDENSED_PRIORITIES,
                   disabled: disabled_priority(@finding, false),
                   readonly: !!USE_SCOPE_CYCLE
                 %>
