@@ -676,6 +676,9 @@ es:
       control_objective_items_open:
         label: OCA
         title: Objetivos de control abiertos
+    statuses:
+      approved: Aprobado
+      draft: Pendiente de aprobación
 
   risk_assessment_templates:
     edit:

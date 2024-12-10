@@ -674,6 +674,9 @@ en:
       control_objective_items_open:
         label: OCO
         title: Open control objectives
+    statuses:
+      approved: Approved
+      draft: Pending approval
 
   risk_assessment_templates:
     edit:
