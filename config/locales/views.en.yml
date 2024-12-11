@@ -1100,3 +1100,4 @@ en:
       supervisor:
         next_to_finished: Mark as revised
         next_to_revised: Return to pending
+        next_to_pending: Mark for revision
