@@ -26,7 +26,8 @@ module WorkPapers::Statuses
         end
       elsif current_user_is?(:supervisor?) || current_user_is?(:manager?)
         case status
-        when 'finished' then 'revised'
+        when 'pending'  then 'finished'
+        when 'finished' then 'revised' unless current_user_marked_as_finished?
         when 'revised'  then 'pending'
         end
       end
@@ -59,6 +60,15 @@ module WorkPapers::Statuses
         review.updated_from_work_paper = true
 
         review.update_status status
+      end
+    end
+
+    def current_user_marked_as_finished?
+      status_versions = versions.where_object_changes status: 'finished'
+
+      status_versions.order(created_at: :desc).limit(1).any? do |version|
+        version.object_changes['status'].last == 'finished' &&
+          version.whodunnit == Current.user.id
       end
     end
 end
