@@ -581,6 +581,7 @@ es:
         estimated_amount: Costo estimado
         organization_id: Organización
         period_id: Periodo
+        status: Estado
       plan/plan_items:
         auxiliar_business_unit_types: Unidades organizativas auxiliares
         business_unit_id: Proyecto (unidad de negocio)
@@ -691,7 +692,7 @@ es:
         file_model_id: Anexos
         identification: Identificación
         include_sox: Incluye prueba SOX
-        manual_score: Puntaje de auditoría
+        manual_score: Conclusión de la auditoría
         manual_score_alt: Puntaje de auditoría cumplimiento
         period_id: Periodo
         plan_item: Proyecto
@@ -702,6 +703,7 @@ es:
         scope: Alcance auditoría
         score: Calificación
         score_alt: Calificación cumplimiento
+        status: Estado
         subsidiary: Sucursal
         subsidiary_id: Sucursal
         survey: Relevamiento

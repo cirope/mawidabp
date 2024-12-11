@@ -1623,7 +1623,7 @@ es:
       without_audited: no tiene usuario auditado
       without_control_objectives: no tiene objetivos de control
       without_file_model: no tiene anexo
-      without_score: no tiene puntaje de auditoría
+      without_score: no tiene conclusión de la auditoria
       without_survey: no tiene relevamiento
     estimated_amount: Costo estimado en plan de trabajo
     external_reviews_label: Informes alternativos

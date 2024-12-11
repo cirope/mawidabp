@@ -21,16 +21,16 @@
             <%= f.input :period, label: Period.model_name.human, input_html: {
               value: @control_objective_item.review.period.inspect, readonly: true
             } %>
-            <%= f.input :relevance, collection: relevances,
+            <%= f.input :relevance, collection: relevances(date: @control_objective_item.created_at),
               include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
             <%= f.input :audit_date, as: :date_picker, input_html: { disabled: readonly } %>
-            <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly, rows: 5 } %>
+            <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly || @control_objective_item.review.approved?, rows: 5 } %>
 
             <%= f.simple_fields_for :control do |c_f| %>
               <% unless HIDE_CONTROL_EFFECTS %>
                 <%= c_f.input :effects, label: Control.human_attribute_name(:effects), input_html: { readonly: readonly, rows: 5 } %>
               <% end %>
-              <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: 5 } %>
+              <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly || @control_objective_item.review.approved?, rows: 5 } %>
 
               <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
                 <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
@@ -53,7 +53,7 @@
             <% end %>
           </div>
           <div class="col-md-6">
-            <%= f.input :design_score, collection: qualifications,
+            <%= f.input :design_score, collection: qualifications(date: @control_objective_item.created_at),
               include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
               prompt: SHOW_CONCLUSION_AS_OPTIONS,
               input_html: {
@@ -66,16 +66,17 @@
                 }
               }
             %>
+
             <%= yield :design_tests %>
 
             <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
-              <%= f.input :compliance_score, collection: qualifications,
+              <%= f.input :compliance_score, collection: qualifications(date: @control_objective_item.created_at),
                 include_blank: t('control_objective_item.not_rated'),
                 input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
             <% end %>
             <%= yield :compliance_tests unless HIDE_CONTROL_COMPLIANCE_TESTS %>
 
-            <%= f.input :sustantive_score, collection: qualifications,
+            <%= f.input :sustantive_score, collection: qualifications(date: @control_objective_item.created_at),
               include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
               prompt: SHOW_CONCLUSION_AS_OPTIONS,
               input_html: {

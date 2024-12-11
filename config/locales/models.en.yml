@@ -581,6 +581,7 @@ en:
         estimated_amount: Estimated cost
         organization_id: Organization
         period_id: Period
+        status: Status
       plan/plan_items:
         auxiliar_business_unit_types: Auxiliary organizational units
         business_unit_id: Project (business unit)
@@ -702,6 +703,7 @@ en:
         scope: Audit scope
         score: Rating
         score_alt: Compliance rating
+        status: Estado
         subsidiary: Branch
         subsidiary_id: Branch
         survey: Survey

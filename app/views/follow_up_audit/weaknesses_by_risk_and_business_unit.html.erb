@@ -55,8 +55,14 @@
 
           <tr>
             <% @weaknesses_by_business_unit_types.size.times do %>
-              <% Weakness.risks.keys.reverse.each do |risk_type| %>
-                <th class="text-center"><%= t "risk_types.#{risk_type}" %></th>
+              <% if REVIEW_MANUAL_SCORE %>
+                <% Weakness.risks.keys.each do |risk_type| %>
+                  <th class="text-center"><%= risk_type %></th>
+                <% end %>
+              <% else %>
+                <% Weakness.risks.keys.reverse.each do |risk_type| %>
+                  <th class="text-center"><%= t "risk_types.#{risk_type}" %></th>
+                <% end %>
               <% end %>
             <% end %>
           </tr>

@@ -501,6 +501,7 @@ Rails.application.routes.draw do
 
   resources :options, only: [] do
     collection do
+      post :create
       get :edit
       patch :update
     end

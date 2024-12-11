@@ -6,9 +6,13 @@ module Weaknesses::Risk
   end
 
   def risk_text
-    risk = self.class.risks.detect { |r| r.last == self.risk }
+    if REVIEW_MANUAL_SCORE
+      Current.organization.risks_text_for date: created_at, value: risk
+    else
+      risk = self.class.risks.detect { |r| r.last == self.risk }
 
-    risk ? I18n.t("risk_types.#{risk.first}") : ''
+      risk ? I18n.t("risk_types.#{risk.first}") : ''
+    end
   end
 
   private
