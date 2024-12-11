@@ -28,6 +28,7 @@ module Reviews::Validations
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: (USE_SCOPE_CYCLE || REVIEW_MANUAL_SCORE) ? 100 : 1000,
     }, allow_nil: true, if: :validate_manual_score?
+    validates :manual_score, presence: true, if: -> { REVIEW_MANUAL_SCORE }
     validates :manual_score_alt, numericality: {
       greater_than_or_equal_to: 0, less_than_or_equal_to: 100
     }, allow_nil: true, if: :validate_manual_score?
