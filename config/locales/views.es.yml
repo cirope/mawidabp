@@ -195,11 +195,11 @@ es:
       confirmed: Confirmada
       criteria_mismatch: Difiere criterio
       expired: Cerrado - No aplica más tiempo
-      failure: Falla
+      failure: Falla (Deshabilitado)
       implemented: Implementado
       implemented_audited: Cerrado - Verificado
       incomplete: Abierto
-      notify: Notificar
+      notify: Notificar (Deshabilitado)
       repeated: Reiterada
       revoked: Anulada
       unanswered: Sin respuesta
