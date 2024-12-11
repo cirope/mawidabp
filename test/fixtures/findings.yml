@@ -309,8 +309,8 @@ unanswered_weakness:
   solution_date:
   audit_recommendations: Proposed action 2w
   effect: Effect 2w
-  risk: <%= Finding.risks_values.first %>
-  priority: <%= Finding.priorities_values.first %>
+  risk:     <%= REVIEW_MANUAL_SCORE ? Finding.risks_values.last      : Finding.risks_values.first      %>
+  priority: <%= REVIEW_MANUAL_SCORE ? Finding.priorities_values.last : Finding.priorities_values.first %>
   follow_up_date:
   final: false
   compliance: no
@@ -373,8 +373,8 @@ unconfirmed_weakness:
   solution_date:
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
-  risk: <%= Finding.risks_values.first %>
-  priority: <%= Finding.priorities_values.first %>
+  risk:     <%= REVIEW_MANUAL_SCORE ? Finding.risks_values.last      : Finding.risks_values.first      %>
+  priority: <%= REVIEW_MANUAL_SCORE ? Finding.priorities_values.last : Finding.priorities_values.first %>
   follow_up_date:
   final: false
   compliance: no

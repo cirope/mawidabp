@@ -56,6 +56,7 @@
 //= require news
 //= require number_pages
 //= require opening_interviews
+//= require options
 //= require permalinks
 //= require plan_items
 //= require plans

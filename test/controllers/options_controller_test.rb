@@ -12,25 +12,26 @@ class OptionsControllerTest < ActionController::TestCase
 
     get :edit
     assert_response :success
-    assert_not_nil assigns(:current_scores)
     assert_template 'options/edit'
   end
 
   test 'should update options' do
     skip unless REVIEW_MANUAL_SCORE
 
+    type                 = 'manual_scores'
     Current.organization = organizations :cirope
+    options              = {
+                            '1' => [ 'satisfactory',   45 ],
+                            '2' => [ 'unsatisfactory', 10 ]
+                          }
 
-    options = {
-      '1' => [ 'satisfactory',   45 ],
-      '2' => [ 'unsatisfactory', 10 ]
-    }
-
-    assert_equal Organization::DEFAULT_SCORES.count, Current.organization.current_scores.count
+    assert_equal Organization::DEFAULT_SCORES.count,
+      Current.organization.manual_scores.count
 
     patch :update, params: { options: options }
 
-    assert_redirected_to edit_options_path
-    assert_equal options.count, Current.organization.current_scores.count
+    assert_redirected_to edit_options_path(type: type)
+    assert_equal options.count,
+      Current.organization.manual_scores.count
   end
 end

@@ -13,31 +13,34 @@ module Organizations::Validations
       format: { with: /\A[A-Za-z0-9][A-Za-z0-9\-]+\z/ },
       uniqueness: { case_sensitive: false },
       exclusion: { in: APP_ADMIN_PREFIXES }
-    validate :validate_manual_scores
+    validate :validate_options
   end
 
   private
 
-    def validate_manual_scores
-      scores = manual_scores.to_a
+    def validate_options
+      options = options_by(option_type).to_a
 
-      if scores.present?
-        last_score = scores.first.last
+      if options.present?
+        last_option     = options.first.last
+        current_options = current_options_by option_type
 
-        if last_score == scores[1]&.last
-          errors.add :base, :invalid, message: I18n.t('options.review_scores.errors.score_not_change')
+        if last_option == options[1]&.last
+          errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.score_not_change')
+        elsif current_options.blank?
+          errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.blank')
         else
           repeated = []
 
-          current_scores.each do |score, value|
+          current_options.each do |option, value|
             if value.to_i < 0 || value.to_i > 100
-              errors.add :base, message: I18n.t('options.review_scores.errors.numericality', value: score)
+              errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.numericality', value: option)
             elsif value.to_s !~ /\A\d+\Z/i
-              errors.add :base, message: I18n.t('options.review_scores.errors.invalid', value: score)
+              errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.invalid', value: option)
             elsif repeated.include? value
-              errors.add :base, message: I18n.t('options.review_scores.errors.taken', value: score)
-            elsif score.blank?
-              errors.add :base, message: I18n.t('options.review_scores.errors.presence')
+              errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.taken', value: option)
+            elsif option.blank?
+              errors.add :base, option_type.to_sym, message: I18n.t('options.scores.errors.blank')
             end
 
             repeated << value

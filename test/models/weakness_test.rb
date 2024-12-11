@@ -298,15 +298,17 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'risk text' do
-    risk = Weakness.risks.detect { |r| r.last == @weakness.risk }
+    risk      = Weakness.risks.detect { |r| r.last == @weakness.risk }
+    risk_text = REVIEW_MANUAL_SCORE ? risk.first.to_s : I18n.t("risk_types.#{risk.first}")
 
-    assert_equal I18n.t("risk_types.#{risk.first}"), @weakness.risk_text
+    assert_equal risk_text, @weakness.risk_text
   end
 
   test 'priority text' do
-    priority = Weakness.priorities.detect { |p| p.last == @weakness.priority }
+    priority      = Weakness.priorities.detect { |p| p.last == @weakness.priority }
+    priority_text = REVIEW_MANUAL_SCORE ? priority.first.to_s : I18n.t("priority_types.#{priority.first}")
 
-    assert_equal I18n.t("priority_types.#{priority.first}"), @weakness.priority_text
+    assert_equal priority_text, @weakness.priority_text
   end
 
   test 'must be approved on implemented audited' do
