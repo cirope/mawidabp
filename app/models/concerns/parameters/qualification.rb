@@ -25,7 +25,7 @@ module Parameters::Qualification
     def qualifications show_value: !SHOW_SHORT_QUALIFICATIONS, date: nil
       if REVIEW_MANUAL_SCORE && Current.organization
         Current.organization.
-          control_objective_item_scores(date: date).symbolize_keys
+          control_objective_item_scores(date: date).with_indifferent_access
       else
         QUALIFICATION_TYPES
       end

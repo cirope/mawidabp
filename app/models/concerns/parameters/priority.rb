@@ -14,7 +14,7 @@ module Parameters::Priority
   module ClassMethods
     def priorities date: nil
       if REVIEW_MANUAL_SCORE && Current.organization
-        Current.organization.priorities(date: date).symbolize_keys
+        Current.organization.priorities(date: date).with_indifferent_access
       else
         PRIORITY_TYPES
       end

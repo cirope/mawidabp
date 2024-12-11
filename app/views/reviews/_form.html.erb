@@ -155,7 +155,7 @@
           <div class="row mt-3">
             <div class="col-md-6">
               <%= f.input :manual_score, collection: review_manual_scope_options(@review),
-                prompt: true,
+                prompt:     true,
                 input_html: { disabled: readonly },
                 selected:   (@review.manual_score.present? ? @review.manual_score.to_i : '') %>
             </div>

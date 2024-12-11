@@ -17,7 +17,7 @@ module Parameters::Relevance
   module ClassMethods
     def relevances show_value: !USE_SHORT_RELEVANCE, date: nil
       if REVIEW_MANUAL_SCORE && Current.organization
-        Current.organization.relevance(date: date).symbolize_keys
+        Current.organization.relevance(date: date).with_indifferent_access
       else
         RELEVANCE_TYPES
       end

@@ -14,7 +14,7 @@ module Parameters::Risk
   module ClassMethods
     def risks date: nil
       if REVIEW_MANUAL_SCORE && Current.organization
-        Current.organization.risks(date: date).symbolize_keys
+        Current.organization.risks(date: date).with_indifferent_access
       else
         RISK_TYPES
       end

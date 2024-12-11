@@ -24,11 +24,11 @@ module Organizations::Options
   }
 
   OPTIONS_TYPES.each do |option|
-    define_method(:"#{option}") do |date: nil|
+    define_method(option) do |date: nil|
       options_for type: option, date: date
     end
 
-    define_method(:"#{option}_text_for") do |date: nil, value: nil|
+    define_method("#{option}_text_for") do |date: nil, value: nil|
       options_text_for type: option, date: date, value: value
     end
   end
