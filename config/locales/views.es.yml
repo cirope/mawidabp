@@ -485,6 +485,14 @@ es:
     edit:
       other_actions: Acciones
       title: Modificar plan de trabajo
+    history:
+      action: Acción
+      actions:
+        create: creó
+        destroy: eliminó
+        update: modificó
+      changes: Historial de cambios
+      show: Ver historial de cambios
     index:
       copy: Copiar
       title: Listado de planes de trabajo
@@ -664,6 +672,14 @@ es:
       add_business_unit_type: Agregar unidad organizativa
       operational_audit: Auditoría operativa
       system_audit: Auditoría de sistema
+    history:
+      action: Acción
+      actions:
+        create: creó
+        destroy: eliminó
+        update: modificó
+      changes: Historial de cambios
+      show: Ver historial de cambios
     index:
       control_objective_items_finished:
         label: OCF
@@ -671,6 +687,9 @@ es:
       control_objective_items_open:
         label: OCA
         title: Objetivos de control abiertos
+    statuses:
+      approved: Aprobado
+      draft: Pendiente de aprobación
 
   risk_assessment_templates:
     edit:

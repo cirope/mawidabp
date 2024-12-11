@@ -486,6 +486,14 @@ en:
     edit:
       title: Edit work plan
       other_actions: Actions
+    history:
+      action: Action
+      actions:
+        create: created
+        destroy: deleted
+        update: updated
+      changes: Change history
+      show: Show change history
     index:
       copy: Copy
       title: Work plan list
@@ -662,6 +670,14 @@ en:
       add_business_unit_type: Add organizational unit
       operational_audit: Operational audit
       system_audit: System audit
+    history:
+      action: Action
+      actions:
+        create: created
+        destroy: deleted
+        update: updated
+      changes: Change history
+      show: Show change history
     index:
       control_objective_items_finished:
         label: CCO
@@ -669,6 +685,9 @@ en:
       control_objective_items_open:
         label: OCO
         title: Open control objectives
+    statuses:
+      approved: Approved
+      draft: Pending approval
 
   risk_assessment_templates:
     edit:

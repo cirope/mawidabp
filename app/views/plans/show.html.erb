@@ -18,11 +18,18 @@
       <% end %>
       <%= link_to_calendar [:calendar, @plan] %> |
       <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
+      <% if Current.organization.require_plan_and_review_approval? %>
+        <%= plan_show_change_history %> |
+      <% end %>
       <%= link_to_index plans_path %> |
       <% if can_approve_plans_and_reviews? %>
         <%= render 'plans/other_actions' %> |
       <% end %>
       <%= render 'shared/downloads', links: plan_download_options, right: true %>
     </div>
+
+    <% if Current.organization.require_plan_and_review_approval? %>
+      <%= render 'plans/change_history', plan: @plan %>
+    <% end %>
   </div>
 </div>

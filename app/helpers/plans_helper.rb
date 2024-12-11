@@ -1,4 +1,11 @@
 module PlansHelper
+  def plan_show_change_history
+    link_to icon('fas', 'history'), "#plan_change_history", {
+      title: t('plans.history.show'),
+      data:  { bs_toggle: 'collapse' }
+    }
+  end
+
   def plan_resource_field form, id = nil
     form.input :resource_id,
       collection: ResourceClass.list,
