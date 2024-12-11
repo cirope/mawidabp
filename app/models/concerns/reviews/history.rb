@@ -27,7 +27,7 @@ module Reviews::History
 
     def relevant_versions
       versions.select do |version|
-        version.object_changes.key?('status')
+        version.object_changes.key? 'status'
       end
     end
 
