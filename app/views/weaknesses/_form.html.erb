@@ -228,7 +228,7 @@
             <% if %w(bic pat).include? Current.conclusion_pdf_format %>
               <div class="row">
                 <div class="col-9">
-                  <%= f.input :risk, collection: risks(date: @weakness.created_at), prompt: true,
+                  <%= f.input :risk, collection: @weakness.risks, prompt: true,
                     disabled: @weakness.automatic_risk? || readonly, input_html: {
                     data: weakness_risk_data_options.merge({ bic_field_to_disabled_when_is_automatic: true })
                   } %>
@@ -246,7 +246,7 @@
               </div>
 
             <% else %>
-              <%= f.input :risk, collection: risks(date: @weakness.created_at), prompt: true, disabled: readonly, input_html: {
+              <%= f.input :risk, collection: @weakness.risks, prompt: true, disabled: readonly, input_html: {
                 data: weakness_risk_data_options
               } %>
             <% end %>
@@ -259,7 +259,7 @@
             <% end %>
 
             <% if %w(gal).exclude? Current.conclusion_pdf_format %>
-              <%= f.input :priority, collection: priorities(date: @weakness.created_at), prompt: !SHOW_CONDENSED_PRIORITIES,
+              <%= f.input :priority, collection: @weakness.priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
                 disabled: disabled_priority(@weakness, readonly),
                 readonly: !!USE_SCOPE_CYCLE
               %>

@@ -1,5 +1,6 @@
 class BusinessUnitScore < ApplicationRecord
   include Auditable
+  include Parameters::Qualification
   include BusinessUnitScores::Effectiveness
   include BusinessUnitScores::Validation
 
