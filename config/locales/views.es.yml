@@ -108,6 +108,7 @@ es:
         update: modificó
       changes: Historial de cambios
       show: Ver historial de cambios
+      default_field_modified: El campo fue modificado
 
   documents:
     edit:
