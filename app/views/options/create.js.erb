@@ -1,0 +1,11 @@
++function () {
+  var $container = $('#<%= @type %>').find('.options-container')
+
+  <% options = simple_fields_for :organization do |f| %>
+    <%= render 'options/option', score: '', value: '', id: f.object_id, f: f %>
+  <% end %>
+
+  $container.append('<%= j options %>')
+
+  $("#<%= @type %> .options-score").last().focus()
+}()

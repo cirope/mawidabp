@@ -83,7 +83,7 @@ module Findings::Answers
       results[key.to_sym] = requirements[key].transform_keys(&:to_i).transform_values &:to_sym
     end
 
-    COMMITMENT_REQUIREMENTS.merge results
+    COMMITMENT_REQUIREMENTS.merge(results).with_indifferent_access
   end
 
   def commitment_date_required_level_text date = nil

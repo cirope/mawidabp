@@ -22,7 +22,8 @@ class OrganizationTest < ActiveSupport::TestCase
     end
 
     assert_equal groups(:main_group).id, @organization.reload.group_id
-    assert_equal Organization::DEFAULT_SCORES.count, @organization.current_scores.count
+    assert_equal Organization::DEFAULT_SCORES.count,
+      @organization.manual_scores.count
   end
 
   test 'create with wrong group' do

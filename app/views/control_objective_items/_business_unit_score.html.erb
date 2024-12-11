@@ -18,17 +18,17 @@
         <%= f.input :business_unit_id, as: :hidden, input_html: { id: "auto_business_unit_id_#{id}" } %>
       </div>
       <div class="col-md-2">
-        <%= f.input :design_score, label: false, collection: qualifications,
+        <%= f.input :design_score, label: false, collection: qualifications(date: f.object.created_at),
           include_blank: t('control_objective_item.not_rated'),
           input_html: { data: { business_unit_score: 'design' }, disabled: readonly } %>
       </div>
       <div class="col-md-2">
-        <%= f.input :compliance_score, label: false, collection: qualifications,
+        <%= f.input :compliance_score, label: false, collection: qualifications(date: f.object.created_at),
           include_blank: t('control_objective_item.not_rated'),
           input_html: { data: { business_unit_score: 'compliance' }, disabled: readonly } %>
       </div>
       <div class="col-md-2">
-        <%= f.input :sustantive_score, label: false, collection: qualifications,
+        <%= f.input :sustantive_score, label: false, collection: qualifications(date: f.object.created_at),
           include_blank: t('control_objective_item.not_rated'),
           input_html: { data: { business_unit_score: 'sustantive' }, disabled: readonly } %>
       </div>

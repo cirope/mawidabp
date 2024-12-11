@@ -1,5 +1,9 @@
 class Setting < ApplicationRecord
   include Auditable
+  include Parameters::Risk
+  include Parameters::Priority
+  include Parameters::Relevance
+  include Parameters::Qualification
   include Settings::Validations
   include Settings::Scopes
 

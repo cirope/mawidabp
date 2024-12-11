@@ -5,13 +5,26 @@ module Parameters::Relevance
     ::RELEVANCE_TYPES = relevance_types unless defined? ::RELEVANCE_TYPES
   end
 
+  DEFAULT_RELEVANCE_TYPES = {
+    not_rated:    0,
+    low:          1,
+    moderate_low: 2,
+    moderate:     3,
+    high:         4,
+    critical:     5
+  }
+
   module ClassMethods
-    def relevances
-      RELEVANCE_TYPES
+    def relevances show_value: !USE_SHORT_RELEVANCE, date: nil
+      if REVIEW_MANUAL_SCORE && Current.organization
+        Current.organization.relevance(date: date).with_indifferent_access
+      else
+        RELEVANCE_TYPES
+      end
     end
 
-    def relevances_values
-      RELEVANCE_TYPES.values
+    def relevances_values date: nil
+      relevances(date: date).values
     end
 
     private
@@ -23,14 +36,7 @@ module Parameters::Relevance
             yes: 5
           }
         else
-          {
-            not_rated:    0,
-            low:          1,
-            moderate_low: 2,
-            moderate:     3,
-            high:         4,
-            critical:     5
-          }
+          DEFAULT_RELEVANCE_TYPES
         end
       end
   end

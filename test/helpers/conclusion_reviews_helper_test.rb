@@ -14,6 +14,8 @@ class ConclusionReviewsHelperTest < ActionView::TestCase
   test 'Should return score' do
     expected = if USE_SCOPE_CYCLE && @conclusion_review.review.control_objective_items_for_score.blank?
       I18n.t 'score_types.none'
+    elsif REVIEW_MANUAL_SCORE
+      @conclusion_review.review.manual_score_text
     else
       @conclusion_review.review.score_text
     end
@@ -32,6 +34,8 @@ class ConclusionReviewsHelperTest < ActionView::TestCase
 
     expected = if USE_SCOPE_CYCLE && @conclusion_review.review.control_objective_items_for_score.blank?
       I18n.t 'score_types.none'
+    elsif REVIEW_MANUAL_SCORE
+      @conclusion_review.review.manual_score_text
     else
       @conclusion_review.review.score_text
     end

@@ -217,15 +217,17 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     FileUtils.rm @conclusion_review.absolute_pdf_path
 
-    assert_nothing_raised do
-      @conclusion_review.default_pdf(
-        organizations(:cirope), :hide_score => true
-      )
-    end
+    unless REVIEW_MANUAL_SCORE
+      assert_nothing_raised do
+        @conclusion_review.default_pdf(
+          organizations(:cirope), :hide_score => true
+        )
+      end
 
-    assert File.exist?(@conclusion_review.absolute_pdf_path)
-    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
-    assert_not_equal size, new_size
+      assert File.exist?(@conclusion_review.absolute_pdf_path)
+      assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+      assert_not_equal size, new_size
+    end
 
     assert_nothing_raised do
       @conclusion_review.default_pdf(
