@@ -106,7 +106,6 @@ en:
         create: Created
         destroy: Removed
         update: Modified
-      change: Change
       changes: Change history
       show: Show change history
       default_field_modified: The field was modified
