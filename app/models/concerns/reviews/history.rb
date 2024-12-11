@@ -46,6 +46,6 @@ module Reviews::History
     end
 
     def check_for_status_changes
-      self.status_will_change! if new_record?
+      status_will_change! if new_record?
     end
 end
