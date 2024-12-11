@@ -1,0 +1,19 @@
+<div id="plan_change_history" class="collapse mt-3">
+  <div>
+    <h5><%= t 'plans.history.changes' %></h5>
+    <ul class="mb-3">
+      <% plan.change_history.each do |history| %>
+        <li>
+          <%= history[:date] %>
+          <ul>
+            <li><%= t 'plans.history.action' %>: <%= history[:action] %></li>
+            <li><%= User.model_name.human %>: <%= history[:user] %></li>
+            <% history[:changes].each do |change| %>
+              <li><%= change.keys.first %>: <%= change.values.first %></li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

@@ -12,12 +12,16 @@ module Parameters::Priority
   }
 
   module ClassMethods
-    def priorities
-      PRIORITY_TYPES
+    def priorities date: nil
+      if REVIEW_MANUAL_SCORE && Current.organization
+        Current.organization.priorities(date: date).with_indifferent_access
+      else
+        PRIORITY_TYPES
+      end
     end
 
-    def priorities_values
-      PRIORITY_TYPES.values
+    def priorities_values date: nil
+      priorities(date: date).to_h.values
     end
 
     private

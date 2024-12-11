@@ -66,20 +66,20 @@
                 </div>
                 <div class="row">
                   <div class="col">
-                    <%= f.input :risk, collection: risks, prompt: true, disabled: @finding.automatic_risk?, input_html: {
+                    <%= f.input :risk, collection: risks(date: @finding.created_at), prompt: true, disabled: @finding.automatic_risk?, input_html: {
                       data: weakness_risk_data_options.merge(data_options_for_suggested_follow_up_date('finding'))
                     } %>
                   </div>
                 </div>
               <% else %>
-                <%= f.input :risk, collection: risks, prompt: true, disabled: true, input_html: {
+                <%= f.input :risk, collection: risks(date: @finding.created_at), prompt: true, disabled: true, input_html: {
                   autofocus: true,
                   data: weakness_risk_data_options
                 } %>
               <% end %>
 
               <% if %w(gal).exclude? Current.conclusion_pdf_format %>
-                <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
+                <%= f.input :priority, collection: priorities(date: @finding.created_at), prompt: true, disabled: true %>
               <% end %>
             <% end %>
             <%= f.label :state, Finding.human_attribute_name(:state) %>
