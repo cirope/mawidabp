@@ -1102,3 +1102,4 @@ es:
       supervisor:
         next_to_finished: Marcar como revisado
         next_to_revised: Volver a pendiente
+        next_to_pending: Marcar para revisión
