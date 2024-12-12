@@ -21,11 +21,28 @@ module Parameters::Qualification
     excellent: 10
   }
 
+  def qualifications
+    self.class.qualifications date:      created_at,
+                              translate: true
+  end
+
   module ClassMethods
-    def qualifications show_value: !SHOW_SHORT_QUALIFICATIONS, date: nil
+    def qualifications show_value: !SHOW_SHORT_QUALIFICATIONS,
+                       date:       nil,
+                       translate:  false
+
       if REVIEW_MANUAL_SCORE && Current.organization
         Current.organization.
           control_objective_item_scores(date: date).with_indifferent_access
+      elsif translate
+        QUALIFICATION_TYPES.map do |k, v|
+          text = [
+            I18n.t("qualification_types.#{k}"),
+            ("(#{v})" if show_value)
+          ].compact.join(' ')
+
+          [text, v]
+        end
       else
         QUALIFICATION_TYPES
       end

@@ -11,10 +11,21 @@ module Parameters::Risk
     high:   2
   }
 
+  def risks
+    self.class.risks date:      created_at,
+                     translate: true
+  end
+
   module ClassMethods
-    def risks date: nil
+    def risks date:      nil,
+              translate: false
+
       if REVIEW_MANUAL_SCORE && Current.organization
         Current.organization.risks(date: date).with_indifferent_access
+      elsif translate
+        RISK_TYPES.map do |k, v|
+          [[I18n.t("risk_types.#{k}"), "(#{v})"].join(' '), v]
+        end
       else
         RISK_TYPES
       end
