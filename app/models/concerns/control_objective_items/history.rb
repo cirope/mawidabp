@@ -25,7 +25,7 @@ module ControlObjectiveItems::History
       finished_versions        = relevant_versions.select { |v| v.object_changes.key?('finished') }.last(5)
       auditor_comment_versions = relevant_versions.select { |v| v.object_changes.key?('auditor_comment') }.last(5)
 
-      (finished_versions + auditor_comment_versions).sort_by(&:created_at)
+      (finished_versions + auditor_comment_versions).sort_by &:created_at
     end
 
     def relevant_versions
