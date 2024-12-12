@@ -21,7 +21,7 @@
             <%= f.input :period, label: Period.model_name.human, input_html: {
               value: @control_objective_item.review.period.inspect, readonly: true
             } %>
-            <%= f.input :relevance, collection: relevances(date: @control_objective_item.created_at),
+            <%= f.input :relevance, collection: @control_objective_item.relevances,
               include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
             <%= f.input :audit_date, as: :date_picker, input_html: { disabled: readonly } %>
             <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly || @control_objective_item.review.approved?, rows: 5 } %>
@@ -53,7 +53,7 @@
             <% end %>
           </div>
           <div class="col-md-6">
-            <%= f.input :design_score, collection: qualifications(date: @control_objective_item.created_at),
+            <%= f.input :design_score, collection: @control_objective_item.qualifications,
               include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
               prompt: SHOW_CONCLUSION_AS_OPTIONS,
               input_html: {
@@ -70,13 +70,13 @@
             <%= yield :design_tests %>
 
             <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
-              <%= f.input :compliance_score, collection: qualifications(date: @control_objective_item.created_at),
+              <%= f.input :compliance_score, collection: @control_objective_item.qualifications,
                 include_blank: t('control_objective_item.not_rated'),
                 input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
             <% end %>
             <%= yield :compliance_tests unless HIDE_CONTROL_COMPLIANCE_TESTS %>
 
-            <%= f.input :sustantive_score, collection: qualifications(date: @control_objective_item.created_at),
+            <%= f.input :sustantive_score, collection: @control_objective_item.qualifications,
               include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
               prompt: SHOW_CONCLUSION_AS_OPTIONS,
               input_html: {
