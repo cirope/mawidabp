@@ -30,6 +30,8 @@ module ControlObjectiveItems::History
 
     def relevant_versions
       versions.select do |version|
+        next unless version.object_changes
+
         (version.object_changes.keys & relevant_attributes).any?
       end
     end
