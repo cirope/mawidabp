@@ -7,7 +7,12 @@ module PaperTrail
     after_commit :log_changes
 
     def log_changes
-      VERSION_LOG.info self if important
+      data = {
+        object:         self.object&.except('change_password_hash'),
+        object_changes: self.object_changes&.except('change_passoword_hash')
+      }
+
+      VERSION_LOG.info data if important
     end
   end
 end
