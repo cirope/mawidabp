@@ -103,11 +103,12 @@ es:
     history:
       action: Acción
       actions:
-        create: creó
-        destroy: eliminó
-        update: modificó
+        create: Creó
+        destroy: Eliminó
+        update: Modificó
       changes: Historial de cambios
       show: Ver historial de cambios
+      default_field_modified: El campo fue modificado
 
   documents:
     edit:

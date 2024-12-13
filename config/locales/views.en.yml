@@ -104,11 +104,11 @@ en:
       action: Action
       actions:
         create: Created
-        destroy: Removed
-        update: Modified
-      change: Change
+        destroy: Deleted
+        update: Updated
       changes: Change history
       show: Show change history
+      default_field_modified: The field was modified
 
   documents:
     edit:
