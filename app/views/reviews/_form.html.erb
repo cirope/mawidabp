@@ -154,7 +154,7 @@
         <% if REVIEW_MANUAL_SCORE %>
           <div class="row mt-3">
             <div class="col-md-6">
-              <%= f.input :manual_score, collection: review_manual_scope_options(@review),
+              <%= f.input :manual_score, collection: @review.manual_scores,
                 prompt:     true,
                 input_html: { disabled: readonly },
                 selected:   (@review.manual_score.present? ? @review.manual_score.to_i : '') %>

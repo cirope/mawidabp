@@ -10,11 +10,11 @@
       </div>
 
       <div class="col-md-2">
-        <%= f.input :relevance, collection: relevances(date: f.object.created_at), prompt: true %>
+        <%= f.input :relevance, collection: f.object.relevances, prompt: true %>
       </div>
       <% unless HIDE_CONTROL_OBJECTIVE_RISK %>
         <div class="col-md-2">
-          <%= f.input :risk, collection: risks(date: f.object.created_at), prompt: true %>
+          <%= f.input :risk, collection: f.object.risks, prompt: true %>
         </div>
       <% end %>
       <div class="col-md-1">
