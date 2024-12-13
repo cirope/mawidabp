@@ -8,7 +8,7 @@ module PaperTrail
 
     def log_changes
       if important
-        data = {
+        VERSION_LOG.info({
           id:              id,
           item_type:       item_type,
           item_id:         item_id,
@@ -18,9 +18,7 @@ module PaperTrail
           organization_id: organization_id,
           object:          object&.except('change_password_hash', 'password'),
           object_changes:  object_changes&.except('change_passoword_hash', 'password')
-        }
-
-        VERSION_LOG.info data
+        })
       end
     end
   end
