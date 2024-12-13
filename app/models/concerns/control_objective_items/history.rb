@@ -43,8 +43,8 @@ module ControlObjectiveItems::History
     def version_changes version
       version.object_changes.each_with_object([]) do |(attr, values), result|
         value = case attr
-                when 'auditor_comment' then I18n.t('control_objective_items.history.default_field_modified')
-                when 'finished'        then I18n.t(values.last ? 'label.yes' : 'label.no')
+                when 'auditor_comment' then I18n.t 'control_objective_items.history.default_field_modified'
+                when 'finished'        then I18n.t values.last ? 'label.yes' : 'label.no'
                 end
 
         result << { ControlObjectiveItem.human_attribute_name(attr) => value } if value
