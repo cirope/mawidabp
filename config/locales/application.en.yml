@@ -1625,6 +1625,7 @@ en:
       without_file_model: has no attachment
       without_score: has no audit rating
       without_survey: has no survey
+      without_manual_score: has no manual score
     estimated_amount: Estimated cost in workplan
     external_reviews_label: Alternative audit reports
     external_reviews_title: Add alternative audit report

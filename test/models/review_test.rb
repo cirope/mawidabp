@@ -587,6 +587,15 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.approval_errors.flatten.include?(
       I18n.t('review.errors.without_audited')
     )
+
+    if REVIEW_MANUAL_SCORE
+      @review.manual_score = nil
+
+      refute @review.must_be_approved?
+      assert @review.approval_errors.flatten.include?(
+        I18n.t('review.errors.without_manual_score')
+      )
+    end
   end
 
   test 'can be sended' do
