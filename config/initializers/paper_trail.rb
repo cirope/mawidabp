@@ -7,19 +7,21 @@ module PaperTrail
     after_commit :log_changes
 
     def log_changes
-      data = {
-        id:              id,
-        item_type:       item_type,
-        item_id:         item_id,
-        event:           event,
-        whodunnit:       whodunnit,
-        created_at:      created_at,
-        organization_id: organization_id,
-        object:          object&.except('change_password_hash', 'password'),
-        object_changes:  object_changes&.except('change_passoword_hash', 'password')
-      }
+      if important
+        data = {
+          id:              id,
+          item_type:       item_type,
+          item_id:         item_id,
+          event:           event,
+          whodunnit:       whodunnit,
+          created_at:      created_at,
+          organization_id: organization_id,
+          object:          object&.except('change_password_hash', 'password'),
+          object_changes:  object_changes&.except('change_passoword_hash', 'password')
+        }
 
-      VERSION_LOG.info data if important
+        VERSION_LOG.info data
+      end
     end
   end
 end
