@@ -8,7 +8,7 @@ module PaperTrail
 
     def log_changes
       if important
-        except_values = ['change_password_hash', 'password', 'salt', 'logged_in']
+        except_keys = ['change_password_hash', 'password', 'salt', 'logged_in']
 
         VERSION_LOG.info({
           id:              id,
@@ -18,8 +18,8 @@ module PaperTrail
           whodunnit:       whodunnit,
           created_at:      created_at,
           organization_id: organization_id,
-          object:          object&.except(*except_values),
-          object_changes:  object_changes&.except(*except_values)
+          object:          object&.except(*except_keys),
+          object_changes:  object_changes&.except(*except_keys)
         })
       end
     end
