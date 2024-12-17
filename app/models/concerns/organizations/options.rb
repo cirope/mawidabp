@@ -46,7 +46,7 @@ module Organizations::Options
   end
 
   def create_options
-    update! options: default_scores
+    update! options: default_options
   end
 
   module ClassMethods
@@ -86,14 +86,39 @@ module Organizations::Options
       end
     end
 
-    def default_scores
-      scores = {}
+    def default_options
+      epoch = Time.zone.now.to_i
 
-      Organization::DEFAULT_SCORES.each do |key, value|
-        score         = I18n.t "options.manual_scores.defaults.#{key}"
-        scores[score] = value
+      OPTIONS_TYPES.each_with_object({}) do |option, result|
+        result[option.to_sym] = { epoch => send("default_#{option}") }
       end
+    end
 
-      { manual_scores: { Time.zone.now.to_i => scores } }
+    def default_manual_scores
+      translate_keys Organization::DEFAULT_SCORES, 'options.manual_scores.defaults'
+    end
+
+    def default_control_objective_item_scores
+      translate_keys Parameters::Qualification::DEFAULT_QUALIFICATION_TYPES, 'qualification_types'
+    end
+
+    def default_relevance
+      translate_keys Parameters::Relevance::DEFAULT_RELEVANCE_TYPES, 'relevance_types'
+    end
+
+    def default_priorities
+      translate_keys Parameters::Priority::DEFAULT_PRIORITY_TYPES, 'priority_types'
+    end
+
+    def default_risks
+      translate_keys Parameters::Risk::DEFAULT_RISK_TYPES, 'risk_types'
+    end
+
+    def translate_keys defaults, i18n_path
+      defaults.each_with_object({}) do |(key, value), result|
+        translated_key = I18n.t "#{i18n_path}.#{key}"
+
+        result[translated_key] = value
+      end
     end
 end
