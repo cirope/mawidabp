@@ -34,4 +34,20 @@ class Findings::WorkPapersControllerTest < ActionController::TestCase
     assert_match Mime[:js].to_s, @response.content_type
     assert @finding.reload.work_papers.last.file_model
   end
+
+  test 'should be can remove work paper' do
+    work_paper = work_papers :image_work_paper
+    work_paper.revised!
+
+    assert !@controller.view_context.can_remove_work_paper?(false, work_paper)
+
+    supervisor = work_paper.
+      owner.
+        review.
+          review_user_assignments.find_by(assignment_type: ReviewUserAssignment::TYPES[:supervisor]).user
+
+    Current.user = supervisor
+
+    assert @controller.view_context.can_remove_work_paper? false, work_paper
+  end
 end

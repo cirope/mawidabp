@@ -37,6 +37,14 @@ module Findings::WorkPapersHelper
     end
   end
 
+  def can_remove_work_paper? frozen, work_paper
+    if work_paper.revised? && !work_paper.current_user_is?(:supervisor?)
+      false
+    elsif work_paper.new_record? || (!frozen && !work_paper.finished?)
+      true
+    end
+  end
+
   private
 
     def work_paper_info_for status
