@@ -496,7 +496,7 @@ class ReviewsController < ApplicationController
   def refresh_manual_scores
     @review.refresh_manual_scores!
 
-    redirect_to [:edit, @review], notice: t("flash.reviews.manual_scores_refreshed")
+    redirect_to [:edit, @review], notice: t('flash.reviews.manual_scores_refreshed')
   end
 
   private
@@ -590,7 +590,8 @@ class ReviewsController < ApplicationController
         recode_weaknesses_by_repetition_and_risk: :modify,
         recode_weaknesses_by_risk_and_repetition: :modify,
         recode_weaknesses_by_control_objective_order: :modify,
-        reset_control_objective_name: :modify
+        reset_control_objective_name: :modify,
+        refresh_manual_scores: :modify
       )
     end
 end
