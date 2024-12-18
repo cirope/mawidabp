@@ -29,6 +29,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::UplPdf
   include ConclusionReviews::Validations
   include ConclusionReviews::WorkflowPdf
+  include Parameters::Risk
 
   attr_readonly :review_id
 

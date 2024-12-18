@@ -33,6 +33,9 @@
             <% end %>
           </div>
           <div class="col-md-6">
+            <% if REVIEW_MANUAL_SCORE %>
+              <%= f.input :risk, collection: @conclusion_draft_review.risks, prompt: true %>
+            <% end %>
             <% if Current.conclusion_pdf_format == 'gal' %>
               <% if SHOW_CONCLUSION_AS_OPTIONS %>
                 <%= f.input :conclusion, collection: conclusion_options, prompt: true, input_html: {
