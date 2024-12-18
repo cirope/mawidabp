@@ -946,4 +946,19 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_redirected_to reviews_url
     assert_equal I18n.t('messages.not_allowed'), flash.alert
   end
+
+  test 'should be refresh manual scores' do
+    set_organization
+    login
+
+    review = reviews :review_without_conclusion
+    review.update! manual_score: 80
+
+    assert_not_nil review.manual_score
+
+    patch :refresh_manual_scores, params: { id: review.id }
+    assert_redirected_to [:edit, review]
+
+    assert_equal review.reload.manual_score, nil
+  end
 end

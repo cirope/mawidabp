@@ -13,7 +13,7 @@ class ReviewsController < ApplicationController
     :recode_weaknesses_by_risk_and_repetition,
     :recode_weaknesses_by_control_objective_order, :reorder,
     :excluded_control_objectives, :reset_control_objective_name,
-    :recode_work_papers
+    :recode_work_papers, :refresh_manual_scores
   ]
   before_action -> { check_review_permissions @review }, only: [:edit, :update, :destroy]
   before_action :set_review_clone, only: [:new]
@@ -491,6 +491,12 @@ class ReviewsController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def refresh_manual_scores
+    @review.refresh_manual_scores!
+
+    redirect_to [:edit, @review], notice: t("flash.reviews.manual_scores_refreshed")
   end
 
   private
