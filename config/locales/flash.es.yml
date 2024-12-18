@@ -129,6 +129,7 @@ es:
       actions:
         approved: El informe ha sido aprobado
         draft: El informe ha sido rebocado
+      manual_scores_refreshed: Puntajes de auditoría actualizados
 
     risk_assessment_templates:
       create:
