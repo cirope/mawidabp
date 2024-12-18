@@ -163,6 +163,7 @@ module ConclusionReviews::DefaultPdf
 
       if REVIEW_MANUAL_SCORE
         pdf.text "\n#{Review.human_attribute_name('manual_score')}: #{review.manual_score_text}\n"
+        pdf.text "\n#{ConclusionReview.human_attribute_name('risk')}: #{risk_text}\n"
       else
         pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
 

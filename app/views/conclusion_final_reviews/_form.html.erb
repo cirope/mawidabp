@@ -38,6 +38,9 @@
             <% else %>
               <%= f.input :summary %>
             <% end %>
+            <% if REVIEW_MANUAL_SCORE %>
+              <%= f.input :risk, collection: @conclusion_final_review.risks, prompt: true %>
+            <% end %>
           </div>
           <div class="col-md-6">
             <% if Current.conclusion_pdf_format == 'gal' %>

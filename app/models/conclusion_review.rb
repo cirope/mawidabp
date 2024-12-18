@@ -22,6 +22,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::PatRtf
   include ConclusionReviews::Pdf
   include ConclusionReviews::Review
+  include ConclusionReviews::Risks
   include ConclusionReviews::Rtf
   include ConclusionReviews::Scopes
   include ConclusionReviews::Search
