@@ -181,6 +181,10 @@ module Reviews::Score
     Current.organization.manual_scores date: created_at
   end
 
+  def refresh_manual_scores!
+    update! created_at: Time.zone.now, manual_score: nil
+  end
+
   private
 
     def _score_text score

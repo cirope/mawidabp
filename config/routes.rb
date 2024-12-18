@@ -384,6 +384,7 @@ Rails.application.routes.draw do
       patch :recode_work_papers
       patch :reorder
       patch :reset_control_objective_name
+      patch :refresh_manual_scores
       patch :actions, to: 'reviews/actions#update'
     end
 

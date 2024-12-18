@@ -4,8 +4,7 @@ class Reviews::ActionsController < ApplicationController
   respond_to :html
 
   before_action :auth, :check_privileges, :set_title, :set_review
-  before_action -> { check_plan_and_review_approval @review },
-    only: [:edit, :update, :destroy]
+  before_action -> { check_plan_and_review_approval @review }, only: [:update]
 
   def update
     @review.approved? ? @review.draft! : @review.approved!
