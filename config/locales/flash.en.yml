@@ -119,6 +119,7 @@ en:
       actions:
         approved: Review has been approved
         draft: Review has been reboked
+      manual_scores_refreshed: Manual scores refreshed
 
     resource_classes:
       create:

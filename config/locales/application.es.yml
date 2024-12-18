@@ -1659,6 +1659,7 @@ es:
     recode_weaknesses_by_risk: Recodificar observaciones por riesgo
     recode_weaknesses_by_risk_and_repetition: Recodificar observaciones por riesgo y reiteración
     recode_work_papers: Recodificar papeles de trabajo
+    refresh_manual_scores: Refrescar puntajes de auditoría
     reorder: Reordenar procesos por nombre
     reordered: Procesos ordenados correctamente
     repeated_weaknesses: Reiteradas
