@@ -7,7 +7,7 @@ module ConclusionReviews::Risks
     )
   end
 
-  def planned_risk_text
+  def planned_risk
     if risk = review.plan_item.risk_assessment_item&.risk
       risk_text(value: risk) || I18n.t('conclusion_reviews.risks.unknown')
     else
