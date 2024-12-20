@@ -165,7 +165,7 @@ module Users::Import
 
         if hierarchy.present?
           if hierarchy.last == user.user
-            hierarchy.last - 1
+            hierarchy[-2]
           else
             hierarchy.last
           end
