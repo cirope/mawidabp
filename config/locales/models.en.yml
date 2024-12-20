@@ -171,6 +171,7 @@ en:
         main_recommendations: Main Audit Recommendations
         main_weaknesses_text: Main weaknesses
         observations: Other considerations
+        planned_risk: Planned risk
         previous_date: Previous issue date
         previous_identification: Previous audit report
         project: Project

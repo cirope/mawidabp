@@ -58,6 +58,10 @@
         <%= @conclusion_draft_review.review.manual_score_text %>
       </p>
       <p class="mb-1">
+        <strong><%= ConclusionReview.human_attribute_name 'planned_risk' %></strong>:
+        <%= @conclusion_draft_review.planned_risk %>
+      </p>
+      <p class="mb-1">
         <strong><%= ConclusionReview.human_attribute_name 'risk' %></strong>:
         <%= @conclusion_draft_review.risk_text %>
       </p>
