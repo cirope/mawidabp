@@ -112,7 +112,7 @@ es:
 
   conclusion_reviews:
     risks:
-      none: Ninguno
+      none: Sin definir
       unknown: Desconocido
 
   documents:
