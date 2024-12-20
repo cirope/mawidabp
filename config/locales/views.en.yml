@@ -110,6 +110,11 @@ en:
       show: Show change history
       default_field_modified: The field was modified
 
+  conclusion_reviews:
+    risks:
+      none: None
+      unknown: Unknown
+
   documents:
     edit:
       title: Edit document

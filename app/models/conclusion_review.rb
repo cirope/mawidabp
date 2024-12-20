@@ -22,6 +22,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::PatRtf
   include ConclusionReviews::Pdf
   include ConclusionReviews::Review
+  include ConclusionReviews::Risks
   include ConclusionReviews::Rtf
   include ConclusionReviews::Scopes
   include ConclusionReviews::Search
@@ -29,6 +30,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::UplPdf
   include ConclusionReviews::Validations
   include ConclusionReviews::WorkflowPdf
+  include Parameters::Risk
 
   attr_readonly :review_id
 

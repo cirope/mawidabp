@@ -38,6 +38,18 @@
             <% else %>
               <%= f.input :summary %>
             <% end %>
+            <% if REVIEW_MANUAL_SCORE %>
+              <div class="row">
+                <% if @conclusion_final_review.persisted? %>
+                  <div class="col-md-6">
+                    <%= f.input :planned_risk, disabled: true %>
+                  </div>
+                <% end %>
+                <div class="col-md-6">
+                  <%= f.input :risk, collection: @conclusion_final_review.risks, prompt: true %>
+                </div>
+              </div>
+            <% end %>
           </div>
           <div class="col-md-6">
             <% if Current.conclusion_pdf_format == 'gal' %>
