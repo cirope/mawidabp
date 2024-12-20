@@ -11,17 +11,34 @@ module Parameters::Priority
     high:   2
   }
 
+  def priorities
+    self.class.priorities date:      created_at,
+                          translate: true
+  end
+
   module ClassMethods
-    def priorities date: nil
+    def priorities date:      nil,
+                   translate: false
+
       if REVIEW_MANUAL_SCORE && Current.organization
         Current.organization.priorities(date: date).with_indifferent_access
+      elsif translate
+        if SHOW_CONDENSED_PRIORITIES
+          PRIORITY_TYPES.map do |k, v|
+            [I18n.t("priority_types.#{k}"), v]
+          end
+        else
+          PRIORITY_TYPES.map do |k, v|
+            [[I18n.t("priority_types.#{k}"), "(#{v})"].join(' '), v]
+          end
+        end
       else
         PRIORITY_TYPES
       end
     end
 
     def priorities_values date: nil
-      priorities(date: date).to_h.values
+      priorities(date: date).values
     end
 
     private

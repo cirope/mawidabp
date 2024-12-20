@@ -1625,6 +1625,7 @@ en:
       without_file_model: has no attachment
       without_score: has no audit rating
       without_survey: has no survey
+      without_manual_score: has no manual score
     estimated_amount: Estimated cost in workplan
     external_reviews_label: Alternative audit reports
     external_reviews_title: Add alternative audit report
@@ -1658,6 +1659,7 @@ en:
     recode_weaknesses_by_risk: Recode issues by risk
     recode_weaknesses_by_risk_and_repetition: Recode issues by risk and repetition
     recode_work_papers: Recode working papers
+    refresh_manual_scores: Refresh manual scores
     reorder: Reorder processes by name
     reordered: Processes were successfully reordered
     repeated_weaknesses: Repeated

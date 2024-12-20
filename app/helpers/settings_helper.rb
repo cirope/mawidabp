@@ -4,57 +4,29 @@ module SettingsHelper
   include Parameters::Relevance
   include Parameters::Qualification
 
-  def relevances show_value: !USE_SHORT_RELEVANCE, date: nil
-    if REVIEW_MANUAL_SCORE && Current.organization
-      Current.organization.relevance date: date
-    else
-      RELEVANCE_TYPES.map do |k, v|
-        text = [
-          t("relevance_types.#{k}"),
-          ("(#{v})" if show_value)
-        ].compact.join(' ')
+  def relevances show_value: !USE_SHORT_RELEVANCE,
+                 date:       nil
 
-        [text, v]
-      end
-    end
+    Setting.relevances show_value: show_value,
+                       date:       date,
+                       translate:  true
   end
 
-  def qualifications show_value: !SHOW_SHORT_QUALIFICATIONS, date: nil
-    if REVIEW_MANUAL_SCORE && Current.organization
-      Current.organization.control_objective_item_scores date: date
-    else
-      ::QUALIFICATION_TYPES.map do |k, v|
-        text = [
-          t("qualification_types.#{k}"),
-          ("(#{v})" if show_value)
-        ].compact.join(' ')
+  def qualifications show_value: !SHOW_SHORT_QUALIFICATIONS,
+                     date:       nil
 
-        [text, v]
-      end
-    end
+    Setting.qualifications show_value: show_value,
+                           date:       date,
+                           translate:  true
   end
 
   def risks date: nil
-    if REVIEW_MANUAL_SCORE && Current.organization
-      Current.organization.risks date: date
-    else
-      RISK_TYPES.map do |k, v|
-        [[t("risk_types.#{k}"), "(#{v})"].join(' '), v]
-      end
-    end
+    Setting.risks date:       date,
+                  translate:  true
   end
 
   def priorities date: nil
-    if SHOW_CONDENSED_PRIORITIES
-      PRIORITY_TYPES.map do |k, v|
-        [t("priority_types.#{k}"), v]
-      end
-    elsif REVIEW_MANUAL_SCORE && Current.organization
-      Current.organization.priorities date: date
-    else
-      PRIORITY_TYPES.map do |k, v|
-        [[t("priority_types.#{k}"), "(#{v})"].join(' '), v]
-      end
-    end
+    Setting.priorities date:       date,
+                       translate:  true
   end
 end

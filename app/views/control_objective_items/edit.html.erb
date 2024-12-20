@@ -6,8 +6,17 @@
   <% end %>
   <%= link_to t('control_objective_item.review.show'),
     review_path(@control_objective_item.review) %> |
+  <% if control_objective_item_show_history_changes? %>
+    <%= control_objective_item_show_change_history %> |
+  <% end %>
   <%= link_to_show @control_objective_item %> |
   <%= link_to_index control_objective_items_path %>
 <% end %>
 
-<%= render 'form' %>
+<div class="card">
+  <%= render 'form' %>
+
+  <% if control_objective_item_show_history_changes? %>
+    <%= render 'change_history' %>
+  <% end %>
+</div>

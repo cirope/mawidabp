@@ -14,10 +14,27 @@ module Parameters::Relevance
     critical:     5
   }
 
+  def relevances
+    self.class.relevances date:      created_at,
+                          translate: true
+  end
+
   module ClassMethods
-    def relevances show_value: !USE_SHORT_RELEVANCE, date: nil
+    def relevances show_value: !USE_SHORT_RELEVANCE,
+                   date:       nil,
+                   translate:  false
+
       if REVIEW_MANUAL_SCORE && Current.organization
         Current.organization.relevance(date: date).with_indifferent_access
+      elsif translate
+        RELEVANCE_TYPES.map do |k, v|
+          text = [
+            I18n.t("relevance_types.#{k}"),
+            ("(#{v})" if show_value)
+          ].compact.join(' ')
+
+          [text, v]
+        end
       else
         RELEVANCE_TYPES
       end

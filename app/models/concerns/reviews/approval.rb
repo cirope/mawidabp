@@ -58,6 +58,10 @@ module Reviews::Approval
         review_errors << I18n.t('review.errors.without_audited')
       end
 
+      if REVIEW_MANUAL_SCORE && manual_score.blank?
+        review_errors << I18n.t('review.errors.without_manual_score')
+      end
+
       review_errors
     end
 

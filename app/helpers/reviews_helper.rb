@@ -277,8 +277,4 @@ module ReviewsHelper
       review&.can_be_modified_by_current_user?
     end
   end
-
-  def review_manual_scope_options review
-    Review.current_manual_scores review.created_at
-  end
 end

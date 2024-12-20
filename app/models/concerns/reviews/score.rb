@@ -177,10 +177,12 @@ module Reviews::Score
     )
   end
 
-  module ClassMethods
-    def current_manual_scores date
-      Current.organization.manual_scores date: date
-    end
+  def manual_scores
+    Current.organization.manual_scores date: created_at
+  end
+
+  def refresh_manual_scores!
+    update! created_at: Time.zone.now, manual_score: nil
   end
 
   private
