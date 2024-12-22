@@ -34,7 +34,13 @@ module PlanItems::Status
   end
 
   def executed? on: Time.zone.today
-    review && review.created_at.to_date <= on
+    created_at = if REVIEW_MANUAL_SCORE
+                   review&.versions&.first&.created_at
+                 else
+                   review&.created_at
+                 end
+
+    created_at && created_at.to_date <= on
   end
 
   def on_time? on: Time.zone.today
