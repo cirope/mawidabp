@@ -110,6 +110,11 @@ es:
       show: Ver historial de cambios
       default_field_modified: El campo fue modificado
 
+  conclusion_reviews:
+    risks:
+      none: Sin definir
+      unknown: Desconocido
+
   documents:
     edit:
       title: Editar documento

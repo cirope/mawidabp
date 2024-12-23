@@ -171,6 +171,7 @@ en:
         main_recommendations: Main Audit Recommendations
         main_weaknesses_text: Main weaknesses
         observations: Other considerations
+        planned_risk: Planned risk
         previous_date: Previous issue date
         previous_identification: Previous audit report
         project: Project
@@ -178,6 +179,7 @@ en:
         reference: Frame of reference
         review_conclusion: Review conclusion
         review_id: Audit report
+        risk: Final risk
         scope: Scope limitation
         sectors: Sectors/departments involved
         summary: Summary

@@ -31,6 +31,18 @@
             <% if %(default pat nbc).include? Current.conclusion_pdf_format %>
               <%= f.input :issue_date, as: :date_picker %>
             <% end %>
+            <% if REVIEW_MANUAL_SCORE %>
+              <div class="row">
+                <% if @conclusion_draft_review.persisted? %>
+                  <div class="col-md-6">
+                    <%= f.input :planned_risk, disabled: true %>
+                  </div>
+                <% end %>
+                <div class="col-md-6">
+                  <%= f.input :risk, collection: @conclusion_draft_review.risks, prompt: true %>
+                </div>
+              </div>
+            <% end %>
           </div>
           <div class="col-md-6">
             <% if Current.conclusion_pdf_format == 'gal' %>

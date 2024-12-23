@@ -328,7 +328,7 @@ class ConclusionDraftReviewsController < ApplicationController
         :reference, :scope, :previous_identification, :previous_date,
         :main_recommendations, :effectiveness_notes, :additional_comments,
         :review_conclusion, :applied_data_analytics, :work_scope,
-        :lock_version, :exclude_regularized_findings,
+        :lock_version, :exclude_regularized_findings, :risk,
         review_attributes: [
           :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [
