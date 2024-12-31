@@ -20,7 +20,9 @@ module RiskAssessmentsHelper
   end
 
   def link_to_create_plan risk_assessment
-    if risk_assessment.final?
+    plan = risk_assessment.period.plan
+
+    if risk_assessment.final? && !plan&.approved?
       options = {
         title: t('.merge_to_plan'),
         class: 'icon',
