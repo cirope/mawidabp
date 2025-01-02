@@ -132,7 +132,13 @@ module ConclusionReviews::DefaultPdf
         pdf.add_subtitle title, PDF_FONT_SIZE, PDF_FONT_SIZE * 0.25
 
         repeated_findings = review.finding_review_assignments.map do |fra|
-          "#{fra.finding.to_s} [<b>#{fra.finding.state_text}</b>]"
+          finding = if review.conclusion_final_review
+                      fra.finding.paper_trail.version_at(review.conclusion_final_review.created_at)
+                    else
+                      fra.finding
+                    end
+
+          "#{finding.to_s} [<b>#{finding.state_text}</b>]"
         end
 
         pdf.add_list repeated_findings, PDF_FONT_SIZE
